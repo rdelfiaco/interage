@@ -1,0 +1,59 @@
+<!-- Start your project here-->
+
+
+<div style="height: 100vh">
+    <div class="d-flex justify-content-center align-items-center h-100">
+      <div class="container-fluid" >
+      <!-- Grid row -->
+        <div class="row justify-content-center" >
+    
+    <!-- Grid column -->
+          <div class="col-md-4 ">
+    
+    <!--Register form-->
+          <form [formGroup]="loginForm"  (ngSubmit)="fazerLogin()" >
+              <mdb-card>
+                <mdb-card-header class="info-color white-text text-center md-4">
+                  <h5>
+                    <strong>Seja bem vindo!</strong>
+                  </h5>
+                </mdb-card-header>
+                <div class="md-form">
+                  <i class="fa fa-user prefix grey-text"></i>
+                  <input type="text" id="loginForm-login" class="form-control" 
+                        formControlName = "login"
+                        data-error="favor digitar seu login"
+                        #login
+                        mdbInputDirective>
+                  <label for="loginForm-login">login</label>
+                </div>
+                
+                <div class="md-form">
+                    <i class="fa fa-lock prefix grey-text"></i>
+                    <input type="password" id="loginForm-senha" class="form-control" 
+                      formControlName = "senha"
+                      data-error="favor digitar sua senha"
+                      mdbInputDirective>
+                    <label for="loginForm-senha">Senha</label>
+                    </div>
+
+                <div class="text-center">
+                  <button mdbBtn outline="true"  block="true" 
+                        class="btn btn-deep-orange waves-light" 
+                        type="submit"
+                        mdbWavesEffect 
+                        [disabled] = "!loginForm.valid"  >Entrar</button>
+                </div>
+            </mdb-card>
+          
+            </form>
+    <!--/Register form-->
+
+          </div>
+    <!-- Grid column -->
+    
+        </div>
+    <!-- Grid row -->
+</div>
+
+    <!-- /Start your project here-->
