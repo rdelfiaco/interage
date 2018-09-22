@@ -1,10 +1,10 @@
-import { DashboardModule } from './dashboard.module';
+import { DashboardAdminModule } from './dashboard-admin.module';
 
 describe('DashboardModule', () => {
-  let dashboardModule: DashboardModule;
+  let dashboardModule: DashboardAdminModule;
 
   beforeEach(() => {
-    dashboardModule = new DashboardModule();
+    dashboardModule = new DashboardAdminModule();
   });
 
   it('should create an instance', () => {

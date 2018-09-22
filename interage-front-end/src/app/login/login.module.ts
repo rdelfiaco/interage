@@ -2,7 +2,6 @@
 import { NgModule} from '@angular/core';
 
 import { Usuario } from './usuario';
-import { AuthService } from './auth.service';
 
 
 import { CommonModule } from '@angular/common';
@@ -22,16 +21,15 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
     BrowserModule,
     MDBBootstrapModulesPro,
     ReactiveFormsModule,
-    FormsModule,
+    FormsModule
 
 
   ],
   declarations: [
-    LoginComponent
+    LoginComponent,
   ],
 
   providers: [
-    AuthService,
     Usuario
   ]
 })

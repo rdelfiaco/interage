@@ -8,20 +8,20 @@ import { NgModule, NO_ERRORS_SCHEMA} from '@angular/core';
 import { MDBBootstrapModulesPro, MDBSpinningPreloader } from './../lib/ng-uikit-pro-standard';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './/app-routing.module';
-import { DashboardComponent } from './dashboard/dashboard.component';
+import { DashboardAdminComponent } from './dashboard-admin/dashboard-admin.component';
 import { DashboardOperadorComponent } from './dashboard-operador/dashboard-operador.component';
 import { DashboardSupervisorComponent } from './dashboard-supervisor/dashboard-supervisor.component';
 import { LoginModule } from './login/login.module';
-import { TesteComponent } from './teste/teste.component';
+
 
 
 @NgModule({
   declarations: [
     AppComponent,
-    DashboardComponent,
+    DashboardAdminComponent,
     DashboardOperadorComponent,
     DashboardSupervisorComponent,
-    TesteComponent
+
   
   ],
   imports: [

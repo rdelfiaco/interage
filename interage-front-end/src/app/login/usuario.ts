@@ -4,7 +4,14 @@ export class Usuario {
     private _id: number;
     private _senha: string;
     private _dashboard: string;
+    private _ultimoLogin: Date;
 
+    public get ultimoLogin(): Date {
+        return this._ultimoLogin;
+    }
+    public set ultimoLogin(value: Date) {
+        this._ultimoLogin = value;
+    }
     
     public get dashboard(): string {
         return this._dashboard;
