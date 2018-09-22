@@ -1,3 +1,4 @@
+import { AuthService } from './auth.service';
 import { Component, OnInit } from '@angular/core';
 import { Usuario } from './usuario';
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
@@ -40,12 +41,12 @@ export class LoginComponent implements OnInit {
 
   fazerLogin(){
     
-    
-
     this.usuario.login = this.loginForm.value.login;
     this.usuario.senha = this.loginForm.value.senha;
 
-    this.router.navigate([ "admin" ]);
+    new AuthService().autenticacao(this.usuario)
+
+    //this.router.navigate([ "admin" ]);
 
 
   }

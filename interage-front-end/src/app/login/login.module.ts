@@ -1,4 +1,5 @@
 
+
 import { NgModule} from '@angular/core';
 
 import { Usuario } from './usuario';
@@ -12,6 +13,7 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { MDBBootstrapModulesPro } from '../../lib/ng-uikit-pro-standard';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { SharedModule } from './../shared/shared.module';
 
 
 @NgModule({
@@ -21,7 +23,8 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
     BrowserModule,
     MDBBootstrapModulesPro,
     ReactiveFormsModule,
-    FormsModule
+    FormsModule,
+    SharedModule
 
 
   ],
