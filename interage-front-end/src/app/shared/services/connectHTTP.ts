@@ -1,35 +1,29 @@
 export class ConnectHTTP {
 
-    callService( ) {
-        const host = "http://localhost:3000/"
-        const service = "login/"
-        const paramsService = "user3"
-        const url = `${host}${service}${paramsService}`
-        const xhttp = new XMLHttpRequest()
+  callService(): object {
+    return new Promise((resolve, reject) => {
+      const host = "http://localhost:3000/"
+      const service = "login/"
+      const paramsService = "user3"
+      const url = `${host}${service}${paramsService}`
+      const xhttp = new XMLHttpRequest()
 
-        debugger
+      xhttp.onload = function () {
+        const selfXhttp = this
 
-        xhttp.onload = function () {
-            const selfXhttp = this
-
-            debugger
-            
-            if (selfXhttp.status === 200) {
-
-            console.log('ssss',  selfXhttp.responseText )
-
-            } //else (selfXhttp.status === 500) {
-            //selfXhttp.responseText
-            //} 
+        if (selfXhttp.status === 200) {
+          resolve(JSON.parse(selfXhttp.responseText))
+        } else if (selfXhttp.status === 500) {
+          reject(JSON.parse(selfXhttp.responseText))
         }
+      }
 
-        xhttp.onerror = (e) => {
-            
-            
-        }
-        xhttp.open("GET", url, true)
-        xhttp.send()
+      xhttp.onerror = (e) => {
+        reject(e)
+      }
 
-    }
-
+      xhttp.open("GET", url, true)
+      xhttp.send()
+    })
+  }
 }
