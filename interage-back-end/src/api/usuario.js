@@ -7,7 +7,7 @@ function login(req, res) {
 
     client.connect()
 
-    let sql = `SELECT * from usuarios where login = '${req.params.login}'`
+    let sql = `SELECT * from usuarios where login = '${req.query.login}'`
 
     client.query(sql)
       .then(res => {
@@ -17,7 +17,7 @@ function login(req, res) {
 
           resolve(res.rows[0])
         }
-        resolve({ id: 0, login: 'Usuário não encontrato' })
+        reject('Usuário não encontrato')
       }
       )
       .catch(err => console.log(err)) //reject( err.hint ) )

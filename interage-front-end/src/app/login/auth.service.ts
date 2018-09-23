@@ -10,8 +10,19 @@ import { LocalStorage } from '../shared/services/localStorage'
 export class AuthService {
 
   async autenticacao(usuario: Usuario) {
-    const usuarioLogado = await new ConnectHTTP().callService()
-    new LocalStorage().postLocalStorage('usuarioLogado', usuarioLogado)
+    try {
+      const usuarioLogado = await new ConnectHTTP().callService({
+        service: 'login',
+        paramsService: {
+          login: usuario.login
+        }
+      })
+      new LocalStorage().postLocalStorage('usuarioLogado', usuarioLogado)
+      return usuarioLogado;
+    }
+    catch (e) {
+      return e;
+    }
   }
 
   constructor() { }

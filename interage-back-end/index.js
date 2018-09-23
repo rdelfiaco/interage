@@ -4,14 +4,15 @@ const nodeStart = require('./src/config/nodeStart');
 
 const usuario = require('./src/api/usuario');
 
-app.get('/login/:login', (req, res) => {
+app.get('/login', (req, res) => {
   usuario.login(req)
     .then(linhas => {
       headerResponse(res)
       res.status(200).send(linhas)
     })
-    .catch(linhas => {
-      res.status(500).send("Erro!")
+    .catch(error => {
+      headerResponse(res)
+      res.status(401).send(error)
     })
 });
 

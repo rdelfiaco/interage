@@ -5,6 +5,14 @@ export class Usuario {
     private _senha: string;
     private _dashboard: string;
     private _ultimoLogin: Date;
+    private _permissao: string;
+
+    public get permissao(): string {
+        return this._permissao;
+    }
+    public set permissao(value: string) {
+        this._permissao = value;
+    }
 
     public get ultimoLogin(): Date {
         return this._ultimoLogin;
@@ -12,7 +20,7 @@ export class Usuario {
     public set ultimoLogin(value: Date) {
         this._ultimoLogin = value;
     }
-    
+
     public get dashboard(): string {
         return this._dashboard;
     }

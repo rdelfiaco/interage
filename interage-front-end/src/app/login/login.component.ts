@@ -41,15 +41,17 @@ export class LoginComponent implements OnInit {
   };
 
   async fazerLogin() {
-
     this.usuario.login = this.loginForm.value.login;
     this.usuario.senha = this.loginForm.value.senha;
 
-    await new AuthService().autenticacao(this.usuario)
-
-    this.router.navigate(["admin"]);
-
-
+    const res = await new AuthService().autenticacao(this.usuario)
+    if (res.error) {
+      console.log(res.error)
+    }
+    else {
+      let usuarioLogado = res.resposta
+      this.router.navigate([usuarioLogado.permissao]);
+    }
   }
 
 
