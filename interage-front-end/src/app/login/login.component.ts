@@ -17,39 +17,42 @@ export class LoginComponent implements OnInit {
   loginForm: FormGroup;
 
 
-  constructor( 
+  constructor(
     formBuilder: FormBuilder,
     private router: Router
   ) {
 
     this.loginForm = formBuilder.group({
       login: ['', [
-                    Validators.required
-                  ]
-              ],
+        Validators.required
+      ]
+      ],
       senha: ['', [
-                    Validators.required
-                  ]
-              ],
+        Validators.required
+      ]
+      ],
 
     }
-    )};
+    )
+  };
 
   ngOnInit() {
 
   };
 
-  fazerLogin(){
-    
+  async fazerLogin() {
     this.usuario.login = this.loginForm.value.login;
     this.usuario.senha = this.loginForm.value.senha;
 
-    new AuthService().autenticacao(this.usuario)
-
-    //this.router.navigate([ "admin" ]);
-
-
+    const res = await new AuthService().autenticacao(this.usuario)
+    if (res.error) {
+      console.log(res.error)
+    }
+    else {
+      let usuarioLogado = res.resposta
+      this.router.navigate([usuarioLogado.permissao]);
+    }
   }
 
-  
+
 }
