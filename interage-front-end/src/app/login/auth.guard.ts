@@ -18,9 +18,9 @@ export class AuthGuard implements CanActivate {
       let usuarioLogado = new LocalStorage().getLocalStorage('usuarioLogado') as Usuario;
       if (this._checkPermissaoRota(route, usuarioLogado))
         return true;
-      // else {
-      //   this.router.navigate(['/semPermissao']);
-      // }
+      else {
+        this.router.navigate(['/semPermissao']);
+      }
     }
     else {
       this.router.navigate(['/']);
