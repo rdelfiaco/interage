@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { CanActivate } from '@angular/router';
 
 @Component({
   selector: 'app-dashboard-operador',
@@ -11,5 +12,4 @@ export class DashboardOperadorComponent implements OnInit {
 
   ngOnInit() {
   }
-
 }

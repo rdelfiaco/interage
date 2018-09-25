@@ -51,8 +51,8 @@ export class ConnectHTTP {
   }
 
   _trataParamsService(paramsService: object): string {
-    return Object.keys(paramsService).map((o) => {
-      return `?${o}=${paramsService[o]}`
+    return "?" + Object.keys(paramsService).map((o) => {
+      return `${o}=${paramsService[o]}`
     }).join('&')
   }
 }

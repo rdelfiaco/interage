@@ -12,6 +12,7 @@ app.get('/login', (req, res) => {
     })
     .catch(error => {
       headerResponse(res)
+      console.log(error)
       res.status(401).send(error)
     })
 });

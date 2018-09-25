@@ -7,13 +7,35 @@ import { LoginComponent } from './login/login.component';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Routes, RouterModule } from '@angular/router';
+import { AuthGuard } from './login/auth.guard';
+
 
 const routes: Routes = [
-  { path: '', component: LoginComponent },
-  { path: 'login', component: LoginComponent },
-  { path: 'admin', component: DashboardAdminComponent },
-  { path: 'operador', component: DashboardOperadorComponent },
-  { path: 'supervisor', component: DashboardSupervisorComponent },
+  {
+    path: '', component: LoginComponent
+  },
+  {
+    path: 'login', component: LoginComponent
+  },
+  // {
+  //   path: 'semPermissao', component: LoginComponent
+  // },
+  {
+    path: 'admin',
+    permission: 'admin',
+    component: DashboardAdminComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'operador',
+    component: DashboardOperadorComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'supervisor',
+    component: DashboardSupervisorComponent,
+    canActivate: [AuthGuard]
+  },
 ];
 
 @NgModule({

@@ -1,6 +1,6 @@
 
 
-import { NgModule} from '@angular/core';
+import { NgModule } from '@angular/core';
 
 import { Usuario } from './usuario';
 
@@ -14,6 +14,8 @@ import { BrowserModule } from '@angular/platform-browser';
 import { MDBBootstrapModulesPro } from '../../lib/ng-uikit-pro-standard';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { SharedModule } from './../shared/shared.module';
+import { AuthService } from './auth.service';
+import { AuthGuard } from './auth.guard';
 
 
 @NgModule({
@@ -33,7 +35,9 @@ import { SharedModule } from './../shared/shared.module';
   ],
 
   providers: [
-    Usuario
+    Usuario,
+    AuthGuard,
+    AuthService
   ]
 })
 

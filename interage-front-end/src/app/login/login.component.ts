@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { Usuario } from './usuario';
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
+import { LocalStorage } from '../shared/services/localStorage';
 
 
 @Component({
@@ -11,11 +12,8 @@ import { Router, ActivatedRoute } from '@angular/router';
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit {
-
   usuario: Usuario = new Usuario();
-
   loginForm: FormGroup;
-
 
   constructor(
     formBuilder: FormBuilder,
@@ -37,8 +35,11 @@ export class LoginComponent implements OnInit {
   };
 
   ngOnInit() {
-
-  };
+    if (new AuthService().checkAutenticacao()) {
+      let usuarioLogado = new LocalStorage().getLocalStorage('usuarioLogado') as Usuario;
+      this.router.navigate([usuarioLogado.dashboard]);
+    }
+  }
 
   async fazerLogin() {
     this.usuario.login = this.loginForm.value.login;
@@ -50,7 +51,7 @@ export class LoginComponent implements OnInit {
     }
     else {
       let usuarioLogado = res.resposta
-      this.router.navigate([usuarioLogado.permissao]);
+      this.router.navigate([usuarioLogado.dashboard]);
     }
   }
 
