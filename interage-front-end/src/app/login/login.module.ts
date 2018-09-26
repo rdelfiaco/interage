@@ -27,8 +27,6 @@ import { AuthGuard } from './auth.guard';
     ReactiveFormsModule,
     FormsModule,
     SharedModule
-
-
   ],
   declarations: [
     LoginComponent,

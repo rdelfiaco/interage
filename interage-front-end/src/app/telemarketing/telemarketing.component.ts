@@ -15,7 +15,9 @@ export class TelemarketingComponent implements OnInit {
   campanhaIniciada: boolean;
   ligacao: object;
 
-  constructor(private connectHTTP: ConnectHTTP, private localStorage: LocalStorage) { }
+
+  constructor(private connectHTTP: ConnectHTTP, private localStorage: LocalStorage) {
+  }
 
   async ngOnInit() {
     let usuarioLogado = this.localStorage.getLocalStorage('usuarioLogado') as Usuario;
@@ -46,6 +48,11 @@ export class TelemarketingComponent implements OnInit {
     this.campanhaIniciada = null
   }
   solicitarLigacao() {
+    debugger;
+    this.ligacao = { pessoa: { nome: 'João' } }
+  }
+  gravarLigacao() {
+    debugger;
     this.ligacao = { pessoa: { nome: 'João' } }
   }
 }

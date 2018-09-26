@@ -1,3 +1,45 @@
-<p>
-  telemarketing-questionario works!
-</p>
+<form [formGroup]="questionarioForm">
+  <div class="row">
+    <div class="md-form form-group col-md-12">
+      <input type="text" id="pessoaALigar" class="form-control form-control-sm" formControlName="pessoaALigar"
+        mdbInputDirective>
+      <label for="pessoaALigar" class="">Pessoa a Ligar</label>
+    </div>
+  </div>
+  <div class="row">
+    <div class="mx-auto col-md-6">
+      <mdb-select (selected)="getSelectedValue($event)" [options]="telefones | async" [multiple]="false" placeholder="Telefone principal"></mdb-select>
+      <label>Telefones</label>
+    </div>
+    <div class="md-form form-group col-md-6">
+      <input type="text" id="telefoneDiscado" class="form-control form-control-sm" formControlName="pessoaALigar"
+        mdbInputDirective>
+      <label for="telefoneDiscado" class="">Telefone Discado</label>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <a mdbBtn color="primary" class="waves-light" mdbWavesEffect>Discar</a>
+    </div>
+    <div class="mx-auto col-md-6">
+      <mdb-select (selected)="getSelectedValue($event)" [options]="status" [multiple]="false" placeholder="Selecione o Status"></mdb-select>
+      <label>Status</label>
+    </div>
+  </div>
+  <div class="row">
+    <div class="md-form form-group col-md-6">
+      <mdb-date-picker name="mydate" [options]="myDatePickerOptions" [placeholder]="'Selected date'" required></mdb-date-picker>
+      <label for="telefoneDiscado" class="">Reagendar</label>
+    </div>
+    <div class="md-form form-group col-md-6">
+      <mdb-time-picker [buttonLabel]="'Done'" [twelvehour]="false" [darktheme]="true" [placeholder]="'Selecione a Hora'"
+        [label]="'Hora'" [ngModel]="darkClock"></mdb-time-picker>
+    </div>
+  </div>
+  <div class="row">
+    <div class="md-form col-md-12">
+      <textarea type="text" id="form7" class="md-textarea form-control" mdbInputDirective></textarea>
+      <label for="form7">Observação</label>
+    </div>
+  </div>
+</form>

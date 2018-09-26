@@ -38,7 +38,7 @@ import { CadastroPessoaComponent } from './cadastro-pessoa/cadastro-pessoa.compo
     MDBBootstrapModulesPro.forRoot(),
     BrowserAnimationsModule,
     AppRoutingModule,
-    LoginModule,
+    LoginModule
 
   ],
   providers: [MDBSpinningPreloader],

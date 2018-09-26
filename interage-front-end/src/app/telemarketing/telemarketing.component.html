@@ -159,19 +159,16 @@
   <br />
   <br />
   <div class="row" *ngIf="campanhaIniciada">
-    <button type="button" mdbBtn color="primary" class="relative waves-light" (click)="basicModal.show()"
-      mdbWavesEffect> Launch demo modal</button>
+    <button type="button" mdbBtn color="primary" class="relative waves-light" (click)="solicitarLigacao(); basicModal.show();"
+      mdbWavesEffect> Solicitar Ligação</button>
     <div mdbModal #basicModal="mdbModal" [config]="{backdrop: true, ignoreBackdropClick: true}" class="modal fade right"
       tabindex="-1" role="dialog" aria-labelledby="myBasicModalLabel" aria-hidden="true">
       <div class="modal-dialog modal-fluid" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <button type="button" class="close pull-right" aria-label="Close" (click)="basicModal.hide()">
-              <span aria-hidden="true">×</span>
-            </button>
-            <h4 class="modal-title w-100" id="myModalLabel">Modal title</h4>
+            <h4 class="modal-title w-100" id="myModalLabel">Responder Questionário</h4>
           </div>
-          <div class="modal-body">
+          <div class="modal-body" style="overflow: auto; height: 400px;">
             <div class="row">
               <div class="col-md-5">
                 <app-telemarketing-questionario></app-telemarketing-questionario>
@@ -182,19 +179,12 @@
             </div>
           </div>
           <div class="modal-footer justify-content-center">
-            <button type="button" mdbBtn color="secondary" class="waves-light" aria-label="Close" (click)="basicModal.hide()"
-              mdbWavesEffect>Close</button>
-            <button type="button" mdbBtn color="primary" class="relative waves-light" mdbWavesEffect>OK!</button>
+            <button type="button" mdbBtn color="primary" (click)="basicModal.hide(); gravarLigacao();" class="relative waves-light"
+              mdbWavesEffect>Gravar</button>
           </div>
         </div>
       </div>
     </div>
-
-    <!-- <div class="col-md-12 text-center">
-      <a class="btn btn-default" (click)="solicitarLigacao()" ripple-radius data-toggle="modal" data-target="#modalLoginForm">
-        <i class="fa fa-phone-square left" aria-hidden="true"></i>Solicitar nova ligação
-      </a>
-    </div> -->
   </div>
 </main>
 <!--/Main layout-->
