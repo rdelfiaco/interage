@@ -139,13 +139,31 @@
 <!--Main Layout-->
 <main>
   <div class="h5 text-center">Campanha de Telemarketing</div>
-  <div>
-    <select class="mdb-select md-form">
-      <option value="" disabled selected>Escolha sua campanha</option>
+  <div class="row">
+    <div class="col-md-6">
+      <mdb-select (selected)="getSelectedValue($event)" [options]="campanhas | async" [multiple]="false" placeholder="Escolha sua campanha"></mdb-select>
+      <label>Campanha</label>
+    </div>
 
-    </select>
-    <h1 ng-repeat="camp in campanhas | async">{{camp.id}}</h1>
-    <label>Campanha</label>
+    <div *ngIf="!campanhaIniciada" class="col-md-6">
+      <a *ngIf="campanhaSelecionada" class="btn btn-success btn-rounded" (click)="iniciarCampanha()" ripple-radius>Iniciar</a>
+      <a *ngIf="!campanhaSelecionada" class="btn btn-elegant btn-rounded" disabled ripple-radius>Iniciar</a>
+    </div>
+
+    <div *ngIf="campanhaIniciada" class="col-md-6">
+      <a *ngIf="campanhaSelecionada" class="btn btn-elegant btn-rounded" disabled ripple-radius>Iniciar</a>
+      <a *ngIf="campanhaSelecionada" class="btn btn-danger btn-rounded" (click)="pararCampanha()" ripple-radius>Parar</a>
+    </div>
+  </div>
+
+  <br />
+  <br />
+  <div class="row" *ngIf="campanhaIniciada">
+    <div class="col-md-12 text-center">
+      <a class="btn btn-default" (click)="solicitarLigacao()" ripple-radius>
+        <i class="fa fa-phone-square left" aria-hidden="true"></i>Solicitar nova ligação
+      </a>
+    </div>
   </div>
 </main>
 <!--/Main layout-->

@@ -13,7 +13,6 @@ export class AuthGuard implements CanActivate {
   canActivate(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean> | boolean {
-    debugger
     if (new AuthService().checkAutenticacao()) {
       let usuarioLogado = new LocalStorage().getLocalStorage('usuarioLogado') as Usuario;
       if (this._checkPermissaoRota(route, usuarioLogado))
