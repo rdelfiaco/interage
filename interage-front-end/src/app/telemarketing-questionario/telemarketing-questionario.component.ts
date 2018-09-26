@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
 import { IMyOptions } from '../../lib/ng-uikit-pro-standard';
 
 interface selectValues {
-  value: number
+  value: string
   label: string
 }
 
@@ -33,38 +33,36 @@ export class TelemarketingQuestionarioComponent implements OnInit {
 
   status: Array<object> = [
     {
-      value: 1,
+      value: '1',
       label: "Ocupado"
     },
     {
-      value: 2,
+      value: '2',
       label: "Telefone Errado"
     },
     {
-      value: 3,
+      value: '3',
       label: "Contato com sucesso"
     },
     {
-      value: 4,
+      value: '4',
       label: "Follow UP"
     },
   ]
   reagendar: boolean = false;
 
   constructor(private formBuilder: FormBuilder) {
-    debugger
     this.questionarioForm = this.formBuilder.group({
       pessoaALigar: ['aasdas'],
       telefones: ['654654654564'],
-    }
-    )
+    })
   }
 
   ngOnInit() {
   }
 
   getSelectedValue(status: selectValues) {
-    if (status.value == 1 || status.value == 4) this.reagendar = true;
+    if (status.value == '1' || status.value == '4') this.reagendar = true;
     else this.reagendar = false;
   }
 

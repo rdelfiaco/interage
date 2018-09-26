@@ -1,0 +1,86 @@
+<form [formGroup]="principalForm" class="formQuestionario">
+  <div class="row">
+    <div class="md-form col-3">
+      <input mdbInputDirective formControlName="id" type="text" id="id" class="form-control">
+      <label for="id">Id</label>
+    </div>
+    <div class="md-form col">
+      <input mdbInputDirective formControlName="nome" type="text" id="nome" class="form-control">
+      <label for="nome">Nome</label>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col mdb-select-form">
+      <mdb-select formControlName="pessoa" (selected)="getSelectedValuePessoa($event)" [options]="tipoDePessoa"
+        [multiple]="false" placeholder="Tipo de pessoa"></mdb-select>
+      <label>Pessoa</label>
+    </div>
+  </div>
+
+  <div *ngIf="tipoPessoaSelecionada == '1'">
+    <div class="row">
+      <div class="col mdb-select-form">
+        <mdb-select formControlName="tratamento" [options]="tipoDeTratamentoFisica" [multiple]="false" placeholder="Tipo de pessoa"></mdb-select>
+        <label>Tipo de tratamento</label>
+      </div>
+      <div class="md-form form-group col mdb-date-form">
+        <mdb-date-picker name="mydate" [options]="myDatePickerOptions" [placeholder]="'Selecione a data'" required></mdb-date-picker>
+        <label class="">Data</label>
+      </div>
+      <div class="col mdb-select-form">
+        <mdb-select formControlName="sexo" [placeholder]="'Selecione o Sexo'" [options]="enumSexo" [multiple]="false"></mdb-select>
+        <label>Sexo</label>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="md-form col-4">
+        <input mdbInputDirective formControlName="RG" type="text" id="rg" class="form-control">
+        <label for="rg">RG</label>
+      </div>
+      <div class="md-form col-4">
+        <input mdbInputDirective formControlName="orgaoEmissor" type="text" id="orgaoEmissor" class="form-control">
+        <label for="orgaoEmissor">Orgão Emissor</label>
+      </div>
+      <div class="md-form col-4">
+        <input mdbInputDirective formControlName="cpf" type="text" id="cpf" class="form-control">
+        <label for="cpf">CPF</label>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="md-form col-6">
+        <input mdbInputDirective formControlName="consultor" type="text" id="consultor" class="form-control">
+        <label for="consultor">Consultor</label>
+      </div>
+      <div class="md-form col-6">
+        <input mdbInputDirective formControlName="profissao" type="text" id="profissao" class="form-control">
+        <label for="profissao">Profissão</label>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="md-form col-6">
+        <input mdbInputDirective formControlName="email" type="text" id="email" class="form-control">
+        <label for="email">Email</label>
+      </div>
+      <div class="md-form col-6">
+        <input mdbInputDirective formControlName="website" type="text" id="website" class="form-control">
+        <label for="website">WebSite</label>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="md-form col">
+        <textarea type="text" id="obs" class="md-textarea form-control" mdbInputDirective></textarea>
+        <label for="obs">Observação</label>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="tipoPessoaSelecionada == '2'" class="col">
+    Jurídica
+  </div>
+
+</form>

@@ -17,6 +17,8 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
 import { TelemarketingComponent } from './telemarketing/telemarketing.component';
 import { TelemarketingQuestionarioComponent } from './telemarketing-questionario/telemarketing-questionario.component';
 import { CadastroPessoaComponent } from './cadastro-pessoa/cadastro-pessoa.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { PrincipalComponent } from './cadastro-pessoa/principal/principal.component';
 
 
 
@@ -32,13 +34,16 @@ import { CadastroPessoaComponent } from './cadastro-pessoa/cadastro-pessoa.compo
     TelemarketingComponent,
     TelemarketingQuestionarioComponent,
     CadastroPessoaComponent,
+    PrincipalComponent,
   ],
   imports: [
     BrowserModule,
     MDBBootstrapModulesPro.forRoot(),
     BrowserAnimationsModule,
     AppRoutingModule,
-    LoginModule
+    LoginModule,
+    FormsModule,
+    ReactiveFormsModule
 
   ],
   providers: [MDBSpinningPreloader],

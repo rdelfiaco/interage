@@ -48,11 +48,9 @@ export class TelemarketingComponent implements OnInit {
     this.campanhaIniciada = null
   }
   solicitarLigacao() {
-    debugger;
     this.ligacao = { pessoa: { nome: 'João' } }
   }
   gravarLigacao() {
-    debugger;
     this.ligacao = { pessoa: { nome: 'João' } }
   }
 }
