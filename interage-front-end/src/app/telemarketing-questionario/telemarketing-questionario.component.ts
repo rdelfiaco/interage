@@ -2,6 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
 import { IMyOptions } from '../../lib/ng-uikit-pro-standard';
 
+interface selectValues {
+  value: number
+  label: string
+}
+
 @Component({
   selector: 'app-telemarketing-questionario',
   templateUrl: './telemarketing-questionario.component.html',
@@ -12,26 +17,40 @@ export class TelemarketingQuestionarioComponent implements OnInit {
   questionarioForm: FormGroup;
   public myDatePickerOptions: IMyOptions = {
     // Strings and translations
-    dayLabels: { su: 'Sun', mo: 'Mon', tu: 'Tue', we: 'Wed', th: 'Thu', fr: 'Fri', sa: 'Sat' },
-    dayLabelsFull: { su: "Sunday", mo: "Monday", tu: "Tuesday", we: "Wednesday", th: "Thursday", fr: "Friday", sa: "Saturday" },
-    monthLabels: { 1: 'Jan', 2: 'Feb', 3: 'Mar', 4: 'Apr', 5: 'May', 6: 'Jun', 7: 'Jul', 8: 'Aug', 9: 'Sep', 10: 'Oct', 11: 'Nov', 12: 'Dec' },
-    monthLabelsFull: { 1: "January", 2: "February", 3: "March", 4: "April", 5: "May", 6: "June", 7: "July", 8: "August", 9: "September", 10: "October", 11: "November", 12: "December" },
+    dayLabels: { su: 'Dom', mo: 'Seg', tu: 'Ter', we: 'Qua', th: 'Qui', fr: 'Sex', sa: 'Sab' },
+    dayLabelsFull: { su: "Domingo", mo: "Segunda", tu: "Terça", we: "Quarta", th: "Quinta", fr: "Sexta", sa: "Sábado" },
+    monthLabels: { 1: 'Jan', 2: 'Fev', 3: 'Mar', 4: 'Abr', 5: 'Mai', 6: 'Jun', 7: 'Jul', 8: 'Ago', 9: 'Set', 10: 'Out', 11: 'Nov', 12: 'Dez' },
+    monthLabelsFull: { 1: "Janeiro", 2: "Fevereiro", 3: "Março", 4: "Abril", 5: "Maio", 6: "Junho", 7: "Julho", 8: "Agosto", 9: "Setembro", 10: "Outubro", 11: "Novembro", 12: "Dezembro" },
 
     // Buttons
-    todayBtnTxt: "Today",
-    clearBtnTxt: "Clear",
-    closeBtnTxt: "Close",
+    todayBtnTxt: "Hoje",
+    clearBtnTxt: "Limpar",
+    closeBtnTxt: "Fechar",
 
     // Format
-    dateFormat: 'dd.mm.yyyy',
+    dateFormat: 'dd/mm/yyyy',
   }
 
   status: Array<object> = [
     {
       value: 1,
       label: "Ocupado"
-    }
+    },
+    {
+      value: 2,
+      label: "Telefone Errado"
+    },
+    {
+      value: 3,
+      label: "Contato com sucesso"
+    },
+    {
+      value: 4,
+      label: "Follow UP"
+    },
   ]
+  reagendar: boolean = false;
+
   constructor(private formBuilder: FormBuilder) {
     debugger
     this.questionarioForm = this.formBuilder.group({
@@ -42,6 +61,11 @@ export class TelemarketingQuestionarioComponent implements OnInit {
   }
 
   ngOnInit() {
+  }
+
+  getSelectedValue(status: selectValues) {
+    if (status.value == 1 || status.value == 4) this.reagendar = true;
+    else this.reagendar = false;
   }
 
 }
