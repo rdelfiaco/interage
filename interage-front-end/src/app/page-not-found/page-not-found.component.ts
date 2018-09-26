@@ -11,5 +11,8 @@ export class PageNotFoundComponent implements OnInit {
 
   ngOnInit() {
   }
+  voltar() {
+    window.history.back();
+  }
 
 }

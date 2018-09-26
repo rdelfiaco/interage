@@ -12,4 +12,8 @@ export class SemPermissaoComponent implements OnInit {
   ngOnInit() {
   }
 
+  voltar() {
+    window.history.back();
+  }
+
 }
