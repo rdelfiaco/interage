@@ -27,7 +27,7 @@ export class TelemarketingComponent implements OnInit {
     });
     this.campanhas = new Observable((observer) => {
       let camp = campanha.resposta as Array<object>
-      camp = camp.map((c) => {
+      camp = camp.map((c: any) => {
         return { value: c.id, label: c.nome }
       })
       observer.next(camp)
