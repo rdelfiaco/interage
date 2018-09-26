@@ -32,6 +32,7 @@ export class AuthGuard implements CanActivate {
       admin: ['admin'],
       operador: ['operador'],
       supervisor: ['supervisor'],
+      telemarketing: ['admin', 'supervisor', 'operador'],
     }
 
     if (rotas[route.routeConfig.path].indexOf(usuarioLogado.dashboard) != -1) return true;

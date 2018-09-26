@@ -27,7 +27,6 @@ export class ConnectHTTP {
 
       xhttp.onload = function () {
         const selfXhttp = this
-        debugger
         if (selfXhttp.status === 200) {
           resolve({ resposta: JSON.parse(selfXhttp.responseText) })
         } else if (selfXhttp.status === 401) {
@@ -36,7 +35,6 @@ export class ConnectHTTP {
       }
 
       xhttp.onerror = (e) => {
-        debugger
         reject(e)
       }
 

@@ -10,6 +10,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { AuthGuard } from './login/auth.guard';
 import { SemPermissaoComponent } from './sem-permissao/sem-permissao.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
+import { TelemarketingComponent } from './telemarketing/telemarketing.component';
 
 
 const routes: Routes = [
@@ -35,6 +36,11 @@ const routes: Routes = [
   {
     path: 'supervisor',
     component: DashboardSupervisorComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'telemarketing',
+    component: TelemarketingComponent,
     canActivate: [AuthGuard]
   },
   { path: '**', component: PageNotFoundComponent }

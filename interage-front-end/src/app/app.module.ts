@@ -14,6 +14,7 @@ import { DashboardSupervisorComponent } from './dashboard-supervisor/dashboard-s
 import { LoginModule } from './login/login.module';
 import { SemPermissaoComponent } from './sem-permissao/sem-permissao.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
+import { TelemarketingComponent } from './telemarketing/telemarketing.component';
 
 
 
@@ -26,6 +27,7 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
     DashboardSupervisorComponent,
     SemPermissaoComponent,
     PageNotFoundComponent,
+    TelemarketingComponent,
   ],
   imports: [
     BrowserModule,
