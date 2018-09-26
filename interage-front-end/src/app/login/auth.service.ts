@@ -37,13 +37,14 @@ export class AuthService {
   }
 
   _getDataExpiracao(): Date {
-    let usuarioLogado = new LocalStorage().getLocalStorage('usuarioLogado');
+    let usuarioLogado = new LocalStorage().getLocalStorage('usuarioLogado') as Usuario;
     if (usuarioLogado && usuarioLogado.token)
       return new LocalStorage().getLocalStorage(usuarioLogado.token as string) as Date;
   }
   _setValidadeToken(usuarioLogado: Usuario) {
     let validadeToken = new Date(new Date().getTime() + (1000 * 60 * 30))
-    new LocalStorage().postLocalStorage(usuarioLogado.token, validadeToken)
+    if (usuarioLogado && usuarioLogado.token)
+      new LocalStorage().postLocalStorage(usuarioLogado.token, validadeToken)
   }
 
   constructor() { }

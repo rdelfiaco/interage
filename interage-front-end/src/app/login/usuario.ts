@@ -6,6 +6,14 @@ export class Usuario {
     private _dashboard: string;
     private _ultimoLogin: Date;
     private _permissao: string;
+    private _token: string;
+    
+    public get token(): string {
+        return this._token;
+    }
+    public set token(value: string) {
+        this._token = value;
+    }
 
     public get permissao(): string {
         return this._permissao;
