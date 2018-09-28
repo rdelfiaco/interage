@@ -14,7 +14,7 @@ export class TelemarketingComponent implements OnInit {
   campanhas: Observable<Array<object>>;
   campanhaSelecionada: object;
   campanhaIniciada: boolean;
-  ligacao: Observable<object>;
+  evento: Observable<object>;
   pessoa: Observable<object>;
 
 
@@ -59,13 +59,8 @@ export class TelemarketingComponent implements OnInit {
         id_evento: this.campanhaSelecionada.value
       }
     });;
-
-    this.ligacao = new Observable((observer) => {
-      observer.next(telemarketing.resposta.ligacao as object)
-    })
-    this.pessoa = new Observable((observer) => {
-      observer.next(telemarketing.resposta.pessoa as object)
-    })
+    this.evento = telemarketing.resposta.evento
+    this.pessoa = telemarketing.resposta.pessoa
   }
   gravarLigacao() {
     this.ligacao = { pessoa: { nome: 'João' } }

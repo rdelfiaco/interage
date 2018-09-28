@@ -21,7 +21,7 @@ function getPessoa(req, res) {
 						getEnderecos().then(enderecos => {
 							getTelefones().then(telefones => {
 								client.end();
-								resolve({ pessoa, enderecos, telefones })
+								resolve({ principal: pessoa[0], enderecos, telefones })
 							}).catch(e => {
 								reject(e);
 							})

@@ -170,8 +170,8 @@
           </div>
           <div class="modal-body" style="overflow: auto; height: 400px;">
             <div class="row">
-              <div class="col-md-5">
-                <app-telemarketing-questionario></app-telemarketing-questionario>
+              <div *ngIf="evento && pessoa" class="col-md-5">
+                <app-telemarketing-questionario [evento]="evento" [pessoa]="pessoa"></app-telemarketing-questionario>
               </div>
               <div class="col-md-7">
                 <app-cadastro-pessoa></app-cadastro-pessoa>
