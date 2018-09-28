@@ -1,38 +1,77 @@
-<form [formGroup]="telefoneForm" class="formQuestionario">
-  <div class="row">
-    <div class="col mdb-select-form">
-      <mdb-select formControlName="telefone" (selected)="getSelectedValueTelefone($event)" [options]="tipoTelefone"
-        [multiple]="false" placeholder="Tipo de Telefone"></mdb-select>
-      <label>Tipo</label>
-    </div>
-  </div>
-  <div class="row">
-    <div class="md-form col-2">
-      <input mdbInputDirective formControlName="ddd" max="3" min="2" type="text" id="ddi" class="form-control">
-      <label for="ddd">DDI</label>
-    </div>
-    <div class="md-form col-2">
-      <input mdbInputDirective formControlName="ddd" max="4" min="3" type="text" id="ddd" class="form-control">
-      <label for="ddd">DDD</label>
-    </div>
-    <div class="md-form col">
-      <input mdbInputDirective formControlName="telefone" type="text" id="telefone" class="form-control">
-      <label for="telefone">Telefone</label>
-    </div>
-  </div>
+<div class="row">
+  <h4>Telefones Cadastrados</h4>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Id</th>
+        <th>DDI</th>
+        <th>DDD</th>
+        <th>Telefone</th>
+        <th>Ramal</th>
+        <th>Ações</th>
+      </tr>
+    </thead>
+    <tbody *ngFor="let telefone of telefones">
+      <tr>
+        <th scope="row">{{telefone.id}}</th>
+        <td>{{telefone.ddi}}</td>
+        <td>{{telefone.ddd}}</td>
+        <td>{{telefone.telefone}}</td>
+        <td>{{telefone.ramal}}</td>
+        <td>
+          <mdb-icon style="margin: 0px 5px;" icon="pencil" size="lg"></mdb-icon>
+          <mdb-icon style="margin: 0px 5px;" icon="trash" size="lg"></mdb-icon>
+        </td>
+      </tr>
 
-  <div class="row">
-    <div class="md-form col-3">
-      <input mdbInputDirective formControlName="ramal" type="text" id="ramal" class="form-control">
-      <label for="ramal">Ramal</label>
+    </tbody>
+  </table>
+</div>
+<div class="row d-flex justify-content-end">
+  <button type="button" mdbBtn color="primary" (click)="adicionarNovoTelefone();" class="relative waves-light"
+    mdbWavesEffect>Adicionar Novo Telefone</button>
+</div>
+<br />
+<br />
+<div *ngIf="telefoneSelecionado">
+  <form [formGroup]="telefoneForm" class="formQuestionario">
+    <div class="row">
+      <div class="col mdb-select-form">
+        <mdb-select formControlName="id_tipo_telefone" (selected)="getSelectedValueTelefone($event)" [options]="tipoTelefone | async"
+          [multiple]="false" placeholder="Tipo de Telefone"></mdb-select>
+        <label>Tipo</label>
+      </div>
     </div>
-    <div class="md-form col">
-      <input mdbInputDirective formControlName="contato" type="text" id="contato" class="form-control">
-      <label for="contato">Contato</label>
+    <div class="row">
+      <div class="md-form col-2">
+        <input mdbInputDirective formControlName="ddi" max="3" min="2" type="text" id="ddi" class="form-control">
+        <label for="ddd">DDI</label>
+      </div>
+      <div class="md-form col-2">
+        <input mdbInputDirective formControlName="ddd" max="4" min="3" type="text" id="ddd" class="form-control">
+        <label for="ddd">DDD</label>
+      </div>
+      <div class="md-form col">
+        <input mdbInputDirective formControlName="telefone" type="text" id="telefone" class="form-control">
+        <label for="telefone">Telefone</label>
+      </div>
     </div>
-  </div>
 
-  <div class="row">
-    
-  </div>
-</form>
+    <div class="row">
+      <div class="md-form col-3">
+        <input mdbInputDirective formControlName="ramal" type="text" id="ramal" class="form-control">
+        <label for="ramal">Ramal</label>
+      </div>
+      <div class="md-form col">
+        <input mdbInputDirective formControlName="contato" type="text" id="contato" class="form-control">
+        <label for="contato">Contato</label>
+      </div>
+    </div>
+    <control-messages [control]="telefoneForm.controls.id_tipo_telefone"></control-messages>
+    <div class="row d-flex justify-content-end">
+      <button type="button" mdbBtn color="primary" (click)="salvar();" class="relative waves-light" mdbWavesEffect
+        [disabled]="!telefoneForm.valid">Salvar Telefone</button>
+      <button type="button" mdbBtn color="danger" (click)="cancelarAdd();" class="relative waves-light" mdbWavesEffect>Cancelar</button>
+    </div>
+  </form>
+</div>

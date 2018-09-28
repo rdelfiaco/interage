@@ -87,14 +87,12 @@ export class TelemarketingQuestionarioComponent implements OnInit {
       telefones: [''],
       telefonePrincipal: ['']
     })
-
   }
 
   ngOnInit() {
   }
 
   _setQuestionarioForm() {
-    debugger
     this.telefones = this.pessoa.telefones.map(t => {
       return {
         id: t.id, numero: `${t.ddi || '+55'} ${t.ddd} ${t.telefone}`

@@ -1,4 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { ConnectHTTP } from '../shared/services/connectHTTP';
+import { LocalStorage } from '../shared/services/localStorage';
+import { Usuario } from '../login/usuario';
 
 @Component({
   selector: 'app-cadastro-pessoa',
@@ -18,7 +21,8 @@ export class CadastroPessoaComponent implements OnInit {
     return this._pessoa
   }
 
-  constructor() { }
+  constructor(private connectHTTP: ConnectHTTP, private localStorage: LocalStorage) {
+  }
 
   ngOnInit() {
   }

@@ -20,6 +20,7 @@ import { CadastroPessoaComponent } from './cadastro-pessoa/cadastro-pessoa.compo
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { PrincipalComponent } from './cadastro-pessoa/principal/principal.component';
 import { TelefonesComponent } from './cadastro-pessoa/telefones/telefones.component';
+import { EnderecosComponent } from './cadastro-pessoa/enderecos/enderecos.component';
 
 
 
@@ -37,6 +38,7 @@ import { TelefonesComponent } from './cadastro-pessoa/telefones/telefones.compon
     CadastroPessoaComponent,
     PrincipalComponent,
     TelefonesComponent,
+    EnderecosComponent,
   ],
   imports: [
     BrowserModule,
