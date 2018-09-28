@@ -61,6 +61,7 @@ export class TelemarketingQuestionarioComponent implements OnInit {
 
   @Input()
   set pessoa(pessoa: any) {
+    debugger
     this._pessoa = pessoa;
     if (this._evento) this._setQuestionarioForm();
   }

@@ -16,6 +16,8 @@ export class TelefonesComponent implements OnInit {
   private telefones: Array<any> = [];
   private telefoneSelecionado: boolean;
   _pessoa: any
+  @Input() refresh: any
+
   @Input()
   set pessoa(pessoa: any) {
     this._pessoa = pessoa;
@@ -93,9 +95,9 @@ export class TelefonesComponent implements OnInit {
       this.toastrService.success('Salvo com sucesso');
     }
     catch (e) {
-      this.toastrService.error('Erro ao salvar pessoa');
+      this.toastrService.error('Erro ao salvar telefone');
     }
-
+    this.refresh();
     this.telefoneSelecionado = false;
   }
 }

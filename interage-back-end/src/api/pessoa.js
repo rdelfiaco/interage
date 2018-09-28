@@ -138,4 +138,83 @@ function salvarPessoa(req, res) {
 
 }
 
-module.exports = { getPessoa, salvarPessoa }
+function getTipoTelefone(req, res) {
+  return new Promise(function (resolve, reject) {
+
+    checkTokenAccess(req).then(historico => {
+      const dbconnection = require('../config/dbConnection')
+      const { Client } = require('pg')
+
+      const client = new Client(dbconnection)
+
+      client.connect()
+      let sql = `SELECT * FROM tipo_telefone`
+
+      client.query(sql)
+        .then(res => {
+          if (res.rowCount > 0) {
+            let tipo_telefone = res.rows;
+
+            client.end();
+            resolve(tipo_telefone)
+          }
+          reject('Erro ao buscar tipos de telefones')
+        }
+        )
+        .catch(err => console.log(err)) //reject( err.hint ) )
+    }).catch(e => {
+      reject(e)
+    })
+  })
+}
+
+function salvarTelefonePessoa(req, res) {
+  return new Promise(function (resolve, reject) {
+
+    checkTokenAccess(req).then(historico => {
+      const dbconnection = require('../config/dbConnection')
+      const { Client } = require('pg')
+
+      const client = new Client(dbconnection)
+
+      client.connect()
+
+      let update;
+      client.query('BEGIN').then((res1) => {
+        update = `INSERT INTO pessoas_telefones(
+            id_pessoa, ddd, telefone, ramal, principal, id_tipo_telefone, contato, ddi)
+            VALUES('${req.query.id_pessoa}',
+                  '${req.query.ddd}',
+                  '${req.query.telefone}',
+                  '${req.query.ramal}',
+                  false,
+                  ${req.query.id_tipo_telefone},
+                  '${req.query.contato}',
+                  '55')`;
+
+        console.log(update)
+        client.query(update).then((res) => {
+          client.query('COMMIT').then((resposta) => {
+            client.end();
+            resolve(resposta)
+          }).catch(e => {
+            reject(e);
+          })
+        }).catch(e => {
+          client.query('ROLLBACK').then((resposta) => {
+            client.end();
+            reject(e)
+          }).catch(e => {
+            reject(e)
+          })
+        })
+      }).catch(e => {
+        reject(e);
+      })
+    }).catch(e => {
+      reject(e);
+    });
+  })
+}
+
+module.exports = { getPessoa, salvarPessoa, getTipoTelefone, salvarTelefonePessoa }

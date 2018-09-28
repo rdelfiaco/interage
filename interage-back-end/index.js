@@ -73,6 +73,45 @@ app.get('/salvarPessoa', (req, res) => {
     })
 });
 
+app.get('/getTipoTelefone', (req, res) => {
+  pessoa.getTipoTelefone(req)
+    .then(linhas => {
+      headerResponse(res)
+      res.status(200).send(linhas)
+    })
+    .catch(error => {
+      headerResponse(res)
+      console.log(error)
+      res.status(401).send(error)
+    })
+});
+
+app.get('/salvarTelefonePessoa', (req, res) => {
+  pessoa.salvarTelefonePessoa(req)
+    .then(linhas => {
+      headerResponse(res)
+      res.status(200).send(linhas)
+    })
+    .catch(error => {
+      headerResponse(res)
+      console.log(error)
+      res.status(401).send(error)
+    })
+});
+
+app.get('/getPessoa', (req, res) => {
+  pessoa.getPessoa(req)
+    .then(linhas => {
+      headerResponse(res)
+      res.status(200).send(linhas)
+    })
+    .catch(error => {
+      headerResponse(res)
+      console.log(error)
+      res.status(401).send(error)
+    })
+});
+
 app.listen(nodeStart.port);
 console.log(`Servidor iniciado na em http://localhost:${nodeStart.port}`)
 

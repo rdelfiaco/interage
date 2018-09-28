@@ -11,7 +11,7 @@ import { Usuario } from '../login/usuario';
 export class CadastroPessoaComponent implements OnInit {
 
   private _pessoa;
-
+  @Input() refresh: any
   @Input()
   set pessoa(evento: any) {
     this._pessoa = evento;

@@ -40,8 +40,8 @@
   </div>
   <div *ngIf="reagendar" class="row">
     <div class="md-form form-group col">
-      <mdb-date-picker #dataReagendamento (dateChanged)="onDateChange($event)" formControlName="data" name="mydate" [options]="myDatePickerOptions"
-        [placeholder]="'Selecione a data'" required></mdb-date-picker>
+      <mdb-date-picker #dataReagendamento (dateChanged)="onDateChange($event)" formControlName="data" name="mydate"
+        [options]="myDatePickerOptions" [placeholder]="'Selecione a data'" required></mdb-date-picker>
       <label for="telefoneDiscado" class="">Data</label>
     </div>
     <div class="md-form form-group col">

@@ -70,4 +70,16 @@ export class TelemarketingComponent implements OnInit {
   _limpar() {
     this.formAberto = false;
   }
+  async refresh() {
+    let p: any = this.pessoa
+    let pessoa = await this.connectHTTP.callService({
+      service: 'getPessoa',
+      paramsService: {
+        token: this.usuarioLogado.token,
+        id_usuario: this.usuarioLogado.id,
+        id_pessoa: p.principal.id
+      }
+    }) as any;
+    this.pessoa = pessoa.resposta
+  }
 }
