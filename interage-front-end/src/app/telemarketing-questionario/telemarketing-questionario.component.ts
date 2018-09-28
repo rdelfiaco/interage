@@ -16,8 +16,8 @@ interface selectValues {
   styleUrls: ['./telemarketing-questionario.component.scss']
 })
 export class TelemarketingQuestionarioComponent implements OnInit {
-  private _evento;
-  private _pessoa;
+  private _evento: any;
+  private _pessoa: any;
   private _motivos_respostas: Array<object>;
   questionarioForm: FormGroup;
   telefones: Array<string>;
@@ -49,35 +49,35 @@ export class TelemarketingQuestionarioComponent implements OnInit {
   @Input() clear: any
 
   @Input()
-  set evento(evento: string) {
+  set evento(evento: any) {
     this._evento = evento;
     if (this._pessoa) this._setQuestionarioForm();
   }
 
-  get evento(): string {
+  get evento(): any {
     return this._evento
   }
 
 
   @Input()
-  set pessoa(pessoa: string) {
+  set pessoa(pessoa: any) {
     this._pessoa = pessoa;
     if (this._evento) this._setQuestionarioForm();
   }
 
-  get pessoa(): string {
+  get pessoa(): any {
     return this._pessoa
   }
 
   @Input()
-  set motivos_respostas(motivos_respostas: string) {
+  set motivos_respostas(motivos_respostas: any) {
     this._motivos_respostas = motivos_respostas;
     this.motivosRespostasFormatado = motivos_respostas.map(m => {
       return { label: m.nome, value: m.id }
     })
   }
 
-  get motivos_respostas(): Array<object> {
+  get motivos_respostas(): any {
     return this._motivos_respostas
   }
 
@@ -149,7 +149,8 @@ export class TelemarketingQuestionarioComponent implements OnInit {
 
 
   trocaTelefonePrincipal(telefoneId: string) {
-    this.questionarioForm.controls['telefonePrincipal'].setValue(this.telefones.filter(t => t.id == telefoneId)[0].numero);
+    const numTelefone = this.telefones.filter((t: any) => t.id == telefoneId) as any;
+    this.questionarioForm.controls['telefonePrincipal'].setValue(numTelefone[0].numero);
     this.questionarioForm.controls['idTelefoneSelecionado'].setValue(telefoneId);
     this.discando = false;
   }
@@ -169,11 +170,11 @@ export class TelemarketingQuestionarioComponent implements OnInit {
     this.discando = true;
   }
   async gravarLigacao() {
-    const usuarioLogado = this.localStorage.getLocalStorage('usuarioLogado') as Usuario;
+    const usuarioLogado = this.localStorage.getLocalStorage('usuarioLogado') as any;
 
     const dataObj = this.questionarioForm.value.data;
     const data = `${dataObj.date.day}/${dataObj.date.month}/${dataObj.date.year}`
-    
+
     await this.connectHTTP.callService({
       service: 'salvarEvento',
       paramsService: {

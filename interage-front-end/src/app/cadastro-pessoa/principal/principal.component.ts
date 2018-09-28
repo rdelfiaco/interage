@@ -1,6 +1,9 @@
-import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder } from '@angular/forms';
-import { IMyOptions } from '../../../lib/ng-uikit-pro-standard';
+import { Component, OnInit, Input } from '@angular/core';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { IMyOptions, ToastService } from '../../../lib/ng-uikit-pro-standard';
+import { ConnectHTTP } from '../../shared/services/connectHTTP';
+import { Usuario } from '../../login/usuario';
+import { LocalStorage } from '../../shared/services/localStorage';
 
 
 interface selectValues {
@@ -8,19 +11,32 @@ interface selectValues {
   label: string
 }
 
+
 @Component({
   selector: 'app-principal',
   templateUrl: './principal.component.html',
   styleUrls: ['./principal.component.scss']
 })
 export class PrincipalComponent implements OnInit {
+  private _pessoa: any;
+
+  @Input()
+  set pessoa(evento: any) {
+    this._pessoa = evento;
+    this._setQuestionarioForm();
+  }
+
+  get pessoa(): any {
+    return this._pessoa
+  }
+
   tipoDePessoa: Array<object> = [
     {
-      value: '1',
+      value: 'F',
       label: "Física"
     },
     {
-      value: '2',
+      value: 'J',
       label: "Jurídica"
     },
   ]
@@ -59,7 +75,7 @@ export class PrincipalComponent implements OnInit {
       label: "Sta."
     },
   ]
-  tipoPessoaSelecionada: string = '1'
+  tipoPessoaSelecionada: string;
   principalForm: FormGroup
 
   public myDatePickerOptions: IMyOptions = {
@@ -78,43 +94,57 @@ export class PrincipalComponent implements OnInit {
     dateFormat: 'dd/mm/yyyy',
   }
 
-  status: Array<object> = [
-    {
-      value: '1',
-      label: "Ocupado"
-    },
-    {
-      value: '2',
-      label: "Telefone Errado"
-    },
-    {
-      value: '3',
-      label: "Contato com sucesso"
-    },
-    {
-      value: '4',
-      label: "Follow UP"
-    },
-  ]
-
   enumSexo: Array<object> = [
     {
-      value: '1',
+      value: 'F',
       label: "Feminino"
     },
     {
-      value: '2',
+      value: 'M',
       label: "Masculino"
     },
   ]
-  
-  constructor(private formBuilder: FormBuilder) {
+
+  constructor(private formBuilder: FormBuilder,
+    private connectHTTP: ConnectHTTP,
+    private localStorage: LocalStorage,
+    private toastrService: ToastService) {
     this.principalForm = this.formBuilder.group({
-      id: ['1234'],
-      nome: ['Usuario de Teste'],
-      pessoa: '1',
-      tratamento: '6',
-      sexo: '2'
+      id: [''],
+      nome: [''],
+      tipo: [''],
+      id_pronome_tratamento: [''],
+      datanascimento: [''],
+      sexo: [''],
+      rg_ie: [''],
+      orgaoemissor: [''],
+      cpf_cnpj: [''],
+      email: [''],
+      website: [''],
+      observacoes: [''],
+      apelido_fantasia: [''],
+      profissao: [''],
+    })
+  }
+
+  _setQuestionarioForm() {
+    this.tipoPessoaSelecionada = this.pessoa.principal.tipo;
+
+    this.principalForm = this.formBuilder.group({
+      id: [this.pessoa.principal.id, [Validators.required]],
+      nome: [this.pessoa.principal.nome, [Validators.required]],
+      tipo: [this.pessoa.principal.tipo, [Validators.required]],
+      id_pronome_tratamento: [this.pessoa.principal.id_pronome_tratamento],
+      datanascimento: [''],
+      sexo: [this.pessoa.principal.sexo],
+      rg_ie: [this.pessoa.principal.rg_ie],
+      orgaoemissor: [this.pessoa.principal.orgaoemissor],
+      cpf_cnpj: [this.pessoa.principal.cpf_cnpj],
+      email: [this.pessoa.principal.email],
+      website: [this.pessoa.principal.website],
+      observacoes: [this.pessoa.principal.observacoes],
+      apelido_fantasia: [this.pessoa.principal.apelido_fantasia],
+      profissao: [this.pessoa.principal.profissao],
     })
   }
 
@@ -125,4 +155,21 @@ export class PrincipalComponent implements OnInit {
     this.tipoPessoaSelecionada = pessoa.value;
   }
 
+  async salvarPessoa() {
+    const usuarioLogado = this.localStorage.getLocalStorage('usuarioLogado') as Usuario;
+
+    this.principalForm.value.id_usuario = usuarioLogado.id;
+    this.principalForm.value.token = usuarioLogado.token;
+    this.principalForm.value.cpf_cnpj = this.principalForm.value.cpf_cnpj.replace(/\W/gi, '')
+    try {
+      await this.connectHTTP.callService({
+        service: 'salvarPessoa',
+        paramsService: this.principalForm.value
+      });
+      this.toastrService.success('Salvo com sucesso');
+    }
+    catch (e) {
+      this.toastrService.error('Erro ao salvar pessoa');
+    }
+  }
 }

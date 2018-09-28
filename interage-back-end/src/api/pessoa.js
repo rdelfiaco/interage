@@ -1,64 +1,141 @@
 const { checkTokenAccess } = require('./checkTokenAccess');
 
 function getPessoa(req, res) {
-	return new Promise(function (resolve, reject) {
+  return new Promise(function (resolve, reject) {
 
-		checkTokenAccess(req).then(historico => {
-			const dbconnection = require('../config/dbConnection')
-			const { Client } = require('pg')
+    checkTokenAccess(req).then(historico => {
+      const dbconnection = require('../config/dbConnection')
+      const { Client } = require('pg')
 
-			const client = new Client(dbconnection)
+      const client = new Client(dbconnection)
 
-			console.log('req.query.id_pessoa', req.query.id_pessoa)
-			client.connect()
-			let sql = `SELECT * FROM pessoas
+      console.log('req.query.id_pessoa', req.query.id_pessoa)
+      client.connect()
+      let sql = `SELECT * FROM pessoas
                   WHERE id=${req.query.id_pessoa}`
 
-			client.query(sql)
-				.then(res => {
-					if (res.rowCount > 0) {
-						let pessoa = res.rows;
-						getEnderecos().then(enderecos => {
-							getTelefones().then(telefones => {
-								client.end();
-								resolve({ principal: pessoa[0], enderecos, telefones })
-							}).catch(e => {
-								reject(e);
-							})
-						}).catch(e => {
-							reject(e);
-						})
+      client.query(sql)
+        .then(res => {
+          if (res.rowCount > 0) {
+            let pessoa = res.rows;
+            getEnderecos().then(enderecos => {
+              getTelefones().then(telefones => {
+                client.end();
+                resolve({ principal: pessoa[0], enderecos, telefones })
+              }).catch(e => {
+                reject(e);
+              })
+            }).catch(e => {
+              reject(e);
+            })
 
-					}
-					else reject('Não há eventos!')
-				}).catch(err => console.log(err)) //reject( err.hint ) )
+          }
+          else reject('Não há eventos!')
+        }).catch(e => {
+          reject(e);
+        })
 
 
-			function getEnderecos() {
-				return new Promise((resolve, reject) => {
-					let sqlEnderecos = `SELECT * FROM pessoas_enderecos
+      function getEnderecos() {
+        return new Promise((resolve, reject) => {
+          let sqlEnderecos = `SELECT * FROM pessoas_enderecos
 															WHERE id_pessoa=${req.query.id_pessoa}`
 
-					client.query(sqlEnderecos).then(res => {
-						resolve(res.rows);
-					})
-				})
-			}
+          client.query(sqlEnderecos).then(res => {
+            resolve(res.rows);
+          })
+        })
+      }
 
-			function getTelefones() {
-				return new Promise((resolve, reject) => {
-					let sqlTelefones = `SELECT * FROM pessoas_telefones
+      function getTelefones() {
+        return new Promise((resolve, reject) => {
+          let sqlTelefones = `SELECT * FROM pessoas_telefones
 															WHERE id_pessoa=${req.query.id_pessoa}`
 
-					client.query(sqlTelefones).then(res => {
-						resolve(res.rows);
-					})
-				})
-			}
-		}).catch(e => {
-			reject(e)
-		})
-	})
+          client.query(sqlTelefones).then(res => {
+            resolve(res.rows);
+          })
+        })
+      }
+    }).catch(e => {
+      reject(e)
+    })
+  })
 }
 
-module.exports = { getPessoa }
+function salvarPessoa(req, res) {
+  return new Promise(function (resolve, reject) {
+
+    checkTokenAccess(req).then(historico => {
+      const dbconnection = require('../config/dbConnection')
+      const { Client } = require('pg')
+
+      const client = new Client(dbconnection)
+
+      client.connect()
+
+      let update;
+      client.query('BEGIN').then((res1) => {
+        if (req.query.tipo == 'F')
+          update = `UPDATE pessoas SET
+            nome='${req.query.nome}',
+            tipo='${req.query.tipo}',
+            id_pronome_tratamento=${req.query.id_pronome_tratamento},
+            sexo='${req.query.sexo}',
+            rg_ie='${req.query.rg_ie}',
+            orgaoemissor='${req.query.orgaoemissor}',
+            cpf_cnpj='${req.query.cpf_cnpj}',
+            email='${req.query.email}',
+            website='${req.query.website}',
+            observacoes='${req.query.observacoes}',
+            dtalteracao=now()
+
+            apelido_fantasia=null
+
+            WHERE pessoas.id=${req.query.id};
+            `;
+
+        else if (req.query.tipo == 'J')
+          update = `UPDATE pessoas SET
+            nome='${req.query.nome}',
+            tipo='${req.query.tipo}',
+            apelido_fantasia='${req.query.apelido_fantasia}',
+            id_pronome_tratamento=${req.query.id_pronome_tratamento},
+            sexo='${req.query.sexo}',
+            rg_ie='${req.query.rg_ie}',
+            orgaoemissor='${req.query.orgaoemissor}',
+            cpf_cnpj='${req.query.cpf_cnpj}',
+            email='${req.query.email}',
+            website='${req.query.website}',
+            observacoes='${req.query.observacoes}',
+            dtalteracao=now()
+
+            WHERE pessoas.id=${req.query.id};
+            `;
+
+        client.query(update).then((res) => {
+          client.query('COMMIT').then((resposta) => {
+            client.end();
+            resolve(resposta)
+          }).catch(e => {
+            reject(e);
+          })
+        }).catch(e => {
+          client.query('ROLLBACK').then((resposta) => {
+            client.end();
+            reject(e)
+          }).catch(e => {
+            reject(e)
+          })
+        })
+      }).catch(e => {
+        reject(e);
+      })
+    }).catch(e => {
+      reject(e);
+    });
+  });
+
+}
+
+module.exports = { getPessoa, salvarPessoa }

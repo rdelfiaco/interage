@@ -12,7 +12,7 @@ import { Observable } from 'rxjs';
 export class TelemarketingComponent implements OnInit {
   usuarioLogado: Usuario;
   campanhas: Observable<Array<object>>;
-  campanhaSelecionada: object;
+  campanhaSelecionada: any;
   campanhaIniciada: boolean;
   evento: Observable<object>;
   pessoa: Observable<object>;
@@ -60,7 +60,7 @@ export class TelemarketingComponent implements OnInit {
         id_usuario: this.usuarioLogado.id,
         id_campanha: this.campanhaSelecionada.value
       }
-    });
+    }) as any;
     this.evento = telemarketing.resposta.evento
     this.pessoa = telemarketing.resposta.pessoa
     this.motivos_respostas = telemarketing.resposta.motivos_respostas
