@@ -23,30 +23,36 @@
 
   <div *ngIf="discando" class="row">
     <div class="col">
-      <mdb-select (selected)="getSelectedValue($event)" [options]="status" [multiple]="false" placeholder="Selecione o Status"></mdb-select>
+      <mdb-select (selected)="selecionaMotivoResposta($event)" [options]="motivosRespostasFormatado" [multiple]="false"
+        placeholder="Selecione o Status"></mdb-select>
     </div>
   </div>
   <div *ngIf="discando" class="row">
     <div class="md-form col">
-      <textarea type="text" id="form7" class="md-textarea form-control" mdbInputDirective></textarea>
+      <textarea type="text" id="form7" formControlName="observacao" class="md-textarea form-control" mdbInputDirective></textarea>
       <label for="form7">Observação</label>
     </div>
   </div>
 
-  <hr />
-  <br />
-  <div class="row">
+  <div *ngIf="reagendar" class="row">
     <input type="checkbox" class="form-check-input" id="materialUnchecked" [checked]="reagendar" [disabled]="!reagendar">
     <label class="form-check-label" for="materialUnchecked">Reagendar</label>
   </div>
   <div *ngIf="reagendar" class="row">
     <div class="md-form form-group col">
-      <mdb-date-picker name="mydate" [options]="myDatePickerOptions" [placeholder]="'Selecione a data'" required></mdb-date-picker>
+      <mdb-date-picker #dataReagendamento formControlName="data" name="mydate" [options]="myDatePickerOptions"
+        [placeholder]="'Selecione a data'" required></mdb-date-picker>
       <label for="telefoneDiscado" class="">Data</label>
     </div>
     <div class="md-form form-group col">
       <mdb-time-picker [buttonLabel]="'Done'" [twelvehour]="false" [darktheme]="true" [placeholder]="'Selecione a hora'"
-        [label]="'Hora'" [ngModel]="darkClock"></mdb-time-picker>
+        [label]="'Hora'" formControlName="hora"></mdb-time-picker>
+    </div>
+  </div>
+  <div class="row">
+    <div class="justify-content-center">
+      <button type="button" mdbBtn color="primary" (click)=" gravarLigacao();" class="relative waves-light"
+        mdbWavesEffect [disabled]="!questionarioForm.valid">Gravar</button>
     </div>
   </div>
 </form>

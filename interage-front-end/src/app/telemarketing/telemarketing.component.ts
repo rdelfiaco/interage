@@ -16,6 +16,7 @@ export class TelemarketingComponent implements OnInit {
   campanhaIniciada: boolean;
   evento: Observable<object>;
   pessoa: Observable<object>;
+  motivos_respostas: Observable<Array<object>>;
 
 
   constructor(private connectHTTP: ConnectHTTP, private localStorage: LocalStorage) {
@@ -61,8 +62,6 @@ export class TelemarketingComponent implements OnInit {
     });;
     this.evento = telemarketing.resposta.evento
     this.pessoa = telemarketing.resposta.pessoa
-  }
-  gravarLigacao() {
-    this.ligacao = { pessoa: { nome: 'João' } }
+    this.motivos_respostas = telemarketing.resposta.motivos_respostas
   }
 }

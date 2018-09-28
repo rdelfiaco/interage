@@ -17,6 +17,7 @@ exports.checkTokenAccess = function checkTokenAccess(req) {
       .then(res => {
         if (res.rowCount > 0) {
           let historico = res.rows[0];
+          client.end();
           if (historico.id_usuario == req.query.id_usuario)
             resolve(historico)
           else reject('Token não compativel');

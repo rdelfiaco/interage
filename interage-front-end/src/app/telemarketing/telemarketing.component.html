@@ -171,16 +171,13 @@
           <div class="modal-body" style="overflow: auto; height: 400px;">
             <div class="row">
               <div *ngIf="evento && pessoa" class="col-md-5">
-                <app-telemarketing-questionario [evento]="evento" [pessoa]="pessoa"></app-telemarketing-questionario>
+                <app-telemarketing-questionario [modal]="basicModal" [evento]="evento" [pessoa]="pessoa"
+                  [motivos_respostas]="motivos_respostas"></app-telemarketing-questionario>
               </div>
               <div class="col-md-7">
                 <app-cadastro-pessoa></app-cadastro-pessoa>
               </div>
             </div>
-          </div>
-          <div class="modal-footer justify-content-center">
-            <button type="button" mdbBtn color="primary" (click)="basicModal.hide(); gravarLigacao();" class="relative waves-light"
-              mdbWavesEffect>Gravar</button>
           </div>
         </div>
       </div>
