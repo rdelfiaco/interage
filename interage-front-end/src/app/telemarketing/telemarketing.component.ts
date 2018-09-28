@@ -17,6 +17,7 @@ export class TelemarketingComponent implements OnInit {
   evento: Observable<object>;
   pessoa: Observable<object>;
   motivos_respostas: Observable<Array<object>>;
+  formAberto: boolean;
 
 
   constructor(private connectHTTP: ConnectHTTP, private localStorage: LocalStorage) {
@@ -57,11 +58,16 @@ export class TelemarketingComponent implements OnInit {
       paramsService: {
         token: this.usuarioLogado.token,
         id_usuario: this.usuarioLogado.id,
-        id_evento: this.campanhaSelecionada.value
+        id_campanha: this.campanhaSelecionada.value
       }
-    });;
+    });
     this.evento = telemarketing.resposta.evento
     this.pessoa = telemarketing.resposta.pessoa
     this.motivos_respostas = telemarketing.resposta.motivos_respostas
+    this.formAberto = true;
+  }
+
+  _limpar() {
+    this.formAberto = false;
   }
 }

@@ -1,6 +1,9 @@
 import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl, FormArray, Validators, AbstractControl } from '@angular/forms';
 import { IMyOptions, MDBDatePickerComponent } from '../../lib/ng-uikit-pro-standard';
+import { ConnectHTTP } from '../shared/services/connectHTTP';
+import { Usuario } from '../login/usuario';
+import { LocalStorage } from '../shared/services/localStorage';
 
 interface selectValues {
   value: string
@@ -42,6 +45,8 @@ export class TelemarketingQuestionarioComponent implements OnInit {
   @ViewChild("dataReagendamento") datePicker: MDBDatePickerComponent;
 
   @Input() modal: any
+  @Input() campanhaSelecionada: any
+  @Input() clear: any
 
   @Input()
   set evento(evento: string) {
@@ -76,7 +81,7 @@ export class TelemarketingQuestionarioComponent implements OnInit {
     return this._motivos_respostas
   }
 
-  constructor(private formBuilder: FormBuilder) {
+  constructor(private formBuilder: FormBuilder, private connectHTTP: ConnectHTTP, private localStorage: LocalStorage) {
     this.questionarioForm = this.formBuilder.group({
       pessoaALigar: [''],
       telefones: [''],
@@ -102,14 +107,18 @@ export class TelemarketingQuestionarioComponent implements OnInit {
         if (t.principal)
           return true
       }).map(telefonePrincipal => `${telefonePrincipal.ddi || '+55'} ${telefonePrincipal.ddd} ${telefonePrincipal.telefone}`),
+      idTelefoneSelecionado: this.pessoa.telefones.filter(t => {
+        if (t.principal)
+          return true
+      }).map(telefonePrincipal => telefonePrincipal.id),
       motivoRespostaSelecionado: ['', [
         Validators.required
       ]],
       observacao: ['', [
         Validators.required
       ]],
-      data: [''],
-      hora: ['']
+      data: ['', [Validators.required]],
+      hora: ['', [Validators.required]]
     })
 
     let data = new Date();
@@ -141,6 +150,7 @@ export class TelemarketingQuestionarioComponent implements OnInit {
 
   trocaTelefonePrincipal(telefoneId: string) {
     this.questionarioForm.controls['telefonePrincipal'].setValue(this.telefones.filter(t => t.id == telefoneId)[0].numero);
+    this.questionarioForm.controls['idTelefoneSelecionado'].setValue(telefoneId);
     this.discando = false;
   }
 
@@ -158,7 +168,50 @@ export class TelemarketingQuestionarioComponent implements OnInit {
   discar() {
     this.discando = true;
   }
-  gravarLigacao() {
+  async gravarLigacao() {
+    const usuarioLogado = this.localStorage.getLocalStorage('usuarioLogado') as Usuario;
+
+    const dataObj = this.questionarioForm.value.data;
+    const data = `${dataObj.date.day}/${dataObj.date.month}/${dataObj.date.year}`
+    
+    await this.connectHTTP.callService({
+      service: 'salvarEvento',
+      paramsService: {
+        token: usuarioLogado.token,
+        id_pessoa: usuarioLogado.id_pessoa,
+        id_usuario: usuarioLogado.id,
+        id_evento: this.evento.id,
+        id_evento_pai: this.evento.id_evento_pai,
+        id_pessoa_receptor: this.evento.id_pessoa_receptor,
+        id_motivos_respostas: this.questionarioForm.value.motivoRespostaSelecionado,
+        id_telefoneDiscado: this.questionarioForm.value.idTelefoneSelecionado,
+        id_campanha: this.campanhaSelecionada,
+        observacao: this.questionarioForm.value.observacao,
+        data,
+        hora: this.questionarioForm.value.hora,
+      }
+    });
+    this._limpar();
     this.modal.hide()
+  }
+
+  _limpar() {
+    this.questionarioForm = null;
+    this.questionarioForm = this.formBuilder.group({
+      pessoaALigar: [''],
+      telefones: [''],
+      telefonePrincipal: ['']
+    });
+    this.reagendar = false;
+    this.discando = false;
+    this.podeGravar = false;
+    this.motivoRespostaSelecionado = null;
+    this._evento = null;
+    this._pessoa = null;
+    this._motivos_respostas = null
+    this.telefones = null
+    this.motivosRespostasFormatado = null;
+    this.motivoRespostaSelecionado = null;
+    this.clear();
   }
 }

@@ -46,6 +46,19 @@ app.get('/getLigacaoTelemarketing', (req, res) => {
     })
 });
 
+app.get('/salvarEvento', (req, res) => {
+  evento.salvarEvento(req)
+    .then(linhas => {
+      headerResponse(res)
+      res.status(200).send(linhas)
+    })
+    .catch(error => {
+      headerResponse(res)
+      console.log(error)
+      res.status(401).send(error)
+    })
+});
+
 app.listen(nodeStart.port);
 console.log(`Servidor iniciado na em http://localhost:${nodeStart.port}`)
 
