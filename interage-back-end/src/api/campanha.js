@@ -11,7 +11,8 @@ function getCampanhasDoUsuario(req, res) {
 
 			client.connect()
 
-			let sql = `SELECT campanhas.id, campanhas.nome FROM campanhas_usuarios
+			console.log('historico.id_usuario', historico.id_usuario)
+			let sql = `SELECT * FROM campanhas_usuarios
 									INNER JOIN campanhas ON campanhas_usuarios.id_campanha=campanhas.id
 									WHERE campanhas_usuarios.id_usuario='${historico.id_usuario}'`
 
@@ -20,9 +21,10 @@ function getCampanhasDoUsuario(req, res) {
 					if (res.rowCount > 0) {
 						let campanhas = res.rows;
 
+						client.end();
 						resolve(campanhas)
 					}
-					reject('Usuário não encontrato')
+					reject('Usuário não encontrado')
 				}
 				)
 				.catch(err => console.log(err)) //reject( err.hint ) )

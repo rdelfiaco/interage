@@ -4,6 +4,8 @@ const nodeStart = require('./src/config/nodeStart');
 
 const usuario = require('./src/api/usuario');
 const campanha = require('./src/api/campanha');
+const evento = require('./src/api/evento');
+const telemarketing = require('./src/api/telemarketing');
 
 app.get('/login', (req, res) => {
   usuario.login(req)
@@ -20,6 +22,19 @@ app.get('/login', (req, res) => {
 
 app.get('/getCampanhasDoUsuario', (req, res) => {
   campanha.getCampanhasDoUsuario(req)
+    .then(linhas => {
+      headerResponse(res)
+      res.status(200).send(linhas)
+    })
+    .catch(error => {
+      headerResponse(res)
+      console.log(error)
+      res.status(401).send(error)
+    })
+});
+
+app.get('/getLigacaoTelemarketing', (req, res) => {
+  telemarketing.getLigacaoTelemarketing(req)
     .then(linhas => {
       headerResponse(res)
       res.status(200).send(linhas)

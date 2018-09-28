@@ -1,5 +1,8 @@
 exports.checkTokenAccess = function checkTokenAccess(req) {
   return new Promise(function (resolve, reject) {
+    if (!req.query.id_usuario) reject('!id_usuario')
+    if (!req.query.token) reject('!token_usuario')
+
     const dbconnection = require('../config/dbConnection')
     const { Client } = require('pg')
 
@@ -14,7 +17,9 @@ exports.checkTokenAccess = function checkTokenAccess(req) {
       .then(res => {
         if (res.rowCount > 0) {
           let historico = res.rows[0];
-          resolve(historico)
+          if (historico.id_usuario == req.query.id_usuario)
+            resolve(historico)
+          else reject('Token não compativel');
         }
         reject('Token não é válido')
       }

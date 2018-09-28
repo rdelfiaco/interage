@@ -8,13 +8,23 @@
   </div>
 
   <div class="row">
-    <div class="col">
-      <mdb-select (selected)="getSelectedValue($event)" [options]="telefones | async" [multiple]="false" placeholder="Telefones">
-      </mdb-select>
-    </div>
-    <div class="md-form form-group col">
-      <input type="text" id="telefoneDiscado" class="form-control" formControlName="pessoaALigar" mdbInputDirective>
-      <label for="telefoneDiscado" class="">Telefone Discado</label>
+    <div class="md-form input-group">
+      <div class="input-group-prepend">
+        <button type="button" class="btn btn-unique m-0">Action</button>
+        <button type="button" class="btn btn-unique m-0 px-3 dropdown-toggle dropdown-toggle-split" data-toggle="dropdown"
+          aria-haspopup="true" aria-expanded="false">
+          <span class="sr-only">Toggle Dropdown</span>
+        </button>
+        
+        <div class="dropdown-menu">
+          <a class="dropdown-item" href="#">Action</a>
+          <a class="dropdown-item" href="#">Another action</a>
+          <a class="dropdown-item" href="#">Something else here</a>
+          <div role="separator" class="dropdown-divider"></div>
+          <a class="dropdown-item" href="#">Separated link</a>
+        </div>
+      </div>
+      <input type="text" class="form-control" aria-label="Text input with segmented dropdown button">
     </div>
   </div>
 
@@ -24,6 +34,12 @@
     </div>
     <div class="col">
       <mdb-select (selected)="getSelectedValue($event)" [options]="status" [multiple]="false" placeholder="Selecione o Status"></mdb-select>
+    </div>
+  </div>
+  <div class="row">
+    <div class="md-form col">
+      <textarea type="text" id="form7" class="md-textarea form-control" mdbInputDirective></textarea>
+      <label for="form7">Observação</label>
     </div>
   </div>
 
@@ -41,12 +57,6 @@
     <div class="md-form form-group col">
       <mdb-time-picker [buttonLabel]="'Done'" [twelvehour]="false" [darktheme]="true" [placeholder]="'Selecione a hora'"
         [label]="'Hora'" [ngModel]="darkClock"></mdb-time-picker>
-    </div>
-  </div>
-  <div class="row">
-    <div class="md-form col">
-      <textarea type="text" id="form7" class="md-textarea form-control" mdbInputDirective></textarea>
-      <label for="form7">Observação</label>
     </div>
   </div>
 </form>

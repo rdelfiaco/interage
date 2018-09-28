@@ -29,8 +29,8 @@ export class AuthGuard implements CanActivate {
   _checkPermissaoRota(route: ActivatedRouteSnapshot, usuarioLogado: Usuario) {
     const rotas = {
       admin: ['admin'],
-      operador: ['operador'],
-      supervisor: ['supervisor'],
+      supervisor: ['admin', 'supervisor'],
+      operador: ['admin', 'operador', 'supervisor'],
       telemarketing: ['admin', 'supervisor', 'operador'],
     }
 

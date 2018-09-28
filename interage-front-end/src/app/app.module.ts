@@ -19,6 +19,7 @@ import { TelemarketingQuestionarioComponent } from './telemarketing-questionario
 import { CadastroPessoaComponent } from './cadastro-pessoa/cadastro-pessoa.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { PrincipalComponent } from './cadastro-pessoa/principal/principal.component';
+import { TelefonesComponent } from './cadastro-pessoa/telefones/telefones.component';
 
 
 
@@ -35,6 +36,7 @@ import { PrincipalComponent } from './cadastro-pessoa/principal/principal.compon
     TelemarketingQuestionarioComponent,
     CadastroPessoaComponent,
     PrincipalComponent,
+    TelefonesComponent,
   ],
   imports: [
     BrowserModule,

@@ -10,21 +10,24 @@ import { Observable } from 'rxjs';
   styleUrls: ['./telemarketing.component.scss']
 })
 export class TelemarketingComponent implements OnInit {
+  usuarioLogado: Usuario;
   campanhas: Observable<Array<object>>;
   campanhaSelecionada: object;
   campanhaIniciada: boolean;
-  ligacao: object;
+  ligacao: Observable<object>;
+  pessoa: Observable<object>;
 
 
   constructor(private connectHTTP: ConnectHTTP, private localStorage: LocalStorage) {
+    this.usuarioLogado = this.localStorage.getLocalStorage('usuarioLogado') as Usuario;
   }
 
   async ngOnInit() {
-    let usuarioLogado = this.localStorage.getLocalStorage('usuarioLogado') as Usuario;
     let campanha = await this.connectHTTP.callService({
       service: 'getCampanhasDoUsuario',
       paramsService: {
-        token: usuarioLogado.token
+        token: this.usuarioLogado.token,
+        id_usuario: this.usuarioLogado.id,
       }
     });
     this.campanhas = new Observable((observer) => {
@@ -47,8 +50,22 @@ export class TelemarketingComponent implements OnInit {
   pararCampanha() {
     this.campanhaIniciada = null
   }
-  solicitarLigacao() {
-    this.ligacao = { pessoa: { nome: 'João' } }
+  async solicitarLigacao() {
+    let telemarketing = await this.connectHTTP.callService({
+      service: 'getLigacaoTelemarketing',
+      paramsService: {
+        token: this.usuarioLogado.token,
+        id_usuario: this.usuarioLogado.id,
+        id_evento: this.campanhaSelecionada.value
+      }
+    });;
+
+    this.ligacao = new Observable((observer) => {
+      observer.next(telemarketing.resposta.ligacao as object)
+    })
+    this.pessoa = new Observable((observer) => {
+      observer.next(telemarketing.resposta.pessoa as object)
+    })
   }
   gravarLigacao() {
     this.ligacao = { pessoa: { nome: 'João' } }

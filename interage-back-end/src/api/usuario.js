@@ -22,6 +22,7 @@ function login(req, res) {
           delete usuario.senha;
           delete usuario.login;
           usuario.token = token_access;
+          client.end();
           resolve(usuario)
         }
         reject('Usuário não encontrato')

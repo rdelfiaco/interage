@@ -1,0 +1,38 @@
+<form [formGroup]="telefoneForm" class="formQuestionario">
+  <div class="row">
+    <div class="col mdb-select-form">
+      <mdb-select formControlName="telefone" (selected)="getSelectedValueTelefone($event)" [options]="tipoTelefone"
+        [multiple]="false" placeholder="Tipo de Telefone"></mdb-select>
+      <label>Tipo</label>
+    </div>
+  </div>
+  <div class="row">
+    <div class="md-form col-2">
+      <input mdbInputDirective formControlName="ddd" max="3" min="2" type="text" id="ddi" class="form-control">
+      <label for="ddd">DDI</label>
+    </div>
+    <div class="md-form col-2">
+      <input mdbInputDirective formControlName="ddd" max="4" min="3" type="text" id="ddd" class="form-control">
+      <label for="ddd">DDD</label>
+    </div>
+    <div class="md-form col">
+      <input mdbInputDirective formControlName="telefone" type="text" id="telefone" class="form-control">
+      <label for="telefone">Telefone</label>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="md-form col-3">
+      <input mdbInputDirective formControlName="ramal" type="text" id="ramal" class="form-control">
+      <label for="ramal">Ramal</label>
+    </div>
+    <div class="md-form col">
+      <input mdbInputDirective formControlName="contato" type="text" id="contato" class="form-control">
+      <label for="contato">Contato</label>
+    </div>
+  </div>
+
+  <div class="row">
+    
+  </div>
+</form>
