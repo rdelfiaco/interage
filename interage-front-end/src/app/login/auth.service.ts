@@ -27,6 +27,12 @@ export class AuthService {
   }
   checkAutenticacao() {
     if (this._getDataExpiracao() && this._getDataExpiracao().getTime() > new Date().getTime()) return true;
+    else {
+      let usuarioLogado = new LocalStorage().getLocalStorage('usuarioLogado') as Usuario;
+
+      new LocalStorage().delLocalStorage(usuarioLogado.token)
+      new LocalStorage().delLocalStorage('usuarioLogado')
+    }
   }
 
   validaAutenticacao() {

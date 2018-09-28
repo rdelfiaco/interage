@@ -11,7 +11,6 @@ interface selectValues {
   label: string
 }
 
-
 @Component({
   selector: 'app-principal',
   templateUrl: './principal.component.html',
