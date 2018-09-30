@@ -8,6 +8,7 @@ const evento = require('./src/api/evento');
 const telemarketing = require('./src/api/telemarketing');
 const pessoa = require('./src/api/pessoa');
 
+
 app.get('/login', (req, res) => {
   usuario.login(req)
     .then(linhas => {
@@ -111,6 +112,20 @@ app.get('/getPessoa', (req, res) => {
       res.status(401).send(error)
     })
 });
+
+app.get('/getEventosPendentes', (req, res) => {
+  evento.getEventosPendentes(req)
+    .then(linhas => {
+      headerResponse(res)
+      res.status(200).send(linhas)
+    })
+    .catch(error => {
+      headerResponse(res)
+      console.log(error)
+      res.status(401).send(error)
+    })
+});
+
 
 app.listen(nodeStart.port);
 console.log(`Servidor iniciado na em http://localhost:${nodeStart.port}`)
