@@ -1,7 +1,8 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { ConnectHTTP } from '../shared/services/connectHTTP';
 import { LocalStorage } from '../shared/services/localStorage';
 import { Usuario } from '../login/usuario';
+import { Observable, Observer, Subscriber } from 'rxjs';
 
 @Component({
   selector: 'app-cadastro-pessoa',
@@ -11,10 +12,11 @@ import { Usuario } from '../login/usuario';
 export class CadastroPessoaComponent implements OnInit {
 
   private _pessoa;
-  @Input() refresh: any
+  observerPessoa: Subscriber<object>;
+  @Output() refresh = new EventEmitter();
   @Input()
-  set pessoa(evento: any) {
-    this._pessoa = evento;
+  set pessoa(pessoa: Observable<object>) {
+    if (pessoa) this._pessoa = pessoa;
   }
 
   get pessoa(): any {
@@ -22,9 +24,14 @@ export class CadastroPessoaComponent implements OnInit {
   }
 
   constructor(private connectHTTP: ConnectHTTP, private localStorage: LocalStorage) {
+
   }
 
   ngOnInit() {
   }
 
+  refreshDad() {
+
+    this.refresh.emit();
+  }
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ConnectHTTP } from '../../shared/services/connectHTTP';
 import { LocalStorage } from '../../shared/services/localStorage';
@@ -16,12 +16,13 @@ export class TelefonesComponent implements OnInit {
   private telefones: Array<any> = [];
   private telefoneSelecionado: boolean;
   _pessoa: any
-  @Input() refresh: any
+  @Output() refresh = new EventEmitter();
 
   @Input()
   set pessoa(pessoa: any) {
-    this._pessoa = pessoa;
-    this.telefones = pessoa.telefones;
+    ;
+    if (pessoa)
+      this._pessoa = pessoa;
   }
 
   get pessoa(): any {
@@ -97,7 +98,7 @@ export class TelefonesComponent implements OnInit {
     catch (e) {
       this.toastrService.error('Erro ao salvar telefone');
     }
-    this.refresh();
+    this.refresh.emit();
     this.telefoneSelecionado = false;
   }
 }

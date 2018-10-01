@@ -22,7 +22,8 @@ export class PrincipalComponent implements OnInit {
   @Input()
   set pessoa(evento: any) {
     this._pessoa = evento;
-    this._setQuestionarioForm();
+    if (this._pessoa)
+      this._setQuestionarioForm();
   }
 
   get pessoa(): any {

@@ -1,14 +1,15 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { ConnectHTTP } from '../shared/services/connectHTTP';
 import { LocalStorage } from '../shared/services/localStorage';
 import { Usuario } from '../login/usuario';
-import { Observable } from 'rxjs';
+import { Observable, Subscriber } from 'rxjs';
 
 @Component({
   selector: 'telemarketing',
   templateUrl: './telemarketing.component.html',
   styleUrls: ['./telemarketing.component.scss']
 })
+
 export class TelemarketingComponent implements OnInit {
   usuarioLogado: Usuario;
   campanhas: Observable<Array<object>>;
@@ -16,11 +17,15 @@ export class TelemarketingComponent implements OnInit {
   campanhaIniciada: boolean;
   evento: Observable<object>;
   pessoa: Observable<object>;
+  observerPessoa: Subscriber<object>;
+  observerEvento: Subscriber<object>;
   motivos_respostas: Observable<Array<object>>;
   formAberto: boolean;
+  pessoaObject: any = {nome: 'dasd'}
+  pessoaNome: string;
 
 
-  constructor(private connectHTTP: ConnectHTTP, private localStorage: LocalStorage) {
+  constructor(private connectHTTP: ConnectHTTP, private localStorage: LocalStorage, private dt: ChangeDetectorRef) {
     this.usuarioLogado = this.localStorage.getLocalStorage('usuarioLogado') as Usuario;
   }
 
@@ -53,16 +58,27 @@ export class TelemarketingComponent implements OnInit {
     this.campanhaIniciada = null
   }
   async solicitarLigacao() {
+    var self = this;
+
     let telemarketing = await this.connectHTTP.callService({
       service: 'getLigacaoTelemarketing',
       paramsService: {
         token: this.usuarioLogado.token,
         id_usuario: this.usuarioLogado.id,
-        id_campanha: this.campanhaSelecionada.value
+        id_campanha: this.campanhaSelecionada.value,
+        id_pessoa: this.usuarioLogado.id_pessoa
       }
     }) as any;
-    this.evento = telemarketing.resposta.evento
-    this.pessoa = telemarketing.resposta.pessoa
+
+    this.evento = new Observable((observer) => {
+      observer.next(telemarketing.resposta.evento);
+    });
+    this.pessoa = new Observable((observer) => {
+      self.observerPessoa = observer;
+      observer.next(telemarketing.resposta.pessoa)
+      self.pessoaObject = telemarketing.resposta.pessoa;
+    });
+
     this.motivos_respostas = telemarketing.resposta.motivos_respostas
     this.formAberto = true;
   }
@@ -71,15 +87,15 @@ export class TelemarketingComponent implements OnInit {
     this.formAberto = false;
   }
   async refresh() {
-    let p: any = this.pessoa
+    let pessoaId = this.pessoaObject.principal.id
     let pessoa = await this.connectHTTP.callService({
       service: 'getPessoa',
       paramsService: {
         token: this.usuarioLogado.token,
         id_usuario: this.usuarioLogado.id,
-        id_pessoa: p.principal.id
+        id_pessoa: pessoaId
       }
     }) as any;
-    this.pessoa = pessoa.resposta
+    this.observerPessoa.next(pessoa.resposta);
   }
 }

@@ -16,7 +16,7 @@
     <div class="row">
       <div class="col-12">
         <br>
-        <app-telefones [pessoa]="pessoa" [refresh]="refresh"></app-telefones>
+        <app-telefones [pessoa]="pessoa" (refresh)="refreshDad()"></app-telefones>
       </div>
     </div>
   </mdb-tab>
@@ -25,7 +25,7 @@
     <div class="row">
       <div class="col-12">
         <br>
-        <app-enderecos [pessoa]="pessoa" [refresh]="refresh"></app-enderecos>
+        <app-enderecos [pessoa]="pessoa" (refresh)="refreshDad()"></app-enderecos>
       </div>
     </div>
   </mdb-tab>

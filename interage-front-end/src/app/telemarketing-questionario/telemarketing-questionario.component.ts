@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, ElementRef, EventEmitter } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl, FormArray, Validators, AbstractControl } from '@angular/forms';
 import { IMyOptions, MDBDatePickerComponent } from '../../lib/ng-uikit-pro-standard';
 import { ConnectHTTP } from '../shared/services/connectHTTP';
@@ -20,7 +20,6 @@ export class TelemarketingQuestionarioComponent implements OnInit {
   private _pessoa: any;
   private _motivos_respostas: Array<object>;
   questionarioForm: FormGroup;
-  telefones: Array<string>;
   motivosRespostasFormatado: Array<object>
   motivoRespostaSelecionado: object
   public myDatePickerOptions: IMyOptions = {
@@ -61,7 +60,6 @@ export class TelemarketingQuestionarioComponent implements OnInit {
 
   @Input()
   set pessoa(pessoa: any) {
-    debugger
     this._pessoa = pessoa;
     if (this._evento) this._setQuestionarioForm();
   }
@@ -94,12 +92,6 @@ export class TelemarketingQuestionarioComponent implements OnInit {
   }
 
   _setQuestionarioForm() {
-    this.telefones = this.pessoa.telefones.map(t => {
-      return {
-        id: t.id, numero: `${t.ddi || '+55'} ${t.ddd} ${t.telefone}`
-      }
-    });
-
     this.questionarioForm = this.formBuilder.group({
       pessoaALigar: [this.pessoa.principal.nome],
       telefonePrincipal: this.pessoa.telefones.filter(t => {
@@ -148,8 +140,9 @@ export class TelemarketingQuestionarioComponent implements OnInit {
 
 
   trocaTelefonePrincipal(telefoneId: string) {
-    const numTelefone = this.telefones.filter((t: any) => t.id == telefoneId) as any;
-    this.questionarioForm.controls['telefonePrincipal'].setValue(numTelefone[0].numero);
+    const numTelefone = this.pessoa.telefones.filter((t: any) => t.id == telefoneId) as any;
+    debugger;
+    this.questionarioForm.controls['telefonePrincipal'].setValue(`${numTelefone[0].ddi} ${numTelefone[0].ddd} ${numTelefone[0].telefone}`);
     this.questionarioForm.controls['idTelefoneSelecionado'].setValue(telefoneId);
     this.discando = false;
   }
@@ -181,7 +174,7 @@ export class TelemarketingQuestionarioComponent implements OnInit {
         id_pessoa: usuarioLogado.id_pessoa,
         id_usuario: usuarioLogado.id,
         id_evento: this.evento.id,
-        id_evento_pai: this.evento.id_evento_pai,
+        id_evento_pai: this.evento.id_evento_pai ? this.evento.id_evento_pai : this.evento.id,
         id_pessoa_receptor: this.evento.id_pessoa_receptor,
         id_motivos_respostas: this.questionarioForm.value.motivoRespostaSelecionado,
         id_telefoneDiscado: this.questionarioForm.value.idTelefoneSelecionado,
@@ -209,7 +202,6 @@ export class TelemarketingQuestionarioComponent implements OnInit {
     this._evento = null;
     this._pessoa = null;
     this._motivos_respostas = null
-    this.telefones = null
     this.motivosRespostasFormatado = null;
     this.motivoRespostaSelecionado = null;
     this.clear();
