@@ -1,3 +1,4 @@
+import { EventoComponent } from './evento/evento.component';
 
 import { DashboardSupervisorComponent } from './dashboard-supervisor/dashboard-supervisor.component';
 import { DashboardOperadorComponent } from './dashboard-operador/dashboard-operador.component';
@@ -11,6 +12,7 @@ import { AuthGuard } from './login/auth.guard';
 import { SemPermissaoComponent } from './sem-permissao/sem-permissao.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { TelemarketingComponent } from './telemarketing/telemarketing.component';
+
 
 
 const routes: Routes = [
@@ -43,6 +45,14 @@ const routes: Routes = [
     component: TelemarketingComponent,
     canActivate: [AuthGuard]
   },
+ {
+    path: 'eventos',
+    component: EventoComponent,
+    canActivate: [AuthGuard]
+  },
+
+
+
   { path: '**', component: PageNotFoundComponent }
 ];
 

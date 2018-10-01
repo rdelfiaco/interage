@@ -173,4 +173,40 @@ function salvarEvento(req, res) {
 
 }
 
-module.exports = { getUmEvento, motivosRespostas, salvarEvento }
+function getEventosPendentes(req, res) {
+  return new Promise(function (resolve, reject) {
+
+    checkTokenAccess(req).then(historico => {
+      const dbconnection = require('../config/dbConnection')
+      const { Client } = require('pg')
+
+      const client = new Client(dbconnection)
+
+      client.connect()
+
+      let sql = `select *
+                from view_eventos
+                where id_status_evento in (1,4,5,6)
+                and ( (tipodestino = 'O' and id_pessoa_organograma = ${req.query.id_organograma} ) or  (tipodestino = 'P' and id_usuario = ${req.query.id_usuario} ))
+                and dt_para_exibir <= now()
+                order by dt_criou `
+
+      client.query(sql)
+        .then(res => {
+          if (res.rowCount > 0) {
+            let evento = res.rows;
+            client.end();
+            resolve(evento)
+          }
+          else reject('Não há eventos!')
+        }
+        )
+        .catch(err => console.log(err)) //reject( err.hint ) )
+    }).catch(e => {
+      reject(e)
+    })
+  })
+}
+
+
+module.exports = { getUmEvento, motivosRespostas, salvarEvento, getEventosPendentes }

@@ -1,6 +1,6 @@
 export class Usuario {
     private _login: string;
-    private _idOrgonograma: number;
+    private _id_organograma: number;
     private _id: number;
     private _senha: string;
     private _dashboard: string;
@@ -57,11 +57,11 @@ export class Usuario {
         this._id = value;
     };
 
-    public get idOrgonograma(): number {
-        return this._idOrgonograma;
+    public get id_organograma(): number {
+        return this._id_organograma;
     };
-    public set idOrgonograma(value: number) {
-        this._idOrgonograma = value;
+    public set id_organograma(value: number) {
+        this._id_organograma = value;
     };
 
 }

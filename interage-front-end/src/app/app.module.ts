@@ -1,3 +1,4 @@
+import { EventoModule } from './evento/evento.module';
 
 
 
@@ -21,6 +22,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { PrincipalComponent } from './cadastro-pessoa/principal/principal.component';
 import { TelefonesComponent } from './cadastro-pessoa/telefones/telefones.component';
 import { EnderecosComponent } from './cadastro-pessoa/enderecos/enderecos.component';
+import { EventoComponent } from './evento/evento.component';
 
 
 
@@ -38,7 +40,7 @@ import { EnderecosComponent } from './cadastro-pessoa/enderecos/enderecos.compon
     CadastroPessoaComponent,
     PrincipalComponent,
     TelefonesComponent,
-    EnderecosComponent,
+    EnderecosComponent
   ],
   imports: [
     BrowserModule,
@@ -47,6 +49,7 @@ import { EnderecosComponent } from './cadastro-pessoa/enderecos/enderecos.compon
     AppRoutingModule,
     LoginModule,
     FormsModule,
+    EventoModule,
     ReactiveFormsModule,
     ToastModule.forRoot(),
 
