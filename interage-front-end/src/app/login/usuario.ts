@@ -7,6 +7,15 @@ export class Usuario {
     private _ultimoLogin: Date;
     private _permissao: string;
     private _token: string;
+    private _id_pessoa: number;
+
+    
+    public get id_pessoa(): number {
+        return this._id_pessoa;
+    }
+    public set id_pessoa(value: number) {
+        this._id_pessoa = value;
+    }
     
     public get token(): string {
         return this._token;

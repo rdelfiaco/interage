@@ -37,7 +37,7 @@ export class EventoComponent implements OnInit {
   firstPageNumber: number = 1;
   lastPageNumber: number;
   maxVisibleItems: number = 10;
-
+  radioModel: string = 'dtCompromisso';
 
   constructor(private http: Http, private connectHTTP: ConnectHTTP, private localStorage: LocalStorage) { 
     this.usuarioLogado = this.localStorage.getLocalStorage('usuarioLogado') as Usuario;

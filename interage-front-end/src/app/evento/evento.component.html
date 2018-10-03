@@ -1,12 +1,34 @@
 <div class="card card-cascade narrower mt-5">
 
     <!--Card image-->
-    <div class="view view-cascade gradient-card-header purple-gradient narrower py-4 mx-4 mb-3 d-flex justify-content-center align-items-center">
+    <div class="view view-cascade gradient-card-header blue-gradient narrower py-1 mx-2 mb-3 d-flex justify-content-center align-items-center">
   
       <h4 class="white-text font-weight-bold text-uppercase mb-0">TAREFAS / EVENTOS</h4>
   
     </div>
-  
+    <!-- Card Filtros -->
+    <div>
+      <div class="row  d-flex align-items-center justify-content-center">
+          <div class="col-md-12">
+            <div class="md-form">
+              <input type="search" [(ngModel)]="searchText" id="search" class="form-control" mdbInputDirective [mdbValidate]="false">
+              <label for="search">Search data</label>
+            </div>
+            <div class="btn-group ">
+                <label mdbBtn color="teal" rounded="true" [(ngModel)]="radioModel" mdbRadio="dtCompromisso" mdbWavesEffect>
+                  Data do compromisso
+                </label>
+                <label mdbBtn color="teal" rounded="true" [(ngModel)]="radioModel" mdbRadio="dtCriacao" mdbWavesEffect>
+                  Data de criação
+                </label>
+            </div>
+          </div>
+      </div>
+        
+
+    </div>
+
+
     <!--/Card image-->
     <div class="row  d-flex align-items-center justify-content-center">
       <div class="col-md-6 mx-auto">
@@ -27,30 +49,30 @@
         <!--Table head-->
         <thead>
           <tr>
-            <th style="width: 50px">Status
+            <th class="th-sm">Status
             </th>
-            <th class="th-lg">Dt. criação
+            <th class="th-sm">Dt. criação
               <mdb-icon icon="sort" (click)="sortBy('dt_criou')"></mdb-icon>
             </th>
-            <th class="th-lg">Cliente
+            <th class="th-sm">Cliente
               <mdb-icon icon="sort" (click)="sortBy('cliente')"></mdb-icon>
             </th>
-            <th class="th-lg">Motivo
+            <th class="th-sm">Motivo
                 <mdb-icon icon="sort" (click)="sortBy('motivo')"></mdb-icon>
             </th>
-            <th class="th-lg">P.
+            <th class="th-sm">P.
                 <mdb-icon icon="sort" (click)="sortBy('prioridade')"></mdb-icon>
             </th>
-            <th class="th-lg">Dt.prevista
+            <th class="th-sm">Dt.prevista
                 <mdb-icon icon="sort" (click)="sortBy('dt_prevista_resolucao')"></mdb-icon>
             </th>
-            <th class="th-lg">Destino
+            <th class="th-sm">Destino
                 <mdb-icon icon="sort" (click)="sortBy('destino')"></mdb-icon>
             </th>
-            <th class="th-lg">Criador
+            <th class="th-sm">Criador
                 <mdb-icon icon="sort" (click)="sortBy('pessoa_criou')"></mdb-icon>
             </th>
-            <th class="th-lg">Tempo
+            <th class="th-sm">Tempo
                 <mdb-icon icon="sort" (click)="sortBy('tempo')"></mdb-icon>
             </th>
           </tr>
@@ -60,15 +82,19 @@
         <!--Table body-->
         <tbody>
           <tr #list *ngFor="let evento of tableData; let i = index">
-            <th *ngIf="i+1 >= firstVisibleIndex && i+1 <= lastVisibleIndex">{{evento.status}}</th>
-            <td *ngIf="i+1 >= firstVisibleIndex && i+1 <= lastVisibleIndex">{{evento.dt_criou  | date:'dd/MM/yyyy HH:mm:ss' }}</td>
-            <td *ngIf="i+1 >= firstVisibleIndex && i+1 <= lastVisibleIndex">{{evento.cliente}}</td>
-            <td *ngIf="i+1 >= firstVisibleIndex && i+1 <= lastVisibleIndex">{{evento.motivo}}</td>
-            <td *ngIf="i+1 >= firstVisibleIndex && i+1 <= lastVisibleIndex">{{evento.prioridade}}</td>
-            <td *ngIf="i+1 >= firstVisibleIndex && i+1 <= lastVisibleIndex">{{evento.dt_prevista_resolucao | date:'dd/MM/yyyy HH:mm:ss'  }}</td>
-            <td *ngIf="i+1 >= firstVisibleIndex && i+1 <= lastVisibleIndex">{{evento.destino}}</td>
-            <td *ngIf="i+1 >= firstVisibleIndex && i+1 <= lastVisibleIndex">{{evento.pessoa_criou}}</td>
-            <td *ngIf="i+1 >= firstVisibleIndex && i+1 <= lastVisibleIndex">{{evento.tempo.hours}}:{{evento.tempo.minutes}}:{{evento.tempo.seconds}} </td>
+            <td *ngIf="i+1 >= firstVisibleIndex && i+1 <= lastVisibleIndex">
+              <a>
+                <mdb-icon class={{evento.status_evento_cor_texto}} icon={{evento.status_evento_icone}} class="mr-2 "></mdb-icon>
+              </a>
+            </td>
+            <td *ngIf="i+1 >= firstVisibleIndex && i+1 <= lastVisibleIndex" class={{evento.status_evento_cor_texto}} >{{evento.dt_criou  | date:'dd/MM/yyyy' }}</td>
+            <td *ngIf="i+1 >= firstVisibleIndex && i+1 <= lastVisibleIndex" class={{evento.status_evento_cor_texto}} >{{evento.cliente}}</td>
+            <td *ngIf="i+1 >= firstVisibleIndex && i+1 <= lastVisibleIndex" class={{evento.status_evento_cor_texto}} >{{evento.motivo}}</td>
+            <td *ngIf="i+1 >= firstVisibleIndex && i+1 <= lastVisibleIndex" class={{evento.status_evento_cor_texto}} >{{evento.prioridade}}</td>
+            <td *ngIf="i+1 >= firstVisibleIndex && i+1 <= lastVisibleIndex" class={{evento.status_evento_cor_texto}} >{{evento.dt_prevista_resolucao | date:'dd/MM/yyyy HH:mm:ss'  }}</td>
+            <td *ngIf="i+1 >= firstVisibleIndex && i+1 <= lastVisibleIndex" class={{evento.status_evento_cor_texto}} >{{evento.destino}}</td>
+            <td *ngIf="i+1 >= firstVisibleIndex && i+1 <= lastVisibleIndex" class={{evento.status_evento_cor_texto}}  >{{evento.pessoa_criou}}</td>
+            <td *ngIf="i+1 >= firstVisibleIndex && i+1 <= lastVisibleIndex" class={{evento.status_evento_cor_texto}} >{{evento.tempo}}</td>
           </tr>
         </tbody>
         <!--Table body-->
