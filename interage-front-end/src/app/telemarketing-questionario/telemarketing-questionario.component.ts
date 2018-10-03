@@ -138,7 +138,7 @@ export class TelemarketingQuestionarioComponent implements OnInit {
 
   trocaTelefonePrincipal(telefoneId: string) {
     const numTelefone = this._pessoaObject.telefones.filter((t: any) => t.id == telefoneId) as any;
-    debugger;
+
     this.questionarioForm.controls['telefonePrincipal'].setValue(`${numTelefone[0].ddi} ${numTelefone[0].ddd} ${numTelefone[0].telefone}`);
     this.questionarioForm.controls['idTelefoneSelecionado'].setValue(telefoneId);
     this.discando = false;

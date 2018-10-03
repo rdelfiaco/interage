@@ -11,7 +11,7 @@ import { Observable, Subscriber } from 'rxjs';
 })
 
 export class TelemarketingComponent implements OnInit {
-  usuarioLogado: Usuario;
+  usuarioLogado: any;
   campanhas: Observable<Array<object>>;
   campanhaSelecionada: any;
   campanhaIniciada: boolean;
@@ -21,7 +21,7 @@ export class TelemarketingComponent implements OnInit {
   observerEvento: Subscriber<object>;
   motivos_respostas: Observable<Array<object>>;
   formAberto: boolean;
-  pessoaObject: any = { nome: 'dasd' }
+  pessoaObject: any;
   pessoaNome: string;
 
 

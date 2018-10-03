@@ -165,8 +165,9 @@
       role="dialog" aria-labelledby="myBasicModalLabel" aria-hidden="true">
       <div class="modal-dialog modal-fluid" role="document">
         <div class="modal-content">
-          <div class="modal-header">
-            <h4 class="modal-title w-100" id="myModalLabel">Telemarketing - {{pessoaObject.principal.nome}}</h4>
+          <div *ngIf="pessoaObject" class="modal-header">
+            <h4 class="modal-title w-100" id="myModalLabel">Telemarketing -
+              {{pessoaObject.principal.nome}}</h4>
           </div>
           <div class="modal-body" style="overflow: auto; height: 80vh;">
             <div class="row">

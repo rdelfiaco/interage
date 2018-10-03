@@ -87,6 +87,20 @@ app.get('/getTipoTelefone', (req, res) => {
     })
 });
 
+
+app.get('/getPessoa', (req, res) => {
+  pessoa.getPessoa(req)
+    .then(linhas => {
+      headerResponse(res)
+      res.status(200).send(linhas)
+    })
+    .catch(error => {
+      headerResponse(res)
+      console.log(error)
+      res.status(401).send(error)
+    })
+});
+
 app.get('/salvarTelefonePessoa', (req, res) => {
   pessoa.salvarTelefonePessoa(req)
     .then(linhas => {
@@ -100,8 +114,34 @@ app.get('/salvarTelefonePessoa', (req, res) => {
     })
 });
 
-app.get('/getPessoa', (req, res) => {
-  pessoa.getPessoa(req)
+app.get('/excluirTelefonePessoa', (req, res) => {
+  pessoa.excluirTelefonePessoa(req)
+    .then(linhas => {
+      headerResponse(res)
+      res.status(200).send(linhas)
+    })
+    .catch(error => {
+      headerResponse(res)
+      console.log(error)
+      res.status(401).send(error)
+    })
+});
+
+app.get('/salvarEnderecoPessoa', (req, res) => {
+  pessoa.salvarEnderecoPessoa(req)
+    .then(linhas => {
+      headerResponse(res)
+      res.status(200).send(linhas)
+    })
+    .catch(error => {
+      headerResponse(res)
+      console.log(error)
+      res.status(401).send(error)
+    })
+});
+
+app.get('/excluirEnderecoPessoa', (req, res) => {
+  pessoa.excluirEnderecoPessoa(req)
     .then(linhas => {
       headerResponse(res)
       res.status(200).send(linhas)

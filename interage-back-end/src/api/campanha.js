@@ -11,7 +11,6 @@ function getCampanhasDoUsuario(req, res) {
 
 			client.connect()
 
-			console.log('historico.id_usuario', historico.id_usuario)
 			let sql = `SELECT * FROM campanhas_usuarios
 									INNER JOIN campanhas ON campanhas_usuarios.id_campanha=campanhas.id
 									WHERE campanhas_usuarios.id_usuario='${historico.id_usuario}'`
