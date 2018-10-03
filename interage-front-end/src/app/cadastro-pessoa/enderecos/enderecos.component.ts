@@ -32,7 +32,6 @@ export class EnderecosComponent implements OnInit {
   ngOnChanges(changes: SimpleChanges) {
     if (changes["pessoa"] && this.pessoa) {
       this.pessoa.subscribe(pessoa => {
-        debugger;
         this._pessoaObject = pessoa
       });
     }

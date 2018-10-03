@@ -304,7 +304,7 @@ function salvarEnderecoPessoa(req, res) {
                   )`;
 
 
-        console.log(update)
+                  
         client.query(update).then((res) => {
           client.query('COMMIT').then((resposta) => {
             client.end();

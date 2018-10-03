@@ -96,12 +96,10 @@ function salvarEvento(req, res) {
             WHERE eventos.id=${req.query.id_evento};
             `;
 
-            console.log(update)
-
             client.query(update).then((res) => {
               motivoResposta_automatico.map((m, index, array) => {
                 eventoCriar = createEvent(m)
-                console.log(eventoCriar)
+                
                 client.query(eventoCriar).then(res => {
                   if (index == array.length - 1)
                     client.query('COMMIT').then((resposta) => {
