@@ -20,7 +20,7 @@ export class CadastroPessoaComponent implements OnInit {
   }
 
   get pessoa(): any {
-    return this._pessoa
+    return this._pessoa 
   }
 
   constructor(private connectHTTP: ConnectHTTP, private localStorage: LocalStorage) {

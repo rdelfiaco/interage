@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ConnectHTTP } from '../../shared/services/connectHTTP';
 import { LocalStorage } from '../../shared/services/localStorage';
@@ -16,18 +16,10 @@ export class TelefonesComponent implements OnInit {
   private telefones: Array<any> = [];
   private telefoneSelecionado: boolean;
   _pessoa: any
+  _pessoaObject: any;
   @Output() refresh = new EventEmitter();
 
-  @Input()
-  set pessoa(pessoa: any) {
-    ;
-    if (pessoa)
-      this._pessoa = pessoa;
-  }
-
-  get pessoa(): any {
-    return this._pessoa
-  }
+  @Input() pessoa: Observable<string[]>;
 
   private tipoTelefone: Observable<Array<object>>;
   private usuarioLogado: any;
@@ -67,10 +59,18 @@ export class TelefonesComponent implements OnInit {
     })
   }
 
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes["pessoa"] && this.pessoa) {
+      this.pessoa.subscribe(pessoa => {
+        this._pessoaObject = pessoa
+      });
+    }
+  }
+
   adicionarNovoTelefone() {
     this.telefoneForm = this.formBuilder.group({
       id: [''],
-      id_pessoa: [this.pessoa.principal.id, [Validators.required]],
+      id_pessoa: [this._pessoaObject.principal.id, [Validators.required]],
       ddd: ['', [Validators.required]],
       telefone: ['', [Validators.required]],
       ramal: [''],

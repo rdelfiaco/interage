@@ -21,7 +21,7 @@ export class TelemarketingComponent implements OnInit {
   observerEvento: Subscriber<object>;
   motivos_respostas: Observable<Array<object>>;
   formAberto: boolean;
-  pessoaObject: any = {nome: 'dasd'}
+  pessoaObject: any = { nome: 'dasd' }
   pessoaNome: string;
 
 
@@ -96,6 +96,6 @@ export class TelemarketingComponent implements OnInit {
         id_pessoa: pessoaId
       }
     }) as any;
-    this.observerPessoa.next(pessoa.resposta);
+    this.pessoa = new Observable(o => o.next(pessoa.resposta));
   }
 }

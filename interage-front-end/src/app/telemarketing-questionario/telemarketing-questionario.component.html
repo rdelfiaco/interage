@@ -6,7 +6,7 @@
         <button type="button" mdbDropdownToggle mdbBtn color="danger" class="dropdown-toggle dropdown-toggle-split px-3 waves-light"
           mdbWavesEffect></button>
         <div class="dropdown-menu">
-          <a *ngFor="let telefone of pessoa.telefones" class="dropdown-item" (click)="trocaTelefonePrincipal(telefone.id)">{{telefone.ddi}}
+          <a *ngFor="let telefone of _pessoaObject.telefones" class="dropdown-item" (click)="trocaTelefonePrincipal(telefone.id)">{{telefone.ddi}}
             {{telefone.ddd}} {{telefone.telefone}}</a>
         </div>
       </div>

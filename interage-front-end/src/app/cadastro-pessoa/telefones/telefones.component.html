@@ -11,7 +11,7 @@
         <th>Ações</th>
       </tr>
     </thead>
-    <tbody *ngFor="let telefone of pessoa.telefones">
+    <tbody *ngFor="let telefone of _pessoaObject.telefones">
       <tr>
         <th scope="row">{{telefone.id}}</th>
         <td>{{telefone.ddi}}</td>
