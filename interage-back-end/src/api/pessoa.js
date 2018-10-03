@@ -186,7 +186,7 @@ function salvarTelefonePessoa(req, res) {
             VALUES('${req.query.id_pessoa}',
                   '${req.query.ddd}',
                   '${req.query.telefone}',
-                  '${req.query.ramal}',
+                  ${req.query.ramal || 'null'},
                   false,
                   ${req.query.id_tipo_telefone},
                   '${req.query.contato}',

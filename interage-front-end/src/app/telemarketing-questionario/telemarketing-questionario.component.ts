@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, ElementRef, EventEmitter, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl, FormArray, Validators, AbstractControl } from '@angular/forms';
 import { IMyOptions, MDBDatePickerComponent } from '../../lib/ng-uikit-pro-standard';
 import { ConnectHTTP } from '../shared/services/connectHTTP';
@@ -16,11 +16,10 @@ interface selectValues {
   styleUrls: ['./telemarketing-questionario.component.scss']
 })
 export class TelemarketingQuestionarioComponent implements OnInit {
-  private _evento: any;
-  private _pessoa: any;
+  private _pessoaObject: any;
+  private _eventoObject: any;
   private _motivos_respostas: Array<object>;
   questionarioForm: FormGroup;
-  telefones: Array<string>;
   motivosRespostasFormatado: Array<object>
   motivoRespostaSelecionado: object
   public myDatePickerOptions: IMyOptions = {
@@ -47,28 +46,8 @@ export class TelemarketingQuestionarioComponent implements OnInit {
   @Input() modal: any
   @Input() campanhaSelecionada: any
   @Input() clear: any
-
-  @Input()
-  set evento(evento: any) {
-    this._evento = evento;
-    if (this._pessoa) this._setQuestionarioForm();
-  }
-
-  get evento(): any {
-    return this._evento
-  }
-
-
-  @Input()
-  set pessoa(pessoa: any) {
-    debugger
-    this._pessoa = pessoa;
-    if (this._evento) this._setQuestionarioForm();
-  }
-
-  get pessoa(): any {
-    return this._pessoa
-  }
+  @Input() pessoa: any;
+  @Input() evento: any;
 
   @Input()
   set motivos_respostas(motivos_respostas: any) {
@@ -93,20 +72,30 @@ export class TelemarketingQuestionarioComponent implements OnInit {
   ngOnInit() {
   }
 
-  _setQuestionarioForm() {
-    this.telefones = this.pessoa.telefones.map(t => {
-      return {
-        id: t.id, numero: `${t.ddi || '+55'} ${t.ddd} ${t.telefone}`
-      }
-    });
 
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes["pessoa"] && this.pessoa) {
+      this.pessoa.subscribe(pessoa => {
+        this._pessoaObject = pessoa
+        if (this._eventoObject) this._setQuestionarioForm();
+      });
+    }
+    if (changes["evento"] && this.evento) {
+      this.evento.subscribe(evento => {
+        this._eventoObject = evento
+        if (this._pessoaObject) this._setQuestionarioForm();
+      });
+    }
+  }
+
+  _setQuestionarioForm() {
     this.questionarioForm = this.formBuilder.group({
-      pessoaALigar: [this.pessoa.principal.nome],
-      telefonePrincipal: this.pessoa.telefones.filter(t => {
+      pessoaALigar: [this._pessoaObject.principal.nome],
+      telefonePrincipal: this._pessoaObject.telefones.filter(t => {
         if (t.principal)
           return true
       }).map(telefonePrincipal => `${telefonePrincipal.ddi || '+55'} ${telefonePrincipal.ddd} ${telefonePrincipal.telefone}`),
-      idTelefoneSelecionado: this.pessoa.telefones.filter(t => {
+      idTelefoneSelecionado: this._pessoaObject.telefones.filter(t => {
         if (t.principal)
           return true
       }).map(telefonePrincipal => telefonePrincipal.id),
@@ -148,8 +137,9 @@ export class TelemarketingQuestionarioComponent implements OnInit {
 
 
   trocaTelefonePrincipal(telefoneId: string) {
-    const numTelefone = this.telefones.filter((t: any) => t.id == telefoneId) as any;
-    this.questionarioForm.controls['telefonePrincipal'].setValue(numTelefone[0].numero);
+    const numTelefone = this._pessoaObject.telefones.filter((t: any) => t.id == telefoneId) as any;
+    debugger;
+    this.questionarioForm.controls['telefonePrincipal'].setValue(`${numTelefone[0].ddi} ${numTelefone[0].ddd} ${numTelefone[0].telefone}`);
     this.questionarioForm.controls['idTelefoneSelecionado'].setValue(telefoneId);
     this.discando = false;
   }
@@ -180,9 +170,9 @@ export class TelemarketingQuestionarioComponent implements OnInit {
         token: usuarioLogado.token,
         id_pessoa: usuarioLogado.id_pessoa,
         id_usuario: usuarioLogado.id,
-        id_evento: this.evento.id,
-        id_evento_pai: this.evento.id_evento_pai,
-        id_pessoa_receptor: this.evento.id_pessoa_receptor,
+        id_evento: this._eventoObject.id,
+        id_evento_pai: this._eventoObject.id_evento_pai ? this._eventoObject.id_evento_pai : this._eventoObject.id,
+        id_pessoa_receptor: this._eventoObject.id_pessoa_receptor,
         id_motivos_respostas: this.questionarioForm.value.motivoRespostaSelecionado,
         id_telefoneDiscado: this.questionarioForm.value.idTelefoneSelecionado,
         id_campanha: this.campanhaSelecionada,
@@ -209,7 +199,6 @@ export class TelemarketingQuestionarioComponent implements OnInit {
     this._evento = null;
     this._pessoa = null;
     this._motivos_respostas = null
-    this.telefones = null
     this.motivosRespostasFormatado = null;
     this.motivoRespostaSelecionado = null;
     this.clear();

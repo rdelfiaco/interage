@@ -162,11 +162,11 @@
     <button type="button" mdbBtn color="primary" class="relative waves-light" (click)="solicitarLigacao(); basicModal.show();"
       mdbWavesEffect> Solicitar Ligação</button>
     <div mdbModal #basicModal="mdbModal" [config]="{backdrop: true, ignoreBackdropClick: true}" class="modal fade right"
-      tabindex="-1" role="dialog" aria-labelledby="myBasicModalLabel" aria-hidden="true">
+      role="dialog" aria-labelledby="myBasicModalLabel" aria-hidden="true">
       <div class="modal-dialog modal-fluid" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <h4 class="modal-title w-100" id="myModalLabel">Telemarketing</h4>
+            <h4 class="modal-title w-100" id="myModalLabel">Telemarketing - {{pessoaObject.principal.nome}}</h4>
           </div>
           <div class="modal-body" style="overflow: auto; height: 80vh;">
             <div class="row">
@@ -175,7 +175,7 @@
                   [motivos_respostas]="motivos_respostas" [campanhaSelecionada]="campanhaSelecionada.value" [clear]="_limpar"></app-telemarketing-questionario>
               </div>
               <div class="col-md-7">
-                <app-cadastro-pessoa [pessoa]="pessoa" [refresh]="refresh"></app-cadastro-pessoa>
+                <app-cadastro-pessoa [pessoa]="pessoa" (refresh)="refresh()"></app-cadastro-pessoa>
               </div>
             </div>
           </div>
