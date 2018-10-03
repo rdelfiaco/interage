@@ -134,8 +134,6 @@ export class TelemarketingQuestionarioComponent implements OnInit {
     }
   }
 
-
-
   trocaTelefonePrincipal(telefoneId: string) {
     const numTelefone = this._pessoaObject.telefones.filter((t: any) => t.id == telefoneId) as any;
 
@@ -196,8 +194,8 @@ export class TelemarketingQuestionarioComponent implements OnInit {
     this.discando = false;
     this.podeGravar = false;
     this.motivoRespostaSelecionado = null;
-    this._evento = null;
-    this._pessoa = null;
+    this.evento = null;
+    this.pessoa = null;
     this._motivos_respostas = null
     this.motivosRespostasFormatado = null;
     this.motivoRespostaSelecionado = null;

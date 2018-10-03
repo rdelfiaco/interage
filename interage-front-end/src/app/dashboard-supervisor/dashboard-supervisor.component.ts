@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { CanActivate } from '@angular/router';
+import { CanActivate, Router } from '@angular/router';
+import { AuthService } from '../login/auth.service';
 
 @Component({
   selector: 'app-dashboard-supervisor',
@@ -8,8 +9,14 @@ import { CanActivate } from '@angular/router';
 })
 export class DashboardSupervisorComponent implements OnInit {
 
-  constructor() { }
+  constructor(private router: Router, private auth: AuthService) { }
 
   ngOnInit() {
+  }
+  logout() {
+    this.auth.logout();
+  }
+  openPage(page: string) {
+    this.router.navigate([page]);
   }
 }

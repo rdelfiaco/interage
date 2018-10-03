@@ -3,6 +3,7 @@ import { Usuario } from './usuario';
 import { Injectable } from '@angular/core';
 import { ConnectHTTP } from '../shared/services/connectHTTP';
 import { LocalStorage } from '../shared/services/localStorage'
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -28,10 +29,7 @@ export class AuthService {
   checkAutenticacao() {
     if (this._getDataExpiracao() && this._getDataExpiracao().getTime() > new Date().getTime()) return true;
     else {
-      let usuarioLogado = new LocalStorage().getLocalStorage('usuarioLogado') as Usuario;
-
-      new LocalStorage().delLocalStorage(usuarioLogado.token)
-      new LocalStorage().delLocalStorage('usuarioLogado')
+      this.logout();
     }
   }
 
@@ -53,5 +51,21 @@ export class AuthService {
       new LocalStorage().postLocalStorage(usuarioLogado.token, validadeToken)
   }
 
-  constructor() { }
+  async logout() {
+    let usuarioLogado = new LocalStorage().getLocalStorage('usuarioLogado') as Usuario;
+
+    await new ConnectHTTP().callService({
+      service: 'logout',
+      paramsService: {
+        token_access: usuarioLogado.token
+      }
+    })
+    debugger;
+
+    new LocalStorage().delLocalStorage(`${usuarioLogado.token}_date`)
+    new LocalStorage().delLocalStorage('usuarioLogado_object')
+    this.router.navigate(['/']);
+  }
+
+  constructor(private router: Router) { }
 }

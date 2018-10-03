@@ -32,6 +32,30 @@ function login(req, res) {
   })
 }
 
+function logout(req, res) {
+  return new Promise(function (resolve, reject) {
+    const dbconnection = require('../config/dbConnection')
+    const { Client } = require('pg')
+
+    const client = new Client(dbconnection)
+
+    client.connect()
+
+    let sql = `UPDATE historico_login SET ativo=false
+                    WHERE token_access='${req.query.token_access}'`
+
+    client.query(sql)
+      .then(res => {
+        client.end();
+        resolve(true)
+      })
+      .catch(err => {
+        console.log(err)
+        reject('Token não encontrado')
+      })
+  })
+}
+
 function generateTokenUserAcess() {
   return rand() + rand();
 
@@ -40,4 +64,4 @@ function generateTokenUserAcess() {
   };
 };
 
-module.exports = { login }
+module.exports = { login, logout }

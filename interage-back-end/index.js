@@ -21,6 +21,18 @@ app.get('/login', (req, res) => {
       res.status(401).send(error)
     })
 });
+app.get('/logout', (req, res) => {
+  usuario.logout(req)
+    .then(linhas => {
+      headerResponse(res)
+      res.status(200).send(linhas)
+    })
+    .catch(error => {
+      headerResponse(res)
+      console.log(error)
+      res.status(401).send(error)
+    })
+});
 
 app.get('/getCampanhasDoUsuario', (req, res) => {
   campanha.getCampanhasDoUsuario(req)

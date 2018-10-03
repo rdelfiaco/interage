@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { CanActivate } from '@angular/router';
+import { CanActivate, Router } from '@angular/router';
+import { AuthService } from '../login/auth.service';
 
 @Component({
   selector: 'app-dashboard-operador',
@@ -8,8 +9,15 @@ import { CanActivate } from '@angular/router';
 })
 export class DashboardOperadorComponent implements OnInit {
 
-  constructor() { }
+  constructor(private router: Router, private auth: AuthService) { }
 
   ngOnInit() {
+    this.router.navigate(['/eventos']);
+  }
+  logout() {
+    this.auth.logout();
+  }
+  openPage(page: string) {
+    this.router.navigate([page]);
   }
 }
