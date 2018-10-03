@@ -13,10 +13,10 @@ import { Observable } from 'rxjs';
 })
 export class TelefonesComponent implements OnInit {
 
-  private telefones: Array<any> = [];
   private telefoneSelecionado: boolean;
   _pessoa: any
   _pessoaObject: any;
+  telefoneExclusao: any;
   @Output() refresh = new EventEmitter();
 
   @Input() pessoa: Observable<string[]>;
@@ -78,6 +78,47 @@ export class TelefonesComponent implements OnInit {
       id_tipo_telefone: ['', [Validators.required]],
       contato: [''],
       ddi: ['']
+    })
+    this.telefoneSelecionado = true;
+  }
+
+  excluirTelefone(telefoneId) {
+    this.telefoneExclusao = this._pessoaObject.telefones.filter(t => t.id == telefoneId)[0];
+  }
+  async confirmaExclusaoTelefone() {
+    try {
+      await this.connectHTTP.callService({
+        service: 'excluirTelefonePessoa',
+        paramsService: {
+          id_usuario: this.usuarioLogado.id,
+          token: this.usuarioLogado.token,
+          id_telefone: this.telefoneExclusao.id
+        }
+      });
+      this.toastrService.success('Excluido com sucesso');
+    }
+    catch (e) {
+      this.toastrService.error('Erro ao excluir telefone');
+    }
+    this.refresh.emit();
+    this.telefoneExclusao = undefined;
+  }
+  cancelaExclusaoTelefone() {
+    this.telefoneExclusao = undefined;
+  }
+
+  editarTelefone(telefoneId) {
+    const telefoneSelecionado = this._pessoaObject.telefones.filter(t => t.id == telefoneId)[0];
+    this.telefoneForm = this.formBuilder.group({
+      id: [telefoneSelecionado.id],
+      id_pessoa: [this._pessoaObject.principal.id, [Validators.required]],
+      ddd: [telefoneSelecionado.ddd, [Validators.required]],
+      telefone: [telefoneSelecionado.telefone, [Validators.required]],
+      ramal: [telefoneSelecionado.ramal],
+      principal: [false],
+      id_tipo_telefone: [telefoneSelecionado.id_tipo_telefone, [Validators.required]],
+      contato: [telefoneSelecionado.contato],
+      ddi: [telefoneSelecionado.ddi]
     })
     this.telefoneSelecionado = true;
   }

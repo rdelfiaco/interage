@@ -113,6 +113,19 @@ app.get('/getPessoa', (req, res) => {
     })
 });
 
+app.get('/excluirTelefonePessoa', (req, res) => {
+  pessoa.excluirTelefonePessoa(req)
+    .then(linhas => {
+      headerResponse(res)
+      res.status(200).send(linhas)
+    })
+    .catch(error => {
+      headerResponse(res)
+      console.log(error)
+      res.status(401).send(error)
+    })
+});
+
 app.get('/getEventosPendentes', (req, res) => {
   evento.getEventosPendentes(req)
     .then(linhas => {

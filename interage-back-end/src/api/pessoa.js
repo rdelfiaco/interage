@@ -181,7 +181,18 @@ function salvarTelefonePessoa(req, res) {
 
       let update;
       client.query('BEGIN').then((res1) => {
-        update = `INSERT INTO pessoas_telefones(
+        if (req.query.id)
+          update = `UPDATE pessoas_telefones SET
+                      ddd='${req.query.ddd}',
+                      telefone='${req.query.telefone}',
+                      ramal=${req.query.ramal || 'null'},
+                      principal=false,
+                      id_tipo_telefone=${req.query.id_tipo_telefone},
+                      contato='${req.query.contato}',
+                      ddi=55
+                      WHERE pessoas_telefones.id=${req.query.id}`;
+        else
+          update = `INSERT INTO pessoas_telefones(
             id_pessoa, ddd, telefone, ramal, principal, id_tipo_telefone, contato, ddi)
             VALUES('${req.query.id_pessoa}',
                   '${req.query.ddd}',
@@ -192,7 +203,6 @@ function salvarTelefonePessoa(req, res) {
                   '${req.query.contato}',
                   '55')`;
 
-        console.log(update)
         client.query(update).then((res) => {
           client.query('COMMIT').then((resposta) => {
             client.end();
@@ -217,4 +227,45 @@ function salvarTelefonePessoa(req, res) {
   })
 }
 
-module.exports = { getPessoa, salvarPessoa, getTipoTelefone, salvarTelefonePessoa }
+function excluirTelefonePessoa(req, res) {
+  return new Promise(function (resolve, reject) {
+
+    checkTokenAccess(req).then(historico => {
+      const dbconnection = require('../config/dbConnection')
+      const { Client } = require('pg')
+
+      const client = new Client(dbconnection)
+
+      client.connect()
+
+      let del;
+      client.query('BEGIN').then((res1) => {
+        if (!req.query.id_telefone) return reject('Não tem telefone selecionado')
+        del = `DELETE FROM pessoas_telefones
+                      WHERE pessoas_telefones.id=${req.query.id_telefone}`;
+
+        client.query(del).then((res) => {
+          client.query('COMMIT').then((resposta) => {
+            client.end();
+            resolve(resposta)
+          }).catch(e => {
+            reject(e);
+          })
+        }).catch(e => {
+          client.query('ROLLBACK').then((resposta) => {
+            client.end();
+            reject(e)
+          }).catch(e => {
+            reject(e)
+          })
+        })
+      }).catch(e => {
+        reject(e);
+      })
+    }).catch(e => {
+      reject(e);
+    });
+  })
+}
+
+module.exports = { getPessoa, salvarPessoa, getTipoTelefone, salvarTelefonePessoa, excluirTelefonePessoa }

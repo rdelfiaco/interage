@@ -1,3 +1,103 @@
-<p>
-  enderecos works!
-</p>
+<div class="row">
+  <h4>Endereços Cadastrados</h4>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Id</th>
+        <th>DDI</th>
+        <th>DDD</th>
+        <th>Telefone</th>
+        <th>Ramal</th>
+        <th>Ações</th>
+      </tr>
+    </thead>
+    <tbody *ngFor="let telefone of (pessoa | async)?.enderecos">
+      <tr>
+        <th scope="row">{{telefone.id}}</th>
+        <td>{{telefone.ddi}}</td>
+        <td>{{telefone.ddd}}</td>
+        <td>{{telefone.telefone}}</td>
+        <td>{{telefone.ramal}}</td>
+        <td>
+          <mdb-icon style="margin: 0px 5px;" icon="pencil" (click)="editarTelefone(telefone.id)" size="lg"></mdb-icon>
+          <mdb-icon style="margin: 0px 5px;" icon="trash" (click)="excluirTelefone(telefone.id)" (click)="confirmExcluirTelefone.show()"
+            size="lg"></mdb-icon>
+        </td>
+      </tr>
+
+    </tbody>
+  </table>
+  <span *ngIf="!_pessoaObject.enderecos.length">Nenhum endereço cadastrado!</span>
+</div>
+<div class="row d-flex justify-content-end">
+  <button type="button" mdbBtn color="primary" (click)="adicionarNovoTelefone();" class="relative waves-light"
+    mdbWavesEffect>Adicionar Novo Telefone</button>
+</div>
+<br />
+<br />
+<div *ngIf="telefoneSelecionado">
+  <form [formGroup]="telefoneForm" class="formQuestionario">
+    <div class="row">
+      <div class="col mdb-select-form">
+        <mdb-select formControlName="id_tipo_telefone" (selected)="getSelectedValueTelefone($event)"
+          [multiple]="false" placeholder="Tipo de Telefone"></mdb-select>
+        <label>Tipo</label>
+      </div>
+    </div>
+    <div class="row">
+      <div class="md-form col-2">
+        <input mdbInputDirective formControlName="ddi" max="3" min="2" type="text" id="ddi" class="form-control">
+        <label for="ddd">DDI</label>
+      </div>
+      <div class="md-form col-2">
+        <input mdbInputDirective formControlName="ddd" max="4" min="3" type="text" id="ddd" class="form-control">
+        <label for="ddd">DDD</label>
+      </div>
+      <div class="md-form col">
+        <input mdbInputDirective formControlName="telefone" type="text" id="telefone" class="form-control">
+        <label for="telefone">Telefone</label>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="md-form col-3">
+        <input mdbInputDirective formControlName="ramal" type="text" id="ramal" class="form-control">
+        <label for="ramal">Ramal</label>
+      </div>
+      <div class="md-form col">
+        <input mdbInputDirective formControlName="contato" type="text" id="contato" class="form-control">
+        <label for="contato">Contato</label>
+      </div>
+    </div>
+    <control-messages [control]="telefoneForm.controls.id_tipo_telefone"></control-messages>
+    <div class="row d-flex justify-content-end">
+      <button type="button" mdbBtn color="primary" (click)="salvar();" class="relative waves-light" mdbWavesEffect
+        [disabled]="!telefoneForm.valid">Salvar Telefone</button>
+      <button type="button" mdbBtn color="danger" (click)="cancelarAdd();" class="relative waves-light" mdbWavesEffect>Cancelar</button>
+    </div>
+  </form>
+</div>
+
+
+<div mdbModal #confirmExcluirTelefone="mdbModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myBasicModalLabel"
+  aria-hidden="true" [config]="{backdrop: true}">
+  <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close pull-right" aria-label="Close" (click)="confirmExcluirTelefone.hide()">
+          <span aria-hidden="true">×</span>
+        </button>
+        <h4 class="modal-title w-100" id="myModalLabel">Excluir Telefone</h4>
+      </div>
+      <div class="modal-body">
+        <!-- {{telefoneExclusao.ddi}} {{telefoneExclusao.ddd}} {{telefoneExclusao.telefone}} -->
+      </div>
+      <div class="modal-footer">
+        <button type="button" mdbBtn color="danger" class="waves-light" aria-label="Cancelar" (click)="confirmExcluirTelefone.hide(); cancelaExclusaoTelefone()"
+          mdbWavesEffect>Cancelar</button>
+        <button type="button" mdbBtn color="primary" class="relative waves-light" (click)="confirmExcluirTelefone.hide(); confirmaExclusaoTelefone();"
+          mdbWavesEffect>Save</button>
+      </div>
+    </div>
+  </div>
+</div>
