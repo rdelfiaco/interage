@@ -1,9 +1,4 @@
-import { EventoModule } from './evento/evento.module';
-
-
-
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule, NO_ERRORS_SCHEMA } from '@angular/core';
 import { MDBBootstrapModulesPro, MDBSpinningPreloader, ToastModule } from './../lib/ng-uikit-pro-standard';
@@ -12,6 +7,7 @@ import { AppRoutingModule } from './/app-routing.module';
 import { DashboardAdminComponent } from './dashboard-admin/dashboard-admin.component';
 import { DashboardOperadorComponent } from './dashboard-operador/dashboard-operador.component';
 import { DashboardSupervisorComponent } from './dashboard-supervisor/dashboard-supervisor.component';
+
 import { LoginModule } from './login/login.module';
 import { SemPermissaoComponent } from './sem-permissao/sem-permissao.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
@@ -22,9 +18,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { PrincipalComponent } from './cadastro-pessoa/principal/principal.component';
 import { TelefonesComponent } from './cadastro-pessoa/telefones/telefones.component';
 import { EnderecosComponent } from './cadastro-pessoa/enderecos/enderecos.component';
-import { EventoComponent } from './evento/evento.component';
-
-
+import { EventoModule } from './evento/evento.module';
 
 
 @NgModule({
@@ -40,8 +34,9 @@ import { EventoComponent } from './evento/evento.component';
     CadastroPessoaComponent,
     PrincipalComponent,
     TelefonesComponent,
-    EnderecosComponent
+    EnderecosComponent,
   ],
+
   imports: [
     BrowserModule,
     MDBBootstrapModulesPro.forRoot(),
@@ -54,7 +49,9 @@ import { EventoComponent } from './evento/evento.component';
     ToastModule.forRoot(),
 
   ],
-  providers: [MDBSpinningPreloader],
+  providers: [MDBSpinningPreloader
+    
+  ],
   bootstrap: [AppComponent],
   schemas: [NO_ERRORS_SCHEMA]
 })
