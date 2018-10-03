@@ -5,6 +5,7 @@ import { Angular5Csv } from 'angular5-csv/Angular5-csv';
 import { Usuario } from '../login/usuario';
 import { ConnectHTTP } from '../shared/services/connectHTTP';
 import { LocalStorage } from '../shared/services/localStorage';
+import { IMyOptions } from '../../lib/ng-uikit-pro-standard';
 
 @Component({
   selector: 'app-evento',
@@ -14,6 +15,23 @@ import { LocalStorage } from '../shared/services/localStorage';
 export class EventoComponent implements OnInit {
   usuarioLogado: Usuario;
   
+  public myDatePickerOptions: IMyOptions = {
+    // Strings and translations
+    dayLabels: { su: 'Dom', mo: 'Seg', tu: 'Ter', we: 'Qua', th: 'Qui', fr: 'Sex', sa: 'Sab' },
+    dayLabelsFull: { su: "Domingo", mo: "Segunda", tu: "Terça", we: "Quarta", th: "Quinta", fr: "Sexta", sa: "Sábado" },
+    monthLabels: { 1: 'Jan', 2: 'Fev', 3: 'Mar', 4: 'Abr', 5: 'Mai', 6: 'Jun', 7: 'Jul', 8: 'Ago', 9: 'Set', 10: 'Out', 11: 'Nov', 12: 'Dez' },
+    monthLabelsFull: { 1: "Janeiro", 2: "Fevereiro", 3: "Março", 4: "Abril", 5: "Maio", 6: "Junho", 7: "Julho", 8: "Agosto", 9: "Setembro", 10: "Outubro", 11: "Novembro", 12: "Dezembro" },
+
+    // Buttons
+    todayBtnTxt: "Hoje",
+    clearBtnTxt: "Limpar",
+    closeBtnTxt: "Fechar",
+    closeAfterSelect: true,
+
+    // Format
+    dateFormat: 'dd/mm/yyyy',
+  }
+
   options = {
     fieldSeparator: ',',
     quoteStrings: '"',

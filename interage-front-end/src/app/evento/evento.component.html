@@ -1,18 +1,19 @@
 <div class="card card-cascade narrower mt-5">
 
     <!--Card image-->
-    <div class="view view-cascade gradient-card-header blue-gradient narrower py-1 mx-2 mb-3 d-flex justify-content-center align-items-center">
+    <div class="view view-cascade gradient-card-header blue-gradient narrower py-1 mx-2  d-flex justify-content-center align-items-center">
   
-      <h4 class="white-text font-weight-bold text-uppercase mb-0">TAREFAS / EVENTOS</h4>
+      <h4 class="white-text font-weight-bold text-uppercase ">TAREFAS / EVENTOS</h4>
   
     </div>
     <!-- Card Filtros -->
     <div>
-      <div class="row  d-flex align-items-center justify-content-center">
+      <div class="row ">
           <div class="col-md-12">
-            <div class="md-form">
-              <input type="search" [(ngModel)]="searchText" id="search" class="form-control" mdbInputDirective [mdbValidate]="false">
-              <label for="search">Search data</label>
+            <div class="md-form form-group col">
+                <mdb-date-picker #dataReagendamento (dateChanged)="onDateChange($event)" formControlName="data" name="mydate"
+                  [options]="myDatePickerOptions" [placeholder]="'Selecione a data'" required></mdb-date-picker>
+                <label for="telefoneDiscado" class="">Data do compromisso</label>
             </div>
             <div class="btn-group ">
                 <label mdbBtn color="teal" rounded="true" [(ngModel)]="radioModel" mdbRadio="dtCompromisso" mdbWavesEffect>
