@@ -268,4 +268,114 @@ function excluirTelefonePessoa(req, res) {
   })
 }
 
-module.exports = { getPessoa, salvarPessoa, getTipoTelefone, salvarTelefonePessoa, excluirTelefonePessoa }
+
+function salvarEnderecoPessoa(req, res) {
+  return new Promise(function (resolve, reject) {
+
+    checkTokenAccess(req).then(historico => {
+      const dbconnection = require('../config/dbConnection')
+      const { Client } = require('pg')
+
+      const client = new Client(dbconnection)
+
+      client.connect()
+
+      let update;
+      client.query('BEGIN').then((res1) => {
+        if (req.query.id)
+          update = `UPDATE pessoas_enderecos SET
+                      id_cidade=${req.query.id_cidade},
+                      cep=${req.query.cep},
+                      logradouro='${req.query.logradouro}',
+                      bairro='${req.query.bairro}',
+                      complemento='${req.query.complemento}',
+                      recebe_correspondencia='${req.query.recebe_correspondencia}'
+                      WHERE pessoas_enderecos.id=${req.query.id}`;
+        else
+          update = `INSERT INTO pessoas_enderecos(
+            id_pessoa, id_cidade, cep, logradouro, bairro, complemento, recebe_correspondencia)
+            VALUES(${req.query.id_pessoa},
+                  ${req.query.id_cidade},
+                  ${req.query.cep},
+                  '${req.query.logradouro}',
+                  '${req.query.bairro}',
+                  '${req.query.complemento}',
+                  '${req.query.recebe_correspondencia}'
+                  )`;
+
+
+        console.log(update)
+        client.query(update).then((res) => {
+          client.query('COMMIT').then((resposta) => {
+            client.end();
+            resolve(resposta)
+          }).catch(e => {
+            reject(e);
+          })
+        }).catch(e => {
+          client.query('ROLLBACK').then((resposta) => {
+            client.end();
+            reject(e)
+          }).catch(e => {
+            reject(e)
+          })
+        })
+      }).catch(e => {
+        reject(e);
+      })
+    }).catch(e => {
+      reject(e);
+    });
+  })
+}
+
+function excluirEnderecoPessoa(req, res) {
+  return new Promise(function (resolve, reject) {
+
+    checkTokenAccess(req).then(historico => {
+      const dbconnection = require('../config/dbConnection')
+      const { Client } = require('pg')
+
+      const client = new Client(dbconnection)
+
+      client.connect()
+
+      let del;
+      client.query('BEGIN').then((res1) => {
+        if (!req.query.id_endereco) return reject('Não tem endereço selecionado')
+        del = `DELETE FROM pessoas_enderecos
+                      WHERE pessoas_enderecos.id=${req.query.id_endereco}`;
+
+        client.query(del).then((res) => {
+          client.query('COMMIT').then((resposta) => {
+            client.end();
+            resolve(resposta)
+          }).catch(e => {
+            reject(e);
+          })
+        }).catch(e => {
+          client.query('ROLLBACK').then((resposta) => {
+            client.end();
+            reject(e)
+          }).catch(e => {
+            reject(e)
+          })
+        })
+      }).catch(e => {
+        reject(e);
+      })
+    }).catch(e => {
+      reject(e);
+    });
+  })
+}
+
+module.exports = {
+  getPessoa,
+  salvarPessoa,
+  getTipoTelefone,
+  salvarTelefonePessoa,
+  excluirTelefonePessoa,
+  excluirEnderecoPessoa,
+  salvarEnderecoPessoa
+}

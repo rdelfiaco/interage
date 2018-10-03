@@ -1,6 +1,7 @@
 interface optionsCallService {
   service: string
-  paramsService?: object
+  paramsService?: object,
+  host?: string
 }
 
 interface retObjectCallService {
@@ -15,7 +16,7 @@ export class ConnectHTTP {
     if (mensagem && !mensagem.error) return mensagem;
 
     return new Promise((resolve, reject) => {
-      const host = "http://localhost:3000/"
+      const host = options.host || "http://localhost:3000/"
       const service = options.service
 
       let url = `${host}${service}`

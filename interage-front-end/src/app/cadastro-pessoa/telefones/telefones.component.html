@@ -69,7 +69,7 @@
         <label for="contato">Contato</label>
       </div>
     </div>
-    <control-messages [control]="telefoneForm.controls.id_tipo_telefone"></control-messages>
+
     <div class="row d-flex justify-content-end">
       <button type="button" mdbBtn color="primary" (click)="salvar();" class="relative waves-light" mdbWavesEffect
         [disabled]="!telefoneForm.valid">Salvar Telefone</button>
@@ -96,7 +96,7 @@
         <button type="button" mdbBtn color="danger" class="waves-light" aria-label="Cancelar" (click)="confirmExcluirTelefone.hide(); cancelaExclusaoTelefone()"
           mdbWavesEffect>Cancelar</button>
         <button type="button" mdbBtn color="primary" class="relative waves-light" (click)="confirmExcluirTelefone.hide(); confirmaExclusaoTelefone();"
-          mdbWavesEffect>Save</button>
+          mdbWavesEffect>Confirma</button>
       </div>
     </div>
   </div>
