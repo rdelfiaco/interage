@@ -12,7 +12,7 @@ export class DashboardOperadorComponent implements OnInit {
   constructor(private router: Router, private auth: AuthService) { }
 
   ngOnInit() {
-    this.router.navigate(['/eventos']);
+    // this.router.navigate(['/eventos']);
   }
   logout() {
     this.auth.logout();

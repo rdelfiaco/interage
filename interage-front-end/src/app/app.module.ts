@@ -19,6 +19,7 @@ import { PrincipalComponent } from './cadastro-pessoa/principal/principal.compon
 import { TelefonesComponent } from './cadastro-pessoa/telefones/telefones.component';
 import { EnderecosComponent } from './cadastro-pessoa/enderecos/enderecos.component';
 import { EventoModule } from './evento/evento.module';
+import { PesquisaPessoaComponent } from './pesquisa-pessoa/pesquisa-pessoa.component';
 
 
 @NgModule({
@@ -35,6 +36,7 @@ import { EventoModule } from './evento/evento.module';
     PrincipalComponent,
     TelefonesComponent,
     EnderecosComponent,
+    PesquisaPessoaComponent,
   ],
 
   imports: [

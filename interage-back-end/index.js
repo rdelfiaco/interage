@@ -165,6 +165,19 @@ app.get('/excluirEnderecoPessoa', (req, res) => {
     })
 });
 
+app.get('/pesquisaPessoas', (req, res) => {
+  pessoa.pesquisaPessoas(req)
+    .then(linhas => {
+      headerResponse(res)
+      res.status(200).send(linhas)
+    })
+    .catch(error => {
+      headerResponse(res)
+      console.log(error)
+      res.status(401).send(error)
+    })
+});
+
 app.get('/getEventosPendentes', (req, res) => {
   evento.getEventosPendentes(req)
     .then(linhas => {

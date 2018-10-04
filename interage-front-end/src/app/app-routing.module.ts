@@ -12,6 +12,7 @@ import { AuthGuard } from './login/auth.guard';
 import { SemPermissaoComponent } from './sem-permissao/sem-permissao.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { TelemarketingComponent } from './telemarketing/telemarketing.component';
+import { PesquisaPessoaComponent } from './pesquisa-pessoa/pesquisa-pessoa.component';
 
 
 
@@ -27,17 +28,17 @@ const routes: Routes = [
   },
   {
     path: 'admin',
-    component: DashboardAdminComponent,
+    component: EventoComponent,
     canActivate: [AuthGuard]
   },
   {
     path: 'operador',
-    component: DashboardOperadorComponent,
+    component: EventoComponent,
     canActivate: [AuthGuard]
   },
   {
     path: 'supervisor',
-    component: DashboardSupervisorComponent,
+    component: EventoComponent,
     canActivate: [AuthGuard]
   },
   {
@@ -45,9 +46,14 @@ const routes: Routes = [
     component: TelemarketingComponent,
     canActivate: [AuthGuard]
   },
- {
+  {
     path: 'eventos',
     component: EventoComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'pessoas',
+    component: PesquisaPessoaComponent,
     canActivate: [AuthGuard]
   },
 

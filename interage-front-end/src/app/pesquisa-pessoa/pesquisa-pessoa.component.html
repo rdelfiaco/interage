@@ -1,0 +1,51 @@
+<div class="row mx-auto">
+  <div class="col md-form">
+    <input type="search" [(ngModel)]="textoPesquisaPessoa" id="search" class="form-control" mdbInputDirective
+      [mdbValidate]="false">
+    <label for="search">Pesquisa Pessoa</label>
+  </div>
+  <div class="col-1">
+    <a mdbBtn floating=" true" size="lg" (click)="pesquisar()" gradient="blue" mdbWavesEffect>
+      <mdb-icon icon="bolt"></mdb-icon>
+    </a>
+  </div>
+</div>
+
+<table class="table table-hover table-responsive-md mb-0">
+
+  <!--Table head-->
+  <thead>
+    <tr>
+      <th class="th-sm">Id</th>
+      <th class="th-sm">Nome
+        <mdb-icon icon="sort" (click)="sortBy('nome')"></mdb-icon>
+      </th>
+      <th class="th-sm">Fantasia
+        <mdb-icon icon="sort" (click)="sortBy('apelido_fantasia')"></mdb-icon>
+      </th>
+      <th class="th-sm">CPF/CNPJ
+        <mdb-icon icon="sort" (click)="sortBy('cpf_cnpj')"></mdb-icon>
+      </th>
+      <th class="th-sm">Inclusão
+        <mdb-icon icon="sort" (click)="sortBy('dtinclusao')"></mdb-icon>
+      </th>
+      <th class="th-sm">Status
+        <mdb-icon icon="sort" (click)="sortBy('status')"></mdb-icon>
+      </th>
+    </tr>
+  </thead>
+  <!--Table head-->
+
+  <!--Table body-->
+  <tbody>
+    <tr #list *ngFor="let pessoa of pessoasEncontradas; let i = index">
+      <td *ngIf="i+1 >= firstVisibleIndex && i+1 <= lastVisibleIndex">{{pessoa.id}}</td>
+      <td *ngIf="i+1 >= firstVisibleIndex && i+1 <= lastVisibleIndex">{{pessoa.nome}}</td>
+      <td *ngIf="i+1 >= firstVisibleIndex && i+1 <= lastVisibleIndex">{{pessoa.apelido_fantasia}}</td>
+      <td *ngIf="i+1 >= firstVisibleIndex && i+1 <= lastVisibleIndex">{{pessoa.cpf_cnpj}}</td>
+      <td *ngIf="i+1 >= firstVisibleIndex && i+1 <= lastVisibleIndex">{{pessoa.dtinclusao | date:'dd/MM/yyyy' }}</td>
+      <td *ngIf="i+1 >= firstVisibleIndex && i+1 <= lastVisibleIndex">{{pessoa.status}}</td>
+    </tr>
+  </tbody>
+  <!--Table body-->
+</table>

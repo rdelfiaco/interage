@@ -304,7 +304,7 @@ function salvarEnderecoPessoa(req, res) {
                   )`;
 
 
-                  
+
         client.query(update).then((res) => {
           client.query('COMMIT').then((resposta) => {
             client.end();
@@ -370,6 +370,45 @@ function excluirEnderecoPessoa(req, res) {
   })
 }
 
+function pesquisaPessoas(req, res) {
+  return new Promise(function (resolve, reject) {
+
+    checkTokenAccess(req).then(historico => {
+      const dbconnection = require('../config/dbConnection')
+      const { Client } = require('pg')
+
+      const client = new Client(dbconnection)
+
+      client.connect()
+
+      const pesquisaTexto = req.query.searchText.toLowerCase()
+      let pesquisa;
+      console.log(isNaN(parseInt(req.query.searchText)))
+      if (isNaN(parseInt(req.query.searchText))) {
+        pesquisa = `SELECT * FROM pessoas
+            WHERE lower(nome) LIKE '%${pesquisaTexto}%' OR lower(apelido_fantasia) LIKE '%${pesquisaTexto}%' OR lower(cpf_cnpj) LIKE '%${pesquisaTexto}%'`
+      }
+      else {
+        pesquisa = `SELECT * FROM pessoas
+            WHERE id=${pesquisaTexto}`
+      }
+
+      console.log(pesquisa)
+      client.query(pesquisa).then((res) => {
+        if (res.rowCount > 0) {
+          resolve(res.rows);
+        }
+        else reject(`Não há pessoas com o texto: ${req.query.searchText}`)
+
+      }).catch(e => {
+        reject(e);
+      })
+    }).catch(e => {
+      reject(e);
+    });
+  })
+}
+
 module.exports = {
   getPessoa,
   salvarPessoa,
@@ -377,5 +416,6 @@ module.exports = {
   salvarTelefonePessoa,
   excluirTelefonePessoa,
   excluirEnderecoPessoa,
-  salvarEnderecoPessoa
+  salvarEnderecoPessoa,
+  pesquisaPessoas
 }
