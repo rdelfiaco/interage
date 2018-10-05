@@ -2,6 +2,7 @@ import { Component, OnInit, ElementRef, ViewChildren, QueryList } from '@angular
 import { ConnectHTTP } from '../shared/services/connectHTTP';
 import { LocalStorage } from '../shared/services/localStorage';
 import { ToastService } from '../../lib/ng-uikit-pro-standard';
+import { Observable } from 'rxjs';
 
 
 @Component({
@@ -22,7 +23,8 @@ export class PesquisaPessoaComponent implements OnInit {
   activePage: number = 1;
   firstVisibleIndex: number = 1;
   lastVisibleIndex: number = 10;
-  editandoPessoa: any;
+  editandoPessoa: Observable<any>;
+  editandoPessoaObject: any;
   constructor(private connectHTTP: ConnectHTTP,
     private localStorage: LocalStorage,
     private toastrService: ToastService) {
@@ -110,9 +112,31 @@ export class PesquisaPessoaComponent implements OnInit {
       this.toastrService.error(e.error);
     }
   }
+  async editarPessoa(pessoa: any) {
+    this.editandoPessoaObject = pessoa;
+    let pessoaId = pessoa.id
+    let p = await this.connectHTTP.callService({
+      service: 'getPessoa',
+      paramsService: {
+        token: this.usuarioLogado.token,
+        id_usuario: this.usuarioLogado.id,
+        id_pessoa: pessoaId
+      }
+    }) as any;
+    this.editandoPessoa = new Observable(o => o.next(p.resposta));
+  }
 
-  editarPessoa(pessoa: any) {
-    this.editandoPessoa = pessoa;
+  async refresh() {
+    let pessoaId = this.editandoPessoaObject.id
+    let pessoa = await this.connectHTTP.callService({
+      service: 'getPessoa',
+      paramsService: {
+        token: this.usuarioLogado.token,
+        id_usuario: this.usuarioLogado.id,
+        id_pessoa: pessoaId
+      }
+    }) as any;
+    this.editandoPessoa = new Observable(o => o.next(pessoa.resposta));
   }
 
 }

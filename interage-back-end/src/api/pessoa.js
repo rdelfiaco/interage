@@ -76,43 +76,28 @@ function salvarPessoa(req, res) {
 
       let update;
       client.query('BEGIN').then((res1) => {
-        if (req.query.tipo == 'F')
+        if (req.query.tipo == 'F') {
+          let pessoaFisica = montaCamposUpdatePessoaFisica()
+          console.log(pessoaFisica)
           update = `UPDATE pessoas SET
-            nome='${req.query.nome}',
-            tipo='${req.query.tipo}',
-            id_pronome_tratamento=${req.query.id_pronome_tratamento},
-            sexo='${req.query.sexo}',
-            rg_ie='${req.query.rg_ie}',
-            orgaoemissor='${req.query.orgaoemissor}',
-            cpf_cnpj='${req.query.cpf_cnpj}',
-            email='${req.query.email}',
-            website='${req.query.website}',
-            observacoes='${req.query.observacoes}',
-            dtalteracao=now()
+            ${pessoaFisica},
+            dtalteracao=now(),
 
-            apelido_fantasia=null
+            apelido_fantasia = NULL
 
             WHERE pessoas.id=${req.query.id};
             `;
-
-        else if (req.query.tipo == 'J')
+        }
+        else if (req.query.tipo == 'J') {
+          let pessoaJuridica = montaCamposUpdatePessoaJuridica()
           update = `UPDATE pessoas SET
-            nome='${req.query.nome}',
-            tipo='${req.query.tipo}',
-            apelido_fantasia='${req.query.apelido_fantasia}',
-            id_pronome_tratamento=${req.query.id_pronome_tratamento},
-            sexo='${req.query.sexo}',
-            rg_ie='${req.query.rg_ie}',
-            orgaoemissor='${req.query.orgaoemissor}',
-            cpf_cnpj='${req.query.cpf_cnpj}',
-            email='${req.query.email}',
-            website='${req.query.website}',
-            observacoes='${req.query.observacoes}',
-            dtalteracao=now()
-
-            WHERE pessoas.id=${req.query.id};
-            `;
-
+          ${pessoaJuridica},
+          dtalteracao=now()
+          
+          WHERE pessoas.id=${req.query.id};
+          `;
+        }
+        console.log(update)
         client.query(update).then((res) => {
           client.query('COMMIT').then((resposta) => {
             client.end();
@@ -128,6 +113,37 @@ function salvarPessoa(req, res) {
             reject(e)
           })
         })
+
+        function montaCamposUpdatePessoaFisica() {
+          let ret = [];
+          ret.push("nome='" + req.query.nome + "'")
+          ret.push("tipo='" + req.query.tipo + "'")
+          ret.push('id_pronome_tratamento=' + (req.query.id_pronome_tratamento != 'null' ? "'" + req.query.id_pronome_tratamento + "'" : 'NULL'))
+          ret.push('sexo=' + (req.query.sexo != 'null' ? "'" + req.query.sexo + "'" : 'NULL'))
+          ret.push('rg_ie=' + (req.query.rg_ie != 'null' ? "'" + req.query.rg_ie + "'" : 'NULL'))
+          ret.push('orgaoemissor=' + (req.query.orgaoemissor != 'null' ? "'" + req.query.orgaoemissor + "'" : 'NULL'))
+          ret.push('cpf_cnpj=' + (req.query.cpf_cnpj != 'null' ? "'" + req.query.cpf_cnpj + "'" : 'NULL'))
+          ret.push('email=' + (req.query.email != 'null' ? "'" + req.query.email + "'" : 'NULL'))
+          ret.push('website=' + (req.query.website != 'null' ? "'" + req.query.website + "'" : 'NULL'))
+          ret.push('observacoes=' + (req.query.observacoes != 'null' ? "'" + req.query.observacoes + "'" : 'NULL'))
+          return ret.join(', ');
+        }
+
+        function montaCamposUpdatePessoaJuridica() {
+          let ret = [];
+          ret.push("nome='" + req.query.nome + "'")
+          ret.push("'tipo='" + req.query.tipo + "'")
+          ret.push('id_pronome_tratamento=' + (req.query.id_pronome_tratamento != 'null' ? "'" + req.query.id_pronome_tratamento + "'" : 'NULL'))
+          ret.push('apelido_fantasia=' + (req.query.apelido_fantasia != 'null' ? "'" + req.query.apelido_fantasia + "'" : 'NULL'))
+          ret.push('sexo=' + (req.query.sexo != 'null' ? "'" + req.query.sexo + "'" : 'NULL'))
+          ret.push('rg_ie=' + (req.query.rg_ie != 'null' ? "'" + req.query.rg_ie + "'" : 'NULL'))
+          ret.push('orgaoemissor=' + (req.query.orgaoemissor != 'null' ? "'" + req.query.orgaoemissor + "'" : 'NULL'))
+          ret.push('cpf_cnpj=' + (req.query.cpf_cnpj != 'null' ? "'" + req.query.cpf_cnpj + "'" : 'NULL'))
+          ret.push('email=' + (req.query.email != 'null' ? "'" + req.query.email + "'" : 'NULL'))
+          ret.push('website=' + (req.query.website != 'null' ? "'" + req.query.website + "'" : 'NULL'))
+          ret.push('observacoes=' + (req.query.observacoes != 'null' ? "'" + req.query.observacoes + "'" : 'NULL'))
+          return ret.join(', ');
+        }
       }).catch(e => {
         reject(e);
       })
@@ -185,7 +201,7 @@ function salvarTelefonePessoa(req, res) {
           update = `UPDATE pessoas_telefones SET
                       ddd='${req.query.ddd}',
                       telefone='${req.query.telefone}',
-                      ramal=${req.query.ramal || 'null'},
+                      ramal=${req.query.ramal || null},
                       principal=false,
                       id_tipo_telefone=${req.query.id_tipo_telefone},
                       contato='${req.query.contato}',
@@ -197,7 +213,7 @@ function salvarTelefonePessoa(req, res) {
             VALUES('${req.query.id_pessoa}',
                   '${req.query.ddd}',
                   '${req.query.telefone}',
-                  ${req.query.ramal || 'null'},
+                  ${req.query.ramal || null},
                   false,
                   ${req.query.id_tipo_telefone},
                   '${req.query.contato}',

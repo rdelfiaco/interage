@@ -31,7 +31,6 @@ export class CadastroPessoaComponent implements OnInit {
   }
 
   refreshDad() {
-
     this.refresh.emit();
   }
 }

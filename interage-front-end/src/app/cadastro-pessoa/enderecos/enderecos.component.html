@@ -92,7 +92,7 @@
         </button>
         <h4 class="modal-title w-100" id="myModalLabel">Excluir Endereço</h4>
       </div>
-      <div class="modal-body">
+      <div *ngIf="enderecoExclusao" class="modal-body">
         {{enderecoExclusao.cep}} {{enderecoExclusao.cidade}} {{enderecoExclusao.bairro}}
         {{enderecoExclusao.logradouro}} {{enderecoExclusao.complemento}}
       </div>

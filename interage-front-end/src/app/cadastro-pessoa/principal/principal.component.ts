@@ -160,7 +160,7 @@ export class PrincipalComponent implements OnInit {
 
     this.principalForm.value.id_usuario = usuarioLogado.id;
     this.principalForm.value.token = usuarioLogado.token;
-    this.principalForm.value.cpf_cnpj = this.principalForm.value.cpf_cnpj.replace(/\W/gi, '')
+    this.principalForm.value.cpf_cnpj = this.principalForm.value.cpf_cnpj && this.principalForm.value.cpf_cnpj.replace(/\W/gi, '')
     try {
       await this.connectHTTP.callService({
         service: 'salvarPessoa',
