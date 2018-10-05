@@ -6,7 +6,7 @@
       <div class="col-12">
         <br>
         <p>
-          <app-principal [pessoa]="pessoa | async"></app-principal>
+          <app-principal [pessoa]="pessoa | async" (refreshPessoaAdd)="refreshPessoaAdd($event)"></app-principal>
         </p>
       </div>
     </div>

@@ -154,6 +154,116 @@ function salvarPessoa(req, res) {
 
 }
 
+function adicionarPessoa(req, res) {
+  return new Promise(function (resolve, reject) {
+
+    checkTokenAccess(req).then(historico => {
+      const dbconnection = require('../config/dbConnection')
+      const { Client } = require('pg')
+
+      const client = new Client(dbconnection)
+
+      client.connect()
+
+      let update;
+      if (req.query.tipo == 'F') {
+        let pessoaFisica = montaCamposUpdatePessoaFisica()
+        update = `INSERT INTO pessoas ${pessoaFisica} RETURNING id`;
+      }
+      else if (req.query.tipo == 'J') {
+        let pessoaJuridica = montaCamposUpdatePessoaJuridica()
+        update = `INSERT INTO pessoas ${pessoaJuridica} RETURNING id`
+      }
+      console.log(update)
+      client.query(update).then((res) => {
+        client.end();
+        resolve(res.rows[0])
+
+      }).catch(e => {
+
+        client.end();
+        reject(e)
+
+      })
+
+      function montaCamposUpdatePessoaFisica() {
+        let ret = [];
+        ret.push("(")
+        ret.push("nome,")
+        ret.push("tipo,")
+        ret.push('id_pronome_tratamento,')
+        ret.push('sexo,')
+        ret.push('rg_ie,')
+        ret.push('orgaoemissor,')
+        ret.push('cpf_cnpj,')
+        ret.push('email,')
+        ret.push('website,')
+        ret.push('observacoes,')
+        ret.push('dtinclusao,')
+        ret.push('dtalteracao')
+        ret.push(')')
+
+        ret.push('VALUES(')
+
+        ret.push("'" + req.query.nome + "',")
+        ret.push("'" + req.query.tipo + "',")
+        ret.push((req.query.id_pronome_tratamento != '' ? "'" + req.query.id_pronome_tratamento + "'" : 'NULL') + ",")
+        ret.push((req.query.sexo != '' ? "'" + req.query.sexo + "'" : 'NULL') + ",")
+        ret.push((req.query.rg_ie != '' ? "'" + req.query.rg_ie + "'" : 'NULL') + ",")
+        ret.push((req.query.orgaoemissor != '' ? "'" + req.query.orgaoemissor + "'" : 'NULL') + ",")
+        ret.push((req.query.cpf_cnpj != '' ? "'" + req.query.cpf_cnpj + "'" : 'NULL') + ",")
+        ret.push((req.query.email != '' ? "'" + req.query.email + "'" : 'NULL') + ",")
+        ret.push((req.query.website != '' ? "'" + req.query.website + "'" : 'NULL') + ",")
+        ret.push((req.query.observacoes != '' ? "'" + req.query.observacoes + "'" : 'NULL') + ",")
+        ret.push('now(),')
+        ret.push('now()')
+        ret.push(')')
+        return ret.join(' ');
+      }
+
+      function montaCamposUpdatePessoaJuridica() {
+        let ret = [];
+        ret.push("(")
+        ret.push("nome,")
+        ret.push("tipo,")
+        ret.push('id_pronome_tratamento,')
+        ret.push('sexo,')
+        ret.push('rg_ie,')
+        ret.push('orgaoemissor,')
+        ret.push('cpf_cnpj,')
+        ret.push('email,')
+        ret.push('website,')
+        ret.push('observacoes,')
+        ret.push('apelido_fantasia,')
+        ret.push('dtinclusao,')
+        ret.push('dtalteracao')
+        ret.push(')')
+
+        ret.push('VALUES(')
+
+        ret.push("'" + req.query.nome + "',")
+        ret.push("'" + req.query.tipo + "',")
+        ret.push((req.query.id_pronome_tratamento != 'null' ? "'" + req.query.id_pronome_tratamento + "'" : 'NULL') + ",")
+        ret.push((req.query.sexo != 'null' ? "'" + req.query.sexo + "'" : 'NULL') + ",")
+        ret.push((req.query.rg_ie != 'null' ? "'" + req.query.rg_ie + "'" : 'NULL') + ",")
+        ret.push((req.query.orgaoemissor != 'null' ? "'" + req.query.orgaoemissor + "'" : 'NULL') + ",")
+        ret.push((req.query.cpf_cnpj != 'null' ? "'" + req.query.cpf_cnpj + "'" : 'NULL') + ",")
+        ret.push((req.query.email != 'null' ? "'" + req.query.email + "'" : 'NULL') + ",")
+        ret.push((req.query.website != 'null' ? "'" + req.query.website + "'" : 'NULL') + ",")
+        ret.push((req.query.observacoes != 'null' ? "'" + req.query.observacoes + "'" : 'NULL') + ",")
+        ret.push((req.query.apelido_fantasia != 'null' ? "'" + req.query.apelido_fantasia + "'" : 'NULL') + ",")
+        ret.push('now(),')
+        ret.push('now()')
+        ret.push(')')
+        return ret.join(' ');
+      }
+    }).catch(e => {
+      reject(e);
+    });
+  });
+
+}
+
 function getTipoTelefone(req, res) {
   return new Promise(function (resolve, reject) {
 
@@ -433,5 +543,6 @@ module.exports = {
   excluirTelefonePessoa,
   excluirEnderecoPessoa,
   salvarEnderecoPessoa,
-  pesquisaPessoas
+  pesquisaPessoas,
+  adicionarPessoa
 }

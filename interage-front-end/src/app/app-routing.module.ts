@@ -13,6 +13,7 @@ import { SemPermissaoComponent } from './sem-permissao/sem-permissao.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { TelemarketingComponent } from './telemarketing/telemarketing.component';
 import { PesquisaPessoaComponent } from './pesquisa-pessoa/pesquisa-pessoa.component';
+import { CadastroPessoaComponent } from './cadastro-pessoa/cadastro-pessoa.component';
 
 
 
@@ -54,6 +55,11 @@ const routes: Routes = [
   {
     path: 'pessoas',
     component: PesquisaPessoaComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'pessoasAdd',
+    component: CadastroPessoaComponent,
     canActivate: [AuthGuard]
   },
   {

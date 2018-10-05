@@ -178,6 +178,19 @@ app.get('/pesquisaPessoas', (req, res) => {
     })
 });
 
+app.get('/adicionarPessoa', (req, res) => {
+  pessoa.adicionarPessoa(req)
+    .then(linhas => {
+      headerResponse(res)
+      res.status(200).send(linhas)
+    })
+    .catch(error => {
+      headerResponse(res)
+      console.log(error)
+      res.status(401).send(error)
+    })
+});
+
 app.get('/getEventosPendentes', (req, res) => {
   evento.getEventosPendentes(req)
     .then(linhas => {

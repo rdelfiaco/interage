@@ -37,17 +37,22 @@ export class EnderecosComponent implements OnInit {
     }
   }
   adicionarNovoEndereco() {
-    this.enderecoForm = this.formBuilder.group({
-      cep: [''],
-      id_pessoa: [''],
-      id_cidade: [''],
-      cidade: [''],
-      logradouro: [''],
-      bairro: [''],
-      complemento: [''],
-      recebe_correspondencia: ['']
-    });
-    this.enderecoSelecionado = true;
+    if (this._pessoaObject && this._pessoaObject.principal.id) {
+      this.enderecoForm = this.formBuilder.group({
+        cep: [''],
+        id_pessoa: [''],
+        id_cidade: [''],
+        cidade: [''],
+        logradouro: [''],
+        bairro: [''],
+        complemento: [''],
+        recebe_correspondencia: ['']
+      });
+      this.enderecoSelecionado = true;
+    }
+    else {
+      this.toastrService.error('Necessário ter uma pessoa cadastrada!')
+    }
   }
 
   async consultarCEP() {

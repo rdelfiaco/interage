@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { IMyOptions, ToastService } from '../../../lib/ng-uikit-pro-standard';
 import { ConnectHTTP } from '../../shared/services/connectHTTP';
@@ -18,7 +18,8 @@ interface selectValues {
 })
 export class PrincipalComponent implements OnInit {
   private _pessoa: any;
-
+  @Output() refresh = new EventEmitter();
+  @Output() refreshPessoaAdd = new EventEmitter();
   @Input()
   set pessoa(evento: any) {
     this._pessoa = evento;
@@ -161,15 +162,30 @@ export class PrincipalComponent implements OnInit {
     this.principalForm.value.id_usuario = usuarioLogado.id;
     this.principalForm.value.token = usuarioLogado.token;
     this.principalForm.value.cpf_cnpj = this.principalForm.value.cpf_cnpj && this.principalForm.value.cpf_cnpj.replace(/\W/gi, '')
-    try {
-      await this.connectHTTP.callService({
-        service: 'salvarPessoa',
-        paramsService: this.principalForm.value
-      });
-      this.toastrService.success('Salvo com sucesso');
+    if (this.principalForm.value.id) {
+      try {
+        await this.connectHTTP.callService({
+          service: 'salvarPessoa',
+          paramsService: this.principalForm.value
+        });
+        this.toastrService.success('Salvo com sucesso');
+      }
+      catch (e) {
+        this.toastrService.error('Erro ao salvar pessoa');
+      }
     }
-    catch (e) {
-      this.toastrService.error('Erro ao salvar pessoa');
+    else {
+      try {
+        const res = await this.connectHTTP.callService({
+          service: 'adicionarPessoa',
+          paramsService: this.principalForm.value
+        }) as any;
+        this.refreshPessoaAdd.emit({ idPessoa: res.resposta.id });
+        this.toastrService.success('Salvo com sucesso');
+      }
+      catch (e) {
+        this.toastrService.error('Erro ao salvar pessoa');
+      }
     }
   }
 }

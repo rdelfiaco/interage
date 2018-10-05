@@ -27,7 +27,7 @@
 
     </tbody>
   </table>
-  <span *ngIf="!_pessoaObject.telefones.length">Nenhum telefone cadastrado!</span>
+  <span *ngIf="_pessoaObject && !_pessoaObject.telefones.length">Nenhum telefone cadastrado!</span>
 </div>
 <div class="row d-flex justify-content-end">
   <button type="button" mdbBtn color="primary" (click)="adicionarNovoTelefone();" class="relative waves-light"

@@ -27,6 +27,7 @@ export class TelefonesComponent implements OnInit {
   constructor(private formBuilder: FormBuilder, private connectHTTP: ConnectHTTP,
     private localStorage: LocalStorage,
     private toastrService: ToastService) {
+    debugger;
     this.telefoneForm = this.formBuilder.group({
       id: [''],
       id_pessoa: [''],
@@ -68,18 +69,23 @@ export class TelefonesComponent implements OnInit {
   }
 
   adicionarNovoTelefone() {
-    this.telefoneForm = this.formBuilder.group({
-      id: [''],
-      id_pessoa: [this._pessoaObject.principal.id, [Validators.required]],
-      ddd: ['', [Validators.required]],
-      telefone: ['', [Validators.required]],
-      ramal: [''],
-      principal: [false],
-      id_tipo_telefone: ['', [Validators.required]],
-      contato: [''],
-      ddi: ['']
-    })
-    this.telefoneSelecionado = true;
+    if (this._pessoaObject && this._pessoaObject.principal.id) {
+      this.telefoneForm = this.formBuilder.group({
+        id: [''],
+        id_pessoa: [this._pessoaObject.principal.id, [Validators.required]],
+        ddd: ['', [Validators.required]],
+        telefone: ['', [Validators.required]],
+        ramal: [''],
+        principal: [false],
+        id_tipo_telefone: ['', [Validators.required]],
+        contato: [''],
+        ddi: ['']
+      })
+      this.telefoneSelecionado = true;
+    }
+    else {
+      this.toastrService.error('Necessário ter uma pessoa cadastrada!')
+    }
   }
 
   excluirTelefone(telefoneId) {

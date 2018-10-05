@@ -29,7 +29,7 @@
 
     </tbody>
   </table>
-  <span *ngIf="!_pessoaObject.enderecos.length">Nenhum endereço cadastrado!</span>
+  <span *ngIf="_pessoaObject && !_pessoaObject.enderecos.length">Nenhum endereço cadastrado!</span>
 </div>
 <div class="row d-flex justify-content-end">
   <button type="button" mdbBtn color="primary" (click)="adicionarNovoEndereco();" class="relative waves-light"
