@@ -1,7 +1,8 @@
 <div class="h5 text-center">Campanha de Telemarketing</div>
 <div class="row">
   <div class="col-md-6">
-    <mdb-select (selected)="getSelectedValue($event)" [options]="campanhas | async" [multiple]="false" placeholder="Escolha sua campanha"></mdb-select>
+    <mdb-select (selected)="getSelectedValue($event)" [disabled]="campanhaIniciada" [options]="campanhas | async"
+      [multiple]="false" placeholder="Escolha sua campanha"></mdb-select>
     <label>Campanha</label>
   </div>
 

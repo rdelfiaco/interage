@@ -16,14 +16,7 @@ export class CadastroPessoaComponent implements OnInit {
   observerPessoa: Subscriber<object>;
   pessoaObject: any;
   @Output() refresh = new EventEmitter();
-  @Input()
-  set pessoa(pessoa: Observable<object>) {
-    if (pessoa) this._pessoa = pessoa;
-  }
-
-  get pessoa(): any {
-    return this._pessoa
-  }
+  @Input() pessoa: Observable<string[]>;
 
   constructor(private connectHTTP: ConnectHTTP, private localStorage: LocalStorage,
     private auth: AuthService) {

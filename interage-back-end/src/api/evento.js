@@ -99,7 +99,7 @@ function salvarEvento(req, res) {
             client.query(update).then((res) => {
               motivoResposta_automatico.map((m, index, array) => {
                 eventoCriar = createEvent(m)
-                
+
                 client.query(eventoCriar).then(res => {
                   if (index == array.length - 1)
                     client.query('COMMIT').then((resposta) => {
@@ -111,10 +111,13 @@ function salvarEvento(req, res) {
             }).catch(e => reject(e))
           })
         }
+        else {
+          console.log('sdfasdf')
+          resolve(true)
+        }
       }).catch(e => reject(e))
       function createEvent(motivoResposta) {
         dataString = req.query.data.split('/');
-        console.dir(req.query.data)
         horaString = req.query.hora.split(':');
 
         let tipoDestino;

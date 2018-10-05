@@ -9,7 +9,6 @@ function getPessoa(req, res) {
 
       const client = new Client(dbconnection)
 
-      console.log('req.query.id_pessoa', req.query.id_pessoa)
       client.connect()
       let sql = `SELECT * FROM pessoas
                   WHERE id=${req.query.id_pessoa}`
@@ -78,7 +77,7 @@ function salvarPessoa(req, res) {
       client.query('BEGIN').then((res1) => {
         if (req.query.tipo == 'F') {
           let pessoaFisica = montaCamposUpdatePessoaFisica()
-          console.log(pessoaFisica)
+
           update = `UPDATE pessoas SET
             ${pessoaFisica},
             dtalteracao=now(),
@@ -97,7 +96,7 @@ function salvarPessoa(req, res) {
           WHERE pessoas.id=${req.query.id};
           `;
         }
-        console.log(update)
+        
         client.query(update).then((res) => {
           client.query('COMMIT').then((resposta) => {
             client.end();
@@ -174,7 +173,7 @@ function adicionarPessoa(req, res) {
         let pessoaJuridica = montaCamposUpdatePessoaJuridica()
         update = `INSERT INTO pessoas ${pessoaJuridica} RETURNING id`
       }
-      console.log(update)
+      
       client.query(update).then((res) => {
         client.end();
         resolve(res.rows[0])
@@ -509,7 +508,7 @@ function pesquisaPessoas(req, res) {
 
       const pesquisaTexto = req.query.searchText.toLowerCase()
       let pesquisa;
-      console.log(isNaN(parseInt(req.query.searchText)))
+
       if (isNaN(parseInt(req.query.searchText))) {
         pesquisa = `SELECT * FROM pessoas
             WHERE lower(nome) LIKE '%${pesquisaTexto}%' OR lower(apelido_fantasia) LIKE '%${pesquisaTexto}%' OR lower(cpf_cnpj) LIKE '%${pesquisaTexto}%'`
@@ -519,7 +518,6 @@ function pesquisaPessoas(req, res) {
             WHERE id=${pesquisaTexto}`
       }
 
-      console.log(pesquisa)
       client.query(pesquisa).then((res) => {
         if (res.rowCount > 0) {
           resolve(res.rows);
