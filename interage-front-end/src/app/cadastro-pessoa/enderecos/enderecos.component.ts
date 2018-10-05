@@ -65,7 +65,6 @@ export class EnderecosComponent implements OnInit {
         host: 'https://viacep.com.br',
         service: '/ws/' + cepConsulta + '/json/unicode/'
       }) as any;
-      debugger
       const res = cep.resposta;
       this.enderecoForm = this.formBuilder.group({
         cep: [res.cep],

@@ -15,6 +15,13 @@ export class AuthService {
 
   constructor(private router: Router, private localStorage: LocalStorage) {
     let self = this;
+    let tm;
+    document.addEventListener("mousemove", () => {
+      if (tm) clearTimeout(tm);
+      tm = setTimeout(() => {
+        self.validaAutenticacao();
+      }, 1000 * 5)
+    });
   }
 
   estaLogado(): Observable<boolean> {

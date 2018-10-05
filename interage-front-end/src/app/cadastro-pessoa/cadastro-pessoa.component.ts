@@ -33,7 +33,6 @@ export class CadastroPessoaComponent implements OnInit {
   }
 
   async refreshPessoaAdd(p: any) {
-    debugger;
     let pessoa = await this.connectHTTP.callService({
       service: 'getPessoa',
       paramsService: {

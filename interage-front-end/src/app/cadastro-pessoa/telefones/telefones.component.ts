@@ -27,7 +27,6 @@ export class TelefonesComponent implements OnInit {
   constructor(private formBuilder: FormBuilder, private connectHTTP: ConnectHTTP,
     private localStorage: LocalStorage,
     private toastrService: ToastService) {
-    debugger;
     this.telefoneForm = this.formBuilder.group({
       id: [''],
       id_pessoa: [''],

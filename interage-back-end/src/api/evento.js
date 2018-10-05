@@ -112,7 +112,6 @@ function salvarEvento(req, res) {
           })
         }
         else {
-          console.log('sdfasdf')
           resolve(true)
         }
       }).catch(e => reject(e))
