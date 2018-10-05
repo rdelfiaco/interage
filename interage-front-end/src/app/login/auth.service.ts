@@ -4,11 +4,23 @@ import { Injectable } from '@angular/core';
 import { ConnectHTTP } from '../shared/services/connectHTTP';
 import { LocalStorage } from '../shared/services/localStorage'
 import { Router } from '@angular/router';
+import { Observable, Subscriber, BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
+  usuarioLogado: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(!!this._getTokenLogadoLocalStorage());
+  usuarioLogadoObject: any;
+
+  constructor(private router: Router, private localStorage: LocalStorage) {
+    let self = this;
+  }
+
+  estaLogado(): Observable<boolean> {
+    return this.usuarioLogado.asObservable();
+  }
+
   async autenticacao(usuario: Usuario) {
     try {
       const usuarioLogado = await new ConnectHTTP().callService({
@@ -18,41 +30,40 @@ export class AuthService {
           senha: usuario.senha
         }
       })
-      new LocalStorage().postLocalStorage('usuarioLogado', usuarioLogado.resposta)
-      this._setValidadeToken(usuarioLogado.resposta as Usuario);
+      this.usuarioLogadoObject = usuarioLogado.resposta;
+      this.localStorage.postLocalStorage('usuarioLogado', usuarioLogado.resposta)
+      this._setValidadeToken();
+
+      this.usuarioLogado.next(true)
       return usuarioLogado;
     }
     catch (e) {
       return e;
     }
   }
+
   checkAutenticacao() {
-    if (this._getDataExpiracao() && this._getDataExpiracao().getTime() > new Date().getTime()) return true;
-    else {
-      this.logout();
-    }
+    return this._getDataExpiracao() && this._getDataExpiracao().getTime() > new Date().getTime();
   }
 
   validaAutenticacao() {
     if (this._getDataExpiracao().getTime() > new Date().getTime()) {
-      let usuarioLogado = new LocalStorage().getLocalStorage('usuarioLogado') as Usuario;
-      this._setValidadeToken(usuarioLogado);
+      this._setValidadeToken();
     }
   }
 
   _getDataExpiracao(): Date {
-    let usuarioLogado = new LocalStorage().getLocalStorage('usuarioLogado') as Usuario;
-    if (usuarioLogado && usuarioLogado.token)
-      return new LocalStorage().getLocalStorage(usuarioLogado.token as string) as Date;
+    if (this.usuarioLogadoObject && this.usuarioLogadoObject.token)
+      return this.localStorage.getLocalStorage(this.usuarioLogadoObject.token as string) as Date;
   }
-  _setValidadeToken(usuarioLogado: Usuario) {
+  _setValidadeToken() {
     let validadeToken = new Date(new Date().getTime() + (1000 * 60 * 30))
-    if (usuarioLogado && usuarioLogado.token)
-      new LocalStorage().postLocalStorage(usuarioLogado.token, validadeToken)
+    if (this.usuarioLogadoObject && this.usuarioLogadoObject.token)
+      this.localStorage.postLocalStorage(this.usuarioLogadoObject.token, validadeToken)
   }
 
   async logout() {
-    let usuarioLogado = new LocalStorage().getLocalStorage('usuarioLogado') as Usuario;
+    let usuarioLogado = this._getUsuarioLogadoLocalStorage();
 
     await new ConnectHTTP().callService({
       service: 'logout',
@@ -60,12 +71,20 @@ export class AuthService {
         token_access: usuarioLogado.token
       }
     })
-    debugger;
-
-    new LocalStorage().delLocalStorage(`${usuarioLogado.token}_date`)
-    new LocalStorage().delLocalStorage('usuarioLogado_object')
+    this.localStorage.delLocalStorage(`${usuarioLogado.token}_date`)
+    this.localStorage.delLocalStorage('usuarioLogado_object')
+    this.usuarioLogado.next(false);
     this.router.navigate(['/']);
+    window.location.reload();
   }
 
-  constructor(private router: Router) { }
+  _getUsuarioLogadoLocalStorage() {
+    return this.localStorage.getLocalStorage('usuarioLogado') as Usuario;
+  }
+
+  _getTokenLogadoLocalStorage() {
+    if (!this.usuarioLogadoObject) this.usuarioLogadoObject = this._getUsuarioLogadoLocalStorage();
+    if (this.usuarioLogadoObject)
+      return this.localStorage.getLocalStorage(this.usuarioLogadoObject.token);
+  }
 }

@@ -178,7 +178,6 @@ export class EventoComponent implements OnInit {
     }
     
     if (this.searchText) {
-      debugger
       return this.filterIt(this.tableData, this.searchText);
     }
   }

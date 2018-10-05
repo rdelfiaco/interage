@@ -56,10 +56,10 @@ const routes: Routes = [
     component: PesquisaPessoaComponent,
     canActivate: [AuthGuard]
   },
-
-
-
-  { path: '**', component: PageNotFoundComponent }
+  {
+    path: '**',
+    component: PageNotFoundComponent
+  }
 ];
 
 @NgModule({

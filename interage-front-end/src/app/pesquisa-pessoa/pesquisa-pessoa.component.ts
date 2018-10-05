@@ -22,6 +22,7 @@ export class PesquisaPessoaComponent implements OnInit {
   activePage: number = 1;
   firstVisibleIndex: number = 1;
   lastVisibleIndex: number = 10;
+  editandoPessoa: any;
   constructor(private connectHTTP: ConnectHTTP,
     private localStorage: LocalStorage,
     private toastrService: ToastService) {
@@ -90,7 +91,6 @@ export class PesquisaPessoaComponent implements OnInit {
           searchText: this.textoPesquisaPessoa
         }
       }) as any;
-      debugger;
       this.pessoasEncontradas = pessoasEncontradas.resposta;
 
       setTimeout(() => {
@@ -109,7 +109,10 @@ export class PesquisaPessoaComponent implements OnInit {
     catch (e) {
       this.toastrService.error(e.error);
     }
+  }
 
+  editarPessoa(pessoa: any) {
+    this.editandoPessoa = pessoa;
   }
 
 }

@@ -8,13 +8,15 @@ import { Usuario } from './usuario';
 @Injectable()
 export class AuthGuard implements CanActivate {
 
-  constructor(private router: Router) { }
+  constructor(private router: Router,
+    private auth: AuthService,
+    private localStorage: LocalStorage) { }
 
   canActivate(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean> | boolean {
-    if (new AuthService().checkAutenticacao()) {
-      let usuarioLogado = new LocalStorage().getLocalStorage('usuarioLogado') as Usuario;
+    if (this.auth.checkAutenticacao()) {
+      let usuarioLogado = this.localStorage.getLocalStorage('usuarioLogado') as Usuario;
       if (this._checkPermissaoRota(route, usuarioLogado))
         return true;
       else {
@@ -22,6 +24,7 @@ export class AuthGuard implements CanActivate {
       }
     }
     else {
+      this.auth.logout();
       this.router.navigate(['/']);
     }
   }
@@ -35,7 +38,6 @@ export class AuthGuard implements CanActivate {
       eventos: ['admin', 'supervisor', 'operador'],
       pessoas: ['admin', 'supervisor', 'operador'],
     }
-    debugger;
     if (rotas[route.routeConfig.path].indexOf(usuarioLogado.dashboard) != -1) return true;
   }
 }

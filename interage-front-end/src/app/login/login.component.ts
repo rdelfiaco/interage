@@ -17,7 +17,9 @@ export class LoginComponent implements OnInit {
 
   constructor(
     formBuilder: FormBuilder,
-    private router: Router
+    private router: Router,
+    private auth: AuthService,
+    private localStorage: LocalStorage
   ) {
 
     this.loginForm = formBuilder.group({
@@ -35,8 +37,8 @@ export class LoginComponent implements OnInit {
   };
 
   ngOnInit() {
-    if (new AuthService().checkAutenticacao()) {
-      let usuarioLogado = new LocalStorage().getLocalStorage('usuarioLogado') as Usuario;
+    if (this.auth.checkAutenticacao()) {
+      let usuarioLogado = this.localStorage.getLocalStorage('usuarioLogado') as Usuario;
       this.router.navigate([usuarioLogado.dashboard]);
     }
   }
@@ -45,13 +47,14 @@ export class LoginComponent implements OnInit {
     this.usuario.login = this.loginForm.value.login;
     this.usuario.senha = this.loginForm.value.senha;
 
-    const res = await new AuthService().autenticacao(this.usuario)
+    const res = await this.auth.autenticacao(this.usuario)
     if (res.error) {
       console.log(res.error)
     }
     else {
       let usuarioLogado = res.resposta
       this.router.navigate([usuarioLogado.dashboard]);
+      window.location.reload();
     }
   }
 

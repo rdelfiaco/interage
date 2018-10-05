@@ -1,4 +1,4 @@
-<body *ngIf="usuarioLogado">
+<body *ngIf="(usuarioLogado | async)">
 
     <!--Double navigation-->
     <header>
@@ -154,6 +154,6 @@
     <!--/Main layout-->
 </body>
 
-<body *ngIf="!usuarioLogado">
+<body *ngIf="!(usuarioLogado  | async)">
     <router-outlet></router-outlet>
 </body>
