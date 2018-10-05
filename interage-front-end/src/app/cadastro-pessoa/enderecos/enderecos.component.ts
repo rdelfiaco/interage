@@ -56,24 +56,28 @@ export class EnderecosComponent implements OnInit {
   }
 
   async consultarCEP() {
-    let cep = await this.connectHTTP.callService({
-      host: 'http://apps.widenet.com.br',
-      service: '/busca-cep/api/cep.json',
-      paramsService: {
-        code: 74525030
-      }
-    }) as any;
-    cep = cep.resposta;
-    this.enderecoForm = this.formBuilder.group({
-      cep: [cep.code],
-      id_pessoa: [this._pessoaObject.principal.id],
-      id_cidade: [1],
-      cidade: [cep.city],
-      logradouro: [cep.address],
-      bairro: [cep.district],
-      complemento: [''],
-      recebe_correspondencia: [false]
-    });
+    let cepConsulta = this.enderecoForm.value.cep.replace(/\D/g, '')
+    if (!cepConsulta) return this.toastrService.error('Campo CEP vazio');
+
+    var validacep = /^[0-9]{8}$/;
+    if (validacep.test(cepConsulta)) {
+      let cep = await this.connectHTTP.callService({
+        host: 'https://viacep.com.br',
+        service: '/ws/' + cepConsulta + '/json/unicode/'
+      }) as any;
+      debugger
+      const res = cep.resposta;
+      this.enderecoForm = this.formBuilder.group({
+        cep: [res.cep],
+        id_pessoa: [this._pessoaObject.principal.id],
+        id_cidade: [1],
+        cidade: [res.localidade],
+        logradouro: [res.logradouro],
+        bairro: [res.bairro],
+        complemento: [''],
+        recebe_correspondencia: [false]
+      });
+    }
   }
 
   cancelarAdd() {
