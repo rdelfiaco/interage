@@ -83,7 +83,13 @@ export class PesquisaPessoaComponent implements OnInit {
     this.lastVisibleIndex = this.activePage * this.maxVisibleItems;
   }
 
+  digitaTextoPesquisa(event) {
+    debugger;
+    return event.keyCode == 13 && this.pesquisar();
+  }
+
   async pesquisar() {
+    debugger;
     try {
       let pessoasEncontradas = await this.connectHTTP.callService({
         service: 'pesquisaPessoas',

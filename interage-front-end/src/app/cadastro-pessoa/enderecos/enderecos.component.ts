@@ -17,6 +17,7 @@ export class EnderecosComponent implements OnInit {
   _pessoaObject: any;
   enderecoExclusao: any;
   enderecoSelecionado: boolean;
+  enderecoSelecionadoObject: any;
   private usuarioLogado: any;
   private enderecoForm: FormGroup;
 
@@ -43,6 +44,7 @@ export class EnderecosComponent implements OnInit {
         id_pessoa: [''],
         id_cidade: [''],
         cidade: [''],
+        uf_cidade: [''],
         logradouro: [''],
         bairro: [''],
         complemento: [''],
@@ -66,11 +68,14 @@ export class EnderecosComponent implements OnInit {
         service: '/ws/' + cepConsulta + '/json/unicode/'
       }) as any;
       const res = cep.resposta;
+      debugger;
       this.enderecoForm = this.formBuilder.group({
+        id: [this.enderecoSelecionadoObject.id],
         cep: [res.cep],
         id_pessoa: [this._pessoaObject.principal.id],
         id_cidade: [1],
         cidade: [res.localidade],
+        uf_cidade: [res.uf],
         logradouro: [res.logradouro],
         bairro: [res.bairro],
         complemento: [''],
@@ -86,6 +91,8 @@ export class EnderecosComponent implements OnInit {
   async salvar() {
     this.enderecoForm.value.id_usuario = this.usuarioLogado.id;
     this.enderecoForm.value.token = this.usuarioLogado.token;
+    this.enderecoForm.value.cep = this.enderecoForm.value.cep.replace(/\D/g, '')
+    debugger;
     try {
       await this.connectHTTP.callService({
         service: 'salvarEnderecoPessoa',
@@ -129,17 +136,18 @@ export class EnderecosComponent implements OnInit {
   }
 
   editarEndereco(enderecoId) {
-    const enderecoSelecionado = this._pessoaObject.enderecos.filter(t => t.id == enderecoId)[0];
+    this.enderecoSelecionadoObject = this._pessoaObject.enderecos.filter(t => t.id == enderecoId)[0];
     this.enderecoForm = this.formBuilder.group({
-      id: [enderecoSelecionado.id],
-      cep: [enderecoSelecionado.cep],
+      id: [this.enderecoSelecionadoObject.id],
+      cep: [this.enderecoSelecionadoObject.cep],
       id_pessoa: [this._pessoaObject.principal.id],
-      id_cidade: [enderecoSelecionado.id_cidade],
-      cidade: [enderecoSelecionado.cidade],
-      logradouro: [enderecoSelecionado.logradouro],
-      bairro: [enderecoSelecionado.bairro],
-      complemento: [enderecoSelecionado.complemento],
-      recebe_correspondencia: [enderecoSelecionado.recebe_correspondencia]
+      id_cidade: [this.enderecoSelecionadoObject.id_cidade],
+      cidade: [this.enderecoSelecionadoObject.nome],
+      uf_cidade: [this.enderecoSelecionadoObject.uf_cidade],
+      logradouro: [this.enderecoSelecionadoObject.logradouro],
+      bairro: [this.enderecoSelecionadoObject.bairro],
+      complemento: [this.enderecoSelecionadoObject.complemento],
+      recebe_correspondencia: [this.enderecoSelecionadoObject.recebe_correspondencia]
     });
     this.enderecoSelecionado = true;
   }

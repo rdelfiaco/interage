@@ -1,7 +1,7 @@
 <div class="row mx-auto">
   <div class="col md-form">
     <input type="search" [(ngModel)]="textoPesquisaPessoa" id="search" class="form-control" mdbInputDirective
-      [mdbValidate]="false">
+      [mdbValidate]="false" (keyup)="$event.keyCode == 13 && pesquisar()">
     <label for="search">Pesquisa Pessoa</label>
   </div>
   <div class="col-1">

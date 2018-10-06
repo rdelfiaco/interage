@@ -38,6 +38,7 @@ function getPessoa(req, res) {
       function getEnderecos() {
         return new Promise((resolve, reject) => {
           let sqlEnderecos = `SELECT * FROM pessoas_enderecos
+                              INNER JOIN cidades ON pessoas_enderecos.id_cidade=cidades.id
 															WHERE id_pessoa=${req.query.id_pessoa}`
 
           client.query(sqlEnderecos).then(res => {
@@ -96,7 +97,7 @@ function salvarPessoa(req, res) {
           WHERE pessoas.id=${req.query.id};
           `;
         }
-        
+
         client.query(update).then((res) => {
           client.query('COMMIT').then((resposta) => {
             client.end();
@@ -173,7 +174,7 @@ function adicionarPessoa(req, res) {
         let pessoaJuridica = montaCamposUpdatePessoaJuridica()
         update = `INSERT INTO pessoas ${pessoaJuridica} RETURNING id`
       }
-      
+
       client.query(update).then((res) => {
         client.end();
         resolve(res.rows[0])
@@ -407,8 +408,34 @@ function salvarEnderecoPessoa(req, res) {
 
       let update;
       client.query('BEGIN').then((res1) => {
-        if (req.query.id)
-          update = `UPDATE pessoas_enderecos SET
+        const queryCidade = `SELECT * from cidades 
+                             WHERE cidades.nome='${req.query.cidade}' AND cidades.uf_cidade='${req.query.uf_cidade.toUpperCase()}'`
+        client.query(queryCidade).then((cidade) => {
+          if (cidade.rowCount) {
+            req.query.id_cidade = cidade.rows[0].id;
+            salvaEndereco();
+          }
+          else {
+            insereCidade()
+          }
+          function insereCidade() {
+            insert = `INSERT INTO cidades(
+              nome, uf_cidade, status)
+              VALUES('${req.query.cidade}',
+                    '${req.query.uf_cidade.toUpperCase()}',
+                    TRUE
+                    ) RETURNING id`;
+
+            client.query(insert).then((res) => {
+              req.query.id_cidade = res.id
+              salvaEndereco()
+            }).catch(e => {
+              reject(e);
+            })
+          }
+          function salvaEndereco() {
+            if (req.query.id)
+              update = `UPDATE pessoas_enderecos SET
                       id_cidade=${req.query.id_cidade},
                       cep=${req.query.cep},
                       logradouro='${req.query.logradouro}',
@@ -416,8 +443,8 @@ function salvarEnderecoPessoa(req, res) {
                       complemento='${req.query.complemento}',
                       recebe_correspondencia='${req.query.recebe_correspondencia}'
                       WHERE pessoas_enderecos.id=${req.query.id}`;
-        else
-          update = `INSERT INTO pessoas_enderecos(
+            else
+              update = `INSERT INTO pessoas_enderecos(
             id_pessoa, id_cidade, cep, logradouro, bairro, complemento, recebe_correspondencia)
             VALUES(${req.query.id_pessoa},
                   ${req.query.id_cidade},
@@ -430,20 +457,24 @@ function salvarEnderecoPessoa(req, res) {
 
 
 
-        client.query(update).then((res) => {
-          client.query('COMMIT').then((resposta) => {
-            client.end();
-            resolve(resposta)
-          }).catch(e => {
-            reject(e);
-          })
+            client.query(update).then((res) => {
+              client.query('COMMIT').then((resposta) => {
+                client.end();
+                resolve(resposta)
+              }).catch(e => {
+                reject(e);
+              })
+            }).catch(e => {
+              client.query('ROLLBACK').then((resposta) => {
+                client.end();
+                reject(e)
+              }).catch(e => {
+                reject(e)
+              })
+            })
+          }
         }).catch(e => {
-          client.query('ROLLBACK').then((resposta) => {
-            client.end();
-            reject(e)
-          }).catch(e => {
-            reject(e)
-          })
+          reject(e);
         })
       }).catch(e => {
         reject(e);
