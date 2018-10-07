@@ -41,6 +41,7 @@ export class LoginComponent implements OnInit {
       let usuarioLogado = this.localStorage.getLocalStorage('usuarioLogado') as Usuario;
       this.router.navigate([usuarioLogado.dashboard]);
     }
+    else this.auth.logout();
   }
 
   async fazerLogin() {

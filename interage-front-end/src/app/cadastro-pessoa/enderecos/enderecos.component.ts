@@ -70,7 +70,7 @@ export class EnderecosComponent implements OnInit {
       const res = cep.resposta;
       debugger;
       this.enderecoForm = this.formBuilder.group({
-        id: [this.enderecoSelecionadoObject.id],
+        id: [(this.enderecoSelecionadoObject && this.enderecoSelecionadoObject.id) || ''],
         cep: [res.cep],
         id_pessoa: [this._pessoaObject.principal.id],
         id_cidade: [1],

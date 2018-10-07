@@ -54,7 +54,7 @@ function motivosRespostas(req, res) {
 
       client.connect()
 
-      let sqlMotivosResposta = `SELECT motivos_respostas.id, motivos_respostas.exige_predicao, motivos_respostas.nome, motivos_respostas.ordem_listagem, motivos_eventos_automaticos.reagendar FROM motivos_respostas
+      let sqlMotivosResposta = `SELECT motivos_respostas.id, motivos_respostas.exige_predicao, motivos_respostas.nome, motivos_respostas.ordem_listagem, motivos_respostas.exige_observacao, motivos_eventos_automaticos.reagendar FROM motivos_respostas
                       LEFT JOIN motivos_eventos_automaticos ON motivos_respostas.id = motivos_eventos_automaticos.id_motivo_resposta
                       WHERE motivos_respostas.id_motivo=${req.query.id_motivo} AND status=true`
       client.query(sqlMotivosResposta).then(res => {
@@ -86,15 +86,28 @@ function salvarEvento(req, res) {
 
         if (motivoResposta_automatico.length > 0) {
           client.query('BEGIN').then((res1) => {
-
-            const update = `UPDATE eventos SET id_status_evento=3,
-            dt_resolvido=now(),
-            id_pessoa_resolveu=${req.query.id_pessoa}, 
-            observacao_retorno='${req.query.observacao}',
-            id_resp_motivo=${req.query.id_motivos_respostas},
-            id_telefone=${req.query.id_telefoneDiscado}
-            WHERE eventos.id=${req.query.id_evento};
-            `;
+            let update;
+            if (req.query.id_predicao) {
+              update = `UPDATE eventos SET id_status_evento=3,
+                  dt_resolvido=now(),
+                  id_pessoa_resolveu=${req.query.id_pessoa}, 
+                  observacao_retorno='${req.query.observacao}',
+                  id_resp_motivo=${req.query.id_motivos_respostas},
+                  id_telefone=${req.query.id_telefoneDiscado},
+                  id_predicao=${req.query.id_predicao}
+                  WHERE eventos.id=${req.query.id_evento};
+                  `;
+            }
+            else {
+              update = `UPDATE eventos SET id_status_evento=3,
+                  dt_resolvido=now(),
+                  id_pessoa_resolveu=${req.query.id_pessoa}, 
+                  observacao_retorno='${req.query.observacao}',
+                  id_resp_motivo=${req.query.id_motivos_respostas},
+                  id_telefone=${req.query.id_telefoneDiscado}
+                  WHERE eventos.id=${req.query.id_evento};
+                  `;
+            }
 
             client.query(update).then((res) => {
               motivoResposta_automatico.map((m, index, array) => {

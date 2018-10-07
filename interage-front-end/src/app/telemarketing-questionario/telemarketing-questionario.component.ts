@@ -19,6 +19,8 @@ export class TelemarketingQuestionarioComponent implements OnInit {
   private _pessoaObject: any;
   private _eventoObject: any;
   private _motivos_respostas: Array<object>;
+  private _predicoes: Array<object>;
+  predicoesFormatado: Array<object>
   questionarioForm: FormGroup;
   motivosRespostasFormatado: Array<object>
   motivoRespostaSelecionado: object
@@ -39,6 +41,8 @@ export class TelemarketingQuestionarioComponent implements OnInit {
     dateFormat: 'dd/mm/yyyy',
   }
   reagendar: boolean = false;
+  exige_observacao: boolean = false;
+  exige_predicao: boolean = false;
   discando: boolean = false;
   podeGravar: boolean = false;
   @ViewChild("dataReagendamento") datePicker: MDBDatePickerComponent;
@@ -59,6 +63,34 @@ export class TelemarketingQuestionarioComponent implements OnInit {
 
   get motivos_respostas(): any {
     return this._motivos_respostas
+  }
+
+  @Input()
+  set predicoes(predicoes: any) {
+    this._predicoes = predicoes;
+    this.predicoesFormatado = predicoes.map(p => {
+      return { label: p.nome, value: p.id, cor: p.cor }
+    })
+    debugger;
+  }
+
+  get predicoes(): any {
+    return this._predicoes
+  }
+
+  ValidateObservacao(control: AbstractControl) {
+    if (this.exige_observacao && !control.value) return { exige_observacao: true };
+    else return null;
+  }
+
+  ValidateExigePredicao(control: AbstractControl) {
+    if (this.exige_predicao && !control.value) return { exige_predicao: true };
+    else return null;
+  }
+
+  ValidateReagendar(control: AbstractControl) {
+    if (this.reagendar && !control.value) return { exige_predicao: true };
+    else return null;
   }
 
   constructor(private formBuilder: FormBuilder, private connectHTTP: ConnectHTTP, private localStorage: LocalStorage) {
@@ -102,11 +134,10 @@ export class TelemarketingQuestionarioComponent implements OnInit {
       motivoRespostaSelecionado: ['', [
         Validators.required
       ]],
-      observacao: ['', [
-        Validators.required
-      ]],
-      data: ['', [Validators.required]],
-      hora: ['', [Validators.required]]
+      observacao: ['', [this.ValidateObservacao.bind(this)]],
+      data: ['', [this.ValidateReagendar.bind(this)]],
+      hora: ['', [this.ValidateReagendar.bind(this)]],
+      id_predicao: ['', [this.ValidateExigePredicao.bind(this)]]
     })
 
     let data = new Date();
@@ -134,6 +165,14 @@ export class TelemarketingQuestionarioComponent implements OnInit {
     }
   }
 
+  camposPreenchidos() {
+    if (this.reagendar && (!this.questionarioForm.value.data || !this.questionarioForm.value.hora))
+      return false;
+    if (this.exige_observacao && (!this.questionarioForm.value.observacao))
+      return false;
+    return true;
+  }
+
   trocaTelefonePrincipal(telefoneId: string) {
     const numTelefone = this._pessoaObject.telefones.filter((t: any) => t.id == telefoneId) as any;
 
@@ -143,12 +182,23 @@ export class TelemarketingQuestionarioComponent implements OnInit {
   }
 
   selecionaMotivoResposta(motivoResposta: selectValues) {
+    const self = this;
     this.motivos_respostas.some((motivo) => {
       if (motivo.id == motivoResposta.value) {
         this.questionarioForm.controls['motivoRespostaSelecionado'].setValue(motivoResposta.value)
         if (motivo.reagendar)
           this.reagendar = true;
         else this.reagendar = false
+
+        if (motivo.exige_observacao)
+          this.exige_observacao = true;
+        else this.exige_observacao = false
+
+        if (motivo.exige_predicao)
+          this.exige_predicao = true;
+        else this.exige_predicao = false
+
+        self.questionarioForm.controls['observacao'].updateValueAndValidity();
       }
     })
   }
@@ -159,8 +209,10 @@ export class TelemarketingQuestionarioComponent implements OnInit {
   async gravarLigacao() {
     const usuarioLogado = this.localStorage.getLocalStorage('usuarioLogado') as any;
 
-    const dataObj = this.questionarioForm.value.data;
-    const data = `${dataObj.date.day}/${dataObj.date.month}/${dataObj.date.year}`
+    let data = this.questionarioForm.value.data;
+    if (typeof data == 'object')
+      data = `${data.date.day}/${data.date.month}/${data.date.year}`
+
     await this.connectHTTP.callService({
       service: 'salvarEvento',
       paramsService: {
@@ -172,6 +224,7 @@ export class TelemarketingQuestionarioComponent implements OnInit {
         id_pessoa_receptor: this._eventoObject.id_pessoa_receptor,
         id_motivos_respostas: this.questionarioForm.value.motivoRespostaSelecionado,
         id_telefoneDiscado: this.questionarioForm.value.idTelefoneSelecionado,
+        id_predicao: this.questionarioForm.value.id_predicao,
         id_campanha: this.campanhaSelecionada,
         observacao: this.questionarioForm.value.observacao,
         data,
@@ -190,6 +243,8 @@ export class TelemarketingQuestionarioComponent implements OnInit {
       telefonePrincipal: ['']
     });
     this.reagendar = false;
+    this.exige_observacao = null
+    this.exige_predicao = null
     this.discando = false;
     this.podeGravar = false;
     this.motivoRespostaSelecionado = null;

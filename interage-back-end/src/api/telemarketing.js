@@ -1,5 +1,6 @@
 const { checkTokenAccess } = require('./checkTokenAccess');
 const { getUmEvento, motivosRespostas } = require('./evento');
+const { getPredicao } = require('./predicao');
 const { getPessoa } = require('./pessoa');
 
 function getLigacaoTelemarketing(req, res) {
@@ -11,9 +12,13 @@ function getLigacaoTelemarketing(req, res) {
         req.query.id_motivo = evento.id_motivo;
         getPessoa(req).then(pessoa => {
           motivosRespostas(req).then(motivos_respostas => {
-            if (!evento || !pessoa || !motivos_respostas) reject('Ligação com erro!');
+            getPredicao(req).then(predicoes => {
+              if (!evento || !pessoa || !motivos_respostas || !predicoes) reject('Ligação com erro!');
 
-            resolve({ pessoa, evento, motivos_respostas });
+              resolve({ pessoa, evento, motivos_respostas, predicoes });
+            }).catch(e => {
+              reject(e);
+            });
           }).catch(e => {
             reject(e);
           });

@@ -426,8 +426,9 @@ function salvarEnderecoPessoa(req, res) {
                     TRUE
                     ) RETURNING id`;
 
+            console.log('insert', insert)
             client.query(insert).then((res) => {
-              req.query.id_cidade = res.id
+              req.query.id_cidade = res.rows[0].id
               salvaEndereco()
             }).catch(e => {
               reject(e);
@@ -456,7 +457,7 @@ function salvarEnderecoPessoa(req, res) {
                   )`;
 
 
-
+            console.log(update)
             client.query(update).then((res) => {
               client.query('COMMIT').then((resposta) => {
                 client.end();

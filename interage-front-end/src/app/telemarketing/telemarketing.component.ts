@@ -20,6 +20,7 @@ export class TelemarketingComponent implements OnInit {
   observerPessoa: Subscriber<object>;
   observerEvento: Subscriber<object>;
   motivos_respostas: Observable<Array<object>>;
+  predicoes: Observable<Array<object>>;
   formAberto: boolean;
   pessoaObject: any;
   pessoaNome: string;
@@ -79,7 +80,9 @@ export class TelemarketingComponent implements OnInit {
       self.pessoaObject = telemarketing.resposta.pessoa;
     });
 
+    debugger;
     this.motivos_respostas = telemarketing.resposta.motivos_respostas
+    this.predicoes = telemarketing.resposta.predicoes
     this.formAberto = true;
   }
 
