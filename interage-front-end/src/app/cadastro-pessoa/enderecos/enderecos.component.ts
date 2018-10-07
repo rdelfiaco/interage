@@ -71,7 +71,7 @@ export class EnderecosComponent implements OnInit {
       debugger;
       this.enderecoForm = this.formBuilder.group({
         id: [(this.enderecoSelecionadoObject && this.enderecoSelecionadoObject.id) || ''],
-        cep: [res.cep],
+        cep: [res.cep || this.enderecoForm.value.cep],
         id_pessoa: [this._pessoaObject.principal.id],
         id_cidade: [1],
         cidade: [res.localidade],
@@ -79,7 +79,7 @@ export class EnderecosComponent implements OnInit {
         logradouro: [res.logradouro],
         bairro: [res.bairro],
         complemento: [''],
-        recebe_correspondencia: [false]
+        recebe_correspondencia: [this.enderecoForm.value.recebe_correspondencia || false]
       });
     }
   }

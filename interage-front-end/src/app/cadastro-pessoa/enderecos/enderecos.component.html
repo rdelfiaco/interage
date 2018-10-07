@@ -5,21 +5,25 @@
       <tr>
         <th>Id</th>
         <th>CEP</th>
-        <th>cidade</th>
+        <th>Cidade</th>
         <th>Bairro</th>
-        <th>Logradouro</th>
-        <th>Complemento</th>
+        <th>Logra.</th>
+        <th>Comp.</th>
+        <th>Recebe Corres.</th>
         <th>Ações</th>
       </tr>
     </thead>
     <tbody *ngFor="let endereco of (pessoa | async)?.enderecos">
       <tr>
-        <th scope="row">{{endereco.id}}</th>
+        <th>{{endereco.id}}</th>
         <td>{{endereco.cep}}</td>
         <td>{{endereco.nome}}</td>
         <td>{{endereco.bairro}}</td>
         <td>{{endereco.logradouro}}</td>
         <td>{{endereco.complemento}}</td>
+        <td>
+          <mdb-checkbox [checked]="endereco.recebe_correspondencia" [disabled]="true"></mdb-checkbox>
+        </td>
         <td>
           <mdb-icon style="margin: 0px 5px;" icon="pencil" (click)="editarEndereco(endereco.id)" size="lg"></mdb-icon>
           <mdb-icon style="margin: 0px 5px;" icon="trash" (click)="excluirEndereco(endereco.id)" (click)="confirmExcluirEndereco.show()"
@@ -40,11 +44,14 @@
 <div *ngIf="enderecoSelecionado">
   <form [formGroup]="enderecoForm" class="formQuestionario">
     <div class="row">
+      <div class="md-form col-4">
+        <mdb-checkbox formControlName="recebe_correspondencia">Recebe Correspondência</mdb-checkbox>
+      </div>
       <div class="md-form col">
         <input mdbInputDirective formControlName="cep" max="11" min="8" type="text" id="cep" class="form-control">
         <label for="cep">CEP</label>
       </div>
-      <div class="md-form col">
+      <div class="md-form col-3">
         <button type="button" mdbBtn color="primary" (click)="consultarCEP();" class="relative waves-light"
           mdbWavesEffect>Buscar</button>
       </div>
@@ -52,12 +59,16 @@
 
     <div class="row">
       <div class="md-form col-6">
+        <input mdbInputDirective formControlName="bairro" type="text" id="bairro" class="form-control">
+        <label for="bairro">Bairro</label>
+      </div>
+      <div class="md-form col-4">
         <input mdbInputDirective formControlName="cidade" type="text" id="cidade" class="form-control">
         <label for="cidade">Cidade</label>
       </div>
-      <div class="md-form col-6">
-        <input mdbInputDirective formControlName="bairro" type="text" id="bairro" class="form-control">
-        <label for="bairro">Bairro</label>
+      <div class="md-form col-2">
+        <input mdbInputDirective formControlName="uf_cidade" type="text" id="estado" class="form-control">
+        <label for="estado">Estado</label>
       </div>
     </div>
 

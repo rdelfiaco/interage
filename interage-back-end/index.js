@@ -177,6 +177,18 @@ app.get('/pesquisaPessoas', (req, res) => {
       res.status(401).send(error)
     })
 });
+app.get('/editaTelefonePrincipal', (req, res) => {
+  pessoa.editaTelefonePrincipal(req)
+    .then(linhas => {
+      headerResponse(res)
+      res.status(200).send(linhas)
+    })
+    .catch(error => {
+      headerResponse(res)
+      console.log(error)
+      res.status(401).send(error)
+    })
+});
 
 app.get('/adicionarPessoa', (req, res) => {
   pessoa.adicionarPessoa(req)

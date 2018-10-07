@@ -8,6 +8,7 @@
         <th>DDD</th>
         <th>Telefone</th>
         <th>Ramal</th>
+        <th>Principal</th>
         <th>Ações</th>
       </tr>
     </thead>
@@ -18,6 +19,9 @@
         <td>{{telefone.ddd}}</td>
         <td>{{telefone.telefone}}</td>
         <td>{{telefone.ramal}}</td>
+        <td>
+          <mdb-checkbox (change)="setTelefonePrincipal(telefone)" [checked]="telefone.principal"></mdb-checkbox>
+        </td>
         <td>
           <mdb-icon style="margin: 0px 5px;" icon="pencil" (click)="editarTelefone(telefone.id)" size="lg"></mdb-icon>
           <mdb-icon style="margin: 0px 5px;" icon="trash" (click)="excluirTelefone(telefone.id)" (click)="confirmExcluirTelefone.show()"

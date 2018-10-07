@@ -67,6 +67,27 @@ export class TelefonesComponent implements OnInit {
     }
   }
 
+  async setTelefonePrincipal(telefone) {
+    try {
+      debugger;
+      await this.connectHTTP.callService({
+        service: 'editaTelefonePrincipal',
+        paramsService: {
+          id_usuario: this.usuarioLogado.id,
+          token: this.usuarioLogado.token,
+          id_telefone: telefone.id,
+          id_pessoa: telefone.id_pessoa
+        }
+      });
+      this.toastrService.success('Telefone principal alterado com sucesso!');
+    }
+    catch (e) {
+      this.toastrService.error('Telefone principal não foi alterado');
+    }
+
+    this.refresh.emit();
+  }
+
   adicionarNovoTelefone() {
     if (this._pessoaObject && this._pessoaObject.principal.id) {
       this.telefoneForm = this.formBuilder.group({
@@ -120,7 +141,7 @@ export class TelefonesComponent implements OnInit {
       ddd: [telefoneSelecionado.ddd, [Validators.required]],
       telefone: [telefoneSelecionado.telefone, [Validators.required]],
       ramal: [telefoneSelecionado.ramal],
-      principal: [false],
+      principal: [telefoneSelecionado.principal],
       id_tipo_telefone: [telefoneSelecionado.id_tipo_telefone, [Validators.required]],
       contato: [telefoneSelecionado.contato],
       ddi: [telefoneSelecionado.ddi]

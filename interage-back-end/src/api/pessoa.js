@@ -37,8 +37,20 @@ function getPessoa(req, res) {
 
       function getEnderecos() {
         return new Promise((resolve, reject) => {
-          let sqlEnderecos = `SELECT * FROM pessoas_enderecos
-                              INNER JOIN cidades ON pessoas_enderecos.id_cidade=cidades.id
+          let sqlEnderecos = `SELECT 
+                              pessoas_enderecos.id,
+                              pessoas_enderecos.id_pessoa,
+                              pessoas_enderecos.id_cidade,
+                              pessoas_enderecos.cep,
+                              pessoas_enderecos.logradouro, 
+                              pessoas_enderecos.bairro,
+                              pessoas_enderecos.complemento,
+                              pessoas_enderecos.recebe_correspondencia,
+                              pessoas_enderecos.status,
+                              cidades.nome,
+                              cidades.uf_cidade
+                              FROM pessoas_enderecos
+                              RIGHT JOIN cidades ON pessoas_enderecos.id_cidade=cidades.id
 															WHERE id_pessoa=${req.query.id_pessoa}`
 
           client.query(sqlEnderecos).then(res => {
@@ -50,7 +62,8 @@ function getPessoa(req, res) {
       function getTelefones() {
         return new Promise((resolve, reject) => {
           let sqlTelefones = `SELECT * FROM pessoas_telefones
-															WHERE id_pessoa=${req.query.id_pessoa}`
+                              WHERE id_pessoa=${req.query.id_pessoa}
+                              ORDER BY principal DESC`
 
           client.query(sqlTelefones).then(res => {
             resolve(res.rows);
@@ -353,6 +366,57 @@ function salvarTelefonePessoa(req, res) {
   })
 }
 
+function editaTelefonePrincipal(req, res) {
+  return new Promise(function (resolve, reject) {
+
+    checkTokenAccess(req).then(historico => {
+      const dbconnection = require('../config/dbConnection')
+      const { Client } = require('pg')
+
+      const client = new Client(dbconnection)
+
+      client.connect()
+
+      let update;
+      client.query('BEGIN').then(() => {
+        todosOsOutrosTelefonesFalse = `UPDATE pessoas_telefones SET
+                      principal=false
+                      WHERE pessoas_telefones.id_pessoa=${req.query.id_pessoa}`;
+
+        client.query(todosOsOutrosTelefonesFalse).then(() => {
+          setaNovoTelefonePrincipal = `UPDATE pessoas_telefones SET
+                      principal=true
+                      WHERE pessoas_telefones.id=${req.query.id_telefone} 
+                      AND pessoas_telefones.id_pessoa=${req.query.id_pessoa}`;
+
+
+          client.query(setaNovoTelefonePrincipal).then(() => {
+            client.query('COMMIT').then((resposta) => {
+              client.end();
+              resolve(resposta)
+            }).catch(e => {
+              reject(e);
+            })
+          }).catch(e => {
+            reject(e);
+          })
+        }).catch(e => {
+          client.query('ROLLBACK').then((resposta) => {
+            client.end();
+            reject(e)
+          }).catch(e => {
+            reject(e)
+          })
+        })
+      }).catch(e => {
+        reject(e);
+      })
+    }).catch(e => {
+      reject(e);
+    });
+  })
+}
+
 function excluirTelefonePessoa(req, res) {
   return new Promise(function (resolve, reject) {
 
@@ -442,7 +506,7 @@ function salvarEnderecoPessoa(req, res) {
                       logradouro='${req.query.logradouro}',
                       bairro='${req.query.bairro}',
                       complemento='${req.query.complemento}',
-                      recebe_correspondencia='${req.query.recebe_correspondencia}'
+                      recebe_correspondencia=${req.query.recebe_correspondencia}
                       WHERE pessoas_enderecos.id=${req.query.id}`;
             else
               update = `INSERT INTO pessoas_enderecos(
@@ -574,5 +638,6 @@ module.exports = {
   excluirEnderecoPessoa,
   salvarEnderecoPessoa,
   pesquisaPessoas,
-  adicionarPessoa
+  adicionarPessoa,
+  editaTelefonePrincipal
 }
