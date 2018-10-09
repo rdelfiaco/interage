@@ -7,8 +7,21 @@ const campanha = require('./src/api/campanha');
 const evento = require('./src/api/evento');
 const telemarketing = require('./src/api/telemarketing');
 const pessoa = require('./src/api/pessoa');
+const atividade = require('./src/api/atividade');
 
 
+app.get('/getAtividades', (req, res) => {
+  atividade.getAtividades(req)
+    .then(linhas => {
+      headerResponse(res)
+      res.status(200).send(linhas)
+    })
+    .catch(error => {
+      headerResponse(res)
+      console.log(error)
+      res.status(401).send(error)
+    })
+});
 app.get('/login', (req, res) => {
   usuario.login(req)
     .then(linhas => {
@@ -112,6 +125,18 @@ app.get('/getPessoa', (req, res) => {
       res.status(401).send(error)
     })
 });
+app.get('/getTratamentoPessoaFisica', (req, res) => {
+  pessoa.getTratamentoPessoaFisica(req)
+    .then(linhas => {
+      headerResponse(res)
+      res.status(200).send(linhas)
+    })
+    .catch(error => {
+      headerResponse(res)
+      console.log(error)
+      res.status(401).send(error)
+    })
+});
 
 app.get('/salvarTelefonePessoa', (req, res) => {
   pessoa.salvarTelefonePessoa(req)
@@ -189,6 +214,7 @@ app.get('/editaTelefonePrincipal', (req, res) => {
       res.status(401).send(error)
     })
 });
+
 app.get('/editaEnderecoDeCorrespondencia', (req, res) => {
   pessoa.editaEnderecoDeCorrespondencia(req)
     .then(linhas => {

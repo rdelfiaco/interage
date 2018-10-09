@@ -18,6 +18,7 @@ interface selectValues {
 })
 export class PrincipalComponent implements OnInit {
   private _pessoa: any;
+  private usuarioLogado: any;
   @Output() refresh = new EventEmitter();
   @Output() refreshPessoaAdd = new EventEmitter();
   @Input()
@@ -42,40 +43,11 @@ export class PrincipalComponent implements OnInit {
     },
   ]
 
-  tipoDeTratamentoFisica: Array<object> = [
-    {
-      value: '1',
-      label: "Dr."
-    },
-    {
-      value: '2',
-      label: "Dra."
-    },
-    {
-      value: '3',
-      label: "Exmo."
-    },
-    {
-      value: '4',
-      label: "Ilmo."
-    },
-    {
-      value: '5',
-      label: "Ms."
-    },
-    {
-      value: '6',
-      label: "Sr."
-    },
-    {
-      value: '7',
-      label: "Sra."
-    },
-    {
-      value: '8',
-      label: "Sta."
-    },
-  ]
+  tipoDeTratamentoFisica: any;
+  atividadesPessoaFisica: any;
+  atividadesPessoaJuridica: any;
+  serchFilter: string;
+
   tipoPessoaSelecionada: string = 'F';
   principalForm: FormGroup
 
@@ -125,7 +97,7 @@ export class PrincipalComponent implements OnInit {
       website: [''],
       observacoes: [''],
       apelido_fantasia: [''],
-      profissao: [''],
+      id_atividade: [''],
     })
   }
 
@@ -146,12 +118,45 @@ export class PrincipalComponent implements OnInit {
       website: [this.pessoa.principal.website],
       observacoes: [this.pessoa.principal.observacoes],
       apelido_fantasia: [this.pessoa.principal.apelido_fantasia],
-      profissao: [this.pessoa.principal.profissao],
+      id_atividade: [this.pessoa.principal.id_atividade],
     })
   }
 
-  ngOnInit() {
+  async ngOnInit() {
+    this.usuarioLogado = this.localStorage.getLocalStorage('usuarioLogado') as Usuario;
 
+    let tratamento = await this.connectHTTP.callService({
+      service: 'getTratamentoPessoaFisica',
+      paramsService: {
+        id_usuario: this.usuarioLogado.id,
+        token: this.usuarioLogado.token
+      }
+    }) as any;
+
+    this.tipoDeTratamentoFisica = tratamento.resposta.map((t) => {
+      return { label: t.descricao, value: t.id };
+    })
+
+
+    let atividades = await this.connectHTTP.callService({
+      service: 'getAtividades',
+      paramsService: {
+        id_usuario: this.usuarioLogado.id,
+        token: this.usuarioLogado.token
+      }
+    }) as any;
+
+    this.atividadesPessoaFisica = atividades.resposta
+      .filter(r => r.tipo === 'F')
+      .map((t) => {
+        return { label: t.name, value: t.id };
+      })
+
+    this.atividadesPessoaJuridica = atividades.resposta
+      .filter(r => r.tipo === 'J')
+      .map((t) => {
+        return { label: t.name, value: t.id };
+      })
   }
 
   getSelectedValuePessoa(pessoa: selectValues) {
@@ -159,11 +164,12 @@ export class PrincipalComponent implements OnInit {
   }
 
   async salvarPessoa() {
-    const usuarioLogado = this.localStorage.getLocalStorage('usuarioLogado') as Usuario;
-
-    this.principalForm.value.id_usuario = usuarioLogado.id;
-    this.principalForm.value.token = usuarioLogado.token;
+    this.principalForm.value.id_usuario = this.usuarioLogado.id;
+    this.principalForm.value.token = this.usuarioLogado.token;
     this.principalForm.value.cpf_cnpj = this.principalForm.value.cpf_cnpj && this.principalForm.value.cpf_cnpj.replace(/\W/gi, '')
+
+    this.checkAtividadePessoa()
+
     if (this.principalForm.value.id) {
       try {
         await this.connectHTTP.callService({
@@ -188,6 +194,16 @@ export class PrincipalComponent implements OnInit {
       catch (e) {
         this.toastrService.error('Erro ao salvar pessoa');
       }
+    }
+  }
+  checkAtividadePessoa() {
+    if (this.principalForm.value.tipo === 'F') {
+      let atividadeDaPessoa = this.atividadesPessoaFisica.filter(atividade => atividade.value == this.principalForm.value.id_atividade)
+      if (!atividadeDaPessoa.length) this.principalForm.value.id_atividade = null;
+    }
+    else {
+      let atividadeDaPessoa = this.atividadesPessoaJuridica.filter(atividade => atividade.value == this.principalForm.value.id_atividade)
+      if (!atividadeDaPessoa.length) this.principalForm.value.id_atividade = null;
     }
   }
 }

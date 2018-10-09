@@ -68,7 +68,6 @@ export class EnderecosComponent implements OnInit {
         service: '/ws/' + cepConsulta + '/json/unicode/'
       }) as any;
       const res = cep.resposta;
-      debugger;
       this.enderecoForm = this.formBuilder.group({
         id: [(this.enderecoSelecionadoObject && this.enderecoSelecionadoObject.id) || ''],
         cep: [res.cep || this.enderecoForm.value.cep, [Validators.required]],
@@ -86,7 +85,6 @@ export class EnderecosComponent implements OnInit {
 
   async setEnderecoDeCorrespondencia(endereco) {
     try {
-      debugger;
       await this.connectHTTP.callService({
         service: 'editaEnderecoDeCorrespondencia',
         paramsService: {
@@ -113,7 +111,6 @@ export class EnderecosComponent implements OnInit {
     this.enderecoForm.value.id_usuario = this.usuarioLogado.id;
     this.enderecoForm.value.token = this.usuarioLogado.token;
     this.enderecoForm.value.cep = this.enderecoForm.value.cep.replace(/\D/g, '')
-    debugger;
     try {
       await this.connectHTTP.callService({
         service: 'salvarEnderecoPessoa',
@@ -157,7 +154,6 @@ export class EnderecosComponent implements OnInit {
   }
 
   editarEndereco(enderecoId) {
-    debugger
     this.enderecoSelecionadoObject = this._pessoaObject.enderecos.filter(t => t.id == enderecoId)[0];
     this.enderecoForm = this.formBuilder.group({
       id: [this.enderecoSelecionadoObject.id],

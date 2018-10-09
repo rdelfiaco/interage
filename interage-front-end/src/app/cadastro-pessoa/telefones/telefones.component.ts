@@ -69,7 +69,6 @@ export class TelefonesComponent implements OnInit {
 
   async setTelefonePrincipal(telefone) {
     try {
-      debugger;
       await this.connectHTTP.callService({
         service: 'editaTelefonePrincipal',
         paramsService: {

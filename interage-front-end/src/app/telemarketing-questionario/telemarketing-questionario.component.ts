@@ -71,7 +71,6 @@ export class TelemarketingQuestionarioComponent implements OnInit {
     this.predicoesFormatado = predicoes.map(p => {
       return { label: p.nome, value: p.id, cor: p.cor }
     })
-    debugger;
   }
 
   get predicoes(): any {

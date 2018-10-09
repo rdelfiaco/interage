@@ -111,6 +111,7 @@ function salvarPessoa(req, res) {
           WHERE pessoas.id=${req.query.id};
           `;
         }
+        console.log(update)
 
         client.query(update).then((res) => {
           client.query('COMMIT').then((resposta) => {
@@ -139,6 +140,7 @@ function salvarPessoa(req, res) {
           ret.push('cpf_cnpj=' + (req.query.cpf_cnpj != 'null' ? "'" + req.query.cpf_cnpj + "'" : 'NULL'))
           ret.push('email=' + (req.query.email != 'null' ? "'" + req.query.email + "'" : 'NULL'))
           ret.push('website=' + (req.query.website != 'null' ? "'" + req.query.website + "'" : 'NULL'))
+          ret.push('id_atividade=' + (req.query.id_atividade != 'null' ? "'" + req.query.id_atividade + "'" : 'NULL'))
           ret.push('observacoes=' + (req.query.observacoes != 'null' ? "'" + req.query.observacoes + "'" : 'NULL'))
           return ret.join(', ');
         }
@@ -146,7 +148,7 @@ function salvarPessoa(req, res) {
         function montaCamposUpdatePessoaJuridica() {
           let ret = [];
           ret.push("nome='" + req.query.nome + "'")
-          ret.push("'tipo='" + req.query.tipo + "'")
+          ret.push("tipo='" + req.query.tipo + "'")
           ret.push('id_pronome_tratamento=' + (req.query.id_pronome_tratamento != 'null' ? "'" + req.query.id_pronome_tratamento + "'" : 'NULL'))
           ret.push('apelido_fantasia=' + (req.query.apelido_fantasia != 'null' ? "'" + req.query.apelido_fantasia + "'" : 'NULL'))
           ret.push('sexo=' + (req.query.sexo != 'null' ? "'" + req.query.sexo + "'" : 'NULL'))
@@ -155,6 +157,7 @@ function salvarPessoa(req, res) {
           ret.push('cpf_cnpj=' + (req.query.cpf_cnpj != 'null' ? "'" + req.query.cpf_cnpj + "'" : 'NULL'))
           ret.push('email=' + (req.query.email != 'null' ? "'" + req.query.email + "'" : 'NULL'))
           ret.push('website=' + (req.query.website != 'null' ? "'" + req.query.website + "'" : 'NULL'))
+          ret.push('id_atividade=' + (req.query.id_atividade != 'null' ? "'" + req.query.id_atividade + "'" : 'NULL'))
           ret.push('observacoes=' + (req.query.observacoes != 'null' ? "'" + req.query.observacoes + "'" : 'NULL'))
           return ret.join(', ');
         }
@@ -699,6 +702,37 @@ function pesquisaPessoas(req, res) {
   })
 }
 
+function getTratamentoPessoaFisica(req, res) {
+  return new Promise(function (resolve, reject) {
+
+    checkTokenAccess(req).then(historico => {
+      const dbconnection = require('../config/dbConnection')
+      const { Client } = require('pg')
+
+      const client = new Client(dbconnection)
+
+      client.connect()
+
+      let sql = `SELECT * FROM pronome_tratamento WHERE pronome_tratamento.status=true`
+
+      client.query(sql)
+        .then(res => {
+          if (res.rowCount > 0) {
+            let pronome_tratamento = res.rows;
+
+            client.end();
+            resolve(pronome_tratamento)
+          }
+          reject('Usuário não encontrado')
+        }
+        )
+        .catch(err => console.log(err)) //reject( err.hint ) )
+    }).catch(e => {
+      reject(e)
+    })
+  })
+}
+
 module.exports = {
   getPessoa,
   salvarPessoa,
@@ -710,5 +744,6 @@ module.exports = {
   pesquisaPessoas,
   adicionarPessoa,
   editaTelefonePrincipal,
-  editaEnderecoDeCorrespondencia
+  editaEnderecoDeCorrespondencia,
+  getTratamentoPessoaFisica
 }

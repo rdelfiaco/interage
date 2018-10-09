@@ -47,9 +47,10 @@
     </div>
 
     <div class="row">
-      <div class="md-form col-6">
-        <input mdbInputDirective formControlName="profissao" type="text" id="profissao" class="form-control">
-        <label for="profissao">Profissão</label>
+      <div class="col-6 mdb-select-form">
+        <mdb-select [filterEnabled]="true" formControlName="id_atividade" [placeholder]="'Selecione a profissão'"
+          [options]="atividadesPessoaFisica" [multiple]="false"></mdb-select>
+        <label>Profissão</label>
       </div>
       <div class="md-form col-6">
         <input mdbInputDirective formControlName="email" type="text" id="email" class="form-control">
@@ -104,9 +105,10 @@
         <input mdbInputDirective formControlName="cpf_cnpj" type="text" id="cpf_cnpj" class="form-control">
         <label for="cpf_cnpj">CNPJ</label>
       </div>
-      <div class="md-form col">
-        <input mdbInputDirective formControlName="id_atividade" type="text" id="id_atividade" class="form-control">
-        <label for="id_atividade">Atividade</label>
+      <div class="col mdb-select-form">
+        <mdb-select [filterEnabled]="true" formControlName="id_atividade" [placeholder]="'Selecione a atividade'"
+          [options]="atividadesPessoaJuridica" [multiple]="false"></mdb-select>
+        <label>Atividade</label>
       </div>
     </div>
 
