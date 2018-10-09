@@ -1,7 +1,7 @@
 import { Component, OnInit, EventEmitter, Output, Input, SimpleChanges } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ConnectHTTP } from '../../shared/services/connectHTTP';
-import { FormGroup, FormBuilder } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ToastService } from '../../../lib/ng-uikit-pro-standard';
 import { LocalStorage } from '../../shared/services/localStorage';
 
@@ -40,14 +40,14 @@ export class EnderecosComponent implements OnInit {
   adicionarNovoEndereco() {
     if (this._pessoaObject && this._pessoaObject.principal.id) {
       this.enderecoForm = this.formBuilder.group({
-        cep: [''],
-        id_pessoa: [''],
+        cep: ['', [Validators.required]],
+        id_pessoa: [this._pessoaObject.principal.id],
         id_cidade: [''],
         cidade: [''],
         uf_cidade: [''],
         logradouro: [''],
         bairro: [''],
-        complemento: [''],
+        complemento: ['', [Validators.required]],
         recebe_correspondencia: ['']
       });
       this.enderecoSelecionado = true;
@@ -71,17 +71,38 @@ export class EnderecosComponent implements OnInit {
       debugger;
       this.enderecoForm = this.formBuilder.group({
         id: [(this.enderecoSelecionadoObject && this.enderecoSelecionadoObject.id) || ''],
-        cep: [res.cep || this.enderecoForm.value.cep],
+        cep: [res.cep || this.enderecoForm.value.cep, [Validators.required]],
         id_pessoa: [this._pessoaObject.principal.id],
         id_cidade: [1],
         cidade: [res.localidade],
         uf_cidade: [res.uf],
         logradouro: [res.logradouro],
         bairro: [res.bairro],
-        complemento: [''],
-        recebe_correspondencia: [this.enderecoForm.value.recebe_correspondencia || false]
+        complemento: ['', [Validators.required]],
+        recebe_correspondencia: [this.enderecoForm.value.recebe_correspondencia]
       });
     }
+  }
+
+  async setEnderecoDeCorrespondencia(endereco) {
+    try {
+      debugger;
+      await this.connectHTTP.callService({
+        service: 'editaEnderecoDeCorrespondencia',
+        paramsService: {
+          id_usuario: this.usuarioLogado.id,
+          token: this.usuarioLogado.token,
+          id_endereco: endereco.id,
+          id_pessoa: endereco.id_pessoa
+        }
+      });
+      this.toastrService.success('Endereço de correspondência alterado com sucesso!');
+      this.refresh.emit();
+    }
+    catch (e) {
+      this.toastrService.error('Endereço de correspondência não foi alterado');
+    }
+
   }
 
   cancelarAdd() {
@@ -136,6 +157,7 @@ export class EnderecosComponent implements OnInit {
   }
 
   editarEndereco(enderecoId) {
+    debugger
     this.enderecoSelecionadoObject = this._pessoaObject.enderecos.filter(t => t.id == enderecoId)[0];
     this.enderecoForm = this.formBuilder.group({
       id: [this.enderecoSelecionadoObject.id],

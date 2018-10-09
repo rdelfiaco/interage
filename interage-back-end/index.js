@@ -189,6 +189,18 @@ app.get('/editaTelefonePrincipal', (req, res) => {
       res.status(401).send(error)
     })
 });
+app.get('/editaEnderecoDeCorrespondencia', (req, res) => {
+  pessoa.editaEnderecoDeCorrespondencia(req)
+    .then(linhas => {
+      headerResponse(res)
+      res.status(200).send(linhas)
+    })
+    .catch(error => {
+      headerResponse(res)
+      console.log(error)
+      res.status(401).send(error)
+    })
+});
 
 app.get('/adicionarPessoa', (req, res) => {
   pessoa.adicionarPessoa(req)

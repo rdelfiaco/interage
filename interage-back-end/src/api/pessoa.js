@@ -51,7 +51,8 @@ function getPessoa(req, res) {
                               cidades.uf_cidade
                               FROM pessoas_enderecos
                               RIGHT JOIN cidades ON pessoas_enderecos.id_cidade=cidades.id
-															WHERE id_pessoa=${req.query.id_pessoa}`
+                              WHERE id_pessoa=${req.query.id_pessoa}
+                              ORDER BY recebe_correspondencia DESC`
 
           client.query(sqlEnderecos).then(res => {
             resolve(res.rows);
@@ -427,6 +428,57 @@ function editaTelefonePrincipal(req, res) {
   })
 }
 
+function editaEnderecoDeCorrespondencia(req, res) {
+  return new Promise(function (resolve, reject) {
+
+    checkTokenAccess(req).then(historico => {
+      const dbconnection = require('../config/dbConnection')
+      const { Client } = require('pg')
+
+      const client = new Client(dbconnection)
+
+      client.connect()
+
+      let update;
+      client.query('BEGIN').then(() => {
+        todosOsOutrosEnderecosFalse = `UPDATE pessoas_enderecos SET
+                      recebe_correspondencia=false
+                      WHERE pessoas_enderecos.id_pessoa=${req.query.id_pessoa}`;
+
+        client.query(todosOsOutrosEnderecosFalse).then(() => {
+          setaNovoEnderecoCorrespondencia = `UPDATE pessoas_enderecos SET
+                      recebe_correspondencia=true
+                      WHERE pessoas_enderecos.id=${req.query.id_endereco} 
+                      AND pessoas_enderecos.id_pessoa=${req.query.id_pessoa}`;
+
+
+          client.query(setaNovoEnderecoCorrespondencia).then(() => {
+            client.query('COMMIT').then((resposta) => {
+              client.end();
+              resolve(resposta)
+            }).catch(e => {
+              reject(e);
+            })
+          }).catch(e => {
+            reject(e);
+          })
+        }).catch(e => {
+          client.query('ROLLBACK').then((resposta) => {
+            client.end();
+            reject(e)
+          }).catch(e => {
+            reject(e)
+          })
+        })
+      }).catch(e => {
+        reject(e);
+      })
+    }).catch(e => {
+      reject(e);
+    });
+  })
+}
+
 function excluirTelefonePessoa(req, res) {
   return new Promise(function (resolve, reject) {
 
@@ -509,8 +561,14 @@ function salvarEnderecoPessoa(req, res) {
             })
           }
           function salvaEndereco() {
-            if (req.query.id)
-              update = `UPDATE pessoas_enderecos SET
+            let selectEnderecos = `SELECT * FROM pessoas_enderecos 
+                                   WHERE pessoas_enderecos.id_pessoa=${req.query.id_pessoa}`
+            client.query(selectEnderecos).then((enderecosPessoas) => {
+              let recebe_correspondencia = false;
+              if (!enderecosPessoas.rowCount) recebe_correspondencia = true;
+
+              if (req.query.id)
+                update = `UPDATE pessoas_enderecos SET
                       id_cidade=${req.query.id_cidade},
                       cep=${req.query.cep},
                       logradouro='${req.query.logradouro}',
@@ -518,36 +576,38 @@ function salvarEnderecoPessoa(req, res) {
                       complemento='${req.query.complemento}',
                       recebe_correspondencia=${req.query.recebe_correspondencia}
                       WHERE pessoas_enderecos.id=${req.query.id}`;
-            else
-              update = `INSERT INTO pessoas_enderecos(
-            id_pessoa, id_cidade, cep, logradouro, bairro, complemento, recebe_correspondencia)
-            VALUES(${req.query.id_pessoa},
-                  ${req.query.id_cidade},
-                  ${req.query.cep},
-                  '${req.query.logradouro}',
-                  '${req.query.bairro}',
-                  '${req.query.complemento}',
-                  '${req.query.recebe_correspondencia}'
-                  )`;
+              else
+                update = `INSERT INTO pessoas_enderecos(
+                      id_pessoa, id_cidade, cep, logradouro, bairro, complemento, recebe_correspondencia)
+                      VALUES(${req.query.id_pessoa},
+                            ${req.query.id_cidade},
+                            ${req.query.cep},
+                            '${req.query.logradouro}',
+                            '${req.query.bairro}',
+                            '${req.query.complemento}',
+                            '${recebe_correspondencia}'
+                            )`;
 
-
-            console.log(update)
-            client.query(update).then((res) => {
-              client.query('COMMIT').then((resposta) => {
-                client.end();
-                resolve(resposta)
+              client.query(update).then((res) => {
+                client.query('COMMIT').then((resposta) => {
+                  client.end();
+                  resolve(resposta)
+                }).catch(e => {
+                  reject(e);
+                })
               }).catch(e => {
-                reject(e);
-              })
-            }).catch(e => {
-              client.query('ROLLBACK').then((resposta) => {
-                client.end();
-                reject(e)
-              }).catch(e => {
-                reject(e)
+                client.query('ROLLBACK').then((resposta) => {
+                  client.end();
+                  reject(e)
+                })
+                  .catch(e => {
+                    reject(e)
+                  })
               })
             })
           }
+
+
         }).catch(e => {
           reject(e);
         })
@@ -649,5 +709,6 @@ module.exports = {
   salvarEnderecoPessoa,
   pesquisaPessoas,
   adicionarPessoa,
-  editaTelefonePrincipal
+  editaTelefonePrincipal,
+  editaEnderecoDeCorrespondencia
 }
