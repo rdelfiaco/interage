@@ -319,47 +319,57 @@ function salvarTelefonePessoa(req, res) {
       client.connect()
 
       let update;
-      client.query('BEGIN').then((res1) => {
-        if (req.query.id)
-          update = `UPDATE pessoas_telefones SET
+      client.query('BEGIN').then(() => {
+        const buscaTelefone = `SELECT * FROM pessoas_telefones WHERE pessoas_telefones.id_pessoa = ${req.query.id_pessoa}`
+
+        client.query(buscaTelefone).then((telefonesPessoa) => {
+          let principal = false;
+          if (!telefonesPessoa.rowCount) principal = true
+          if (req.query.id)
+            update = `UPDATE pessoas_telefones SET
                       ddd='${req.query.ddd}',
                       telefone='${req.query.telefone}',
                       ramal=${req.query.ramal || null},
-                      principal=false,
+                      principal=${req.query.telefone},
                       id_tipo_telefone=${req.query.id_tipo_telefone},
                       contato='${req.query.contato}',
                       ddi=55
                       WHERE pessoas_telefones.id=${req.query.id}`;
-        else
-          update = `INSERT INTO pessoas_telefones(
+          else
+            update = `INSERT INTO pessoas_telefones(
             id_pessoa, ddd, telefone, ramal, principal, id_tipo_telefone, contato, ddi)
             VALUES('${req.query.id_pessoa}',
                   '${req.query.ddd}',
                   '${req.query.telefone}',
                   ${req.query.ramal || null},
-                  false,
+                  ${principal},
                   ${req.query.id_tipo_telefone},
                   '${req.query.contato}',
                   '55')`;
 
-        client.query(update).then((res) => {
-          client.query('COMMIT').then((resposta) => {
-            client.end();
-            resolve(resposta)
+          client.query(update).then((res) => {
+            client.query('COMMIT').then((resposta) => {
+              client.end();
+              resolve(resposta)
+            }).catch(e => {
+              reject(e);
+            })
           }).catch(e => {
-            reject(e);
+            client.query('ROLLBACK').then((resposta) => {
+              client.end();
+              reject(e)
+            }).catch(e => {
+              reject(e)
+            })
           })
+
         }).catch(e => {
-          client.query('ROLLBACK').then((resposta) => {
-            client.end();
-            reject(e)
-          }).catch(e => {
-            reject(e)
-          })
+          reject(e);
         })
       }).catch(e => {
         reject(e);
       })
+
     }).catch(e => {
       reject(e);
     });

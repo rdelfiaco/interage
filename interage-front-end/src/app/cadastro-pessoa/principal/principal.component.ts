@@ -76,7 +76,7 @@ export class PrincipalComponent implements OnInit {
       label: "Sta."
     },
   ]
-  tipoPessoaSelecionada: string;
+  tipoPessoaSelecionada: string = 'F';
   principalForm: FormGroup
 
   public myDatePickerOptions: IMyOptions = {
@@ -90,6 +90,7 @@ export class PrincipalComponent implements OnInit {
     todayBtnTxt: "Hoje",
     clearBtnTxt: "Limpar",
     closeBtnTxt: "Fechar",
+    closeAfterSelect: true,
 
     // Format
     dateFormat: 'dd/mm/yyyy',
@@ -112,8 +113,8 @@ export class PrincipalComponent implements OnInit {
     private toastrService: ToastService) {
     this.principalForm = this.formBuilder.group({
       id: [''],
-      nome: [''],
-      tipo: [''],
+      nome: ['', [Validators.required]],
+      tipo: [this.tipoPessoaSelecionada, [Validators.required]],
       id_pronome_tratamento: [''],
       datanascimento: [''],
       sexo: [''],
@@ -132,7 +133,7 @@ export class PrincipalComponent implements OnInit {
     this.tipoPessoaSelecionada = this.pessoa.principal.tipo;
 
     this.principalForm = this.formBuilder.group({
-      id: [this.pessoa.principal.id, [Validators.required]],
+      id: [this.pessoa.principal.id],
       nome: [this.pessoa.principal.nome, [Validators.required]],
       tipo: [this.pessoa.principal.tipo, [Validators.required]],
       id_pronome_tratamento: [this.pessoa.principal.id_pronome_tratamento],
@@ -150,6 +151,7 @@ export class PrincipalComponent implements OnInit {
   }
 
   ngOnInit() {
+
   }
 
   getSelectedValuePessoa(pessoa: selectValues) {

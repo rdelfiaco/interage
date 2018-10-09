@@ -1,16 +1,5 @@
 <form [formGroup]="principalForm" class="formQuestionario">
   <div class="row">
-    <div class="md-form col-3">
-      <input mdbInputDirective formControlName="id" type="text" id="id" class="form-control" disabled>
-      <label for="id">Id</label>
-    </div>
-    <div class="md-form col">
-      <input mdbInputDirective formControlName="nome" type="text" id="nome" class="form-control">
-      <label for="nome">Nome</label>
-    </div>
-  </div>
-
-  <div class="row">
     <div class="col mdb-select-form">
       <mdb-select formControlName="tipo" (selected)="getSelectedValuePessoa($event)" [options]="tipoDePessoa"
         [multiple]="false" placeholder="Tipo de pessoa"></mdb-select>
@@ -20,11 +9,18 @@
 
   <div *ngIf="tipoPessoaSelecionada == 'F'">
     <div class="row">
-      <div class="col mdb-select-form">
+      <div class="col-3 mdb-select-form">
         <mdb-select formControlName="id_pronome_tratamento" [options]="tipoDeTratamentoFisica" [multiple]="false"
           placeholder="Tipo de pessoa"></mdb-select>
         <label>Tipo de tratamento</label>
       </div>
+      <div class="md-form col">
+        <input mdbInputDirective formControlName="nome" type="text" id="nome" class="form-control">
+        <label for="nome">Nome</label>
+      </div>
+    </div>
+
+    <div class="row">
       <div class="md-form form-group col mdb-date-form">
         <mdb-date-picker name="mydate" [options]="myDatePickerOptions" [placeholder]="'Selecione a data'" required></mdb-date-picker>
         <label class="">Data</label>
@@ -52,21 +48,17 @@
 
     <div class="row">
       <div class="md-form col-6">
-        <input mdbInputDirective formControlName="consultor" type="text" id="consultor" class="form-control">
-        <label for="consultor">Consultor</label>
-      </div>
-      <div class="md-form col-6">
         <input mdbInputDirective formControlName="profissao" type="text" id="profissao" class="form-control">
         <label for="profissao">Profissão</label>
       </div>
-    </div>
-
-    <div class="row">
       <div class="md-form col-6">
         <input mdbInputDirective formControlName="email" type="text" id="email" class="form-control">
         <label for="email">Email</label>
       </div>
-      <div class="md-form col-6">
+    </div>
+
+    <div class="row">
+      <div class="md-form col">
         <input mdbInputDirective formControlName="website" type="text" id="website" class="form-control">
         <label for="website">WebSite</label>
       </div>
@@ -76,6 +68,13 @@
       <div class="md-form col">
         <textarea type="text" formControlName="observacoes" id="obs" class="md-textarea form-control" mdbInputDirective></textarea>
         <label for="obs">Observação</label>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="md-form col">
+        <input mdbInputDirective formControlName="id" type="text" id="id" class="form-control" disabled>
+        <label for="id">Id</label>
       </div>
     </div>
   </div>
@@ -101,22 +100,16 @@
     </div>
 
     <div class="row">
-      <div class="md-form col-4">
+      <div class="md-form col-5">
         <input mdbInputDirective formControlName="cpf_cnpj" type="text" id="cpf_cnpj" class="form-control">
         <label for="cpf_cnpj">CNPJ</label>
       </div>
+      <div class="md-form col">
+        <input mdbInputDirective formControlName="id_atividade" type="text" id="id_atividade" class="form-control">
+        <label for="id_atividade">Atividade</label>
+      </div>
     </div>
 
-    <div class="row">
-      <div class="md-form col-6">
-        <input mdbInputDirective formControlName="consultor" type="text" id="consultor" class="form-control">
-        <label for="consultor">Consultor</label>
-      </div>
-      <div class="md-form col-6">
-        <input mdbInputDirective formControlName="profissao" type="text" id="profissao" class="form-control">
-        <label for="profissao">Profissão</label>
-      </div>
-    </div>
 
     <div class="row">
       <div class="md-form col-6">
@@ -133,6 +126,13 @@
       <div class="md-form col">
         <textarea type="text" formControlName="observacoes" id="obs" class="md-textarea form-control" mdbInputDirective></textarea>
         <label for="obs">Observação</label>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="md-form col">
+        <input mdbInputDirective formControlName="id" type="text" id="id" class="form-control" disabled>
+        <label for="id">Id</label>
       </div>
     </div>
   </div>

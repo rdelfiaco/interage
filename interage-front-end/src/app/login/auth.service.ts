@@ -71,7 +71,7 @@ export class AuthService {
 
   async logout() {
     let usuarioLogado = this._getUsuarioLogadoLocalStorage();
-
+    if (!usuarioLogado) return;
     await new ConnectHTTP().callService({
       service: 'logout',
       paramsService: {
