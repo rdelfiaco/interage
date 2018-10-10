@@ -59,7 +59,7 @@
           </div>
           <div class="col-6 col-sm-1 " style="z-index: 0" >
               <div class="row justify-content-around" >
-                  <a mdbBtn floating="true" size="lg" gradient="blue" mdbWavesEffect><mdb-icon icon="refresh"></mdb-icon></a>
+                  <a mdbBtn floating="true" size="lg" gradient="blue" mdbWavesEffect><mdb-icon icon="bolt"></mdb-icon></a>
               </div>
 
           </div>
@@ -67,121 +67,15 @@
         
 
     </div>
-  
 
-<br>
-<br>
-    <div class="px-2">
-  
-      <!--Table-->
-      <table class="table table-hover table-responsive-md mb-0">
-  
-        <!--Table head-->
-        <thead>
-          <tr>
-            <th class="status">Status
-            </th>
-            <th class="th-sm dtCriacao">Dt. criação
-              <mdb-icon icon="sort" (click)="sortBy('dt_criou')"></mdb-icon>
-            </th>
-            <th class="th-sm">Cliente
-              <mdb-icon icon="sort" (click)="sortBy('cliente')"></mdb-icon>
-            </th>
-            <th class="th-sm">Motivo
-                <mdb-icon icon="sort" (click)="sortBy('motivo')"></mdb-icon>
-            </th>
-            <th class="th-sm">P.
-                <mdb-icon icon="sort" (click)="sortBy('prioridade')"></mdb-icon>
-            </th>
-            <th class="th-sm">Dt.prevista
-                <mdb-icon icon="sort" (click)="sortBy('dt_prevista_resolucao')"></mdb-icon>
-            </th>
-            <th class="th-sm">Destino
-                <mdb-icon icon="sort" (click)="sortBy('destino')"></mdb-icon>
-            </th>
-            <th class="th-sm">Criador
-                <mdb-icon icon="sort" (click)="sortBy('pessoa_criou')"></mdb-icon>
-            </th>
-            <th class="th-sm">Tempo
-                <mdb-icon icon="sort" (click)="sortBy('tempo')"></mdb-icon>
-            </th>
-          </tr>
-        </thead>
-        <!--Table head-->
-  
-        <!--Table body-->
-        <tbody>
-          <tr #list *ngFor="let evento of tableData; let i = index">
-            <td *ngIf="i+1 >= firstVisibleIndex && i+1 <= lastVisibleIndex">
-              <a>
-                <mdb-icon class={{evento.status_evento_cor_texto}} 
-                icon={{evento.status_evento_icone}} class="mr-2 " 
-                title={{evento.status}}
-                ></mdb-icon>
-              </a>
-            </td>
-            <td *ngIf="i+1 >= firstVisibleIndex && i+1 <= lastVisibleIndex" class="{{evento.status_evento_cor_texto}} dtCriacao" >{{evento.dt_criou  | date:'dd/MM/yyyy' }}</td>
-            <td *ngIf="i+1 >= firstVisibleIndex && i+1 <= lastVisibleIndex" class={{evento.status_evento_cor_texto}} >{{evento.cliente}}</td>
-            <td *ngIf="i+1 >= firstVisibleIndex && i+1 <= lastVisibleIndex" class={{evento.status_evento_cor_texto}} >{{evento.motivo}}</td>
-            <td *ngIf="i+1 >= firstVisibleIndex && i+1 <= lastVisibleIndex" class={{evento.status_evento_cor_texto}} >{{evento.prioridade}}</td>
-            <td *ngIf="i+1 >= firstVisibleIndex && i+1 <= lastVisibleIndex" class={{evento.status_evento_cor_texto}} >{{evento.dt_prevista_resolucao | date:'dd/MM/yyyy HH:mm:ss'  }}</td>
-            <td *ngIf="i+1 >= firstVisibleIndex && i+1 <= lastVisibleIndex" class={{evento.status_evento_cor_texto}} >{{evento.destino}}</td>
-            <td *ngIf="i+1 >= firstVisibleIndex && i+1 <= lastVisibleIndex" class={{evento.status_evento_cor_texto}}  >{{evento.pessoa_criou}}</td>
-            <td *ngIf="i+1 >= firstVisibleIndex && i+1 <= lastVisibleIndex" class={{evento.status_evento_cor_texto}} >{{evento.tempo}}</td>
-          </tr>
-        </tbody>
-        <!--Table body-->
-      </table>
-  
-    </div>
-  
-    <hr class="my-0">
-  
-    <!--Bottom Table UI-->
-    <div class="d-flex justify-content-center">
-  
-      <!--Pagination -->
-      <nav class="my-4 pt-2">
-        <ul class="pagination pagination-circle pg-purple mb-0">
-  
-          <!--First-->
-          <li class="page-item clearfix d-none d-md-block" (click)="firstPage()" [ngClass]="{disabled: activePage == firstPageNumber}">
-            <a class="page-link">First</a>
-          </li>
-  
-          <!--Arrow left-->
-          <li class="page-item" (click)="previousPage($event)" [ngClass]="{disabled: activePage == firstPageNumber}">
-            <a class="page-link" aria-label="Previous">
-              <span aria-hidden="true">&laquo;</span>
-              <span class="sr-only">Previous</span>
-            </a>
-          </li>
-  
-          <!--Numbers-->
-          <li *ngFor="let page of paginators; let i = index" class="page-item" [ngClass]="{active: i+1 == activePage}">
-            <a class="page-link waves-light" (click)="changePage($event)" mdbWavesEffect>{{page}}</a>
-          </li>
-  
-  
-  
-          <!--Arrow right-->
-          <li class="page-item" (click)="nextPage($event)" [ngClass]="{disabled: activePage == lastPageNumber}">
-            <a class="page-link" aria-label="Next">
-              <span aria-hidden="true">&raquo;</span>
-              <span class="sr-only">Next</span>
-            </a>
-          </li>
-  
-          <!--First-->
-          <li class="page-item clearfix d-none d-md-block" (click)="lastPage()" [ngClass]="{disabled: activePage == lastPageNumber}">
-            <a class="page-link">Last</a>
-          </li>
-  
-        </ul>
-      </nav>
-      <!--/Pagination -->
-  
-    </div>
-    <!--Bottom Table UI-->
-  
+    <br>
+    <br>
+    <div class="container-fluid">
+      <mdb-progress-bar class="progress primary-color-dark" mode="indeterminate"></mdb-progress-bar>
+      <div class="blue-gradient  py-4   d-flex justify-content-center align-items-center">
+        
+        teste
+        
+      </div>
+  </div>
   </div>
