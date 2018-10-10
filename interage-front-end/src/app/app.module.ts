@@ -20,6 +20,7 @@ import { TelefonesComponent } from './cadastro-pessoa/telefones/telefones.compon
 import { EnderecosComponent } from './cadastro-pessoa/enderecos/enderecos.component';
 import { EventoModule } from './evento/evento.module';
 import { PesquisaPessoaComponent } from './pesquisa-pessoa/pesquisa-pessoa.component';
+import { AnalisaCampanhaComponent } from './analisa-campanha/analisa-campanha.component';
 
 
 @NgModule({
@@ -37,6 +38,7 @@ import { PesquisaPessoaComponent } from './pesquisa-pessoa/pesquisa-pessoa.compo
     TelefonesComponent,
     EnderecosComponent,
     PesquisaPessoaComponent,
+    AnalisaCampanhaComponent,
   ],
 
   imports: [

@@ -10,6 +10,7 @@ const pessoa = require('./src/api/pessoa');
 const atividade = require('./src/api/atividade');
 
 
+
 app.get('/getAtividades', (req, res) => {
   atividade.getAtividades(req)
     .then(linhas => {
@@ -49,6 +50,19 @@ app.get('/logout', (req, res) => {
 
 app.get('/getCampanhasDoUsuario', (req, res) => {
   campanha.getCampanhasDoUsuario(req)
+    .then(linhas => {
+      headerResponse(res)
+      res.status(200).send(linhas)
+    })
+    .catch(error => {
+      headerResponse(res)
+      console.log(error)
+      res.status(401).send(error)
+    })
+});
+
+app.get('/getCampanhas', (req, res) => {
+  campanha.getCampanhas(req)
     .then(linhas => {
       headerResponse(res)
       res.status(200).send(linhas)
@@ -254,6 +268,18 @@ app.get('/getEventosPendentes', (req, res) => {
     })
 });
 
+app.get('/getAgentesVendas', (req, res) => {
+  usuario.getAgentesVendas(req)
+    .then(linhas => {
+      headerResponse(res)
+      res.status(200).send(linhas)
+    })
+    .catch(error => {
+      headerResponse(res)
+      console.log(error)
+      res.status(401).send(error)
+    })
+});
 
 app.listen(nodeStart.port);
 console.log(`Servidor iniciado na em http://localhost:${nodeStart.port}`)

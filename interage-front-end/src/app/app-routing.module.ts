@@ -14,6 +14,7 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
 import { TelemarketingComponent } from './telemarketing/telemarketing.component';
 import { PesquisaPessoaComponent } from './pesquisa-pessoa/pesquisa-pessoa.component';
 import { CadastroPessoaComponent } from './cadastro-pessoa/cadastro-pessoa.component';
+import { AnalisaCampanhaComponent } from './analisa-campanha/analisa-campanha.component';
 
 
 
@@ -60,6 +61,11 @@ const routes: Routes = [
   {
     path: 'pessoasAdd',
     component: CadastroPessoaComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'analisaCampanha',
+    component: AnalisaCampanhaComponent,
     canActivate: [AuthGuard]
   },
   {
