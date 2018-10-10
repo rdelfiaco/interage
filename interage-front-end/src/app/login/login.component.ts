@@ -55,7 +55,6 @@ export class LoginComponent implements OnInit {
     else {
       let usuarioLogado = res.resposta
       this.router.navigate([usuarioLogado.dashboard]);
-      window.location.reload();
     }
   }
 

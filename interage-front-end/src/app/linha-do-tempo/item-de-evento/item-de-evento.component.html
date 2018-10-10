@@ -1,15 +1,17 @@
 <div *ngIf="eventos" class="acordionEvento">
   <mdb-accordion *ngFor="let evento of eventos">
-    <mdb-accordion-item [collapsed]="true">
-      <mdb-accordion-item-head [indicator]="evento.eventosFilho">
-        <div class="row align-items-center">
+    <mdb-accordion-item [collapsed]="true" [customClass]="'itemAcordion'">
+      <mdb-accordion-item-head [indicator]="evento.eventosFilho" [customClass]="'text-center justify-content-start align-items-center'">
+        <div class="row">
+
           <button class="col-2" (click)="visualizarDetalhesEvento.show(); selecionaEvento($event, evento)" mdbBtn type="button"
             gradient="peach" size="sm" mdbWavesEffect>Detalhe</button>
-          <div class="col-1">{{evento.id}}</div>
-          <div class="col-3">{{evento.motivo}}</div>
-          <div class="col-3">{{evento.resposta_motivo}}</div>
-          <div class="col-2">{{(evento.dataFilhoMaisNovo || evento.dt_resolvido || evento.dt_prevista_resolucao) |
-            date:'dd/MM/yyyy '}}</div>
+          <div class="col-2 h6">{{evento.motivo}}</div>
+          <div class="col-2 h6">{{evento.resposta_motivo}}</div>
+          <div class=" col-4 h6" style="white-space: nowrap;">{{(evento.dataFilhoMaisNovo
+            || evento.dt_resolvido ||
+            evento.dt_prevista_resolucao) |
+            date:'dd/MM/yyyy hh:mm:ss'}}</div>
         </div>
       </mdb-accordion-item-head>
       <mdb-accordion-item-body *ngIf="evento.eventosFilho">
