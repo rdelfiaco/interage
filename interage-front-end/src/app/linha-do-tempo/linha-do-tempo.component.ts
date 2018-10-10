@@ -34,13 +34,8 @@ export class LinhaDoTempoComponent implements OnInit {
 
 
 
-      this.eventosDaPessoa = juntaEventosPaiEFilhos(eventosEncontrados.resposta, null).sort((a, b) => {
-        if (new Date(a.dt_criou).getTime() > new Date(b.dt_criou).getTime()) return 1;
-        else if (new Date(a.dt_criou).getTime() < new Date(b.dt_criou).getTime()) return -1;
-        else return 0;
-      })
-      debugger;
-      function juntaEventosPaiEFilhos(eventos: Array<any>, idEventoPai: string) {
+
+      const juntaEventosPaiEFilhos = (eventos: Array<any>, idEventoPai: string) => {
         let eventosRetorno = [];
         eventos.forEach(evento => {
           if (!evento.id_evento_pai && !idEventoPai) {
@@ -85,6 +80,13 @@ export class LinhaDoTempoComponent implements OnInit {
           return maiorData;
         }
       }
+
+      this.eventosDaPessoa = juntaEventosPaiEFilhos(eventosEncontrados.resposta, null).sort((a, b) => {
+        if (new Date(a.dt_criou).getTime() > new Date(b.dt_criou).getTime()) return 1;
+        else if (new Date(a.dt_criou).getTime() < new Date(b.dt_criou).getTime()) return -1;
+        else return 0;
+      })
+
 
     }
     catch (e) {
