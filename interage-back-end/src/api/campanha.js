@@ -33,4 +33,34 @@ function getCampanhasDoUsuario(req, res) {
 	})
 }
 
-module.exports = { getCampanhasDoUsuario }
+function getCampanhas(req, res) {
+	return new Promise(function (resolve, reject) {
+
+		checkTokenAccess(req).then(historico => {
+			const dbconnection = require('../config/dbConnection')
+			const { Client } = require('pg')
+
+			const client = new Client(dbconnection)
+
+			client.connect()
+
+			let sql = `SELECT * FROM campanhas order by nome`
+
+			client.query(sql)
+				.then(res => {
+					if (res.rowCount > 0) {
+						let campanhas = res.rows;
+
+						client.end();
+						resolve(campanhas)
+					}
+					reject('Campanha não encontrada')
+				}
+				)
+				.catch(err => console.log(err)) //reject( err.hint ) )
+		}).catch(e => {
+			reject(e)
+		})
+	})
+}
+module.exports = { getCampanhasDoUsuario, getCampanhas }

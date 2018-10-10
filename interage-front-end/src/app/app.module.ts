@@ -22,6 +22,7 @@ import { EventoModule } from './evento/evento.module';
 import { PesquisaPessoaComponent } from './pesquisa-pessoa/pesquisa-pessoa.component';
 import { LinhaDoTempoComponent } from './linha-do-tempo/linha-do-tempo.component';
 import { ItemDeEventoComponent } from './linha-do-tempo/item-de-evento/item-de-evento.component';
+import { AnalisaCampanhaComponent } from './analisa-campanha/analisa-campanha.component';
 
 
 @NgModule({
@@ -41,7 +42,7 @@ import { ItemDeEventoComponent } from './linha-do-tempo/item-de-evento/item-de-e
     PesquisaPessoaComponent,
     LinhaDoTempoComponent,
     ItemDeEventoComponent,
-
+    AnalisaCampanhaComponent,
   ],
 
   imports: [

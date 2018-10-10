@@ -1,3 +1,5 @@
+const { checkTokenAccess } = require('./checkTokenAccess');
+
 function login(req, res) {
   console.log('Chama Login')
   return new Promise(function (resolve, reject) {
@@ -64,4 +66,36 @@ function generateTokenUserAcess() {
   };
 };
 
-module.exports = { login, logout }
+
+function getAgentesVendas(req, res) {
+	return new Promise(function (resolve, reject) {
+
+		checkTokenAccess(req).then(historico => {
+			const dbconnection = require('../config/dbConnection')
+			const { Client } = require('pg')
+
+			const client = new Client(dbconnection)
+
+			client.connect()
+
+			let sql = 'SELECT id_pessoa, login FROM usuarios order by login'
+
+			client.query(sql)
+				.then(res => {
+					if (res.rowCount > 0) {
+						let agentesVendas = res.rows;
+
+						client.end();
+						resolve(agentesVendas)
+					}
+					reject('Usuário não encontrado')
+				}
+				)
+				.catch(err => console.log(err)) //reject( err.hint ) )
+		}).catch(e => {
+			reject(e)
+		})
+	})
+}
+
+module.exports = { login, logout, getAgentesVendas }  
