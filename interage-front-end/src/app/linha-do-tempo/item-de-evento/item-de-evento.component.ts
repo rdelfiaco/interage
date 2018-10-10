@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-item-de-evento',
@@ -31,25 +32,29 @@ export class ItemDeEventoComponent implements OnInit {
   }
 
   ngOnInit() {
+    console.log(this.eventos)
   }
 
-  selecionaEvento(evento) {
+  selecionaEvento(event, evento) {
+    debugger
+    event.preventDefault();
+    event.stopPropagation();
     this.eventoSelecionado = evento;
     debugger;
     this.eventoForm = this.formBuilder.group({
       id: [evento.id],
       status: [evento.status],
       motivo: [evento.motivo],
-      dt_criou: [evento.dt_criou],
-      dt_para_exibir: [evento.dt_para_exibir],
-      dt_prevista_resolucao: [evento.dt_prevista_resolucao],
+      dt_criou: [evento.dt_criou ? moment(evento.dt_criou).format('DD/MM/YYYY') : evento.dt_criou],
+      dt_para_exibir: [evento.dt_para_exibir ? moment(evento.dt_para_exibir).format('DD/MM/YYYY') : evento.dt_para_exibir],
+      dt_prevista_resolucao: [evento.dt_prevista_resolucao ? moment(evento.dt_prevista_resolucao).format('DD/MM/YYYY') : evento.dt_prevista_resolucao],
       pessoa_criou: [evento.pessoa_criou],
       destino: [evento.destino],
       cliente: [evento.cliente],
       pessoa_visualizou: [evento.pessoa_visualizou],
       pessoa_resolveu: [evento.pessoa_resolveu],
-      dt_visualizou: [evento.dt_visualizou],
-      dt_resolvido: [evento.dt_resolvido],
+      dt_visualizou: [evento.dt_visualizou ? moment(evento.dt_visualizou).format('DD/MM/YYYY') : evento.dt_visualizou],
+      dt_resolvido: [evento.dt_resolvido ? moment(evento.dt_resolvido).format('DD/MM/YYYY') : evento.dt_resolvido],
       observacao_retorno: [evento.observacao_retorno],
     });
   }

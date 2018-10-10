@@ -21,6 +21,7 @@ export class LinhaDoTempoComponent implements OnInit {
   }
 
   async ngOnChanges() {
+    if (!this.pessoa) return;
     try {
       let eventosEncontrados = await this.connectHTTP.callService({
         service: 'getEventosLinhaDoTempo',
@@ -53,6 +54,7 @@ export class LinhaDoTempoComponent implements OnInit {
             })
           }
           else if (idEventoPai === evento.id_evento_pai) {
+            debugger;
             eventosRetorno.push({
               ...evento,
               dt_prevista_resolucao: new Date(evento.dt_prevista_resolucao),
@@ -86,6 +88,7 @@ export class LinhaDoTempoComponent implements OnInit {
 
     }
     catch (e) {
+      debugger
       this.toastrService.error(e.error);
     }
   }

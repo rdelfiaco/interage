@@ -14,9 +14,9 @@ export class ConnectHTTP {
   callService(options: optionsCallService): Promise<retObjectCallService> | retObjectCallService {
     const mensagem = this._checkOptionsCallService(options);
     if (mensagem && !mensagem.error) return mensagem;
-
+    debugger;
     return new Promise((resolve, reject) => {
-      const host = options.host || "http://localhost:3000/"
+      const host = options.host || "http://192.168.100.54:3000/"
       const service = options.service
 
       let url = `${host}${service}`
@@ -28,6 +28,7 @@ export class ConnectHTTP {
 
       xhttp.onload = function () {
         const selfXhttp = this
+        debugger;
         if (selfXhttp.status === 200) {
           resolve({ resposta: JSON.parse(selfXhttp.responseText) })
         } else if (selfXhttp.status === 401) {

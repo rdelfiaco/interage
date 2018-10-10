@@ -113,6 +113,7 @@ export class PesquisaPessoaComponent implements OnInit {
       }, 200);
     }
     catch (e) {
+      debugger
       this.toastrService.error(e.error);
     }
   }

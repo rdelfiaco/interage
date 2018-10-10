@@ -117,13 +117,13 @@ export class EventoComponent implements OnInit {
 
     this.statusSelectVAlue = '2'
 
-
+    debugger
     let eventos = await this.connectHTTP.callService({
       service: 'getEventosPendentes',
       paramsService: {
         token: this.usuarioLogado.token,
         id_usuario: this.usuarioLogado.id,        
-        id_organograma: this.usuarioLogado.id_organograma,
+        id_organograma: this.usuarioLogado.id_organograma
       }
     });
     

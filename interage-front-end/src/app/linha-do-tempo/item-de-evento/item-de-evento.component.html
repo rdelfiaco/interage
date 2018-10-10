@@ -3,11 +3,12 @@
     <mdb-accordion-item [collapsed]="true">
       <mdb-accordion-item-head [indicator]="evento.eventosFilho">
         <div class="row align-items-center">
-          <button class="col-2" (click)="visualizarDetalhesEvento.show(); selecionaEvento(evento)" mdbBtn type="button"
+          <button class="col-2" (click)="visualizarDetalhesEvento.show(); selecionaEvento($event, evento)" mdbBtn type="button"
             gradient="peach" size="sm" mdbWavesEffect>Detalhe</button>
           <div class="col-1">{{evento.id}}</div>
-          <div class="col-4">{{evento.motivo}}</div>
-          <div class="col-4">{{(evento.dataFilhoMaisNovo || evento.dt_resolvido || evento.dt_prevista_resolucao) |
+          <div class="col-3">{{evento.motivo}}</div>
+          <div class="col-3">{{evento.resposta_motivo}}</div>
+          <div class="col-2">{{(evento.dataFilhoMaisNovo || evento.dt_resolvido || evento.dt_prevista_resolucao) |
             date:'dd/MM/yyyy '}}</div>
         </div>
       </mdb-accordion-item-head>
@@ -27,9 +28,9 @@
         <button type="button" class="close pull-right" aria-label="Close" (click)="visualizarDetalhesEvento.hide()">
           <span aria-hidden="true">×</span>
         </button>
-        <h4 class="modal-title w-100" id="myModalLabel">Evento de Pessoa</h4>
+        <h4 *ngIf="eventoSelecionado" class="modal-title w-100" id="myModalLabel">Evento {{eventoSelecionado.motivo}}</h4>
       </div>
-      <div class="modal-body" style="overflow: auto;">
+      <div class="modal-body" style="overflow: auto; height: 80vh;">
         <div class="row">
           <div class="md-form col-12">
             <form [formGroup]="eventoForm" class="formQuestionario">
@@ -39,16 +40,77 @@
                   <label for="id">ID</label>
                 </div>
                 <div class="md-form col-4">
-                  <input mdbInputDirective formControlName="status" type="text" id="status" class="form-control" disabled>
+                  <input mdbInputDirective formControlName="status" type="text" id="status" class="form-control"
+                    disabled>
                   <label for="status">Status</label>
                 </div>
                 <div class="md-form col-4">
-                  <input mdbInputDirective formControlName="motivo" type="text" id="motivo" class="form-control" disabled>
+                  <input mdbInputDirective formControlName="motivo" type="text" id="motivo" class="form-control"
+                    disabled>
                   <label for="motivo">Motivo</label>
                 </div>
                 <div class="md-form col-2">
-                  <input mdbInputDirective formControlName="dt_criou" type="text" id="dt_criou" class="form-control" disabled>
-                  <label for="dt_criou">Data Criação</label>
+                  <input mdbInputDirective formControlName="dt_criou" type="text" id="dt_criou" class="form-control"
+                    disabled>
+                  <label for="dt_criou">Criado em</label>
+                </div>
+              </div>
+              <div class="row">
+                <div class="md-form col-2">
+                  <input mdbInputDirective formControlName="dt_para_exibir" type="text" id="dt_para_exibir" class="form-control"
+                    disabled>
+                  <label for="dt_para_exibir">Agendado para</label>
+                </div>
+                <div class="md-form col-2">
+                  <input mdbInputDirective formControlName="dt_prevista_resolucao" type="text" id="dt_prevista_resolucao"
+                    class="form-control" disabled>
+                  <label for="dt_prevista_resolucao">Resolver até</label>
+                </div>
+                <div class="md-form col-4">
+                  <input mdbInputDirective formControlName="pessoa_criou" type="text" id="pessoa_criou" class="form-control"
+                    disabled>
+                  <label for="pessoa_criou">Registrado por</label>
+                </div>
+                <div class="md-form col-4">
+                  <input mdbInputDirective formControlName="destino" type="text" id="destino" class="form-control"
+                    disabled>
+                  <label for="destino">Destinatário</label>
+                </div>
+              </div>
+              <div class="row">
+                <div class="md-form col-4">
+                  <input mdbInputDirective formControlName="cliente" type="text" id="cliente" class="form-control"
+                    disabled>
+                  <label for="cliente">Cliente</label>
+                </div>
+                <div class="md-form col-4">
+                  <input mdbInputDirective formControlName="pessoa_visualizou" type="text" id="pessoa_visualizou" class="form-control"
+                    disabled>
+                  <label for="pessoa_visualizou">Visualizado por</label>
+                </div>
+                <div class="md-form col-4">
+                  <input mdbInputDirective formControlName="pessoa_resolveu" type="text" id="pessoa_resolveu" class="form-control"
+                    disabled>
+                  <label for="pessoa_resolveu">Resolvido por</label>
+                </div>
+              </div>
+              <div class="row">
+                <div class="md-form col-6">
+                  <input mdbInputDirective formControlName="dt_visualizou" type="text" id="dt_visualizou" class="form-control"
+                    disabled>
+                  <label for="dt_visualizou">Aberto em</label>
+                </div>
+                <div class="md-form col-6">
+                  <input mdbInputDirective formControlName="dt_resolvido" type="text" id="dt_resolvido" class="form-control"
+                    disabled>
+                  <label for="dt_resolvido">Resolvido em </label>
+                </div>
+              </div>
+              <div class="row">
+                <div class="md-form col">
+                  <textarea type="text" formControlName="observacao_retorno" id="observacao_retorno" class="md-textarea form-control"
+                    mdbInputDirective></textarea>
+                  <label for="observacao_retorno">Observação de Retorno</label>
                 </div>
               </div>
             </form>

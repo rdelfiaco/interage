@@ -67,7 +67,8 @@ export class TelemarketingComponent implements OnInit {
         token: this.usuarioLogado.token,
         id_usuario: this.usuarioLogado.id,
         id_campanha: this.campanhaSelecionada.value,
-        id_pessoa: this.usuarioLogado.id_pessoa
+        id_pessoa: this.usuarioLogado.id_pessoa,
+        id_organograma: this.usuarioLogado.id_organograma
       }
     }) as any;
 

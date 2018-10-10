@@ -4,6 +4,7 @@ import { IMyOptions, MDBDatePickerComponent } from '../../lib/ng-uikit-pro-stand
 import { ConnectHTTP } from '../shared/services/connectHTTP';
 import { Usuario } from '../login/usuario';
 import { LocalStorage } from '../shared/services/localStorage';
+import * as moment from 'moment';
 
 interface selectValues {
   value: string
@@ -140,13 +141,8 @@ export class TelemarketingQuestionarioComponent implements OnInit {
     })
 
     let data = new Date();
-    let date = {
-      date: {
-        year: data.getFullYear(),
-        month: data.getMonth() + 1,
-        day: data.getDate()
-      }
-    }
+    let date = moment().format('DD/MM/YYYY');
+
     this.questionarioForm.controls['data'].setValue(date);
 
     let hours = getHora(data);
@@ -206,12 +202,8 @@ export class TelemarketingQuestionarioComponent implements OnInit {
     this.discando = true;
   }
   async gravarLigacao() {
+    debugger
     const usuarioLogado = this.localStorage.getLocalStorage('usuarioLogado') as any;
-
-    let data = this.questionarioForm.value.data;
-    if (typeof data == 'object')
-      data = `${data.date.day}/${data.date.month}/${data.date.year}`
-
     await this.connectHTTP.callService({
       service: 'salvarEvento',
       paramsService: {
@@ -226,8 +218,7 @@ export class TelemarketingQuestionarioComponent implements OnInit {
         id_predicao: this.questionarioForm.value.id_predicao,
         id_campanha: this.campanhaSelecionada,
         observacao: this.questionarioForm.value.observacao,
-        data,
-        hora: this.questionarioForm.value.hora,
+        data: moment(this.questionarioForm.value.data + ' - ' + this.questionarioForm.value.hora, 'DD/MM/YYYY - hh:mm').toISOString(),
       }
     });
     this._limpar();
