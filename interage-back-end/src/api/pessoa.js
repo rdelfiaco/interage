@@ -51,7 +51,8 @@ function getPessoa(req, res) {
                               cidades.uf_cidade
                               FROM pessoas_enderecos
                               RIGHT JOIN cidades ON pessoas_enderecos.id_cidade=cidades.id
-															WHERE id_pessoa=${req.query.id_pessoa}`
+                              WHERE id_pessoa=${req.query.id_pessoa}
+                              ORDER BY recebe_correspondencia DESC`
 
           client.query(sqlEnderecos).then(res => {
             resolve(res.rows);
@@ -110,6 +111,7 @@ function salvarPessoa(req, res) {
           WHERE pessoas.id=${req.query.id};
           `;
         }
+        console.log(update)
 
         client.query(update).then((res) => {
           client.query('COMMIT').then((resposta) => {
@@ -138,6 +140,7 @@ function salvarPessoa(req, res) {
           ret.push('cpf_cnpj=' + (req.query.cpf_cnpj != 'null' ? "'" + req.query.cpf_cnpj + "'" : 'NULL'))
           ret.push('email=' + (req.query.email != 'null' ? "'" + req.query.email + "'" : 'NULL'))
           ret.push('website=' + (req.query.website != 'null' ? "'" + req.query.website + "'" : 'NULL'))
+          ret.push('id_atividade=' + (req.query.id_atividade != 'null' ? "'" + req.query.id_atividade + "'" : 'NULL'))
           ret.push('observacoes=' + (req.query.observacoes != 'null' ? "'" + req.query.observacoes + "'" : 'NULL'))
           return ret.join(', ');
         }
@@ -145,7 +148,7 @@ function salvarPessoa(req, res) {
         function montaCamposUpdatePessoaJuridica() {
           let ret = [];
           ret.push("nome='" + req.query.nome + "'")
-          ret.push("'tipo='" + req.query.tipo + "'")
+          ret.push("tipo='" + req.query.tipo + "'")
           ret.push('id_pronome_tratamento=' + (req.query.id_pronome_tratamento != 'null' ? "'" + req.query.id_pronome_tratamento + "'" : 'NULL'))
           ret.push('apelido_fantasia=' + (req.query.apelido_fantasia != 'null' ? "'" + req.query.apelido_fantasia + "'" : 'NULL'))
           ret.push('sexo=' + (req.query.sexo != 'null' ? "'" + req.query.sexo + "'" : 'NULL'))
@@ -154,6 +157,7 @@ function salvarPessoa(req, res) {
           ret.push('cpf_cnpj=' + (req.query.cpf_cnpj != 'null' ? "'" + req.query.cpf_cnpj + "'" : 'NULL'))
           ret.push('email=' + (req.query.email != 'null' ? "'" + req.query.email + "'" : 'NULL'))
           ret.push('website=' + (req.query.website != 'null' ? "'" + req.query.website + "'" : 'NULL'))
+          ret.push('id_atividade=' + (req.query.id_atividade != 'null' ? "'" + req.query.id_atividade + "'" : 'NULL'))
           ret.push('observacoes=' + (req.query.observacoes != 'null' ? "'" + req.query.observacoes + "'" : 'NULL'))
           return ret.join(', ');
         }
@@ -319,47 +323,57 @@ function salvarTelefonePessoa(req, res) {
       client.connect()
 
       let update;
-      client.query('BEGIN').then((res1) => {
-        if (req.query.id)
-          update = `UPDATE pessoas_telefones SET
+      client.query('BEGIN').then(() => {
+        const buscaTelefone = `SELECT * FROM pessoas_telefones WHERE pessoas_telefones.id_pessoa = ${req.query.id_pessoa}`
+
+        client.query(buscaTelefone).then((telefonesPessoa) => {
+          let principal = false;
+          if (!telefonesPessoa.rowCount) principal = true
+          if (req.query.id)
+            update = `UPDATE pessoas_telefones SET
                       ddd='${req.query.ddd}',
                       telefone='${req.query.telefone}',
                       ramal=${req.query.ramal || null},
-                      principal=false,
+                      principal=${req.query.telefone},
                       id_tipo_telefone=${req.query.id_tipo_telefone},
                       contato='${req.query.contato}',
                       ddi=55
                       WHERE pessoas_telefones.id=${req.query.id}`;
-        else
-          update = `INSERT INTO pessoas_telefones(
+          else
+            update = `INSERT INTO pessoas_telefones(
             id_pessoa, ddd, telefone, ramal, principal, id_tipo_telefone, contato, ddi)
             VALUES('${req.query.id_pessoa}',
                   '${req.query.ddd}',
                   '${req.query.telefone}',
                   ${req.query.ramal || null},
-                  false,
+                  ${principal},
                   ${req.query.id_tipo_telefone},
                   '${req.query.contato}',
                   '55')`;
 
-        client.query(update).then((res) => {
-          client.query('COMMIT').then((resposta) => {
-            client.end();
-            resolve(resposta)
+          client.query(update).then((res) => {
+            client.query('COMMIT').then((resposta) => {
+              client.end();
+              resolve(resposta)
+            }).catch(e => {
+              reject(e);
+            })
           }).catch(e => {
-            reject(e);
+            client.query('ROLLBACK').then((resposta) => {
+              client.end();
+              reject(e)
+            }).catch(e => {
+              reject(e)
+            })
           })
+
         }).catch(e => {
-          client.query('ROLLBACK').then((resposta) => {
-            client.end();
-            reject(e)
-          }).catch(e => {
-            reject(e)
-          })
+          reject(e);
         })
       }).catch(e => {
         reject(e);
       })
+
     }).catch(e => {
       reject(e);
     });
@@ -391,6 +405,57 @@ function editaTelefonePrincipal(req, res) {
 
 
           client.query(setaNovoTelefonePrincipal).then(() => {
+            client.query('COMMIT').then((resposta) => {
+              client.end();
+              resolve(resposta)
+            }).catch(e => {
+              reject(e);
+            })
+          }).catch(e => {
+            reject(e);
+          })
+        }).catch(e => {
+          client.query('ROLLBACK').then((resposta) => {
+            client.end();
+            reject(e)
+          }).catch(e => {
+            reject(e)
+          })
+        })
+      }).catch(e => {
+        reject(e);
+      })
+    }).catch(e => {
+      reject(e);
+    });
+  })
+}
+
+function editaEnderecoDeCorrespondencia(req, res) {
+  return new Promise(function (resolve, reject) {
+
+    checkTokenAccess(req).then(historico => {
+      const dbconnection = require('../config/dbConnection')
+      const { Client } = require('pg')
+
+      const client = new Client(dbconnection)
+
+      client.connect()
+
+      let update;
+      client.query('BEGIN').then(() => {
+        todosOsOutrosEnderecosFalse = `UPDATE pessoas_enderecos SET
+                      recebe_correspondencia=false
+                      WHERE pessoas_enderecos.id_pessoa=${req.query.id_pessoa}`;
+
+        client.query(todosOsOutrosEnderecosFalse).then(() => {
+          setaNovoEnderecoCorrespondencia = `UPDATE pessoas_enderecos SET
+                      recebe_correspondencia=true
+                      WHERE pessoas_enderecos.id=${req.query.id_endereco} 
+                      AND pessoas_enderecos.id_pessoa=${req.query.id_pessoa}`;
+
+
+          client.query(setaNovoEnderecoCorrespondencia).then(() => {
             client.query('COMMIT').then((resposta) => {
               client.end();
               resolve(resposta)
@@ -499,8 +564,14 @@ function salvarEnderecoPessoa(req, res) {
             })
           }
           function salvaEndereco() {
-            if (req.query.id)
-              update = `UPDATE pessoas_enderecos SET
+            let selectEnderecos = `SELECT * FROM pessoas_enderecos 
+                                   WHERE pessoas_enderecos.id_pessoa=${req.query.id_pessoa}`
+            client.query(selectEnderecos).then((enderecosPessoas) => {
+              let recebe_correspondencia = false;
+              if (!enderecosPessoas.rowCount) recebe_correspondencia = true;
+
+              if (req.query.id)
+                update = `UPDATE pessoas_enderecos SET
                       id_cidade=${req.query.id_cidade},
                       cep=${req.query.cep},
                       logradouro='${req.query.logradouro}',
@@ -508,36 +579,38 @@ function salvarEnderecoPessoa(req, res) {
                       complemento='${req.query.complemento}',
                       recebe_correspondencia=${req.query.recebe_correspondencia}
                       WHERE pessoas_enderecos.id=${req.query.id}`;
-            else
-              update = `INSERT INTO pessoas_enderecos(
-            id_pessoa, id_cidade, cep, logradouro, bairro, complemento, recebe_correspondencia)
-            VALUES(${req.query.id_pessoa},
-                  ${req.query.id_cidade},
-                  ${req.query.cep},
-                  '${req.query.logradouro}',
-                  '${req.query.bairro}',
-                  '${req.query.complemento}',
-                  '${req.query.recebe_correspondencia}'
-                  )`;
+              else
+                update = `INSERT INTO pessoas_enderecos(
+                      id_pessoa, id_cidade, cep, logradouro, bairro, complemento, recebe_correspondencia)
+                      VALUES(${req.query.id_pessoa},
+                            ${req.query.id_cidade},
+                            ${req.query.cep},
+                            '${req.query.logradouro}',
+                            '${req.query.bairro}',
+                            '${req.query.complemento}',
+                            '${recebe_correspondencia}'
+                            )`;
 
-
-            console.log(update)
-            client.query(update).then((res) => {
-              client.query('COMMIT').then((resposta) => {
-                client.end();
-                resolve(resposta)
+              client.query(update).then((res) => {
+                client.query('COMMIT').then((resposta) => {
+                  client.end();
+                  resolve(resposta)
+                }).catch(e => {
+                  reject(e);
+                })
               }).catch(e => {
-                reject(e);
-              })
-            }).catch(e => {
-              client.query('ROLLBACK').then((resposta) => {
-                client.end();
-                reject(e)
-              }).catch(e => {
-                reject(e)
+                client.query('ROLLBACK').then((resposta) => {
+                  client.end();
+                  reject(e)
+                })
+                  .catch(e => {
+                    reject(e)
+                  })
               })
             })
           }
+
+
         }).catch(e => {
           reject(e);
         })
@@ -629,6 +702,37 @@ function pesquisaPessoas(req, res) {
   })
 }
 
+function getTratamentoPessoaFisica(req, res) {
+  return new Promise(function (resolve, reject) {
+
+    checkTokenAccess(req).then(historico => {
+      const dbconnection = require('../config/dbConnection')
+      const { Client } = require('pg')
+
+      const client = new Client(dbconnection)
+
+      client.connect()
+
+      let sql = `SELECT * FROM pronome_tratamento WHERE pronome_tratamento.status=true`
+
+      client.query(sql)
+        .then(res => {
+          if (res.rowCount > 0) {
+            let pronome_tratamento = res.rows;
+
+            client.end();
+            resolve(pronome_tratamento)
+          }
+          reject('Usuário não encontrado')
+        }
+        )
+        .catch(err => console.log(err)) //reject( err.hint ) )
+    }).catch(e => {
+      reject(e)
+    })
+  })
+}
+
 module.exports = {
   getPessoa,
   salvarPessoa,
@@ -639,5 +743,7 @@ module.exports = {
   salvarEnderecoPessoa,
   pesquisaPessoas,
   adicionarPessoa,
-  editaTelefonePrincipal
+  editaTelefonePrincipal,
+  editaEnderecoDeCorrespondencia,
+  getTratamentoPessoaFisica
 }

@@ -4,7 +4,6 @@
     <thead>
       <tr>
         <th>Id</th>
-        <th>DDI</th>
         <th>DDD</th>
         <th>Telefone</th>
         <th>Ramal</th>
@@ -15,7 +14,6 @@
     <tbody *ngFor="let telefone of (pessoa | async)?.telefones">
       <tr>
         <th scope="row">{{telefone.id}}</th>
-        <td>{{telefone.ddi}}</td>
         <td>{{telefone.ddd}}</td>
         <td>{{telefone.telefone}}</td>
         <td>{{telefone.ramal}}</td>
@@ -34,7 +32,7 @@
   <span *ngIf="_pessoaObject && !_pessoaObject.telefones.length">Nenhum telefone cadastrado!</span>
 </div>
 <div class="row d-flex justify-content-end">
-  <button type="button" mdbBtn color="primary" (click)="adicionarNovoTelefone();" class="relative waves-light"
+  <button type="button" [disabled]="telefoneSelecionado" mdbBtn color="primary" (click)="adicionarNovoTelefone();" class="relative waves-light"
     mdbWavesEffect>Adicionar Novo Telefone</button>
 </div>
 <br />

@@ -30,7 +30,7 @@ export class TelefonesComponent implements OnInit {
     this.telefoneForm = this.formBuilder.group({
       id: [''],
       id_pessoa: [''],
-      ddd: [''],
+      ddd: ['62'],
       telefone: [''],
       ramal: [''],
       principal: [''],
@@ -69,7 +69,6 @@ export class TelefonesComponent implements OnInit {
 
   async setTelefonePrincipal(telefone) {
     try {
-      debugger;
       await this.connectHTTP.callService({
         service: 'editaTelefonePrincipal',
         paramsService: {
@@ -80,12 +79,11 @@ export class TelefonesComponent implements OnInit {
         }
       });
       this.toastrService.success('Telefone principal alterado com sucesso!');
+      this.refresh.emit();
     }
     catch (e) {
       this.toastrService.error('Telefone principal não foi alterado');
     }
-
-    this.refresh.emit();
   }
 
   adicionarNovoTelefone() {
@@ -93,13 +91,12 @@ export class TelefonesComponent implements OnInit {
       this.telefoneForm = this.formBuilder.group({
         id: [''],
         id_pessoa: [this._pessoaObject.principal.id, [Validators.required]],
-        ddd: ['', [Validators.required]],
+        ddd: ['62', [Validators.required]],
         telefone: ['', [Validators.required]],
         ramal: [''],
         principal: [false],
         id_tipo_telefone: ['', [Validators.required]],
         contato: [''],
-        ddi: ['']
       })
       this.telefoneSelecionado = true;
     }
@@ -144,7 +141,6 @@ export class TelefonesComponent implements OnInit {
       principal: [telefoneSelecionado.principal],
       id_tipo_telefone: [telefoneSelecionado.id_tipo_telefone, [Validators.required]],
       contato: [telefoneSelecionado.contato],
-      ddi: [telefoneSelecionado.ddi]
     })
     this.telefoneSelecionado = true;
   }

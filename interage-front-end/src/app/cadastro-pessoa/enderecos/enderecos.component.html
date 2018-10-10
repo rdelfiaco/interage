@@ -22,7 +22,7 @@
         <td>{{endereco.logradouro}}</td>
         <td>{{endereco.complemento}}</td>
         <td>
-          <mdb-checkbox [checked]="endereco.recebe_correspondencia" [disabled]="true"></mdb-checkbox>
+          <mdb-checkbox (change)="setEnderecoDeCorrespondencia(endereco)" [checked]="endereco.recebe_correspondencia"></mdb-checkbox>
         </td>
         <td>
           <mdb-icon style="margin: 0px 5px;" icon="pencil" (click)="editarEndereco(endereco.id)" size="lg"></mdb-icon>
@@ -36,7 +36,7 @@
   <span *ngIf="_pessoaObject && !_pessoaObject.enderecos.length">Nenhum endereço cadastrado!</span>
 </div>
 <div class="row d-flex justify-content-end">
-  <button type="button" mdbBtn color="primary" (click)="adicionarNovoEndereco();" class="relative waves-light"
+  <button type="button" [disabled]="enderecoSelecionado" mdbBtn color="primary" (click)="adicionarNovoEndereco();" class="relative waves-light"
     mdbWavesEffect>Adicionar Novo Endereço</button>
 </div>
 <br />
@@ -44,9 +44,6 @@
 <div *ngIf="enderecoSelecionado">
   <form [formGroup]="enderecoForm" class="formQuestionario">
     <div class="row">
-      <div class="md-form col-4">
-        <mdb-checkbox formControlName="recebe_correspondencia">Recebe Correspondência</mdb-checkbox>
-      </div>
       <div class="md-form col">
         <input mdbInputDirective formControlName="cep" max="11" min="8" type="text" id="cep" class="form-control">
         <label for="cep">CEP</label>

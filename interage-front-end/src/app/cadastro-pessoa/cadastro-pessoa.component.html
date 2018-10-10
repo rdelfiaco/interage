@@ -12,7 +12,7 @@
     </div>
   </mdb-tab>
   <!--Panel 2-->
-  <mdb-tab heading="Telefones">
+  <mdb-tab heading="Telefones" [disabled]="!(pessoa | async)">
     <div class="row">
       <div class="col-12">
         <br>
@@ -21,7 +21,7 @@
     </div>
   </mdb-tab>
   <!--Panel 3-->
-  <mdb-tab heading="Endereços">
+  <mdb-tab heading="Endereços" [disabled]="!(pessoa | async)">
     <div class="row">
       <div class="col-12">
         <br>
