@@ -717,13 +717,10 @@ function getTratamentoPessoaFisica(req, res) {
 
       client.query(sql)
         .then(res => {
-          if (res.rowCount > 0) {
-            let pronome_tratamento = res.rows;
+          let pronome_tratamento = res.rows;
 
-            client.end();
-            resolve(pronome_tratamento)
-          }
-          reject('Usuário não encontrado')
+          client.end();
+          resolve(pronome_tratamento)
         }
         )
         .catch(err => console.log(err)) //reject( err.hint ) )

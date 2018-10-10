@@ -268,12 +268,12 @@ app.get('/getEventosLinhaDoTempo', (req, res) => {
 });
 
 
-app.listen(nodeStart.port);
+app.listen(nodeStart.port, "0.0.0.0");
 console.log(`Servidor iniciado na em http://localhost:${nodeStart.port}`)
 
 
 function headerResponse(res) {
-  res.set('Access-Control-Allow-Origin', 'http://localhost:4200');
+  res.set('Access-Control-Allow-Origin', '*');
   res.set("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT");
   res.set("Access-Control-Allow-Headers", "Access-Control-Allow-Origin, Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers, cache-control");
 }

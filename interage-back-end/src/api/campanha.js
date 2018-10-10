@@ -23,7 +23,7 @@ function getCampanhasDoUsuario(req, res) {
 						client.end();
 						resolve(campanhas)
 					}
-					reject('Usuário não encontrado')
+					reject('Campanha não encontrada')
 				}
 				)
 				.catch(err => console.log(err)) //reject( err.hint ) )

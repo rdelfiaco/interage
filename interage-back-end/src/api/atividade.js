@@ -21,7 +21,7 @@ function getAtividades(req, res) {
                         client.end();
                         resolve(atividades)
                     }
-                    reject('Usuário não encontrado')
+                    reject('Atividade não encontrada')
                 }
                 )
                 .catch(err => console.log(err)) //reject( err.hint ) )

@@ -1,4 +1,5 @@
 function login(req, res) {
+  console.log('Chama Login')
   return new Promise(function (resolve, reject) {
     const dbconnection = require('../config/dbConnection')
     const { Client } = require('pg')
@@ -22,12 +23,11 @@ function login(req, res) {
           delete usuario.senha;
           delete usuario.login;
           usuario.token = token_access;
-          client.end();
           resolve(usuario)
+          client.end();
         }
         reject('Usuário não encontrato')
-      }
-      )
+      })
       .catch(err => console.log(err)) //reject( err.hint ) )
   })
 }

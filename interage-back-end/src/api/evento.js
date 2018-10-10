@@ -11,10 +11,14 @@ function getUmEvento(req, res) {
 
       client.connect()
 
-      let sql = `SELECT * FROM eventos
-                  WHERE id_campanha=${req.query.id_campanha} AND id_status_evento IN (1, 4, 5, 6)
-                  ORDER BY dt_para_exibir
-                  LIMIT 1`
+      let sql = `select *
+          from view_eventos
+          where id_status_evento in (1,4,5,6)
+          and ( (tipodestino = 'O' and id_pessoa_organograma = ${req.query.id_organograma} )
+            or  (tipodestino = 'P' and id_usuario = ${req.query.id_usuario} )
+            or  (id_pessoa_visualizou = ${req.query.id_pessoa} and id_status_evento in(5,6)  ))
+          and dt_para_exibir <= now()
+          order by dt_para_exibir, id_prioridade desc`
 
       client.query(sql)
         .then(res => {
@@ -84,12 +88,11 @@ function salvarEvento(req, res) {
       client.query(sqlMotivoRespostaAutomaticos).then(res => {
         const motivoResposta_automatico = res.rows;
 
-        if (motivoResposta_automatico.length > 0) {
-          client.query('BEGIN').then((res1) => {
-            let update;
-            if (req.query.id_predicao) {
-              update = `UPDATE eventos SET id_status_evento=3,
-                  dt_resolvido=now(),
+        client.query('BEGIN').then((res1) => {
+          let update;
+          if (req.query.id_predicao) {
+            update = `UPDATE eventos SET id_status_evento=3,
+              dt_resolvido=now(),
                   id_pessoa_resolveu=${req.query.id_pessoa}, 
                   observacao_retorno='${req.query.observacao}',
                   id_resp_motivo=${req.query.id_motivos_respostas},
@@ -97,9 +100,9 @@ function salvarEvento(req, res) {
                   id_predicao=${req.query.id_predicao}
                   WHERE eventos.id=${req.query.id_evento};
                   `;
-            }
-            else {
-              update = `UPDATE eventos SET id_status_evento=3,
+          }
+          else {
+            update = `UPDATE eventos SET id_status_evento=3,
                   dt_resolvido=now(),
                   id_pessoa_resolveu=${req.query.id_pessoa}, 
                   observacao_retorno='${req.query.observacao}',
@@ -107,13 +110,16 @@ function salvarEvento(req, res) {
                   id_telefone=${req.query.id_telefoneDiscado}
                   WHERE eventos.id=${req.query.id_evento};
                   `;
-            }
-
-            client.query(update).then((res) => {
+          }
+          console.log(update)
+          client.query(update).then((res) => {
+            console.log('motivoResposta_automatico.length', motivoResposta_automatico)
+            if (motivoResposta_automatico.length > 0) {
               motivoResposta_automatico.map((m, index, array) => {
                 eventoCriar = createEvent(m)
-
+                console.log('eventoCriar', eventoCriar)
                 client.query(eventoCriar).then(res => {
+                  console.log('index == array.length - 1', index == array.length - 1)
                   if (index == array.length - 1)
                     client.query('COMMIT').then((resposta) => {
                       client.end();
@@ -121,17 +127,17 @@ function salvarEvento(req, res) {
                     })
                 }).catch(e => reject(e))
               })
-            }).catch(e => reject(e))
-          })
-        }
-        else {
-          resolve(true)
-        }
+            }
+            else {
+              client.query('COMMIT').then((resposta) => {
+                client.end();
+                resolve(true)
+              })
+            }
+          }).catch(e => reject(e))
+        })
       }).catch(e => reject(e))
       function createEvent(motivoResposta) {
-        dataString = req.query.data.split('/');
-        horaString = req.query.hora.split(':');
-
         let tipoDestino;
         let id_pessoa_organograma;
 
@@ -148,7 +154,6 @@ function salvarEvento(req, res) {
           id_pessoa_organograma = req.query.id_pessoa_organograma_destino;
         }
 
-        let data = new Date(dataString[2], dataString[1], dataString[0], horaString[0], horaString[1])
         return `INSERT INTO eventos(
             id_campanha,
             id_motivo,
@@ -172,8 +177,8 @@ function salvarEvento(req, res) {
             1,
             ${req.query.id_pessoa},
             now(),
-            '${data.toISOString()}',
-            '${data.toISOString()}',
+            '${req.query.data}',
+            '${req.query.data}',
             '${tipoDestino}', 
             ${id_pessoa_organograma},
             ${req.query.id_pessoa_receptor},
