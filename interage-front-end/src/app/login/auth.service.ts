@@ -78,7 +78,7 @@ export class AuthService {
         token_access: usuarioLogado.token
       }
     })
-    debugger;
+    
     this.localStorage.delLocalStorage(`${usuarioLogado.token}_date`)
     this.localStorage.delLocalStorage('usuarioLogado_object')
     this.usuarioLogado.next(false);

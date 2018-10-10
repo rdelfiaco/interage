@@ -1,4 +1,4 @@
-<div class="card card-cascade narrower mt-5">
+<div class="card card-cascade narrower">
 
     <!--Card image-->
     <div class="view view-cascade gradient-card-header blue-gradient narrower py-1 mx-2  d-flex justify-content-center align-items-center">
@@ -9,39 +9,124 @@
     <!-- Card Filtros -->
     <div>
       <div class="row ">
-          <div class="col-md-12">
-            <div class="md-form form-group col">
-                <mdb-date-picker #dataReagendamento (dateChanged)="onDateChange($event)" formControlName="data" name="mydate"
-                  [options]="myDatePickerOptions" [placeholder]="'Selecione a data'" required></mdb-date-picker>
-                <label for="telefoneDiscado" class="">Data do compromisso</label>
-            </div>
-            <div class="btn-group ">
-                <label mdbBtn color="teal" rounded="true" [(ngModel)]="radioModel" mdbRadio="dtCompromisso" mdbWavesEffect>
-                  Data do compromisso
-                </label>
-                <label mdbBtn color="teal" rounded="true" [(ngModel)]="radioModel" mdbRadio="dtCriacao" mdbWavesEffect>
-                  Data de criação
-                </label>
-            </div>
+          <div class="col-6 col-sm-4">
+              <div class="row justify-content-around">
+                  <div class="col-6 col-sm-6">
+                      <div class="md-form datas">
+                          <mdb-date-picker #dataReagendamento (dateChanged)="onDateChange($event)"  
+                            name="mydate"
+                            [options]="myDatePickerOptions" required
+                            [(ngModel)]="dataInicial"
+                            class="datas"></mdb-date-picker>
+                          <label  class="datas" style="height: 10px" >Data do inicial</label>
+                        </div>
+                  </div>
+                  <div class="col-6 col-sm-6">
+                      <div class="md-form datas">
+                          <mdb-date-picker #dataReagendamento (dateChanged)="onDateChange($event)"  name="mydate"
+                            [options]="myDatePickerOptions" 
+                            required
+                            [(ngModel)]="dataFinal"
+                            class="datas"></mdb-date-picker>
+                          <label class="datas" style="height: 10px"  >Data do inicial</label>
+                      </div>
+                  </div>
+              </div>
+              <div class="row justify-content-around">
+                                <!-- Data do compromisso -->
+                <div class="form-check form-check-inline"  >
+                  <input type="radio" class="form-check-input"  style="margin-right: 0px;"
+                    id="dtCompromissoRadio" name="dataEventoRadio" mdbInputDirective>
+                  <label class="form-check-label" for="dtCompromissoRadio" 
+                  style="font-size: 0.8rem; margin-left: 0px; margin-right: 0px;  " >Data do compromisso</label>
+                </div>
+                <!-- Data de ciração do evento -->
+                <div class="form-check form-check-inline ">
+                  <input type="radio" class="form-check-input" 
+                    id="dtCricaoRadio" name="dataEventoRadio" mdbInputDirective>
+                  <label class="form-check-label" for="dtCricaoRadio" style="font-size: 0.8rem; " >Data de criação</label>
+                </div>
+              </div>
+
+              <div class="row" style="margin-top: 40px; margin-left: 5px; font-size: 0.8rem; ">
+                <!-- Material unchecked -->
+                <mdb-checkbox>Listar apenas eventos do usuário.</mdb-checkbox>
+                <mdb-checkbox>Listar apenas eventos não finalizados.</mdb-checkbox>
+                <mdb-checkbox>Listar apenas os cem últinos eventos</mdb-checkbox>
+              </div>
+
           </div>
+          <div class="col-6 col-sm-4 " style="z-index: 0" >
+              <div class="row" style="margin-left: 50px; margin-top: 10px" >
+                
+                <!-- Enviados Por -->
+                <div class="form-check form-check-inline"  >
+                    <input type="radio" class="form-check-input"  style="margin-right: 0px;"
+                      id="enviadoPoroRadio" name="EnviadoRecebidoEventoRadio" mdbInputDirective>
+                    <label class="form-check-label" for="enviadoPoroRadio" 
+                    style="font-size: 0.8rem; margin-left: 0px; margin-right: 0px;  " >Enviados por</label>
+                </div>
+                  
+                  <!-- Recebidos por -->
+                <div class="form-check form-check-inline ">
+                    <input type="radio" class="form-check-input" 
+                      id="recebidoPorRadio" name="EnviadoRecebidoEventoRadio" mdbInputDirective>
+                    <label class="form-check-label" for="recebidoPorRadio" style="font-size: 0.8rem; " >Recebidos por</label>
+                </div>
+              </div>
+              <div class="row"  style="margin-top: 15px" >
+                  <div class="col-md-12">
+                      <mdb-select  [(ngModel)]="departamentoSelectValue" [options]="departamentoSelect" placeholder="Escolha o departamento"
+                      style="font-size: 0.5rem;" ></mdb-select>
+                      <label>Departamento</label>
+                  </div>
+              </div>
+              <div class="row" style="margin-top: 15px" >
+                  <div class="col-md-12">
+                      <mdb-select  [(ngModel)]="usuarioSelectValue" [options]="usuarioSelect" placeholder="Escolha o usuário"
+                      style="font-size: 0.5rem;" ></mdb-select>
+                      <label>Usuário</label>
+                  </div>
+              </div>
+              <div class="row justify-content-around" >
+
+                  <a mdbBtn floating="true" size="lg" gradient="blue" mdbWavesEffect><mdb-icon icon="refresh"></mdb-icon></a>
+                  <a mdbBtn floating="true" size="lg" gradient="purple" mdbWavesEffect><mdb-icon icon="calendar-plus-o"></mdb-icon></a>
+
+              </div>
+
+          </div>
+          <div class="col-6 col-sm-4" style="z-index: 0">
+              <div class="row" style="margin-top: 50px"  >
+                  <div class="col-md-12">
+                      <mdb-select  [(ngModel)]="motivoSelectVAlue" [options]="motivoSelect" placeholder="Escolha o motivo"
+                      style="font-size: 0.5rem;" ></mdb-select>
+                      <label>Motivo</label>
+                  </div>
+              </div>
+              <div class="row" style="margin-top: 15px"  >
+                  <div class="col-md-12">
+                      <mdb-select  [(ngModel)]="statusSelectVAlue" [options]="statusSelect" placeholder="Escolha o status"
+                      style="font-size: 0.5rem;" ></mdb-select>
+                      <label>Status</label>
+                  </div>
+              </div>
+              <div class="row justify-content-around" >
+                  <a mdbBtn floating="true" size="lg" gradient="peach" mdbWavesEffect><mdb-icon icon="search"></mdb-icon></a>
+                  <a mdbBtn floating="true" size="lg" gradient="aqua" mdbWavesEffect><mdb-icon icon="cloud-download"></mdb-icon></a>
+    
+                </div>
+  
+          </div>
+
       </div>
         
 
     </div>
+  
 
-
-    <!--/Card image-->
-    <div class="row  d-flex align-items-center justify-content-center">
-      <div class="col-md-6 mx-auto">
-        <div class="md-form">
-          <input type="search" [(ngModel)]="searchText" id="search" class="form-control" mdbInputDirective [mdbValidate]="false">
-          <label for="search">Search data</label>
-        </div>
-      </div>
-      <div class="col-md-3 mx-auto">
-        <button class="btn btn-primary waves-light btn-sm" mdbWavesEffect (click)="generateCsv()">Generate CSV</button>
-      </div>
-    </div>
+<br>
+<br>
     <div class="px-2">
   
       <!--Table-->
@@ -50,9 +135,9 @@
         <!--Table head-->
         <thead>
           <tr>
-            <th class="th-sm">Status
+            <th class="status">Status
             </th>
-            <th class="th-sm">Dt. criação
+            <th class="th-sm dtCriacao">Dt. criação
               <mdb-icon icon="sort" (click)="sortBy('dt_criou')"></mdb-icon>
             </th>
             <th class="th-sm">Cliente
@@ -85,10 +170,13 @@
           <tr #list *ngFor="let evento of tableData; let i = index">
             <td *ngIf="i+1 >= firstVisibleIndex && i+1 <= lastVisibleIndex">
               <a>
-                <mdb-icon class={{evento.status_evento_cor_texto}} icon={{evento.status_evento_icone}} class="mr-2 "></mdb-icon>
+                <mdb-icon class={{evento.status_evento_cor_texto}} 
+                icon={{evento.status_evento_icone}} class="mr-2 " 
+                title={{evento.status}}
+                ></mdb-icon>
               </a>
             </td>
-            <td *ngIf="i+1 >= firstVisibleIndex && i+1 <= lastVisibleIndex" class={{evento.status_evento_cor_texto}} >{{evento.dt_criou  | date:'dd/MM/yyyy' }}</td>
+            <td *ngIf="i+1 >= firstVisibleIndex && i+1 <= lastVisibleIndex" class="{{evento.status_evento_cor_texto}} dtCriacao" >{{evento.dt_criou  | date:'dd/MM/yyyy' }}</td>
             <td *ngIf="i+1 >= firstVisibleIndex && i+1 <= lastVisibleIndex" class={{evento.status_evento_cor_texto}} >{{evento.cliente}}</td>
             <td *ngIf="i+1 >= firstVisibleIndex && i+1 <= lastVisibleIndex" class={{evento.status_evento_cor_texto}} >{{evento.motivo}}</td>
             <td *ngIf="i+1 >= firstVisibleIndex && i+1 <= lastVisibleIndex" class={{evento.status_evento_cor_texto}} >{{evento.prioridade}}</td>
