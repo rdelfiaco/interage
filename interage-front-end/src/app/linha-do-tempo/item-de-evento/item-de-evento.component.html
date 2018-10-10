@@ -1,0 +1,60 @@
+<div *ngIf="eventos" class="acordionEvento">
+  <mdb-accordion *ngFor="let evento of eventos">
+    <mdb-accordion-item [collapsed]="true">
+      <mdb-accordion-item-head [indicator]="evento.eventosFilho">
+        <div class="row align-items-center">
+          <button class="col-2" (click)="visualizarDetalhesEvento.show(); selecionaEvento(evento)" mdbBtn type="button"
+            gradient="peach" size="sm" mdbWavesEffect>Detalhe</button>
+          <div class="col-1">{{evento.id}}</div>
+          <div class="col-4">{{evento.motivo}}</div>
+          <div class="col-4">{{(evento.dataFilhoMaisNovo || evento.dt_resolvido || evento.dt_prevista_resolucao) |
+            date:'dd/MM/yyyy '}}</div>
+        </div>
+      </mdb-accordion-item-head>
+      <mdb-accordion-item-body *ngIf="evento.eventosFilho">
+        <app-item-de-evento [eventos]="evento.eventosFilho"></app-item-de-evento>
+      </mdb-accordion-item-body>
+    </mdb-accordion-item>
+  </mdb-accordion>
+</div>
+
+
+<div mdbModal #visualizarDetalhesEvento="mdbModal" [config]="{backdrop: true, ignoreBackdropClick: true}" class="modal fade right"
+  role="dialog" aria-labelledby="myBasicModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-fluid" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close pull-right" aria-label="Close" (click)="visualizarDetalhesEvento.hide()">
+          <span aria-hidden="true">×</span>
+        </button>
+        <h4 class="modal-title w-100" id="myModalLabel">Evento de Pessoa</h4>
+      </div>
+      <div class="modal-body" style="overflow: auto;">
+        <div class="row">
+          <div class="md-form col-12">
+            <form [formGroup]="eventoForm" class="formQuestionario">
+              <div class="row">
+                <div class="md-form col-1">
+                  <input mdbInputDirective formControlName="id" type="text" id="id" class="form-control" disabled>
+                  <label for="id">ID</label>
+                </div>
+                <div class="md-form col-4">
+                  <input mdbInputDirective formControlName="status" type="text" id="status" class="form-control" disabled>
+                  <label for="status">Status</label>
+                </div>
+                <div class="md-form col-4">
+                  <input mdbInputDirective formControlName="motivo" type="text" id="motivo" class="form-control" disabled>
+                  <label for="motivo">Motivo</label>
+                </div>
+                <div class="md-form col-2">
+                  <input mdbInputDirective formControlName="dt_criou" type="text" id="dt_criou" class="form-control" disabled>
+                  <label for="dt_criou">Data Criação</label>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -222,4 +222,41 @@ function getEventosPendentes(req, res) {
 }
 
 
-module.exports = { getUmEvento, motivosRespostas, salvarEvento, getEventosPendentes }
+function getEventosLinhaDoTempo(req, res) {
+  return new Promise(function (resolve, reject) {
+
+    checkTokenAccess(req).then(historico => {
+      const dbconnection = require('../config/dbConnection')
+      const { Client } = require('pg')
+
+      const client = new Client(dbconnection)
+
+      client.connect()
+
+      let sql = `select * from view_eventos where id_pessoa_receptor=${req.query.id_pessoa_receptor}`
+
+      client.query(sql)
+        .then(res => {
+          if (res.rowCount > 0) {
+            let eventos = res.rows;
+            client.end();
+            resolve(eventos)
+          }
+          else reject('Não há eventos!')
+        }
+        )
+        .catch(err => console.log(err)) //reject( err.hint ) )
+    }).catch(e => {
+      reject(e)
+    })
+  })
+}
+
+
+module.exports = {
+  getUmEvento,
+  motivosRespostas,
+  salvarEvento,
+  getEventosPendentes,
+  getEventosLinhaDoTempo
+}
