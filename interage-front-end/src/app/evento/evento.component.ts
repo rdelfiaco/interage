@@ -6,6 +6,8 @@ import { Usuario } from '../login/usuario';
 import { ConnectHTTP } from '../shared/services/connectHTTP';
 import { LocalStorage } from '../shared/services/localStorage';
 import { IMyOptions } from '../../lib/ng-uikit-pro-standard';
+import * as moment from 'moment';
+
 
 @Component({
   selector: 'app-evento',
@@ -13,8 +15,21 @@ import { IMyOptions } from '../../lib/ng-uikit-pro-standard';
   styleUrls: ['./evento.component.scss']
 })
 export class EventoComponent implements OnInit {
+
   usuarioLogado: Usuario;
+  usuarioSelect: Array<any>;
+  departamentoSelect: Array<any>;
+  motivoSelect: Array<any>;
+  statusSelect: Array<any>;
+  departamentoSelectValue: string;
+  usuarioSelectValue: string;
+  motivoSelectVAlue : string;
+  statusSelectVAlue : string;
+  dataInicial: string = moment().subtract(1, 'days').format('DD/MM/YYYY')
+  dataFinal: string  =  moment().add(1, 'days').format('DD/MM/YYYY')
   
+
+
   public myDatePickerOptions: IMyOptions = {
     // Strings and translations
     dayLabels: { su: 'Dom', mo: 'Seg', tu: 'Ter', we: 'Qua', th: 'Qui', fr: 'Sex', sa: 'Sab' },
@@ -30,6 +45,8 @@ export class EventoComponent implements OnInit {
 
     // Format
     dateFormat: 'dd/mm/yyyy',
+    selectionTxtFontSize: '15px',
+    
   }
 
   options = {
@@ -59,17 +76,47 @@ export class EventoComponent implements OnInit {
 
   constructor(private http: Http, private connectHTTP: ConnectHTTP, private localStorage: LocalStorage) { 
     this.usuarioLogado = this.localStorage.getLocalStorage('usuarioLogado') as Usuario;
-  }
 
-  /* 
-  getData() {
-    return this.http.get(this.url);
+
   }
-*/
 
   async ngOnInit() {
     console.log( this.usuarioLogado )
     console.log(this.usuarioLogado.id_organograma)
+    console.log(  moment().format('DD/MM/YYYY') );
+
+    this.departamentoSelect = [
+      { value: '1', label: 'Option 1' },
+      { value: '2', label: 'Option 2' },
+      { value: '3', label: 'Option 3' },
+    ];
+    
+    this.departamentoSelectValue = '1';
+
+    this.usuarioSelect = [
+      { value: '1', label: 'Option 1' },
+      { value: '2', label: 'Option 2' },
+      { value: '3', label: 'Option 3' },
+    ];
+
+    this.usuarioSelectValue = '2';
+
+    this.motivoSelect = [
+      { value: '1', label: 'Option 1' },
+      { value: '2', label: 'Option 2' },
+      { value: '3', label: 'Option 3' },
+    ];
+
+    this.motivoSelectVAlue = '3'
+
+    this.statusSelect = [
+      { value: '1', label: 'Option 1' },
+      { value: '2', label: 'Option 2' },
+      { value: '3', label: 'Option 3' },
+    ];
+
+    this.statusSelectVAlue = '2'
+
 
     let eventos = await this.connectHTTP.callService({
       service: 'getEventosPendentes',
@@ -79,15 +126,7 @@ export class EventoComponent implements OnInit {
         id_organograma: this.usuarioLogado.id_organograma,
       }
     });
-
-    console.log(eventos.resposta ) 
-/*
-    this.getData().subscribe((next: any) => {
-      next.json().forEach((element: any) => {
-        this.tableData.push({ id: (element.id).toString(), title: element.title, body: element.body });
-      });
-    });
-*/
+    
     this.tableData = eventos.resposta as Array<object> ;
 
     setTimeout(() => {

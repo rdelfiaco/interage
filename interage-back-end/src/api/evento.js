@@ -204,6 +204,7 @@ function getEventosPendentes(req, res) {
                 and dt_para_exibir <= now()
                 order by dt_criou `
 
+      console.log(sql)
       client.query(sql)
         .then(res => {
           if (res.rowCount > 0) {
