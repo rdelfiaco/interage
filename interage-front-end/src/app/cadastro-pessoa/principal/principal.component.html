@@ -1,19 +1,19 @@
 <form [formGroup]="principalForm" class="formQuestionario">
-  <div class="row">
-    <div class="col mdb-select-form">
-      <mdb-select formControlName="tipo" (selected)="getSelectedValuePessoa($event)" [options]="tipoDePessoa"
-        [multiple]="false" placeholder="Tipo de pessoa"></mdb-select>
-      <label>Pessoa</label>
-    </div>
-  </div>
 
   <div *ngIf="tipoPessoaSelecionada == 'F'">
     <div class="row">
-      <div class="col-3 mdb-select-form">
+      <div class="col mdb-select-form">
+        <mdb-select formControlName="tipo" (selected)="getSelectedValuePessoa($event)" [options]="tipoDePessoa"
+          [multiple]="false" placeholder="Tipo de pessoa"></mdb-select>
+        <label>Pessoa</label>
+      </div>
+      <div class="col-4 mdb-select-form">
         <mdb-select formControlName="id_pronome_tratamento" [options]="tipoDeTratamentoFisica" [multiple]="false"
           placeholder="Tipo de pessoa"></mdb-select>
         <label>Tipo de tratamento</label>
       </div>
+    </div>
+    <div class="row">
       <div class="md-form col">
         <input mdbInputDirective formControlName="nome" type="text" id="nome" class="form-control">
         <label for="nome">Nome</label>
@@ -23,7 +23,7 @@
     <div class="row">
       <div class="md-form form-group col mdb-date-form">
         <mdb-date-picker name="mydate" [options]="myDatePickerOptions" [placeholder]="'Selecione a data'" required></mdb-date-picker>
-        <label class="">Data</label>
+        <label class="">Data Nascimento</label>
       </div>
       <div class="col mdb-select-form">
         <mdb-select formControlName="sexo" [placeholder]="'Selecione o Sexo'" [options]="enumSexo" [multiple]="false"></mdb-select>
@@ -83,6 +83,13 @@
 
   <!-- Pessoa Juridica -->
   <div *ngIf="tipoPessoaSelecionada == 'J'" class="col">
+    <div class="row">
+      <div class="col mdb-select-form">
+        <mdb-select formControlName="tipo" (selected)="getSelectedValuePessoa($event)" [options]="tipoDePessoa"
+          [multiple]="false" placeholder="Tipo de pessoa"></mdb-select>
+        <label>Pessoa</label>
+      </div>
+    </div>
     <div class="row">
       <div class="md-form col">
         <input mdbInputDirective formControlName="apelido_fantasia" type="text" id="rg" class="form-control">
