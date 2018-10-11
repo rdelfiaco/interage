@@ -19,6 +19,8 @@ export class AnalisaCampanhaComponent implements OnInit {
   usuarioLogado: Usuario;
   agentesVendasSelect: Array<any>;
   campanhaSelect: Array<any>;
+  analisaCampanhaTabela: Array<any>;
+  prospectsResposta: Array<any>;
   agentesVendasSelectValue: string;
   campanhaSelectValue : string;
   dataInicial: string = moment().format('DD/MM/YYYY')
@@ -109,88 +111,30 @@ export class AnalisaCampanhaComponent implements OnInit {
     this.campanhaSelectValue = this.campanhaSelect[0].value;
 
     
-  }
+  };
 
 
-  @HostListener('input') oninput() {
-    this.paginators = [];
-    for (let i = 1; i <= this.search().length; i++) {
-      if (!(this.paginators.indexOf(Math.ceil(i / this.maxVisibleItems)) !== -1)) {
-        this.paginators.push(Math.ceil(i / this.maxVisibleItems));
+  async analisarCampanha() {
+    let analisarCampanha = await this.connectHTTP.callService({
+      service: 'getCampanhaProspects',
+      paramsService: {
+        token: this.usuarioLogado.token,
+        id_usuario: this.usuarioLogado.id,        
+        id_organograma: this.usuarioLogado.id_organograma,
+        id_campanha: this.campanhaSelectValue,
+        dtInicial: this.dataInicial,
+        dtFinal: this.dataFinal
       }
-    }
-    this.lastPageNumber = this.paginators.length;
-  }
-  changePage(event: any) {
-    if (event.target.text >= 1 && event.target.text <= this.maxVisibleItems) {
-      this.activePage = +event.target.text;
-      this.firstVisibleIndex = this.activePage * this.maxVisibleItems - this.maxVisibleItems + 1;
-      this.lastVisibleIndex = this.activePage * this.maxVisibleItems;
-    }
-  }
-
-  nextPage() {
-    this.activePage += 1;
-    this.firstVisibleIndex = this.activePage * this.maxVisibleItems - this.maxVisibleItems + 1;
-    this.lastVisibleIndex = this.activePage * this.maxVisibleItems;
-  }
-  previousPage() {
-    this.activePage -= 1;
-    this.firstVisibleIndex = this.activePage * this.maxVisibleItems - this.maxVisibleItems + 1;
-    this.lastVisibleIndex = this.activePage * this.maxVisibleItems;
-  }
-
-  firstPage() {
-    this.activePage = 1;
-    this.firstVisibleIndex = this.activePage * this.maxVisibleItems - this.maxVisibleItems + 1;
-    this.lastVisibleIndex = this.activePage * this.maxVisibleItems;
-  }
-
-  lastPage() {
-    this.activePage = this.lastPageNumber;
-    this.firstVisibleIndex = this.activePage * this.maxVisibleItems - this.maxVisibleItems + 1;
-    this.lastVisibleIndex = this.activePage * this.maxVisibleItems;
-  }
-
-  sortBy(by: string | any): void {
-    // if (by == 'dt_criou') {
-    //   this.search().reverse();
-    // } else {
-      this.tableData.sort((a: any, b: any) => {
-        if (a[by] < b[by]) {
-          return this.sorted ? 1 : -1;
-        }
-        if (a[by] > b[by]) {
-          return this.sorted ? -1 : 1;
-        }
-        return 0;
-      });
-    //}
-    this.sorted = !this.sorted;
-  }
-
-  filterIt(arr: any, searchKey: any) {
-    return arr.filter((obj: any) => {
-      return Object.keys(obj).some((key) => {
-        return obj[key].includes(searchKey);
-      });
     });
-  }
+     
+    this.prospectsResposta = analisarCampanha.resposta as Array<object>;
 
-  search() {
-    
-    if (!this.searchText) {
-      return this.tableData;
-    }
-    
-    if (this.searchText) {
-      return this.filterIt(this.tableData, this.searchText);
-    }
-  }
+    console.log(this.prospectsResposta)
 
-  generateCsv() {
-    new Angular5Csv(this.search(), 'data-table', this.options);
-  }
+  };
+ 
+
+
 }
 
 

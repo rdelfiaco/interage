@@ -63,4 +63,86 @@ function getCampanhas(req, res) {
 		})
 	})
 }
-module.exports = { getCampanhasDoUsuario, getCampanhas }
+
+function getCampanhaProspects(req, res) {
+	return new Promise(function (resolve, reject) {
+
+		checkTokenAccess(req).then(historico => {
+			const dbconnection = require('../config/dbConnection')
+			const { Client } = require('pg')
+
+			const client = new Client(dbconnection)
+
+			client.connect()
+			
+			let sql = `select count(*) as prospects from eventos 
+						where id_campanha = ${req.query.id_campanha} 
+						and dt_criou between '${req.query.dtInicial}' and '${req.query.dtFinal}'
+						and id_evento_pai is null`
+			
+			client.query(sql)
+				.then(res => {
+					if (res.rowCount > 0) {
+						let registros = res.rows;
+
+						client.end();
+						resolve(registros)
+					}
+					reject('prospects não encontrados')
+				}
+				)
+				.catch(err => console.log(err)) //reject( err.hint ) )
+		}).catch(e => {
+			reject(e)
+		})
+	})
+}
+
+function getCampanhaTentando(req, res) {
+	return new Promise(function (resolve, reject) {
+
+		checkTokenAccess(req).then(historico => {
+			const dbconnection = require('../config/dbConnection')
+			const { Client } = require('pg')
+
+			const client = new Client(dbconnection)
+
+			client.connect()
+			
+			let sql = `select tentativas, sum(tentativas) as qtde
+						from (
+						select id_pessoa_receptor, count(*) as tentativas 
+						from eventos  where  id_status_evento not in (1,4)
+							and id in ( select id from eventos where id_campanha = ${req.query.id_campanha}  
+								and id_evento_pai is null and dt_criou between ${req.query.dtInicial}' and '${req.query.dtFinal}' )
+						group by id_pessoa_receptor
+						union
+						select id_pessoa_receptor, 0 as tentativas 
+						from eventos  where id_evento_pai is null and id_status_evento in (1,4)
+							and id in ( select id from eventos where id_campanha = ${req.query.id_campanha} 
+								 and id_evento_pai is null and dt_criou between ${req.query.dtInicial}' and '${req.query.dtFinal}' )
+						group by id_pessoa_receptor	
+						) a
+						group by tentativas 
+						
+						order by tentativas`
+
+			client.query(sql)
+				.then(res => {
+					if (res.rowCount > 0) {
+						let registros = res.rows;
+
+						client.end();
+						resolve(registros)
+					}
+					reject('prospects não encontrados')
+				}
+				)
+				.catch(err => console.log(err)) //reject( err.hint ) )
+		}).catch(e => {
+			reject(e)
+		})
+	})
+}
+
+module.exports = { getCampanhasDoUsuario, getCampanhas, getCampanhaProspects, getCampanhaTentando }

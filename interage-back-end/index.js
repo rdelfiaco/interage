@@ -294,6 +294,20 @@ app.get('/getEventosLinhaDoTempo', (req, res) => {
     })
 });
 
+app.get('/getCampanhaProspects', (req, res) => {
+  campanha.getCampanhaProspects(req)
+    .then(linhas => {
+      headerResponse(res)
+      res.status(200).send(linhas)
+    })
+    .catch(error => {
+      headerResponse(res)
+      console.log(error)
+      res.status(401).send(error)
+    })
+});
+
+
 app.listen(nodeStart.port, "0.0.0.0");
 console.log(`Servidor iniciado na em http://localhost:${nodeStart.port}`)
 

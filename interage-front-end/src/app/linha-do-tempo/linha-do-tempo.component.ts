@@ -10,6 +10,11 @@ import { LocalStorage } from '../shared/services/localStorage';
 })
 export class LinhaDoTempoComponent implements OnInit {
 
+  
+  ngOnInit(): void {
+    throw new Error("Method not implemented.");
+  }
+
   private usuarioLogado: any;
   private eventosDaPessoa: any;
 
