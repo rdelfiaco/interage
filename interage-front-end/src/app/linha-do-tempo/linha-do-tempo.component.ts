@@ -37,7 +37,15 @@ export class LinhaDoTempoComponent implements OnInit {
       }) as any;
 
 
-
+      const ordenaEventos = (eventos: Array<any>): Array<any> => {
+        if (eventos && eventos.length)
+          return eventos.sort((a, b) => {
+            if (new Date(a.dt_criou).getTime() > new Date(b.dt_criou).getTime()) return 1;
+            else if (new Date(a.dt_criou).getTime() < new Date(b.dt_criou).getTime()) return -1;
+            else return 0;
+          })
+        return eventos;
+      }
 
       const juntaEventosPaiEFilhos = (eventos: Array<any>, idEventoPai: string) => {
         let eventosRetorno = [];
@@ -86,19 +94,6 @@ export class LinhaDoTempoComponent implements OnInit {
       }
 
       this.eventosDaPessoa = ordenaEventos(juntaEventosPaiEFilhos(eventosEncontrados.resposta, null));
-
-
-      function ordenaEventos(eventos: Array<any>): Array<any> {
-        if (eventos && eventos.length)
-          return eventos.sort((a, b) => {
-            if (new Date(a.dt_criou).getTime() > new Date(b.dt_criou).getTime()) return 1;
-            else if (new Date(a.dt_criou).getTime() < new Date(b.dt_criou).getTime()) return -1;
-            else return 0;
-          })
-        return eventos;
-      }
-
-
     }
     catch (e) {
       debugger
