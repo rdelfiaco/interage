@@ -25,6 +25,10 @@ export class LinhaDoTempoComponent implements OnInit {
     this.usuarioLogado = this.localStorage.getLocalStorage('usuarioLogado') as any;
   }
 
+  ngOnInit() {
+
+  }
+
   async ngOnChanges() {
     if (!this.pessoa) return;
     try {
@@ -38,7 +42,15 @@ export class LinhaDoTempoComponent implements OnInit {
       }) as any;
 
 
-
+      const ordenaEventos = (eventos: Array<any>): Array<any> => {
+        if (eventos && eventos.length)
+          return eventos.sort((a, b) => {
+            if (new Date(a.dt_criou).getTime() > new Date(b.dt_criou).getTime()) return 1;
+            else if (new Date(a.dt_criou).getTime() < new Date(b.dt_criou).getTime()) return -1;
+            else return 0;
+          })
+        return eventos;
+      }
 
       const juntaEventosPaiEFilhos = (eventos: Array<any>, idEventoPai: string) => {
         let eventosRetorno = [];
@@ -50,7 +62,7 @@ export class LinhaDoTempoComponent implements OnInit {
               dt_prevista_resolucao: new Date(evento.dt_prevista_resolucao),
               dt_resolvido: evento.dt_resolvido ? new Date(evento.dt_resolvido) : evento.dt_resolvido,
               dataFilhoMaisNovo: calcularDataFilhoMaisNovo(eventos, evento.id),
-              eventosFilho: juntaEventosPaiEFilhos(eventos, evento.id)
+              eventosFilho: ordenaEventos(juntaEventosPaiEFilhos(eventos, evento.id))
             })
           }
           else if (idEventoPai === evento.id_evento_pai) {
@@ -59,7 +71,7 @@ export class LinhaDoTempoComponent implements OnInit {
               ...evento,
               dt_prevista_resolucao: new Date(evento.dt_prevista_resolucao),
               dt_resolvido: evento.dt_resolvido ? new Date(evento.dt_resolvido) : evento.dt_resolvido,
-              eventosFilho: juntaEventosPaiEFilhos(eventos, evento.id)
+              eventosFilho: ordenaEventos(juntaEventosPaiEFilhos(eventos, evento.id))
             })
           }
           else return;
@@ -86,13 +98,7 @@ export class LinhaDoTempoComponent implements OnInit {
         }
       }
 
-      this.eventosDaPessoa = juntaEventosPaiEFilhos(eventosEncontrados.resposta, null).sort((a, b) => {
-        if (new Date(a.dt_criou).getTime() > new Date(b.dt_criou).getTime()) return 1;
-        else if (new Date(a.dt_criou).getTime() < new Date(b.dt_criou).getTime()) return -1;
-        else return 0;
-      })
-
-
+      this.eventosDaPessoa = ordenaEventos(juntaEventosPaiEFilhos(eventosEncontrados.resposta, null));
     }
     catch (e) {
       debugger

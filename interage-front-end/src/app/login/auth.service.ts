@@ -83,7 +83,6 @@ export class AuthService {
     this.localStorage.delLocalStorage('usuarioLogado_object')
     this.usuarioLogado.next(false);
     this.router.navigate(['/']);
-    // window.location.reload();
   }
 
   _getUsuarioLogadoLocalStorage() {
