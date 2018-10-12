@@ -36,11 +36,9 @@ export class ItemDeEventoComponent implements OnInit {
   }
 
   selecionaEvento(event, evento) {
-    debugger
     event.preventDefault();
     event.stopPropagation();
     this.eventoSelecionado = evento;
-    debugger;
     this.eventoForm = this.formBuilder.group({
       id: [evento.id],
       status: [evento.status],

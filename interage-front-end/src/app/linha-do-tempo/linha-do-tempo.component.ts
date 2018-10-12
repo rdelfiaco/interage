@@ -9,12 +9,6 @@ import { LocalStorage } from '../shared/services/localStorage';
   styleUrls: ['./linha-do-tempo.component.scss']
 })
 export class LinhaDoTempoComponent implements OnInit {
-
-  
-  ngOnInit(): void {
-    throw new Error("Method not implemented.");
-  }
-
   private usuarioLogado: any;
   private eventosDaPessoa: any;
 
@@ -56,7 +50,6 @@ export class LinhaDoTempoComponent implements OnInit {
         let eventosRetorno = [];
         eventos.forEach(evento => {
           if (!evento.id_evento_pai && !idEventoPai) {
-            debugger;
             eventosRetorno.push({
               ...evento,
               dt_prevista_resolucao: new Date(evento.dt_prevista_resolucao),
@@ -66,7 +59,6 @@ export class LinhaDoTempoComponent implements OnInit {
             })
           }
           else if (idEventoPai === evento.id_evento_pai) {
-            debugger;
             eventosRetorno.push({
               ...evento,
               dt_prevista_resolucao: new Date(evento.dt_prevista_resolucao),
@@ -101,7 +93,6 @@ export class LinhaDoTempoComponent implements OnInit {
       this.eventosDaPessoa = ordenaEventos(juntaEventosPaiEFilhos(eventosEncontrados.resposta, null));
     }
     catch (e) {
-      debugger
       this.toastrService.error(e.error);
     }
   }

@@ -206,7 +206,6 @@ export class TelemarketingQuestionarioComponent implements OnInit {
     this.discando = true;
   }
   async gravarLigacao() {
-    debugger
     const usuarioLogado = this.localStorage.getLocalStorage('usuarioLogado') as any;
     await this.connectHTTP.callService({
       service: 'salvarEvento',

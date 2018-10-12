@@ -12,38 +12,63 @@
 
 }
 .bocaFunil{
-    background-image: linear-gradient(to bottom, #000000, #9933CC );
-    height: 20px;
+    background: url("./img/pessoas_funil.png") no-repeat center center;
+    height: 40px;
     width: 500px;
-    
+    background-size: contain;
 }
 .propect {
-    background-image: linear-gradient(to bottom, #9933CC, #b488ca);
+    background: url("./img/nivel_1_funil_interage.png") no-repeat center center;
     height: 80px;
     width: 500px;
-
+    background-size: contain;
+    margin-top: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
+
 .tentando {
-    background-image: linear-gradient(to bottom,  #b488ca, #33b5e5 );
-    height: 120px;
+    background: url("./img/nivel_2_funil_interage.png") no-repeat center center;
+    height: 80px;
     width: 500px;
-
-}
-.flowup {
-    background-image: linear-gradient(to bottom,  #33b5e5, #2BBBAD );
-    height: 120px;
-    width: 500px;  
-}
-
-.flowup1 {
-    background-image: linear-gradient(to bottom,  #33b5e5,  rgb(248, 162, 64) );
-    height: 120px;
-    width: 500px;  
+    background-size: contain;
+    margin-top: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .fundoFunil{
-    background-image: linear-gradient(to bottom,   rgb(248, 162, 64) , #fad487 );
-    height: 120px;
-    width: 500px; 
+    background: url("./img/nivel_3_funil_interage.png") no-repeat center center;
+    height: 207px;
+    width: 500px;
+    background-size: contain;
+    margin-top: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: column;
+}
 
+.acerto{
+    background: url("./img/alvo.png") no-repeat center center;
+    height: 80px;
+    width: 500px;
+    background-size: contain;
+    margin-top: 10px;
+}
+
+.alvoErro{
+    background: url("./img/fora_do_alvo.png") no-repeat center center;
+    height: 80px;
+    width: 500px;
+    background-size: contain;
+    margin-top: 10px;
+}
+
+.propect span, .tentando span, .fundoFunil span {
+    font-size: 2.5em;
+    color: white;
+    font-weight: 800;
 }

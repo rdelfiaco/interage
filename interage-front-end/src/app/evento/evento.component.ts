@@ -117,7 +117,6 @@ export class EventoComponent implements OnInit {
 
     this.statusSelectVAlue = '2'
 
-    debugger
     let eventos = await this.connectHTTP.callService({
       service: 'getEventosPendentes',
       paramsService: {

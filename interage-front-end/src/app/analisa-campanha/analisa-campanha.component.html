@@ -2,52 +2,46 @@
 
     <!--Card image-->
     <div class="view view-cascade gradient-card-header blue-gradient narrower py-1 mx-2  d-flex justify-content-center align-items-center">
-  
-      <h4 class="white-text font-weight-bold text-uppercase ">Analisa Campanha</h4>
-  
+
+        <h4 class="white-text font-weight-bold text-uppercase ">Analisa Campanha</h4>
+
     </div>
     <!-- Card Filtros -->
     <div>
-      <div class="row ">
-          <div class="col-6 col-sm-3">
-              <div class="row justify-content-around">
-                  <div class="col-6 col-sm-6">
-                      <div class="md-form datas">
-                          <mdb-date-picker #dataEventos  
-                            name="mydate"
-                            [options]="myDatePickerOptions" required
-                            [(ngModel)]="dataInicial"
-                            class="datas"></mdb-date-picker>
-                          <label  class="datas" style="height: 10px" >Data inicial</label>
+        <div class="row ">
+            <div class="col-6 col-sm-3">
+                <div class="row justify-content-around">
+                    <div class="col-6 col-sm-6">
+                        <div class="md-form datas">
+                            <mdb-date-picker #dataEventos name="mydate" [options]="myDatePickerOptions" required
+                                [(ngModel)]="dataInicial" class="datas"></mdb-date-picker>
+                            <label class="datas" style="height: 10px">Data inicial</label>
                         </div>
-                  </div>
-                  <div class="col-6 col-sm-6">
-                      <div class="md-form datas">
-                          <mdb-date-picker #dataEventos  name="mydate"
-                            [options]="myDatePickerOptions" 
-                            required
-                            [(ngModel)]="dataFinal"
-                            class="datas"></mdb-date-picker>
-                          <label class="datas" style="height: 10px"  >Data final</label>
-                      </div>
-                  </div>
-              </div>
+                    </div>
+                    <div class="col-6 col-sm-6">
+                        <div class="md-form datas">
+                            <mdb-date-picker #dataEventos name="mydate" [options]="myDatePickerOptions" required
+                                [(ngModel)]="dataFinal" class="datas"></mdb-date-picker>
+                            <label class="datas" style="height: 10px">Data final</label>
+                        </div>
+                    </div>
+                </div>
 
 
 
 
-          </div>
-          <div class="col-6 col-sm-4 " style="z-index: 0" >
+            </div>
+            <div class="col-6 col-sm-4 " style="z-index: 0">
 
-              <div class="row" style="margin-top: 30px"  >
-                  <div class="col-md-12">
-                      <mdb-select  [(ngModel)]="campanhaSelectValue" [options]="campanhaSelect" placeholder="Escolha a campanha"
-                      style="font-size: 0.5rem;" ></mdb-select>
-                      <label>Campanha</label>
-                  </div>
-              </div>
-          </div>
-          <!-- <div class="col-6 col-sm-4" style="z-index: 0">
+                <div class="row" style="margin-top: 30px">
+                    <div class="col-md-12">
+                        <mdb-select [(ngModel)]="campanhaSelectValue" [options]="campanhaSelect" placeholder="Escolha a campanha"
+                            style="font-size: 0.5rem;"></mdb-select>
+                        <label>Campanha</label>
+                    </div>
+                </div>
+            </div>
+            <!-- <div class="col-6 col-sm-4" style="z-index: 0">
 
               <div class="row" style="margin-top: 30px" >
                   <div class="col-md-12">
@@ -57,44 +51,45 @@
                   </div>
               </div>
           </div> -->
-          <div class="col-6 col-sm-1 " style="z-index: 0" >
-              <div class="row justify-content-around" >
-                  <a mdbBtn floating="true" size="lg" gradient="blue" (click)="analisarCampanha()"  mdbWavesEffect><mdb-icon icon="bolt"></mdb-icon></a>
-              </div>
+            <div class="col-6 col-sm-1 " style="z-index: 0">
+                <div class="row justify-content-around">
+                    <a mdbBtn floating="true" size="lg" gradient="blue" (click)="analisarCampanha()" mdbWavesEffect>
+                        <mdb-icon icon="bolt"></mdb-icon>
+                    </a>
+                </div>
 
-          </div>
-      </div>
-        
+            </div>
+        </div>
+
 
     </div>
 
     <br>
     <br>
-    <div class="row no-gutters justify-content-center"> 
-        <div class="col-md-6">
-              <div class="bocaFunil justify-content-center align-items-center">
-                <h4 class= "white-text font-weight-bold " 
-                >Prospects: </h4>
-                
-              </div>
-              <div class="propect">
-             
-              </div>
-              <div class="tentando">
-               
-              </div>
-              <div class="flowup">
+    <div class="row no-gutters justify-content-center">
+        <div class="col-md-6 justify-content-center align-items-center">
+            <div class="bocaFunil">
+                <h4 class=" font-weight-bold ">Prospects: </h4>
 
-              </div>
-              <div class="flowup1">
-
-                </div>
-              <div class="fundoFunil">
-
-              </div>
+            </div>
+            <div class="propect">
+                <span>3456</span>
+            </div>
+            <div class="tentando">
+                <span>1555</span>
+            </div>
+            <div class="fundoFunil">
+                <span>255</span>
+                <span>454</span>
+                <span>100</span>
+            </div>
+            <div class="row resultado">
+                <div class="col-6 acerto"></div>
+                <div class="col-6 alvoErro"></div>
+            </div>
         </div>
     </div>
-          
 
 
-  </div>
+
+</div>
