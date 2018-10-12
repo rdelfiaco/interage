@@ -5,6 +5,7 @@ import { ConnectHTTP } from '../shared/services/connectHTTP';
 import { Usuario } from '../login/usuario';
 import { LocalStorage } from '../shared/services/localStorage';
 import * as moment from 'moment';
+import { MascaraTelefonePipe } from '../shared/pipes/mascaraTelefone/mascara-telefone.pipe';
 
 interface selectValues {
   value: string
@@ -14,7 +15,8 @@ interface selectValues {
 @Component({
   selector: 'app-telemarketing-questionario',
   templateUrl: './telemarketing-questionario.component.html',
-  styleUrls: ['./telemarketing-questionario.component.scss']
+  styleUrls: ['./telemarketing-questionario.component.scss'],
+  providers: [MascaraTelefonePipe]
 })
 export class TelemarketingQuestionarioComponent implements OnInit {
   private _pessoaObject: any;
@@ -97,7 +99,10 @@ export class TelemarketingQuestionarioComponent implements OnInit {
     else return null;
   }
 
-  constructor(private formBuilder: FormBuilder, private connectHTTP: ConnectHTTP, private localStorage: LocalStorage) {
+  constructor(private formBuilder: FormBuilder,
+    private connectHTTP: ConnectHTTP,
+    private localStorage: LocalStorage,
+    private mascaraTelefone: MascaraTelefonePipe) {
     this.questionarioForm = this.formBuilder.group({
       pessoaALigar: [''],
       telefones: [''],
@@ -113,6 +118,13 @@ export class TelemarketingQuestionarioComponent implements OnInit {
     if (changes["pessoa"] && this.pessoa) {
       this.pessoa.subscribe(pessoa => {
         this._pessoaObject = pessoa
+        this._pessoaObject.telefones = this._pessoaObject.telefones.map((telefone) => {
+          return {
+            ...telefone,
+            telefoneCompleto: telefone.ddi + telefone.ddd + telefone.telefone
+          }
+        });
+        debugger;
         if (this._eventoObject) this._setQuestionarioForm();
       });
     }
@@ -125,12 +137,13 @@ export class TelemarketingQuestionarioComponent implements OnInit {
   }
 
   _setQuestionarioForm() {
+    debugger;
     this.questionarioForm = this.formBuilder.group({
       pessoaALigar: [this._pessoaObject.principal.nome],
-      telefonePrincipal: this._pessoaObject.telefones.filter(t => {
+      telefonePrincipal: this.mascaraTelefone.transform(this._pessoaObject.telefones.filter(t => {
         if (t.principal)
           return true
-      }).map(telefonePrincipal => `${telefonePrincipal.ddi || '+55'} ${telefonePrincipal.ddd} ${telefonePrincipal.telefone}`),
+      }).map(telefonePrincipal => `${telefonePrincipal.ddi}${telefonePrincipal.ddd}${telefonePrincipal.telefone}`)[0]),
       idTelefoneSelecionado: this._pessoaObject.telefones.filter(t => {
         if (t.principal)
           return true
@@ -175,7 +188,7 @@ export class TelemarketingQuestionarioComponent implements OnInit {
   trocaTelefonePrincipal(telefoneId: string) {
     const numTelefone = this._pessoaObject.telefones.filter((t: any) => t.id == telefoneId) as any;
 
-    this.questionarioForm.controls['telefonePrincipal'].setValue(`${numTelefone[0].ddi} ${numTelefone[0].ddd} ${numTelefone[0].telefone}`);
+    this.questionarioForm.controls['telefonePrincipal'].setValue(this.mascaraTelefone.transform(`${numTelefone[0].ddi}${numTelefone[0].ddd} ${numTelefone[0].telefone}`));
     this.questionarioForm.controls['idTelefoneSelecionado'].setValue(telefoneId);
     this.discando = false;
   }

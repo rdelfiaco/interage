@@ -15,7 +15,7 @@
       <tr>
         <th scope="row">{{telefone.id}}</th>
         <td>{{telefone.ddd}}</td>
-        <td>{{telefone.telefone}}</td>
+        <td>{{telefone.telefone | mascaraTelefone}}</td>
         <td>{{telefone.ramal}}</td>
         <td>
           <mdb-checkbox (change)="setTelefonePrincipal(telefone)" [checked]="telefone.principal"></mdb-checkbox>
