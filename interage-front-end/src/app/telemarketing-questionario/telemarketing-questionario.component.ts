@@ -59,12 +59,12 @@ export class TelemarketingQuestionarioComponent implements OnInit {
   @Input()
   set motivos_respostas(motivos_respostas: any) {
     this._motivos_respostas = motivos_respostas;
-    this.motivosRespostasFormatado = motivos_respostas.map(m => {
-      return { label: m.nome, value: m.id }
-    }).sort((a, b) => {
-      if (a.label > b.label) return 1;
-      else if (a.label < b.label) return -1;
+    this.motivosRespostasFormatado = motivos_respostas.sort((a, b) => {
+      if (a.ordem_listagem > b.ordem_listagem) return 1;
+      else if (a.ordem_listagem < b.ordem_listagem) return -1;
       else return 0;
+    }).map(m => {
+      return { label: m.nome, value: m.id }
     })
   }
 
