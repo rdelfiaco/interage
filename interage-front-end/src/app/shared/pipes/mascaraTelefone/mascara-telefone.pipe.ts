@@ -15,7 +15,6 @@ export class MascaraTelefonePipe implements PipeTransform {
     let testTelefoneFixoCompletoSemDDI = /^([0-9]{2})([0-9]{4})([0-9]{4}$)/gmi.exec(telefone);
     let testTelefoneFixoCompletoSemDDIeDDD = /^([0-9]{4})([0-9]{4}$)/gmi.exec(telefone);
 
-    debugger;
     if (testTelefoneCelularCompleto) {
       let t = testTelefoneCelularCompleto;
       return `+${t[1]} (${t[2]}) ${t[3]} ${t[4]}-${t[5]}`

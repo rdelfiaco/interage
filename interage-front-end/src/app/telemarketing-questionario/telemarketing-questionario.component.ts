@@ -146,7 +146,6 @@ export class TelemarketingQuestionarioComponent implements OnInit {
             telefoneCompleto: telefone.ddi + telefone.ddd + telefone.telefone
           }
         });
-        debugger;
         if (this._eventoObject) this._setQuestionarioForm();
         this._buscaEventosDaPessoa();
       });
@@ -170,7 +169,6 @@ export class TelemarketingQuestionarioComponent implements OnInit {
         id_pessoa_receptor: this._pessoaObject.principal.id
       }
     }) as any;
-    debugger;
     this.quantEventosDaPessoa = eventosPessoa.resposta.length
   }
 
@@ -248,7 +246,6 @@ export class TelemarketingQuestionarioComponent implements OnInit {
           this.exige_predicao = true;
         else this.exige_predicao = false
 
-        debugger;
         if (motivo.exige_objecao)
           this.exige_objecao = true;
         else this.exige_objecao = false
