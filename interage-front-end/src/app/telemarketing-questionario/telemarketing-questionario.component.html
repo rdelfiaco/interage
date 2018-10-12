@@ -1,7 +1,8 @@
 <form [formGroup]="questionarioForm" class="formQuestionario">
   <div class="row">
     <div class="md-form input-group">
-      <div class="btn-group" mdbDropdown>
+
+      <div *ngIf="quantEventosDaPessoa == 1" class="btn-group" mdbDropdown>
         <button type="button" mdbBtn color="danger" class="waves-light" mdbWavesEffect (click)="discar()">Discar</button>
         <button type="button" mdbDropdownToggle mdbBtn color="danger" class="dropdown-toggle dropdown-toggle-split px-3 waves-light"
           mdbWavesEffect></button>
@@ -10,6 +11,18 @@
             {{telefone.telefoneCompleto | mascaraTelefone}}</a>
         </div>
       </div>
+
+
+      <div *ngIf="quantEventosDaPessoa > 1" class="btn-group" mdbDropdown>
+        <button type="button" mdbBtn color="dark-green" class="waves-light" mdbWavesEffect (click)="discar()">Discar</button>
+        <button type="button" mdbDropdownToggle mdbBtn color="dark-green" class="dropdown-toggle dropdown-toggle-split px-3 waves-light"
+          mdbWavesEffect></button>
+        <div class="dropdown-menu">
+          <a *ngFor="let telefone of _pessoaObject.telefones" class="dropdown-item" (click)="trocaTelefonePrincipal(telefone.id)">
+            {{telefone.telefoneCompleto | mascaraTelefone}}</a>
+        </div>
+      </div>
+
       <input type="text" formControlName="telefonePrincipal" class="form-control" aria-label="Text input with segmented dropdown button">
     </div>
   </div>

@@ -30,22 +30,32 @@
           <h4 class="modal-title w-100" id="myModalLabel">Telemarketing -
             {{pessoaObject.principal.nome}}</h4>
         </div>
-        <div *ngIf="formAberto && evento | async" class="modal-body" style="overflow: auto; height: 80vh;">
-          <div class="row">
-            <div class="col-md-5">
-              <app-telemarketing-questionario [modal]="basicModal" [evento]="evento" [pessoa]="pessoa"
-                [motivos_respostas]="motivos_respostas" [predicoes]="predicoes" [campanhaSelecionada]="campanhaSelecionada.value"
-                [clear]="_limpar"></app-telemarketing-questionario>
-            </div>
-            <div class="col-md-7">
-              <app-cadastro-pessoa [pessoa]="pessoa" (refresh)="refresh()"></app-cadastro-pessoa>
+        <div *ngIf="formAberto" class="modal-body" style="overflow: auto; height: 80vh;">
+          <div *ngIf="eventoObject">
+            <div class="row">
+              <div class="col-md-5">
+                <app-telemarketing-questionario [modal]="basicModal" [evento]="evento" [pessoa]="pessoa"
+                  [motivos_respostas]="motivos_respostas" [predicoes]="predicoes" [campanhaSelecionada]="campanhaSelecionada.value"
+                  [clear]="_limpar"></app-telemarketing-questionario>
+              </div>
+              <div class="col-md-7">
+                <app-cadastro-pessoa [pessoa]="pessoa" (refresh)="refresh()"></app-cadastro-pessoa>
+              </div>
             </div>
           </div>
-        </div>
-        <div *ngIf="!(evento | async)" class="modal-body justify-content-center align-items-center flex-column row" style="overflow: auto; height: 80vh;">
-          <h1>Não há ligações no momento!</h1>
-          <button mdbBtn (click)="basicModal.hide();" type="button" gradient="peach" rounded="true" class="waves-light"
-            mdbWavesEffect>Fechar</button>
+          <div *ngIf="!eventoObject" style="height: 100%;">
+            <div *ngIf="!carregouEvento" class="justify-content-center align-items-center flex-column row" style="height: 100%;">
+              <h1>Carregando!</h1>
+              <mdb-spinner spinnerType="big" spinnerColor="blue"></mdb-spinner>
+              <button mdbBtn (click)="basicModal.hide();" type="button" gradient="peach" rounded="true" class="waves-light"
+                mdbWavesEffect>Fechar</button>
+            </div>
+            <div *ngIf="carregouEvento" class="justify-content-center align-items-center flex-column row" style="height: 100%;">
+              <h1>Não há ligações no momento!</h1>
+              <button mdbBtn (click)="basicModal.hide();" type="button" gradient="peach" rounded="true" class="waves-light"
+                mdbWavesEffect>Fechar</button>
+            </div>
+          </div>
         </div>
       </div>
     </div>

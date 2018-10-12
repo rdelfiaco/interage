@@ -48,6 +48,8 @@ export class TelemarketingQuestionarioComponent implements OnInit {
   exige_predicao: boolean = false;
   discando: boolean = false;
   podeGravar: boolean = false;
+  quantEventosDaPessoa: number;
+  corDoBotaoDiscar: string = 'danger';
   @ViewChild("dataReagendamento") datePicker: MDBDatePickerComponent;
 
   @Input() modal: any
@@ -126,6 +128,7 @@ export class TelemarketingQuestionarioComponent implements OnInit {
         });
         debugger;
         if (this._eventoObject) this._setQuestionarioForm();
+        this._buscaEventosDaPessoa();
       });
     }
     if (changes["evento"] && this.evento) {
@@ -136,8 +139,22 @@ export class TelemarketingQuestionarioComponent implements OnInit {
     }
   }
 
-  _setQuestionarioForm() {
+  async _buscaEventosDaPessoa() {
+    const usuarioLogado = this.localStorage.getLocalStorage('usuarioLogado') as any;
+
+    let eventosPessoa = await this.connectHTTP.callService({
+      service: 'getEventosLinhaDoTempo',
+      paramsService: {
+        id_usuario: usuarioLogado.id,
+        token: usuarioLogado.token,
+        id_pessoa_receptor: this._pessoaObject.principal.id
+      }
+    }) as any;
     debugger;
+    this.quantEventosDaPessoa = eventosPessoa.resposta.length
+  }
+
+  _setQuestionarioForm() {
     this.questionarioForm = this.formBuilder.group({
       pessoaALigar: [this._pessoaObject.principal.nome],
       telefonePrincipal: this.mascaraTelefone.transform(this._pessoaObject.telefones.filter(t => {

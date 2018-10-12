@@ -15,7 +15,9 @@ export class TelemarketingComponent implements OnInit {
   campanhas: Observable<Array<object>>;
   campanhaSelecionada: any;
   campanhaIniciada: boolean;
+  carregouEvento: boolean = false;
   evento: Observable<object>;
+  eventoObject: any;
   pessoa: Observable<object>;
   observerPessoa: Subscriber<object>;
   observerEvento: Subscriber<object>;
@@ -60,7 +62,7 @@ export class TelemarketingComponent implements OnInit {
   }
   async solicitarLigacao() {
     var self = this;
-
+    this.formAberto = true;
     let telemarketing = await this.connectHTTP.callService({
       service: 'getLigacaoTelemarketing',
       paramsService: {
@@ -72,9 +74,11 @@ export class TelemarketingComponent implements OnInit {
       }
     }) as any;
 
+    this.eventoObject = telemarketing.resposta.evento;
+
     this.evento = new Observable((observer) => {
       observer.next(telemarketing.resposta.evento);
-      this.formAberto = true;
+      self.carregouEvento = true;
     });
     this.pessoa = new Observable((observer) => {
       self.observerPessoa = observer;
