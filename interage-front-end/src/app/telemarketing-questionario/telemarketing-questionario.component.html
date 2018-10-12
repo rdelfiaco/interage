@@ -29,7 +29,14 @@
 
   <div *ngIf="exige_predicao" class="row">
     <div class="col">
-      <mdb-select formControlName="id_predicao" [options]="predicoesFormatado" [multiple]="false" placeholder="Selecione a predição">
+      <mdb-select formControlName="id_predicao" [options]="predicoesFormatado" [multiple]="false" placeholder="Selecione a previsão">
+      </mdb-select>
+    </div>
+  </div>
+
+  <div *ngIf="exige_objecao" class="row">
+    <div class="col">
+      <mdb-select formControlName="id_objecao" [options]="predicoesFormatado" [multiple]="false" placeholder="Selecione a previsão">
       </mdb-select>
     </div>
   </div>

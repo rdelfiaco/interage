@@ -30,7 +30,7 @@
     </div>
   </mdb-tab>
   <!-- Panel 4 -->
-  <mdb-tab heading="Eventos">
+  <mdb-tab heading="Eventos" [disabled]="!(pessoa | async)">
     <div class="row">
       <div class="col-12">
         <br>
