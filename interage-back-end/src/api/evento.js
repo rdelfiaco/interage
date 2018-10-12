@@ -84,6 +84,7 @@ function salvarEvento(req, res) {
       client.connect()
       let sqlMotivoRespostaAutomaticos = `SELECT * from motivos_eventos_automaticos
                               WHERE motivos_eventos_automaticos.id_motivo_resposta=${req.query.id_motivos_respostas}`;
+
       client.query(sqlMotivoRespostaAutomaticos).then(res => {
         const motivoResposta_automatico = res.rows;
 
@@ -106,29 +107,70 @@ function salvarEvento(req, res) {
                   `;
             console.log(update)
             client.query(update).then((res) => {
-              console.log('motivoResposta_automatico.length', motivoResposta_automatico)
-              if (motivoResposta_automatico.length > 0) {
-                motivoResposta_automatico.map((m, index, array) => {
-                  eventoCriar = createEvent(m, motivoResposta)
-                  console.log('eventoCriar', eventoCriar)
-                  client.query(eventoCriar).then(res => {
-                    console.log('index == array.length - 1', index == array.length - 1)
-                    if (index == array.length - 1)
-                      client.query('COMMIT').then((resposta) => {
-                        client.end();
-                        resolve(resposta)
-                      })
+
+              const selectQuantidadeTentativas = `SELECT COUNT(id_resp_motivo) from eventos
+
+                                             WHERE ((id_resp_motivo=${req.query.id_motivos_respostas} AND 
+                                             id_evento_pai = ${req.query.id_evento_pai}) OR
+                                             
+                                             (id_resp_motivo=${req.query.id_motivos_respostas} AND
+                                              id = ${req.query.id_evento_pai}))`
+
+
+              console.log('selectQuantidadeTentativas', selectQuantidadeTentativas)
+              client.query(selectQuantidadeTentativas).then((qtdTentativas) => {
+                qtdTentativas = parseInt(qtdTentativas.rows[0].count);
+                console.log('motivoResposta_automatico.length', motivoResposta_automatico)
+
+                console.log('qtdTentativas', qtdTentativas)
+                console.log('motivoResposta.tentativas', motivoResposta.tentativas)
+                console.log('motivoResposta.tentativas < qtdTentativas', motivoResposta.tentativas < qtdTentativas)
+                if (motivoResposta.tentativas > qtdTentativas) {
+
+                  if (motivoResposta_automatico.length > 0) {
+                    motivoResposta_automatico.map((m, index, array) => {
+                      eventoCriar = createEvent(m, motivoResposta)
+                      console.log('eventoCriar', eventoCriar)
+
+                      client.query(eventoCriar).then(res => {
+                        console.log('index == array.length - 1', index == array.length - 1)
+
+                        if (index == array.length - 1)
+                          client.query('COMMIT').then((resposta) => {
+                            client.end();
+                            resolve(resposta)
+                          })
+                      }).catch(e => reject(e))
+
+                    })
+                  } else {
+                    client.query('COMMIT').then(() => {
+                      client.end();
+                      resolve(true)
+                    }).catch(e => reject(e))
+                  }
+
+
+                }
+                else {
+                  updateQuantidadeMaxTentativas = `UPDATE eventos SET 
+                      excedeu_tentativas=true
+                      WHERE eventos.id=${req.query.id_evento};
+                      `;
+
+                  client.query(updateQuantidadeMaxTentativas).then(() => {
+                    client.query('COMMIT').then(() => {
+                      client.end();
+                      resolve(true)
+                    }).catch(e => reject(e))
                   }).catch(e => reject(e))
-                })
-              }
-              else {
-                client.query('COMMIT').then((resposta) => {
-                  client.end();
-                  resolve(true)
-                })
-              }
+                }
+
+
+              }).catch(e => reject(e))
             }).catch(e => reject(e))
           })
+
         }).catch(e => reject(e))
       }).catch(e => reject(e))
 
