@@ -1,8 +1,11 @@
 <form [formGroup]="questionarioForm" class="formQuestionario">
   <div class="row">
+      <button mdbBtn type="button" color="danger" size="sm" mdbWavesEffect>Primeira Ligação</button>
+      <button mdbBtn type="button" color="dark-green" size="sm" mdbWavesEffect>Ligações Anteriores</button>
     <div class="md-form input-group">
 
       <div *ngIf="quantEventosDaPessoa == 1" class="btn-group" mdbDropdown>
+
         <button type="button" mdbBtn color="danger" class="waves-light" mdbWavesEffect (click)="discar()">Discar</button>
         <button type="button" mdbDropdownToggle mdbBtn color="danger" class="dropdown-toggle dropdown-toggle-split px-3 waves-light"
           mdbWavesEffect></button>

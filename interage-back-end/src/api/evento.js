@@ -116,7 +116,6 @@ function salvarEvento(req, res) {
                                              (id_resp_motivo=${req.query.id_motivos_respostas} AND
                                               id = ${req.query.id_evento_pai}))`
 
-
               console.log('selectQuantidadeTentativas', selectQuantidadeTentativas)
               client.query(selectQuantidadeTentativas).then((qtdTentativas) => {
                 qtdTentativas = parseInt(qtdTentativas.rows[0].count);
