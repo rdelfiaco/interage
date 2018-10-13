@@ -1,22 +1,23 @@
-.dtCriacao{
+.dtCriacao {
     padding-left: 0px;
     grid-column-gap: 2px;
 }
 
-.datas{
+.datas {
     padding: 0 0 0 0;
     margin-top: 5px;
     margin-left: 5px;
     font-size: 0.9rem;
     height: 60px;
-
 }
-.bocaFunil{
+
+.bocaFunil {
     background: url("./img/pessoas_funil.png") no-repeat center center;
     height: 40px;
     width: 500px;
     background-size: contain;
 }
+
 .propect {
     background: url("./img/nivel_1_funil_interage.png") no-repeat center center;
     height: 80px;
@@ -36,10 +37,23 @@
     margin-top: 10px;
     display: flex;
     justify-content: center;
-    align-items: center;
+    & .table_scroll {
+        display: block;
+        max-height: 200px;
+        width: 75%;
+        overflow-y: auto;
+        margin-top: 15px;
+        & tbody td,
+        & thead th {
+            padding: 5px;
+            color: white;
+            font-size: 1.5em;
+            font-weight: 800;
+        }
+    }
 }
 
-.fundoFunil{
+.fundoFunil {
     background: url("./img/nivel_3_funil_interage.png") no-repeat center center;
     height: 207px;
     width: 500px;
@@ -51,7 +65,7 @@
     flex-direction: column;
 }
 
-.acerto{
+.acerto {
     background: url("./img/alvo.png") no-repeat center center;
     height: 80px;
     width: 500px;
@@ -59,7 +73,7 @@
     margin-top: 10px;
 }
 
-.alvoErro{
+.alvoErro {
     background: url("./img/fora_do_alvo.png") no-repeat center center;
     height: 80px;
     width: 500px;
@@ -67,8 +81,12 @@
     margin-top: 10px;
 }
 
-.propect span, .tentando span, .fundoFunil span {
-    font-size: 2.5em;
-    color: white;
-    font-weight: 800;
+.propect,
+.tentando,
+.fundoFunil {
+    & span {
+        font-size: 2.5em;
+        color: white;
+        font-weight: 800;
+    }
 }

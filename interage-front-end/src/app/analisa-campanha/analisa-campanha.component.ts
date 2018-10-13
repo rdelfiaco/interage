@@ -5,7 +5,7 @@ import { Angular5Csv } from 'angular5-csv/Angular5-csv';
 import { Usuario } from '../login/usuario';
 import { ConnectHTTP } from '../shared/services/connectHTTP';
 import { LocalStorage } from '../shared/services/localStorage';
-import { IMyOptions } from '../../lib/ng-uikit-pro-standard';
+import { IMyOptions, ToastService } from '../../lib/ng-uikit-pro-standard';
 import * as moment from 'moment';
 import { FormGroup, FormControl } from '@angular/forms';
 
@@ -17,6 +17,7 @@ import { FormGroup, FormControl } from '@angular/forms';
 export class AnalisaCampanhaComponent implements OnInit {
 
   prospects: string;
+  tentando: string;
   usuarioLogado: Usuario;
   agentesVendasSelect: Array<any>;
   campanhaSelect: Array<any>;
@@ -24,10 +25,10 @@ export class AnalisaCampanhaComponent implements OnInit {
   prospectsResposta: Array<any>;
   tentandoResposta: Array<any>;
   agentesVendasSelectValue: string;
-  campanhaSelectValue : string;
+  campanhaSelectValue: string;
   dataInicial: string = moment().format('DD/MM/YYYY')
-  dataFinal: string  =  moment().format('DD/MM/YYYY')
-  
+  dataFinal: string = moment().format('DD/MM/YYYY')
+
 
 
   public myDatePickerOptions: IMyOptions = {
@@ -46,7 +47,7 @@ export class AnalisaCampanhaComponent implements OnInit {
     // Format
     dateFormat: 'dd/mm/yyyy',
     selectionTxtFontSize: '15px',
-    
+
   }
 
   options = {
@@ -73,78 +74,64 @@ export class AnalisaCampanhaComponent implements OnInit {
   maxVisibleItems: number = 10;
   radioModel: string = 'dtCompromisso';
 
-  constructor(private http: Http, private connectHTTP: ConnectHTTP, private localStorage: LocalStorage) { 
+  constructor(private http: Http, private connectHTTP: ConnectHTTP, private localStorage: LocalStorage,
+    private toastrService: ToastService) {
     this.usuarioLogado = this.localStorage.getLocalStorage('usuarioLogado') as Usuario;
-
-
-
   }
 
   async ngOnInit() {
-  
     let agentesVendas = await this.connectHTTP.callService({
       service: 'getAgentesVendas',
       paramsService: {
         token: this.usuarioLogado.token,
-        id_usuario: this.usuarioLogado.id,        
+        id_usuario: this.usuarioLogado.id,
         id_organograma: this.usuarioLogado.id_organograma,
       }
     });
-    
+
     this.agentesVendasSelect = agentesVendas.resposta as Array<object>;
     this.agentesVendasSelect = this.agentesVendasSelect.map(agenteVenda => {
-      return {value:agenteVenda.id_pessoa, label:agenteVenda.login}
-    } );
+      return { value: agenteVenda.id_pessoa, label: agenteVenda.login }
+    });
 
     this.agentesVendasSelectValue = this.agentesVendasSelect[0].value;
-
 
     let campanha = await this.connectHTTP.callService({
       service: 'getCampanhas',
       paramsService: {
         token: this.usuarioLogado.token,
-        id_usuario: this.usuarioLogado.id,        
+        id_usuario: this.usuarioLogado.id,
         id_organograma: this.usuarioLogado.id_organograma,
       }
     });
     this.campanhaSelect = campanha.resposta as Array<object>;
     this.campanhaSelect = this.campanhaSelect.map(campanha => {
-      return {value:campanha.id, label:campanha.nome}
-    } )
+      return { value: campanha.id, label: campanha.nome }
+    })
     this.campanhaSelectValue = this.campanhaSelect[0].value;
 
     this.analisarCampanha();
-
   };
 
 
   async analisarCampanha() {
-    let analisarCampanha = await this.connectHTTP.callService({
-      service: 'getCampanhaAnalisar',
-      paramsService: {
-        token: this.usuarioLogado.token,
-        id_usuario: this.usuarioLogado.id,        
-        id_organograma: this.usuarioLogado.id_organograma,
-        id_campanha: this.campanhaSelectValue,
-        dtInicial: this.dataInicial,
-        dtFinal: this.dataFinal
-      }
-    }) as any;
-     
-    this.prospects = analisarCampanha.resposta.campanhaProspects[0].prospects;
-
-   
-    console.log(analisarCampanha.resposta.campanhaProspects[0].prospects);
-
-    console.log(this.tentandoResposta)
-
-
-
-  }; 
- 
-
-
-
+    try {
+      let analisarCampanha = await this.connectHTTP.callService({
+        service: 'getCampanhaAnalisar',
+        paramsService: {
+          token: this.usuarioLogado.token,
+          id_usuario: this.usuarioLogado.id,
+          id_organograma: this.usuarioLogado.id_organograma,
+          id_campanha: this.campanhaSelectValue,
+          dtInicial: this.dataInicial,
+          dtFinal: this.dataFinal
+        }
+      }) as any;
+      this.prospects = analisarCampanha.resposta.campanhaProspects[0].prospects;
+      this.tentando = analisarCampanha.resposta.campanhaTentando;
+    }
+    catch (e) {
+      this.toastrService.error(e.error);
+    }
+  };
 }
-
-

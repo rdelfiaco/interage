@@ -1,47 +1,47 @@
 <div class="card card-cascade narrower">
 
-    <!--Card image-->
-    <div class="view view-cascade gradient-card-header blue-gradient narrower py-1 mx-2  d-flex justify-content-center align-items-center">
+  <!--Card image-->
+  <div class="view view-cascade gradient-card-header blue-gradient narrower py-1 mx-2  d-flex justify-content-center align-items-center">
 
-        <h4 class="white-text font-weight-bold text-uppercase ">Analisa Campanha</h4>
+    <h4 class="white-text font-weight-bold text-uppercase ">Analisa Campanha</h4>
 
-    </div>
-    <!-- Card Filtros -->
-    <div>
-        <div class="row ">
-            <div class="col-6 col-sm-3">
-                <div class="row justify-content-around">
-                    <div class="col-6 col-sm-6">
-                        <div class="md-form datas">
-                            <mdb-date-picker #dataEventos name="mydate" [options]="myDatePickerOptions" required
-                                [(ngModel)]="dataInicial" class="datas"></mdb-date-picker>
-                            <label class="datas" style="height: 10px">Data inicial</label>
-                        </div>
-                    </div>
-                    <div class="col-6 col-sm-6">
-                        <div class="md-form datas">
-                            <mdb-date-picker #dataEventos name="mydate" [options]="myDatePickerOptions" required
-                                [(ngModel)]="dataFinal" class="datas"></mdb-date-picker>
-                            <label class="datas" style="height: 10px">Data final</label>
-                        </div>
-                    </div>
-                </div>
-
-
-
-
+  </div>
+  <!-- Card Filtros -->
+  <div>
+    <div class="row ">
+      <div class="col-6 col-sm-3">
+        <div class="row justify-content-around">
+          <div class="col-6 col-sm-6">
+            <div class="md-form datas">
+              <mdb-date-picker #dataEventos name="mydate" [options]="myDatePickerOptions" required [(ngModel)]="dataInicial"
+                class="datas"></mdb-date-picker>
+              <label class="datas" style="height: 10px">Data inicial</label>
             </div>
-            <div class="col-6 col-sm-4 " style="z-index: 0">
-
-                <div class="row" style="margin-top: 30px">
-                    <div class="col-md-12">
-                        <mdb-select [(ngModel)]="campanhaSelectValue" [options]="campanhaSelect" placeholder="Escolha a campanha"
-                            style="font-size: 0.5rem;"></mdb-select>
-                        <label>Campanha</label>
-                    </div>
-                </div>
+          </div>
+          <div class="col-6 col-sm-6">
+            <div class="md-form datas">
+              <mdb-date-picker #dataEventos name="mydate" [options]="myDatePickerOptions" required [(ngModel)]="dataFinal"
+                class="datas"></mdb-date-picker>
+              <label class="datas" style="height: 10px">Data final</label>
             </div>
-            <!-- <div class="col-6 col-sm-4" style="z-index: 0">
+          </div>
+        </div>
+
+
+
+
+      </div>
+      <div class="col-6 col-sm-4 " style="z-index: 0">
+
+        <div class="row" style="margin-top: 30px">
+          <div class="col-md-12">
+            <mdb-select [(ngModel)]="campanhaSelectValue" [options]="campanhaSelect" placeholder="Escolha a campanha"
+              style="font-size: 0.5rem;"></mdb-select>
+            <label>Campanha</label>
+          </div>
+        </div>
+      </div>
+      <!-- <div class="col-6 col-sm-4" style="z-index: 0">
 
               <div class="row" style="margin-top: 30px" >
                   <div class="col-md-12">
@@ -51,45 +51,55 @@
                   </div>
               </div>
           </div> -->
-            <div class="col-6 col-sm-1 " style="z-index: 0">
-                <div class="row justify-content-around">
-                    <a mdbBtn floating="true" size="lg" gradient="blue" (click)="analisarCampanha()" mdbWavesEffect>
-                        <mdb-icon icon="bolt"></mdb-icon>
-                    </a>
-                </div>
-
-            </div>
+      <div class="col-6 col-sm-1 " style="z-index: 0">
+        <div class="row justify-content-around">
+          <a mdbBtn floating="true" size="lg" gradient="blue" (click)="analisarCampanha()" mdbWavesEffect>
+            <mdb-icon icon="bolt"></mdb-icon>
+          </a>
         </div>
+
+      </div>
     </div>
+  </div>
 
-    <br>
-    <br>
+  <br>
+  <br>
 
-        <div class="row no-gutters justify-content-center">
-            <div class="col-md-6 justify-content-center align-items-center">
-                <div class="bocaFunil">
-                </div>
-                <div class="propect">
-                    <span> {{prospects}}</span>
-                </div>
-                <div class="tentando">
-
-
-
-                </div>
-                <div class="fundoFunil">
-                    <span>255</span>
-                    <span>454</span>
-                    <span>100</span>
-                </div>
-                <div class="row resultado">
-                    <div class="col-6 acerto"></div>
-                    <div class="col-6 alvoErro"></div>
-                </div>
-            </div>
+  <div class="row no-gutters justify-content-center">
+    <div class="col-md-6 justify-content-center align-items-center">
+      <div class="bocaFunil">
+      </div>
+      <div class="propect">
+        <span> {{prospects}}</span>
+      </div>
+      <div class="tentando">
+        <div class="table_scroll">
+          <table class="table table-bordered table-striped">
+            <!--Table head-->
+            <thead>
+              <tr>
+                <th class="status justify-content-center">Tentativas</th>
+                <th class="th-sm dtCriacao justify-content-center">Quantidade</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let t of tentando">
+                <td class="justify-content-center">{{t.tentativas}}</td>
+                <td class="justify-content-center">{{t.qtde}}</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
-
-
-
-
+      </div>
+      <div class="fundoFunil">
+        <span>255</span>
+        <span>454</span>
+        <span>100</span>
+      </div>
+      <div class="row resultado">
+        <div class="col-6 acerto"></div>
+        <div class="col-6 alvoErro"></div>
+      </div>
+    </div>
+  </div>
 </div>
