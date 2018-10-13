@@ -69,10 +69,10 @@
     <div class="relatorioFunil col-md-6 justify-content-center align-items-center">
       <div class="bocaFunil">
       </div>
-      <div class="propect">
+      <div class="propect" title="Prospects">
         <span> {{prospects}}</span>
       </div>
-      <div class="tentando">
+      <div class="tentando" title="Tentando">
         <div class="table_scroll">
           <table class="table table-bordered table-striped">
             <!--Table head-->
@@ -92,24 +92,24 @@
         </div>
       </div>
       <div class="fundoFunil">
-        <span *ngIf="predicoes">{{predicoes[0].count}}</span>
-        <span *ngIf="predicoes">{{predicoes[1].count}}</span>
-        <span *ngIf="predicoes">{{predicoes[2].count}}</span>
+        <span *ngIf="predicoes" [title]="predicoes[0].nome">{{predicoes[0].count}}</span>
+        <span *ngIf="predicoes" [title]="predicoes[1].nome">{{predicoes[1].count}}</span>
+        <span *ngIf="predicoes" [title]="predicoes[2].nome">{{predicoes[2].count}}</span>
       </div>
       <div class="row resultado">
-        <div class="col-4 acerto">
+        <div *ngIf="resultado" class="col-4 acerto" [title]="resultado[0].descricao">
           <div>
-            <span *ngIf="resultado">{{resultado[0].qdte}}</span>
+            <span>{{resultado[0].qdte}}</span>
           </div>
         </div>
-        <div class="col-4 alvoErro">
+        <div *ngIf="resultado" class="col-4 alvoErro" [title]="resultado[1].descricao">
           <div>
-            <span *ngIf="resultado">{{resultado[1].qdte}}</span>
+            <span>{{resultado[1].qdte}}</span>
           </div>
         </div>
-        <div class="col-4 excedeu">
+        <div *ngIf="resultado" class="col-4 excedeu" [title]="resultado[2].descricao">
           <div>
-            <span *ngIf="resultado">{{resultado[2].qdte}}</span>
+            <span>{{resultado[2].qdte}}</span>
           </div>
         </div>
       </div>
