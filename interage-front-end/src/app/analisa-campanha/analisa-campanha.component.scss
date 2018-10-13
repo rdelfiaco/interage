@@ -1,7 +1,7 @@
 .relatorioFunil {
     display: flex;
     flex-direction: column;
-    margin-bottom: 15px;
+    margin-bottom: 60px;
 }
 
 .dtCriacao {
@@ -91,6 +91,16 @@
         height: 80px;
         background-size: contain;
         margin-top: 10px;
+    }
+    & div {
+        height: 114px;
+        display: flex;
+        justify-content: center;
+        & span {
+            align-self: flex-end;
+            font-size: 1.2em;
+            font-weight: 600;
+        }
     }
 }
 

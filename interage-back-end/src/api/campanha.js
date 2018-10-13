@@ -73,11 +73,15 @@ function getCampanhaAnalisar(req, res) {
       getCampanhaProspects(req).then(campanhaProspects => {
         getCampanhaTentando(req).then(campanhaTentando => {
           getPredicoesCampanha(req).then(campanhaPredicoes => {
+            getCampanhaResultado(req).then(campanhaResultado => {
 
-            if (!campanhaProspects || !campanhaTentando || !campanhaPredicoes) reject('Campanha sem retorno');
+              if (!campanhaProspects || !campanhaTentando || !campanhaPredicoes || !campanhaResultado) reject('Campanha sem retorno');
 
-            resolve({ campanhaProspects, campanhaTentando, campanhaPredicoes });
+              resolve({ campanhaProspects, campanhaTentando, campanhaPredicoes, campanhaResultado });
 
+            }).catch(e => {
+              reject(e);
+            });
           }).catch(e => {
             reject(e);
           });
@@ -180,4 +184,55 @@ function getCampanhaTentando(req, res) {
   })
 }
 
-module.exports = { getCampanhasDoUsuario, getCampanhas, getCampanhaAnalisar }
+function getCampanhaResultado(req, res) {
+  return new Promise(function (resolve, reject) {
+
+    checkTokenAccess(req).then(historico => {
+      const dbconnection = require('../config/dbConnection')
+      const { Client } = require('pg')
+
+      const client = new Client(dbconnection)
+
+      client.connect()
+
+      let sql = `select '1' as id  ,'Comprou' as descricao, count(*) as qdte
+                    from eventos 
+                  where id_campanha = ${req.query.id_campanha}
+                    and date(dt_criou) between '${req.query.dtInicial}' and '${req.query.dtFinal}'
+                  and id_resp_motivo = 8
+                union 
+                select  '2' as id ,'Não comprou' as descricao, count(*) as qdte
+                    from eventos 
+                  where id_campanha = ${req.query.id_campanha}
+                    and date(dt_criou) between '${req.query.dtInicial}' and '${req.query.dtFinal}'
+                  and id_resp_motivo = 9
+                union	
+                select  '3' as id , 'Ligações excedidas' as descricao, count(*) as qdte 
+                    from eventos 
+                  where id_campanha = ${req.query.id_campanha}
+                    and date(dt_criou) between '${req.query.dtInicial}' and '${req.query.dtFinal}'
+                  and excedeu_tentativas 	
+                
+                order by id`
+
+      console.log(sql)
+
+      client.query(sql)
+        .then(res => {
+          if (res.rowCount > 0) {
+            let registros = res.rows;
+
+            client.end();
+            resolve(registros)
+          }
+          reject('Campanha resultado não encontrados')
+        }
+        )
+        .catch(err => console.log(err)) //reject( err.hint ) )
+    }).catch(e => {
+      reject(e)
+    })
+  })
+}
+
+module.exports = { getCampanhasDoUsuario, getCampanhas, getCampanhaAnalisar, getCampanhaResultado }

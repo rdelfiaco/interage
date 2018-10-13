@@ -97,9 +97,21 @@
         <span *ngIf="predicoes">{{predicoes[2].count}}</span>
       </div>
       <div class="row resultado">
-        <div class="col-4 acerto"></div>
-        <div class="col-4 alvoErro"></div>
-        <div class="col-4 excedeu"></div>
+        <div class="col-4 acerto">
+          <div>
+            <span *ngIf="resultado">{{resultado[0].qdte}}</span>
+          </div>
+        </div>
+        <div class="col-4 alvoErro">
+          <div>
+            <span *ngIf="resultado">{{resultado[1].qdte}}</span>
+          </div>
+        </div>
+        <div class="col-4 excedeu">
+          <div>
+            <span *ngIf="resultado">{{resultado[2].qdte}}</span>
+          </div>
+        </div>
       </div>
     </div>
   </div>
