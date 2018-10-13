@@ -123,7 +123,7 @@ function salvarEvento(req, res) {
 
                 console.log('qtdTentativas', qtdTentativas)
                 console.log('motivoResposta.tentativas', motivoResposta.tentativas)
-                console.log('motivoResposta.tentativas < qtdTentativas', motivoResposta.tentativas < qtdTentativas)
+                console.log('motivoResposta.tentativas > qtdTentativas', motivoResposta.tentativas > qtdTentativas)
                 if (motivoResposta.tentativas > qtdTentativas) {
 
                   if (motivoResposta_automatico.length > 0) {
