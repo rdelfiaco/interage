@@ -23,6 +23,7 @@ import { PesquisaPessoaComponent } from './pesquisa-pessoa/pesquisa-pessoa.compo
 import { LinhaDoTempoComponent } from './linha-do-tempo/linha-do-tempo.component';
 import { ItemDeEventoComponent } from './linha-do-tempo/item-de-evento/item-de-evento.component';
 import { AnalisaCampanhaComponent } from './analisa-campanha/analisa-campanha.component';
+import { MascaraTelefonePipe } from './shared/pipes/mascaraTelefone/mascara-telefone.pipe';
 
 
 @NgModule({
@@ -43,6 +44,7 @@ import { AnalisaCampanhaComponent } from './analisa-campanha/analisa-campanha.co
     LinhaDoTempoComponent,
     ItemDeEventoComponent,
     AnalisaCampanhaComponent,
+    MascaraTelefonePipe,
   ],
 
   imports: [
@@ -58,7 +60,7 @@ import { AnalisaCampanhaComponent } from './analisa-campanha/analisa-campanha.co
 
   ],
   providers: [MDBSpinningPreloader
-    
+
   ],
   bootstrap: [AppComponent],
   schemas: [NO_ERRORS_SCHEMA]

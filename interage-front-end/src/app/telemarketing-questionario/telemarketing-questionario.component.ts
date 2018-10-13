@@ -5,6 +5,7 @@ import { ConnectHTTP } from '../shared/services/connectHTTP';
 import { Usuario } from '../login/usuario';
 import { LocalStorage } from '../shared/services/localStorage';
 import * as moment from 'moment';
+import { MascaraTelefonePipe } from '../shared/pipes/mascaraTelefone/mascara-telefone.pipe';
 
 interface selectValues {
   value: string
@@ -14,7 +15,8 @@ interface selectValues {
 @Component({
   selector: 'app-telemarketing-questionario',
   templateUrl: './telemarketing-questionario.component.html',
-  styleUrls: ['./telemarketing-questionario.component.scss']
+  styleUrls: ['./telemarketing-questionario.component.scss'],
+  providers: [MascaraTelefonePipe]
 })
 export class TelemarketingQuestionarioComponent implements OnInit {
   private _pessoaObject: any;
@@ -22,6 +24,8 @@ export class TelemarketingQuestionarioComponent implements OnInit {
   private _motivos_respostas: Array<object>;
   private _predicoes: Array<object>;
   predicoesFormatado: Array<object>
+  private _objecoes: Array<object>;
+  objecoesFormatado: Array<object>
   questionarioForm: FormGroup;
   motivosRespostasFormatado: Array<object>
   motivoRespostaSelecionado: object
@@ -44,8 +48,11 @@ export class TelemarketingQuestionarioComponent implements OnInit {
   reagendar: boolean = false;
   exige_observacao: boolean = false;
   exige_predicao: boolean = false;
+  exige_objecao: boolean = false;
   discando: boolean = false;
   podeGravar: boolean = false;
+  quantEventosDaPessoa: number;
+  corDoBotaoDiscar: string = 'danger';
   @ViewChild("dataReagendamento") datePicker: MDBDatePickerComponent;
 
   @Input() modal: any
@@ -57,12 +64,12 @@ export class TelemarketingQuestionarioComponent implements OnInit {
   @Input()
   set motivos_respostas(motivos_respostas: any) {
     this._motivos_respostas = motivos_respostas;
-    this.motivosRespostasFormatado = motivos_respostas.map(m => {
-      return { label: m.nome, value: m.id }
-    }).sort((a, b) => {
-      if (a.label > b.label) return 1;
-      else if (a.label < b.label) return -1;
+    this.motivosRespostasFormatado = motivos_respostas.sort((a, b) => {
+      if (a.ordem_listagem > b.ordem_listagem) return 1;
+      else if (a.ordem_listagem < b.ordem_listagem) return -1;
       else return 0;
+    }).map(m => {
+      return { label: m.nome, value: m.id }
     })
   }
 
@@ -82,6 +89,18 @@ export class TelemarketingQuestionarioComponent implements OnInit {
     return this._predicoes
   }
 
+  @Input()
+  set objecoes(objecoes: any) {
+    this._objecoes = objecoes;
+    this.objecoesFormatado = objecoes.map(p => {
+      return { label: p.nome, value: p.id, cor: p.cor }
+    })
+  }
+
+  get objecoes(): any {
+    return this._objecoes
+  }
+
   ValidateObservacao(control: AbstractControl) {
     if (this.exige_observacao && !control.value) return { exige_observacao: true };
     else return null;
@@ -92,12 +111,20 @@ export class TelemarketingQuestionarioComponent implements OnInit {
     else return null;
   }
 
-  ValidateReagendar(control: AbstractControl) {
-    if (this.reagendar && !control.value) return { exige_predicao: true };
+  ValidateExigeObjecao(control: AbstractControl) {
+    if (this.exige_objecao && !control.value) return { exige_objecao: true };
     else return null;
   }
 
-  constructor(private formBuilder: FormBuilder, private connectHTTP: ConnectHTTP, private localStorage: LocalStorage) {
+  ValidateReagendar(control: AbstractControl) {
+    if (this.reagendar && !control.value) return { reagendar: true };
+    else return null;
+  }
+
+  constructor(private formBuilder: FormBuilder,
+    private connectHTTP: ConnectHTTP,
+    private localStorage: LocalStorage,
+    private mascaraTelefone: MascaraTelefonePipe) {
     this.questionarioForm = this.formBuilder.group({
       pessoaALigar: [''],
       telefones: [''],
@@ -113,7 +140,14 @@ export class TelemarketingQuestionarioComponent implements OnInit {
     if (changes["pessoa"] && this.pessoa) {
       this.pessoa.subscribe(pessoa => {
         this._pessoaObject = pessoa
+        this._pessoaObject.telefones = this._pessoaObject.telefones.map((telefone) => {
+          return {
+            ...telefone,
+            telefoneCompleto: telefone.ddi + telefone.ddd + telefone.telefone
+          }
+        });
         if (this._eventoObject) this._setQuestionarioForm();
+        this._buscaEventosDaPessoa();
       });
     }
     if (changes["evento"] && this.evento) {
@@ -124,13 +158,27 @@ export class TelemarketingQuestionarioComponent implements OnInit {
     }
   }
 
+  async _buscaEventosDaPessoa() {
+    const usuarioLogado = this.localStorage.getLocalStorage('usuarioLogado') as any;
+
+    let eventosPessoa = await this.connectHTTP.callService({
+      service: 'getEventosLinhaDoTempo',
+      paramsService: {
+        id_usuario: usuarioLogado.id,
+        token: usuarioLogado.token,
+        id_pessoa_receptor: this._pessoaObject.principal.id
+      }
+    }) as any;
+    this.quantEventosDaPessoa = eventosPessoa.resposta.length
+  }
+
   _setQuestionarioForm() {
     this.questionarioForm = this.formBuilder.group({
       pessoaALigar: [this._pessoaObject.principal.nome],
-      telefonePrincipal: this._pessoaObject.telefones.filter(t => {
+      telefonePrincipal: this.mascaraTelefone.transform(this._pessoaObject.telefones.filter(t => {
         if (t.principal)
           return true
-      }).map(telefonePrincipal => `${telefonePrincipal.ddi || '+55'} ${telefonePrincipal.ddd} ${telefonePrincipal.telefone}`),
+      }).map(telefonePrincipal => `${telefonePrincipal.ddi}${telefonePrincipal.ddd}${telefonePrincipal.telefone}`)[0]),
       idTelefoneSelecionado: this._pessoaObject.telefones.filter(t => {
         if (t.principal)
           return true
@@ -141,7 +189,8 @@ export class TelemarketingQuestionarioComponent implements OnInit {
       observacao: ['', [this.ValidateObservacao.bind(this)]],
       data: ['', [this.ValidateReagendar.bind(this)]],
       hora: ['', [this.ValidateReagendar.bind(this)]],
-      id_predicao: ['', [this.ValidateExigePredicao.bind(this)]]
+      id_predicao: ['', [this.ValidateExigePredicao.bind(this)]],
+      id_objecao: ['', [this.ValidateExigeObjecao.bind(this)]]
     })
 
     let data = new Date();
@@ -175,7 +224,7 @@ export class TelemarketingQuestionarioComponent implements OnInit {
   trocaTelefonePrincipal(telefoneId: string) {
     const numTelefone = this._pessoaObject.telefones.filter((t: any) => t.id == telefoneId) as any;
 
-    this.questionarioForm.controls['telefonePrincipal'].setValue(`${numTelefone[0].ddi} ${numTelefone[0].ddd} ${numTelefone[0].telefone}`);
+    this.questionarioForm.controls['telefonePrincipal'].setValue(this.mascaraTelefone.transform(`${numTelefone[0].ddi}${numTelefone[0].ddd} ${numTelefone[0].telefone}`));
     this.questionarioForm.controls['idTelefoneSelecionado'].setValue(telefoneId);
     this.discando = false;
   }
@@ -196,6 +245,10 @@ export class TelemarketingQuestionarioComponent implements OnInit {
         if (motivo.exige_predicao)
           this.exige_predicao = true;
         else this.exige_predicao = false
+
+        if (motivo.exige_objecao)
+          this.exige_objecao = true;
+        else this.exige_objecao = false
 
         self.questionarioForm.controls['observacao'].updateValueAndValidity();
       }
@@ -219,6 +272,7 @@ export class TelemarketingQuestionarioComponent implements OnInit {
         id_motivos_respostas: this.questionarioForm.value.motivoRespostaSelecionado,
         id_telefoneDiscado: this.questionarioForm.value.idTelefoneSelecionado,
         id_predicao: this.questionarioForm.value.id_predicao,
+        id_objecao: this.questionarioForm.value.id_objecao,
         id_campanha: this.campanhaSelecionada,
         observacao: this.questionarioForm.value.observacao,
         data: moment(this.questionarioForm.value.data + ' - ' + this.questionarioForm.value.hora, 'DD/MM/YYYY - hh:mm').toISOString(),
@@ -238,6 +292,7 @@ export class TelemarketingQuestionarioComponent implements OnInit {
     this.reagendar = false;
     this.exige_observacao = null
     this.exige_predicao = null
+    this.exige_objecao = null
     this.discando = false;
     this.podeGravar = false;
     this.motivoRespostaSelecionado = null;

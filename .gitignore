@@ -1,2 +1,3 @@
 interage-back-end/node_modules/**/*
+interage-back-end/tests/node_modules/**/*
 interage-front-end/node_modules/**/*

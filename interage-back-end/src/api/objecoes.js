@@ -1,6 +1,6 @@
 const { checkTokenAccess } = require('./checkTokenAccess');
 
-function getPredicao(req, res) {
+function getObjecoes(req, res) {
   return new Promise(function (resolve, reject) {
 
     checkTokenAccess(req).then(historico => {
@@ -11,15 +11,15 @@ function getPredicao(req, res) {
 
       client.connect()
 
-      let sqlPredicao = `SELECT * from predicao where status=true`
-      client.query(sqlPredicao).then(res => {
-        let predicao = res.rows;
+      let sqlObjecao = `SELECT * from objecoes where status=true`
+      client.query(sqlObjecao).then(res => {
+        let objecao = res.rows;
 
         client.end();
-        resolve(predicao)
+        resolve(objecao)
       }).catch(e => reject(e))
     });
   });
 }
 
-module.exports = { getPredicao }
+module.exports = { getObjecoes }

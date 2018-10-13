@@ -680,13 +680,17 @@ function pesquisaPessoas(req, res) {
 
       if (isNaN(parseInt(req.query.searchText))) {
         pesquisa = `SELECT * FROM pessoas
-            WHERE lower(nome) LIKE '%${pesquisaTexto}%' OR lower(apelido_fantasia) LIKE '%${pesquisaTexto}%' OR lower(cpf_cnpj) LIKE '%${pesquisaTexto}%'`
+            WHERE lower(nome) LIKE '%${pesquisaTexto}%' OR
+            lower(apelido_fantasia)
+            LIKE '%${pesquisaTexto}%' OR
+            lower(cpf_cnpj) LIKE '%${pesquisaTexto}%' limit 100`
       }
       else {
         pesquisa = `SELECT * FROM pessoas
-            WHERE id=${pesquisaTexto}`
+            WHERE id=${pesquisaTexto}
+            limit 100`
       }
-
+      console.log(pesquisa)
       client.query(pesquisa).then((res) => {
         if (res.rowCount > 0) {
           resolve(res.rows);

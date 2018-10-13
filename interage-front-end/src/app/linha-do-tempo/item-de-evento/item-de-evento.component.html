@@ -29,7 +29,9 @@
         <button type="button" class="close pull-right" aria-label="Close" (click)="visualizarDetalhesEvento.hide()">
           <span aria-hidden="true">×</span>
         </button>
-        <h4 *ngIf="eventoSelecionado" class="modal-title w-100" id="myModalLabel">Evento {{eventoSelecionado.motivo}}</h4>
+        <h4 *ngIf="eventoSelecionado" class="modal-title w-100" id="myModalLabel">Evento {{eventoSelecionado.motivo}}
+          <button *ngIf="eventoSelecionado && eventoSelecionado.excedeu_tentativas" mdbBtn type="button" color="danger"
+            size="sm" mdbWavesEffect>Excedeu Tentativas</button></h4>
       </div>
       <div class="modal-body" style="overflow: auto; height: 80vh;">
         <div class="row" style="padding: 0px 15px;">
@@ -93,6 +95,19 @@
                 </div>
               </div>
 
+              <div class="row">
+                <div class="md-form col">
+                  <input mdbInputDirective formControlName="telefone" type="text" id="telefone" class="form-control"
+                    disabled>
+                  <label for="telefone">Telefone Discado</label>
+                </div>
+                <div class="md-form col">
+                  <input mdbInputDirective formControlName="objecao" type="text" id="objecao" class="form-control"
+                    disabled>
+                  <label for="objecao">Objeção</label>
+                </div>
+              </div>
+
 
               <div class="row">
                 <div class="md-form col-6">
@@ -118,6 +133,14 @@
                   <input mdbInputDirective formControlName="dt_resolvido" type="text" id="dt_resolvido" class="form-control"
                     disabled>
                   <label for="dt_resolvido">Resolvido em </label>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="md-form col">
+                  <textarea type="text" formControlName="observacao_origem" id="observacao_origem" class="md-textarea form-control"
+                    mdbInputDirective></textarea>
+                  <label for="observacao_origem">Observação de Origem</label>
                 </div>
               </div>
 

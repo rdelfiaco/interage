@@ -23,10 +23,13 @@ export class ItemDeEventoComponent implements OnInit {
       pessoa_criou: [''],
       destino: [''],
       cliente: [''],
+      telefone: [''],
+      objecao: [''],
       pessoa_visualizou: [''],
       pessoa_resolveu: [''],
       dt_visualizou: [''],
       dt_resolvido: [''],
+      observacao_origem: [''],
       observacao_retorno: [''],
     });
   }
@@ -49,10 +52,13 @@ export class ItemDeEventoComponent implements OnInit {
       pessoa_criou: [evento.pessoa_criou],
       destino: [evento.destino],
       cliente: [evento.cliente],
+      telefone: [evento.telefone],
+      objecao: [evento.objecao],
       pessoa_visualizou: [evento.pessoa_visualizou],
       pessoa_resolveu: [evento.pessoa_resolveu],
       dt_visualizou: [evento.dt_visualizou ? moment(evento.dt_visualizou).format('DD/MM/YYYY hh:mm:ss') : evento.dt_visualizou],
       dt_resolvido: [evento.dt_resolvido ? moment(evento.dt_resolvido).format('DD/MM/YYYY hh:mm:ss') : evento.dt_resolvido],
+      observacao_origem: [evento.observacao_origem],
       observacao_retorno: [evento.observacao_retorno],
     });
   }

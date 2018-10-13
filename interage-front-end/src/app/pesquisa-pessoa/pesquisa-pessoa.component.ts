@@ -100,6 +100,7 @@ export class PesquisaPessoaComponent implements OnInit {
       this.pessoasEncontradas = pessoasEncontradas.resposta;
 
       setTimeout(() => {
+        this.paginators = []
         for (let i = 1; i <= this.pessoasEncontradas.length; i++) {
           if (i % this.maxVisibleItems === 0) {
             this.paginators.push(i / this.maxVisibleItems);
