@@ -135,23 +135,25 @@ function getCampanhaTentando(req, res) {
 
       client.connect()
 
-      let sql = `select tentativas, CASE  WHEN tentativas = 0 THEN count(*) else sum(tentativas) end  as qtde
-        from ( select id_pessoa_receptor, count(*) as tentativas
-            from eventos  
-                where id_evento_pai is not null  
-                  and id_evento_pai in ( select id from eventos where id_campanha = ${req.query.id_campanha}
-                                    and id_evento_pai is null  
-                    and date(dt_criou)   between '${req.query.dtInicial}' and '12/10/2018' )
-            group by id_pessoa_receptor
-            union
-            select id_pessoa_receptor,  0 as tentativas
-                from eventos  
-                  where id_evento_pai is null and id_status_evento in (1,4)
-                      and  id_campanha = 5 and id_evento_pai is null 
-                      and date(dt_criou) between '${req.query.dtInicial}' and '${req.query.dtFinal}' 
-            group by id_pessoa_receptor) a
-        group by tentativas
-        order by tentativas`
+      let sql = `select tentativas, CASE  WHEN tentativas = 0 THEN count(*) else count(tentativas) end  as qtde
+      from ( select id_pessoa_receptor, count(*) as tentativas
+              from eventos  
+              where id_status_evento in (3,7)
+             and CASE  WHEN id_evento_pai is null then id else id_evento_pai end 
+                          in ( select id from eventos where id_campanha = ${req.query.id_campanha}
+                                                              and id_evento_pai is null  
+                              and date(dt_criou) 
+                              between '${req.query.dtInicial}' and '${req.query.dtFinal}' )
+             group by id_pessoa_receptor
+             union
+             select id_pessoa_receptor,  0 as tentativas
+                     from eventos  
+                     where id_evento_pai is null and id_status_evento in (1,4)
+                                  and  id_campanha = 5 and id_evento_pai is null 
+                and date(dt_criou) between '${req.query.dtInicial}' and '${req.query.dtFinal}' 
+             group by id_pessoa_receptor) a
+       group by tentativas
+       order by tentativas`
 
       console.log(sql)
 
