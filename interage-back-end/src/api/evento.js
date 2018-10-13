@@ -18,8 +18,9 @@ function getUmEvento(req, res) {
             or  (tipodestino = 'P' and id_usuario = ${req.query.id_usuario} )
             or  (id_pessoa_visualizou = ${req.query.id_pessoa} and id_status_evento in(5,6)  ))
           and dt_para_exibir <= now()
-          order by dt_para_exibir, id_prioridade desc LIMIT 1`
+          order by id_status_evento desc, id_prioridade, dt_para_exibir LIMIT 1`
 
+      console.log(sql)
       client.query(sql)
         .then(res => {
           if (res.rowCount > 0) {
