@@ -17,7 +17,8 @@ import { FormGroup, FormControl } from '@angular/forms';
 export class AnalisaCampanhaComponent implements OnInit {
 
   prospects: string;
-  tentando: string;
+  tentando: any;
+  predicoes: any;
   usuarioLogado: Usuario;
   agentesVendasSelect: Array<any>;
   campanhaSelect: Array<any>;
@@ -129,6 +130,7 @@ export class AnalisaCampanhaComponent implements OnInit {
       }) as any;
       this.prospects = analisarCampanha.resposta.campanhaProspects[0].prospects;
       this.tentando = analisarCampanha.resposta.campanhaTentando;
+      this.predicoes = analisarCampanha.resposta.campanhaPredicoes;
     }
     catch (e) {
       this.toastrService.error(e.error);

@@ -1,4 +1,5 @@
 const { checkTokenAccess } = require('./checkTokenAccess');
+const { getPredicoesCampanha } = require('./predicao');
 
 function getCampanhasDoUsuario(req, res) {
   return new Promise(function (resolve, reject) {
@@ -71,11 +72,15 @@ function getCampanhaAnalisar(req, res) {
       console.log('oll')
       getCampanhaProspects(req).then(campanhaProspects => {
         getCampanhaTentando(req).then(campanhaTentando => {
+          getPredicoesCampanha(req).then(campanhaPredicoes => {
 
-          if (!campanhaProspects || !campanhaTentando) reject('Campanha sem retorno');
+            if (!campanhaProspects || !campanhaTentando || !campanhaPredicoes) reject('Campanha sem retorno');
 
-          resolve({ campanhaProspects, campanhaTentando });
+            resolve({ campanhaProspects, campanhaTentando, campanhaPredicoes });
 
+          }).catch(e => {
+            reject(e);
+          });
         }).catch(e => {
           reject(e);
         });
