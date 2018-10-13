@@ -64,6 +64,31 @@ function getCampanhas(req, res) {
 	})
 }
 
+function getCampanhaAnalisar(req, res) {
+	return new Promise(function (resolve, reject) {
+  
+	  checkTokenAccess(req).then(historico => {
+		  console.log('oll')
+		getCampanhaProspects(req).then(campanhaProspects => {
+			getCampanhaTentando(req).then(campanhaTentando => {
+			
+				if (!campanhaProspects || !campanhaTentando ) reject('Campanha sem retorno');
+  
+				resolve({ campanhaProspects, campanhaTentando });
+
+		  }).catch(e => {
+			reject(e);
+		  });
+		}).catch(e => {
+		  reject(e);
+		});
+	  }).catch(e => {
+		reject(e)
+	  })
+	})
+  }
+
+
 function getCampanhaProspects(req, res) {
 	return new Promise(function (resolve, reject) {
 
@@ -77,9 +102,10 @@ function getCampanhaProspects(req, res) {
 			
 			let sql = `select count(*) as prospects from eventos 
 						where id_campanha = ${req.query.id_campanha} 
-						and dt_criou between '${req.query.dtInicial}' and '${req.query.dtFinal}'
+						and date(dt_criou) between '${req.query.dtInicial}' and '${req.query.dtFinal}'
 						and id_evento_pai is null`
-			
+			console.log(sql)
+
 			client.query(sql)
 				.then(res => {
 					if (res.rowCount > 0) {
@@ -127,6 +153,8 @@ function getCampanhaTentando(req, res) {
 						
 						order by tentativas`
 
+		    console.log(sql)
+
 			client.query(sql)
 				.then(res => {
 					if (res.rowCount > 0) {
@@ -145,4 +173,4 @@ function getCampanhaTentando(req, res) {
 	})
 }
 
-module.exports = { getCampanhasDoUsuario, getCampanhas, getCampanhaProspects, getCampanhaTentando }
+module.exports = { getCampanhasDoUsuario, getCampanhas, getCampanhaAnalisar }

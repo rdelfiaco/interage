@@ -294,8 +294,8 @@ app.get('/getEventosLinhaDoTempo', (req, res) => {
     })
 });
 
-app.get('/getCampanhaProspects', (req, res) => {
-  campanha.getCampanhaProspects(req)
+app.get('/getCampanhaAnalisar', (req, res) => {
+  campanha.getCampanhaAnalisar(req)
     .then(linhas => {
       headerResponse(res)
       res.status(200).send(linhas)
@@ -306,6 +306,7 @@ app.get('/getCampanhaProspects', (req, res) => {
       res.status(401).send(error)
     })
 });
+
 
 
 app.listen(nodeStart.port, "0.0.0.0");

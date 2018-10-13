@@ -7,6 +7,7 @@ import { ConnectHTTP } from '../shared/services/connectHTTP';
 import { LocalStorage } from '../shared/services/localStorage';
 import { IMyOptions } from '../../lib/ng-uikit-pro-standard';
 import * as moment from 'moment';
+import { FormGroup, FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-analisa-campanha',
@@ -15,12 +16,13 @@ import * as moment from 'moment';
 })
 export class AnalisaCampanhaComponent implements OnInit {
 
-
+  prospects: string;
   usuarioLogado: Usuario;
   agentesVendasSelect: Array<any>;
   campanhaSelect: Array<any>;
   analisaCampanhaTabela: Array<any>;
   prospectsResposta: Array<any>;
+  tentandoResposta: Array<any>;
   agentesVendasSelectValue: string;
   campanhaSelectValue : string;
   dataInicial: string = moment().format('DD/MM/YYYY')
@@ -75,6 +77,7 @@ export class AnalisaCampanhaComponent implements OnInit {
     this.usuarioLogado = this.localStorage.getLocalStorage('usuarioLogado') as Usuario;
 
 
+
   }
 
   async ngOnInit() {
@@ -110,13 +113,14 @@ export class AnalisaCampanhaComponent implements OnInit {
     } )
     this.campanhaSelectValue = this.campanhaSelect[0].value;
 
-    
+    this.analisarCampanha();
+
   };
 
 
   async analisarCampanha() {
     let analisarCampanha = await this.connectHTTP.callService({
-      service: 'getCampanhaProspects',
+      service: 'getCampanhaAnalisar',
       paramsService: {
         token: this.usuarioLogado.token,
         id_usuario: this.usuarioLogado.id,        
@@ -125,14 +129,20 @@ export class AnalisaCampanhaComponent implements OnInit {
         dtInicial: this.dataInicial,
         dtFinal: this.dataFinal
       }
-    });
+    }) as any;
      
-    this.prospectsResposta = analisarCampanha.resposta as Array<object>;
+    this.prospects = analisarCampanha.resposta.campanhaProspects[0].prospects;
 
-    console.log(this.prospectsResposta)
+   
+    console.log(analisarCampanha.resposta.campanhaProspects[0].prospects);
 
-  };
+    console.log(this.tentandoResposta)
+
+
+
+  }; 
  
+
 
 
 }
