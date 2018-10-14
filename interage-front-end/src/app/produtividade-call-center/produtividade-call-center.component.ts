@@ -29,14 +29,14 @@ export class ProdutividadeCallCenterComponent implements OnInit {
   campanhaSelect: Array<any>;
   campanhaSelectValue: string;
 
-  eventosPendentesDepartamento: Array<any>;
-  eventosPendentesUsuario: Array<any>;
-  eventosTentandoUsuario: Array<any>;
-  eventosTentandoDepartamento: Array<any>;
-  eventosPredicaoUsuario: Array<any>;
-  eventosPredicaoDepartamento: Array<any>;
-  eventosResultadoUsuario: Array<any>;
-  eventosResultadoDepartamento: Array<any>;
+  eventosPendentesDepartamento: Array<any> = [];
+  eventosPendentesUsuario: Array<any> = [];
+  eventosTentandoUsuario: Array<any> = [];
+  eventosTentandoDepartamento: Array<any> = [];
+  eventosPredicaoUsuario: Array<any> = [];
+  eventosPredicaoDepartamento: Array<any> = [];
+  eventosResultadoUsuario: Array<any> = [];
+  eventosResultadoDepartamento: Array<any> = [];
 
   dataInicial: string = moment().startOf('month').format('DD/MM/YYYY')
   dataFinal: string = moment().endOf('month').format('DD/MM/YYYY')
@@ -92,6 +92,7 @@ export class ProdutividadeCallCenterComponent implements OnInit {
   }
 
   async ngOnInit() {
+    debugger
     let agentesVendas = await this.connectHTTP.callService({
       service: 'getAgentesVendas',
       paramsService: {

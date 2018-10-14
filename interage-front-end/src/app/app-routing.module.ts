@@ -31,17 +31,17 @@ const routes: Routes = [
   },
   {
     path: 'admin',
-    component: EventoComponent,
+    component: ProdutividadeCallCenterComponent,
     canActivate: [AuthGuard]
   },
   {
     path: 'operador',
-    component: EventoComponent,
+    component: ProdutividadeCallCenterComponent,
     canActivate: [AuthGuard]
   },
   {
     path: 'supervisor',
-    component: EventoComponent,
+    component: ProdutividadeCallCenterComponent,
     canActivate: [AuthGuard]
   },
   {
