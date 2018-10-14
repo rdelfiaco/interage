@@ -95,18 +95,11 @@
                 </div>
               </div>
 
-
-
               <div class="row">
-                <div class="md-form col-6">
-                  <input mdbInputDirective formControlName="pessoa_visualizou" type="text" id="pessoa_visualizou" class="form-control"
-                    disabled>
-                  <label for="pessoa_visualizou">Visualizado por</label>
-                </div>
-                <div class="md-form col-6">
-                  <input mdbInputDirective formControlName="pessoa_resolveu" type="text" id="pessoa_resolveu" class="form-control"
-                    disabled>
-                  <label for="pessoa_resolveu">Resolvido por</label>
+                <div class="md-form col">
+                  <textarea type="text" formControlName="observacao_origem" id="observacao_origem" class="md-textarea form-control"
+                    mdbInputDirective></textarea>
+                  <label for="observacao_origem">Observação de Origem</label>
                 </div>
               </div>
 
@@ -124,15 +117,23 @@
                 </div>
               </div>
 
+
               <div class="row">
-                <div class="md-form col">
-                  <textarea type="text" formControlName="observacao_origem" id="observacao_origem" class="md-textarea form-control"
-                    mdbInputDirective></textarea>
-                  <label for="observacao_origem">Observação de Origem</label>
+                <div class="md-form col-6">
+                  <input mdbInputDirective formControlName="pessoa_visualizou" type="text" id="pessoa_visualizou" class="form-control"
+                    disabled>
+                  <label for="pessoa_visualizou">Visualizado por</label>
+                </div>
+                <div class="md-form col-6">
+                  <input mdbInputDirective formControlName="pessoa_resolveu" type="text" id="pessoa_resolveu" class="form-control"
+                    disabled>
+                  <label for="pessoa_resolveu">Resolvido por</label>
                 </div>
               </div>
 
-              
+
+
+
               <div class="row">
                 <div class="md-form col">
                   <input mdbInputDirective formControlName="telefone" type="text" id="telefone" class="form-control"
