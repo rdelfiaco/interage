@@ -15,6 +15,7 @@ import { TelemarketingComponent } from './telemarketing/telemarketing.component'
 import { PesquisaPessoaComponent } from './pesquisa-pessoa/pesquisa-pessoa.component';
 import { CadastroPessoaComponent } from './cadastro-pessoa/cadastro-pessoa.component';
 import { AnalisaCampanhaComponent } from './analisa-campanha/analisa-campanha.component';
+import { ProdutividadeCallCenterComponent } from './produtividade-call-center/produtividade-call-center.component';
 
 
 
@@ -66,6 +67,11 @@ const routes: Routes = [
   {
     path: 'analisaCampanha',
     component: AnalisaCampanhaComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'produtividadeCallCenter',
+    component: ProdutividadeCallCenterComponent,
     canActivate: [AuthGuard]
   },
   {

@@ -45,7 +45,8 @@ function getCampanhas(req, res) {
 
       client.connect()
 
-      let sql = `SELECT * FROM campanhas order by nome`
+	  let sql = `SELECT id, nome, to_char(dt_inicio, 'dd/mm/yyyy') as dt_inicio 
+	  , to_char(dt_fim , 'dd/mm/yyyy') as dt_fim FROM public.campanhas`
 
       client.query(sql)
         .then(res => {
@@ -69,7 +70,6 @@ function getCampanhaAnalisar(req, res) {
   return new Promise(function (resolve, reject) {
 
     checkTokenAccess(req).then(historico => {
-      console.log('oll')
       getCampanhaProspects(req).then(campanhaProspects => {
         getCampanhaTentando(req).then(campanhaTentando => {
           getPredicoesCampanha(req).then(campanhaPredicoes => {
@@ -113,7 +113,7 @@ function getCampanhaProspects(req, res) {
 						where id_campanha = ${req.query.id_campanha} 
 						and date(dt_criou) between '${req.query.dtInicial}' and '${req.query.dtFinal}'
 						and id_evento_pai is null`
-      console.log(sql)
+      
 
       client.query(sql)
         .then(res => {
@@ -164,7 +164,7 @@ function getCampanhaTentando(req, res) {
        group by tentativas
        order by tentativas`
 
-      console.log(sql)
+      
 
       client.query(sql)
         .then(res => {
@@ -215,7 +215,7 @@ function getCampanhaResultado(req, res) {
                 
                 order by id`
 
-      console.log(sql)
+      
 
       client.query(sql)
         .then(res => {

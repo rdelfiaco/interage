@@ -7,14 +7,14 @@ import { ConnectHTTP } from '../shared/services/connectHTTP';
 import { LocalStorage } from '../shared/services/localStorage';
 import { IMyOptions, ToastService } from '../../lib/ng-uikit-pro-standard';
 import * as moment from 'moment';
-import { FormGroup, FormControl } from '@angular/forms';
 
 @Component({
-  selector: 'app-analisa-campanha',
-  templateUrl: './analisa-campanha.component.html',
-  styleUrls: ['./analisa-campanha.component.scss']
+  selector: 'app-produtividade-call-center',
+  templateUrl: './produtividade-call-center.component.html',
+  styleUrls: ['./produtividade-call-center.component.scss']
 })
-export class AnalisaCampanhaComponent implements OnInit {
+export class ProdutividadeCallCenterComponent implements OnInit {
+
 
   prospects: string;
   tentando: any;
@@ -22,14 +22,22 @@ export class AnalisaCampanhaComponent implements OnInit {
   resultado: any;
   usuarioLogado: Usuario;
   agentesVendasSelect: Array<any>;
-  campanhaSelect: Array<any>;
-  analisaCampanhaTabela: Array<any>;
-  prospectsResposta: Array<any>;
-  tentandoResposta: Array<any>;
   agentesVendasSelectValue: string;
+
+  campanhaSelect: Array<any>;
   campanhaSelectValue: string;
-  dataInicial: string //= moment().format('DD/MM/YYYY')
-  dataFinal: string //= moment().format('DD/MM/YYYY')
+
+  eventosPendentesDepartamento: Array<any>;
+  eventosPendentesUsuario: Array<any>;
+  eventosTentandoUsuario: Array<any>;
+  eventosTentandoDepartamento: Array<any>;
+  eventosPredicaoUsuario: Array<any>;
+  eventosPredicaoDepartamento: Array<any>;
+  eventosResultadoUsuario: Array<any>;
+  eventosResultadoDepartamento: Array<any>;
+
+  dataInicial: string = moment().startOf('month').format('DD/MM/YYYY')
+  dataFinal: string = moment().endOf('month').format('DD/MM/YYYY')
 
 
 
@@ -97,47 +105,62 @@ export class AnalisaCampanhaComponent implements OnInit {
     });
 
     this.agentesVendasSelectValue = this.agentesVendasSelect[0].value;
+    
+    // this.agentesVendasSelectValue = this.usuarioLogado.id_pessoa.toString ;
 
-    let campanha = await this.connectHTTP.callService({
-      service: 'getCampanhas',
-      paramsService: {
-        token: this.usuarioLogado.token,
-        id_usuario: this.usuarioLogado.id,
-        id_organograma: this.usuarioLogado.id_organograma,
-      }
-    });
-    this.campanhaSelect = campanha.resposta as Array<object>;
-    this.dataInicial = this.campanhaSelect[0].dt_inicio;
-    this.dataFinal =  this.campanhaSelect[0].dt_fim;
-    this.campanhaSelect = this.campanhaSelect.map(campanha => {
-      return { value: campanha.id, label: campanha.nome }
-    })
-    this.campanhaSelectValue = this.campanhaSelect[0].value;
+    // let campanha = await this.connectHTTP.callService({
+    //   service: 'getCampanhas',
+    //   paramsService: {
+    //     token: this.usuarioLogado.token,
+    //     id_usuario: this.usuarioLogado.id,
+    //     id_organograma: this.usuarioLogado.id_organograma,
+    //   }
+    // });
+    // this.campanhaSelect = campanha.resposta as Array<object>;
+    // this.dataInicial = this.campanhaSelect[0].dt_inicio;
+    // this.dataFinal =  this.campanhaSelect[0].dt_fim;
+    // this.campanhaSelect = this.campanhaSelect.map(campanha => {
+    //   return { value: campanha.id, label: campanha.nome }
+    // })
+    // this.campanhaSelectValue = this.campanhaSelect[0].value;
 
-    this.analisarCampanha();
+    this.produtividadeCallCenter();
   };
 
 
-  async analisarCampanha() {
+  async produtividadeCallCenter() {
     try {
-      let analisarCampanha = await this.connectHTTP.callService({
-        service: 'getCampanhaAnalisar',
+      let getProdutividadeCallCenter = await this.connectHTTP.callService({
+        service: 'getProdutividadeCallCenter',
         paramsService: {
           token: this.usuarioLogado.token,
           id_usuario: this.usuarioLogado.id,
+          id_pessoa_usuario_select: this.agentesVendasSelectValue,
           id_organograma: this.usuarioLogado.id_organograma,
-          id_campanha: this.campanhaSelectValue,
+          id_campanha: 5,
           dtInicial: this.dataInicial,
           dtFinal: this.dataFinal
         }
       }) as any;
-      this.prospects = analisarCampanha.resposta.campanhaProspects[0].prospects;
-      this.tentando = analisarCampanha.resposta.campanhaTentando;
-      this.predicoes = analisarCampanha.resposta.campanhaPredicoes;
-      this.resultado = analisarCampanha.resposta.campanhaResultado;
+     
+      console.log(getProdutividadeCallCenter);
+      
+
+      this.eventosPendentesDepartamento = getProdutividadeCallCenter.resposta.EventosPendentesDepartamento;
+      this.eventosPendentesUsuario = getProdutividadeCallCenter.resposta.EventosPendentesUsuario;
+      this.eventosTentandoDepartamento = getProdutividadeCallCenter.resposta.EventosTentandoDepartamento;
+      this.eventosTentandoUsuario = getProdutividadeCallCenter.resposta.EventosTentandoUsuario;
+      this.eventosPredicaoDepartamento = getProdutividadeCallCenter.resposta.EventosPredicaoDepartamento;
+      this.eventosPredicaoUsuario = getProdutividadeCallCenter.resposta.EventosPredicao;
+      this.eventosResultadoDepartamento = getProdutividadeCallCenter.resposta.EventosResultadoDepartamento;
+      this.eventosResultadoUsuario = getProdutividadeCallCenter.resposta.EventosResultado;
+
+
+
     }
     catch (e) {
       this.toastrService.error(e.error);
     }
   };
 }
+

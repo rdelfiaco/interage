@@ -78,7 +78,7 @@ function getAgentesVendas(req, res) {
 
 			client.connect()
 
-			let sql = 'SELECT id_pessoa, login FROM usuarios order by login'
+			let sql = `SELECT id_pessoa, login FROM usuarios where id_organograma = 4 and responsavel_membro = 'M' order by login`
 
 			client.query(sql)
 				.then(res => {
