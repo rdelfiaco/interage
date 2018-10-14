@@ -68,34 +68,36 @@ function generateTokenUserAcess() {
 
 
 function getAgentesVendas(req, res) {
-	return new Promise(function (resolve, reject) {
+  return new Promise(function (resolve, reject) {
 
-		checkTokenAccess(req).then(historico => {
-			const dbconnection = require('../config/dbConnection')
-			const { Client } = require('pg')
+    checkTokenAccess(req).then(historico => {
+      const dbconnection = require('../config/dbConnection')
+      const { Client } = require('pg')
 
-			const client = new Client(dbconnection)
+      const client = new Client(dbconnection)
 
-			client.connect()
+      client.connect()
 
-			let sql = `SELECT id_pessoa, login FROM usuarios where id_organograma = 4 and responsavel_membro = 'M' order by login`
+      let sql = `SELECT pessoas.nome, usuarios.id_pessoa FROM usuarios
+                  INNER JOIN pessoas ON pessoas.id = usuarios.id_pessoa
+                  WHERE id_organograma = 4 and responsavel_membro = 'M' order by pessoas.nome`
 
-			client.query(sql)
-				.then(res => {
-					if (res.rowCount > 0) {
-						let agentesVendas = res.rows;
+      client.query(sql)
+        .then(res => {
+          if (res.rowCount > 0) {
+            let agentesVendas = res.rows;
 
-						client.end();
-						resolve(agentesVendas)
-					}
-					reject('Usuário não encontrado')
-				}
-				)
-				.catch(err => console.log(err)) //reject( err.hint ) )
-		}).catch(e => {
-			reject(e)
-		})
-	})
+            client.end();
+            resolve(agentesVendas)
+          }
+          reject('Usuário não encontrado')
+        }
+        )
+        .catch(err => console.log(err)) //reject( err.hint ) )
+    }).catch(e => {
+      reject(e)
+    })
+  })
 }
 
 module.exports = { login, logout, getAgentesVendas }  

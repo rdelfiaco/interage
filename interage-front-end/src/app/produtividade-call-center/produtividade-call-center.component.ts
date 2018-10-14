@@ -23,6 +23,7 @@ export class ProdutividadeCallCenterComponent implements OnInit {
   usuarioLogado: Usuario;
   agentesVendasSelect: Array<any>;
   agentesVendasSelectValue: string;
+  agentesVendasSelectNome: string;
 
   campanhaSelect: Array<any>;
   campanhaSelectValue: string;
@@ -101,32 +102,17 @@ export class ProdutividadeCallCenterComponent implements OnInit {
 
     this.agentesVendasSelect = agentesVendas.resposta as Array<object>;
     this.agentesVendasSelect = this.agentesVendasSelect.map(agenteVenda => {
-      return { value: agenteVenda.id_pessoa, label: agenteVenda.login }
+      return { value: agenteVenda.id_pessoa, label: agenteVenda.nome }
     });
 
     this.agentesVendasSelectValue = this.agentesVendasSelect[0].value;
-    
-    // this.agentesVendasSelectValue = this.usuarioLogado.id_pessoa.toString ;
-
-    // let campanha = await this.connectHTTP.callService({
-    //   service: 'getCampanhas',
-    //   paramsService: {
-    //     token: this.usuarioLogado.token,
-    //     id_usuario: this.usuarioLogado.id,
-    //     id_organograma: this.usuarioLogado.id_organograma,
-    //   }
-    // });
-    // this.campanhaSelect = campanha.resposta as Array<object>;
-    // this.dataInicial = this.campanhaSelect[0].dt_inicio;
-    // this.dataFinal =  this.campanhaSelect[0].dt_fim;
-    // this.campanhaSelect = this.campanhaSelect.map(campanha => {
-    //   return { value: campanha.id, label: campanha.nome }
-    // })
-    // this.campanhaSelectValue = this.campanhaSelect[0].value;
+    this.agentesVendasSelectNome = this.agentesVendasSelect[0].label;
 
     this.produtividadeCallCenter();
   };
-
+  setNomeAtendente(value) {
+    this.agentesVendasSelectNome = value.label;
+  }
 
   async produtividadeCallCenter() {
     try {
@@ -142,21 +128,18 @@ export class ProdutividadeCallCenterComponent implements OnInit {
           dtFinal: this.dataFinal
         }
       }) as any;
-     
-      console.log(getProdutividadeCallCenter);
-      
 
+      debugger;
       this.eventosPendentesDepartamento = getProdutividadeCallCenter.resposta.EventosPendentesDepartamento;
-      this.eventosPendentesUsuario = getProdutividadeCallCenter.resposta.EventosPendentesUsuario;
       this.eventosTentandoDepartamento = getProdutividadeCallCenter.resposta.EventosTentandoDepartamento;
-      this.eventosTentandoUsuario = getProdutividadeCallCenter.resposta.EventosTentandoUsuario;
       this.eventosPredicaoDepartamento = getProdutividadeCallCenter.resposta.EventosPredicaoDepartamento;
-      this.eventosPredicaoUsuario = getProdutividadeCallCenter.resposta.EventosPredicao;
       this.eventosResultadoDepartamento = getProdutividadeCallCenter.resposta.EventosResultadoDepartamento;
+
+
+      this.eventosPendentesUsuario = getProdutividadeCallCenter.resposta.EventosPendentesUsuario;
+      this.eventosTentandoUsuario = getProdutividadeCallCenter.resposta.EventosTentandoUsuario;
+      this.eventosPredicaoUsuario = getProdutividadeCallCenter.resposta.EventosPredicao;
       this.eventosResultadoUsuario = getProdutividadeCallCenter.resposta.EventosResultado;
-
-
-
     }
     catch (e) {
       this.toastrService.error(e.error);
