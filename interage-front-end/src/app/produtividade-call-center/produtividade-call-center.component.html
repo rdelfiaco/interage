@@ -1,0 +1,174 @@
+<div class="card card-cascade narrower">
+
+    <!--Card image-->
+    <div class="view view-cascade gradient-card-header blue-gradient narrower py-1 mx-2  d-flex justify-content-center align-items-center">
+  
+      <h4 class="white-text font-weight-bold text-uppercase ">Produtividade</h4>
+  
+    </div>
+    <!-- Card Filtros -->
+    <div>
+      <div class="row ">
+        <div class="col-6 col-sm-3">
+          <div class="row justify-content-around">
+            <div class="col-6 col-sm-6">
+              <div class="md-form datas">
+                <mdb-date-picker #dataEventos name="mydate" [options]="myDatePickerOptions" required [(ngModel)]="dataInicial"
+                  class="datas"></mdb-date-picker>
+                <label class="datas" style="height: 10px">Data inicial</label>
+              </div>
+            </div>
+            <div class="col-6 col-sm-6">
+              <div class="md-form datas">
+                <mdb-date-picker #dataEventos name="mydate" [options]="myDatePickerOptions" required [(ngModel)]="dataFinal"
+                  class="datas"></mdb-date-picker>
+                <label class="datas" style="height: 10px">Data final</label>
+              </div>
+            </div>
+          </div>
+  
+        </div>
+        <!-- <div class="col-6 col-sm-4 " style="z-index: 0">
+  
+          <div class="row" style="margin-top: 30px">
+            <div class="col-md-12">
+              <mdb-select [(ngModel)]="campanhaSelectValue" [options]="campanhaSelect" placeholder="Escolha a campanha"
+                style="font-size: 0.5rem;"></mdb-select>
+              <label>Campanha</label>
+            </div>
+          </div>
+        </div> -->
+        <div class="col-6 col-sm-4" style="z-index: 0">
+  
+                <div class="row" style="margin-top: 30px" >
+                    <div class="col-md-12">
+                        <mdb-select  [(ngModel)]="agentesVendasSelectValue"   [options]="agentesVendasSelect" placeholder="Escolha os Agentes de vendas"
+                        style="font-size: 0.5rem;" ></mdb-select>
+                        <label>Agentes de venda interna</label>
+                    </div>
+                </div>
+            </div>
+        <div class="col-6 col-sm-1 " style="z-index: 0">
+          <div class="row justify-content-around">
+            <a mdbBtn floating="true" size="lg" gradient="blue" (click)="produtividadeCallCenter()" mdbWavesEffect>
+              <mdb-icon icon="bolt"></mdb-icon>
+            </a>
+          </div>
+  
+        </div>
+      </div>
+    </div>
+  
+    <br>
+    <br>
+      <div class="row no-gutters justify-content-center">
+        <!-- Funil do Departamento -->
+        <div class="relatorioFunil col-md-6 justify-content-center align-items-center">
+          <div class="bocaFunil">
+          </div>
+          <div class="propect" >
+            <span title="Eventos pendentes departamento" > {{eventosPendentesDepartamento[0].eventos_depatamentos}}</span>
+          </div>
+          <div class="tentando" title="Tentando">
+            <div class="table_scroll">
+              <table class="table table-bordered table-striped">
+                <!--Table head-->
+                <thead>
+                  <tr>
+                    <th class="justify-content-center">Tentativas</th>
+                    <th class="justify-content-center">Ligações</th>
+                    <th class="justify-content-center">Clientes</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let t of eventosTentandoDepartamento">
+                    <td class="justify-content-center">{{t.tentativas}}</td>
+                    <td class="justify-content-center">{{t.ligacoes}}</td>
+                    <td class="justify-content-center">{{t.clientes}}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="fundoFunil">
+            <span *ngIf="EventosPredicao" [title]="EventosPredicao[0].nome">{{EventosPredicao[0].count}}</span>
+            <span *ngIf="EventosPredicao" [title]="EventosPredicao[1].nome">{{EventosPredicao[1].count}}</span>
+            <span *ngIf="EventosPredicao" [title]="EventosPredicao[2].nome">{{EventosPredicao[2].count}}</span>
+          </div>
+          <div class="row resultado">
+            <div *ngIf="EventosResultado" class="col-4 acerto" [title]="EventosResultado[0].descricao">
+              <div>
+                <span>{{EventosResultado[0].qdte}}</span>
+              </div>
+            </div>
+            <div *ngIf="EventosResultado" class="col-4 alvoErro" [title]="EventosResultado[1].descricao">
+              <div>
+                <span>{{EventosResultado[1].qdte}}</span>
+              </div>
+            </div>
+            <div *ngIf="EventosResultado" class="col-4 excedeu" [title]="EventosResultado[2].descricao">
+              <div>
+                <span>{{EventosResultado[2].qdte}}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Funil do usuário selecionado   -->
+        <div class="relatorioFunil col-md-6 justify-content-center align-items-center">
+            <div class="bocaFunil">
+            </div>
+            <div class="propect" >
+              <span title="Eventos pendentes do usuário" > {{eventosPendentesUsuario[0].eventos_usuarios}}</span>
+            </div>
+            <div class="tentando" title="Tentando">
+              <div class="table_scroll">
+                <table class="table table-bordered table-striped">
+                  <!--Table head-->
+                  <thead>
+                    <tr>
+                      <th class="justify-content-center">Tentativas</th>
+                      <th class="justify-content-center">Ligações</th>
+                      <th class="justify-content-center">Clientes</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let t of eventosTentando">
+                      <td class="justify-content-center">{{t.tentativas}}</td>
+                      <td class="justify-content-center">{{t.ligacoes}}</td>
+                      <td class="justify-content-center">{{t.clientes}}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div class="fundoFunil">
+              <span *ngIf="eventosPredicao" [title]="eventosPredicao[0].nome">{{eventosPredicao[0].count}}</span>
+              <span *ngIf="eventosPredicao" [title]="eventosPredicao[1].nome">{{eventosPredicao[1].count}}</span>
+              <span *ngIf="eventosPredicao" [title]="eventosPredicao[2].nome">{{eventosPredicao[2].count}}</span>
+            </div>
+            <div class="row resultado">
+              <div *ngIf="eventosResultado" class="col-4 acerto" [title]="eventosResultado[0].descricao">
+                <div>
+                  <span>{{eventosResultado[0].qdte}}</span>
+                </div>
+              </div>
+              <div *ngIf="eventosResultado" class="col-4 alvoErro" [title]="eventosResultado[1].descricao">
+                <div>
+                  <span>{{eventosResultado[1].qdte}}</span>
+                </div>
+              </div>
+              <div *ngIf="eventosResultado" class="col-4 excedeu" [title]="eventosResultado[2].descricao">
+                <div>
+                  <span>{{eventosResultado[2].qdte}}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+      </div>
+
+
+
+
+  </div>

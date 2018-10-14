@@ -1,0 +1,116 @@
+.relatorioFunil {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 60px;
+}
+
+.dtCriacao {
+    padding-left: 0px;
+    grid-column-gap: 2px;
+}
+
+
+.datas {
+    padding: 0 0 0 0;
+    margin-top: 5px;
+    margin-left: 5px;
+    font-size: 0.9rem;
+    height: 60px;
+}
+
+.bocaFunil {
+    background: url("./img/pessoas_funil.png") no-repeat center center;
+    height: 40px;
+    width: 500px;
+    background-size: contain;
+}
+
+.propect {
+    background: url("./img/nivel_1_funil_interage.png") no-repeat center center;
+    height: 80px;
+    width: 500px;
+    background-size: contain;
+    margin-top: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.tentando {
+    background: url("./img/nivel_2_funil_interage.png") no-repeat center center;
+    height: 205px;
+    width: 500px;
+    background-size: contain;
+    margin-top: 10px;
+    display: flex;
+    justify-content: center;
+    & .table_scroll {
+        display: block;
+        max-height: 200px;
+        width: 35%;
+        overflow-y: auto;
+        margin-top: 2px;
+        & tbody td,
+        & thead th {
+            padding: 5px;
+            color: white;
+            font-size: 0.8em;
+            font-weight: 800;
+        }
+    }
+}
+
+.fundoFunil {
+    background: url("./img/nivel_3_funil_interage.png") no-repeat center center;
+    height: 207px;
+    width: 500px;
+    background-size: contain;
+    margin-top: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: column;
+}
+
+.resultado {
+    display: flex;
+    width: 370px;
+    & .acerto {
+        background: url("./img/alvo.png") no-repeat center center;
+        height: 80px;
+        background-size: contain;
+        margin-top: 10px;
+    }
+    & .alvoErro {
+        background: url("./img/fora_do_alvo.png") no-repeat center center;
+        height: 80px;
+        background-size: contain;
+        margin-top: 10px;
+    }
+    & .excedeu {
+        background: url("./img/excedeu.png") no-repeat center center;
+        height: 80px;
+        background-size: contain;
+        margin-top: 10px;
+    }
+    & div {
+        height: 114px;
+        display: flex;
+        justify-content: center;
+        & span {
+            align-self: flex-end;
+            font-size: 1.2em;
+            font-weight: 600;
+        }
+    }
+}
+
+.propect,
+.tentando,
+.fundoFunil {
+    & span {
+        font-size: 2.5em;
+        color: white;
+        font-weight: 800;
+    }
+}

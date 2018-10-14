@@ -8,6 +8,7 @@ const evento = require('./src/api/evento');
 const telemarketing = require('./src/api/telemarketing');
 const pessoa = require('./src/api/pessoa');
 const atividade = require('./src/api/atividade');
+const produtividade = require('./src/api/produtividade');
 
 
 
@@ -307,7 +308,18 @@ app.get('/getCampanhaAnalisar', (req, res) => {
     })
 });
 
-
+app.get('/getProdutividadeCallCenter', (req, res) => {
+  produtividade.getProdutividadeCallCenter(req)
+    .then(linhas => {
+      headerResponse(res)
+      res.status(200).send(linhas)
+    })
+    .catch(error => {
+      headerResponse(res)
+      console.log(error)
+      res.status(401).send(error)
+    })
+});
 
 app.listen(nodeStart.port, "0.0.0.0");
 console.log(`Servidor iniciado na em http://localhost:${nodeStart.port}`)
