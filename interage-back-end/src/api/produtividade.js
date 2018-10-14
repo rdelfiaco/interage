@@ -1,29 +1,28 @@
 const { checkTokenAccess } = require('./checkTokenAccess');
 
 function getProdutividadeCallCenter(req, res) {
-    return new Promise(function (resolve, reject) {
-  
-      checkTokenAccess(req).then(historico => {
-        getEventosPendentesDepartamento(req).then(EventosPendentesDepartamento => {
-          getEventosPendentesUsuario(req).then(EventosPendentesUsuario => {
-            getEventosTentandoDepartamento(req).then(EventosTentandoDepartamento => {
-              getEventosTentandoUsuario(req).then(EventosTentandoUsuario => {
-                getEventosPredicaoDepartamento(req).then(EventosPredicaoDepartamento => {
-                  getEventosPredicaoUsuario(req).then(EventosPredicaoUsuario => {
-                    getEventosResultadoDepartamento(req).then(EventosResultadoDepartamento => {
-                      getEventosResultadoUsuario(req).then(EventosResultadoUsuario => {
-                        if (!EventosPendentesDepartamento || !EventosPendentesUsuario 
-                          || !EventosTentandoDepartamento ||  !EventosTentandoUsuario 
-                          || !EventosPredicaoDepartamento || !EventosPredicaoUsuario 
-                          || !EventosResultadoDepartamento || !EventosResultadoUsuario ) 
-                          reject('Produtividade sem retorno');
-        
-                        resolve({ EventosPendentesDepartamento, EventosPendentesUsuario, 
-                          EventosTentandoDepartamento,EventosTentandoUsuario, 
-                          EventosPredicaoDepartamento, EventosPredicaoUsuario,
-                          EventosResultadoDepartamento, EventosResultadoUsuario });
-                        }).catch(e => {
-                          reject(e);
+  return new Promise(function (resolve, reject) {
+
+    checkTokenAccess(req).then(historico => {
+      getEventosPendentesDepartamento(req).then(EventosPendentesDepartamento => {
+        getEventosPendentesUsuario(req).then(EventosPendentesUsuario => {
+          getEventosTentandoDepartamento(req).then(EventosTentandoDepartamento => {
+            getEventosTentandoUsuario(req).then(EventosTentandoUsuario => {
+              getEventosPredicaoDepartamento(req).then(EventosPredicaoDepartamento => {
+                getEventosPredicaoUsuario(req).then(EventosPredicaoUsuario => {
+                  getEventosResultadoDepartamento(req).then(EventosResultadoDepartamento => {
+                    getEventosResultadoUsuario(req).then(EventosResultadoUsuario => {
+                      if (!EventosPendentesDepartamento || !EventosPendentesUsuario
+                        || !EventosTentandoDepartamento || !EventosTentandoUsuario
+                        || !EventosPredicaoDepartamento || !EventosPredicaoUsuario
+                        || !EventosResultadoDepartamento || !EventosResultadoUsuario)
+                        reject('Produtividade sem retorno');
+
+                      resolve({
+                        EventosPendentesDepartamento, EventosPendentesUsuario,
+                        EventosTentandoDepartamento, EventosTentandoUsuario,
+                        EventosPredicaoDepartamento, EventosPredicaoUsuario,
+                        EventosResultadoDepartamento, EventosResultadoUsuario
                       });
                     }).catch(e => {
                       reject(e);
@@ -31,8 +30,8 @@ function getProdutividadeCallCenter(req, res) {
                   }).catch(e => {
                     reject(e);
                   });
-                    }).catch(e => {
-                    reject(e);
+                }).catch(e => {
+                  reject(e);
                 });
               }).catch(e => {
                 reject(e);
@@ -47,88 +46,85 @@ function getProdutividadeCallCenter(req, res) {
           reject(e);
         });
       }).catch(e => {
-        reject(e)
+        reject(e);
       });
-    })
+    }).catch(e => {
+      reject(e)
+    });
+  })
 }
 
 function getEventosPendentesDepartamento(req, res) {
-    return new Promise(function (resolve, reject) {
-  
-      checkTokenAccess(req).then(historico => {
-        const dbconnection = require('../config/dbConnection')
-        const { Client } = require('pg')
-  
-        const client = new Client(dbconnection)
-  
-        client.connect()
-  
-        let sql = `select count(*) as eventos_depatamentos from eventos where id_status_evento in (1,4,5,6) and tipodestino = 'O' and id_pessoa_organograma = 4 `
-        
-        
+  return new Promise(function (resolve, reject) {
 
-        client.query(sql)
-          .then(res => {
-            if (res.rowCount > 0) {
-              let registros = res.rows;
-  
-              client.end();
-              resolve(registros)
-            }
-            reject('eventos não encontrados')
-          }
-          )
-          .catch(err => console.log(err)) //reject( err.hint ) )
-      }).catch(e => {
-        reject(e)
-      })
+    checkTokenAccess(req).then(historico => {
+      const dbconnection = require('../config/dbConnection')
+      const { Client } = require('pg')
+
+      const client = new Client(dbconnection)
+
+      client.connect()
+
+      let sql = `select count(*) as eventos_depatamentos from eventos where id_status_evento in (1,4,5,6) and tipodestino = 'O' and id_pessoa_organograma = 4 `
+
+
+
+      client.query(sql)
+        .then(res => {
+          let registros = res.rows;
+
+          client.end();
+          resolve(registros)
+        }
+        )
+        .catch(err => console.log(err)) //reject( err.hint ) )
+    }).catch(e => {
+      reject(e)
     })
-  }
+  })
+}
 
-  function getEventosPendentesUsuario(req, res) {
-    return new Promise(function (resolve, reject) {
-  
-      checkTokenAccess(req).then(historico => {
-        const dbconnection = require('../config/dbConnection')
-        const { Client } = require('pg')
-  
-        const client = new Client(dbconnection)
-  
-        client.connect()
-  
-        let sql = `select count(*) as eventos_usuarios from eventos where id_status_evento in (1,4,5,6) 
+function getEventosPendentesUsuario(req, res) {
+  return new Promise(function (resolve, reject) {
+
+    checkTokenAccess(req).then(historico => {
+      const dbconnection = require('../config/dbConnection')
+      const { Client } = require('pg')
+
+      const client = new Client(dbconnection)
+
+      client.connect()
+
+      let sql = `select count(*) as eventos_usuarios from eventos where id_status_evento in (1,4,5,6) 
                   and tipodestino = 'P' and id_pessoa_organograma = ${req.query.id_pessoa_usuario_select} `
-        
-        client.query(sql)
-          .then(res => {
-            if (res.rowCount > 0) {
-              let registros = res.rows;
-  
-              client.end();
-              resolve(registros)
-            }
-            reject('eventos não encontrados')
-          }
-          )
-          .catch(err => console.log(err)) //reject( err.hint ) )
-      }).catch(e => {
-        reject(e)
-      })
-    })
-  }
 
-  function getEventosTentandoDepartamento(req, res) {
-    return new Promise(function (resolve, reject) {
-  
-      checkTokenAccess(req).then(historico => {
-        const dbconnection = require('../config/dbConnection')
-        const { Client } = require('pg')
-  
-        const client = new Client(dbconnection)
-  
-        client.connect()
-  
-        let sql = `select tentativas, CASE  WHEN tentativas = 0 THEN count(*) else sum(tentativas) end  as ligacoes, count(tentativas) as clientes
+      client.query(sql)
+        .then(res => {
+          let registros = res.rows;
+
+          client.end();
+          resolve(registros)
+        }
+        )
+        .catch(err => console.log(err)) //reject( err.hint ) )
+    }).catch(e => {
+      reject(e)
+    })
+  })
+}
+
+function getEventosTentandoDepartamento(req, res) {
+  return new Promise(function (resolve, reject) {
+
+    checkTokenAccess(req).then(historico => {
+      const dbconnection = require('../config/dbConnection')
+      const { Client } = require('pg')
+
+      const client = new Client(dbconnection)
+
+      client.connect()
+
+      let sql = `select tentativas, CASE  WHEN tentativas = 0 THEN count(*) else sum(tentativas) end  as ligacoes, count(tentativas) as clientes
                     from ( select id_pessoa_receptor, count(*) as tentativas
                             from eventos  
                                 where   id_campanha = ${req.query.id_campanha}
@@ -140,43 +136,40 @@ function getEventosPendentesDepartamento(req, res) {
                             select id_pessoa_receptor,  0 as tentativas
                             from eventos  
                                 where id_evento_pai is null and id_status_evento in (1,4) and id_campanha = ${req.query.id_campanha}
-                                        and tipodestino = 'P' and id_pessoa_organograma = ${req.query.id_pessoa_usuario_select}  
+                                        and tipodestino = 'O' and id_pessoa_organograma = 4 
                             group by id_pessoa_receptor) a
                     group by tentativas
                     order by tentativas `
-        
-       
 
-        client.query(sql)
-          .then(res => {
-            if (res.rowCount > 0) {
-              let registros = res.rows;
-  
-              client.end();
-              resolve(registros)
-            }
-            reject('eventos não encontrados')
-          }
-          )
-          .catch(err => console.log(err)) //reject( err.hint ) )
-      }).catch(e => {
-        reject(e)
-      })
+
+
+      client.query(sql)
+        .then(res => {
+          let registros = res.rows;
+
+          client.end();
+          resolve(registros)
+        }
+        )
+        .catch(err => console.log(err)) //reject( err.hint ) )
+    }).catch(e => {
+      reject(e)
     })
-  }
+  })
+}
 
-  function getEventosTentandoUsuario(req, res) {
-    return new Promise(function (resolve, reject) {
-  
-      checkTokenAccess(req).then(historico => {
-        const dbconnection = require('../config/dbConnection')
-        const { Client } = require('pg')
-  
-        const client = new Client(dbconnection)
-  
-        client.connect()
-  
-        let sql = `select tentativas, CASE  WHEN tentativas = 0 THEN count(*) else sum(tentativas) end  as ligacoes, count(tentativas) as clientes
+function getEventosTentandoUsuario(req, res) {
+  return new Promise(function (resolve, reject) {
+
+    checkTokenAccess(req).then(historico => {
+      const dbconnection = require('../config/dbConnection')
+      const { Client } = require('pg')
+
+      const client = new Client(dbconnection)
+
+      client.connect()
+
+      let sql = `select tentativas, CASE  WHEN tentativas = 0 THEN count(*) else sum(tentativas) end  as ligacoes, count(tentativas) as clientes
                     from ( select id_pessoa_receptor, count(*) as tentativas
                             from eventos  
                                 where  id_pessoa_resolveu = ${req.query.id_pessoa_usuario_select} 
@@ -193,40 +186,37 @@ function getEventosPendentesDepartamento(req, res) {
                             group by id_pessoa_receptor) a
                     group by tentativas
                     order by tentativas `
-        
-       
 
-        client.query(sql)
-          .then(res => {
-            if (res.rowCount > 0) {
-              let registros = res.rows;
-  
-              client.end();
-              resolve(registros)
-            }
-            reject('eventos não encontrados')
-          }
-          )
-          .catch(err => console.log(err)) //reject( err.hint ) )
-      }).catch(e => {
-        reject(e)
-      })
+      console.log(sql)
+
+      client.query(sql)
+        .then(res => {
+          let registros = res.rows;
+
+          client.end();
+          resolve(registros)
+        }
+        )
+        .catch(err => console.log(err)) //reject( err.hint ) )
+    }).catch(e => {
+      reject(e)
     })
-  }
+  })
+}
 
 
-  function getEventosPredicaoDepartamento(req, res) {
-    return new Promise(function (resolve, reject) {
-  
-      checkTokenAccess(req).then(historico => {
-        const dbconnection = require('../config/dbConnection')
-        const { Client } = require('pg')
-  
-        const client = new Client(dbconnection)
-  
-        client.connect()
-  
-        let sql = `select pr.nome, pr.id, count(*)
+function getEventosPredicaoDepartamento(req, res) {
+  return new Promise(function (resolve, reject) {
+
+    checkTokenAccess(req).then(historico => {
+      const dbconnection = require('../config/dbConnection')
+      const { Client } = require('pg')
+
+      const client = new Client(dbconnection)
+
+      client.connect()
+
+      let sql = `select pr.nome, pr.id, count(*)
         from eventos e
         inner join predicao pr on e.id_predicao = pr.id
         inner join (
@@ -245,40 +235,36 @@ function getEventosPendentesDepartamento(req, res) {
         group by id_pessoa_receptor) mx on e.id = mx.id_evento
         group by pr.nome, pr.id
         order by pr.id`
-        
-        console.log(sql)
 
-        client.query(sql)
-          .then(res => {
-            if (res.rowCount > 0) {
-              let registros = res.rows;
-  
-              client.end();
-              resolve(registros)
-            }
-            reject('eventos não encontrados')
-          }
-          )
-          .catch(err => console.log(err)) //reject( err.hint ) )
-      }).catch(e => {
-        reject(e)
-      })
+
+      client.query(sql)
+        .then(res => {
+          let registros = res.rows;
+
+          client.end();
+          resolve(registros)
+        }
+        )
+        .catch(err => console.log(err)) //reject( err.hint ) )
+    }).catch(e => {
+      reject(e)
     })
-  }
+  })
+}
 
 
-  function getEventosPredicaoUsuario(req, res) {
-    return new Promise(function (resolve, reject) {
-  
-      checkTokenAccess(req).then(historico => {
-        const dbconnection = require('../config/dbConnection')
-        const { Client } = require('pg')
-  
-        const client = new Client(dbconnection)
-  
-        client.connect()
-  
-        let sql = `select pr.nome, pr.id, count(*)
+function getEventosPredicaoUsuario(req, res) {
+  return new Promise(function (resolve, reject) {
+
+    checkTokenAccess(req).then(historico => {
+      const dbconnection = require('../config/dbConnection')
+      const { Client } = require('pg')
+
+      const client = new Client(dbconnection)
+
+      client.connect()
+
+      let sql = `select pr.nome, pr.id, count(*)
         from eventos e
         inner join predicao pr on e.id_predicao = pr.id
         inner join (
@@ -297,40 +283,35 @@ function getEventosPendentesDepartamento(req, res) {
         group by id_pessoa_receptor) mx on e.id = mx.id_evento
         group by pr.nome, pr.id
         order by pr.id`
-        
-        console.log(sql)
 
-        client.query(sql)
-          .then(res => {
-            if (res.rowCount > 0) {
-              let registros = res.rows;
-  
-              client.end();
-              resolve(registros)
-            }
-            reject('eventos não encontrados')
-          }
-          )
-          .catch(err => console.log(err)) //reject( err.hint ) )
-      }).catch(e => {
-        reject(e)
-      })
+      client.query(sql)
+        .then(res => {
+          let registros = res.rows;
+
+          client.end();
+          resolve(registros)
+        }
+        )
+        .catch(err => console.log(err)) //reject( err.hint ) )
+    }).catch(e => {
+      reject(e)
     })
-  }
-  
+  })
+}
 
-  function getEventosResultadoDepartamento(req, res) {
-    return new Promise(function (resolve, reject) {
-  
-      checkTokenAccess(req).then(historico => {
-        const dbconnection = require('../config/dbConnection')
-        const { Client } = require('pg')
-  
-        const client = new Client(dbconnection)
-  
-        client.connect()
-  
-        let sql = `select '1' as id  ,'Comprou' as descricao, count(*) as qdte
+
+function getEventosResultadoDepartamento(req, res) {
+  return new Promise(function (resolve, reject) {
+
+    checkTokenAccess(req).then(historico => {
+      const dbconnection = require('../config/dbConnection')
+      const { Client } = require('pg')
+
+      const client = new Client(dbconnection)
+
+      client.connect()
+
+      let sql = `select '1' as id  ,'Comprou' as descricao, count(*) as qdte
                       from eventos 
                     where id_campanha = ${req.query.id_campanha}
                         and date(dt_resolvido) between '${req.query.dtInicial}' and '${req.query.dtFinal}'
@@ -349,38 +330,38 @@ function getEventosPendentesDepartamento(req, res) {
                         and excedeu_tentativas 	
                   
                   order by id`
-  
-        client.query(sql)
-          .then(res => {
-            if (res.rowCount > 0) {
-              let registros = res.rows;
-  
-              client.end();
-              resolve(registros)
-            }
-            reject('Eventos resultado não encontrados')
-          }
-          )
-          .catch(err => console.log(err)) //reject( err.hint ) )
-      }).catch(e => {
-        reject(e)
-      })
-    })
-  }
-  
 
-  function getEventosResultadoUsuario(req, res) {
-    return new Promise(function (resolve, reject) {
-  
-      checkTokenAccess(req).then(historico => {
-        const dbconnection = require('../config/dbConnection')
-        const { Client } = require('pg')
-  
-        const client = new Client(dbconnection)
-  
-        client.connect()
-  
-        let sql = `select '1' as id  ,'Comprou' as descricao, count(*) as qdte
+      client.query(sql)
+        .then(res => {
+          if (res.rowCount > 0) {
+            let registros = res.rows;
+
+            client.end();
+            resolve(registros)
+          }
+          reject('Eventos resultado não encontrados')
+        }
+        )
+        .catch(err => console.log(err)) //reject( err.hint ) )
+    }).catch(e => {
+      reject(e)
+    })
+  })
+}
+
+
+function getEventosResultadoUsuario(req, res) {
+  return new Promise(function (resolve, reject) {
+
+    checkTokenAccess(req).then(historico => {
+      const dbconnection = require('../config/dbConnection')
+      const { Client } = require('pg')
+
+      const client = new Client(dbconnection)
+
+      client.connect()
+
+      let sql = `select '1' as id  ,'Comprou' as descricao, count(*) as qdte
                       from eventos 
                     where id_campanha = ${req.query.id_campanha}
                         and id_pessoa_resolveu = ${req.query.id_pessoa_usuario_select}
@@ -402,24 +383,24 @@ function getEventosPendentesDepartamento(req, res) {
                         and excedeu_tentativas 	
                   
                   order by id`
-  
-        client.query(sql)
-          .then(res => {
-            if (res.rowCount > 0) {
-              let registros = res.rows;
-  
-              client.end();
-              resolve(registros)
-            }
-            reject('Eventos resultado não encontrados')
-          }
-          )
-          .catch(err => console.log(err)) //reject( err.hint ) )
-      }).catch(e => {
-        reject(e)
-      })
-    })
-  }
-  
 
-  module.exports = { getProdutividadeCallCenter }
+      client.query(sql)
+        .then(res => {
+          if (res.rowCount > 0) {
+            let registros = res.rows;
+
+            client.end();
+            resolve(registros)
+          }
+          reject('Eventos resultado não encontrados')
+        }
+        )
+        .catch(err => console.log(err)) //reject( err.hint ) )
+    }).catch(e => {
+      reject(e)
+    })
+  })
+}
+
+
+module.exports = { getProdutividadeCallCenter }

@@ -24,6 +24,7 @@ export class ProdutividadeCallCenterComponent implements OnInit {
   agentesVendasSelect: Array<any>;
   agentesVendasSelectValue: string;
   agentesVendasSelectNome: string;
+  agentesVendasSelectNomeTemp: string;
 
   campanhaSelect: Array<any>;
   campanhaSelectValue: string;
@@ -87,7 +88,7 @@ export class ProdutividadeCallCenterComponent implements OnInit {
 
   constructor(private http: Http, private connectHTTP: ConnectHTTP, private localStorage: LocalStorage,
     private toastrService: ToastService) {
-    this.usuarioLogado = this.localStorage.getLocalStorage('usuarioLogado') as Usuario;
+    this.usuarioLogado = this.localStorage.getLocalStorage('usuarioLogado') as any;
   }
 
   async ngOnInit() {
@@ -105,13 +106,22 @@ export class ProdutividadeCallCenterComponent implements OnInit {
       return { value: agenteVenda.id_pessoa, label: agenteVenda.nome }
     });
 
-    this.agentesVendasSelectValue = this.agentesVendasSelect[0].value;
-    this.agentesVendasSelectNome = this.agentesVendasSelect[0].label;
+    debugger;
+    if (this.usuarioLogado.responsavel_membro == 'M') {
+      let agenteSelecionado = agentesVendas.resposta.filter(a => a.id_pessoa == this.usuarioLogado.id_pessoa)[0];
+
+      this.agentesVendasSelectNome = agenteSelecionado.nome;
+      this.agentesVendasSelectValue = agenteSelecionado.id_pessoa;
+    }
+    else {
+      this.agentesVendasSelectNome = this.agentesVendasSelect[0].label;
+      this.agentesVendasSelectValue = this.agentesVendasSelect[0].value;
+    }
 
     this.produtividadeCallCenter();
   };
   setNomeAtendente(value) {
-    this.agentesVendasSelectNome = value.label;
+    this.agentesVendasSelectNomeTemp = value.label;
   }
 
   async produtividadeCallCenter() {
@@ -129,7 +139,7 @@ export class ProdutividadeCallCenterComponent implements OnInit {
         }
       }) as any;
 
-      debugger;
+      this.agentesVendasSelectNome = this.agentesVendasSelectNomeTemp;
       this.eventosPendentesDepartamento = getProdutividadeCallCenter.resposta.EventosPendentesDepartamento;
       this.eventosTentandoDepartamento = getProdutividadeCallCenter.resposta.EventosTentandoDepartamento;
       this.eventosPredicaoDepartamento = getProdutividadeCallCenter.resposta.EventosPredicaoDepartamento;
@@ -138,8 +148,32 @@ export class ProdutividadeCallCenterComponent implements OnInit {
 
       this.eventosPendentesUsuario = getProdutividadeCallCenter.resposta.EventosPendentesUsuario;
       this.eventosTentandoUsuario = getProdutividadeCallCenter.resposta.EventosTentandoUsuario;
-      this.eventosPredicaoUsuario = getProdutividadeCallCenter.resposta.EventosPredicao;
-      this.eventosResultadoUsuario = getProdutividadeCallCenter.resposta.EventosResultado;
+      this.eventosPredicaoUsuario = getProdutividadeCallCenter.resposta.EventosPredicaoUsuario;
+      this.eventosResultadoUsuario = getProdutividadeCallCenter.resposta.EventosResultadoUsuario;
+    }
+    catch (e) {
+      this.toastrService.error(e.error);
+    }
+  };
+
+  async salvaProdutividadeCSV() {
+    try {
+      let getProdutividadeCallCenter = await this.connectHTTP.callService({
+        service: 'getEventosRelatorioUsuario',
+        paramsService: {
+          token: this.usuarioLogado.token,
+          id_usuario: this.usuarioLogado.id,
+          id_pessoa_organograma: this.agentesVendasSelectValue,
+          id_organograma: this.usuarioLogado.id_organograma,
+          id_campanha: 5,
+          dtInicial: this.dataInicial,
+          dtFinal: this.dataFinal
+        }
+      }) as any;
+
+      new Angular5Csv(getProdutividadeCallCenter.resposta, 'data-table', {
+        headers: Object.keys(getProdutividadeCallCenter.resposta[0])
+      });
     }
     catch (e) {
       this.toastrService.error(e.error);

@@ -71,7 +71,7 @@
       </div>
       <div class="tentando" title="Tentando">
         <div class="table_scroll">
-          <table class="table table-bordered table-striped">
+          <table *ngIf="tentando" class="table table-bordered table-striped">
             <!--Table head-->
             <thead>
               <tr>
@@ -89,22 +89,22 @@
         </div>
       </div>
       <div class="fundoFunil">
-        <span *ngIf="predicoes" [title]="predicoes[0].nome">{{predicoes[0].count}}</span>
-        <span *ngIf="predicoes" [title]="predicoes[1].nome">{{predicoes[1].count}}</span>
-        <span *ngIf="predicoes" [title]="predicoes[2].nome">{{predicoes[2].count}}</span>
+        <span *ngIf="predicoes && predicoes[0]" [title]="predicoes[0].nome">{{predicoes[0].count}}</span>
+        <span *ngIf="predicoes && predicoes[1]" [title]="predicoes[1].nome">{{predicoes[1].count}}</span>
+        <span *ngIf="predicoes && predicoes[2]" [title]="predicoes[2].nome">{{predicoes[2].count}}</span>
       </div>
       <div class="row resultado">
-        <div *ngIf="resultado" class="col-4 acerto" [title]="resultado[0].descricao">
+        <div *ngIf="resultado && resultado[0]" class="col-4 acerto" [title]="resultado[0].descricao">
           <div>
             <span>{{resultado[0].qdte}}</span>
           </div>
         </div>
-        <div *ngIf="resultado" class="col-4 alvoErro" [title]="resultado[1].descricao">
+        <div *ngIf="resultado && resultado[1]" class="col-4 alvoErro" [title]="resultado[1].descricao">
           <div>
             <span>{{resultado[1].qdte}}</span>
           </div>
         </div>
-        <div *ngIf="resultado" class="col-4 excedeu" [title]="resultado[2].descricao">
+        <div *ngIf="resultado && resultado[2]" class="col-4 excedeu" [title]="resultado[2].descricao">
           <div>
             <span>{{resultado[2].qdte}}</span>
           </div>

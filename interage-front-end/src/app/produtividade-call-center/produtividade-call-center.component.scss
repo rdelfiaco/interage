@@ -9,7 +9,6 @@
     grid-column-gap: 2px;
 }
 
-
 .datas {
     padding: 0 0 0 0;
     margin-top: 5px;
@@ -47,7 +46,7 @@
     & .table_scroll {
         display: block;
         max-height: 200px;
-        width: 35%;
+        width: 40%;
         overflow-y: auto;
         margin-top: 2px;
         & tbody td,

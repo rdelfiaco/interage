@@ -295,6 +295,19 @@ app.get('/getEventosLinhaDoTempo', (req, res) => {
     })
 });
 
+app.get('/getEventosRelatorioUsuario', (req, res) => {
+  evento.getEventosRelatorioUsuario(req)
+    .then(linhas => {
+      headerResponse(res)
+      res.status(200).send(linhas)
+    })
+    .catch(error => {
+      headerResponse(res)
+      console.log(error)
+      res.status(401).send(error)
+    })
+});
+
 app.get('/getCampanhaAnalisar', (req, res) => {
   campanha.getCampanhaAnalisar(req)
     .then(linhas => {
