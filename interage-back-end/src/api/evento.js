@@ -104,10 +104,11 @@ function salvarEvento(req, res) {
                   id_telefone=${req.query.id_telefoneDiscado},
                   id_predicao=${req.query.id_predicao || 'NULL'},
                   id_objecao=${req.query.id_objecao || 'NULL'}
-                  WHERE eventos.id=${req.query.id_evento};
+                  WHERE eventos.id=${req.query.id_evento}
+                  RETURNING tipoDestino, id_pessoa_organograma;
                   `;
             console.log(update)
-            client.query(update).then((res) => {
+            client.query(update).then((updateEventoEncerrado) => {
 
               const selectQuantidadeTentativas = `SELECT COUNT(id_resp_motivo) from eventos
 
@@ -129,7 +130,7 @@ function salvarEvento(req, res) {
 
                   if (motivoResposta_automatico.length > 0) {
                     motivoResposta_automatico.map((m, index, array) => {
-                      eventoCriar = createEvent(m, motivoResposta)
+                      eventoCriar = createEvent(m, motivoResposta, updateEventoEncerrado)
                       console.log('eventoCriar', eventoCriar)
 
                       client.query(eventoCriar).then(res => {
@@ -175,7 +176,7 @@ function salvarEvento(req, res) {
       }).catch(e => reject(e))
 
 
-      function createEvent(motivoRespostaAutomatico, motivoResposta) {
+      function createEvent(motivoRespostaAutomatico, motivoResposta, updateEventoEncerrado) {
         let tipoDestino;
         let id_pessoa_organograma;
 
@@ -186,6 +187,10 @@ function salvarEvento(req, res) {
         else if (motivoRespostaAutomatico.gera_para == 2) {
           tipoDestino = 'P';
           id_pessoa_organograma = req.query.id_pessoa
+        }
+        else if (motivoRespostaAutomatico.gera_para == 4) {
+          tipoDestino = updateEventoEncerrado.rows[0].tipodestino;
+          id_pessoa_organograma = updateEventoEncerrado.rows[0].id_pessoa_organograma
         }
         else {
           tipoDestino = req.query.tipoDestino;
