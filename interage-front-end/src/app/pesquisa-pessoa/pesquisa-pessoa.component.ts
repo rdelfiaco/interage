@@ -12,7 +12,7 @@ import { Observable } from 'rxjs';
 })
 export class PesquisaPessoaComponent implements OnInit {
   private usuarioLogado: any;
-  private textoPesquisaPessoa: string;
+  textoPesquisaPessoa: string;
   pessoasEncontradas: any = [];
   firstPageNumber: number = 1;
   lastPageNumber: number;

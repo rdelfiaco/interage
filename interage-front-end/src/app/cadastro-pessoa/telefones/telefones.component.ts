@@ -13,7 +13,7 @@ import { Observable } from 'rxjs';
 })
 export class TelefonesComponent implements OnInit {
 
-  private telefoneSelecionado: boolean;
+  telefoneSelecionado: boolean;
   _pessoa: any
   _pessoaObject: any;
   telefoneExclusao: any;

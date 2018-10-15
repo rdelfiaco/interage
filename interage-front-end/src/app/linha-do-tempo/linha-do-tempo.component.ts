@@ -10,7 +10,7 @@ import { LocalStorage } from '../shared/services/localStorage';
 })
 export class LinhaDoTempoComponent implements OnInit {
   private usuarioLogado: any;
-  private eventosDaPessoa: any;
+  eventosDaPessoa: any;
 
   @Input() pessoa: any;
   constructor(private toastrService: ToastService,

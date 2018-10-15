@@ -20,7 +20,7 @@ export class ProdutividadeCallCenterComponent implements OnInit {
   tentando: any;
   predicoes: any;
   resultado: any;
-  usuarioLogado: Usuario;
+  usuarioLogado: any;
   agentesVendasSelect: Array<any>;
   agentesVendasSelectValue: string;
   agentesVendasSelectNome: string;
@@ -100,7 +100,7 @@ export class ProdutividadeCallCenterComponent implements OnInit {
         id_usuario: this.usuarioLogado.id,
         id_organograma: this.usuarioLogado.id_organograma,
       }
-    });
+    }) as any;
 
     this.agentesVendasSelect = agentesVendas.resposta as Array<object>;
     this.agentesVendasSelect = this.agentesVendasSelect.map(agenteVenda => {
