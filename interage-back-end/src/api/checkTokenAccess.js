@@ -25,6 +25,9 @@ exports.checkTokenAccess = function checkTokenAccess(req) {
         reject('Token não é válido')
       }
       )
-      .catch(err => console.log(err)) //reject( err.hint ) )
+      .catch(err => {
+        client.end();
+        console.log(err)
+      })
   })
 }

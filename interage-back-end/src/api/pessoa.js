@@ -21,17 +21,20 @@ function getPessoa(req, res) {
               getTelefones().then(telefones => {
                 client.end();
                 resolve({ principal: pessoa[0], enderecos, telefones })
-              }).catch(e => {
-                reject(e);
+              }).catch(err => {
+                client.end();
+                reject(err)
               })
-            }).catch(e => {
-              reject(e);
+            }).catch(err => {
+              client.end();
+              reject(err)
             })
 
           }
           else reject('Não há eventos!')
-        }).catch(e => {
-          reject(e);
+        }).catch(err => {
+          client.end();
+          reject(err)
         })
 
 
@@ -56,6 +59,9 @@ function getPessoa(req, res) {
 
           client.query(sqlEnderecos).then(res => {
             resolve(res.rows);
+          }).catch(err => {
+            client.end();
+            reject(err)
           })
         })
       }
@@ -68,6 +74,9 @@ function getPessoa(req, res) {
 
           client.query(sqlTelefones).then(res => {
             resolve(res.rows);
+          }).catch(err => {
+            client.end();
+            reject(err)
           })
         })
       }
@@ -117,15 +126,17 @@ function salvarPessoa(req, res) {
           client.query('COMMIT').then((resposta) => {
             client.end();
             resolve(resposta)
-          }).catch(e => {
-            reject(e);
+          }).catch(err => {
+            client.end();
+            reject(err)
           })
         }).catch(e => {
           client.query('ROLLBACK').then((resposta) => {
             client.end();
             reject(e)
-          }).catch(e => {
-            reject(e)
+          }).catch(err => {
+            client.end();
+            reject(err)
           })
         })
 
@@ -161,8 +172,9 @@ function salvarPessoa(req, res) {
           ret.push('observacoes=' + (req.query.observacoes != 'null' ? "'" + req.query.observacoes + "'" : 'NULL'))
           return ret.join(', ');
         }
-      }).catch(e => {
-        reject(e);
+      }).catch(err => {
+        client.end();
+        reject(err)
       })
     }).catch(e => {
       reject(e);
@@ -304,7 +316,10 @@ function getTipoTelefone(req, res) {
           reject('Erro ao buscar tipos de telefones')
         }
         )
-        .catch(err => console.log(err)) //reject( err.hint ) )
+        .catch(err => {
+          client.end();
+          reject(err)
+        })
     }).catch(e => {
       reject(e)
     })
@@ -355,23 +370,27 @@ function salvarTelefonePessoa(req, res) {
             client.query('COMMIT').then((resposta) => {
               client.end();
               resolve(resposta)
-            }).catch(e => {
-              reject(e);
+            }).catch(err => {
+              client.end();
+              reject(err)
             })
           }).catch(e => {
             client.query('ROLLBACK').then((resposta) => {
               client.end();
               reject(e)
-            }).catch(e => {
-              reject(e)
+            }).catch(err => {
+              client.end();
+              reject(err)
             })
           })
 
-        }).catch(e => {
-          reject(e);
+        }).catch(err => {
+          client.end();
+          reject(err)
         })
-      }).catch(e => {
-        reject(e);
+      }).catch(err => {
+        client.end();
+        reject(err)
       })
 
     }).catch(e => {
@@ -408,22 +427,26 @@ function editaTelefonePrincipal(req, res) {
             client.query('COMMIT').then((resposta) => {
               client.end();
               resolve(resposta)
-            }).catch(e => {
-              reject(e);
+            }).catch(err => {
+              client.end();
+              reject(err)
             })
-          }).catch(e => {
-            reject(e);
+          }).catch(err => {
+            client.end();
+            reject(err)
           })
         }).catch(e => {
           client.query('ROLLBACK').then((resposta) => {
             client.end();
             reject(e)
-          }).catch(e => {
-            reject(e)
+          }).catch(err => {
+            client.end();
+            reject(err)
           })
         })
-      }).catch(e => {
-        reject(e);
+      }).catch(err => {
+        client.end();
+        reject(err)
       })
     }).catch(e => {
       reject(e);
@@ -459,22 +482,26 @@ function editaEnderecoDeCorrespondencia(req, res) {
             client.query('COMMIT').then((resposta) => {
               client.end();
               resolve(resposta)
-            }).catch(e => {
-              reject(e);
+            }).catch(err => {
+              client.end();
+              reject(err)
             })
-          }).catch(e => {
-            reject(e);
+          }).catch(err => {
+            client.end();
+            reject(err)
           })
         }).catch(e => {
           client.query('ROLLBACK').then((resposta) => {
             client.end();
             reject(e)
-          }).catch(e => {
-            reject(e)
+          }).catch(err => {
+            client.end();
+            reject(err)
           })
         })
-      }).catch(e => {
-        reject(e);
+      }).catch(err => {
+        client.end();
+        reject(err)
       })
     }).catch(e => {
       reject(e);
@@ -503,19 +530,22 @@ function excluirTelefonePessoa(req, res) {
           client.query('COMMIT').then((resposta) => {
             client.end();
             resolve(resposta)
-          }).catch(e => {
-            reject(e);
+          }).catch(err => {
+            client.end();
+            reject(err)
           })
         }).catch(e => {
           client.query('ROLLBACK').then((resposta) => {
             client.end();
             reject(e)
-          }).catch(e => {
-            reject(e)
+          }).catch(err => {
+            client.end();
+            reject(err)
           })
         })
-      }).catch(e => {
-        reject(e);
+      }).catch(err => {
+        client.end();
+        reject(err)
       })
     }).catch(e => {
       reject(e);
@@ -595,27 +625,30 @@ function salvarEnderecoPessoa(req, res) {
                 client.query('COMMIT').then((resposta) => {
                   client.end();
                   resolve(resposta)
-                }).catch(e => {
-                  reject(e);
+                }).catch(err => {
+                  client.end();
+                  reject(err)
                 })
               }).catch(e => {
                 client.query('ROLLBACK').then((resposta) => {
                   client.end();
                   reject(e)
+                }).catch(err => {
+                  client.end();
+                  reject(err)
                 })
-                  .catch(e => {
-                    reject(e)
-                  })
               })
             })
           }
 
 
-        }).catch(e => {
-          reject(e);
+        }).catch(err => {
+          client.end();
+          reject(err)
         })
-      }).catch(e => {
-        reject(e);
+      }).catch(err => {
+        client.end();
+        reject(err)
       })
     }).catch(e => {
       reject(e);
@@ -644,19 +677,22 @@ function excluirEnderecoPessoa(req, res) {
           client.query('COMMIT').then((resposta) => {
             client.end();
             resolve(resposta)
-          }).catch(e => {
-            reject(e);
+          }).catch(err => {
+            client.end();
+            reject(err)
           })
         }).catch(e => {
           client.query('ROLLBACK').then((resposta) => {
             client.end();
             reject(e)
-          }).catch(e => {
-            reject(e)
+          }).catch(err => {
+            client.end();
+            reject(err)
           })
         })
-      }).catch(e => {
-        reject(e);
+      }).catch(err => {
+        client.end();
+        reject(err)
       })
     }).catch(e => {
       reject(e);
@@ -697,8 +733,9 @@ function pesquisaPessoas(req, res) {
         }
         else reject(`Não há pessoas com o texto: ${req.query.searchText}`)
 
-      }).catch(e => {
-        reject(e);
+      }).catch(err => {
+        client.end();
+        reject(err)
       })
     }).catch(e => {
       reject(e);
@@ -725,9 +762,11 @@ function getTratamentoPessoaFisica(req, res) {
 
           client.end();
           resolve(pronome_tratamento)
-        }
-        )
-        .catch(err => console.log(err)) //reject( err.hint ) )
+        })
+        .catch(err => {
+          client.end();
+          reject(err)
+        })
     }).catch(e => {
       reject(e)
     })

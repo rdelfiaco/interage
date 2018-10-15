@@ -17,7 +17,10 @@ function getObjecoes(req, res) {
 
         client.end();
         resolve(objecao)
-      }).catch(e => reject(e))
+      }).catch(err => {
+        client.end();
+        reject(err)
+      })
     });
   });
 }

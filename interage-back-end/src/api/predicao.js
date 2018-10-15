@@ -17,7 +17,10 @@ function getPredicao(req, res) {
 
         client.end();
         resolve(predicao)
-      }).catch(e => reject(e))
+      }).catch(err => {
+        client.end();
+        reject(err)
+      })
     });
   });
 }
@@ -57,7 +60,10 @@ function getPredicoesCampanha(req, res) {
 
         client.end();
         resolve(predicao)
-      }).catch(e => reject(e))
+      }).catch(err => {
+        client.end();
+        reject(err)
+      })
     });
   });
 }

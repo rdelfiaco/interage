@@ -30,7 +30,10 @@ function login(req, res) {
         }
         reject('Usuário não encontrato')
       })
-      .catch(err => console.log(err)) //reject( err.hint ) )
+      .catch(err => {
+        client.end();
+        reject(err)
+      })
   })
 }
 
@@ -52,6 +55,7 @@ function logout(req, res) {
         resolve(true)
       })
       .catch(err => {
+        client.end();
         console.log(err)
         reject('Token não encontrado')
       })
@@ -90,10 +94,16 @@ function getAgentesVendas(req, res) {
             client.end();
             resolve(agentesVendas)
           }
-          reject('Usuário não encontrado')
+          else {
+            client.end();
+            reject('Usuário não encontrado')
+          }
         }
         )
-        .catch(err => console.log(err)) //reject( err.hint ) )
+        .catch(err => {
+          client.end();
+          reject(err)
+        })
     }).catch(e => {
       reject(e)
     })
