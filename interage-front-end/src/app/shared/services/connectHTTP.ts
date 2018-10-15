@@ -15,7 +15,7 @@ export class ConnectHTTP {
     const mensagem = this._checkOptionsCallService(options);
     if (mensagem && !mensagem.error) return mensagem;
     return new Promise((resolve, reject) => {
-      const host = options.host || "http://localhost:3000/"
+      const host = options.host || "http://localhost:6000/"
       const service = options.service
 
       let url = `${host}${service}`
