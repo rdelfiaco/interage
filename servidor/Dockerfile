@@ -1,7 +1,10 @@
 FROM nginx:alpine
 
-WORKDIR /usr/share/interage/
-RUN git clone https://12cfd35e80550f6fc4e58f975e9ac112966aaf54@github.com/rdelfiaco/interage.git
+RUN apk update && apk upgrade && \
+    apk add --no-cache bash git openssh
+
+WORKDIR /usr/share/
+RUN git clone https://3e05c6b42c79eeba167ab0d0895077e218f669c8@github.com/rdelfiaco/interage.git
 
 EXPOSE 8080
 COPY nginx/default.conf /etc/nginx/conf.d/default.conf
