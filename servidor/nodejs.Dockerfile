@@ -13,5 +13,5 @@ RUN git checkout origin/treinamento
 
 RUN npm install
 
-EXPOSE 6000
+EXPOSE 3010
 CMD [ "node", "index.js" ]
