@@ -249,4 +249,43 @@ function getCampanhaResultado(req, res) {
   })
 }
 
-module.exports = { getCampanhasDoUsuario, getCampanhas, getCampanhaAnalisar, getCampanhaResultado }
+function getEventosRelatorioCampanha(req, res) {
+  return new Promise(function (resolve, reject) {
+
+    checkTokenAccess(req).then(historico => {
+      const dbconnection = require('../config/dbConnection')
+      const { Client } = require('pg')
+
+      const client = new Client(dbconnection)
+
+      client.connect()
+
+      let sql = `select *
+      from view_eventos 
+      where id_status_evento in (3,7)
+      and id_campanha = ${req.query.id_campanha}`
+
+      client.query(sql)
+        .then(res => {
+          if (res.rowCount > 0) {
+            let eventos = res.rows;
+            client.end();
+            resolve(eventos)
+          }
+          else {
+            reject('Não há eventos!')
+            client.end();
+          }
+        }
+        )
+        .catch(err => {
+          client.end();
+          reject(err)
+        })
+    }).catch(e => {
+      reject(e)
+    })
+  })
+}
+
+module.exports = { getCampanhasDoUsuario, getCampanhas, getCampanhaAnalisar, getCampanhaResultado, getEventosRelatorioCampanha }

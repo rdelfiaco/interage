@@ -205,6 +205,6 @@ export class ProdutividadeCallCenterComponent implements OnInit {
     catch (e) {
       this.toastrService.error(e.error);
     }
-  };
+  }
 }
 
