@@ -63,6 +63,7 @@ export class PrincipalComponent implements OnInit {
     clearBtnTxt: "Limpar",
     closeBtnTxt: "Fechar",
     closeAfterSelect: true,
+    minYear: 1900,
 
     // Format
     dateFormat: 'dd/mm/yyyy',

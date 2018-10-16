@@ -92,7 +92,7 @@ export class TelefonesComponent implements OnInit {
         id: [''],
         id_pessoa: [this._pessoaObject.principal.id, [Validators.required]],
         ddd: ['62', [Validators.required, Validators.minLength(2), Validators.maxLength(2)]],
-        telefone: ['', [Validators.required, Validators.minLength(9), Validators.maxLength(9)]],
+        telefone: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(9)]],
         ramal: [''],
         principal: [false],
         id_tipo_telefone: ['', [Validators.required]],
