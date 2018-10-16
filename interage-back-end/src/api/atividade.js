@@ -24,7 +24,10 @@ function getAtividades(req, res) {
                     reject('Atividade não encontrada')
                 }
                 )
-                .catch(err => console.log(err)) //reject( err.hint ) )
+                .catch(err => {
+                    client.end();
+                    console.log(err)
+                })
         }).catch(e => {
             reject(e)
         })

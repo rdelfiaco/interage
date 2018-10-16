@@ -77,7 +77,10 @@ function getEventosPendentesDepartamento(req, res) {
           resolve(registros)
         }
         )
-        .catch(err => console.log(err)) //reject( err.hint ) )
+        .catch(err => {
+          client.end();
+          reject(err)
+        })
     }).catch(e => {
       reject(e)
     })
@@ -106,7 +109,10 @@ function getEventosPendentesUsuario(req, res) {
           resolve(registros)
         }
         )
-        .catch(err => console.log(err)) //reject( err.hint ) )
+        .catch(err => {
+          client.end();
+          reject(err)
+        })
     }).catch(e => {
       reject(e)
     })
@@ -151,7 +157,10 @@ function getEventosTentandoDepartamento(req, res) {
           resolve(registros)
         }
         )
-        .catch(err => console.log(err)) //reject( err.hint ) )
+        .catch(err => {
+          client.end();
+          reject(err)
+        })
     }).catch(e => {
       reject(e)
     })
@@ -197,7 +206,10 @@ function getEventosTentandoUsuario(req, res) {
           resolve(registros)
         }
         )
-        .catch(err => console.log(err)) //reject( err.hint ) )
+        .catch(err => {
+          client.end();
+          reject(err)
+        })
     }).catch(e => {
       reject(e)
     })
@@ -245,7 +257,10 @@ function getEventosPredicaoDepartamento(req, res) {
           resolve(registros)
         }
         )
-        .catch(err => console.log(err)) //reject( err.hint ) )
+        .catch(err => {
+          client.end();
+          reject(err)
+        })
     }).catch(e => {
       reject(e)
     })
@@ -292,7 +307,10 @@ function getEventosPredicaoUsuario(req, res) {
           resolve(registros)
         }
         )
-        .catch(err => console.log(err)) //reject( err.hint ) )
+        .catch(err => {
+          client.end();
+          reject(err)
+        })
     }).catch(e => {
       reject(e)
     })
@@ -333,16 +351,16 @@ function getEventosResultadoDepartamento(req, res) {
 
       client.query(sql)
         .then(res => {
-          if (res.rowCount > 0) {
-            let registros = res.rows;
+          let registros = res.rows;
 
-            client.end();
-            resolve(registros)
-          }
-          reject('Eventos resultado não encontrados')
+          client.end();
+          resolve(registros)
         }
         )
-        .catch(err => console.log(err)) //reject( err.hint ) )
+        .catch(err => {
+          client.end();
+          reject(err)
+        })
     }).catch(e => {
       reject(e)
     })
@@ -386,16 +404,15 @@ function getEventosResultadoUsuario(req, res) {
 
       client.query(sql)
         .then(res => {
-          if (res.rowCount > 0) {
-            let registros = res.rows;
+          let registros = res.rows;
 
-            client.end();
-            resolve(registros)
-          }
-          reject('Eventos resultado não encontrados')
+          client.end();
+          resolve(registros)
         }
-        )
-        .catch(err => console.log(err)) //reject( err.hint ) )
+        ).catch(err => {
+          client.end();
+          reject(err)
+        })
     }).catch(e => {
       reject(e)
     })

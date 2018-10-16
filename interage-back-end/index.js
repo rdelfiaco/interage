@@ -321,6 +321,19 @@ app.get('/getCampanhaAnalisar', (req, res) => {
     })
 });
 
+app.get('/getEventosRelatorioCampanha', (req, res) => {
+  campanha.getEventosRelatorioCampanha(req)
+    .then(linhas => {
+      headerResponse(res)
+      res.status(200).send(linhas)
+    })
+    .catch(error => {
+      headerResponse(res)
+      console.log(error)
+      res.status(401).send(error)
+    })
+});
+
 app.get('/getProdutividadeCallCenter', (req, res) => {
   produtividade.getProdutividadeCallCenter(req)
     .then(linhas => {

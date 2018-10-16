@@ -126,6 +126,30 @@ export class ProdutividadeCallCenterComponent implements OnInit {
   }
 
   async produtividadeCallCenter() {
+    const arrumaPredicoes = function arrumaPredicoes(resultadoPredicoes) {
+      let ret = [];
+
+      let predicaoFrio = resultadoPredicoes.filter((r) => {
+        if (r.id == 1) return true;
+      })[0]
+      let predicaoMorno = resultadoPredicoes.filter((r) => {
+        if (r.id == 2) return true;
+      })[0]
+      let predicaoQuente = resultadoPredicoes.filter((r) => {
+        if (r.id == 3) return true;
+      })[0]
+
+      if (!predicaoFrio) ret.push({ nome: "Frio", id: 1, count: "0" })
+      else ret.push(predicaoFrio)
+
+      if (!predicaoMorno) ret.push({ nome: "Morno", id: 2, count: "0" })
+      else ret.push(predicaoMorno)
+
+      if (!predicaoQuente) ret.push({ nome: "Quente", id: 3, count: "0" })
+      else ret.push(predicaoQuente)
+      return ret;
+    }
+
     try {
       let getProdutividadeCallCenter = await this.connectHTTP.callService({
         service: 'getProdutividadeCallCenter',
@@ -143,13 +167,15 @@ export class ProdutividadeCallCenterComponent implements OnInit {
       this.agentesVendasSelectNome = this.agentesVendasSelectNomeTemp;
       this.eventosPendentesDepartamento = getProdutividadeCallCenter.resposta.EventosPendentesDepartamento;
       this.eventosTentandoDepartamento = getProdutividadeCallCenter.resposta.EventosTentandoDepartamento;
-      this.eventosPredicaoDepartamento = getProdutividadeCallCenter.resposta.EventosPredicaoDepartamento;
+
+      this.eventosPredicaoDepartamento = arrumaPredicoes(getProdutividadeCallCenter.resposta.EventosPredicaoDepartamento);
+      debugger;
       this.eventosResultadoDepartamento = getProdutividadeCallCenter.resposta.EventosResultadoDepartamento;
 
 
       this.eventosPendentesUsuario = getProdutividadeCallCenter.resposta.EventosPendentesUsuario;
       this.eventosTentandoUsuario = getProdutividadeCallCenter.resposta.EventosTentandoUsuario;
-      this.eventosPredicaoUsuario = getProdutividadeCallCenter.resposta.EventosPredicaoUsuario;
+      this.eventosPredicaoUsuario = arrumaPredicoes(getProdutividadeCallCenter.resposta.EventosPredicaoUsuario);
       this.eventosResultadoUsuario = getProdutividadeCallCenter.resposta.EventosResultadoUsuario;
     }
     catch (e) {
@@ -179,6 +205,6 @@ export class ProdutividadeCallCenterComponent implements OnInit {
     catch (e) {
       this.toastrService.error(e.error);
     }
-  };
+  }
 }
 

@@ -27,7 +27,10 @@ function getCampanhasDoUsuario(req, res) {
           reject('Campanha não encontrada')
         }
         )
-        .catch(err => console.log(err)) //reject( err.hint ) )
+        .catch(err => {
+          client.end();
+          console.log(err)
+        })
     }).catch(e => {
       reject(e)
     })
@@ -45,8 +48,8 @@ function getCampanhas(req, res) {
 
       client.connect()
 
-	  let sql = `SELECT id, nome, to_char(dt_inicio, 'dd/mm/yyyy') as dt_inicio 
-	  , to_char(dt_fim , 'dd/mm/yyyy') as dt_fim FROM public.campanhas`
+      let sql = `SELECT id, nome, to_char(dt_inicio, 'dd/mm/yyyy') as dt_inicio 
+	        , to_char(dt_fim , 'dd/mm/yyyy') as dt_fim FROM public.campanhas`
 
       client.query(sql)
         .then(res => {
@@ -59,7 +62,10 @@ function getCampanhas(req, res) {
           reject('Campanha não encontrada')
         }
         )
-        .catch(err => console.log(err)) //reject( err.hint ) )
+        .catch(err => {
+          client.end();
+          console.log(err)
+        })
     }).catch(e => {
       reject(e)
     })
@@ -113,7 +119,7 @@ function getCampanhaProspects(req, res) {
 						where id_campanha = ${req.query.id_campanha} 
 						and date(dt_criou) between '${req.query.dtInicial}' and '${req.query.dtFinal}'
 						and id_evento_pai is null`
-      
+
 
       client.query(sql)
         .then(res => {
@@ -126,7 +132,10 @@ function getCampanhaProspects(req, res) {
           reject('prospects não encontrados')
         }
         )
-        .catch(err => console.log(err)) //reject( err.hint ) )
+        .catch(err => {
+          client.end();
+          console.log(err)
+        })
     }).catch(e => {
       reject(e)
     })
@@ -164,7 +173,7 @@ function getCampanhaTentando(req, res) {
        group by tentativas
        order by tentativas`
 
-      
+
 
       client.query(sql)
         .then(res => {
@@ -177,7 +186,10 @@ function getCampanhaTentando(req, res) {
           reject('Campanha tentando não encontrados')
         }
         )
-        .catch(err => console.log(err)) //reject( err.hint ) )
+        .catch(err => {
+          client.end();
+          console.log(err)
+        })
     }).catch(e => {
       reject(e)
     })
@@ -215,24 +227,65 @@ function getCampanhaResultado(req, res) {
                 
                 order by id`
 
-      
+
 
       client.query(sql)
         .then(res => {
           if (res.rowCount > 0) {
             let registros = res.rows;
-
-            client.end();
             resolve(registros)
           }
-          reject('Campanha resultado não encontrados')
-        }
-        )
-        .catch(err => console.log(err)) //reject( err.hint ) )
+          else
+            reject('Campanha resultado não encontrados')
+          client.end();
+        })
+        .catch(err => {
+          client.end();
+          console.log(err)
+        })
     }).catch(e => {
       reject(e)
     })
   })
 }
 
-module.exports = { getCampanhasDoUsuario, getCampanhas, getCampanhaAnalisar, getCampanhaResultado }
+function getEventosRelatorioCampanha(req, res) {
+  return new Promise(function (resolve, reject) {
+
+    checkTokenAccess(req).then(historico => {
+      const dbconnection = require('../config/dbConnection')
+      const { Client } = require('pg')
+
+      const client = new Client(dbconnection)
+
+      client.connect()
+
+      let sql = `select *
+      from view_eventos 
+      where id_status_evento in (3,7)
+      and id_campanha = ${req.query.id_campanha}`
+
+      client.query(sql)
+        .then(res => {
+          if (res.rowCount > 0) {
+            let eventos = res.rows;
+            client.end();
+            resolve(eventos)
+          }
+          else {
+            reject('Não há eventos!')
+            client.end();
+          }
+        }
+        )
+        .catch(err => {
+          client.end();
+          reject(err)
+        })
+    }).catch(e => {
+      reject(e)
+    })
+  })
+}
+
+module.exports = { getCampanhasDoUsuario, getCampanhas, getCampanhaAnalisar, getCampanhaResultado, getEventosRelatorioCampanha }

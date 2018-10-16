@@ -35,13 +35,20 @@ function getUmEvento(req, res) {
                 client.end();
                 resolve(evento)
 
-              }).catch(e => {
-                reject(e)
+              }).catch(err => {
+                client.end();
+                console.log(err)
               })
           }
-          else reject('Não há eventos!')
+          else {
+            client.end();
+            reject('Não há eventos!')
+          }
         })
-        .catch(err => console.log(err))
+        .catch(err => {
+          client.end();
+          console.log(err)
+        })
     }).catch(e => {
       reject(e)
     })
@@ -67,7 +74,10 @@ function motivosRespostas(req, res) {
 
         client.end();
         resolve(motivos_respostas)
-      }).catch(e => reject(e))
+      }).catch(err => {
+        client.end();
+        console.log(err)
+      })
     });
   });
 }
@@ -141,14 +151,20 @@ function salvarEvento(req, res) {
                             client.end();
                             resolve(resposta)
                           })
-                      }).catch(e => reject(e))
+                      }).catch(err => {
+                        client.end();
+                        reject(err)
+                      })
 
                     })
                   } else {
                     client.query('COMMIT').then(() => {
                       client.end();
                       resolve(true)
-                    }).catch(e => reject(e))
+                    }).catch(err => {
+                      client.end();
+                      reject(err)
+                    })
                   }
 
 
@@ -163,17 +179,35 @@ function salvarEvento(req, res) {
                     client.query('COMMIT').then(() => {
                       client.end();
                       resolve(true)
-                    }).catch(e => reject(e))
-                  }).catch(e => reject(e))
+                    }).catch(err => {
+                      client.end();
+                      reject(err)
+                    })
+                  }).catch(err => {
+                    client.end();
+                    reject(err)
+                  })
                 }
 
 
-              }).catch(e => reject(e))
-            }).catch(e => reject(e))
+              }).catch(err => {
+                client.end();
+                reject(err)
+              })
+            }).catch(err => {
+              client.end();
+              reject(err)
+            })
           })
 
-        }).catch(e => reject(e))
-      }).catch(e => reject(e))
+        }).catch(err => {
+          client.end();
+          reject(err)
+        })
+      }).catch(err => {
+        client.end();
+        reject(err)
+      })
 
 
       function createEvent(motivoRespostaAutomatico, motivoResposta, updateEventoEncerrado) {
@@ -236,8 +270,9 @@ function salvarEvento(req, res) {
         }
       }
     });
-  });
-
+  }).catch(err => {
+    reject(err)
+  })
 }
 
 function getEventosPendentes(req, res) {
@@ -268,10 +303,12 @@ function getEventosPendentes(req, res) {
           }
           else reject('Não há eventos!')
         }
-        )
-        .catch(err => console.log(err)) //reject( err.hint ) )
-    }).catch(e => {
-      reject(e)
+        ).catch(err => {
+          client.end();
+          reject(err)
+        })
+    }).catch(err => {
+      reject(err)
     })
   })
 }
@@ -298,11 +335,13 @@ function getEventosLinhaDoTempo(req, res) {
             resolve(eventos)
           }
           else reject('Não há eventos!')
-        }
-        )
-        .catch(err => console.log(err)) //reject( err.hint ) )
-    }).catch(e => {
-      reject(e)
+        })
+        .catch(err => {
+          client.end();
+          reject(err)
+        })
+    }).catch(err => {
+      reject(err)
     })
   })
 }
@@ -330,10 +369,16 @@ function getEventosRelatorioUsuario(req, res) {
             client.end();
             resolve(eventos)
           }
-          else reject('Não há eventos!')
+          else {
+            reject('Não há eventos!')
+            client.end();
+          }
         }
         )
-        .catch(err => console.log(err)) //reject( err.hint ) )
+        .catch(err => {
+          client.end();
+          reject(err)
+        })
     }).catch(e => {
       reject(e)
     })

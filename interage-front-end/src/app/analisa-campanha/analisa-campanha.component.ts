@@ -108,7 +108,7 @@ export class AnalisaCampanhaComponent implements OnInit {
     });
     this.campanhaSelect = campanha.resposta as Array<object>;
     this.dataInicial = this.campanhaSelect[0].dt_inicio;
-    this.dataFinal =  this.campanhaSelect[0].dt_fim;
+    this.dataFinal = this.campanhaSelect[0].dt_fim;
     this.campanhaSelect = this.campanhaSelect.map(campanha => {
       return { value: campanha.id, label: campanha.nome }
     })
@@ -120,6 +120,30 @@ export class AnalisaCampanhaComponent implements OnInit {
 
   async analisarCampanha() {
     try {
+      const arrumaPredicoes = function arrumaPredicoes(resultadoPredicoes) {
+        let ret = [];
+
+        let predicaoFrio = resultadoPredicoes.filter((r) => {
+          if (r.id == 1) return true;
+        })[0]
+        let predicaoMorno = resultadoPredicoes.filter((r) => {
+          if (r.id == 2) return true;
+        })[0]
+        let predicaoQuente = resultadoPredicoes.filter((r) => {
+          if (r.id == 3) return true;
+        })[0]
+
+        if (!predicaoFrio) ret.push({ nome: "Frio", id: 1, count: "0" })
+        else ret.push(predicaoFrio)
+
+        if (!predicaoMorno) ret.push({ nome: "Morno", id: 2, count: "0" })
+        else ret.push(predicaoMorno)
+
+        if (!predicaoQuente) ret.push({ nome: "Quente", id: 3, count: "0" })
+        else ret.push(predicaoQuente)
+        return ret;
+      }
+
       let analisarCampanha = await this.connectHTTP.callService({
         service: 'getCampanhaAnalisar',
         paramsService: {
@@ -133,11 +157,31 @@ export class AnalisaCampanhaComponent implements OnInit {
       }) as any;
       this.prospects = analisarCampanha.resposta.campanhaProspects[0].prospects;
       this.tentando = analisarCampanha.resposta.campanhaTentando;
-      this.predicoes = analisarCampanha.resposta.campanhaPredicoes;
+      this.predicoes = arrumaPredicoes(analisarCampanha.resposta.campanhaPredicoes);
       this.resultado = analisarCampanha.resposta.campanhaResultado;
     }
     catch (e) {
       this.toastrService.error(e.error);
     }
-  };
+  }
+  async salvaCampanhaCSV() {
+    try {
+      let getCampanhaCallCenter = await this.connectHTTP.callService({
+        service: 'getEventosRelatorioCampanha',
+        paramsService: {
+          token: this.usuarioLogado.token,
+          id_usuario: this.usuarioLogado.id,
+          id_campanha: this.campanhaSelectValue,
+        }
+      }) as any;
+
+      debugger;
+      new Angular5Csv(getCampanhaCallCenter.resposta, 'data-table', {
+        headers: Object.keys(getCampanhaCallCenter.resposta[0])
+      });
+    }
+    catch (e) {
+      this.toastrService.error(e.error);
+    }
+  }
 }
