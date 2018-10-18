@@ -199,6 +199,7 @@ export class ProdutividadeCallCenterComponent implements OnInit {
       }) as any;
 
       new Angular5Csv(getProdutividadeCallCenter.resposta, 'data-table', {
+        fieldSeparator: ';',
         headers: Object.keys(getProdutividadeCallCenter.resposta[0])
       });
     }
