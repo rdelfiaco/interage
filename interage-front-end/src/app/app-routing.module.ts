@@ -45,7 +45,7 @@ const routes: Routes = [
     canActivate: [AuthGuard]
   },
   {
-    path: 'telemarketing',
+    path: 'vendasInternas',
     component: TelemarketingComponent,
     canActivate: [AuthGuard]
   },

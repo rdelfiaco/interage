@@ -1,4 +1,4 @@
-<div class="h5 text-center">Campanha de Telemarketing</div>
+<div class="h5 text-center">Campanha de Vendas Internas</div>
 <div class="row">
   <div class="col-md-6">
     <mdb-select (selected)="getSelectedValue($event)" [disabled]="campanhaIniciada" [options]="campanhas | async"
@@ -21,13 +21,13 @@
 <br />
 <div class="row" *ngIf="campanhaIniciada">
   <button type="button" mdbBtn color="primary" class="relative waves-light" (click)="solicitarLigacao(); basicModal.show();"
-    mdbWavesEffect> Solicitar Ligação</button>
+    mdbWavesEffect> Próximo cliente</button>
   <div mdbModal #basicModal="mdbModal" [config]="{backdrop: true, ignoreBackdropClick: true}" class="modal fade right"
     role="dialog" aria-labelledby="myBasicModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-fluid" role="document">
       <div class="modal-content">
         <div *ngIf="pessoaObject" class="modal-header">
-          <h4 class="modal-title w-100" id="myModalLabel">Telemarketing -
+          <h4 class="modal-title w-100" id="myModalLabel">Vendas Internas -
             {{pessoaObject.principal.nome}}</h4>
         </div>
         <div *ngIf="formAberto" class="modal-body" style="overflow: auto; height: 80vh;">
