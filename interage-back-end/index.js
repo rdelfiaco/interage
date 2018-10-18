@@ -347,6 +347,19 @@ app.get('/getProdutividadeCallCenter', (req, res) => {
     })
 });
 
+app.get('/trocarSenhaUsuarioLogado', (req, res) => {
+  usuario.trocarSenhaUsuarioLogado(req)
+    .then(linhas => {
+      headerResponse(res)
+      res.status(200).send(linhas)
+    })
+    .catch(error => {
+      headerResponse(res)
+      console.log(error)
+      res.status(401).send(error)
+    })
+});
+
 app.listen(nodeStart.port, "0.0.0.0");
 console.log(`Servidor iniciado na em http://localhost:${nodeStart.port}`)
 

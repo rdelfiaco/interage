@@ -4,6 +4,7 @@ import { Usuario } from './usuario';
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { LocalStorage } from '../shared/services/localStorage';
+import { ToastService } from '../../lib/ng-uikit-pro-standard';
 
 
 @Component({
@@ -19,7 +20,8 @@ export class LoginComponent implements OnInit {
     formBuilder: FormBuilder,
     private router: Router,
     private auth: AuthService,
-    private localStorage: LocalStorage
+    private localStorage: LocalStorage,
+    private toastrService: ToastService
   ) {
 
     this.loginForm = formBuilder.group({
@@ -50,7 +52,7 @@ export class LoginComponent implements OnInit {
 
     const res = await this.auth.autenticacao(this.usuario)
     if (res.error) {
-      console.log(res.error)
+      this.toastrService.error(res.error);
     }
     else {
       let usuarioLogado = res.resposta

@@ -25,6 +25,7 @@ import { ItemDeEventoComponent } from './linha-do-tempo/item-de-evento/item-de-e
 import { AnalisaCampanhaComponent } from './analisa-campanha/analisa-campanha.component';
 import { MascaraTelefonePipe } from './shared/pipes/mascaraTelefone/mascara-telefone.pipe';
 import { ProdutividadeCallCenterComponent } from './produtividade-call-center/produtividade-call-center.component';
+import { TrocarSenhaComponent } from './usuario/trocar-senha/trocar-senha.component';
 
 
 @NgModule({
@@ -47,6 +48,7 @@ import { ProdutividadeCallCenterComponent } from './produtividade-call-center/pr
     AnalisaCampanhaComponent,
     MascaraTelefonePipe,
     ProdutividadeCallCenterComponent,
+    TrocarSenhaComponent,
   ],
 
   imports: [

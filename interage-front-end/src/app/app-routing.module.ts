@@ -16,6 +16,7 @@ import { PesquisaPessoaComponent } from './pesquisa-pessoa/pesquisa-pessoa.compo
 import { CadastroPessoaComponent } from './cadastro-pessoa/cadastro-pessoa.component';
 import { AnalisaCampanhaComponent } from './analisa-campanha/analisa-campanha.component';
 import { ProdutividadeCallCenterComponent } from './produtividade-call-center/produtividade-call-center.component';
+import { TrocarSenhaComponent } from './usuario/trocar-senha/trocar-senha.component';
 
 
 
@@ -72,6 +73,11 @@ const routes: Routes = [
   {
     path: 'produtividadeCallCenter',
     component: ProdutividadeCallCenterComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'trocarSenha',
+    component: TrocarSenhaComponent,
     canActivate: [AuthGuard]
   },
   {

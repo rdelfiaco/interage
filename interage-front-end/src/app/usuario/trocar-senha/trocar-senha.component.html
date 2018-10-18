@@ -1,0 +1,32 @@
+<div class="card card-cascade narrower">
+
+  <!--Card image-->
+  <div class="view view-cascade gradient-card-header blue-gradient narrower py-1 mx-2  d-flex justify-content-center align-items-center">
+
+    <h4 class="white-text font-weight-bold text-uppercase ">Trocar Senha</h4>
+
+  </div>
+
+  <div class="row no-gutters justify-content-center trocarSenha">
+    <div class="col-6">
+      <form [formGroup]="trocarSenhaForm" class="formQuestionario">
+        <div class="md-form">
+          <input mdbInputDirective formControlName="senhaAntiga" type="password" id="senhaAntiga" class="form-control">
+          <label for="senhaAntiga">Senha Antiga</label>
+        </div>
+        <div class="md-form">
+          <input mdbInputDirective formControlName="senhaNova" type="password" id="senhaNova" class="form-control">
+          <label for="senhaNova">Senha Nova</label>
+        </div>
+        <div class="md-form">
+          <input mdbInputDirective formControlName="senhaNovaRepete" type="password" id="senhaNovaRepete" class="form-control">
+          <label for="senhaNovaRepete">Repetir Senha Nova</label>
+        </div>
+        <div class="row">
+          <button type="button" mdbBtn color="primary" (click)="salvarSenha();" class="relative waves-light"
+            mdbWavesEffect [disabled]="!trocarSenhaForm.valid">Salvar nova senha</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
