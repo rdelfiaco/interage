@@ -15,6 +15,7 @@ export class ConnectHTTP {
     const mensagem = this._checkOptionsCallService(options);
     if (mensagem && !mensagem.error) return mensagem;
     return new Promise((resolve, reject) => {
+      //TROCA DADOS SERVIDOR
       // const host = options.host || "http://159.69.205.116:3010/" //treinamento
       // const host = options.host || "http://159.69.205.116:3000/" //Producao
       const host = options.host || "http://localhost:3010/" //Local
