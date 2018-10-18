@@ -96,6 +96,10 @@
           </table>
         </div>
       </div>
+      <div class="quantidadeDeLigacoes">
+        <span *ngIf="totalLigacoesCampanha" title="Quantidade de ligações">{{totalLigacoesCampanha}}</span>
+      </div>
+      
       <div class="fundoFunil">
         <span *ngIf="predicoes && predicoes[0]" [title]="predicoes[0].nome">{{predicoes[0].count}}</span>
         <span *ngIf="predicoes && predicoes[1]" [title]="predicoes[1].nome">{{predicoes[1].count}}</span>

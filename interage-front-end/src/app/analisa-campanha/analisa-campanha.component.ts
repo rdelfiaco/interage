@@ -26,6 +26,7 @@ export class AnalisaCampanhaComponent implements OnInit {
   analisaCampanhaTabela: Array<any>;
   prospectsResposta: Array<any>;
   tentandoResposta: Array<any>;
+  totalLigacoesCampanha: number;
   agentesVendasSelectValue: string;
   campanhaSelectValue: string;
   dataInicial: string //= moment().format('DD/MM/YYYY')
@@ -159,6 +160,7 @@ export class AnalisaCampanhaComponent implements OnInit {
       this.tentando = analisarCampanha.resposta.campanhaTentando;
       this.predicoes = arrumaPredicoes(analisarCampanha.resposta.campanhaPredicoes);
       this.resultado = analisarCampanha.resposta.campanhaResultado;
+      this.totalLigacoesCampanha = analisarCampanha.resposta.totalLigacoesCampanha[0].total_ligacoes;
     }
     catch (e) {
       this.toastrService.error(e.error);

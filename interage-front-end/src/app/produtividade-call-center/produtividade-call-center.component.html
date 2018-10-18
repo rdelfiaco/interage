@@ -100,6 +100,9 @@
           </table>
         </div>
       </div>
+      <div class="quantidadeDeLigacoes">
+        <span *ngIf="totalLigacoesDepartamento" title="Quantidade de ligações">{{totalLigacoesDepartamento}}</span>
+      </div>
       <div class="fundoFunil">
         <span *ngIf="eventosPredicaoDepartamento" title="Frio">{{eventosPredicaoDepartamento[0] ?
           eventosPredicaoDepartamento[0].count : 0}}</span>
@@ -156,6 +159,9 @@
             </tbody>
           </table>
         </div>
+      </div>
+      <div class="quantidadeDeLigacoes">
+        <span *ngIf="totalLigacoesUsuario" title="Quantidade de ligações">{{totalLigacoesUsuario}}</span>
       </div>
       <div class="fundoFunil">
         <span *ngIf="eventosPredicaoUsuario" title="Frio">{{eventosPredicaoUsuario[0] ?
