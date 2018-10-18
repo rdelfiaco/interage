@@ -177,6 +177,7 @@ export class AnalisaCampanhaComponent implements OnInit {
 
       debugger;
       new Angular5Csv(getCampanhaCallCenter.resposta, 'data-table', {
+        fieldSeparator: ';',
         headers: Object.keys(getCampanhaCallCenter.resposta[0])
       });
     }

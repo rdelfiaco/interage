@@ -50,7 +50,7 @@ export class EventoComponent implements OnInit {
   }
 
   options = {
-    fieldSeparator: ',',
+    fieldSeparator: ';',
     quoteStrings: '"',
     decimalseparator: '.',
     showLabels: true,
