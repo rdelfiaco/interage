@@ -25,6 +25,7 @@ export class TrocarSenhaComponent implements OnInit {
       senhaNovaRepete: ['', [this.ValidateSenha.bind(this)]],
     })
   }
+  ngOnInit() { }
 
   ValidateSenha(control: AbstractControl) {
     if (control.value === "" || control.value.length < 4) return { senhaDiferente: true };
