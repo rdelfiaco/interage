@@ -19,9 +19,12 @@
 
 
 module.exports = ({ //localhost
-    host: '159.69.205.116',
+    host: 'localhost',
+    // host: '159.69.205.116',
     port: 5432,
-    database: 'altis_teste',
+    database: 'altis',
+    // database: 'altis_teste',
     user: 'postgres',
-    password: 'altisinterage123!@#'
+    password: 'postgres'
+    // password: 'altisinterage123!@#'
 });
