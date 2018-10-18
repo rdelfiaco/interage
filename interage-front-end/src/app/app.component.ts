@@ -10,7 +10,7 @@ import { Observable } from 'rxjs';
 })
 export class AppComponent {
   usuarioLogado: Observable<boolean>;
-
+  versaoSistema: string = 'v.1.0.0';
   constructor(private router: Router, private auth: AuthService) {
     this.usuarioLogado = this.auth.estaLogado();
   }
