@@ -27,10 +27,24 @@ export class TelemarketingComponent implements OnInit {
   formAberto: boolean;
   pessoaObject: any;
   pessoaNome: string;
-
+  velocimetro: string;
 
   constructor(private connectHTTP: ConnectHTTP, private localStorage: LocalStorage, private dt: ChangeDetectorRef) {
     this.usuarioLogado = this.localStorage.getLocalStorage('usuarioLogado') as Usuario;
+    this.velocimetro;
+    let arr = [];
+
+    arr.push('http://chart.apis.google.com/chart?')
+    arr.push('chs=225x125')
+    arr.push('&cht=gom')
+    arr.push('&chd=t:6')
+    arr.push('&chds=0,12')
+    arr.push('&chco=ff0000,ffff00,00ff00')
+    arr.push('&chxt=y')
+    arr.push('&chxl=0:|0|100')
+    this.velocimetro = arr.join('')
+    console.log(this.velocimetro)
+
   }
 
   async ngOnInit() {

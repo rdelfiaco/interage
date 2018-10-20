@@ -1,5 +1,16 @@
 <div class="h5 text-center">Campanha de Vendas Internas</div>
 <div class="row">
+  <br>
+  <div class="col-md-3">
+    <div class="h6 text-left" >Total de ligações realizadas:</div>
+  </div>
+  <div class="col-md-4">
+    <div class="h6 text-left">Meta diária:</div>
+  </div>  
+</div>
+
+<br>
+<div class="row">
   <div class="col-md-6">
     <mdb-select (selected)="getSelectedValue($event)" [disabled]="campanhaIniciada" [options]="campanhas | async"
       [multiple]="false" placeholder="Escolha sua campanha"></mdb-select>
@@ -60,4 +71,16 @@
       </div>
     </div>
   </div>
+</div>
+<br>
+<div class="row">
+    <div class="col-md-6 text-center">
+      <!-- <img src="http://chart.apis.google.com/chart?chs=225x125&cht=gom&chd=t:6&chds=0,12&chco=ff0000,ffff00,00ff00&chxt=y&chxl=0:|0|100"> -->
+      <img [src]="velocimetro"/>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6 text-center">
+      <span class="h6 text-left">Tendência para alcançar a meta das ligações diária:</span>
+    </div>
 </div>
