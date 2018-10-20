@@ -71,6 +71,20 @@
     flex-direction: column;
 }
 
+.quantidadeDeLigacoes {
+    height: 40px;
+    width: 500px;
+    margin-top: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    & span {
+        font-size: 2em;
+        color: black;
+        font-weight: 800;
+    }
+}
+
 .resultado {
     display: flex;
     width: 370px;

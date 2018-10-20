@@ -12,17 +12,27 @@ function getProdutividadeCallCenter(req, res) {
                 getEventosPredicaoUsuario(req).then(EventosPredicaoUsuario => {
                   getEventosResultadoDepartamento(req).then(EventosResultadoDepartamento => {
                     getEventosResultadoUsuario(req).then(EventosResultadoUsuario => {
-                      if (!EventosPendentesDepartamento || !EventosPendentesUsuario
-                        || !EventosTentandoDepartamento || !EventosTentandoUsuario
-                        || !EventosPredicaoDepartamento || !EventosPredicaoUsuario
-                        || !EventosResultadoDepartamento || !EventosResultadoUsuario)
-                        reject('Produtividade sem retorno');
+                      getTotalLigacoesDepartamento(req).then(totalLigacoesDepartamento => {
+                        getTotalLigacoesUsuario(req).then(totalLigacoesUsuario => {
+                          if (!EventosPendentesDepartamento || !EventosPendentesUsuario
+                            || !EventosTentandoDepartamento || !EventosTentandoUsuario
+                            || !EventosPredicaoDepartamento || !EventosPredicaoUsuario
+                            || !EventosResultadoDepartamento || !EventosResultadoUsuario
+                            || !totalLigacoesDepartamento || !totalLigacoesUsuario)
+                            reject('Produtividade sem retorno');
 
-                      resolve({
-                        EventosPendentesDepartamento, EventosPendentesUsuario,
-                        EventosTentandoDepartamento, EventosTentandoUsuario,
-                        EventosPredicaoDepartamento, EventosPredicaoUsuario,
-                        EventosResultadoDepartamento, EventosResultadoUsuario
+                          resolve({
+                            EventosPendentesDepartamento, EventosPendentesUsuario,
+                            EventosTentandoDepartamento, EventosTentandoUsuario,
+                            EventosPredicaoDepartamento, EventosPredicaoUsuario,
+                            EventosResultadoDepartamento, EventosResultadoUsuario,
+                            totalLigacoesDepartamento, totalLigacoesUsuario
+                          });
+                        }).catch(e => {
+                          reject(e);
+                        });
+                      }).catch(e => {
+                        reject(e);
                       });
                     }).catch(e => {
                       reject(e);
@@ -401,6 +411,78 @@ function getEventosResultadoUsuario(req, res) {
                         and excedeu_tentativas 	
                   
                   order by id`
+
+      client.query(sql)
+        .then(res => {
+          let registros = res.rows;
+
+          client.end();
+          resolve(registros)
+        }
+        ).catch(err => {
+          client.end();
+          reject(err)
+        })
+    }).catch(e => {
+      reject(e)
+    })
+  })
+}
+
+function getTotalLigacoesDepartamento(req, res) {
+  return new Promise(function (resolve, reject) {
+
+    checkTokenAccess(req).then(historico => {
+      const dbconnection = require('../config/dbConnection')
+      const { Client } = require('pg')
+
+      const client = new Client(dbconnection)
+
+      client.connect()
+
+      let sql = `select count(*) as total_ligacoes
+                  from eventos e
+                  inner join usuarios u on e.id_pessoa_resolveu = u.id_pessoa
+                  where id_status_evento in (3,7)
+                  and id_canal = 3
+                  and u.id_organograma = 4
+                  and date(dt_resolvido) between date('${req.query.dtInicial}') and date('${req.query.dtFinal}')`
+
+      client.query(sql)
+        .then(res => {
+          let registros = res.rows;
+
+          client.end();
+          resolve(registros)
+        }
+        ).catch(err => {
+          client.end();
+          reject(err)
+        })
+    }).catch(e => {
+      reject(e)
+    })
+  })
+}
+
+
+function getTotalLigacoesUsuario(req, res) {
+  return new Promise(function (resolve, reject) {
+
+    checkTokenAccess(req).then(historico => {
+      const dbconnection = require('../config/dbConnection')
+      const { Client } = require('pg')
+
+      const client = new Client(dbconnection)
+
+      client.connect()
+
+      let sql = `select count(*) as total_ligacoes
+                  from eventos
+                  where id_status_evento in (3,7)
+                  and id_canal = 3
+                  and date(dt_resolvido) between date('${req.query.dtInicial}') and date('${req.query.dtFinal}')
+                  and id_pessoa_resolveu = ${req.query.id_pessoa_usuario_select}`
 
       client.query(sql)
         .then(res => {

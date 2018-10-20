@@ -37,6 +37,8 @@ export class ProdutividadeCallCenterComponent implements OnInit {
   eventosPredicaoDepartamento: Array<any> = [];
   eventosResultadoUsuario: Array<any> = [];
   eventosResultadoDepartamento: Array<any> = [];
+  totalLigacoesDepartamento: number;
+  totalLigacoesUsuario: number;
 
   dataInicial: string = moment().startOf('month').format('DD/MM/YYYY')
   dataFinal: string = moment().endOf('month').format('DD/MM/YYYY')
@@ -164,12 +166,11 @@ export class ProdutividadeCallCenterComponent implements OnInit {
         }
       }) as any;
 
-      this.agentesVendasSelectNome = this.agentesVendasSelectNomeTemp;
+      debugger;
+      this.agentesVendasSelectNome = this.agentesVendasSelectNomeTemp || this.agentesVendasSelectNome;
       this.eventosPendentesDepartamento = getProdutividadeCallCenter.resposta.EventosPendentesDepartamento;
       this.eventosTentandoDepartamento = getProdutividadeCallCenter.resposta.EventosTentandoDepartamento;
-
       this.eventosPredicaoDepartamento = arrumaPredicoes(getProdutividadeCallCenter.resposta.EventosPredicaoDepartamento);
-      debugger;
       this.eventosResultadoDepartamento = getProdutividadeCallCenter.resposta.EventosResultadoDepartamento;
 
 
@@ -177,6 +178,8 @@ export class ProdutividadeCallCenterComponent implements OnInit {
       this.eventosTentandoUsuario = getProdutividadeCallCenter.resposta.EventosTentandoUsuario;
       this.eventosPredicaoUsuario = arrumaPredicoes(getProdutividadeCallCenter.resposta.EventosPredicaoUsuario);
       this.eventosResultadoUsuario = getProdutividadeCallCenter.resposta.EventosResultadoUsuario;
+      this.totalLigacoesDepartamento = getProdutividadeCallCenter.resposta.totalLigacoesDepartamento[0].total_ligacoes;
+      this.totalLigacoesUsuario = getProdutividadeCallCenter.resposta.totalLigacoesUsuario[0].total_ligacoes;
     }
     catch (e) {
       this.toastrService.error(e.error);

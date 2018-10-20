@@ -80,11 +80,15 @@ function getCampanhaAnalisar(req, res) {
         getCampanhaTentando(req).then(campanhaTentando => {
           getPredicoesCampanha(req).then(campanhaPredicoes => {
             getCampanhaResultado(req).then(campanhaResultado => {
+              getTotalLigacoesCampanha(req).then(totalLigacoesCampanha => {
 
-              if (!campanhaProspects || !campanhaTentando || !campanhaPredicoes || !campanhaResultado) reject('Campanha sem retorno');
+                if (!campanhaProspects || !campanhaTentando || !campanhaPredicoes || !campanhaResultado || !totalLigacoesCampanha) reject('Campanha sem retorno');
 
-              resolve({ campanhaProspects, campanhaTentando, campanhaPredicoes, campanhaResultado });
+                resolve({ campanhaProspects, campanhaTentando, campanhaPredicoes, campanhaResultado, totalLigacoesCampanha });
 
+              }).catch(e => {
+                reject(e);
+              });
             }).catch(e => {
               reject(e);
             });
@@ -278,6 +282,48 @@ function getEventosRelatorioCampanha(req, res) {
           }
         }
         )
+        .catch(err => {
+          client.end();
+          reject(err)
+        })
+    }).catch(e => {
+      reject(e)
+    })
+  })
+}
+
+function getTotalLigacoesCampanha(req, res) {
+  return new Promise(function (resolve, reject) {
+
+    checkTokenAccess(req).then(historico => {
+      const dbconnection = require('../config/dbConnection')
+      const { Client } = require('pg')
+
+      const client = new Client(dbconnection)
+
+      client.connect()
+
+      let sql = `select count(*) as total_ligacoes
+                  from eventos e
+                  inner join usuarios u on e.id_pessoa_resolveu = u.id_pessoa
+                  where id_status_evento in (3,7)
+                  and id_canal = 3
+                  and u.id_organograma = 4
+                  and date(dt_resolvido) between date('${req.query.dtInicial}') and date('${req.query.dtFinal}')
+                  and e.id_campanha = ${req.query.id_campanha}`
+
+      client.query(sql)
+        .then(res => {
+          if (res.rowCount > 0) {
+            let eventos = res.rows;
+            client.end();
+            resolve(eventos)
+          }
+          else {
+            reject('Não há eventos!')
+            client.end();
+          }
+        })
         .catch(err => {
           client.end();
           reject(err)

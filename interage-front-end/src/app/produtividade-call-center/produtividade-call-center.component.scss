@@ -35,6 +35,20 @@
     align-items: center;
 }
 
+.quantidadeDeLigacoes {
+    height: 40px;
+    width: 500px;
+    margin-top: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    & span {
+        font-size: 2em;
+        color: black;
+        font-weight: 800;
+    }
+}
+
 .tentando {
     background: url("./img/nivel_2_funil_interage.png") no-repeat center center;
     height: 205px;
