@@ -1,4 +1,5 @@
 const { checkTokenAccess } = require('./checkTokenAccess');
+const { getMetaPessoa } = require('./metaLigacoes');
 
 function getUmEvento(req, res) {
   return new Promise(function (resolve, reject) {
@@ -148,8 +149,13 @@ function salvarEvento(req, res) {
 
                         if (index == array.length - 1)
                           client.query('COMMIT').then((resposta) => {
-                            client.end();
-                            resolve(resposta)
+                            getMetaPessoa(req).then(metaPessoa => {
+                              client.end();
+                              resolve(metaPessoa)
+                            }).catch(err => {
+                              client.end();
+                              reject(err)
+                            })
                           })
                       }).catch(err => {
                         client.end();

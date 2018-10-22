@@ -1,5 +1,6 @@
 const { checkTokenAccess } = require('./checkTokenAccess');
 const { getPredicoesCampanha } = require('./predicao');
+const { getMetaPessoa } = require('./metaLigacoes');
 
 function getCampanhasDoUsuario(req, res) {
   return new Promise(function (resolve, reject) {
@@ -18,18 +19,24 @@ function getCampanhasDoUsuario(req, res) {
 
       client.query(sql)
         .then(res => {
-          if (res.rowCount > 0) {
-            let campanhas = res.rows;
+          getMetaPessoa(req).then(metaPessoa => {
+            if (res.rowCount > 0 && metaPessoa) {
+              let campanhas = res.rows;
 
+              client.end();
+              resolve({ campanhas, metaPessoa })
+            }
+            else {
+              client.end();
+              reject('Campanha não encontrada')
+            }
+          }).catch(err => {
             client.end();
-            resolve(campanhas)
-          }
-          reject('Campanha não encontrada')
-        }
-        )
-        .catch(err => {
+            reject(err)
+          })
+        }).catch(err => {
           client.end();
-          console.log(err)
+          reject(err)
         })
     }).catch(e => {
       reject(e)
