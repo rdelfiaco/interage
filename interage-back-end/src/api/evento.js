@@ -165,8 +165,13 @@ function salvarEvento(req, res) {
                     })
                   } else {
                     client.query('COMMIT').then(() => {
-                      client.end();
-                      resolve(true)
+                      getMetaPessoa(req).then(metaPessoa => {
+                        client.end();
+                        resolve(metaPessoa)
+                      }).catch(err => {
+                        client.end();
+                        reject(err)
+                      })
                     }).catch(err => {
                       client.end();
                       reject(err)
@@ -183,8 +188,13 @@ function salvarEvento(req, res) {
 
                   client.query(updateQuantidadeMaxTentativas).then(() => {
                     client.query('COMMIT').then(() => {
-                      client.end();
-                      resolve(true)
+                      getMetaPessoa(req).then(metaPessoa => {
+                        client.end();
+                        resolve(metaPessoa)
+                      }).catch(err => {
+                        client.end();
+                        reject(err)
+                      })
                     }).catch(err => {
                       client.end();
                       reject(err)
