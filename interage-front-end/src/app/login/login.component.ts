@@ -4,6 +4,7 @@ import { Usuario } from './usuario';
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { LocalStorage } from '../shared/services/localStorage';
+import SHA1 from '../shared/sha1';
 import { ToastService } from '../../lib/ng-uikit-pro-standard';
 
 
@@ -48,7 +49,7 @@ export class LoginComponent implements OnInit {
 
   async fazerLogin() {
     this.usuario.login = this.loginForm.value.login;
-    this.usuario.senha = this.loginForm.value.senha;
+    this.usuario.senha = SHA1(this.loginForm.value.senha);
 
     const res = await this.auth.autenticacao(this.usuario)
     if (res.error) {

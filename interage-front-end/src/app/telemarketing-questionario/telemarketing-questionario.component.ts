@@ -280,7 +280,6 @@ export class TelemarketingQuestionarioComponent implements OnInit {
       }
     });
     this._limpar();
-    debugger;
     this.atualizaMeta.emit(metaPessoa.resposta[0]);
     this.modal.hide()
   }

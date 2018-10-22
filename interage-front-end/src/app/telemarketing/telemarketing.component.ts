@@ -35,7 +35,6 @@ export class TelemarketingComponent implements OnInit {
   }
 
   async ngOnInit() {
-    debugger;
     let r = await this.connectHTTP.callService({
       service: 'getCampanhasDoUsuario',
       paramsService: {
@@ -44,7 +43,6 @@ export class TelemarketingComponent implements OnInit {
         id_pessoa: this.usuarioLogado.id_pessoa,
       }
     }) as any;
-    debugger;
     this.campanhas = new Observable((observer) => {
       let camp = r.resposta.campanhas as Array<object>
       camp = camp.map((c: any) => {
@@ -114,7 +112,6 @@ export class TelemarketingComponent implements OnInit {
   }
 
   _limpar() {
-    debugger;
     this.formAberto = false;
     this.pessoa = null;
     this.eventoObject = null;
@@ -137,7 +134,6 @@ export class TelemarketingComponent implements OnInit {
   }
 
   atualizaMeta(metaPessoa) {
-    debugger;
     this.metaPessoa = metaPessoa;
   }
 }
