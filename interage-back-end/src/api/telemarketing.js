@@ -3,6 +3,7 @@ const { getUmEvento, motivosRespostas } = require('./evento');
 const { getPredicao } = require('./predicao');
 const { getObjecoes } = require('./objecoes');
 const { getPessoa } = require('./pessoa');
+const { getMetaPessoa } = require('./metaLigacoes');
 
 function getLigacaoTelemarketing(req, res) {
   return new Promise(function (resolve, reject) {
@@ -15,9 +16,13 @@ function getLigacaoTelemarketing(req, res) {
           motivosRespostas(req).then(motivos_respostas => {
             getPredicao(req).then(predicoes => {
               getObjecoes(req).then(objecoes => {
-                if (!evento || !pessoa || !motivos_respostas || !predicoes) reject('Ligação com erro!');
+                getMetaPessoa(req).then(metaPessoa => {
+                  if (!evento || !pessoa || !motivos_respostas || !predicoes || !metaPessoa) reject('Ligação com erro!');
 
-                resolve({ pessoa, evento, motivos_respostas, predicoes, objecoes });
+                  resolve({ pessoa, evento, motivos_respostas, predicoes, objecoes, metaPessoa });
+                }).catch(e => {
+                  reject(e);
+                });
               }).catch(e => {
                 reject(e);
               });

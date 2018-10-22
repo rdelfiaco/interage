@@ -8,7 +8,6 @@
 //     password: 'altisinterage123!@#'
 // });
 
-
 // module.exports = ({ //Produção
 //     host: 'localhost',
 //     port: 5432,
@@ -16,7 +15,6 @@
 //     user: 'postgres',
 //     password: 'altisinterage123!@#'
 // });
-
 
 module.exports = ({ //localhost
     host: '159.69.205.116',

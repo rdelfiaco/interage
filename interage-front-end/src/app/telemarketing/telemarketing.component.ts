@@ -88,7 +88,7 @@ export class TelemarketingComponent implements OnInit {
         id_organograma: this.usuarioLogado.id_organograma
       }
     }) as any;
-
+    debugger;
     this.eventoObject = telemarketing.resposta.evento;
 
     this.evento = new Observable((observer) => {
