@@ -6,6 +6,7 @@ import { Usuario } from '../login/usuario';
 import { ConnectHTTP } from '../shared/services/connectHTTP';
 import { LocalStorage } from '../shared/services/localStorage';
 import { IMyOptions } from '../../lib/ng-uikit-pro-standard';
+
 import * as moment from 'moment';
 
 
@@ -21,10 +22,17 @@ export class EventoComponent implements OnInit {
   departamentoSelect: Array<any>;
   motivoSelect: Array<any>;
   statusSelect: Array<any>;
-  departamentoSelectValue: string;
-  usuarioSelectValue: string;
-  motivoSelectVAlue : string;
-  statusSelectVAlue : string;
+  departamentoSelectValue: Array<number>;
+  usuarioSelectValue: number;
+  motivoSelectValue : number;
+  statusSelectValue : number;
+  eventosUsuarioChk: boolean = true;
+  eventosFinalizadosChk: boolean = true;
+  dtCricaoRadio:  boolean = false;
+  dtCompromissoRadio:  boolean = true;
+  enviadoPorRadio:  boolean = false;
+  recebidoPorRadio:  boolean = true;
+
   dataInicial: string = moment().subtract(1, 'days').format('DD/MM/YYYY')
   dataFinal: string  =  moment().add(1, 'days').format('DD/MM/YYYY')
   
@@ -72,7 +80,6 @@ export class EventoComponent implements OnInit {
   firstPageNumber: number = 1;
   lastPageNumber: number;
   maxVisibleItems: number = 10;
-  radioModel: string = 'dtCompromisso';
 
   constructor(private http: Http, private connectHTTP: ConnectHTTP, private localStorage: LocalStorage) { 
     this.usuarioLogado = this.localStorage.getLocalStorage('usuarioLogado') as Usuario;
@@ -85,61 +92,53 @@ export class EventoComponent implements OnInit {
     console.log(this.usuarioLogado.id_organograma)
     console.log(  moment().format('DD/MM/YYYY') );
 
-    this.departamentoSelect = [
-      { value: '1', label: 'Option 1' },
-      { value: '2', label: 'Option 2' },
-      { value: '3', label: 'Option 3' },
-    ];
-    
-    this.departamentoSelectValue = '1';
-
-    this.usuarioSelect = [
-      { value: '1', label: 'Option 1' },
-      { value: '2', label: 'Option 2' },
-      { value: '3', label: 'Option 3' },
-    ];
-
-    this.usuarioSelectValue = '2';
-
-    this.motivoSelect = [
-      { value: '1', label: 'Option 1' },
-      { value: '2', label: 'Option 2' },
-      { value: '3', label: 'Option 3' },
-    ];
-
-    this.motivoSelectVAlue = '3'
-
-    this.statusSelect = [
-      { value: '1', label: 'Option 1' },
-      { value: '2', label: 'Option 2' },
-      { value: '3', label: 'Option 3' },
-    ];
-
-    this.statusSelectVAlue = '2'
-
-    let eventos = await this.connectHTTP.callService({
-      service: 'getEventosPendentes',
+    let eventoFiltros = await this.connectHTTP.callService({
+      service: 'getEventoFiltros',
       paramsService: {
         token: this.usuarioLogado.token,
         id_usuario: this.usuarioLogado.id,        
         id_organograma: this.usuarioLogado.id_organograma
       }
     });
-    
-    this.tableData = eventos.resposta as Array<object> ;
 
-    setTimeout(() => {
-      for (let i = 1; i <= this.tableData.length; i++) {
-        if (i % this.maxVisibleItems === 0) {
-          this.paginators.push(i / this.maxVisibleItems);
-        }
-      }
-      if (this.tableData.length % this.paginators.length !== 0) {
-        this.paginators.push(this.paginators.length + 1);
-      }
-      this.lastPageNumber = this.paginators.length;
-      this.lastVisibleIndex = this.maxVisibleItems;
-    }, 200);
+    console.log( eventoFiltros.resposta  );
+
+    // combo departamento 
+    this.departamentoSelect = eventoFiltros.resposta.Organograma;
+    this.departamentoSelect = this.departamentoSelect.map(departamento => {
+      return { value: departamento.id, label: departamento.nome }
+    });
+
+    this.departamentoSelectValue = [this.usuarioLogado.id_organograma];
+
+    // combo usuário
+    this.usuarioSelect = eventoFiltros.resposta.Usuarios;
+    this.usuarioSelect = this.usuarioSelect.map(usuario => {
+      return { value: usuario.id, label: usuario.nome }
+    });
+
+    this.usuarioSelectValue =  this.usuarioLogado.id_pessoa;
+
+
+    // combo motivos
+    this.motivoSelect = eventoFiltros.resposta.Motivos;
+    this.motivoSelect = this.motivoSelect.map(motivos => {
+      return { value: motivos.id, label: motivos.nome }
+    });
+
+    this.motivoSelectValue =  1
+
+    // combo status_evento
+    this.statusSelect = eventoFiltros.resposta.StatusEvento;
+    this.statusSelect = this.statusSelect.map(status => {
+      return { value: status.id, label: status.nome }
+    });
+
+    this.statusSelectValue =  1;
+
+
+    this.listaEventos();
+
 
   }
 
@@ -223,5 +222,31 @@ export class EventoComponent implements OnInit {
   generateCsv() {
     new Angular5Csv(this.search(), 'data-table', this.options);
   }
+
+  async listaEventos(){
+
+    let eventos = await this.connectHTTP.callService({
+      service: 'getEventosFiltrados',
+      paramsService: {
+        token: this.usuarioLogado.token,
+        id_usuario: this.usuarioLogado.id,        
+        id_organograma: this.usuarioLogado.id_organograma,
+        dt_inicial: this.dataInicial,
+        dt_final: this.dataFinal,
+        responsavel_membro: this.usuarioLogado.responsavel_membro,
+        departamentos: this.departamentoSelectValue,
+        usuarios: this.usuarioSelectValue,
+        motivos: this.motivoSelectValue,
+        status: this.statusSelectValue,
+        eventosUsuarioChk: this.eventosUsuarioChk, 
+        dtCricaoRadio: this.dtCricaoRadio
+        
+      }
+    });
+    
+    this.tableData = eventos.resposta as Array<object> ;
+
+  }
+
 }
 

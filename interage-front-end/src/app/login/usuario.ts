@@ -8,7 +8,15 @@ export class Usuario {
     private _permissao: string;
     private _token: string;
     private _id_pessoa: number;
+    private _responsavel_membro: number;
 
+    
+    public get responsavel_membro(): number {
+        return this._responsavel_membro;
+    }
+    public set responsavel_membro(value: number) {
+        this._responsavel_membro = value;
+    }
     
     public get id_pessoa(): number {
         return this._id_pessoa;

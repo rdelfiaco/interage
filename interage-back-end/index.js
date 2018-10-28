@@ -101,6 +101,35 @@ app.get('/salvarEvento', (req, res) => {
     })
 });
 
+app.get('/getEventoFiltros', (req, res) => {
+  evento.getEventoFiltros(req)
+    .then(linhas => {
+      headerResponse(res)
+      res.status(200).send(linhas)
+    })
+    .catch(error => {
+      headerResponse(res)
+      console.log(error)
+      res.status(401).send(error)
+    })
+});
+
+app.get('/getEventosFiltrados', (req, res) => {
+  evento.getEventosFiltrados(req)
+    .then(linhas => {
+      headerResponse(res)
+      res.status(200).send(linhas)
+    })
+    .catch(error => {
+      headerResponse(res)
+      console.log(error)
+      res.status(401).send(error)
+    })
+});
+
+
+
+
 app.get('/salvarPessoa', (req, res) => {
   pessoa.salvarPessoa(req)
     .then(linhas => {
