@@ -83,7 +83,7 @@
         </div>
         <div class="row justify-content-around">
 
-          <a mdbBtn floating="true" size="lg" gradient="blue" mdbWavesEffect>
+          <a mdbBtn floating="true" size="lg" gradient="blue" (click)="listaEventos()"  mdbWavesEffect>
             <mdb-icon icon="refresh"></mdb-icon>
           </a>
           <a mdbBtn floating="true" size="lg" gradient="purple" mdbWavesEffect>
@@ -110,7 +110,7 @@
           <a mdbBtn floating="true" size="lg" gradient="peach" mdbWavesEffect>
             <mdb-icon icon="search"></mdb-icon>
           </a>
-          <a mdbBtn floating="true" size="lg" gradient="aqua" mdbWavesEffect>
+          <a mdbBtn floating="true" size="lg" gradient="aqua" (click)="generateCsv()" mdbWavesEffect>
             <mdb-icon icon="cloud-download"></mdb-icon>
           </a>
 

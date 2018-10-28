@@ -5,7 +5,7 @@ import { Angular5Csv } from 'angular5-csv/Angular5-csv';
 import { Usuario } from '../login/usuario';
 import { ConnectHTTP } from '../shared/services/connectHTTP';
 import { LocalStorage } from '../shared/services/localStorage';
-import { IMyOptions } from '../../lib/ng-uikit-pro-standard';
+import { IMyOptions, ToastService } from '../../lib/ng-uikit-pro-standard';
 
 import * as moment from 'moment';
 
@@ -81,27 +81,26 @@ export class EventoComponent implements OnInit {
   lastPageNumber: number;
   maxVisibleItems: number = 10;
 
-  constructor(private http: Http, private connectHTTP: ConnectHTTP, private localStorage: LocalStorage) { 
+  constructor(private http: Http, private connectHTTP: ConnectHTTP,
+    private toastrService: ToastService,  private localStorage: LocalStorage) { 
     this.usuarioLogado = this.localStorage.getLocalStorage('usuarioLogado') as Usuario;
 
 
   }
 
   async ngOnInit() {
-    console.log( this.usuarioLogado )
-    console.log(this.usuarioLogado.id_organograma)
-    console.log(  moment().format('DD/MM/YYYY') );
 
-    let eventoFiltros = await this.connectHTTP.callService({
-      service: 'getEventoFiltros',
-      paramsService: {
-        token: this.usuarioLogado.token,
-        id_usuario: this.usuarioLogado.id,        
-        id_organograma: this.usuarioLogado.id_organograma
-      }
-    });
+    
 
-    console.log( eventoFiltros.resposta  );
+      let eventoFiltros = await this.connectHTTP.callService({
+        service: 'getEventoFiltros',
+        paramsService: {
+          token: this.usuarioLogado.token,
+          id_usuario: this.usuarioLogado.id,        
+          id_organograma: this.usuarioLogado.id_organograma
+        }
+      }) as any;
+
 
     // combo departamento 
     this.departamentoSelect = eventoFiltros.resposta.Organograma;
@@ -142,7 +141,7 @@ export class EventoComponent implements OnInit {
 
   }
 
-
+  
   @HostListener('input') oninput() {
     this.paginators = [];
     for (let i = 1; i <= this.search().length; i++) {
@@ -219,33 +218,44 @@ export class EventoComponent implements OnInit {
     }
   }
 
-  generateCsv() {
-    new Angular5Csv(this.search(), 'data-table', this.options);
-  }
+
 
   async listaEventos(){
-
-    let eventos = await this.connectHTTP.callService({
-      service: 'getEventosFiltrados',
-      paramsService: {
-        token: this.usuarioLogado.token,
-        id_usuario: this.usuarioLogado.id,        
-        id_organograma: this.usuarioLogado.id_organograma,
-        dt_inicial: this.dataInicial,
-        dt_final: this.dataFinal,
-        responsavel_membro: this.usuarioLogado.responsavel_membro,
-        departamentos: this.departamentoSelectValue,
-        usuarios: this.usuarioSelectValue,
-        motivos: this.motivoSelectValue,
-        status: this.statusSelectValue,
-        eventosUsuarioChk: this.eventosUsuarioChk, 
-        dtCricaoRadio: this.dtCricaoRadio
-        
-      }
-    });
+    try {
+      let eventos = await this.connectHTTP.callService({
+        service: 'getEventosFiltrados',
+        paramsService: {
+          token: this.usuarioLogado.token,
+          id_usuario: this.usuarioLogado.id,        
+          id_organograma: this.usuarioLogado.id_organograma,
+          dt_inicial: this.dataInicial,
+          dt_final: this.dataFinal,
+          responsavel_membro: this.usuarioLogado.responsavel_membro,
+          departamentos: this.departamentoSelectValue,
+          usuarios: this.usuarioSelectValue,
+          motivos: this.motivoSelectValue,
+          status: this.statusSelectValue,
+          eventosUsuarioChk: this.eventosUsuarioChk, 
+          dtCricaoRadio: this.dtCricaoRadio,
+        }
+      }) as any;
     
     this.tableData = eventos.resposta as Array<object> ;
+    console.log(this.dtCricaoRadio)
+    
+  }
+  catch (e) {
+    this.toastrService.error(e.error);
+    this.tableData = [];
+  }
 
+  }
+
+  generateCsv() {
+    new Angular5Csv(this.tableData, 'data-table', {
+      fieldSeparator: ';',
+      headers: Object.keys(this.tableData[0])
+    });
   }
 
 }

@@ -586,13 +586,13 @@ function getEventosFiltrados(req, res) {
 
       let sql = `select * from view_eventos where `
       sql = sql + `id_status_evento in (${req.query.status}) `  // status 
-      if (req.query.eventosUsuarioChk = 'true') { 
+      if (req.query.eventosUsuarioChk == 'true') { 
         sql = sql + ` and (tipodestino = 'P' and id_pessoa_organograma in ( ${req.query.usuarios}) )` // usuário
       } else {
         sql = sql + ` and ( tipodestino = 'O' and id_pessoa_organograma in (${req.query.departamentos}) )` // departamentos 
       }
       sql = sql + ` and (id_motivo in ( ${req.query.motivos})  )` // motivos 
-      if (req.query.dtCricaoRadio = 'true' ) {
+      if (req.query.dtCricaoRadio == 'true' ) {
         sql = sql + ` and date(dt_criou) between date('${req.query.dt_inicial}') and date('${req.query.dt_final}')` // data de criação 
       }else {
         sql = sql + ` and dt_para_exibir <= now()` // data de compromisso 
