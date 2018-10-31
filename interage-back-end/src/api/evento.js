@@ -19,6 +19,7 @@ function getUmEvento(req, res) {
             or (tipodestino = 'P' and id_usuario = ${req.query.id_usuario} )
             or (id_pessoa_visualizou = ${req.query.id_pessoa} and id_status_evento in(5,6) ))
             and dt_para_exibir <= now()
+            and id_campanha = ${req.query.id_campanha}
             order by id_status_evento desc, id_prioridade, dt_para_exibir LIMIT 1`
 
       console.log(sql)
@@ -374,7 +375,7 @@ function getEventosRelatorioUsuario(req, res) {
 
       client.connect()
 
-      let sql = `select * from eventos where (id_pessoa_resolveu=${req.query.id_pessoa_organograma} and date(dt_resolvido)
+      let sql = `select * from view_eventos where (id_pessoa_resolveu=${req.query.id_pessoa_organograma} and date(dt_resolvido)
                   between '${req.query.dtInicial}'  and '${req.query.dtFinal}') OR
                   (tipodestino='P' and id_pessoa_organograma=${req.query.id_pessoa_organograma})`
 
