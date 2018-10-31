@@ -94,7 +94,6 @@ export class ProdutividadeCallCenterComponent implements OnInit {
   }
 
   async ngOnInit() {
-    debugger
     let agentesVendas = await this.connectHTTP.callService({
       service: 'getAgentesVendas',
       paramsService: {
@@ -109,7 +108,6 @@ export class ProdutividadeCallCenterComponent implements OnInit {
       return { value: agenteVenda.id_pessoa, label: agenteVenda.nome }
     });
 
-    debugger;
     if (this.usuarioLogado.responsavel_membro == 'M') {
       let agenteSelecionado = agentesVendas.resposta.filter(a => a.id_pessoa == this.usuarioLogado.id_pessoa)[0];
 
@@ -166,7 +164,6 @@ export class ProdutividadeCallCenterComponent implements OnInit {
         }
       }) as any;
 
-      debugger;
       this.agentesVendasSelectNome = this.agentesVendasSelectNomeTemp || this.agentesVendasSelectNome;
       this.eventosPendentesDepartamento = getProdutividadeCallCenter.resposta.EventosPendentesDepartamento;
       this.eventosTentandoDepartamento = getProdutividadeCallCenter.resposta.EventosTentandoDepartamento;

@@ -9,6 +9,7 @@ const telemarketing = require('./src/api/telemarketing');
 const pessoa = require('./src/api/pessoa');
 const atividade = require('./src/api/atividade');
 const produtividade = require('./src/api/produtividade');
+const consultaPlaca = require('./src/api/consultaPlaca');
 
 
 
@@ -349,6 +350,19 @@ app.get('/getProdutividadeCallCenter', (req, res) => {
 
 app.get('/trocarSenhaUsuarioLogado', (req, res) => {
   usuario.trocarSenhaUsuarioLogado(req)
+    .then(linhas => {
+      headerResponse(res)
+      res.status(200).send(linhas)
+    })
+    .catch(error => {
+      headerResponse(res)
+      console.log(error)
+      res.status(401).send(error)
+    })
+});
+
+app.get('/busca', (req, res) => {
+  consultaPlaca.busca(req)
     .then(linhas => {
       headerResponse(res)
       res.status(200).send(linhas)

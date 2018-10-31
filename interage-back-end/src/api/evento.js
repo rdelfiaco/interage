@@ -1,4 +1,5 @@
 const { checkTokenAccess } = require('./checkTokenAccess');
+const { getMetaPessoa } = require('./metaLigacoes');
 
 function getUmEvento(req, res) {
   return new Promise(function (resolve, reject) {
@@ -12,13 +13,14 @@ function getUmEvento(req, res) {
       client.connect()
 
       let sql = `select *
-          from view_eventos
-          where id_status_evento in (1,4,5,6)
-          and ( (tipodestino = 'O' and id_pessoa_organograma = ${req.query.id_organograma} )
-            or  (tipodestino = 'P' and id_usuario = ${req.query.id_usuario} )
-            or  (id_pessoa_visualizou = ${req.query.id_pessoa} and id_status_evento in(5,6)  ))
-          and dt_para_exibir <= now()
-          order by id_status_evento desc, id_prioridade, dt_para_exibir LIMIT 1`
+            from view_eventos
+            where id_status_evento in (1,4,5,6)
+            and ( (tipodestino = 'O' and id_pessoa_visualizou is null and id_pessoa_organograma = ${req.query.id_organograma} )
+            or (tipodestino = 'P' and id_usuario = ${req.query.id_usuario} )
+            or (id_pessoa_visualizou = ${req.query.id_pessoa} and id_status_evento in(5,6) ))
+            and dt_para_exibir <= now()
+            and id_campanha = ${req.query.id_campanha}
+            order by id_status_evento desc, id_prioridade, dt_para_exibir LIMIT 1`
 
       console.log(sql)
       client.query(sql)
@@ -148,8 +150,13 @@ function salvarEvento(req, res) {
 
                         if (index == array.length - 1)
                           client.query('COMMIT').then((resposta) => {
-                            client.end();
-                            resolve(resposta)
+                            getMetaPessoa(req).then(metaPessoa => {
+                              client.end();
+                              resolve(metaPessoa)
+                            }).catch(err => {
+                              client.end();
+                              reject(err)
+                            })
                           })
                       }).catch(err => {
                         client.end();
@@ -159,8 +166,13 @@ function salvarEvento(req, res) {
                     })
                   } else {
                     client.query('COMMIT').then(() => {
-                      client.end();
-                      resolve(true)
+                      getMetaPessoa(req).then(metaPessoa => {
+                        client.end();
+                        resolve(metaPessoa)
+                      }).catch(err => {
+                        client.end();
+                        reject(err)
+                      })
                     }).catch(err => {
                       client.end();
                       reject(err)
@@ -177,8 +189,13 @@ function salvarEvento(req, res) {
 
                   client.query(updateQuantidadeMaxTentativas).then(() => {
                     client.query('COMMIT').then(() => {
-                      client.end();
-                      resolve(true)
+                      getMetaPessoa(req).then(metaPessoa => {
+                        client.end();
+                        resolve(metaPessoa)
+                      }).catch(err => {
+                        client.end();
+                        reject(err)
+                      })
                     }).catch(err => {
                       client.end();
                       reject(err)
@@ -358,7 +375,7 @@ function getEventosRelatorioUsuario(req, res) {
 
       client.connect()
 
-      let sql = `select * from eventos where (id_pessoa_resolveu=${req.query.id_pessoa_organograma} and date(dt_resolvido)
+      let sql = `select * from view_eventos where (id_pessoa_resolveu=${req.query.id_pessoa_organograma} and date(dt_resolvido)
                   between '${req.query.dtInicial}'  and '${req.query.dtFinal}') OR
                   (tipodestino='P' and id_pessoa_organograma=${req.query.id_pessoa_organograma})`
 
