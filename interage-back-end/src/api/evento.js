@@ -401,6 +401,246 @@ function getEventosRelatorioUsuario(req, res) {
   })
 }
 
+function getEventoFiltros(req, res) {
+  return new Promise(function (resolve, reject) {
+
+    checkTokenAccess(req).then(historico => {
+      getOrganograma(req).then(Organograma => {
+        getUsuarios(req).then(Usuarios => {
+          getMotivos(req).then(Motivos => {
+            getStatusEvento(req).then(StatusEvento => {
+                          if (!Organograma || !Usuarios
+                            || !Motivos || !StatusEvento)
+                            reject('não encontrado');
+
+                          resolve({
+                            Organograma, Usuarios,
+                            Motivos, StatusEvento
+                          });
+              });
+            }).catch(e => {
+              reject(e);
+            });
+          }).catch(e => {
+            reject(e);
+          });
+        }).catch(e => {
+          reject(e);
+        });
+      }).catch(e => {
+        reject(e);
+      });
+  })
+}
+
+
+function getOrganograma(req, res) {
+  return new Promise(function (resolve, reject) {
+
+    checkTokenAccess(req).then(historico => {
+      const dbconnection = require('../config/dbConnection')
+      const { Client } = require('pg')
+
+      const client = new Client(dbconnection)
+
+      client.connect()
+
+      let sql = `select * from organograma order by nome`
+
+      client.query(sql)
+        .then(res => {
+          if (res.rowCount > 0) {
+            let eventos = res.rows;
+            client.end();
+            resolve(eventos)
+          }
+          else {
+            reject('Não há organograma!')
+            client.end();
+          }
+        }
+        )
+        .catch(err => {
+          client.end();
+          reject(err)
+        })
+    }).catch(e => {
+      reject(e)
+    })
+  })
+}
+
+
+function getUsuarios(req, res) {
+  return new Promise(function (resolve, reject) {
+
+    checkTokenAccess(req).then(historico => {
+      const dbconnection = require('../config/dbConnection')
+      const { Client } = require('pg')
+
+      const client = new Client(dbconnection)
+
+      client.connect()
+
+      let sql = `select p.id, p.nome, u.id_organograma
+                  from usuarios u
+                  inner join pessoas p on u.id_pessoa = p.id and u.status = true 
+                  order by p.nome`
+
+      client.query(sql)
+        .then(res => {
+          if (res.rowCount > 0) {
+            let eventos = res.rows;
+            client.end();
+            resolve(eventos)
+          }
+          else {
+            reject('Não há usuário!')
+            client.end();
+          }
+        }
+        )
+        .catch(err => {
+          client.end();
+          reject(err)
+        })
+    }).catch(e => {
+      reject(e)
+    })
+  })
+}
+function getMotivos(req, res) {
+  return new Promise(function (resolve, reject) {
+
+    checkTokenAccess(req).then(historico => {
+      const dbconnection = require('../config/dbConnection')
+      const { Client } = require('pg')
+
+      const client = new Client(dbconnection)
+
+      client.connect()
+
+      let sql = `select id, nome
+                  from motivos
+                  where status = true 
+                  order by nome `
+
+      client.query(sql)
+        .then(res => {
+          if (res.rowCount > 0) {
+            let eventos = res.rows;
+            client.end();
+            resolve(eventos)
+          }
+          else {
+            reject('Não há usuário!')
+            client.end();
+          }
+        }
+        )
+        .catch(err => {
+          client.end();
+          reject(err)
+        })
+    }).catch(e => {
+      reject(e)
+    })
+  })
+}
+
+
+function getStatusEvento(req, res) {
+  return new Promise(function (resolve, reject) {
+
+    checkTokenAccess(req).then(historico => {
+      const dbconnection = require('../config/dbConnection')
+      const { Client } = require('pg')
+
+      const client = new Client(dbconnection)
+
+      client.connect()
+
+      let sql = `select id, nome 
+                  from status_evento
+                  where status = true 
+                  order by nome`
+
+      client.query(sql)
+        .then(res => {
+          if (res.rowCount > 0) {
+            let eventos = res.rows;
+            client.end();
+            resolve(eventos)
+          }
+          else {
+            reject('Não há usuário!')
+            client.end();
+          }
+        }
+        )
+        .catch(err => {
+          client.end();
+          reject(err)
+        })
+    }).catch(e => {
+      reject(e)
+    })
+  })
+}
+
+
+function getEventosFiltrados(req, res) {
+  return new Promise(function (resolve, reject) {
+
+    checkTokenAccess(req).then(historico => {
+      const dbconnection = require('../config/dbConnection')
+      const { Client } = require('pg')
+
+      const client = new Client(dbconnection)
+
+      client.connect()
+
+      let sql = `select * from view_eventos where `
+      sql = sql + `id_status_evento in (${req.query.status}) `  // status 
+      if (req.query.eventosUsuarioChk == 'true') { 
+        sql = sql + ` and (tipodestino = 'P' and id_pessoa_organograma in ( ${req.query.usuarios}) )` // usuário
+      } else {
+        sql = sql + ` and ( tipodestino = 'O' and id_pessoa_organograma in (${req.query.departamentos}) )` // departamentos 
+      }
+      sql = sql + ` and (id_motivo in ( ${req.query.motivos})  )` // motivos 
+      if (req.query.dtCricaoRadio == 'true' ) {
+        sql = sql + ` and date(dt_criou) between date('${req.query.dt_inicial}') and date('${req.query.dt_final}')` // data de criação 
+      }else {
+        sql = sql + ` and dt_para_exibir <= now()` // data de compromisso 
+      }
+
+      sql = sql + ` order by dt_criou limit 100` //
+
+      console.log(sql)
+      console.log(req.query.dtCricaoRadio)
+                
+      client.query(sql)
+        .then(res => {
+          if (res.rowCount > 0) {
+            let eventos = res.rows;
+            client.end();
+            resolve(eventos)
+          }
+          else {
+            reject('Não há eventos!')
+            client.end();
+          }
+        }
+        )
+        .catch(err => {
+          client.end();
+          reject(err)
+        })
+    }).catch(e => {
+      reject(e)
+    })
+  })
+}
 
 module.exports = {
   getUmEvento,
@@ -408,5 +648,7 @@ module.exports = {
   salvarEvento,
   getEventosPendentes,
   getEventosLinhaDoTempo,
-  getEventosRelatorioUsuario
+  getEventosRelatorioUsuario,
+  getEventoFiltros,
+  getEventosFiltrados
 }
