@@ -273,7 +273,7 @@ function salvarEvento(req, res) {
             1,
             ${req.query.id_pessoa},
             now(),
-            '${req.query.data}',
+            'select func_dt_expira(${motivoRespostaAutomatico.id_motivo})',
             '${req.query.data}',
             '${tipoDestino}', 
             ${id_pessoa_organograma},
@@ -410,17 +410,14 @@ function getEventoFiltros(req, res) {
         getUsuarios(req).then(Usuarios => {
           getMotivos(req).then(Motivos => {
             getStatusEvento(req).then(StatusEvento => {
-                          if (!Organograma || !Usuarios
-                            || !Motivos || !StatusEvento)
-                            reject('não encontrado');
+              if (!Organograma || !Usuarios
+                || !Motivos || !StatusEvento)
+                reject('não encontrado');
 
-                          resolve({
-                            Organograma, Usuarios,
-                            Motivos, StatusEvento
-                          });
+              resolve({
+                Organograma, Usuarios,
+                Motivos, StatusEvento
               });
-            }).catch(e => {
-              reject(e);
             });
           }).catch(e => {
             reject(e);
@@ -431,6 +428,9 @@ function getEventoFiltros(req, res) {
       }).catch(e => {
         reject(e);
       });
+    }).catch(e => {
+      reject(e);
+    });
   })
 }
 
@@ -603,15 +603,15 @@ function getEventosFiltrados(req, res) {
 
       let sql = `select * from view_eventos where `
       sql = sql + `id_status_evento in (${req.query.status}) `  // status 
-      if (req.query.eventosUsuarioChk == 'true') { 
+      if (req.query.eventosUsuarioChk == 'true') {
         sql = sql + ` and (tipodestino = 'P' and id_pessoa_organograma in ( ${req.query.usuarios}) )` // usuário
       } else {
         sql = sql + ` and ( tipodestino = 'O' and id_pessoa_organograma in (${req.query.departamentos}) )` // departamentos 
       }
       sql = sql + ` and (id_motivo in ( ${req.query.motivos})  )` // motivos 
-      if (req.query.dtCricaoRadio == 'true' ) {
+      if (req.query.dtCricaoRadio == 'true') {
         sql = sql + ` and date(dt_criou) between date('${req.query.dt_inicial}') and date('${req.query.dt_final}')` // data de criação 
-      }else {
+      } else {
         sql = sql + ` and dt_para_exibir <= now()` // data de compromisso 
       }
 
@@ -619,7 +619,7 @@ function getEventosFiltrados(req, res) {
 
       console.log(sql)
       console.log(req.query.dtCricaoRadio)
-                
+
       client.query(sql)
         .then(res => {
           if (res.rowCount > 0) {
@@ -643,6 +643,45 @@ function getEventosFiltrados(req, res) {
   })
 }
 
+
+function getEventoPorId(req, res) {
+  return new Promise(function (resolve, reject) {
+
+    checkTokenAccess(req).then(historico => {
+      const dbconnection = require('../config/dbConnection')
+      const { Client } = require('pg')
+
+      const client = new Client(dbconnection)
+
+      client.connect()
+
+      let sql = `select *
+                  from view_eventos
+                  where id=${req.query.id_evento}`
+
+      client.query(sql)
+        .then(res => {
+          if (res.rowCount > 0) {
+            let evento = res.rows;
+            client.end();
+            resolve(evento)
+          }
+          else {
+            reject('Não há evento!')
+            client.end();
+          }
+        }
+        )
+        .catch(err => {
+          client.end();
+          reject(err)
+        })
+    }).catch(e => {
+      reject(e)
+    })
+  })
+}
+
 module.exports = {
   getUmEvento,
   motivosRespostas,
@@ -651,5 +690,6 @@ module.exports = {
   getEventosLinhaDoTempo,
   getEventosRelatorioUsuario,
   getEventoFiltros,
-  getEventosFiltrados
+  getEventosFiltrados,
+  getEventoPorId
 }

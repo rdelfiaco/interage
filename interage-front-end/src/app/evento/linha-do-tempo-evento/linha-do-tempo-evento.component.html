@@ -1,0 +1,6 @@
+<app-item-linha-do-tempo-evento [eventos]="eventosDaPessoa" (setEventoSelecionado)="setEventoSelecionado($event)">
+</app-item-linha-do-tempo-evento>
+
+<div *ngIf="eventoSelecionado" style="padding: 10px;">
+  <app-formulario-evento [evento]="eventoSelecionado"></app-formulario-evento>
+</div>

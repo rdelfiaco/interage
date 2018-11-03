@@ -1,0 +1,19 @@
+<mdb-accordion *ngFor="let evento of eventos">
+  <mdb-accordion-item [collapsed]="true" [customClass]="'itemAcordion'">
+    <mdb-accordion-item-head [indicator]="evento.eventosFilho" [customClass]="'text-center justify-content-start align-items-center'">
+      <div class="row align-items-center">
+        <button class="col-2" (click)="selecionaEvento($event, evento)" mdbBtn type="button" gradient="peach" size="sm"
+          mdbWavesEffect>Detalhe</button>
+        <div class="col-2 h6" style="white-space: pre;">{{evento.motivo}}</div>
+        <div class="col-2 h6">{{evento.resposta_motivo}}</div>
+        <div class=" col-4 h6" style="white-space: nowrap;">{{(evento.dataFilhoMaisNovo
+          || evento.dt_resolvido ||
+          evento.dt_prevista_resolucao) |
+          date:'dd/MM/yyyy hh:mm:ss'}}</div>
+      </div>
+    </mdb-accordion-item-head>
+    <mdb-accordion-item-body *ngIf="evento.eventosFilho">
+      <app-item-linha-do-tempo-evento [eventos]="evento.eventosFilho" (setEventoSelecionado)="setEventoSelecionadoPai($event)"></app-item-linha-do-tempo-evento>
+    </mdb-accordion-item-body>
+  </mdb-accordion-item>
+</mdb-accordion>

@@ -29,22 +29,22 @@
         <div class="row justify-content-around">
           <!-- Data do compromisso -->
           <div class="form-check-inline">
-            <input type="radio" class="form-check-input" style="margin-right: 0px;" id="dtCompromissoRadio" name="dataEventoRadio"  [checked]=dtCompromissoRadio
-              >
+            <input type="radio" class="form-check-input" style="margin-right: 0px;" id="dtCompromissoRadio" name="dataEventoRadio"
+              [checked]=dtCompromissoRadio>
             <label class="form-check-label" for="dtCompromissoRadio" style="font-size: 0.8rem; margin-left: 0px; margin-right: 0px;  ">Data
               do compromisso</label>
           </div>
           <!-- Data de ciração do evento -->
           <div class="form-check-inline ">
-            <input type="radio" class="form-check-input" id="dtCricaoRadio" name="dataEventoRadio" [checked]=dtCricaoRadio >
+            <input type="radio" class="form-check-input" id="dtCricaoRadio" name="dataEventoRadio" [checked]=dtCricaoRadio>
             <label class="form-check-label" for="dtCricaoRadio" style="font-size: 0.8rem; ">Data de criação</label>
           </div>
         </div>
 
         <div class="row" style="margin-top: 40px; margin-left: 5px; font-size: 0.8rem; ">
           <!-- Material unchecked -->
-          <mdb-checkbox [checked] = eventosUsuarioChk >Listar apenas eventos do usuário.</mdb-checkbox>
-          <mdb-checkbox [checked] = eventosFinalizadosChk >Listar apenas eventos não finalizados.</mdb-checkbox>
+          <mdb-checkbox [checked]=eventosUsuarioChk>Listar apenas eventos do usuário.</mdb-checkbox>
+          <mdb-checkbox [checked]=eventosFinalizadosChk>Listar apenas eventos não finalizados.</mdb-checkbox>
           <mdb-checkbox [disabled]="true" [checked]="true">Listar apenas os cem últinos eventos</mdb-checkbox>
         </div>
 
@@ -54,8 +54,8 @@
 
           <!-- Enviados Por -->
           <div class="form-check form-check-inline">
-            <input type="radio" class="form-check-input" style="margin-right: 0px;" 
-                  id="enviadoPoroRadio" name="EnviadoRecebidoEventoRadio" [checked]=enviadoPorRadio>
+            <input type="radio" class="form-check-input" style="margin-right: 0px;" id="enviadoPoroRadio" name="EnviadoRecebidoEventoRadio"
+              [checked]=enviadoPorRadio>
             <label class="form-check-label" for="enviadoPoroRadio" style="font-size: 0.8rem; margin-left: 0px; margin-right: 0px;  ">Enviados
               por</label>
           </div>
@@ -63,14 +63,14 @@
           <!-- Recebidos por -->
           <div class="form-check form-check-inline ">
             <input type="radio" class="form-check-input" id="recebidoPorRadio" name="EnviadoRecebidoEventoRadio"
-            [checked]=recebidoPorRadio>
+              [checked]=recebidoPorRadio>
             <label class="form-check-label" for="recebidoPorRadio" style="font-size: 0.8rem; ">Recebidos por</label>
           </div>
         </div>
         <div class="row" style="margin-top: 15px">
           <div class="col-md-12">
-            <mdb-select [(ngModel)]="departamentoSelectValue" [options]="departamentoSelect"  [multiple]="true" placeholder="Escolha o departamento"
-              style="font-size: 0.5rem;"></mdb-select>
+            <mdb-select [(ngModel)]="departamentoSelectValue" [options]="departamentoSelect" [multiple]="true"
+              placeholder="Escolha o departamento" style="font-size: 0.5rem;"></mdb-select>
             <label>Departamento</label>
           </div>
         </div>
@@ -83,7 +83,7 @@
         </div>
         <div class="row justify-content-around">
 
-          <a mdbBtn floating="true" size="lg" gradient="blue" (click)="listaEventos()"  mdbWavesEffect>
+          <a mdbBtn floating="true" size="lg" gradient="blue" (click)="listaEventos()" mdbWavesEffect>
             <mdb-icon icon="refresh"></mdb-icon>
           </a>
           <a mdbBtn floating="true" size="lg" gradient="purple" mdbWavesEffect>
@@ -166,7 +166,7 @@
 
       <!--Table body-->
       <tbody>
-        <tr #list *ngFor="let evento of tableData; let i = index">
+        <tr (click)="abreEvento(evento.id)" #list *ngFor="let evento of tableData; let i = index">
           <td *ngIf="i+1 >= firstVisibleIndex && i+1 <= lastVisibleIndex">
             <a>
               <mdb-icon class={{evento.status_evento_cor_texto}} icon={{evento.status_evento_icone}} class="mr-2 "

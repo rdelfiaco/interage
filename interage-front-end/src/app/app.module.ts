@@ -26,6 +26,8 @@ import { AnalisaCampanhaComponent } from './analisa-campanha/analisa-campanha.co
 import { MascaraTelefonePipe } from './shared/pipes/mascaraTelefone/mascara-telefone.pipe';
 import { ProdutividadeCallCenterComponent } from './produtividade-call-center/produtividade-call-center.component';
 import { TrocarSenhaComponent } from './usuario/trocar-senha/trocar-senha.component';
+import { CarregandoComponent } from './shared/carregando/carregando.component';
+import { CarregandoModule } from './shared/carregando/carregando.module';
 
 
 @NgModule({
@@ -48,7 +50,7 @@ import { TrocarSenhaComponent } from './usuario/trocar-senha/trocar-senha.compon
     AnalisaCampanhaComponent,
     MascaraTelefonePipe,
     ProdutividadeCallCenterComponent,
-    TrocarSenhaComponent,
+    TrocarSenhaComponent
   ],
 
   imports: [
@@ -61,7 +63,7 @@ import { TrocarSenhaComponent } from './usuario/trocar-senha/trocar-senha.compon
     EventoModule,
     ReactiveFormsModule,
     ToastModule.forRoot(),
-
+    CarregandoModule
   ],
   providers: [MDBSpinningPreloader
 

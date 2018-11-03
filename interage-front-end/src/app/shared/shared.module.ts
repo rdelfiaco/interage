@@ -9,13 +9,13 @@ import { CommonModule } from '@angular/common';
     CommonModule
   ],
   declarations: [
-      //LocalStorage, 
-      //ConnectHTTP
+    //LocalStorage, 
+    //ConnectHTTP
   ],
   providers: [
-      LocalStorage,
-      ConnectHTTP
-    
+    LocalStorage,
+    ConnectHTTP
+
   ]
 })
-export class SharedModule {  }
+export class SharedModule { }

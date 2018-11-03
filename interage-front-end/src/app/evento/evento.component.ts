@@ -8,6 +8,7 @@ import { LocalStorage } from '../shared/services/localStorage';
 import { IMyOptions, ToastService } from '../../lib/ng-uikit-pro-standard';
 
 import * as moment from 'moment';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -24,18 +25,18 @@ export class EventoComponent implements OnInit {
   statusSelect: Array<any>;
   departamentoSelectValue: Array<number>;
   usuarioSelectValue: number;
-  motivoSelectValue : number;
-  statusSelectValue : number;
+  motivoSelectValue: number;
+  statusSelectValue: number;
   eventosUsuarioChk: boolean = true;
   eventosFinalizadosChk: boolean = true;
-  dtCricaoRadio:  boolean = false;
-  dtCompromissoRadio:  boolean = true;
-  enviadoPorRadio:  boolean = false;
-  recebidoPorRadio:  boolean = true;
+  dtCricaoRadio: boolean = false;
+  dtCompromissoRadio: boolean = true;
+  enviadoPorRadio: boolean = false;
+  recebidoPorRadio: boolean = true;
 
   dataInicial: string = moment().subtract(1, 'days').format('DD/MM/YYYY')
-  dataFinal: string  =  moment().add(1, 'days').format('DD/MM/YYYY')
-  
+  dataFinal: string = moment().add(1, 'days').format('DD/MM/YYYY')
+
 
 
   public myDatePickerOptions: IMyOptions = {
@@ -54,7 +55,7 @@ export class EventoComponent implements OnInit {
     // Format
     dateFormat: 'dd/mm/yyyy',
     selectionTxtFontSize: '15px',
-    
+
   }
 
   options = {
@@ -82,7 +83,7 @@ export class EventoComponent implements OnInit {
   maxVisibleItems: number = 10;
 
   constructor(private http: Http, private connectHTTP: ConnectHTTP,
-    private toastrService: ToastService,  private localStorage: LocalStorage) { 
+    private toastrService: ToastService, private localStorage: LocalStorage, private router: Router) {
     this.usuarioLogado = this.localStorage.getLocalStorage('usuarioLogado') as Usuario;
 
 
@@ -90,16 +91,16 @@ export class EventoComponent implements OnInit {
 
   async ngOnInit() {
 
-    
 
-      let eventoFiltros = await this.connectHTTP.callService({
-        service: 'getEventoFiltros',
-        paramsService: {
-          token: this.usuarioLogado.token,
-          id_usuario: this.usuarioLogado.id,        
-          id_organograma: this.usuarioLogado.id_organograma
-        }
-      }) as any;
+
+    let eventoFiltros = await this.connectHTTP.callService({
+      service: 'getEventoFiltros',
+      paramsService: {
+        token: this.usuarioLogado.token,
+        id_usuario: this.usuarioLogado.id,
+        id_organograma: this.usuarioLogado.id_organograma
+      }
+    }) as any;
 
 
     // combo departamento 
@@ -116,7 +117,7 @@ export class EventoComponent implements OnInit {
       return { value: usuario.id, label: usuario.nome }
     });
 
-    this.usuarioSelectValue =  this.usuarioLogado.id_pessoa;
+    this.usuarioSelectValue = this.usuarioLogado.id_pessoa;
 
 
     // combo motivos
@@ -125,7 +126,7 @@ export class EventoComponent implements OnInit {
       return { value: motivos.id, label: motivos.nome }
     });
 
-    this.motivoSelectValue =  1
+    this.motivoSelectValue = 1
 
     // combo status_evento
     this.statusSelect = eventoFiltros.resposta.StatusEvento;
@@ -133,7 +134,7 @@ export class EventoComponent implements OnInit {
       return { value: status.id, label: status.nome }
     });
 
-    this.statusSelectValue =  1;
+    this.statusSelectValue = 1;
 
 
     this.listaEventos();
@@ -141,7 +142,7 @@ export class EventoComponent implements OnInit {
 
   }
 
-  
+
   @HostListener('input') oninput() {
     this.paginators = [];
     for (let i = 1; i <= this.search().length; i++) {
@@ -186,15 +187,15 @@ export class EventoComponent implements OnInit {
     // if (by == 'dt_criou') {
     //   this.search().reverse();
     // } else {
-      this.tableData.sort((a: any, b: any) => {
-        if (a[by] < b[by]) {
-          return this.sorted ? 1 : -1;
-        }
-        if (a[by] > b[by]) {
-          return this.sorted ? -1 : 1;
-        }
-        return 0;
-      });
+    this.tableData.sort((a: any, b: any) => {
+      if (a[by] < b[by]) {
+        return this.sorted ? 1 : -1;
+      }
+      if (a[by] > b[by]) {
+        return this.sorted ? -1 : 1;
+      }
+      return 0;
+    });
     //}
     this.sorted = !this.sorted;
   }
@@ -208,11 +209,11 @@ export class EventoComponent implements OnInit {
   }
 
   search() {
-    
+
     if (!this.searchText) {
       return this.tableData;
     }
-    
+
     if (this.searchText) {
       return this.filterIt(this.tableData, this.searchText);
     }
@@ -220,13 +221,13 @@ export class EventoComponent implements OnInit {
 
 
 
-  async listaEventos(){
+  async listaEventos() {
     try {
       let eventos = await this.connectHTTP.callService({
         service: 'getEventosFiltrados',
         paramsService: {
           token: this.usuarioLogado.token,
-          id_usuario: this.usuarioLogado.id,        
+          id_usuario: this.usuarioLogado.id,
           id_organograma: this.usuarioLogado.id_organograma,
           dt_inicial: this.dataInicial,
           dt_final: this.dataFinal,
@@ -235,20 +236,23 @@ export class EventoComponent implements OnInit {
           usuarios: this.usuarioSelectValue,
           motivos: this.motivoSelectValue,
           status: this.statusSelectValue,
-          eventosUsuarioChk: this.eventosUsuarioChk, 
+          eventosUsuarioChk: this.eventosUsuarioChk,
           dtCricaoRadio: this.dtCricaoRadio,
         }
       }) as any;
-    
-    this.tableData = eventos.resposta as Array<object> ;
-    console.log(this.dtCricaoRadio)
-    
-  }
-  catch (e) {
-    this.toastrService.error(e.error);
-    this.tableData = [];
+
+      this.tableData = eventos.resposta as Array<object>;
+      console.log(this.dtCricaoRadio)
+
+    }
+    catch (e) {
+      this.toastrService.error(e.error);
+      this.tableData = [];
+    }
   }
 
+  abreEvento(eventoId: string) {
+    this.router.navigate([`/evento/${eventoId}`]);
   }
 
   generateCsv() {

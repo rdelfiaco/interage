@@ -6,6 +6,11 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MDBBootstrapModulesPro } from '../../lib/ng-uikit-pro-standard';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { DetalheEventoComponent } from './detalhe-evento/detalhe-evento.component';
+import { CarregandoModule } from '../shared/carregando/carregando.module';
+import { LinhaDoTempoEventoComponent } from './linha-do-tempo-evento/linha-do-tempo-evento.component';
+import { ItemLinhaDoTempoEventoComponent } from './item-linha-do-tempo-evento/item-linha-do-tempo-evento.component';
+import { FormularioEventoComponent } from './formulario-evento/formulario-evento.component';
 
 
 @NgModule({
@@ -16,13 +21,18 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     MDBBootstrapModulesPro,
     ReactiveFormsModule,
     FormsModule,
-    SharedModule
+    SharedModule,
+    CarregandoModule
   ],
   providers: [
-    
+
   ],
   declarations: [
-    EventoComponent
+    EventoComponent,
+    DetalheEventoComponent,
+    LinhaDoTempoEventoComponent,
+    ItemLinhaDoTempoEventoComponent,
+    FormularioEventoComponent
   ]
 })
 export class EventoModule { }

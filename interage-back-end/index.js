@@ -11,7 +11,7 @@ const atividade = require('./src/api/atividade');
 const produtividade = require('./src/api/produtividade');
 const consultaPlaca = require('./src/api/consultaPlaca');
 
-
+declaraServico('getEventoPorId', evento.getEventoPorId);
 
 app.get('/getAtividades', (req, res) => {
   atividade.getAtividades(req)
@@ -406,6 +406,22 @@ app.get('/busca', (req, res) => {
 app.listen(nodeStart.port, "0.0.0.0");
 console.log(`Servidor iniciado na em http://localhost:${nodeStart.port}`)
 
+
+function declaraServico(nomeServico, funcao) {
+  app.get(`/${nomeServico}`, (req, res) => {
+    funcao(req)
+      .then(linhas => {
+        headerResponse(res)
+        res.status(200).send(linhas)
+      })
+      .catch(error => {
+        headerResponse(res)
+        console.log(error)
+        res.status(401).send(error)
+      })
+  });
+  console.log(`Serviço ${nomeServico}, declarado com sucesso!`)
+}
 
 function headerResponse(res) {
   res.set('Access-Control-Allow-Origin', '*');

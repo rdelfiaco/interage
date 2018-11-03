@@ -1,0 +1,124 @@
+<form [formGroup]="eventoForm" class="formQuestionario">
+  <div class="row">
+    <div class="md-form col-1">
+      <input mdbInputDirective formControlName="id" type="text" id="id" class="form-control" disabled>
+      <label for="id">ID</label>
+    </div>
+    <div class="md-form col-5">
+      <input mdbInputDirective formControlName="status" type="text" id="status" class="form-control" disabled>
+      <label for="status">Status</label>
+    </div>
+    <div class="md-form col-6">
+      <input mdbInputDirective formControlName="motivo" type="text" id="motivo" class="form-control" disabled>
+      <label for="motivo">Motivo</label>
+    </div>
+  </div>
+
+
+  <div class="row">
+    <div class="md-form col-6">
+      <input mdbInputDirective formControlName="dt_criou" type="text" id="dt_criou" class="form-control" disabled>
+      <label for="dt_criou">Criado em</label>
+    </div>
+    <div class="md-form col-6">
+      <input mdbInputDirective formControlName="dt_para_exibir" type="text" id="dt_para_exibir" class="form-control"
+        disabled>
+      <label for="dt_para_exibir">Agendado para</label>
+    </div>
+  </div>
+
+
+  <div class="row">
+    <div class="md-form col-6">
+      <input mdbInputDirective formControlName="dt_prevista_resolucao" type="text" id="dt_prevista_resolucao" class="form-control"
+        disabled>
+      <label for="dt_prevista_resolucao">Resolver até</label>
+    </div>
+    <div class="md-form col-6">
+      <input mdbInputDirective formControlName="pessoa_criou" type="text" id="pessoa_criou" class="form-control"
+        disabled>
+      <label for="pessoa_criou">Registrado por</label>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="md-form col-6">
+      <input mdbInputDirective formControlName="destino" type="text" id="destino" class="form-control" disabled>
+      <label for="destino">Destinatário</label>
+    </div>
+    <div class="md-form col-6">
+      <input mdbInputDirective formControlName="cliente" type="text" id="cliente" class="form-control" disabled>
+      <label for="cliente">Cliente</label>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="md-form col">
+      <textarea type="text" formControlName="observacao_origem" id="observacao_origem" class="md-textarea form-control"
+        mdbInputDirective></textarea>
+      <label for="observacao_origem">Observação de Origem</label>
+    </div>
+  </div>
+
+
+  <div class="row">
+    <div class="md-form col-6">
+      <input mdbInputDirective formControlName="dt_visualizou" type="text" id="dt_visualizou" class="form-control"
+        disabled>
+      <label for="dt_visualizou">Aberto em</label>
+    </div>
+    <div class="md-form col-6">
+      <input mdbInputDirective formControlName="dt_resolvido" type="text" id="dt_resolvido" class="form-control"
+        disabled>
+      <label for="dt_resolvido">Resolvido em </label>
+    </div>
+  </div>
+
+
+  <div class="row">
+    <div class="md-form col-6">
+      <input mdbInputDirective formControlName="pessoa_visualizou" type="text" id="pessoa_visualizou" class="form-control"
+        disabled>
+      <label for="pessoa_visualizou">Visualizado por</label>
+    </div>
+    <div class="md-form col-6">
+      <input mdbInputDirective formControlName="pessoa_resolveu" type="text" id="pessoa_resolveu" class="form-control"
+        disabled>
+      <label for="pessoa_resolveu">Resolvido por</label>
+    </div>
+  </div>
+
+
+
+
+  <div class="row">
+    <div class="md-form col">
+      <input mdbInputDirective formControlName="telefone" type="text" id="telefone" class="form-control" disabled>
+      <label for="telefone">Telefone Discado</label>
+    </div>
+    <div class="md-form col">
+      <input mdbInputDirective formControlName="objecao" type="text" id="objecao" class="form-control" disabled>
+      <label for="objecao">Objeção</label>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="md-form col">
+      <input mdbInputDirective formControlName="resposta_motivo" type="text" id="resposta_motivo" class="form-control"
+        disabled>
+      <label for="resposta_motivo">Resposta Motivo</label>
+    </div>
+    <div class="md-form col">
+      <input mdbInputDirective formControlName="predicao" type="text" id="predicao" class="form-control" disabled>
+      <label for="predicao">Predição</label>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="md-form col">
+      <textarea type="text" formControlName="observacao_retorno" id="observacao_retorno" class="md-textarea form-control"
+        mdbInputDirective></textarea>
+      <label for="observacao_retorno">Observação de Retorno</label>
+    </div>
+  </div>
+</form>
