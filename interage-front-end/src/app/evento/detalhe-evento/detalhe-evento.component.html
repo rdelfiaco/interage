@@ -4,28 +4,32 @@
 
 <div *ngIf="!carregando">
   <!-- Nav tabs -->
-  <mdb-tabset [buttonClass]="'classic-tabs tabs-cyan'" [contentClass]="'card'" class="classic-tabs">
-    <!--Panel 1-->
-    <mdb-tab heading="Evento">
-      <div class="row">
-        <div class="col-12">
-          <div class="row" style="padding: 0px 15px;">
-            <div class="md-form col-12">
-              <app-formulario-evento [evento]="evento"></app-formulario-evento>
+  <div *ngIf="podeVisualizarEvento">
+    <mdb-tabset [buttonClass]="'classic-tabs tabs-cyan'" [contentClass]="'card'" class="classic-tabs">
+      <!--Panel 1-->
+      <mdb-tab heading="Evento">
+        <div class="row">
+          <div class="col-12">
+            <div class="row" style="padding: 0px 15px;">
+              <div class="md-form col-12">
+                <app-formulario-evento [evento]="evento"></app-formulario-evento>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    </mdb-tab>
-    <!--Panel 2-->
-    <mdb-tab heading="Histórico Evento">
-      <div class="row">
-        <div class="col-12">
-          <br>
-          <app-linha-do-tempo-evento [pessoa]="pessoa | async"></app-linha-do-tempo-evento>
+      </mdb-tab>
+      <!--Panel 2-->
+      <mdb-tab heading="Histórico Evento">
+        <div class="row">
+          <div class="col-12">
+            <br>
+            <app-linha-do-tempo-evento [pessoa]="pessoa | async"></app-linha-do-tempo-evento>
+          </div>
         </div>
-      </div>
-    </mdb-tab>
-  </mdb-tabset>
-
+      </mdb-tab>
+    </mdb-tabset>
+  </div>
+  <div *ngIf="!podeVisualizarEvento">
+    <app-sem-permissao></app-sem-permissao>
+  </div>
 </div>

@@ -1,11 +1,11 @@
-import { Component, OnInit, HostListener, ViewChildren, QueryList, ElementRef } from '@angular/core';
+import { Component, OnInit, HostListener, ViewChildren, QueryList, ElementRef, ViewChild } from '@angular/core';
 import { Http } from '@angular/http';
 import { Angular5Csv } from 'angular5-csv/Angular5-csv';
 
 import { Usuario } from '../login/usuario';
 import { ConnectHTTP } from '../shared/services/connectHTTP';
 import { LocalStorage } from '../shared/services/localStorage';
-import { IMyOptions, ToastService } from '../../lib/ng-uikit-pro-standard';
+import { IMyOptions, ToastService, ModalDirective } from '../../lib/ng-uikit-pro-standard';
 
 import * as moment from 'moment';
 import { Router } from '@angular/router';
@@ -33,6 +33,9 @@ export class EventoComponent implements OnInit {
   dtCompromissoRadio: boolean = true;
   enviadoPorRadio: boolean = false;
   recebidoPorRadio: boolean = true;
+  usuarioLogadoSupervisor: boolean = true;
+
+  tornarResponsavel: any;
 
   dataInicial: string = moment().subtract(1, 'days').format('DD/MM/YYYY')
   dataFinal: string = moment().add(1, 'days').format('DD/MM/YYYY')
@@ -85,8 +88,7 @@ export class EventoComponent implements OnInit {
   constructor(private http: Http, private connectHTTP: ConnectHTTP,
     private toastrService: ToastService, private localStorage: LocalStorage, private router: Router) {
     this.usuarioLogado = this.localStorage.getLocalStorage('usuarioLogado') as Usuario;
-
-
+    this.usuarioLogadoSupervisor = this.usuarioLogado.dashboard === "supervisor" || this.usuarioLogado.dashboard === "admin";
   }
 
   async ngOnInit() {
@@ -142,7 +144,7 @@ export class EventoComponent implements OnInit {
 
   }
 
-
+  @ViewChild('confirmSeTornarResponsavelModal') confirmSeTornarResponsavelModal: ModalDirective;
   @HostListener('input') oninput() {
     this.paginators = [];
     for (let i = 1; i <= this.search().length; i++) {
@@ -251,8 +253,58 @@ export class EventoComponent implements OnInit {
     }
   }
 
-  abreEvento(eventoId: string) {
-    this.router.navigate([`/evento/${eventoId}`]);
+  async abreEvento(evento: any) {
+    if (evento.id_status_evento == 1 || evento.id_status_evento == 4) {
+      const eventoParaPessoaLogada = (evento.tipodestino === "P" && this.usuarioLogado.id_pessoa === evento.id_pessoa_organograma);
+      const eventoParaPessoaOrgonogramaLogada = (evento.tipodestino === "O" && this.usuarioLogado.id_organograma === evento.id_pessoa_organograma);
+
+      if (eventoParaPessoaLogada) {
+        await this.connectHTTP.callService({
+          service: 'visualizarEvento',
+          paramsService: {
+            id_evento: evento.id,
+            id_pessoa_visualizou: this.usuarioLogado.id_pessoa
+          }
+        }) as any;
+        this.router.navigate([`/evento/${evento.id}`]);
+      }
+      else if (this.usuarioLogadoSupervisor || eventoParaPessoaOrgonogramaLogada) {
+        this.tornarResponsavel = evento;
+        this.confirmSeTornarResponsavelModal.show();
+      }
+      else
+        this.toastrService.error("Você não pode visualizar esse evento!");
+    }
+  }
+
+  async visualizarEvento() {
+    if (this.usuarioLogadoSupervisor) {
+      this.router.navigate([`/evento/${this.tornarResponsavel.id}`]);
+      this.tornarResponsavel = null;
+    }
+    else this.toastrService.error("Você não tem permissão de visualizar esse evento!");
+  }
+
+  cancelaSeTornarResponsavel() {
+    this.tornarResponsavel = null;
+    this.toastrService.error("Você não assumiu a responsabilidade não tem permissão para visualizar");
+  }
+
+  async confirmaSeTornarResponsavel() {
+    try {
+      await this.connectHTTP.callService({
+        service: 'visualizarEvento',
+        paramsService: {
+          id_evento: this.tornarResponsavel.id,
+          id_pessoa_visualizou: this.usuarioLogado.id_pessoa
+        }
+      }) as any;
+      this.tornarResponsavel = null;
+      this.router.navigate([`/evento/${this.tornarResponsavel.id}`]);
+    }
+    catch (e) {
+      this.toastrService.error(e.error);
+    }
   }
 
   generateCsv() {

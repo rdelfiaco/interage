@@ -166,7 +166,7 @@
 
       <!--Table body-->
       <tbody>
-        <tr (click)="abreEvento(evento.id)" #list *ngFor="let evento of tableData; let i = index">
+        <tr (click)="abreEvento(evento)" #list *ngFor="let evento of tableData; let i = index">
           <td *ngIf="i+1 >= firstVisibleIndex && i+1 <= lastVisibleIndex">
             <a>
               <mdb-icon class={{evento.status_evento_cor_texto}} icon={{evento.status_evento_icone}} class="mr-2 "
@@ -238,5 +238,30 @@
 
   </div>
   <!--Bottom Table UI-->
+
+  <div mdbModal #confirmSeTornarResponsavelModal="mdbModal" class="modal fade" tabindex="-1" role="dialog"
+    aria-labelledby="myBasicModalLabel" aria-hidden="true" [config]="{backdrop: true}">
+    <div class="modal-dialog modal-md modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close pull-right" aria-label="Close" (click)="confirmSeTornarResponsavelModal.hide()">
+            <span aria-hidden="true">×</span>
+          </button>
+          <h4 class="modal-title w-100" id="myModalLabel">Confirma Responsabilidade</h4>
+        </div>
+        <div *ngIf="tornarResponsavel" class="modal-body">
+          Deseja se tornar responsável do evento do cliente {{tornarResponsavel.cliente}}
+        </div>
+        <div class="modal-footer">
+          <button type="button" style="white-space: nowrap;" mdbBtn color="danger" class="waves-light" aria-label="Cancelar"
+            (click)="confirmSeTornarResponsavelModal.hide(); cancelaSeTornarResponsavel()" mdbWavesEffect>Cancelar</button>
+          <button *ngIf="usuarioLogadoSupervisor" type="button" style="white-space: nowrap;" mdbBtn color="warning" class="waves-light" aria-label="Somente Visualizar"
+            (click)="confirmSeTornarResponsavelModal.hide(); visualizarEvento()" mdbWavesEffect>Somente Visualizar</button>
+          <button type="button" style="white-space: nowrap;" mdbBtn color="primary" class="relative waves-light"
+            (click)="confirmSeTornarResponsavelModal.hide(); confirmaSeTornarResponsavel();" mdbWavesEffect>Sim</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
 </div>

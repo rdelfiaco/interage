@@ -28,6 +28,7 @@ import { ProdutividadeCallCenterComponent } from './produtividade-call-center/pr
 import { TrocarSenhaComponent } from './usuario/trocar-senha/trocar-senha.component';
 import { CarregandoComponent } from './shared/carregando/carregando.component';
 import { CarregandoModule } from './shared/carregando/carregando.module';
+import { SemPermissaoModule } from './sem-permissao/sem-permissao.module';
 
 
 @NgModule({
@@ -36,7 +37,6 @@ import { CarregandoModule } from './shared/carregando/carregando.module';
     DashboardAdminComponent,
     DashboardOperadorComponent,
     DashboardSupervisorComponent,
-    SemPermissaoComponent,
     PageNotFoundComponent,
     TelemarketingComponent,
     TelemarketingQuestionarioComponent,
@@ -63,7 +63,8 @@ import { CarregandoModule } from './shared/carregando/carregando.module';
     EventoModule,
     ReactiveFormsModule,
     ToastModule.forRoot(),
-    CarregandoModule
+    CarregandoModule,
+    SemPermissaoModule
   ],
   providers: [MDBSpinningPreloader
 

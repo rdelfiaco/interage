@@ -32,6 +32,7 @@ export class AuthService {
     try {
       const usuarioLogado = await this.connectHTTP.callService({
         service: 'login',
+        naoExigeToken: true,
         paramsService: {
           login: usuario.login,
           senha: usuario.senha
@@ -77,6 +78,7 @@ export class AuthService {
     if (!usuarioLogado) return;
     await this.connectHTTP.callService({
       service: 'logout',
+      naoExigeToken: true,
       paramsService: {
         token_access: usuarioLogado.token,
         id_usuario: usuarioLogado.id

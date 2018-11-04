@@ -11,6 +11,7 @@ import { CarregandoModule } from '../shared/carregando/carregando.module';
 import { LinhaDoTempoEventoComponent } from './linha-do-tempo-evento/linha-do-tempo-evento.component';
 import { ItemLinhaDoTempoEventoComponent } from './item-linha-do-tempo-evento/item-linha-do-tempo-evento.component';
 import { FormularioEventoComponent } from './formulario-evento/formulario-evento.component';
+import { SemPermissaoModule } from '../sem-permissao/sem-permissao.module';
 
 
 @NgModule({
@@ -22,7 +23,8 @@ import { FormularioEventoComponent } from './formulario-evento/formulario-evento
     ReactiveFormsModule,
     FormsModule,
     SharedModule,
-    CarregandoModule
+    CarregandoModule,
+    SemPermissaoModule
   ],
   providers: [
 

@@ -682,6 +682,39 @@ function getEventoPorId(req, res) {
   })
 }
 
+function visualizarEvento(req, res) {
+  return new Promise(function (resolve, reject) {
+
+    checkTokenAccess(req).then(historico => {
+      const dbconnection = require('../config/dbConnection')
+      const { Client } = require('pg')
+
+      const client = new Client(dbconnection)
+
+      client.connect()
+
+      let sql = `UPDATE eventos SET
+                  id_pessoa_visualizou = ${req.query.id_pessoa_visualizou},
+                  dt_visualizou = now(),
+                  id_status_evento=5
+                  where id=${req.query.id_evento}`
+      console.log(sql);
+      client.query(sql)
+        .then(res => {
+          client.end();
+          resolve(res)
+        }
+        )
+        .catch(err => {
+          client.end();
+          reject(err)
+        })
+    }).catch(e => {
+      reject(e)
+    })
+  })
+}
+
 module.exports = {
   getUmEvento,
   motivosRespostas,
@@ -691,5 +724,6 @@ module.exports = {
   getEventosRelatorioUsuario,
   getEventoFiltros,
   getEventosFiltrados,
-  getEventoPorId
+  getEventoPorId,
+  visualizarEvento
 }

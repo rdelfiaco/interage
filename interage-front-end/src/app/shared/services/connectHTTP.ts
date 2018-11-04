@@ -4,7 +4,8 @@ import { Usuario } from "../../login/usuario";
 interface optionsCallService {
   service: string
   paramsService?: object,
-  host?: string
+  host?: string,
+  naoExigeToken?: boolean
 }
 
 interface retObjectCallService {
@@ -26,7 +27,7 @@ export class ConnectHTTP {
 
       let url = `${host}${service}`
 
-      if (!options.paramsService.token || !options.paramsService.id_usuario) {
+      if (!options.naoExigeToken && (!options.paramsService.token || !options.paramsService.id_usuario)) {
         let usuarioLogado = this.localStorage.getLocalStorage('usuarioLogado') as Usuario;
         options.paramsService.id_usuario = usuarioLogado.id.toString();
         options.paramsService.token = usuarioLogado.token;

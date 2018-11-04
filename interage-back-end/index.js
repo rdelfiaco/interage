@@ -12,6 +12,7 @@ const produtividade = require('./src/api/produtividade');
 const consultaPlaca = require('./src/api/consultaPlaca');
 
 declaraServico('getEventoPorId', evento.getEventoPorId);
+declaraServico('visualizarEvento', evento.visualizarEvento);
 
 app.get('/getAtividades', (req, res) => {
   atividade.getAtividades(req)
