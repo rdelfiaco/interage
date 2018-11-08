@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ConnectHTTP } from '../../shared/services/connectHTTP';
 import { Observable } from 'rxjs';
 import { Usuario } from '../../login/usuario';
 import { LocalStorage } from '../../shared/services/localStorage';
+import { ModalDirective } from '../../../lib/ng-uikit-pro-standard';
 
 @Component({
   selector: 'app-detalhe-evento',
@@ -18,6 +19,9 @@ export class DetalheEventoComponent implements OnInit {
   podeVisualizarEvento: boolean;
   usuarioLogadoSupervisor: boolean;
   usuarioLogado: Usuario;
+  podeConcluir: boolean;
+
+  @ViewChild('modalConcluirEvento') modalConcluirEvento: ModalDirective;
 
   constructor(private route: ActivatedRoute,
     private connectHTTP: ConnectHTTP, private localStorage: LocalStorage) {
@@ -55,8 +59,12 @@ export class DetalheEventoComponent implements OnInit {
       this.podeVisualizarEvento = false;
     }
 
+    this.podeConcluir = !(this.evento.id_status_evento == 5 || this.evento.id_status_evento == 6)
     this.pessoa = new Observable(o => o.next(pessoa.resposta));
     this.carregando = false;
   }
 
+  concluirEvento() {
+    this.modalConcluirEvento.show();
+  }
 }

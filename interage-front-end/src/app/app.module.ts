@@ -29,6 +29,9 @@ import { TrocarSenhaComponent } from './usuario/trocar-senha/trocar-senha.compon
 import { CarregandoComponent } from './shared/carregando/carregando.component';
 import { CarregandoModule } from './shared/carregando/carregando.module';
 import { SemPermissaoModule } from './sem-permissao/sem-permissao.module';
+import { TelemarketingQuestionarioModule } from './telemarketing-questionario/telemarketing-questionario.module';
+import { TelemarketingModule } from './telemarketing/telemarketing.module';
+import { PipesModule } from './shared/pipes/pipesModule';
 
 
 @NgModule({
@@ -38,17 +41,8 @@ import { SemPermissaoModule } from './sem-permissao/sem-permissao.module';
     DashboardOperadorComponent,
     DashboardSupervisorComponent,
     PageNotFoundComponent,
-    TelemarketingComponent,
-    TelemarketingQuestionarioComponent,
-    CadastroPessoaComponent,
-    PrincipalComponent,
-    TelefonesComponent,
-    EnderecosComponent,
     PesquisaPessoaComponent,
-    LinhaDoTempoComponent,
-    ItemDeEventoComponent,
     AnalisaCampanhaComponent,
-    MascaraTelefonePipe,
     ProdutividadeCallCenterComponent,
     TrocarSenhaComponent
   ],
@@ -60,11 +54,13 @@ import { SemPermissaoModule } from './sem-permissao/sem-permissao.module';
     AppRoutingModule,
     LoginModule,
     FormsModule,
-    EventoModule,
     ReactiveFormsModule,
+    EventoModule,
     ToastModule.forRoot(),
     CarregandoModule,
-    SemPermissaoModule
+    SemPermissaoModule,
+    TelemarketingModule,
+    PipesModule
   ],
   providers: [MDBSpinningPreloader
 

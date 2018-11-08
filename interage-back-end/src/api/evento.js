@@ -273,7 +273,7 @@ function salvarEvento(req, res) {
             1,
             ${req.query.id_pessoa},
             now(),
-            'select func_dt_expira(${motivoRespostaAutomatico.id_motivo})',
+            func_dt_expira(${motivoRespostaAutomatico.id_motivo}),
             '${req.query.data}',
             '${tipoDestino}', 
             ${id_pessoa_organograma},
@@ -288,7 +288,7 @@ function salvarEvento(req, res) {
       }
     });
   }).catch(err => {
-    reject(err)
+    console.log(err)
   })
 }
 

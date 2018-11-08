@@ -12,6 +12,8 @@ import { LinhaDoTempoEventoComponent } from './linha-do-tempo-evento/linha-do-te
 import { ItemLinhaDoTempoEventoComponent } from './item-linha-do-tempo-evento/item-linha-do-tempo-evento.component';
 import { FormularioEventoComponent } from './formulario-evento/formulario-evento.component';
 import { SemPermissaoModule } from '../sem-permissao/sem-permissao.module';
+import { ConcluirEventoComponent } from './concluir-evento/concluir-evento.component';
+import { TelemarketingQuestionarioModule } from '../telemarketing-questionario/telemarketing-questionario.module';
 
 
 @NgModule({
@@ -24,7 +26,8 @@ import { SemPermissaoModule } from '../sem-permissao/sem-permissao.module';
     FormsModule,
     SharedModule,
     CarregandoModule,
-    SemPermissaoModule
+    SemPermissaoModule,
+    TelemarketingQuestionarioModule
   ],
   providers: [
 
@@ -34,7 +37,8 @@ import { SemPermissaoModule } from '../sem-permissao/sem-permissao.module';
     DetalheEventoComponent,
     LinhaDoTempoEventoComponent,
     ItemLinhaDoTempoEventoComponent,
-    FormularioEventoComponent
+    FormularioEventoComponent,
+    ConcluirEventoComponent
   ]
 })
 export class EventoModule { }

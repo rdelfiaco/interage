@@ -26,6 +26,7 @@ export class TelemarketingComponent implements OnInit {
   predicoes: Observable<Array<object>>;
   objecoes: Observable<Array<object>>;
   formAberto: boolean;
+  carregouPessoa: boolean = false;
   pessoaObject: any;
   pessoaNome: string;
   velocimetro: string;
@@ -103,6 +104,9 @@ export class TelemarketingComponent implements OnInit {
     this.pessoa = new Observable((observer) => {
       self.observerPessoa = observer;
       observer.next(telemarketing.resposta.pessoa)
+      setTimeout(() => {
+        self.carregouPessoa = true;
+      }, 0);
       self.pessoaObject = telemarketing.resposta.pessoa;
     });
 

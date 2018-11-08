@@ -28,7 +28,16 @@
         </div>
       </mdb-tab>
     </mdb-tabset>
+    <div class="row justify-content-end">
+      <button type="button" [disabled]="podeConcluir" style="white-space: nowrap;" mdbBtn color="primary" class="waves-light" aria-label="Somente Visualizar"
+        (click)="concluirEvento()" mdbWavesEffect>Concluir</button>
+      <button type="button" style="white-space: nowrap;" mdbBtn color="warning" class="relative waves-light" (click)="confirmSeTornarResponsavelModal.hide(); confirmaSeTornarResponsavel();"
+        mdbWavesEffect>Encaminhar</button>
+      <button type="button" style="white-space: nowrap;" mdbBtn color="danger" class="waves-light" aria-label="Cancelar"
+        (click)="confirmSeTornarResponsavelModal.hide(); cancelaSeTornarResponsavel()" mdbWavesEffect>Cancelar</button>
+    </div>
   </div>
+  <app-concluir-evento></app-concluir-evento>
   <div *ngIf="!podeVisualizarEvento">
     <app-sem-permissao></app-sem-permissao>
   </div>
