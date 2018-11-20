@@ -14,6 +14,7 @@ import { FormularioEventoComponent } from './formulario-evento/formulario-evento
 import { SemPermissaoModule } from '../sem-permissao/sem-permissao.module';
 import { ConcluirEventoComponent } from './concluir-evento/concluir-evento.component';
 import { TelemarketingQuestionarioModule } from '../telemarketing-questionario/telemarketing-questionario.module';
+import { CadastroPessoaModule } from '../cadastro-pessoa/cadastro-pessoa.module';
 
 
 @NgModule({
@@ -27,7 +28,8 @@ import { TelemarketingQuestionarioModule } from '../telemarketing-questionario/t
     SharedModule,
     CarregandoModule,
     SemPermissaoModule,
-    TelemarketingQuestionarioModule
+    TelemarketingQuestionarioModule,
+    CadastroPessoaModule
   ],
   providers: [
 

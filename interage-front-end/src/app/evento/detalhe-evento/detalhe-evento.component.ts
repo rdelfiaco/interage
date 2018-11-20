@@ -65,6 +65,7 @@ export class DetalheEventoComponent implements OnInit {
   }
 
   concluirEvento() {
+    debugger;
     this.modalConcluirEvento.show();
   }
 }
