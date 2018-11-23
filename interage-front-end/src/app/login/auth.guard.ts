@@ -41,6 +41,7 @@ export class AuthGuard implements CanActivate {
       analisaCampanha: ['admin', 'supervisor'],
       produtividadeCallCenter: ['admin', 'supervisor', 'operador'],
       trocarSenha: ['admin', 'supervisor', 'operador'],
+      proposta: ['admin', 'supervisor', 'operador'],
     }
     if (rotas[route.routeConfig.path].indexOf(usuarioLogado.dashboard) != -1) return true;
   }

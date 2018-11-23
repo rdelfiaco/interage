@@ -18,10 +18,18 @@
 // });
 
 
+// module.exports = ({ //localhost
+//     host: '159.69.205.116',
+//     port: 5432,
+//     database: 'altis_teste',
+//     user: 'postgres',
+//     password: 'altisinterage123!@#'
+// });
+
 module.exports = ({ //localhost
-    host: '159.69.205.116',
+    host: '192.168.100.28',
     port: 5432,
-    database: 'altis_teste',
+    database: 'altis',
     user: 'postgres',
-    password: 'altisinterage123!@#'
+    password: 'postgres'
 });

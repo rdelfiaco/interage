@@ -9,7 +9,7 @@ const telemarketing = require('./src/api/telemarketing');
 const pessoa = require('./src/api/pessoa');
 const atividade = require('./src/api/atividade');
 const produtividade = require('./src/api/produtividade');
-
+const tabelaPrecos = require('./src/api/tabelasPrecos');
 
 
 app.get('/getAtividades', (req, res) => {
@@ -24,6 +24,21 @@ app.get('/getAtividades', (req, res) => {
       res.status(401).send(error)
     })
 });
+
+app.get('/getTabelaPrecos', (req, res) => {
+  tabelaPrecos.getTabelaPrecos(req)
+    .then(linhas => {
+      headerResponse(res)
+      res.status(200).send(linhas)
+    })
+    .catch(error => {
+      headerResponse(res)
+      console.log(error)
+      res.status(401).send(error)
+    })
+});
+
+
 app.get('/login', (req, res) => {
   usuario.login(req)
     .then(linhas => {

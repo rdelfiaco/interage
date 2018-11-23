@@ -1,3 +1,4 @@
+import { PropostaModule } from './proposta/proposta.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule, NO_ERRORS_SCHEMA } from '@angular/core';
@@ -26,6 +27,7 @@ import { AnalisaCampanhaComponent } from './analisa-campanha/analisa-campanha.co
 import { MascaraTelefonePipe } from './shared/pipes/mascaraTelefone/mascara-telefone.pipe';
 import { ProdutividadeCallCenterComponent } from './produtividade-call-center/produtividade-call-center.component';
 import { TrocarSenhaComponent } from './usuario/trocar-senha/trocar-senha.component';
+
 
 
 @NgModule({
@@ -61,6 +63,7 @@ import { TrocarSenhaComponent } from './usuario/trocar-senha/trocar-senha.compon
     EventoModule,
     ReactiveFormsModule,
     ToastModule.forRoot(),
+    PropostaModule,
 
   ],
   providers: [MDBSpinningPreloader

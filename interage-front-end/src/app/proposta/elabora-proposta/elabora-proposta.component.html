@@ -1,0 +1,203 @@
+
+<div class="row" >
+  
+  <div class=" col-md-5 md-form input-group" >
+      <input mdbInputDirective type="text" id="cliente" class="form-control" >
+      <label for="cliente" style="margin-left: 15px" >Cliente</label>
+      <a mdbBtn floating="true" size="sm" gradient="blue" mdbWavesEffect (click)="teste()"  >
+          <i class="fa fa-search-plus" aria-hidden="true"></i>
+      </a>
+  </div>
+      
+  <div class="col-md-4" style="margin-top: 25px" >
+        <mdb-select [(ngModel)]="tipoVeiculoSelectValue" [options]="tipoVeiculoSelect" placeholder="Escolha o tipo do veículo"
+          style="font-size: 0.5rem;" (selected)="atualizaTipoVeiculo($event)" ></mdb-select>
+        <label>Tipo do Veículo</label>
+  </div>
+        
+  <div class=" col-md-2 md-form " style="margin-top: 30px" >
+        <input mdbInputDirective type="text" id="vlrVeiculo" class="form-control" [(ngModel)]="sVlrVeiculo"  disabled >
+        <label for="vlrVeiculo" style="margin-left: 15px" >Valor do veículo</label>
+
+  </div>
+
+</div>
+
+<div *ngIf="valores.length > 0 " >
+
+    <div class="row ">
+        <div class="content" >
+            <div *ngFor="let combo of combos; let i = index">  
+                <div [ngStyle]="{'background-color': combo.cor_fundo,'color': combo.cor_caracteres }" >                
+                    <div style="text-align: center">   
+                        <br>                                
+                            {{combo.nome}}
+                        <br>
+                        <br>
+                        <div class="comboDescricao"> 
+                            {{combo.descricao}}
+                        </div>
+                        <br>
+                            {{combo.valor_combo}}
+                        <br class="form-check form-check-inline">
+                                <input type="radio" class="form-check-input" value="i" id="{{ 'chkCombo' + i}}" (change)="mudouPlano(i)" [checked]="chkPrecos == i"
+                                name="chckCombo" mdbInputDirective>
+                                <label class="form-check-label" for="{{ 'chkCombo' + i}}" ></label>
+                        <br>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br>
+    <div style="text-align: center">
+        Valor da proposta 
+        <br>
+        {{vlrPoposta}}
+    </div>
+    <br>
+    <br class="form-check form-check-inline">
+        <input type="radio" class="form-check-input" value="6"  id=chkCombo6 (change)="mudouPlano(6)" [checked]="chkPrecos == 6"
+            name="chckCombo" mdbInputDirective  >
+        <label class="form-check-label" for=chkCombo6 >Calculo personalizado</label>
+    <br>
+
+    <div *ngIf="chkPrecos == 6"> 
+        <div class="container tabelaPrecos" >
+            <div class="col-md-12" >
+                <div class="row">
+                    <div class="col-md-2">
+                        COTA 
+                    </div>
+                    <div class="col-md-3"> 
+                        VALOR 24H + PLANO PPV 
+                    </div>
+                    <div class="col-md-3">
+                        ADESÃO
+                    </div>
+                    <div class="col-md-3">
+                        COTA PARTICIPAÇÃO
+                    </div>
+                </div>        
+                <div class="row">
+                    <div class="col-md-2">
+                        {{cota}}
+                    </div>
+                    <div class="col-md-3"> 
+                        {{valorPPV}}
+                    </div>
+                    <div class="col-md-3">
+                        {{adesao}}
+                    </div>
+                    <div class="col-md-3">
+                        <a *ngIf="prcParticipacao > 0">
+                            {{prcParticipacao}} %  =  
+                        </a>
+                        {{vlrParticipacao}}
+                    </div>
+                </div>  
+                <br>
+                <div class="row">
+                    <!-- <div>
+                        Fundo para terceiro..:  
+                    </div> -->
+                        <th  *ngFor="let _fundoTerceiro of fundoTerceiro; let i = index"  
+                            class=" col-md-3 tabelaChck">  
+                            <div class="form-check form-check-inline">
+                                <input type="radio" class="form-check-input" id="{{ 'chkFundo' + i}}" (change)="mudouFundo(i)" [checked]="chkFundo == i"
+                                name="chckFundoTerceiro" mdbInputDirective>
+                                <label class="form-check-label" for="{{ 'chkFundo' + i}}" ></label>
+                                {{_fundoTerceiro.nome}}
+                            </div>
+                            <div>
+                                {{_fundoTerceiro.valor}}
+                            </div>
+                        </th>
+                </div>
+                <br>
+                <div class="row">
+                    <!-- <div>
+                        Carro reserva
+                    </div> -->
+                        <th  *ngFor="let _carroReserva of carroReserva; let i = index"  
+                        class=" col-md-3 tabelaChck">  
+                            <div class="form-check form-check-inline">
+                                <input type="radio" class="form-check-input" id="{{ 'chckCarroRes' + i}}" (change)="mudouCarroReserva(i)" [checked]="chckCarroRes == i"
+                                name="chckCarroReserva" mdbInputDirective>
+                                <label class="form-check-label" for="{{ 'chckCarroRes' + i}}" ></label>
+                                {{_carroReserva.nome}}
+                            </div>
+                            <div>
+                                {{_carroReserva.valor}}
+                            </div>
+                        </th>
+                </div>
+                <br>
+                <div class="row">
+                    <!-- <div> 
+                        Proteção de vidros
+                    </div> -->
+                    <th  *ngFor="let _protecaoVidro of protecaoVidro; let i = index"  
+                    class=" col-md-3 tabelaChck">  
+                        <div class="form-check form-check-inline">
+                            <input type="radio" class="form-check-input" id="{{ 'chckProtecaoVidro' + i}}" (change)="mudouProtecaoVidro(i)" [checked]="chckProtecaoVidro == i"
+                            name="chckProtecaoVidro" mdbInputDirective>
+                            <label class="form-check-label" for="{{ 'chckProtecaoVidro' + i}}" ></label>
+                            {{_protecaoVidro.nome}}
+                        </div>
+                        <div>
+                            {{_protecaoVidro.valor}}
+                        </div>
+                    </th>
+
+                </div>
+                <br>
+                <div class="row">
+                    <!-- <div> 
+                        APP
+                    </div> -->
+                    <th  *ngFor="let _app of app; let i = index"  
+                    class=" col-md-3 tabelaChck">  
+                        <div class="form-check form-check-inline">
+                            <input type="radio" class="form-check-input" id="{{ 'chckApp' + i}}" (change)="mudouApp(i)" [checked]="chckApp == i"
+                            name="chckApp" mdbInputDirective>
+                            <label class="form-check-label" for="{{ 'chckApp' + i}}" ></label>
+                            {{_app.nome}}
+                        </div>
+                        <div>
+                            {{_app.valor}}
+                        </div>
+                    </th>
+
+                </div>
+                <br>
+                <div class="row">
+                    <!-- <div> 
+                        Rastreador
+                    </div> -->
+                    <th  *ngFor="let _rastreador of rastreador; let i = index"  
+                    class=" col-md-3 tabelaChck">  
+                        <div class="form-check form-check-inline">
+                                <input type="radio" class="form-check-input" id="{{ 'chckRastreador' + i}}" (change)="mudouRastreador(i)" [checked]="chckRastreador == i"
+                                name="chckRastreador" mdbInputDirective>
+                                <label class="form-check-label" for="{{ 'chckRastreador' + i}}" ></label> 
+                            {{_rastreador.nome}}
+                        </div>
+                        <div>
+                            {{_rastreador.valor}}
+                        </div>
+                        <div>
+                            instalação: {{_rastreador.valor_instalacao}}
+                        </div> 
+                    </th>
+                </div>
+            </div>
+            <br>
+            <br>
+        </div>
+    </div>
+
+</div>
+
+
+

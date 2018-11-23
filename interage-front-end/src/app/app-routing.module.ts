@@ -1,3 +1,4 @@
+import { PropostaComponent } from './proposta/proposta.component';
 import { EventoComponent } from './evento/evento.component';
 
 import { DashboardSupervisorComponent } from './dashboard-supervisor/dashboard-supervisor.component';
@@ -81,9 +82,15 @@ const routes: Routes = [
     canActivate: [AuthGuard]
   },
   {
+    path: 'proposta',
+    component: PropostaComponent,
+    canActivate: [AuthGuard]
+  },
+  {
     path: '**',
     component: PageNotFoundComponent
   }
+
 ];
 
 @NgModule({
