@@ -36,6 +36,8 @@ export class FormularioEventoComponent implements OnInit {
   }
 
   ngOnInit() {
+
+    
   }
 
   ngOnChanges() {
