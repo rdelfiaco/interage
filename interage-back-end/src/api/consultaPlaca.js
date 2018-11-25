@@ -7,7 +7,7 @@ function busca(req, res) {
         sinesp = require('sinesp-nodejs')
 
         /* Realizar uma consulta contra a placa AAA-0001 */
-        sinesp.consultaPlaca('NKL4858').then(dados => {
+        sinesp.consultaPlaca('NFU9272').then(dados => {
             console.log(dados);
             resolve(dados);
         }).catch(err => {

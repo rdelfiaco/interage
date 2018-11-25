@@ -12,7 +12,13 @@
           <div class="col-12">
             <div class="row" style="padding: 0px 15px;">
               <div class="md-form col-12">
-                <app-formulario-evento [evento]="evento"></app-formulario-evento>
+                <div class="row justify-content-start">
+                  <button type="button" [disabled]="podeConcluir" style="white-space: nowrap;" mdbBtn color="primary"
+                    class="waves-light" aria-label="Somente Visualizar" (click)="concluirEvento()" mdbWavesEffect>Concluir</button>
+                  <button type="button" [disabled]="podeEncaminhar" style="white-space: nowrap;" mdbBtn color="warning" class="relative waves-light"
+                    (click)="confirmSeTornarResponsavelModal.hide(); confirmaSeTornarResponsavel();" mdbWavesEffect>Encaminhar</button>
+                </div>
+                <app-formulario-evento [evento]="evento | async"></app-formulario-evento>
               </div>
             </div>
           </div>
@@ -28,19 +34,17 @@
         </div>
       </mdb-tab>
     </mdb-tabset>
-    <div class="row justify-content-end">
-      <button type="button" [disabled]="podeConcluir" style="white-space: nowrap;" mdbBtn color="primary" class="waves-light"
-        aria-label="Somente Visualizar" (click)="concluirEvento()" mdbWavesEffect>Concluir</button>
-      <button type="button" style="white-space: nowrap;" mdbBtn color="warning" class="relative waves-light" (click)="confirmSeTornarResponsavelModal.hide(); confirmaSeTornarResponsavel();"
-        mdbWavesEffect>Encaminhar</button>
-      <button type="button" style="white-space: nowrap;" mdbBtn color="danger" class="waves-light" aria-label="Cancelar"
-        (click)="confirmSeTornarResponsavelModal.hide(); cancelaSeTornarResponsavel()" mdbWavesEffect>Cancelar</button>
-    </div>
   </div>
-  <div mdbModal #modalConcluirEvento="mdbModal" [config]="{backdrop: true, ignoreBackdropClick: true}" class="modal fade right"
-    role="dialog" aria-labelledby="myBasicModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-fluid" role="document">
-      <app-concluir-evento></app-concluir-evento>
+  <div class="row justify-content-end">
+    <button type="button" style="white-space: nowrap;" mdbBtn color="danger" class="waves-light" aria-label="Cancelar"
+      (click)="confirmSeTornarResponsavelModal.hide(); cancelaSeTornarResponsavel()" mdbWavesEffect>Cancelar</button>
+  </div>
+
+  <div mdbModal #modalConcluirEvento="mdbModal" [config]="{backdrop: true}" class="modal fade right" role="dialog"
+    aria-labelledby="myBasicModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <app-concluir-evento [evento]="evento" [pessoa]="pessoa" [motivos_respostas]="motivos_respostas" [predicoes]="predicoes"
+        [objecoes]="objecoes" (fechaModal)="fechaModal()"></app-concluir-evento>
     </div>
   </div>
   <div *ngIf="!podeVisualizarEvento">

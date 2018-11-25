@@ -1,5 +1,8 @@
 const { checkTokenAccess } = require('./checkTokenAccess');
 const { getMetaPessoa } = require('./metaLigacoes');
+const { getPredicao } = require('./predicao');
+const { getObjecoes } = require('./objecoes');
+const { getPessoa } = require('./pessoa');
 
 function getUmEvento(req, res) {
   return new Promise(function (resolve, reject) {
@@ -71,6 +74,8 @@ function motivosRespostas(req, res) {
       let sqlMotivosResposta = `SELECT motivos_respostas.id, motivos_respostas.exige_predicao, motivos_respostas.exige_objecao,  motivos_respostas.nome, motivos_respostas.ordem_listagem, motivos_respostas.exige_observacao, motivos_eventos_automaticos.reagendar FROM motivos_respostas
                       LEFT JOIN motivos_eventos_automaticos ON motivos_respostas.id = motivos_eventos_automaticos.id_motivo_resposta
                       WHERE motivos_respostas.id_motivo=${req.query.id_motivo} AND status=true`
+
+      console.log(sqlMotivosResposta);
       client.query(sqlMotivosResposta).then(res => {
         let motivos_respostas = res.rows;
 
@@ -113,7 +118,7 @@ function salvarEvento(req, res) {
                   id_pessoa_resolveu=${req.query.id_pessoa}, 
                   observacao_retorno='${req.query.observacao}',
                   id_resp_motivo=${req.query.id_motivos_respostas},
-                  id_telefone=${req.query.id_telefoneDiscado},
+                  id_telefone=${req.query.id_telefoneDiscado || 'NULL'},
                   id_predicao=${req.query.id_predicao || 'NULL'},
                   id_objecao=${req.query.id_objecao || 'NULL'}
                   WHERE eventos.id=${req.query.id_evento}
@@ -659,17 +664,31 @@ function getEventoPorId(req, res) {
                   from view_eventos
                   where id=${req.query.id_evento}`
 
+      console.log(sql);
       client.query(sql)
-        .then(res => {
-          if (res.rowCount > 0) {
-            let evento = res.rows;
-            client.end();
-            resolve(evento)
-          }
-          else {
-            reject('Não há evento!')
-            client.end();
-          }
+        .then(evento => {
+          evento = evento.rows[0];
+          req.query.id_pessoa = evento.id_pessoa_receptor;
+          req.query.id_motivo = evento.id_motivo;
+          getPessoa(req).then(pessoa => {
+            motivosRespostas(req).then(motivos_respostas => {
+              getPredicao(req).then(predicoes => {
+                getObjecoes(req).then(objecoes => {
+                  if (!evento || !pessoa || !motivos_respostas || !predicoes) reject('Evento com erro!');
+                  resolve({ pessoa, evento: evento, motivos_respostas, predicoes, objecoes });
+                  client.end();
+                }).catch(e => {
+                  reject(e);
+                });
+              }).catch(e => {
+                reject(e);
+              });
+            }).catch(e => {
+              reject(e);
+            });
+          }).catch(e => {
+            reject(e);
+          });
         }
         )
         .catch(err => {

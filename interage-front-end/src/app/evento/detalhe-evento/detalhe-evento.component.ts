@@ -14,12 +14,17 @@ import { ModalDirective } from '../../../lib/ng-uikit-pro-standard';
 export class DetalheEventoComponent implements OnInit {
   id_evento: string;
   evento: any;
+  motivos_respostas: any;
+  predicoes: any;
+  objecoes: any;
   carregando: boolean = false;
   pessoa: Observable<string[]>;
+  eventoObject: any;
   podeVisualizarEvento: boolean;
   usuarioLogadoSupervisor: boolean;
   usuarioLogado: Usuario;
   podeConcluir: boolean;
+  podeEncaminhar: boolean;
 
   @ViewChild('modalConcluirEvento') modalConcluirEvento: ModalDirective;
 
@@ -33,6 +38,10 @@ export class DetalheEventoComponent implements OnInit {
   }
 
   async ngOnInit() {
+    this.carregaEvento();
+  }
+
+  async carregaEvento() {
     this.carregando = true;
     let eventoEncontrado = await this.connectHTTP.callService({
       service: 'getEventoPorId',
@@ -40,17 +49,15 @@ export class DetalheEventoComponent implements OnInit {
         id_evento: this.id_evento
       }
     }) as any;
-    this.evento = eventoEncontrado.resposta[0];
+    this.motivos_respostas = eventoEncontrado.resposta.motivos_respostas;
+    this.predicoes = eventoEncontrado.resposta.predicoes;
+    this.objecoes = eventoEncontrado.resposta.objecoes;
+    this.evento = new Observable(o => o.next(eventoEncontrado.resposta.evento));
+    this.eventoObject = eventoEncontrado.resposta.evento;
+    this.pessoa = new Observable(o => o.next(eventoEncontrado.resposta.pessoa));
 
-    let pessoa = await this.connectHTTP.callService({
-      service: 'getPessoa',
-      paramsService: {
-        id_pessoa: this.evento.id_pessoa_receptor
-      }
-    }) as any;
-
-    const eventoParaPessoaLogada = (this.evento.tipodestino === "P" && this.usuarioLogado.id_pessoa === this.evento.id_pessoa_organograma);
-    const eventoParaPessoaOrgonogramaLogadaQueVisualizou = (this.evento.tipodestino === "O" && this.usuarioLogado.id_organograma === this.evento.id_pessoa_organograma && this.evento.id_pessoa_visualizou == this.usuarioLogado.id_pessoa);
+    const eventoParaPessoaLogada = (this.eventoObject.tipodestino === "P" && this.usuarioLogado.id_pessoa === this.eventoObject.id_pessoa_organograma);
+    const eventoParaPessoaOrgonogramaLogadaQueVisualizou = (this.eventoObject.tipodestino === "O" && this.usuarioLogado.id_organograma === this.eventoObject.id_pessoa_organograma && this.eventoObject.id_pessoa_visualizou == this.usuarioLogado.id_pessoa);
 
     if (eventoParaPessoaLogada || eventoParaPessoaOrgonogramaLogadaQueVisualizou || this.usuarioLogadoSupervisor) {
       this.podeVisualizarEvento = true;
@@ -59,13 +66,20 @@ export class DetalheEventoComponent implements OnInit {
       this.podeVisualizarEvento = false;
     }
 
-    this.podeConcluir = !(this.evento.id_status_evento == 5 || this.evento.id_status_evento == 6)
-    this.pessoa = new Observable(o => o.next(pessoa.resposta));
+    this.podeConcluir = !(this.eventoObject.id_status_evento == 5 || this.eventoObject.id_status_evento == 6)
+    this.podeEncaminhar = !(this.eventoObject.id_status_evento == 5 || this.eventoObject.id_status_evento == 6)
     this.carregando = false;
   }
 
   concluirEvento() {
-    debugger;
     this.modalConcluirEvento.show();
+  }
+
+  fechaModal() {
+    this.modalConcluirEvento.hide();
+    this.carregaEvento();
+  }
+
+  mudou() {
   }
 }

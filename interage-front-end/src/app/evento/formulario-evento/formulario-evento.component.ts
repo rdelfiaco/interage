@@ -39,7 +39,6 @@ export class FormularioEventoComponent implements OnInit {
   }
 
   ngOnChanges() {
-    debugger
     this.eventoForm.setValue({
       id: this.evento.id,
       status: this.evento.status,

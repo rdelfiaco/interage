@@ -1,33 +1,55 @@
-<div class="modal-content">
-  <div *ngIf="pessoaObject" class="modal-header">
-    <h4 class="modal-title w-100" id="myModalLabel">Vendas Internas -
-      {{pessoaObject.principal.nome}}</h4>
-  </div>
-  <div class="modal-body" style="overflow: auto; height: 80vh;">
-    <div *ngIf="eventoObject">
+<form [formGroup]="questionarioForm" class="formQuestionario">
+  <div class="modal-content">
+    <div *ngIf="_pessoaObject" class="modal-header">
+      <h4 class="modal-title w-100" id="myModalLabel">Concluir Evento -
+        {{_pessoaObject.principal.nome}}</h4>
+    </div>
+    <div class="modal-body" style="overflow: auto; height: 80vh;">
       <div class="row">
-        <div class="col-md-5">
-          <app-telemarketing-questionario [modal]="basicModal" [evento]="evento" [pessoa]="pessoa" [motivos_respostas]="motivos_respostas"
-            [predicoes]="predicoes" [objecoes]="objecoes" [campanhaSelecionada]="campanhaSelecionada.value" (clear)="_limpar()"
-            (atualizaMeta)="atualizaMeta($event)"></app-telemarketing-questionario>
-        </div>
-        <div class="col-md-7">
-          <app-cadastro-pessoa [pessoa]="pessoa" (refresh)="refresh()"></app-cadastro-pessoa>
+        <div class="col">
+          <mdb-select (selected)="selecionaMotivoResposta($event)" [options]="motivosRespostasFormatado" [multiple]="false"
+            placeholder="Resultado da Ligação"></mdb-select>
         </div>
       </div>
-    </div>
-    <div *ngIf="!eventoObject" style="height: 100%;">
-      <div *ngIf="!carregouEvento" class="justify-content-center align-items-center flex-column row" style="height: 100%;">
-        <h1>Carregando!</h1>
-        <mdb-spinner spinnerType="big" spinnerColor="blue"></mdb-spinner>
-        <button mdbBtn (click)="basicModal.hide();" type="button" gradient="peach" rounded="true" class="waves-light"
-          mdbWavesEffect>Fechar</button>
+      <div class="row">
+        <div class="md-form col">
+          <textarea type="text" id="form7" formControlName="observacao" class="md-textarea form-control"
+            mdbInputDirective></textarea>
+          <label for="form7">Observação</label>
+        </div>
       </div>
-      <div *ngIf="carregouEvento" class="justify-content-center align-items-center flex-column row" style="height: 100%;">
-        <h1>Não há ligações no momento!</h1>
-        <button mdbBtn (click)="basicModal.hide();" type="button" gradient="peach" rounded="true" class="waves-light"
-          mdbWavesEffect>Fechar</button>
+
+      <div *ngIf="exige_predicao" class="row">
+        <div class="col">
+          <mdb-select formControlName="id_predicao" [options]="predicoesFormatado" [multiple]="false" placeholder="Selecione a previsão">
+          </mdb-select>
+        </div>
+      </div>
+
+      <div *ngIf="exige_objecao" class="row">
+        <div class="col">
+          <mdb-select formControlName="id_objecao" [options]="objecoesFormatado" [multiple]="false" placeholder="Selecione a objeção">
+          </mdb-select>
+        </div>
+      </div>
+
+      <div *ngIf="reagendar" class="row">
+        <div class="md-form form-group col">
+          <mdb-date-picker #dataReagendamento (dateChanged)="onDateChange($event)" formControlName="data" name="mydate"
+            [options]="myDatePickerOptions" [placeholder]="'Selecione a data'" required></mdb-date-picker>
+          <label for="telefoneDiscado" class="">Data Reagendamento</label>
+        </div>
+        <div class="md-form form-group col">
+          <mdb-time-picker [buttonLabel]="'Done'" [twelvehour]="false" [darktheme]="true" [placeholder]="'Selecione a hora'"
+            [label]="'Hora Reagendamento'" formControlName="hora"></mdb-time-picker>
+        </div>
+      </div>
+      <div class="row">
+        <div class="justify-content-center">
+          <button type="button" mdbBtn color="primary" (click)="concluiEvento();" class="relative waves-light"
+            mdbWavesEffect [disabled]="!questionarioForm.valid">Gravar</button>
+        </div>
       </div>
     </div>
   </div>
-</div>
+</form>

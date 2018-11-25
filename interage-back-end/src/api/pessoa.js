@@ -13,6 +13,7 @@ function getPessoa(req, res) {
       let sql = `SELECT * FROM pessoas
                   WHERE id=${req.query.id_pessoa}`
 
+      console.log(sql);
       client.query(sql)
         .then(res => {
           if (res.rowCount > 0) {

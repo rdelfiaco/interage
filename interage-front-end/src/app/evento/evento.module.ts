@@ -16,7 +16,6 @@ import { ConcluirEventoComponent } from './concluir-evento/concluir-evento.compo
 import { TelemarketingQuestionarioModule } from '../telemarketing-questionario/telemarketing-questionario.module';
 import { CadastroPessoaModule } from '../cadastro-pessoa/cadastro-pessoa.module';
 
-
 @NgModule({
   imports: [
     CommonModule,

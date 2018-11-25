@@ -20,12 +20,10 @@ export class ItemLinhaDoTempoEventoComponent implements OnInit {
     event.preventDefault();
     event.stopPropagation();
     this.eventoSelecionado = Object.assign({}, evento);
-    debugger;
     this.setEventoSelecionado.emit(this.eventoSelecionado);
   }
 
   setEventoSelecionadoPai(evento: any) {
-    debugger;
     this.setEventoSelecionado.emit(evento);
   }
 }
