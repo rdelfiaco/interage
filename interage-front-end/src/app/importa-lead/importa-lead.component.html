@@ -1,0 +1,63 @@
+  <form>
+      <div class="file-field md-form">
+          <div mdbBtn floating="true" size="md" gradient="purple" mdbWavesEffect>
+            <i class="fa fa-cloud-upload" aria-hidden="true"></i>
+            <input type="file" mdbFileSelect (uploadOutput)="onUploadOutput($event)" [uploadInput]="uploadInput" (change)="fileChangeListener($event)" accept=".csv" >
+          </div>
+        <div class="file-path-wrapper mt-3">
+          <input class="file-path" type="text" placeholder="Upload your file" [value]="showFiles()">
+        </div>
+      </div>
+      <button mdbBtn type="button" gradient="purple" rounded="true"  (click)="importarCSV" mdbWavesEffect>Importar</button>
+</form>
+<div>
+  <span>Total de linhas do arquivos: {{totalLinhas}}</span>
+</div>
+
+
+
+<div>
+    <table class="table table-hover table-responsive-md mb-0">
+      <thead>
+        <tr>
+          <th>contador</th>
+          <th>tipo</th>
+          <th>nome</th>
+          <th>observacoes</th>
+          <th>dtinclusao</th>
+          <th>dtalteracao</th>
+          <th>lead</th>
+          <th>origem_lead</th>
+          <th>id_origem_lead</th>
+          <th>DDD1</th>
+          <th>FONE1</th>
+          <th>DDD2</th>
+          <th>FONE2</th>
+          <th>DDD3</th>
+          <th>FONE3</th>
+          <th>RESULTADO</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let csvData of csvRecords;let i = index;">
+          <td>{{i+1}}</td>
+          <td><span>{{csvData.tipo}}</span></td>
+          <td><span>{{csvData.nome}}</span></td>
+          <td><span>{{csvData.observacoes}}</span></td>
+          <td><span>{{csvData.dtinclusao}}</span></td>
+          <td><span>{{csvData.dtalteracao}}</span></td>
+          <td><span>{{csvData.lead}}</span></td>
+          <td> <span>{{csvData.origem_lead}}</span></td>
+          <td><span>{{csvData.id_origem_lead}}</span></td>
+          <td> <span>{{csvData.DDD1}}</span></td>
+          <td><span>{{csvData.FONE1}}</span></td>
+          <td><span>{{csvData.DDD2}}</span></td>
+          <td><span>{{csvData.FONE2}}</span></td>
+          <td><span>{{csvData.DDD3}}</span></td>
+          <td><span>{{csvData.FONE3}}</span></td>
+          <td><span *ngIF grava(csvData) > </span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  

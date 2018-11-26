@@ -12,6 +12,7 @@ import { Observable, Subscriber } from 'rxjs';
 
 export class TelemarketingComponent implements OnInit {
   usuarioLogado: any;
+  metaPessoa: any = {};
   campanhas: Observable<Array<object>>;
   campanhaSelecionada: any;
   campanhaIniciada: boolean;
@@ -31,37 +32,41 @@ export class TelemarketingComponent implements OnInit {
 
   constructor(private connectHTTP: ConnectHTTP, private localStorage: LocalStorage, private dt: ChangeDetectorRef) {
     this.usuarioLogado = this.localStorage.getLocalStorage('usuarioLogado') as Usuario;
-    this.velocimetro;
-    let arr = [];
-
-    arr.push('http://chart.apis.google.com/chart?')
-    arr.push('chs=225x125')
-    arr.push('&cht=gom')
-    arr.push('&chd=t:6')
-    arr.push('&chds=0,12')
-    arr.push('&chco=ff0000,ffff00,00ff00')
-    arr.push('&chxt=y')
-    arr.push('&chxl=0:|0|100')
-    this.velocimetro = arr.join('')
-    console.log(this.velocimetro)
-
   }
 
   async ngOnInit() {
-    let campanha = await this.connectHTTP.callService({
+    let r = await this.connectHTTP.callService({
       service: 'getCampanhasDoUsuario',
       paramsService: {
         token: this.usuarioLogado.token,
         id_usuario: this.usuarioLogado.id,
+        id_pessoa: this.usuarioLogado.id_pessoa,
       }
-    });
+    }) as any;
     this.campanhas = new Observable((observer) => {
-      let camp = campanha.resposta as Array<object>
+      let camp = r.resposta.campanhas as Array<object>
       camp = camp.map((c: any) => {
         return { value: c.id, label: c.nome }
       })
       observer.next(camp)
     })
+
+    this.metaPessoa = r.resposta.metaPessoa[0];
+    this._constroiGraficoMeta(this.metaPessoa);
+  }
+
+  _constroiGraficoMeta(meta) {
+    let arr = [];
+
+    arr.push('http://chart.apis.google.com/chart?')
+    arr.push('chs=225x125')
+    arr.push('&cht=gom')
+    arr.push(`&chd=t:${meta.chd || 6}`)
+    arr.push(`&chds=0,${meta.chds || 12}`)
+    arr.push('&chco=ff0000,ffff00,00ff00')
+    arr.push('&chxt=y')
+    arr.push('&chxl=0:|0|100')
+    this.velocimetro = arr.join('')
   }
 
   getSelectedValue(campanhaSelecionada: any) {
@@ -108,6 +113,12 @@ export class TelemarketingComponent implements OnInit {
 
   _limpar() {
     this.formAberto = false;
+    this.pessoa = null;
+    this.eventoObject = null;
+    this.pessoaObject = null;
+    this.pessoaNome = null;
+    this.eventoObject = null;
+    this.carregouEvento = false;
   }
   async refresh() {
     let pessoaId = this.pessoaObject.principal.id
@@ -120,5 +131,9 @@ export class TelemarketingComponent implements OnInit {
       }
     }) as any;
     this.pessoa = new Observable(o => o.next(pessoa.resposta));
+  }
+
+  atualizaMeta(metaPessoa) {
+    this.metaPessoa = metaPessoa;
   }
 }

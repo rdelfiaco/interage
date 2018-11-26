@@ -1,4 +1,5 @@
 const { checkTokenAccess } = require('./checkTokenAccess');
+const { getMetaPessoa } = require('./metaLigacoes');
 
 function getUmEvento(req, res) {
   return new Promise(function (resolve, reject) {
@@ -20,7 +21,11 @@ function getUmEvento(req, res) {
             and dt_para_exibir <= now()
             and id_campanha = ${req.query.id_campanha}
             order by id_status_evento desc, id_prioridade, dt_para_exibir LIMIT 1`
+<<<<<<< HEAD
           
+=======
+
+>>>>>>> 9ea4d01ee76de782e16309f5373c49c78fc91393
       console.log(sql)
       client.query(sql)
         .then(res => {
@@ -149,8 +154,13 @@ function salvarEvento(req, res) {
 
                         if (index == array.length - 1)
                           client.query('COMMIT').then((resposta) => {
-                            client.end();
-                            resolve(resposta)
+                            getMetaPessoa(req).then(metaPessoa => {
+                              client.end();
+                              resolve(metaPessoa)
+                            }).catch(err => {
+                              client.end();
+                              reject(err)
+                            })
                           })
                       }).catch(err => {
                         client.end();
@@ -160,8 +170,13 @@ function salvarEvento(req, res) {
                     })
                   } else {
                     client.query('COMMIT').then(() => {
-                      client.end();
-                      resolve(true)
+                      getMetaPessoa(req).then(metaPessoa => {
+                        client.end();
+                        resolve(metaPessoa)
+                      }).catch(err => {
+                        client.end();
+                        reject(err)
+                      })
                     }).catch(err => {
                       client.end();
                       reject(err)
@@ -178,8 +193,13 @@ function salvarEvento(req, res) {
 
                   client.query(updateQuantidadeMaxTentativas).then(() => {
                     client.query('COMMIT').then(() => {
-                      client.end();
-                      resolve(true)
+                      getMetaPessoa(req).then(metaPessoa => {
+                        client.end();
+                        resolve(metaPessoa)
+                      }).catch(err => {
+                        client.end();
+                        reject(err)
+                      })
                     }).catch(err => {
                       client.end();
                       reject(err)

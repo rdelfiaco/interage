@@ -57,6 +57,9 @@ export class AuthService {
     if (this._getDataExpiracao().getTime() > new Date().getTime()) {
       this._setValidadeToken();
     }
+    else {
+      this.logout();
+    }
   }
 
   _getDataExpiracao(): Date {
@@ -75,7 +78,8 @@ export class AuthService {
     await this.connectHTTP.callService({
       service: 'logout',
       paramsService: {
-        token_access: usuarioLogado.token
+        token_access: usuarioLogado.token,
+        id_usuario: usuarioLogado.id
       }
     })
 

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild, ElementRef, EventEmitter, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, ElementRef, EventEmitter, SimpleChanges, Output } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl, FormArray, Validators, AbstractControl } from '@angular/forms';
 import { IMyOptions, MDBDatePickerComponent } from '../../lib/ng-uikit-pro-standard';
 import { ConnectHTTP } from '../shared/services/connectHTTP';
@@ -57,9 +57,10 @@ export class TelemarketingQuestionarioComponent implements OnInit {
 
   @Input() modal: any
   @Input() campanhaSelecionada: any
-  @Input() clear: any
+  @Output() clear = new EventEmitter();
   @Input() pessoa: any;
   @Input() evento: any;
+  @Output() atualizaMeta = new EventEmitter();
 
   @Input()
   set motivos_respostas(motivos_respostas: any) {
@@ -260,7 +261,7 @@ export class TelemarketingQuestionarioComponent implements OnInit {
   }
   async gravarLigacao() {
     const usuarioLogado = this.localStorage.getLocalStorage('usuarioLogado') as any;
-    await this.connectHTTP.callService({
+    let metaPessoa = await this.connectHTTP.callService({
       service: 'salvarEvento',
       paramsService: {
         token: usuarioLogado.token,
@@ -279,6 +280,7 @@ export class TelemarketingQuestionarioComponent implements OnInit {
       }
     });
     this._limpar();
+    this.atualizaMeta.emit(metaPessoa.resposta[0]);
     this.modal.hide()
   }
 
@@ -301,6 +303,6 @@ export class TelemarketingQuestionarioComponent implements OnInit {
     this._motivos_respostas = null
     this.motivosRespostasFormatado = null;
     this.motivoRespostaSelecionado = null;
-    this.clear();
+    this.clear.emit();
   }
 }

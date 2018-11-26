@@ -27,6 +27,8 @@ import { AnalisaCampanhaComponent } from './analisa-campanha/analisa-campanha.co
 import { MascaraTelefonePipe } from './shared/pipes/mascaraTelefone/mascara-telefone.pipe';
 import { ProdutividadeCallCenterComponent } from './produtividade-call-center/produtividade-call-center.component';
 import { TrocarSenhaComponent } from './usuario/trocar-senha/trocar-senha.component';
+import { ImportarPessoasComponent } from './importar-pessoas/importar-pessoas.component';
+import { ImportaLeadComponent } from './importa-lead/importa-lead.component';
 
 
 
@@ -51,6 +53,8 @@ import { TrocarSenhaComponent } from './usuario/trocar-senha/trocar-senha.compon
     MascaraTelefonePipe,
     ProdutividadeCallCenterComponent,
     TrocarSenhaComponent,
+    ImportarPessoasComponent,
+    ImportaLeadComponent,
   ],
 
   imports: [
