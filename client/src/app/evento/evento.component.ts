@@ -10,7 +10,6 @@ import { IMyOptions, ToastService, ModalDirective } from '../../lib/ng-uikit-pro
 import * as moment from 'moment';
 import { Router } from '@angular/router';
 
-
 @Component({
   selector: 'app-evento',
   templateUrl: './evento.component.html',
