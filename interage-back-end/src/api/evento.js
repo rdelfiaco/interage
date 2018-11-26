@@ -116,12 +116,23 @@ function salvarEvento(req, res) {
                   id_telefone=${req.query.id_telefoneDiscado},
                   id_predicao=${req.query.id_predicao || 'NULL'},
                   id_objecao=${req.query.id_objecao || 'NULL'}
-                  WHERE eventos.id=${req.query.id_evento} AND eventos.status in(5,6)
+                  WHERE eventos.id=${req.query.id_evento} AND eventos.id_status_evento in(5,6)
                   RETURNING tipoDestino, id_pessoa_organograma;
                   `;
             console.log(update)
             client.query(update).then((updateEventoEncerrado) => {
-
+              if (updateEventoEncerrado.rowCount != 1) {
+                client.query('COMMIT').then((resposta) => {
+                  getMetaPessoa(req).then(metaPessoa => {
+                    client.end();
+                    resolve(metaPessoa)
+                  }).catch(err => {
+                    client.end();
+                    reject(err)
+                  })
+                })
+                return;
+              }
               const selectQuantidadeTentativas = `SELECT COUNT(id_resp_motivo) from eventos
 
                                              WHERE ((id_resp_motivo=${req.query.id_motivos_respostas} AND 
@@ -288,7 +299,7 @@ function salvarEvento(req, res) {
       }
     });
   }).catch(err => {
-    reject(err)
+    console.log(err)
   })
 }
 

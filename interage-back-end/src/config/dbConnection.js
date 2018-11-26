@@ -17,9 +17,9 @@ module.exports = ({ //treinamento
 // });
 
 // module.exports = ({ //localhost
-//     host: '159.69.205.116',
+//     host: 'localhost',
 //     port: 5432,
-//     database: 'altis_teste',
+//     database: 'altis',
 //     user: 'postgres',
-//     password: 'altisinterage123!@#'
+//     password: 'postgres'
 // });
