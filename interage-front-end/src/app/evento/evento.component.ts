@@ -1,13 +1,14 @@
-import { Component, OnInit, HostListener, ViewChildren, QueryList, ElementRef } from '@angular/core';
+import { Component, OnInit, HostListener, ViewChildren, QueryList, ElementRef, ViewChild } from '@angular/core';
 import { Http } from '@angular/http';
 import { Angular5Csv } from 'angular5-csv/Angular5-csv';
 
 import { Usuario } from '../login/usuario';
 import { ConnectHTTP } from '../shared/services/connectHTTP';
 import { LocalStorage } from '../shared/services/localStorage';
-import { IMyOptions, ToastService } from '../../lib/ng-uikit-pro-standard';
+import { IMyOptions, ToastService, ModalDirective } from '../../lib/ng-uikit-pro-standard';
 
 import * as moment from 'moment';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -24,18 +25,21 @@ export class EventoComponent implements OnInit {
   statusSelect: Array<any>;
   departamentoSelectValue: Array<number>;
   usuarioSelectValue: number;
-  motivoSelectValue : number;
-  statusSelectValue : number;
+  motivoSelectValue: number;
+  statusSelectValue: number;
   eventosUsuarioChk: boolean = true;
   eventosFinalizadosChk: boolean = true;
-  dtCricaoRadio:  boolean = false;
-  dtCompromissoRadio:  boolean = true;
-  enviadoPorRadio:  boolean = false;
-  recebidoPorRadio:  boolean = true;
+  dtCricaoRadio: boolean = false;
+  dtCompromissoRadio: boolean = true;
+  enviadoPorRadio: boolean = false;
+  recebidoPorRadio: boolean = true;
+  usuarioLogadoSupervisor: boolean = true;
+
+  tornarResponsavel: any;
 
   dataInicial: string = moment().subtract(1, 'days').format('DD/MM/YYYY')
-  dataFinal: string  =  moment().add(1, 'days').format('DD/MM/YYYY')
-  
+  dataFinal: string = moment().add(1, 'days').format('DD/MM/YYYY')
+
 
 
   public myDatePickerOptions: IMyOptions = {
@@ -54,7 +58,7 @@ export class EventoComponent implements OnInit {
     // Format
     dateFormat: 'dd/mm/yyyy',
     selectionTxtFontSize: '15px',
-    
+
   }
 
   options = {
@@ -82,24 +86,23 @@ export class EventoComponent implements OnInit {
   maxVisibleItems: number = 10;
 
   constructor(private http: Http, private connectHTTP: ConnectHTTP,
-    private toastrService: ToastService,  private localStorage: LocalStorage) { 
+    private toastrService: ToastService, private localStorage: LocalStorage, private router: Router) {
     this.usuarioLogado = this.localStorage.getLocalStorage('usuarioLogado') as Usuario;
-
-
+    this.usuarioLogadoSupervisor = this.usuarioLogado.dashboard === "supervisor" || this.usuarioLogado.dashboard === "admin";
   }
 
   async ngOnInit() {
 
-    
 
-      let eventoFiltros = await this.connectHTTP.callService({
-        service: 'getEventoFiltros',
-        paramsService: {
-          token: this.usuarioLogado.token,
-          id_usuario: this.usuarioLogado.id,        
-          id_organograma: this.usuarioLogado.id_organograma
-        }
-      }) as any;
+
+    let eventoFiltros = await this.connectHTTP.callService({
+      service: 'getEventoFiltros',
+      paramsService: {
+        token: this.usuarioLogado.token,
+        id_usuario: this.usuarioLogado.id,
+        id_organograma: this.usuarioLogado.id_organograma
+      }
+    }) as any;
 
 
     // combo departamento 
@@ -116,7 +119,7 @@ export class EventoComponent implements OnInit {
       return { value: usuario.id, label: usuario.nome }
     });
 
-    this.usuarioSelectValue =  this.usuarioLogado.id_pessoa;
+    this.usuarioSelectValue = this.usuarioLogado.id_pessoa;
 
 
     // combo motivos
@@ -125,7 +128,7 @@ export class EventoComponent implements OnInit {
       return { value: motivos.id, label: motivos.nome }
     });
 
-    this.motivoSelectValue =  1
+    this.motivoSelectValue = 1
 
     // combo status_evento
     this.statusSelect = eventoFiltros.resposta.StatusEvento;
@@ -133,7 +136,7 @@ export class EventoComponent implements OnInit {
       return { value: status.id, label: status.nome }
     });
 
-    this.statusSelectValue =  1;
+    this.statusSelectValue = 1;
 
 
     this.listaEventos();
@@ -141,7 +144,7 @@ export class EventoComponent implements OnInit {
 
   }
 
-  
+  @ViewChild('confirmSeTornarResponsavelModal') confirmSeTornarResponsavelModal: ModalDirective;
   @HostListener('input') oninput() {
     this.paginators = [];
     for (let i = 1; i <= this.search().length; i++) {
@@ -186,15 +189,15 @@ export class EventoComponent implements OnInit {
     // if (by == 'dt_criou') {
     //   this.search().reverse();
     // } else {
-      this.tableData.sort((a: any, b: any) => {
-        if (a[by] < b[by]) {
-          return this.sorted ? 1 : -1;
-        }
-        if (a[by] > b[by]) {
-          return this.sorted ? -1 : 1;
-        }
-        return 0;
-      });
+    this.tableData.sort((a: any, b: any) => {
+      if (a[by] < b[by]) {
+        return this.sorted ? 1 : -1;
+      }
+      if (a[by] > b[by]) {
+        return this.sorted ? -1 : 1;
+      }
+      return 0;
+    });
     //}
     this.sorted = !this.sorted;
   }
@@ -208,11 +211,11 @@ export class EventoComponent implements OnInit {
   }
 
   search() {
-    
+
     if (!this.searchText) {
       return this.tableData;
     }
-    
+
     if (this.searchText) {
       return this.filterIt(this.tableData, this.searchText);
     }
@@ -220,13 +223,13 @@ export class EventoComponent implements OnInit {
 
 
 
-  async listaEventos(){
+  async listaEventos() {
     try {
       let eventos = await this.connectHTTP.callService({
         service: 'getEventosFiltrados',
         paramsService: {
           token: this.usuarioLogado.token,
-          id_usuario: this.usuarioLogado.id,        
+          id_usuario: this.usuarioLogado.id,
           id_organograma: this.usuarioLogado.id_organograma,
           dt_inicial: this.dataInicial,
           dt_final: this.dataFinal,
@@ -235,20 +238,78 @@ export class EventoComponent implements OnInit {
           usuarios: this.usuarioSelectValue,
           motivos: this.motivoSelectValue,
           status: this.statusSelectValue,
-          eventosUsuarioChk: this.eventosUsuarioChk, 
+          eventosUsuarioChk: this.eventosUsuarioChk,
           dtCricaoRadio: this.dtCricaoRadio,
         }
       }) as any;
-    
-    this.tableData = eventos.resposta as Array<object> ;
-    console.log(this.dtCricaoRadio)
-    
-  }
-  catch (e) {
-    this.toastrService.error(e.error);
-    this.tableData = [];
+
+      this.tableData = eventos.resposta as Array<object>;
+      console.log(this.dtCricaoRadio)
+
+    }
+    catch (e) {
+      this.toastrService.error(e.error);
+      this.tableData = [];
+    }
   }
 
+  async abreEvento(evento: any) {
+    if (evento.id_status_evento == 1 || evento.id_status_evento == 4) {
+      const eventoParaPessoaLogada = (evento.tipodestino === "P" && this.usuarioLogado.id_pessoa === evento.id_pessoa_organograma);
+      const eventoParaPessoaOrgonogramaLogada = (evento.tipodestino === "O" && this.usuarioLogado.id_organograma === evento.id_pessoa_organograma);
+
+      if (eventoParaPessoaLogada) {
+        await this.connectHTTP.callService({
+          service: 'visualizarEvento',
+          paramsService: {
+            id_evento: evento.id,
+            id_pessoa_visualizou: this.usuarioLogado.id_pessoa
+          }
+        }) as any;
+        this.router.navigate([`/evento/${evento.id}`]);
+      }
+      else if (this.usuarioLogadoSupervisor || eventoParaPessoaOrgonogramaLogada) {
+        this.tornarResponsavel = evento;
+        this.confirmSeTornarResponsavelModal.show();
+      }
+      else
+        this.toastrService.error("Você não pode visualizar esse evento!");
+    }
+    if (evento.id_status_evento == 5 || evento.id_status_evento == 6) {
+      const eventoParaPessoaLogada = (evento.tipodestino === "P" && this.usuarioLogado.id_pessoa === evento.id_pessoa_organograma);
+      if (eventoParaPessoaLogada) this.router.navigate([`/evento/${evento.id}`]);
+      else this.toastrService.error("Você não pode visualizar esse evento!");
+    }
+  }
+
+  async visualizarEvento() {
+    if (this.usuarioLogadoSupervisor) {
+      this.router.navigate([`/evento/${this.tornarResponsavel.id}`]);
+      this.tornarResponsavel = null;
+    }
+    else this.toastrService.error("Você não tem permissão de visualizar esse evento!");
+  }
+
+  cancelaSeTornarResponsavel() {
+    this.tornarResponsavel = null;
+    this.toastrService.error("Você não assumiu a responsabilidade não tem permissão para visualizar");
+  }
+
+  async confirmaSeTornarResponsavel() {
+    try {
+      await this.connectHTTP.callService({
+        service: 'visualizarEvento',
+        paramsService: {
+          id_evento: this.tornarResponsavel.id,
+          id_pessoa_visualizou: this.usuarioLogado.id_pessoa
+        }
+      }) as any;
+      this.tornarResponsavel = null;
+      this.router.navigate([`/evento/${this.tornarResponsavel.id}`]);
+    }
+    catch (e) {
+      this.toastrService.error(e.error);
+    }
   }
 
   generateCsv() {

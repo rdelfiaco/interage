@@ -30,6 +30,12 @@ import { TrocarSenhaComponent } from './usuario/trocar-senha/trocar-senha.compon
 import { ImportarPessoasComponent } from './importar-pessoas/importar-pessoas.component';
 import { ImportaLeadComponent } from './importa-lead/importa-lead.component';
 
+import { CarregandoComponent } from './shared/carregando/carregando.component';
+import { CarregandoModule } from './shared/carregando/carregando.module';
+import { SemPermissaoModule } from './sem-permissao/sem-permissao.module';
+import { TelemarketingQuestionarioModule } from './telemarketing-questionario/telemarketing-questionario.module';
+import { TelemarketingModule } from './telemarketing/telemarketing.module';
+import { PipesModule } from './shared/pipes/pipesModule';
 
 
 @NgModule({
@@ -38,23 +44,14 @@ import { ImportaLeadComponent } from './importa-lead/importa-lead.component';
     DashboardAdminComponent,
     DashboardOperadorComponent,
     DashboardSupervisorComponent,
-    SemPermissaoComponent,
     PageNotFoundComponent,
-    TelemarketingComponent,
-    TelemarketingQuestionarioComponent,
-    CadastroPessoaComponent,
-    PrincipalComponent,
-    TelefonesComponent,
-    EnderecosComponent,
     PesquisaPessoaComponent,
-    LinhaDoTempoComponent,
-    ItemDeEventoComponent,
     AnalisaCampanhaComponent,
-    MascaraTelefonePipe,
     ProdutividadeCallCenterComponent,
     TrocarSenhaComponent,
     ImportarPessoasComponent,
     ImportaLeadComponent,
+    TrocarSenhaComponent
   ],
 
   imports: [
@@ -64,11 +61,15 @@ import { ImportaLeadComponent } from './importa-lead/importa-lead.component';
     AppRoutingModule,
     LoginModule,
     FormsModule,
-    EventoModule,
     ReactiveFormsModule,
+    EventoModule,
     ToastModule.forRoot(),
     PropostaModule,
 
+    CarregandoModule,
+    SemPermissaoModule,
+    TelemarketingModule,
+    PipesModule
   ],
   providers: [MDBSpinningPreloader
 

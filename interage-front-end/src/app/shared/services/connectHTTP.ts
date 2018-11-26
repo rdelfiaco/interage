@@ -1,7 +1,11 @@
+import { LocalStorage } from "./localStorage";
+import { Usuario } from "../../login/usuario";
+
 interface optionsCallService {
   service: string
   paramsService?: object,
-  host?: string
+  host?: string,
+  naoExigeToken?: boolean
 }
 
 interface retObjectCallService {
@@ -9,19 +13,27 @@ interface retObjectCallService {
   resposta: object
 }
 
-export class ConnectHTTP {
 
+export class ConnectHTTP {
+  localStorage: LocalStorage = new LocalStorage();
   callService(options: optionsCallService): Promise<retObjectCallService> | retObjectCallService {
     const mensagem = this._checkOptionsCallService(options);
     if (mensagem && !mensagem.error) return mensagem;
     return new Promise((resolve, reject) => {
       //TROCA DADOS SERVIDOR
-      const host = options.host || "http://159.69.205.116:3010/" //treinamento
+      // const host = options.host || "http://159.69.205.116:3010/" //treinamento
       // const host = options.host || "http://159.69.205.116:3000/" //Producao
-      // const host = options.host || "http://localhost:3010/" //Local
+      const host = options.host || "http://localhost:3010/" //Local
       const service = options.service
 
       let url = `${host}${service}`
+
+      if (!options.naoExigeToken && (!options.paramsService.token || !options.paramsService.id_usuario)) {
+        let usuarioLogado = this.localStorage.getLocalStorage('usuarioLogado') as Usuario;
+        options.paramsService.id_usuario = usuarioLogado.id.toString();
+        options.paramsService.token = usuarioLogado.token;
+      }
+
       if (options.paramsService) {
         const paramsService = this._trataParamsService(options.paramsService)
         url = `${url}${paramsService}`

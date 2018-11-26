@@ -36,8 +36,6 @@ export class CadastroPessoaComponent implements OnInit {
     let pessoa = await this.connectHTTP.callService({
       service: 'getPessoa',
       paramsService: {
-        token: this.auth.usuarioLogadoObject.token,
-        id_usuario: this.auth.usuarioLogadoObject.id,
         id_pessoa: p.idPessoa
       }
     }) as any;

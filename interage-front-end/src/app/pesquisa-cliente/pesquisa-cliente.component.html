@@ -1,0 +1,5 @@
+<div class="col mdb-select-form">
+  <mdb-select [(ngModel)]="campanhaSelectValue" [filterEnabled]="true" (selected)="selecionarCliente($event)" (keyup)="pesquisar($event)" [placeholder]="'Selecione o cliente'"
+    [options]="clientes" [multiple]="false"></mdb-select>
+  <label>Cliente</label>
+</div>

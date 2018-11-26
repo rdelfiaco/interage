@@ -1,5 +1,8 @@
 const { checkTokenAccess } = require('./checkTokenAccess');
 const { getMetaPessoa } = require('./metaLigacoes');
+const { getPredicao } = require('./predicao');
+const { getObjecoes } = require('./objecoes');
+const { getPessoa } = require('./pessoa');
 
 function getUmEvento(req, res) {
   return new Promise(function (resolve, reject) {
@@ -75,6 +78,8 @@ function motivosRespostas(req, res) {
       let sqlMotivosResposta = `SELECT motivos_respostas.id, motivos_respostas.exige_predicao, motivos_respostas.exige_objecao,  motivos_respostas.nome, motivos_respostas.ordem_listagem, motivos_respostas.exige_observacao, motivos_eventos_automaticos.reagendar FROM motivos_respostas
                       LEFT JOIN motivos_eventos_automaticos ON motivos_respostas.id = motivos_eventos_automaticos.id_motivo_resposta
                       WHERE motivos_respostas.id_motivo=${req.query.id_motivo} AND status=true`
+
+      console.log(sqlMotivosResposta);
       client.query(sqlMotivosResposta).then(res => {
         let motivos_respostas = res.rows;
 
@@ -117,15 +122,26 @@ function salvarEvento(req, res) {
                   id_pessoa_resolveu=${req.query.id_pessoa}, 
                   observacao_retorno='${req.query.observacao}',
                   id_resp_motivo=${req.query.id_motivos_respostas},
-                  id_telefone=${req.query.id_telefoneDiscado},
+                  id_telefone=${req.query.id_telefoneDiscado || 'NULL'},
                   id_predicao=${req.query.id_predicao || 'NULL'},
                   id_objecao=${req.query.id_objecao || 'NULL'}
-                  WHERE eventos.id=${req.query.id_evento}
+                  WHERE eventos.id=${req.query.id_evento} AND eventos.id_status_evento in(5,6)
                   RETURNING tipoDestino, id_pessoa_organograma;
                   `;
             console.log(update)
             client.query(update).then((updateEventoEncerrado) => {
-
+              if (updateEventoEncerrado.rowCount != 1) {
+                client.query('COMMIT').then((resposta) => {
+                  getMetaPessoa(req).then(metaPessoa => {
+                    client.end();
+                    resolve(metaPessoa)
+                  }).catch(err => {
+                    client.end();
+                    reject(err)
+                  })
+                })
+                return;
+              }
               const selectQuantidadeTentativas = `SELECT COUNT(id_resp_motivo) from eventos
 
                                              WHERE ((id_resp_motivo=${req.query.id_motivos_respostas} AND 
@@ -277,7 +293,7 @@ function salvarEvento(req, res) {
             1,
             ${req.query.id_pessoa},
             now(),
-            '${req.query.data}',
+            func_dt_expira(${motivoRespostaAutomatico.id_motivo}),
             '${req.query.data}',
             '${tipoDestino}', 
             ${id_pessoa_organograma},
@@ -292,7 +308,7 @@ function salvarEvento(req, res) {
       }
     });
   }).catch(err => {
-    reject(err)
+    console.log(err)
   })
 }
 
@@ -414,17 +430,14 @@ function getEventoFiltros(req, res) {
         getUsuarios(req).then(Usuarios => {
           getMotivos(req).then(Motivos => {
             getStatusEvento(req).then(StatusEvento => {
-                          if (!Organograma || !Usuarios
-                            || !Motivos || !StatusEvento)
-                            reject('não encontrado');
+              if (!Organograma || !Usuarios
+                || !Motivos || !StatusEvento)
+                reject('não encontrado');
 
-                          resolve({
-                            Organograma, Usuarios,
-                            Motivos, StatusEvento
-                          });
+              resolve({
+                Organograma, Usuarios,
+                Motivos, StatusEvento
               });
-            }).catch(e => {
-              reject(e);
             });
           }).catch(e => {
             reject(e);
@@ -435,6 +448,9 @@ function getEventoFiltros(req, res) {
       }).catch(e => {
         reject(e);
       });
+    }).catch(e => {
+      reject(e);
+    });
   })
 }
 
@@ -552,6 +568,44 @@ function getMotivos(req, res) {
     })
   })
 }
+function getCanais(req, res) {
+  return new Promise(function (resolve, reject) {
+
+    checkTokenAccess(req).then(historico => {
+      const dbconnection = require('../config/dbConnection')
+      const { Client } = require('pg')
+
+      const client = new Client(dbconnection)
+
+      client.connect()
+
+      let sql = `select id, nome
+                  from canais
+                  where status = true 
+                  order by nome `
+
+      client.query(sql)
+        .then(res => {
+          if (res.rowCount > 0) {
+            let canais = res.rows;
+            client.end();
+            resolve(canais)
+          }
+          else {
+            reject('Não há canais!')
+            client.end();
+          }
+        }
+        )
+        .catch(err => {
+          client.end();
+          reject(err)
+        })
+    }).catch(e => {
+      reject(e)
+    })
+  })
+}
 
 
 function getStatusEvento(req, res) {
@@ -607,15 +661,15 @@ function getEventosFiltrados(req, res) {
 
       let sql = `select * from view_eventos where `
       sql = sql + `id_status_evento in (${req.query.status}) `  // status 
-      if (req.query.eventosUsuarioChk == 'true') { 
+      if (req.query.eventosUsuarioChk == 'true') {
         sql = sql + ` and (tipodestino = 'P' and id_pessoa_organograma in ( ${req.query.usuarios}) )` // usuário
       } else {
         sql = sql + ` and ( tipodestino = 'O' and id_pessoa_organograma in (${req.query.departamentos}) )` // departamentos 
       }
       sql = sql + ` and (id_motivo in ( ${req.query.motivos})  )` // motivos 
-      if (req.query.dtCricaoRadio == 'true' ) {
+      if (req.query.dtCricaoRadio == 'true') {
         sql = sql + ` and date(dt_criou) between date('${req.query.dt_inicial}') and date('${req.query.dt_final}')` // data de criação 
-      }else {
+      } else {
         sql = sql + ` and dt_para_exibir <= now()` // data de compromisso 
       }
 
@@ -623,7 +677,7 @@ function getEventosFiltrados(req, res) {
 
       console.log(sql)
       console.log(req.query.dtCricaoRadio)
-                
+
       client.query(sql)
         .then(res => {
           if (res.rowCount > 0) {
@@ -647,6 +701,122 @@ function getEventosFiltrados(req, res) {
   })
 }
 
+
+function getEventoPorId(req, res) {
+  return new Promise(function (resolve, reject) {
+
+    checkTokenAccess(req).then(historico => {
+      const dbconnection = require('../config/dbConnection')
+      const { Client } = require('pg')
+
+      const client = new Client(dbconnection)
+
+      client.connect()
+
+      let sql = `select *
+                  from view_eventos
+                  where id=${req.query.id_evento}`
+
+      console.log(sql);
+      client.query(sql)
+        .then(evento => {
+          evento = evento.rows[0];
+          req.query.id_pessoa = evento.id_pessoa_receptor;
+          req.query.id_motivo = evento.id_motivo;
+          getPessoa(req).then(pessoa => {
+            motivosRespostas(req).then(motivos_respostas => {
+              getPredicao(req).then(predicoes => {
+                getObjecoes(req).then(objecoes => {
+                  if (!evento || !pessoa || !motivos_respostas || !predicoes) reject('Evento com erro!');
+                  resolve({ pessoa, evento: evento, motivos_respostas, predicoes, objecoes });
+                  client.end();
+                }).catch(e => {
+                  reject(e);
+                });
+              }).catch(e => {
+                reject(e);
+              });
+            }).catch(e => {
+              reject(e);
+            });
+          }).catch(e => {
+            reject(e);
+          });
+        }
+        )
+        .catch(err => {
+          client.end();
+          reject(err)
+        })
+    }).catch(e => {
+      reject(e)
+    })
+  })
+}
+
+function visualizarEvento(req, res) {
+  return new Promise(function (resolve, reject) {
+
+    checkTokenAccess(req).then(historico => {
+      const dbconnection = require('../config/dbConnection')
+      const { Client } = require('pg')
+
+      const client = new Client(dbconnection)
+
+      client.connect()
+
+      let sql = `UPDATE eventos SET
+                  id_pessoa_visualizou = ${req.query.id_pessoa_visualizou},
+                  dt_visualizou = now(),
+                  id_status_evento=5
+                  where id=${req.query.id_evento}`
+      console.log(sql);
+      client.query(sql)
+        .then(res => {
+          client.end();
+          resolve(res)
+        }
+        )
+        .catch(err => {
+          client.end();
+          reject(err)
+        })
+    }).catch(e => {
+      reject(e)
+    })
+  })
+}
+
+function informacoesParaCriarEvento(req, res) {
+  return new Promise(function (resolve, reject) {
+
+    checkTokenAccess(req).then(historico => {
+      const dbconnection = require('../config/dbConnection')
+      const { Client } = require('pg')
+
+      const client = new Client(dbconnection)
+
+      client.connect()
+
+      getCanais(req).then(canais => {
+        getOrganograma(req).then(organograma => {
+          getUsuarios(req).then(usuarios => {
+            resolve({ canais, organograma, usuarios })
+          });
+        });
+      }).catch(err => {
+        client.end();
+        reject(err)
+      });
+
+    }).catch(e => {
+      reject(e)
+    })
+  })
+}
+
+
+
 module.exports = {
   getUmEvento,
   motivosRespostas,
@@ -655,5 +825,8 @@ module.exports = {
   getEventosLinhaDoTempo,
   getEventosRelatorioUsuario,
   getEventoFiltros,
-  getEventosFiltrados
+  getEventosFiltrados,
+  getEventoPorId,
+  visualizarEvento,
+  informacoesParaCriarEvento
 }

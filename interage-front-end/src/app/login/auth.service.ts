@@ -13,7 +13,7 @@ export class AuthService {
   usuarioLogado: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(!!this._getTokenLogadoLocalStorage());
   usuarioLogadoObject: any;
 
-  constructor(private router: Router, private localStorage: LocalStorage, private connectHTTP: ConnectHTTP) {
+  constructor(private router?: Router, private localStorage?: LocalStorage, private connectHTTP?: ConnectHTTP) {
     let self = this;
     let tm;
     document.addEventListener("mousemove", () => {
@@ -32,6 +32,7 @@ export class AuthService {
     try {
       const usuarioLogado = await this.connectHTTP.callService({
         service: 'login',
+        naoExigeToken: true,
         paramsService: {
           login: usuario.login,
           senha: usuario.senha
@@ -73,10 +74,11 @@ export class AuthService {
   }
 
   async logout() {
-    let usuarioLogado = this._getUsuarioLogadoLocalStorage();
+    let usuarioLogado = this.getUsuarioLogadoLocalStorage();
     if (!usuarioLogado) return;
     await this.connectHTTP.callService({
       service: 'logout',
+      naoExigeToken: true,
       paramsService: {
         token_access: usuarioLogado.token,
         id_usuario: usuarioLogado.id
@@ -89,12 +91,12 @@ export class AuthService {
     this.router.navigate(['/']);
   }
 
-  _getUsuarioLogadoLocalStorage() {
+  getUsuarioLogadoLocalStorage() {
     return this.localStorage.getLocalStorage('usuarioLogado') as Usuario;
   }
 
   _getTokenLogadoLocalStorage() {
-    if (!this.usuarioLogadoObject) this.usuarioLogadoObject = this._getUsuarioLogadoLocalStorage();
+    if (!this.usuarioLogadoObject) this.usuarioLogadoObject = this.getUsuarioLogadoLocalStorage();
     if (this.usuarioLogadoObject)
       return this.localStorage.getLocalStorage(this.usuarioLogadoObject.token);
   }

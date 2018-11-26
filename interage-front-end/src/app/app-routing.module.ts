@@ -19,6 +19,7 @@ import { CadastroPessoaComponent } from './cadastro-pessoa/cadastro-pessoa.compo
 import { AnalisaCampanhaComponent } from './analisa-campanha/analisa-campanha.component';
 import { ProdutividadeCallCenterComponent } from './produtividade-call-center/produtividade-call-center.component';
 import { TrocarSenhaComponent } from './usuario/trocar-senha/trocar-senha.component';
+import { DetalheEventoComponent } from './evento/detalhe-evento/detalhe-evento.component';
 
 
 
@@ -55,6 +56,11 @@ const routes: Routes = [
   {
     path: 'eventos',
     component: EventoComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'evento/:id',
+    component: DetalheEventoComponent,
     canActivate: [AuthGuard]
   },
   {
