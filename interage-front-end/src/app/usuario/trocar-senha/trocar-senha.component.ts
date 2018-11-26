@@ -4,6 +4,7 @@ import { ConnectHTTP } from '../../shared/services/connectHTTP';
 import { LocalStorage } from '../../shared/services/localStorage';
 import { ToastService } from '../../../lib/ng-uikit-pro-standard';
 import { Usuario } from '../../login/usuario';
+import SHA1 from '../../shared/sha1';
 
 @Component({
   selector: 'app-trocar-senha',
@@ -36,6 +37,10 @@ export class TrocarSenhaComponent implements OnInit {
   async salvarSenha() {
     this.trocarSenhaForm.value.id_usuario = this.usuarioLogado.id;
     this.trocarSenhaForm.value.token = this.usuarioLogado.token;
+
+    this.trocarSenhaForm.value.senhaAntiga = SHA1(this.trocarSenhaForm.value.senhaAntiga);
+    this.trocarSenhaForm.value.senhaNova = SHA1(this.trocarSenhaForm.value.senhaNova);
+    this.trocarSenhaForm.value.senhaNovaRepete = SHA1(this.trocarSenhaForm.value.senhaNovaRepete);
     try {
       let tratamento = await this.connectHTTP.callService({
         service: 'trocarSenhaUsuarioLogado',

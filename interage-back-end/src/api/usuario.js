@@ -11,7 +11,7 @@ function login(req, res) {
 
     client.connect()
 
-    const senhaCriptografada = SHA1(req.query.senha)
+    const senhaCriptografada = req.query.senha
     let sql = `SELECT * from usuarios where login = '${req.query.login}' AND senha='${senhaCriptografada}'`
 
     client.query(sql)
@@ -28,7 +28,10 @@ function login(req, res) {
           resolve(usuario)
           client.end();
         }
-        reject('Usuário não encontrato')
+        else {
+          client.end();
+          reject('Usuário não encontrato')
+        }
       })
       .catch(err => {
         client.end();
@@ -47,7 +50,7 @@ function logout(req, res) {
     client.connect()
 
     let sql = `UPDATE historico_login SET ativo=false
-                    WHERE token_access='${req.query.token_access}'`
+                    WHERE token_access='${req.query.token_access}' OR id_usuario=${req.query.id_usuario}`
 
     client.query(sql)
       .then(res => {
@@ -122,9 +125,9 @@ function trocarSenhaUsuarioLogado(req, res) {
 
       client.connect()
 
-      const senhaCriptografadaAntiga = SHA1(req.query.senhaAntiga)
-      const senhaCriptografadaNova = SHA1(req.query.senhaNova)
-      const senhaCriptografadaNovaRepete = SHA1(req.query.senhaNovaRepete)
+      const senhaCriptografadaAntiga = req.query.senhaAntiga;
+      const senhaCriptografadaNova = req.query.senhaNova;
+      const senhaCriptografadaNovaRepete = req.query.senhaNovaRepete;
 
       let buscaUsuario = `SELECT * from usuarios WHERE senha='${senhaCriptografadaAntiga}' AND id=${req.query.id_usuario}`
 

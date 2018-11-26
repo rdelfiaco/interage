@@ -1,5 +1,16 @@
 <div class="h5 text-center">Campanha de Vendas Internas</div>
 <div class="row">
+  <br>
+  <div class="col-md-5">
+    <div class="h6 text-left">Total de ligações realizadas: {{metaPessoa.ligacoes_realizadas | number}}</div>
+  </div>
+  <div class="col-md-6">
+    <div class="h6 text-left">Meta diária: {{metaPessoa.meta | number}}</div>
+  </div>
+</div>
+
+<br>
+<div class="row">
   <div class="col-md-6">
     <mdb-select (selected)="getSelectedValue($event)" [disabled]="campanhaIniciada" [options]="campanhas | async"
       [multiple]="false" placeholder="Escolha sua campanha"></mdb-select>
@@ -36,7 +47,7 @@
               <div class="col-md-5">
                 <app-telemarketing-questionario [modal]="basicModal" [evento]="evento" [pessoa]="pessoa"
                   [motivos_respostas]="motivos_respostas" [predicoes]="predicoes" [objecoes]="objecoes"
-                  [campanhaSelecionada]="campanhaSelecionada.value" [clear]="_limpar"></app-telemarketing-questionario>
+                  [campanhaSelecionada]="campanhaSelecionada.value" (clear)="_limpar()" (atualizaMeta)="atualizaMeta($event)"></app-telemarketing-questionario>
               </div>
               <div class="col-md-7">
                 <app-cadastro-pessoa [pessoa]="pessoa" (refresh)="refresh()"></app-cadastro-pessoa>
@@ -59,5 +70,16 @@
         </div>
       </div>
     </div>
+  </div>
+</div>
+<br>
+<div class="row">
+  <div class="col-md-6 text-center">
+    <img *ngIf="velocimetro" [src]="velocimetro" />
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-6 text-center">
+    <span *ngIf="velocimetro" class="h6 text-left">Tendência para alcançar a meta das ligações diária</span>
   </div>
 </div>
