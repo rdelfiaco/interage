@@ -15,8 +15,8 @@
                 <div class="row justify-content-start">
                   <button type="button" [disabled]="podeConcluir" style="white-space: nowrap;" mdbBtn color="primary"
                     class="waves-light" aria-label="Somente Visualizar" (click)="concluirEvento()" mdbWavesEffect>Concluir</button>
-                  <button type="button" [disabled]="podeEncaminhar" style="white-space: nowrap;" mdbBtn color="warning" class="relative waves-light"
-                    (click)="confirmSeTornarResponsavelModal.hide(); confirmaSeTornarResponsavel();" mdbWavesEffect>Encaminhar</button>
+                  <button type="button" [disabled]="podeEncaminhar" (click)="encaminharEvento()" style="white-space: nowrap;"
+                    mdbBtn color="warning" class="relative waves-light" mdbWavesEffect>Encaminhar</button>
                 </div>
                 <app-formulario-evento [evento]="evento | async"></app-formulario-evento>
               </div>
@@ -37,14 +37,24 @@
   </div>
   <div class="row justify-content-end">
     <button type="button" style="white-space: nowrap;" mdbBtn color="danger" class="waves-light" aria-label="Cancelar"
-      (click)="confirmSeTornarResponsavelModal.hide(); cancelaSeTornarResponsavel()" mdbWavesEffect>Cancelar</button>
+      mdbWavesEffect>Cancelar</button>
   </div>
 
   <div mdbModal #modalConcluirEvento="mdbModal" [config]="{backdrop: true}" class="modal fade right" role="dialog"
     aria-labelledby="myBasicModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
-      <app-concluir-evento [evento]="evento" [pessoa]="pessoa" [motivos_respostas]="motivos_respostas" [predicoes]="predicoes"
-        [objecoes]="objecoes" (fechaModal)="fechaModal()"></app-concluir-evento>
+      <div class="modal-content">
+        <div *ngIf="pessoaObject" class="modal-header">
+          <h4 class="modal-title w-100" id="myModalLabel">{{concluirOuEncaminhar}} Evento -
+            {{pessoaObject.principal.nome}}</h4>
+        </div>
+        <div class="modal-body" style="overflow: auto; height: 80vh;">
+          <app-concluir-evento *ngIf="concluir" [evento]="evento" [pessoa]="pessoa" [motivos_respostas]="motivos_respostas"
+            [predicoes]="predicoes" [objecoes]="objecoes" (fechaModal)="fechaModal()"></app-concluir-evento>
+
+          <app-encaminhar-evento *ngIf="encaminhar" [evento]="evento" [pessoa]="pessoa" (fechaModal)="fechaModal()"></app-encaminhar-evento>
+        </div>
+      </div>
     </div>
   </div>
   <div *ngIf="!podeVisualizarEvento">

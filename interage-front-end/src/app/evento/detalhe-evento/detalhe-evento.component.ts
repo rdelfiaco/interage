@@ -20,13 +20,19 @@ export class DetalheEventoComponent implements OnInit {
   carregando: boolean = false;
   pessoa: Observable<string[]>;
   eventoObject: any;
+  pessoaObject: any;
   podeVisualizarEvento: boolean;
   usuarioLogadoSupervisor: boolean;
   usuarioLogado: Usuario;
   podeConcluir: boolean;
   podeEncaminhar: boolean;
+  concluirOuEncaminhar: string;
+
+  encaminhar: boolean;
+  concluir: boolean;
 
   @ViewChild('modalConcluirEvento') modalConcluirEvento: ModalDirective;
+  // @ViewChild('modalEncaminharEvento') modalEncaminharEvento: ModalDirective;
 
   constructor(private route: ActivatedRoute,
     private connectHTTP: ConnectHTTP, private localStorage: LocalStorage) {
@@ -55,6 +61,7 @@ export class DetalheEventoComponent implements OnInit {
     this.evento = new Observable(o => o.next(eventoEncontrado.resposta.evento));
     this.eventoObject = eventoEncontrado.resposta.evento;
     this.pessoa = new Observable(o => o.next(eventoEncontrado.resposta.pessoa));
+    this.pessoaObject = eventoEncontrado.resposta.pessoa;
 
     const eventoParaPessoaLogada = (this.eventoObject.tipodestino === "P" && this.usuarioLogado.id_pessoa === this.eventoObject.id_pessoa_organograma);
     const eventoParaPessoaOrgonogramaLogadaQueVisualizou = (this.eventoObject.tipodestino === "O" && this.usuarioLogado.id_organograma === this.eventoObject.id_pessoa_organograma && this.eventoObject.id_pessoa_visualizou == this.usuarioLogado.id_pessoa);
@@ -71,15 +78,30 @@ export class DetalheEventoComponent implements OnInit {
     this.carregando = false;
   }
 
+  encaminharEvento() {
+    this.concluirOuEncaminhar = "Encaminhar"
+    this.encaminhar = true;
+    this.concluir = false;
+    this.mostrarModal();
+  }
+
   concluirEvento() {
+    this.concluirOuEncaminhar = "Concluir"
+    this.encaminhar = false;
+    this.concluir = true;
+    this.mostrarModal();
+  }
+
+  mostrarModal() {
     this.modalConcluirEvento.show();
   }
 
   fechaModal() {
+    this.concluirOuEncaminhar = '';
+    this.encaminhar = false;
+    this.concluir = false;
     this.modalConcluirEvento.hide();
     this.carregaEvento();
   }
 
-  mudou() {
-  }
 }

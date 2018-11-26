@@ -13,6 +13,7 @@ const consultaPlaca = require('./src/api/consultaPlaca');
 
 declaraServico('getEventoPorId', evento.getEventoPorId);
 declaraServico('visualizarEvento', evento.visualizarEvento);
+declaraServico('informacoesParaCriarEvento', evento.informacoesParaCriarEvento);
 
 app.get('/getAtividades', (req, res) => {
   atividade.getAtividades(req)

@@ -275,6 +275,11 @@ export class EventoComponent implements OnInit {
       else
         this.toastrService.error("Você não pode visualizar esse evento!");
     }
+    if (evento.id_status_evento == 5 || evento.id_status_evento == 6) {
+      const eventoParaPessoaLogada = (evento.tipodestino === "P" && this.usuarioLogado.id_pessoa === evento.id_pessoa_organograma);
+      if (eventoParaPessoaLogada) this.router.navigate([`/evento/${evento.id}`]);
+      else this.toastrService.error("Você não pode visualizar esse evento!");
+    }
   }
 
   async visualizarEvento() {

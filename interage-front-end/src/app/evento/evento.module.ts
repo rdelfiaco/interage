@@ -15,6 +15,9 @@ import { SemPermissaoModule } from '../sem-permissao/sem-permissao.module';
 import { ConcluirEventoComponent } from './concluir-evento/concluir-evento.component';
 import { TelemarketingQuestionarioModule } from '../telemarketing-questionario/telemarketing-questionario.module';
 import { CadastroPessoaModule } from '../cadastro-pessoa/cadastro-pessoa.module';
+import { CriarEventoComponent } from './criar-evento/criar-evento.component';
+import { EncaminharEventoComponent } from './encaminhar-evento/encaminhar-evento.component';
+import { PesquisaClienteModule } from '../pesquisa-cliente/pesquisa-cliente.module';
 
 @NgModule({
   imports: [
@@ -28,7 +31,8 @@ import { CadastroPessoaModule } from '../cadastro-pessoa/cadastro-pessoa.module'
     CarregandoModule,
     SemPermissaoModule,
     TelemarketingQuestionarioModule,
-    CadastroPessoaModule
+    CadastroPessoaModule,
+    PesquisaClienteModule
   ],
   providers: [
 
@@ -39,7 +43,9 @@ import { CadastroPessoaModule } from '../cadastro-pessoa/cadastro-pessoa.module'
     LinhaDoTempoEventoComponent,
     ItemLinhaDoTempoEventoComponent,
     FormularioEventoComponent,
-    ConcluirEventoComponent
+    ConcluirEventoComponent,
+    CriarEventoComponent,
+    EncaminharEventoComponent
   ]
 })
 export class EventoModule { }

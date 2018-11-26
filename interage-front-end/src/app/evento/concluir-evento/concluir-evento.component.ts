@@ -194,8 +194,8 @@ export class ConcluirEventoComponent implements OnInit {
 
   async concluiEvento() {
     const usuarioLogado = this.localStorage.getLocalStorage('usuarioLogado') as any;
-    debugger;
-    let metaPessoa = await this.connectHTTP.callService({
+
+    await this.connectHTTP.callService({
       service: 'salvarEvento',
       paramsService: {
         token: usuarioLogado.token,

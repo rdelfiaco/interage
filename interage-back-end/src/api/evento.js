@@ -553,6 +553,44 @@ function getMotivos(req, res) {
     })
   })
 }
+function getCanais(req, res) {
+  return new Promise(function (resolve, reject) {
+
+    checkTokenAccess(req).then(historico => {
+      const dbconnection = require('../config/dbConnection')
+      const { Client } = require('pg')
+
+      const client = new Client(dbconnection)
+
+      client.connect()
+
+      let sql = `select id, nome
+                  from canais
+                  where status = true 
+                  order by nome `
+
+      client.query(sql)
+        .then(res => {
+          if (res.rowCount > 0) {
+            let canais = res.rows;
+            client.end();
+            resolve(canais)
+          }
+          else {
+            reject('Não há canais!')
+            client.end();
+          }
+        }
+        )
+        .catch(err => {
+          client.end();
+          reject(err)
+        })
+    }).catch(e => {
+      reject(e)
+    })
+  })
+}
 
 
 function getStatusEvento(req, res) {
@@ -734,6 +772,36 @@ function visualizarEvento(req, res) {
   })
 }
 
+function informacoesParaCriarEvento(req, res) {
+  return new Promise(function (resolve, reject) {
+
+    checkTokenAccess(req).then(historico => {
+      const dbconnection = require('../config/dbConnection')
+      const { Client } = require('pg')
+
+      const client = new Client(dbconnection)
+
+      client.connect()
+
+      getCanais(req).then(canais => {
+        getOrganograma(req).then(organograma => {
+          getUsuarios(req).then(usuarios => {
+            resolve({ canais, organograma, usuarios })
+          });
+        });
+      }).catch(err => {
+        client.end();
+        reject(err)
+      });
+
+    }).catch(e => {
+      reject(e)
+    })
+  })
+}
+
+
+
 module.exports = {
   getUmEvento,
   motivosRespostas,
@@ -744,5 +812,6 @@ module.exports = {
   getEventoFiltros,
   getEventosFiltrados,
   getEventoPorId,
-  visualizarEvento
+  visualizarEvento,
+  informacoesParaCriarEvento
 }
