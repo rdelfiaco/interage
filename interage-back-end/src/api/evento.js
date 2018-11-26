@@ -116,7 +116,7 @@ function salvarEvento(req, res) {
                   id_telefone=${req.query.id_telefoneDiscado},
                   id_predicao=${req.query.id_predicao || 'NULL'},
                   id_objecao=${req.query.id_objecao || 'NULL'}
-                  WHERE eventos.id=${req.query.id_evento}
+                  WHERE eventos.id=${req.query.id_evento} AND eventos.status in(5,6)
                   RETURNING tipoDestino, id_pessoa_organograma;
                   `;
             console.log(update)
