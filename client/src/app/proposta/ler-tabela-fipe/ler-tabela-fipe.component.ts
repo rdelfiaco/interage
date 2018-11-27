@@ -1,8 +1,9 @@
-import { TabelaFipeService } from './../tabela-fipe.service';
-import { TabelaFipe } from './../tabela-fipe';
+
+import { Proposta } from '../proposta';
 import { Component, OnInit, SimpleChanges, Input, Output, EventEmitter, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormControl, FormArray } from '@angular/forms';
-import { Observable } from 'rxjs';
+import { ComunicaPropostaService } from '../comunica-proposta.service';
+
 
 
 @Component({
@@ -13,13 +14,14 @@ import { Observable } from 'rxjs';
 export class LerTabelaFipeComponent implements OnInit {
 
 formulario: FormGroup;
-tabelaFipe: TabelaFipe = new TabelaFipe();
+proposta: Proposta = new Proposta();
 
 // @Output() refresh = new EventEmitter();
 
   constructor(
     private formBuilder: FormBuilder,
-    private stabelaFipe: TabelaFipeService 
+    private propostaComuc: ComunicaPropostaService,
+    private aba: ComunicaPropostaService,
   ) { }
 
   ngOnInit() {
@@ -36,11 +38,8 @@ tabelaFipe: TabelaFipe = new TabelaFipe();
       campo8: [null]
       });
 
-      this.stabelaFipe.emitirTabelaFipe.subscribe(
-        tabelaFipe => console.log(tabelaFipe)
-      );
+      //this.propostaComuc.emitiProposta.subscribe();
   
-
   }
 
   lerTabelaFipe(){
@@ -68,8 +67,8 @@ tabelaFipe: TabelaFipe = new TabelaFipe();
       };
     this.colocaConteudoCampo(j,strTabelaFipe.substr(ij+1,i-ij).trim());
 
-    // this.refresh.emit(this.tabelaFipe)
-    this.stabelaFipe.setCurso(this.tabelaFipe)
+    this.propostaComuc.setProposta(this.proposta);
+    
   };
 
   
@@ -82,38 +81,40 @@ tabelaFipe: TabelaFipe = new TabelaFipe();
     switch (numeroCampo){
       case 1 :
         this.formulario.patchValue({campo1 : conteudo });
-        this.tabelaFipe.mesReferencia = conteudo;
+        this.proposta.mesReferencia = conteudo;
         break;
       case 2 :
         this.formulario.patchValue({campo2 : conteudo });
-        this.tabelaFipe.codigoFipe = conteudo;
+        this.proposta.codigoFipe = conteudo;
         break;
       case 3 :
         this.formulario.patchValue({campo3 : conteudo });
-        this.tabelaFipe.marca = conteudo;
+        this.proposta.marca = conteudo;
         break;
       case 4 :
         this.formulario.patchValue({campo4 : conteudo });
-        this.tabelaFipe.modelo = conteudo;
+        this.proposta.modelo = conteudo;
         break;
       case 5 :
         this.formulario.patchValue({campo5 : conteudo });
-        this.tabelaFipe.anoModelo = conteudo;
+        this.proposta.anoModelo = conteudo;
         break;
       case 6 :
         this.formulario.patchValue({campo6 : conteudo });
-        this.tabelaFipe.autenticacao = conteudo;
+        this.proposta.autenticacao = conteudo;
         break;
       case 7 :
         this.formulario.patchValue({campo7 : conteudo });
-        this.tabelaFipe.dataConsulta = conteudo;
+        this.proposta.dataConsulta = conteudo;
         break;
       case 8 :
         this.formulario.patchValue({campo8 : conteudo });
-        this.tabelaFipe.precoMedio = conteudo;
+        this.proposta.precoMedio = conteudo;
     }
   };
 
-
+  mudaAba(){
+    this.aba.setAba(4);
+  }
 
 }

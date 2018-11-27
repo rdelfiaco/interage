@@ -1,12 +1,13 @@
 
-import { TabelaFipe } from './../tabela-fipe';
+import { Proposta } from '../proposta';
 import { Component, OnInit, Input, EventEmitter, OnChanges, SimpleChanges, Type } from '@angular/core';
 import { Usuario } from '../../login/usuario';
 import { ConnectHTTP } from '../../shared/services/connectHTTP';
 import { LocalStorage } from '../../shared/services/localStorage';
 import { Observable } from 'rxjs';
-import { TabelaFipeService } from '../tabela-fipe.service';
+
 import { ToastService } from '../../../lib/ng-uikit-pro-standard';
+import { ComunicaPropostaService } from '../comunica-proposta.service';
 
 interface selectValues {
   value: string
@@ -51,7 +52,7 @@ export class ElaboraPropostaComponent implements OnInit {
   sVlrVeiculo: string;
   nVlrVeiculo: number;
 
-  tabelaFipe: TabelaFipe;
+  proposta: Proposta;
 
 // radios 
   chkPrecos: string = "2";
@@ -65,7 +66,8 @@ export class ElaboraPropostaComponent implements OnInit {
 
   constructor( private connectHTTP: ConnectHTTP, 
     private localStorage: LocalStorage,
-    private stabelaFipe: TabelaFipeService,
+    private propostaComuc: ComunicaPropostaService,
+    private aba: ComunicaPropostaService,
     private toastrService: ToastService  ){
     this.usuarioLogado = this.localStorage.getLocalStorage('usuarioLogado') as Usuario;
   }
@@ -99,16 +101,14 @@ export class ElaboraPropostaComponent implements OnInit {
     });
 
     this.tipoVeiculoSelectValue = 1;
-
-    this.stabelaFipe.emitirTabelaFipe.subscribe(
-      tabelaFipe => this.atualizaValorVeiculo(tabelaFipe)
-    );
-
     
+    this.propostaComuc.emitiProposta.subscribe(
+      proposta => this.atualizaValorVeiculo(proposta)
+    );
   }
 
-  atualizaValorVeiculo(pTabelaFipe: TabelaFipe){
-    this.sVlrVeiculo = pTabelaFipe.precoMedio;
+  atualizaValorVeiculo(proposta_: Proposta){
+    this.sVlrVeiculo = proposta_.precoMedio;
     this.atualizaTabelas();
   }
 
@@ -118,7 +118,7 @@ export class ElaboraPropostaComponent implements OnInit {
     }else {
       this.chkPrecos = "6";
     }
-    debugger
+    
     this.atualizaTabelas()
 
   }
@@ -142,7 +142,7 @@ export class ElaboraPropostaComponent implements OnInit {
 
     this.app = this.apps.filter( this.filtraTabelasTipoVeiculos , [this.tipoVeiculoSelectValue ]);
 
-    if (this.valores.length > 0 ) 
+    if (this.valores ) 
       {
         this.valorPPV = this.valores[0].valor_ppv;
         this.cota = this.valores[0].cota;

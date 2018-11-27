@@ -1,5 +1,5 @@
-import { TabelaFipeService } from './tabela-fipe.service';
-import { TabelaFipe } from './tabela-fipe';
+import { ComunicaPropostaService } from './comunica-proposta.service';
+import { Proposta } from './proposta';
 import { PropostaComponent } from './proposta.component';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -14,6 +14,7 @@ import { ElaboraPropostaComponent } from './elabora-proposta/elabora-proposta.co
 import { EnviaPropostaComponent } from './envia-proposta/envia-proposta.component';
 import { LerTabelaFipeComponent } from './ler-tabela-fipe/ler-tabela-fipe.component';
 import { PropostasEnviadasComponent } from './propostas-enviadas/propostas-enviadas.component';
+
 
 
 @NgModule({
@@ -37,8 +38,8 @@ import { PropostasEnviadasComponent } from './propostas-enviadas/propostas-envia
     PropostasEnviadasComponent
   ],
   providers: [
-    TabelaFipe,
-    TabelaFipeService
+    Proposta,
+    ComunicaPropostaService
   ]
 
 })

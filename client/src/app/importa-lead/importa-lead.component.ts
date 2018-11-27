@@ -12,6 +12,8 @@ import { humanizeBytes } from 'ng-uikit-pro-standard';
 
 export class ImportaLeadComponent implements OnInit {
 
+
+
   public csvRecords: any[] = [];
 
   @ViewChild('fileImportInput') fileImportInput: any;
@@ -28,6 +30,10 @@ export class ImportaLeadComponent implements OnInit {
       this.files = [];
       this.uploadInput = new EventEmitter<UploadInput>();
       this.humanizeBytes = humanizeBytes;
+  }
+
+  ngOnInit(): void {
+    throw new Error("Method not implemented.");
   }
 
   showFiles() {

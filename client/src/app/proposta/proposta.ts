@@ -1,5 +1,5 @@
 
-export class TabelaFipe {
+export class Proposta {
 
     private _mesReferencia: string;
     private _codigoFipe: string;
@@ -64,5 +64,6 @@ export class TabelaFipe {
     }
     public set precoMedio(value: string) {
         this._precoMedio = value;
+        
     }
 }
