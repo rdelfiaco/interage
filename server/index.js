@@ -1,6 +1,8 @@
 const express = require('express');
+const router = express.Router();
 const app = express();
 const nodeStart = require('./src/config/nodeStart');
+const bodyParser = require('body-parser');
 
 const usuario = require('./src/api/usuario');
 const campanha = require('./src/api/campanha');
@@ -10,12 +12,21 @@ const pessoa = require('./src/api/pessoa');
 const atividade = require('./src/api/atividade');
 const produtividade = require('./src/api/produtividade');
 const tabelaPrecos = require('./src/api/tabelasPrecos');
+const importar = require('./src/api/importaLead');
 
 const consultaPlaca = require('./src/api/consultaPlaca');
 
 declaraServico('getEventoPorId', evento.getEventoPorId);
 declaraServico('visualizarEvento', evento.visualizarEvento);
 declaraServico('informacoesParaCriarEvento', evento.informacoesParaCriarEvento);
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({
+  extended: true
+}));
+
+app.post('/api/uploadFile', importar.importaLead)
+
 
 app.get('/getAtividades', (req, res) => {
   atividade.getAtividades(req)
