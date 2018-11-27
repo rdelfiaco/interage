@@ -20,6 +20,7 @@ export class AppComponent {
     this.auth.logout();
   }
 
+  
   openPage(page: string) {
     this.router.navigate([page]);
   }

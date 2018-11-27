@@ -1,6 +1,7 @@
 import { Component, EventEmitter, OnInit, ViewChild } from '@angular/core';
 import { UploadFile, UploadInput, UploadOutput } from 'ng-uikit-pro-standard';
 import { humanizeBytes } from 'ng-uikit-pro-standard';
+import { ConnectHTTP } from '../shared/services/connectHTTP';
 
 
 
@@ -26,10 +27,10 @@ export class ImportaLeadComponent implements OnInit {
   totalLinhas: number;
   csvRecordsArray: Array<any>;
 
-  constructor() {
-      this.files = [];
-      this.uploadInput = new EventEmitter<UploadInput>();
-      this.humanizeBytes = humanizeBytes;
+  constructor(private connectHTTP: ConnectHTTP) {
+    this.files = [];
+    this.uploadInput = new EventEmitter<UploadInput>();
+    this.humanizeBytes = humanizeBytes;
   }
 
   ngOnInit(): void {
@@ -37,57 +38,57 @@ export class ImportaLeadComponent implements OnInit {
   }
 
   showFiles() {
-      let files = '';
-      for (let i = 0; i < this.files.length; i ++) {
-        files += this.files[i].name;
-         if (!(this.files.length - 1 === i)) {
-           files += ',';
-        }
+    let files = '';
+    for (let i = 0; i < this.files.length; i++) {
+      files += this.files[i].name;
+      if (!(this.files.length - 1 === i)) {
+        files += ',';
       }
-      return files;
-   }
+    }
+    return files;
+  }
 
   startUpload(): void {
-      const event: UploadInput = {
+    const event: UploadInput = {
       type: 'uploadAll',
       url: 'your-path-to-backend-endpoint',
       method: 'POST',
       data: { foo: 'bar' },
-      };
-      this.files = [];
-      this.uploadInput.emit(event);
+    };
+    this.files = [];
+    this.uploadInput.emit(event);
   }
 
   cancelUpload(id: string): void {
-      this.uploadInput.emit({ type: 'cancel', id: id });
+    this.uploadInput.emit({ type: 'cancel', id: id });
   }
 
   onUploadOutput(output: UploadOutput | any): void {
 
-      if (output.type === 'allAddedToQueue') {
-      } else if (output.type === 'addedToQueue') {
-        this.files.push(output.file); // add file to array when added
-      } else if (output.type === 'uploading') {
-        // update current data in files array for uploading file
-        const index = this.files.findIndex(file => file.id === output.file.id);
-        this.files[index] = output.file;
-      } else if (output.type === 'removed') {
-        // remove file from array when removed
-        this.files = this.files.filter((file: UploadFile) => file !== output.file);
-      } else if (output.type === 'dragOver') {
-        this.dragOver = true;
-      } else if (output.type === 'dragOut') {
-      } else if (output.type === 'drop') {
-        this.dragOver = false;
-      }
-      this.showFiles();
+    if (output.type === 'allAddedToQueue') {
+    } else if (output.type === 'addedToQueue') {
+      this.files.push(output.file); // add file to array when added
+    } else if (output.type === 'uploading') {
+      // update current data in files array for uploading file
+      const index = this.files.findIndex(file => file.id === output.file.id);
+      this.files[index] = output.file;
+    } else if (output.type === 'removed') {
+      // remove file from array when removed
+      this.files = this.files.filter((file: UploadFile) => file !== output.file);
+    } else if (output.type === 'dragOver') {
+      this.dragOver = true;
+    } else if (output.type === 'dragOut') {
+    } else if (output.type === 'drop') {
+      this.dragOver = false;
+    }
+    this.showFiles();
   }
 
 
   fileChangeListener($event: any): void {
 
     var text = [];
- 
+
     console.log($event)
     debugger
     var files = $event.srcElement.files;
@@ -95,19 +96,19 @@ export class ImportaLeadComponent implements OnInit {
     if (this.isCSVFile(files[0])) {
 
       var input = $event.target;
-      
+
       var reader = new FileReader();
 
-      
 
-      reader.readAsText(input.files[0], 'ISO-8859-1' );
+
+      reader.readAsText(input.files[0], 'ISO-8859-1');
       //new Blob([this.csv], {"type": "text/csv;charset=utf8;"});
 
       reader.onload = (data) => {
-        
+
         let csvData = reader.result;
         let csvRecordsArray = csvData.split(/\r\n|\n/);
-        
+
         this.totalLinhas = csvRecordsArray.length;
 
         let headersRow = this.getHeaderArray(csvRecordsArray);
@@ -115,7 +116,7 @@ export class ImportaLeadComponent implements OnInit {
         this.csvRecords = this.getDataRecordsArrayFromCSVFile(csvRecordsArray, headersRow.length);
       }
 
-      reader.onerror = function() {
+      reader.onerror = function () {
         alert('Unable to read ' + input.files[0]);
       };
 
@@ -160,7 +161,7 @@ export class ImportaLeadComponent implements OnInit {
 
   // CHECK IF FILE IS A VALID CSV FILE
   isCSVFile(file: any) {
-    
+
     return file.name.endsWith(".csv");
   }
 
@@ -179,11 +180,20 @@ export class ImportaLeadComponent implements OnInit {
     this.csvRecords = [];
   }
 
+  async importarCSV() {
+    var arquivo = this.files[0] as any;
+    await this.connectHTTP.sendFile({
+      service: 'api/uploadFile',
+      paramsService: {
+        arquivo: this.csvRecords,
+      }
+    });
+  }
 }
 
 
 
-export class CSVRecord{
+export class CSVRecord {
 
 
   public tipo: any;
@@ -201,10 +211,9 @@ export class CSVRecord{
   public DDD3: any;
   public FONE3: any;
 
-  constructor()
-  {
+  constructor() {
 
   }
 
-  
+
 }
