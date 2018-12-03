@@ -29,7 +29,7 @@ export class ConnectHTTP {
       let url = `${host}${service}`
 
 
-      
+
       if (!options.naoExigeToken && (!options.paramsService.token || !options.paramsService.id_usuario)) {
         let usuarioLogado = this.localStorage.getLocalStorage('usuarioLogado') as Usuario;
         options.paramsService.id_usuario = usuarioLogado.id.toString();
@@ -107,7 +107,7 @@ export class ConnectHTTP {
       }
       // xhttp.setRequestHeader("Content-Type","multipart/form-data");
       xhttp.open("POST", url, true)
-      xhttp.send(JSON.stringify(options.paramsService.arquivo)
+      xhttp.send(JSON.stringify(options.paramsService.arquivo));
     })
   }
 
