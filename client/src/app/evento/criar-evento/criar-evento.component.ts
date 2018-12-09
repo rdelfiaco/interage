@@ -1,8 +1,8 @@
-import { Component, OnInit, Input, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ConnectHTTP } from '../../shared/services/connectHTTP';
 import { LocalStorage } from '../../shared/services/localStorage';
-import { IMyOptions } from '../../../lib/ng-uikit-pro-standard';
+import { IMyOptions, ToastService } from '../../../lib/ng-uikit-pro-standard';
 import { Observable } from 'rxjs';
 import * as moment from 'moment';
 @Component({
@@ -26,7 +26,7 @@ export class CriarEventoComponent implements OnInit {
   }
   pessoaId: any;
   @Input() evento: any
-  @Input() fecharModal = new EventEmitter()
+  @Output() fechaModal = new EventEmitter()
   criarEventoForm: FormGroup;
   departamentoSelect: Array<any>
   canaisSelect: Array<any>
@@ -48,7 +48,7 @@ export class CriarEventoComponent implements OnInit {
   }
 
   constructor(formBuilder: FormBuilder, private connectHTTP: ConnectHTTP,
-    private localStorage: LocalStorage) {
+    private localStorage: LocalStorage, private toastrService: ToastService) {
     this.criarEventoForm = formBuilder.group({
       tipodestino: ['P', [
         Validators.required
@@ -117,7 +117,7 @@ export class CriarEventoComponent implements OnInit {
     let dataExibir = moment(this.criarEventoForm.value.data + ' - ' + this.criarEventoForm.value.hora, 'DD/MM/YYYY - hh:mm').toISOString()
     const usuarioLogado = this.localStorage.getLocalStorage('usuarioLogado') as any;
     debugger;
-    await this.connectHTTP.callService({
+    let res = await this.connectHTTP.callService({
       service: 'encaminhaEvento',
       paramsService: {
         id_pessoa_resolveu: usuarioLogado.id_pessoa,
@@ -133,6 +133,7 @@ export class CriarEventoComponent implements OnInit {
         id_canal: this.criarEventoForm.value.canal,
       }
     }) as any;
-    this.fecharModal.emit();
+    this.toastrService.success('Evento encaminhado com sucesso!');
+    this.fechaModal.emit();
   }
 }

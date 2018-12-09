@@ -16,7 +16,8 @@ export class EncaminharEventoComponent implements OnInit {
   ngOnInit() {
   }
 
-  fecharModalPai() {
+  fechaModalPai() {
+    debugger;
     this.fechaModal.emit();
   }
 
