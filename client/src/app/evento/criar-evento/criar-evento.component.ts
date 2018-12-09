@@ -12,7 +12,8 @@ import { Router } from '@angular/router';
   styleUrls: ['./criar-evento.component.scss']
 })
 export class CriarEventoComponent implements OnInit {
-  _pessoa: any
+  private _pessoa: any
+  private _evento: any
   @Input()
   set pessoa(pessoa: any): any {
     if (pessoa)
@@ -27,9 +28,19 @@ export class CriarEventoComponent implements OnInit {
     return this._pessoa;
   }
   pessoaId: any;
-  @Input() evento: any
+
+  @Input()
+  set evento(evento: any): any {
+    this._evento = evento;
+  }
+  get evento(): any {
+    return this._evento
+  }
+
   @Input() disabled: any
   @Output() fechaModal = new EventEmitter()
+  motivosDoCanal: Array<any> = [];
+  motivosDoCanalSelecionado: Array<any> = [];
   criarEventoForm: FormGroup;
   departamentoSelect: Array<any>
   canaisSelect: Array<any>
@@ -63,6 +74,9 @@ export class CriarEventoComponent implements OnInit {
       canal: ['', [
         Validators.required
       ]],
+      id_motivo: ['', [
+        Validators.required
+      ]],
       pessoaId: ['', [Validators.required]],
       data: [''],
       hora: [''],
@@ -92,14 +106,43 @@ export class CriarEventoComponent implements OnInit {
     this.usuarioSelect = this.usuarioSelect.map(usuario => {
       return { value: usuario.id, label: usuario.nome }
     });
+
+    this.motivosDoCanal = eventoEncontrado.resposta.motivosCanais;   
+
     this.optionsTipoDestino = this.usuarioSelect;
+
+    let data = new Date();
+    let date = moment().format('DD/MM/YYYY');
+
+    this.criarEventoForm.controls['data'].setValue(date);
+
+    let hours = getHora(data);
+    this.criarEventoForm.controls['hora'].setValue(hours);
+
+    function getHora(data: Date) {
+      let hora = trataTempo(data.getHours() + 1)
+      let minutos = trataTempo(data.getMinutes())
+      return `${hora}:${minutos}`
+    }
+
+    function trataTempo(tempo: number) {
+      if (tempo.toString().length == 1) return `0${tempo}`
+      return tempo;
+    }
   }
 
   onSelectTipoPessoa(valor) {
-    debugger;
     if (valor.value == 'P')
       this.optionsTipoDestino = this.usuarioSelect;
     else this.optionsTipoDestino = this.departamentoSelect;
+  }
+
+  onSelectCanal(valor) {
+    this.motivosDoCanalSelecionado = this.motivosDoCanal.filter(m => m.id_canal == valor.value).map(m => {
+      return { value: m.id, label: m.nome }
+    });
+
+    if (!this.motivosDoCanalSelecionado.length) this.toastrService.error('Canal sem nenhum motivo cadastrado!');
   }
 
   onSelectCliente(valor) {
@@ -127,8 +170,9 @@ export class CriarEventoComponent implements OnInit {
         paramsService: {
           id_pessoa_resolveu: usuarioLogado.id_pessoa,
           id_evento: this.evento.id,
+          id_status_evento: this.evento.id_status_evento,
           id_campanha: this.evento.id_campanha,
-          id_motivo: this.evento.id_motivo,
+          id_motivo: this.criarEventoForm.value.id_motivo,
           id_evento_pai: this.evento.id,
           dt_para_exibir: dataExibir,
           tipoDestino: this.criarEventoForm.value.tipodestino,
@@ -146,8 +190,8 @@ export class CriarEventoComponent implements OnInit {
         service: 'criarEvento',
         paramsService: {
           id_pessoa_resolveu: usuarioLogado.id_pessoa,
-          id_motivo: 1,
           dt_para_exibir: dataExibir,
+          id_motivo: this.criarEventoForm.value.id_motivo,
           tipoDestino: this.criarEventoForm.value.tipodestino,
           id_pessoa_organograma: this.criarEventoForm.value.pessoaOrgonograma,
           id_pessoa_receptor: this.criarEventoForm.value.pessoaId,
@@ -157,7 +201,9 @@ export class CriarEventoComponent implements OnInit {
       }) as any;
       this.toastrService.success('Evento criado com sucesso!');
       this.fechaModal.emit();
-      this.router.navigate([`/evento/${res.resposta.rows[0].id}`]);
     }
+  }
+  cancelar() {
+    this.fechaModal.emit();
   }
 }

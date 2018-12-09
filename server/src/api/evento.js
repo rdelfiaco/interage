@@ -89,9 +89,9 @@ function motivosRespostas(req, res) {
   });
 }
 
-function encerrarEvento(client, id_pessoa, id_evento) {
+function encerrarEvento(client, id_pessoa, id_evento, id_status_evento) {
   return new Promise(function (resolve, reject) {
-    let update = `UPDATE eventos SET id_status_evento=3,
+    let update = `UPDATE eventos SET id_status_evento=${id_status_evento},
           dt_resolvido=now(),
           id_pessoa_resolveu=${id_pessoa} 
           WHERE eventos.id=${id_evento} AND eventos.id_status_evento in(5,6)
@@ -165,7 +165,11 @@ function encaminhaEvento(req, res) {
       client.connect();
       client.query('BEGIN').then((res1) => {
         console.log('req.query', req.query)
-        encerrarEvento(client, req.query.id_pessoa_resolveu, req.query.id_evento).then(eventoEncerrado => {
+        let statusEvento;
+        if (req.query.id_status_evento === '5') statusEvento = 2;
+        if (req.query.id_status_evento === '6') statusEvento = 8;
+
+        encerrarEvento(client, req.query.id_pessoa_resolveu, req.query.id_evento, statusEvento).then(eventoEncerrado => {
           _criarEvento(client, req.query.id_campanha, req.query.id_motivo, req.query.id_evento_pai, req.query.id_evento,
             req.query.id_pessoa_resolveu, req.query.dt_para_exibir, req.query.tipoDestino, req.query.id_pessoa_organograma, req.query.id_pessoa_receptor,
             req.query.observacao_origem, req.query.id_canal).then(eventoCriado => {
@@ -943,17 +947,42 @@ function informacoesParaCriarEvento(req, res) {
       getCanais(req).then(canais => {
         getOrganograma(req).then(organograma => {
           getUsuarios(req).then(usuarios => {
-            resolve({ canais, organograma, usuarios })
-          });
-        });
-      }).catch(err => {
-        client.end();
-        reject(err)
-      });
-
+            getMotivosCanais(client).then(motivosCanais => {
+              resolve({ canais, organograma, usuarios, motivosCanais })
+            })
+          })
+        })
+      })
     }).catch(e => {
       reject(e)
     })
+  })
+}
+
+
+function getMotivosCanais(client) {
+  return new Promise(function (resolve, reject) {
+    let sql = `select * from motivos
+                LEFT JOIN motivos_canais ON motivos_canais.id_motivo = motivos.id
+                WHERE status=true`
+
+    client.query(sql)
+      .then(res => {
+        if (res.rowCount > 0) {
+          let motivosCanais = res.rows;
+          client.end();
+          resolve(motivosCanais)
+        }
+        else {
+          reject('Não há motivos para canais!')
+          client.end();
+        }
+      }
+      )
+      .catch(err => {
+        client.end();
+        reject(err)
+      })
   })
 }
 

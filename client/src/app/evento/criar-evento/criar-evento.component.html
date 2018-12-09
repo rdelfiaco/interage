@@ -1,7 +1,8 @@
 <form [formGroup]="criarEventoForm" class="formQuestionario">
   <div class="row">
     <div class="col">
-      <mdb-select formControlName="tipodestino" (selected)="onSelectTipoPessoa($event)" [options]="tipoPessoa" [multiple]="false" placeholder="Para"></mdb-select>
+      <mdb-select formControlName="tipodestino" (selected)="onSelectTipoPessoa($event)" [options]="tipoPessoa"
+        [multiple]="false" placeholder="Para"></mdb-select>
     </div>
     <div class="col-8">
       <mdb-select formControlName="pessoaOrgonograma" [options]="optionsTipoDestino" [multiple]="false" placeholder="Destino"></mdb-select>
@@ -9,18 +10,24 @@
   </div>
   <div class="row">
     <div class="col">
-      <mdb-select formControlName="canal" [options]="canaisSelect" [multiple]="false" placeholder="Canal"></mdb-select>
+      <mdb-select formControlName="canal" [options]="canaisSelect" (selected)="onSelectCanal($event)" [multiple]="false"
+        placeholder="Canal"></mdb-select>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col">
+      <mdb-select formControlName="id_motivo" [options]="motivosDoCanalSelecionado" [multiple]="false" placeholder="Motivo"></mdb-select>
     </div>
   </div>
   <div class="row">
     <div class="md-form col">
-      <mdb-date-picker formControlName="data" #dataReagendamento (dateChanged)="onDateChange($event)" name="mydate" [options]="myDatePickerOptions"
-        [placeholder]="'Selecione a data'" required></mdb-date-picker>
-      <label for="telefoneDiscado" class="">Data Reagendamento</label>
+      <mdb-date-picker formControlName="data" #dataReagendamento (dateChanged)="onDateChange($event)" name="mydate"
+        [options]="myDatePickerOptions" [placeholder]="'Selecione a data'" required></mdb-date-picker>
+      <label for="telefoneDiscado" class="">Agendar para:</label>
     </div>
     <div class="md-form col">
-      <mdb-time-picker formControlName="hora" [buttonLabel]="'Done'" [twelvehour]="false" [darktheme]="true" [placeholder]="'Selecione a hora'"
-        [label]="'Hora Reagendamento'"></mdb-time-picker>
+      <mdb-time-picker formControlName="hora" [buttonLabel]="'Done'" [twelvehour]="false" [darktheme]="true"
+        [placeholder]="'Selecione a hora'" [label]="'Agendar para:'"></mdb-time-picker>
     </div>
   </div>
 
@@ -39,8 +46,9 @@
 
   <div class="row">
     <div class="justify-content-center">
-      <button type="button" mdbBtn color="primary" (click)="criarEvento();" class="relative waves-light"
-        mdbWavesEffect [disabled]="!criarEventoForm.valid">Gravar</button>
+      <button type="button" mdbBtn color="primary" (click)="criarEvento();" class="relative waves-light" mdbWavesEffect
+        [disabled]="!criarEventoForm.valid">Gravar</button>
+      <button type="button" mdbBtn color="danger" (click)="cancelar();" class="relative waves-light" mdbWavesEffect>Cancelar</button>
     </div>
   </div>
 </form>
