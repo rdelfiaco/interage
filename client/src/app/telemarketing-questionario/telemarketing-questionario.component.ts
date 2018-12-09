@@ -103,21 +103,25 @@ export class TelemarketingQuestionarioComponent implements OnInit {
   }
 
   ValidateObservacao(control: AbstractControl) {
+    debugger
     if (this.exige_observacao && !control.value) return { exige_observacao: true };
     else return null;
   }
 
   ValidateExigePredicao(control: AbstractControl) {
+    debugger
     if (this.exige_predicao && !control.value) return { exige_predicao: true };
     else return null;
   }
 
   ValidateExigeObjecao(control: AbstractControl) {
+    debugger
     if (this.exige_objecao && !control.value) return { exige_objecao: true };
     else return null;
   }
 
   ValidateReagendar(control: AbstractControl) {
+    debugger
     if (this.reagendar && !control.value) return { reagendar: true };
     else return null;
   }
@@ -235,23 +239,17 @@ export class TelemarketingQuestionarioComponent implements OnInit {
     this.motivos_respostas.some((motivo) => {
       if (motivo.id == motivoResposta.value) {
         this.questionarioForm.controls['motivoRespostaSelecionado'].setValue(motivoResposta.value)
-        if (motivo.reagendar)
-          this.reagendar = true;
-        else this.reagendar = false
 
-        if (motivo.exige_observacao)
-          this.exige_observacao = true;
-        else this.exige_observacao = false
-
-        if (motivo.exige_predicao)
-          this.exige_predicao = true;
-        else this.exige_predicao = false
-
-        if (motivo.exige_objecao)
-          this.exige_objecao = true;
-        else this.exige_objecao = false
+        this.reagendar = motivo.reagendar;
+        this.exige_observacao = motivo.exige_observacao;
+        this.exige_predicao = motivo.exige_predicao;
+        this.exige_objecao = motivo.exige_objecao;
 
         self.questionarioForm.controls['observacao'].updateValueAndValidity();
+        self.questionarioForm.controls['id_predicao'].updateValueAndValidity();
+        self.questionarioForm.controls['id_objecao'].updateValueAndValidity();
+        self.questionarioForm.controls['data'].updateValueAndValidity();
+        self.questionarioForm.controls['hora'].updateValueAndValidity();
       }
     })
   }

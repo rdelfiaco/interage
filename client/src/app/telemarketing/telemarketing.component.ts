@@ -123,6 +123,7 @@ export class TelemarketingComponent implements OnInit {
     this.pessoaNome = null;
     this.eventoObject = null;
     this.carregouEvento = false;
+    this.carregouPessoa = false;
   }
   async refresh() {
     let pessoaId = this.pessoaObject.principal.id
@@ -138,6 +139,7 @@ export class TelemarketingComponent implements OnInit {
   }
 
   atualizaMeta(metaPessoa) {
+    debugger;
     this.metaPessoa = metaPessoa;
   }
 }
