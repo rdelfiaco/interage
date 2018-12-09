@@ -24,7 +24,7 @@ function getUmEvento(req, res) {
             and dt_para_exibir <= now()
             and id_campanha = ${req.query.id_campanha}
             order by id_status_evento desc, id_prioridade, dt_para_exibir LIMIT 1`
-          
+
       console.log(sql)
       client.query(sql)
         .then(res => {
@@ -89,6 +89,113 @@ function motivosRespostas(req, res) {
   });
 }
 
+function encerrarEvento(client, id_pessoa, id_evento) {
+  return new Promise(function (resolve, reject) {
+    let update = `UPDATE eventos SET id_status_evento=3,
+          dt_resolvido=now(),
+          id_pessoa_resolveu=${id_pessoa} 
+          WHERE eventos.id=${id_evento} AND eventos.id_status_evento in(5,6)
+          RETURNING tipoDestino, id_pessoa_organograma;`;
+    console.log(update)
+    client.query(update).then((updateEventoEncerrado) => {
+      resolve(updateEventoEncerrado)
+    }).catch(err => {
+      reject(err);
+    })
+  });
+}
+
+function criarEvento(client, id_campanha, id_motivo, id_evento_pai, id_evento_anterior,
+  id_pessoa_criou, dt_para_exibir, tipoDestino, id_pessoa_organograma, id_pessoa_receptor,
+  observacao_origem, id_canal) {
+  return new Promise(function (resolve, reject) {
+    let update = `INSERT INTO eventos(
+      id_campanha,
+      id_motivo,
+      id_evento_pai,
+      id_evento_anterior,
+      id_status_evento,
+      id_pessoa_criou,
+      dt_criou,
+      dt_prevista_resolucao,
+      dt_para_exibir,
+      tipodestino,
+      id_pessoa_organograma,
+      id_pessoa_receptor,
+      id_prioridade,
+      observacao_origem,
+      id_canal)
+      VALUES (${id_campanha},
+      ${id_motivo},
+      ${id_evento_pai},
+      ${id_evento_anterior},
+      1,
+      ${id_pessoa_criou},
+      now(),
+      func_dt_expira(${id_motivo}),
+      '${dt_para_exibir}',
+      '${tipoDestino}', 
+      ${id_pessoa_organograma},
+      ${id_pessoa_receptor},
+      '2',
+      '${observacao_origem}',
+      ${id_canal})`;
+
+    console.log(update)
+    client.query(update).then((updateEventoCriado) => {
+      resolve(updateEventoCriado)
+    }).catch(err => {
+      reject(err);
+    })
+  });
+}
+
+
+
+function encaminhaEvento(req, res) {
+  return new Promise(function (resolve, reject) {
+
+    checkTokenAccess(req).then(historico => {
+      const dbconnection = require('../config/dbConnection')
+      const { Client } = require('pg')
+
+      const client = new Client(dbconnection)
+
+      client.connect();
+      client.query('BEGIN').then((res1) => {
+        console.log('req.query', req.query)
+        encerrarEvento(client, req.query.id_pessoa_resolveu, req.query.id_evento).then(eventoEncerrado => {
+          criarEvento(client, req.query.id_campanha, req.query.id_motivo, req.query.id_evento_pai, req.query.id_evento,
+            req.query.id_pessoa_resolveu, req.query.dt_para_exibir, req.query.tipoDestino, req.query.id_pessoa_organograma, req.query.id_pessoa_receptor,
+            req.query.observacao_origem, req.query.id_canal).then(eventoCriado => {
+              client.query('COMMIT').then((resposta) => {
+                resolve(eventoCriado)
+                client.end();
+              }).catch(err => {
+                client.end();
+                reject(err)
+              })
+            }).catch(err => {
+              client.end();
+              reject(err)
+            })
+        }).catch(err => {
+          client.end();
+          reject(err)
+        })
+
+      }).catch(err => {
+        client.query('ROLLBACK').then((resposta) => {
+          client.end();
+          reject('Erro ao processar arquivo importado')
+        }).catch(err => {
+          client.end();
+          reject(err)
+        })
+      })
+    })
+  })
+}
 
 function salvarEvento(req, res) {
   return new Promise(function (resolve, reject) {
@@ -824,5 +931,6 @@ module.exports = {
   getEventosFiltrados,
   getEventoPorId,
   visualizarEvento,
-  informacoesParaCriarEvento
+  informacoesParaCriarEvento,
+  encaminhaEvento
 }
