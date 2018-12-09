@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { } from 'pdfkit';
+
 
 @Component({
   selector: 'app-envia-proposta',
@@ -9,7 +11,12 @@ export class EnviaPropostaComponent implements OnInit {
 
   constructor() { }
 
+
+
   ngOnInit() {
+    var docDefinition = { content: 'This is an sample PDF printed with pdfMake' };
+
+    //pdfMake.createPdf(docDefinition).open();
   }
 
 }

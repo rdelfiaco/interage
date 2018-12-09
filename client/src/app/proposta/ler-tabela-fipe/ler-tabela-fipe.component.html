@@ -4,26 +4,25 @@
       <div class="col-md-6">
 
           <div class="md-form">
-              <textarea mdbInputDirective type="text" formControlName="tabelaFipe"
-              id="tabelaFipe" class="md-textarea form-control" rows="30" (keyup)="lerTabelaFipe()"  ></textarea>
+              <textarea  mdbInputDirective type="text" formControlName="tabelaFipe"
+              id="tabelaFipe" class="md-textarea form-control" rows="30" (keyup)="lerTabelaFipe()" [disabled]="tabelaLimpa" ></textarea>
               <label for="tabelaFipe">Cole aqui a tabela Fipe</label>
           </div>
+
+
+
       </div>
       <div class="col-md-6">
 
 
         <div class="row justify-content-around">
 
-          <a mdbBtn floating="true" size="lg" gradient="peach" mdbWavesEffect (click)="lerTabelaFipe()">
-            <mdb-icon icon="stack-overflow"></mdb-icon>
-          </a>
-
-          <a mdbBtn floating="true" size="lg" gradient="blue" mdbWavesEffect (click)="mudaAba()">
-            <mdb-icon icon="sign-out"></mdb-icon>
-          </a>
+          <button mdbBtn type="button" color="primary" mdbWavesEffect (click)="limparTabelaFipe()" >
+            <mdb-icon icon="trash" class="mr-1"></mdb-icon>Limpar
+          </button>
 
         </div>
-
+<!-- 
         <div class="md-form">
           <input mdbInputDirective type="text" formControlName="campo1" disabled
           id="campo1" class="form-control">
@@ -64,7 +63,7 @@
           id="campo8" class="form-control">
           <label for="campo8" class="">Preço Médio</label>
         </div>
-
+ -->
 
       </div>
     </div>

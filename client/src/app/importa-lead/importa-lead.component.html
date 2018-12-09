@@ -15,47 +15,54 @@
 </div>
 
 
-
 <div>
     <table class="table table-hover table-responsive-md mb-0">
       <thead>
         <tr>
-          <th>contador</th>
-          <th>tipo</th>
+          <th>linha</th>
+          <th>tipo_pessoa</th> 
+          <th>cpf</th>
           <th>nome</th>
+          <th>email</th>
           <th>observacoes</th>
-          <th>dtinclusao</th>
-          <th>dtalteracao</th>
-          <th>lead</th>
+          <th>rua</th>
+          <th>complemento</th>
+          <th>bairro</th>
+          <th>cidade</th>
+          <th>uf</th>
+          <th>cep</th>
+          <th>ddd1</th>
+          <th>fone1</th>
+          <th>ddd2</th>
+          <th>fone2</th>
+          <th>ddd3</th>
+          <th>fone3</th>
           <th>origem_lead</th>
           <th>id_origem_lead</th>
-          <th>DDD1</th>
-          <th>FONE1</th>
-          <th>DDD2</th>
-          <th>FONE2</th>
-          <th>DDD3</th>
-          <th>FONE3</th>
-          <th>RESULTADO</th>
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let csvData of csvRecords;let i = index;">
           <td>{{i+1}}</td>
-          <td><span>{{csvData.tipo}}</span></td>
+          <td><span>{{csvData.tipo_pessoa}}</span></td> 
+          <td><span>{{csvData.cpf}}</span></td>
           <td><span>{{csvData.nome}}</span></td>
+          <td><span>{{csvData.email}}</span></td>
           <td><span>{{csvData.observacoes}}</span></td>
-          <td><span>{{csvData.dtinclusao}}</span></td>
-          <td><span>{{csvData.dtalteracao}}</span></td>
-          <td><span>{{csvData.lead}}</span></td>
-          <td> <span>{{csvData.origem_lead}}</span></td>
+          <td><span>{{csvData.rua}}</span></td>
+          <td><span>{{csvData.complemento}}</span></td>
+          <td><span>{{csvData.bairro}}</span></td>
+          <td><span>{{csvData.cidade}}</span></td>
+          <td><span>{{csvData.uf}}</span></td>
+          <td><span>{{csvData.cep}}</span></td>
+          <td><span>{{csvData.ddd1}}</span></td>
+          <td><span>{{csvData.fone1}}</span></td>
+          <td><span>{{csvData.ddd2}}</span></td>
+          <td><span>{{csvData.fone2}}</span></td>
+          <td><span>{{csvData.ddd3}}</span></td>
+          <td><span>{{csvData.fone3}}</span></td>
+          <td><span>{{csvData.origem_lead}}</span></td>
           <td><span>{{csvData.id_origem_lead}}</span></td>
-          <td> <span>{{csvData.DDD1}}</span></td>
-          <td><span>{{csvData.FONE1}}</span></td>
-          <td><span>{{csvData.DDD2}}</span></td>
-          <td><span>{{csvData.FONE2}}</span></td>
-          <td><span>{{csvData.DDD3}}</span></td>
-          <td><span>{{csvData.FONE3}}</span></td>
-          <td><span *ngIF grava(csvData) > </span></td>
         </tr>
       </tbody>
     </table>

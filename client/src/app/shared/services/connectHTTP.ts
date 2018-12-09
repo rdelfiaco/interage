@@ -27,8 +27,12 @@ export class ConnectHTTP {
       const service = options.service
 
       let url = `${host}${service}`
+  
+
+      
 
 
+      
       
       if (!options.naoExigeToken && (!options.paramsService.token || !options.paramsService.id_usuario)) {
         let usuarioLogado = this.localStorage.getLocalStorage('usuarioLogado') as Usuario;
@@ -45,6 +49,7 @@ export class ConnectHTTP {
       xhttp.onload = function () {
         const selfXhttp = this
         if (selfXhttp.status === 200) {
+          debugger
           resolve({ resposta: JSON.parse(selfXhttp.responseText) })
         } else if (selfXhttp.status === 401) {
           reject({ resposta: {}, error: selfXhttp.responseText })
@@ -93,7 +98,6 @@ export class ConnectHTTP {
       const xhttp = new XMLHttpRequest()
 
       xhttp.onload = function () {
-        debugger
         const selfXhttp = this
         if (selfXhttp.status === 200) {
           resolve({ resposta: JSON.parse(selfXhttp.responseText) })
@@ -107,7 +111,7 @@ export class ConnectHTTP {
       }
       // xhttp.setRequestHeader("Content-Type","multipart/form-data");
       xhttp.open("POST", url, true)
-      xhttp.send(JSON.stringify(options.paramsService.arquivo)
+      xhttp.send(JSON.stringify(options.paramsService.arquivo))
     })
   }
 

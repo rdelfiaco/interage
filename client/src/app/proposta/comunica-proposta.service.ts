@@ -13,6 +13,9 @@ export class ComunicaPropostaService {
 
   emitiProposta = new EventEmitter<Proposta>();
   private propostaAtual: Proposta;
+
+  emitiPropostaJSON = new EventEmitter<any>();
+  private propostaJSONAtual: any;
   
   constructor() { }
 
@@ -23,6 +26,10 @@ export class ComunicaPropostaService {
     return this.propostaAtual;
   }
 
+  getPropostaJSON() {
+    return this.propostaJSONAtual;
+  }
+
   setAba(abaInformada: number){
     this.abaAtual = abaInformada; 
     this.emitiAba.emit(this.abaAtual);
@@ -31,6 +38,11 @@ export class ComunicaPropostaService {
   setProposta(propostaInformada: Proposta){
     this.propostaAtual = propostaInformada;
     this.emitiProposta.emit(this.propostaAtual)
+  }
+
+  setPropostaJSON(propostaJSONInformada: any){
+    this.propostaJSONAtual = propostaJSONInformada;
+    this.emitiPropostaJSON.emit(this.propostaJSONAtual)
   }
 
 }

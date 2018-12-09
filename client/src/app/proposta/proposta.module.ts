@@ -1,3 +1,6 @@
+
+
+
 import { ComunicaPropostaService } from './comunica-proposta.service';
 import { Proposta } from './proposta';
 import { PropostaComponent } from './proposta.component';
@@ -14,7 +17,7 @@ import { ElaboraPropostaComponent } from './elabora-proposta/elabora-proposta.co
 import { EnviaPropostaComponent } from './envia-proposta/envia-proposta.component';
 import { LerTabelaFipeComponent } from './ler-tabela-fipe/ler-tabela-fipe.component';
 import { PropostasEnviadasComponent } from './propostas-enviadas/propostas-enviadas.component';
-
+import { PesquisaClienteModule } from '../pesquisa-cliente/pesquisa-cliente.module';
 
 
 @NgModule({
@@ -26,6 +29,7 @@ import { PropostasEnviadasComponent } from './propostas-enviadas/propostas-envia
     ReactiveFormsModule,
     FormsModule,
     SharedModule,
+    PesquisaClienteModule,
     
   ],
   declarations: [

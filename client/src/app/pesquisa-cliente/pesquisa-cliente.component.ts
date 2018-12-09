@@ -40,7 +40,7 @@ export class PesquisaClienteComponent implements OnInit {
     }) as any;
 
     this.clienteSelecionado = initValueId;
-    debugger;
+   
     pessoa = pessoa.resposta.principal
     this.clienteSelecionadoObject = [{ label: pessoa.nome, value: pessoa.id }];
     this.clientes.concat(this.clienteSelecionadoObject)

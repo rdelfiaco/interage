@@ -51,7 +51,7 @@ export class CriarEventoComponent implements OnInit {
   }
 
   async ngOnInit() {
-    debugger
+   
     let eventoEncontrado = await this.connectHTTP.callService({
       service: 'informacoesParaCriarEvento',
       paramsService: {

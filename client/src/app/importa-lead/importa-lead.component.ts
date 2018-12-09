@@ -2,6 +2,8 @@ import { Component, EventEmitter, OnInit, ViewChild } from '@angular/core';
 import { UploadFile, UploadInput, UploadOutput } from 'ng-uikit-pro-standard';
 import { humanizeBytes } from 'ng-uikit-pro-standard';
 import { ConnectHTTP } from '../shared/services/connectHTTP';
+import { LocalStorage } from '../shared/services/localStorage';
+import { Usuario } from '../login/usuario';
 
 
 
@@ -12,8 +14,6 @@ import { ConnectHTTP } from '../shared/services/connectHTTP';
 })
 
 export class ImportaLeadComponent implements OnInit {
-
-
 
   public csvRecords: any[] = [];
 
@@ -26,15 +26,47 @@ export class ImportaLeadComponent implements OnInit {
   dragOver: boolean;
   totalLinhas: number;
   csvRecordsArray: Array<any>;
+  nomeChk: boolean = false;
+  cpfChk: boolean = false;
+  importar: boolean = false;
+  usuarioLogado: any;
+  headersRow: Array<any>;
+  informacao: string;
 
-  constructor(private connectHTTP: ConnectHTTP) {
+  tituloHeadersRow= [
+    "tipo_pessoa",
+     "cpf",
+     "nome",
+     "email",
+     "observacoes",
+     "rua",
+     "complemento",
+     "bairro",
+     "cidade",
+     "uf",
+     "cep",
+     "ddd1",
+     "fone1",
+     "ddd2",
+     "fone2",
+     "ddd3",
+     "fone3",
+     "origem_lead",
+     "id_origem_lead",
+     ];
+
+  constructor(private connectHTTP: ConnectHTTP, 
+    private localStorage: LocalStorage) {
     this.files = [];
     this.uploadInput = new EventEmitter<UploadInput>();
     this.humanizeBytes = humanizeBytes;
+    this.usuarioLogado = this.localStorage.getLocalStorage('usuarioLogado') as Usuario;
+    
   }
 
-  ngOnInit(): void {
-    throw new Error("Method not implemented.");
+  async ngOnInit() {
+ 
+
   }
 
   showFiles() {
@@ -88,9 +120,6 @@ export class ImportaLeadComponent implements OnInit {
   fileChangeListener($event: any): void {
 
     var text = [];
-
-    console.log($event)
-    debugger
     var files = $event.srcElement.files;
 
     if (this.isCSVFile(files[0])) {
@@ -99,22 +128,29 @@ export class ImportaLeadComponent implements OnInit {
 
       var reader = new FileReader();
 
-
-
       reader.readAsText(input.files[0], 'ISO-8859-1');
       //new Blob([this.csv], {"type": "text/csv;charset=utf8;"});
 
       reader.onload = (data) => {
 
         let csvData = reader.result;
+
         let csvRecordsArray = csvData.split(/\r\n|\n/);
 
-        this.totalLinhas = csvRecordsArray.length;
+       
 
-        let headersRow = this.getHeaderArray(csvRecordsArray);
+        this.headersRow = this.getHeaderArray(csvRecordsArray);
 
-        this.csvRecords = this.getDataRecordsArrayFromCSVFile(csvRecordsArray, headersRow.length);
+        if (this.temHeader()) {
+          this.csvRecords = this.getDataRecordsArrayFromCSVFile(csvRecordsArray, this.headersRow.length);
+          
+          this.importar = this.testaIncosistencias(csvRecordsArray)
+    
+        } else {
+            this.informacao = "O arquivo não possui header compatível"
+        }
       }
+
 
       reader.onerror = function () {
         alert('Unable to read ' + input.files[0]);
@@ -126,6 +162,29 @@ export class ImportaLeadComponent implements OnInit {
     }
   }
 
+  temHeader(){
+    let qtdeHeaderIquais: number = 0
+    for (let i = 0; i < this.headersRow.length; i++ ){
+      for (let j = 0; j < this.tituloHeadersRow.length; j++){
+        if (this.headersRow[i] == this.tituloHeadersRow[j]){
+          qtdeHeaderIquais++;
+        }
+      }
+    }
+    if (qtdeHeaderIquais > 0){
+      return true
+    }else {
+      return false
+    }
+  }
+
+  testaIncosistencias(csvRecordsArray: any){
+
+
+    return true;
+  }
+
+
   getDataRecordsArrayFromCSVFile(csvRecordsArray: any, headerLength: any) {
     var dataArr = []
 
@@ -136,25 +195,42 @@ export class ImportaLeadComponent implements OnInit {
       // ARE SAME AS NUMBER OF HEADER COLUMNS THEN PARSE THE DATA
       if (data.length == headerLength) {
 
-        var csvRecord: CSVRecord = new CSVRecord();
+         var csvRecord: CSVRecord = new CSVRecord();
+        csvRecord.id_pessoa= 0;
+        csvRecord.tipo_pessoa= data[0];
+        csvRecord.cpf= data[1];
+        csvRecord.nome= data[2];
+        csvRecord.email= data[3];
+        csvRecord.observacoes= data[4];
+        csvRecord.rua= data[5];
+        csvRecord.complemento= data[6];
+        csvRecord.bairro= data[7];
+        csvRecord.cidade= data[8];
+        csvRecord.uf= data[9];
+        csvRecord.cep= data[10];
+        csvRecord.ddd1= data[11];
+        csvRecord.fone1= data[12];
+        csvRecord.ddd2= data[13];
+        csvRecord.fone2= data[14];
+        csvRecord.ddd3= data[15];
+        csvRecord.fone3= data[16];
+        csvRecord.origem_lead= data[17];
+        csvRecord.id_origem_lead= data[18];
+        
+        // var csvRecord: string;
+        // let csvRecord_: string;
+        // for (let j = 0; j < this.tituloHeadersRow.length ; j++){
+        //   if (this.headersRow.indexOf(this.tituloHeadersRow[j]) > 0 ){
+        //     csvRecord_ =  `csvRecord.${this.tituloHeadersRow[j]}`
+        //     csvRecord_ =  csvRecord_ + ":" + data[this.headersRow.indexOf(this.tituloHeadersRow[j]) ] 
+        //   }
+        // }
 
-        csvRecord.tipo = data[0];
-        csvRecord.nome = data[1];
-        csvRecord.observacoes = data[2];
-        csvRecord.dtinclusao = data[3];
-        csvRecord.dtalteracao = data[4];
-        csvRecord.lead = data[5];
-        csvRecord.origem_lead = data[6];
-        csvRecord.id_origem_lead = data[7];
-        csvRecord.DDD1 = data[8];
-        csvRecord.FONE1 = data[9];
-        csvRecord.DDD2 = data[10];
-        csvRecord.FONE2 = data[11];
-        csvRecord.DDD3 = data[12];
-        csvRecord.FONE3 = data[13];
 
         dataArr.push(csvRecord);
+        this.totalLinhas = i
       }
+      
     }
     return dataArr;
   }
@@ -181,39 +257,52 @@ export class ImportaLeadComponent implements OnInit {
   }
 
   async importarCSV() {
+  
     var arquivo = this.files[0] as any;
-    await this.connectHTTP.sendFile({
+    let resultado = await this.connectHTTP.sendFile({
       service: 'api/uploadFile',
       paramsService: {
-        arquivo: this.csvRecords,
+        arquivo: this.csvRecords
       }
     });
+
+    console.log('resulatado da importação', resultado.resposta)
+    // colar alerta 
+
+
   }
+
 }
 
 
 
 export class CSVRecord {
 
-
-  public tipo: any;
-  public nome: any;
-  public observacoes: any;
-  public dtinclusao: any;
-  public dtalteracao: any;
-  public lead: any;
-  public origem_lead: any;
-  public id_origem_lead: any;
-  public DDD1: any;
-  public FONE1: any;
-  public DDD2: any;
-  public FONE2: any;
-  public DDD3: any;
-  public FONE3: any;
-
+ public id_pessoa: any;
+ public tipo_pessoa: any; 
+ public cpf: any;
+ public nome: any;
+ public email: any;
+ public observacoes: any;
+ public rua: any;
+ public complemento: any;
+ public bairro: any;
+ public cidade: any;
+ public uf: any;
+ public cep: any;
+ public ddd1: any;
+ public fone1: any;
+ public ddd2: any;
+ public fone2: any;
+ public ddd3: any;
+ public fone3: any;
+ public origem_lead: any;
+ public id_origem_lead: any;
+ 
   constructor() {
 
   }
 
 
 }
+

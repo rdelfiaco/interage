@@ -1,12 +1,15 @@
 
 <div class="row" >
   
-  <div class=" col-md-5 md-form input-group" >
+  <!-- <div class=" col-md-5 md-form input-group" >
       <input mdbInputDirective type="text" id="cliente" class="form-control" >
       <label for="cliente" style="margin-left: 15px" >Cliente</label>
       <a mdbBtn floating="true" size="sm" gradient="blue" mdbWavesEffect (click)="teste()"  >
           <i class="fa fa-search-plus" aria-hidden="true"></i>
       </a>
+  </div> -->
+  <div class=" col-md-5" style="margin-top: 25px">
+      <app-pesquisa-cliente [initValueId]="initValueId" (onSelectCliente)="onSelectCliente($event)"></app-pesquisa-cliente>
   </div>
       
   <div class="col-md-4" style="margin-top: 25px" >
@@ -18,12 +21,11 @@
   <div class=" col-md-2 md-form " style="margin-top: 30px" >
         <input mdbInputDirective type="text" id="vlrVeiculo" class="form-control" [(ngModel)]="sVlrVeiculo"  disabled >
         <label for="vlrVeiculo" style="margin-left: 15px" >Valor do veículo</label>
-
   </div>
 
 </div>
 
-<div *ngIf="valores" >
+<div *ngIf="valores.length > 0 ;  else limpaTela " >
 
     <div class="row ">
         <div class="content" >
@@ -50,11 +52,21 @@
         </div>
     </div>
     <br>
-    <div style="text-align: center">
-        Valor da proposta 
-        <br>
-        {{vlrPoposta}}
+    <div class="row ">
+        <div class=" col-md-4 md-form " style="text-align: center">
+            Valor da proposta 
+            <br>
+            {{vlrPoposta}}
+        </div>
+        <div class=" col-md-4 md-form " style="text-align: center">
+            <button type="button" mdbBtn color="primary" (click)="geraProposta();" 
+                class="relative waves-light" mdbWavesEffect>
+                Salvar Proposta
+            </button>
+        </div>
+       
     </div>
+
     <br>
     <br class="form-check form-check-inline">
         <input type="radio" class="form-check-input" value="6"  id=chkCombo6 (change)="mudouPlano(6)" [checked]="chkPrecos == 6"
@@ -200,4 +212,9 @@
 </div>
 
 
-
+<ng-template #limpaTela>
+    <h4>
+        Informa tabela Fipe!
+    </h4>
+       
+</ng-template>

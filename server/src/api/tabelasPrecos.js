@@ -7,19 +7,19 @@ function getTabelaPrecos(req, res) {
             getTipoVeiculos(req).then(TipoVeiculos => {
                 getRastreador(req).then(Rastreador => {
                     getProtecaoVidros(req).then(ProtecaoVidros => {
-                        getFundoTerceiro(req).then(FundoTerceiro => {
+                        getFundoTerceiros(req).then(FundoTerceiros => {
                             getApp(req).then(App => {
                                 getCarroReserva(req).then(CarroReserva => {
                                     getTabelaValores(req).then(TabelaValores => {
                                         getTabelaCombos(req).then(TabelaCombos => {
                                             if (!TipoVeiculos || !Rastreador
-                                                || !ProtecaoVidros || !FundoTerceiro || !App
+                                                || !ProtecaoVidros || !FundoTerceiros || !App
                                                 || !CarroReserva || !TabelaValores || !TabelaCombos) 
                                                 reject('não encontrado');
             
                                             resolve({
                                                 TipoVeiculos, Rastreador,  ProtecaoVidros, 
-                                            FundoTerceiro, App, CarroReserva, TabelaValores, TabelaCombos
+                                            FundoTerceiros, App, CarroReserva, TabelaValores, TabelaCombos
                                             });
                                         }).catch(e => {
                                             reject(e);   
@@ -239,7 +239,7 @@ function getTipoVeiculos(req, res) {
       })
     })
   }
-  function getFundoTerceiro(req, res) {
+  function getFundoTerceiros(req, res) {
     return new Promise(function (resolve, reject) {
   
       checkTokenAccess(req).then(historico => {
@@ -250,7 +250,7 @@ function getTipoVeiculos(req, res) {
   
         client.connect()
   
-        let sql = 'select * from fundo_terceiro where status order by valor'
+        let sql = 'select * from fundo_terceiros where status order by valor'
 
         client.query(sql)
           .then(res => {

@@ -9,6 +9,24 @@ export class Usuario {
     private _token: string;
     private _id_pessoa: number;
     private _responsavel_membro: number;
+    private _nomeFantasia: string;
+    private _telefonePrincipal: string;
+
+
+    public get telefonePrincipal(): string {
+        return this._telefonePrincipal;
+    }
+    public set telefonePrincipal(value: string) {
+        this._telefonePrincipal = value;
+    }
+
+
+    public get nomeFantasia(): string {
+        return this._nomeFantasia;
+    }
+    public set nomeFantasia(value: string) {
+        this._nomeFantasia = value;
+    }
 
     
     public get responsavel_membro(): number {

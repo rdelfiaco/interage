@@ -1,8 +1,9 @@
 
 import { Proposta } from '../proposta';
-import { Component, OnInit, SimpleChanges, Input, Output, EventEmitter, ViewChild } from '@angular/core';
+import { Component, OnInit, SimpleChanges, Input, Output, EventEmitter, ViewChild, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormControl, FormArray } from '@angular/forms';
 import { ComunicaPropostaService } from '../comunica-proposta.service';
+import { ToastService } from '../../../lib/ng-uikit-pro-standard';
 
 
 
@@ -16,18 +17,21 @@ export class LerTabelaFipeComponent implements OnInit {
 formulario: FormGroup;
 proposta: Proposta = new Proposta();
 
+
 // @Output() refresh = new EventEmitter();
 
   constructor(
     private formBuilder: FormBuilder,
     private propostaComuc: ComunicaPropostaService,
     private aba: ComunicaPropostaService,
+    private toastrService: ToastService
   ) { }
 
   ngOnInit() {
 
     this.formulario = this.formBuilder.group({
       tabelaFipe: [null],
+      tabelaLimpa: [true],
       campo1: [null],
       campo2: [null],
       campo3: [null],
@@ -36,7 +40,10 @@ proposta: Proposta = new Proposta();
       campo6: [null],
       campo7: [null],
       campo8: [null]
+      
       });
+
+      this.limparTabelaFipe()
 
       //this.propostaComuc.emitiProposta.subscribe();
   
@@ -46,29 +53,44 @@ proposta: Proposta = new Proposta();
 
 
     let strTabelaFipe : string = this.formulario.get("tabelaFipe").value;
-    let i, ij, j: number;
-    let colunaDados : boolean;
+    if (strTabelaFipe.length > 200){
+      let i, ij, j: number;
+      let colunaDados : boolean;
+      colunaDados = false;
+      ij = 0;
+      j = 1;
+      this.formulario.patchValue({tabelaLimpa : false });
 
-    colunaDados = false;
-    ij = 0;
-    j = 1;
-
-    for (i = 0; i <  strTabelaFipe.length; i++)  {
-        if (strTabelaFipe.charCodeAt(i) == 10 && strTabelaFipe.charCodeAt(i-1) == 10 ) {
-          if (!colunaDados) {
-             colunaDados = true;
-             ij = i;
-          } else {
-            colunaDados = false;
-            this.colocaConteudoCampo(j,strTabelaFipe.substr(ij+1,i-ij).trim());
-            j++;
-          }; 
+      for (i = 0; i <  strTabelaFipe.length; i++)  {
+          if (strTabelaFipe.charCodeAt(i) == 10 && strTabelaFipe.charCodeAt(i-1) == 10 ) {
+            if (!colunaDados) {
+              colunaDados = true;
+              ij = i;
+            } else {
+              colunaDados = false;
+              this.colocaConteudoCampo(j,strTabelaFipe.substr(ij+1,i-ij).trim());
+              j++;
+            }; 
+          };
         };
-      };
-    this.colocaConteudoCampo(j,strTabelaFipe.substr(ij+1,i-ij).trim());
+      this.colocaConteudoCampo(j,strTabelaFipe.substr(ij+1,i-ij).trim());
 
-    this.propostaComuc.setProposta(this.proposta);
+      console.log( 'ler ', this.proposta)
+      this.propostaComuc.setProposta(this.proposta);
+  
+      this.mudaAba()
+
+  } else{
+    this.toastrService.error('Dados incorretos! Favor clique no botão limpar e cole a tabela Fipe novamente');
+    this.limparTabelaFipe();
+    let i = 0;
+    for (i = 1; i < 9; i++){
+      this.colocaConteudoCampo(i,'')
+    }
+  }
     
+
+
   };
 
   
@@ -116,5 +138,11 @@ proposta: Proposta = new Proposta();
   mudaAba(){
     this.aba.setAba(4);
   }
+
+  limparTabelaFipe(){
+    this.formulario.patchValue({tabelaFipe : null });
+    this.formulario.patchValue({tabelaLimpa : true });
+    this.propostaComuc.setProposta(null);
+     }
 
 }

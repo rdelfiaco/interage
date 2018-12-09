@@ -13,12 +13,15 @@ const atividade = require('./src/api/atividade');
 const produtividade = require('./src/api/produtividade');
 const tabelaPrecos = require('./src/api/tabelasPrecos');
 const importar = require('./src/api/importaLead');
+const proposta = require('./src/api/proposta')
 
 const consultaPlaca = require('./src/api/consultaPlaca');
 
 declaraServico('getEventoPorId', evento.getEventoPorId);
 declaraServico('visualizarEvento', evento.visualizarEvento);
 declaraServico('informacoesParaCriarEvento', evento.informacoesParaCriarEvento);
+declaraServico('salvarProposta', proposta.salvarProposta); 
+
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
@@ -131,6 +134,7 @@ app.get('/salvarEvento', (req, res) => {
       res.status(401).send(error)
     })
 });
+
 
 app.get('/getEventoFiltros', (req, res) => {
   evento.getEventoFiltros(req)
