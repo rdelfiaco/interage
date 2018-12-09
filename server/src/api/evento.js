@@ -105,7 +105,7 @@ function encerrarEvento(client, id_pessoa, id_evento) {
   });
 }
 
-function criarEvento(client, id_campanha, id_motivo, id_evento_pai, id_evento_anterior,
+function _criarEvento(client, id_campanha, id_motivo, id_evento_pai, id_evento_anterior,
   id_pessoa_criou, dt_para_exibir, tipoDestino, id_pessoa_organograma, id_pessoa_receptor,
   observacao_origem, id_canal) {
   return new Promise(function (resolve, reject) {
@@ -125,7 +125,7 @@ function criarEvento(client, id_campanha, id_motivo, id_evento_pai, id_evento_an
       id_prioridade,
       observacao_origem,
       id_canal)
-      VALUES (${id_campanha},
+      VALUES (${id_campanha || 'NULL'},
       ${id_motivo},
       ${id_evento_pai},
       ${id_evento_anterior},
@@ -139,7 +139,8 @@ function criarEvento(client, id_campanha, id_motivo, id_evento_pai, id_evento_an
       ${id_pessoa_receptor},
       '2',
       '${observacao_origem}',
-      ${id_canal})`;
+      ${id_canal})
+      RETURNING id`;
 
     console.log(update)
     client.query(update).then((updateEventoCriado) => {
@@ -165,7 +166,7 @@ function encaminhaEvento(req, res) {
       client.query('BEGIN').then((res1) => {
         console.log('req.query', req.query)
         encerrarEvento(client, req.query.id_pessoa_resolveu, req.query.id_evento).then(eventoEncerrado => {
-          criarEvento(client, req.query.id_campanha, req.query.id_motivo, req.query.id_evento_pai, req.query.id_evento,
+          _criarEvento(client, req.query.id_campanha, req.query.id_motivo, req.query.id_evento_pai, req.query.id_evento,
             req.query.id_pessoa_resolveu, req.query.dt_para_exibir, req.query.tipoDestino, req.query.id_pessoa_organograma, req.query.id_pessoa_receptor,
             req.query.observacao_origem, req.query.id_canal).then(eventoCriado => {
               client.query('COMMIT').then((resposta) => {
@@ -184,6 +185,44 @@ function encaminhaEvento(req, res) {
           reject(err)
         })
 
+      }).catch(err => {
+        client.query('ROLLBACK').then((resposta) => {
+          client.end();
+          reject('Erro ao processar arquivo importado')
+        }).catch(err => {
+          client.end();
+          reject(err)
+        })
+      })
+    })
+  })
+}
+
+function criarEvento(req, res) {
+  return new Promise(function (resolve, reject) {
+
+    checkTokenAccess(req).then(historico => {
+      const dbconnection = require('../config/dbConnection')
+      const { Client } = require('pg')
+
+      const client = new Client(dbconnection)
+
+      client.connect();
+      client.query('BEGIN').then((res1) => {
+        _criarEvento(client, req.query.id_campanha, req.query.id_motivo, 'NULL', 'NULL',
+          req.query.id_pessoa_resolveu, req.query.dt_para_exibir, req.query.tipoDestino, req.query.id_pessoa_organograma, req.query.id_pessoa_receptor,
+          req.query.observacao_origem, req.query.id_canal).then(eventoCriado => {
+            client.query('COMMIT').then((resposta) => {
+              resolve(eventoCriado)
+              client.end();
+            }).catch(err => {
+              client.end();
+              reject(err)
+            })
+          }).catch(err => {
+            client.end();
+            reject(err)
+          })
       }).catch(err => {
         client.query('ROLLBACK').then((resposta) => {
           client.end();
@@ -932,5 +971,6 @@ module.exports = {
   getEventoPorId,
   visualizarEvento,
   informacoesParaCriarEvento,
-  encaminhaEvento
+  encaminhaEvento,
+  criarEvento
 }

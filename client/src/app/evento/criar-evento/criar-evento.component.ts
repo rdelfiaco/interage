@@ -5,6 +5,7 @@ import { LocalStorage } from '../../shared/services/localStorage';
 import { IMyOptions, ToastService } from '../../../lib/ng-uikit-pro-standard';
 import { Observable } from 'rxjs';
 import * as moment from 'moment';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-criar-evento',
   templateUrl: './criar-evento.component.html',
@@ -14,18 +15,20 @@ export class CriarEventoComponent implements OnInit {
   _pessoa: any
   @Input()
   set pessoa(pessoa: any): any {
-    pessoa.subscribe((pessoa) => {
-      this.pessoaId = new Observable((observer) => {
-        observer.next(pessoa.principal.id)
-      })
-      this.criarEventoForm.controls['pessoaId'].setValue(pessoa.principal.id);
-    });
+    if (pessoa)
+      pessoa.subscribe((pessoa) => {
+        this.pessoaId = new Observable((observer) => {
+          observer.next(pessoa.principal.id)
+        })
+        this.criarEventoForm.controls['pessoaId'].setValue(pessoa.principal.id);
+      });
   }
   get pessoa(): any {
     return this._pessoa;
   }
   pessoaId: any;
   @Input() evento: any
+  @Input() disabled: any
   @Output() fechaModal = new EventEmitter()
   criarEventoForm: FormGroup;
   departamentoSelect: Array<any>
@@ -48,7 +51,8 @@ export class CriarEventoComponent implements OnInit {
   }
 
   constructor(formBuilder: FormBuilder, private connectHTTP: ConnectHTTP,
-    private localStorage: LocalStorage, private toastrService: ToastService) {
+    private localStorage: LocalStorage, private toastrService: ToastService,
+    private router: Router) {
     this.criarEventoForm = formBuilder.group({
       tipodestino: ['P', [
         Validators.required
@@ -99,7 +103,7 @@ export class CriarEventoComponent implements OnInit {
   }
 
   onSelectCliente(valor) {
-    this.criarEventoForm.value.pessoaId = valor.value;
+    this.criarEventoForm.controls['pessoaId'].setValue(valor.value);
   }
 
   tipoPessoa: Array<object> = [
@@ -116,24 +120,44 @@ export class CriarEventoComponent implements OnInit {
   async criarEvento() {
     let dataExibir = moment(this.criarEventoForm.value.data + ' - ' + this.criarEventoForm.value.hora, 'DD/MM/YYYY - hh:mm').toISOString()
     const usuarioLogado = this.localStorage.getLocalStorage('usuarioLogado') as any;
-    debugger;
-    let res = await this.connectHTTP.callService({
-      service: 'encaminhaEvento',
-      paramsService: {
-        id_pessoa_resolveu: usuarioLogado.id_pessoa,
-        id_evento: this.evento.id,
-        id_campanha: this.evento.id_campanha,
-        id_motivo: this.evento.id_motivo,
-        id_evento_pai: this.evento.id,
-        dt_para_exibir: dataExibir,
-        tipoDestino: this.criarEventoForm.value.tipodestino,
-        id_pessoa_organograma: this.criarEventoForm.value.pessoaOrgonograma,
-        id_pessoa_receptor: this.criarEventoForm.value.pessoaId,
-        observacao_origem: this.criarEventoForm.value.observacao,
-        id_canal: this.criarEventoForm.value.canal,
-      }
-    }) as any;
-    this.toastrService.success('Evento encaminhado com sucesso!');
-    this.fechaModal.emit();
+
+    if (this.evento) {
+      await this.connectHTTP.callService({
+        service: 'encaminhaEvento',
+        paramsService: {
+          id_pessoa_resolveu: usuarioLogado.id_pessoa,
+          id_evento: this.evento.id,
+          id_campanha: this.evento.id_campanha,
+          id_motivo: this.evento.id_motivo,
+          id_evento_pai: this.evento.id,
+          dt_para_exibir: dataExibir,
+          tipoDestino: this.criarEventoForm.value.tipodestino,
+          id_pessoa_organograma: this.criarEventoForm.value.pessoaOrgonograma,
+          id_pessoa_receptor: this.criarEventoForm.value.pessoaId,
+          observacao_origem: this.criarEventoForm.value.observacao,
+          id_canal: this.criarEventoForm.value.canal,
+        }
+      }) as any;
+      this.toastrService.success('Evento encaminhado com sucesso!');
+      this.fechaModal.emit();
+    }
+    else {
+      let res = await this.connectHTTP.callService({
+        service: 'criarEvento',
+        paramsService: {
+          id_pessoa_resolveu: usuarioLogado.id_pessoa,
+          id_motivo: 1,
+          dt_para_exibir: dataExibir,
+          tipoDestino: this.criarEventoForm.value.tipodestino,
+          id_pessoa_organograma: this.criarEventoForm.value.pessoaOrgonograma,
+          id_pessoa_receptor: this.criarEventoForm.value.pessoaId,
+          observacao_origem: this.criarEventoForm.value.observacao,
+          id_canal: this.criarEventoForm.value.canal,
+        }
+      }) as any;
+      this.toastrService.success('Evento criado com sucesso!');
+      this.fechaModal.emit();
+      this.router.navigate([`/evento/${res.resposta.rows[0].id}`]);
+    }
   }
 }

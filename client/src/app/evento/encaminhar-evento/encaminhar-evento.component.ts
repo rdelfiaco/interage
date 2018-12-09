@@ -17,7 +17,6 @@ export class EncaminharEventoComponent implements OnInit {
   }
 
   fechaModalPai() {
-    debugger;
     this.fechaModal.emit();
   }
 
