@@ -21,7 +21,8 @@ declaraServico('getEventoPorId', evento.getEventoPorId);
 declaraServico('visualizarEvento', evento.visualizarEvento);
 declaraServico('informacoesParaCriarEvento', evento.informacoesParaCriarEvento);
 declaraServico('salvarProposta', proposta.salvarProposta); 
-
+declaraServico('encaminhaEvento', evento.encaminhaEvento);
+declaraServico('criarEvento', evento.criarEvento);
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({

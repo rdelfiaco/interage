@@ -15,9 +15,14 @@ export class PesquisaClienteComponent implements OnInit {
   clienteSelecionado: string;
   clienteSelecionadoObject: Array<object>;
 
+  @Input() disabled: boolean;
   @Input()
   set initValueId(initValueId: any) {
-    this.initValue(initValueId);
+    initValueId.subscribe(i => {
+      debugger;
+      if (i)
+        this.initValue(i);
+    })
   }
 
 
@@ -43,7 +48,8 @@ export class PesquisaClienteComponent implements OnInit {
    
     pessoa = pessoa.resposta.principal
     this.clienteSelecionadoObject = [{ label: pessoa.nome, value: pessoa.id }];
-    this.clientes.concat(this.clienteSelecionadoObject)
+    debugger;
+    this.clientes = this.clientes.concat(this.clienteSelecionadoObject)
   }
 
   async pesquisarCliente() {
@@ -57,7 +63,6 @@ export class PesquisaClienteComponent implements OnInit {
     this.clientes = this.clientes.map(cliente => {
       return { value: cliente.id, label: cliente.nome }
     })
-    this.clientes.concat(this.clienteSelecionadoObject);
   }
 
   pesquisar(event) {

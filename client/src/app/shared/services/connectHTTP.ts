@@ -27,12 +27,6 @@ export class ConnectHTTP {
       const service = options.service
 
       let url = `${host}${service}`
-  
-
-      
-
-
-      
       
       if (!options.naoExigeToken && (!options.paramsService.token || !options.paramsService.id_usuario)) {
         let usuarioLogado = this.localStorage.getLocalStorage('usuarioLogado') as Usuario;

@@ -143,6 +143,7 @@ export class EventoComponent implements OnInit {
 
   }
 
+  @ViewChild('modalCriarEvento') modalCriarEvento: ModalDirective;
   @ViewChild('confirmSeTornarResponsavelModal') confirmSeTornarResponsavelModal: ModalDirective;
   @HostListener('input') oninput() {
     this.paginators = [];
@@ -316,6 +317,10 @@ export class EventoComponent implements OnInit {
       fieldSeparator: ';',
       headers: Object.keys(this.tableData[0])
     });
+  }
+
+  fechaModal() {
+    this.modalCriarEvento.hide();
   }
 
 }

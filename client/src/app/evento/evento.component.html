@@ -86,10 +86,9 @@
           <a mdbBtn floating="true" size="lg" gradient="blue" (click)="listaEventos()" mdbWavesEffect>
             <mdb-icon icon="refresh"></mdb-icon>
           </a>
-          <a mdbBtn floating="true" size="lg" gradient="purple" mdbWavesEffect>
+          <a mdbBtn floating="true" size="lg" gradient="purple" (click)="modalCriarEvento.show()" mdbWavesEffect>
             <mdb-icon icon="calendar-plus-o"></mdb-icon>
           </a>
-
         </div>
 
       </div>
@@ -255,10 +254,25 @@
         <div class="modal-footer">
           <button type="button" style="white-space: nowrap;" mdbBtn color="danger" class="waves-light" aria-label="Cancelar"
             (click)="confirmSeTornarResponsavelModal.hide(); cancelaSeTornarResponsavel()" mdbWavesEffect>Cancelar</button>
-          <button *ngIf="usuarioLogadoSupervisor" type="button" style="white-space: nowrap;" mdbBtn color="warning" class="waves-light" aria-label="Somente Visualizar"
-            (click)="confirmSeTornarResponsavelModal.hide(); visualizarEvento()" mdbWavesEffect>Somente Visualizar</button>
+          <button *ngIf="usuarioLogadoSupervisor" type="button" style="white-space: nowrap;" mdbBtn color="warning"
+            class="waves-light" aria-label="Somente Visualizar" (click)="confirmSeTornarResponsavelModal.hide(); visualizarEvento()"
+            mdbWavesEffect>Somente Visualizar</button>
           <button type="button" style="white-space: nowrap;" mdbBtn color="primary" class="relative waves-light"
             (click)="confirmSeTornarResponsavelModal.hide(); confirmaSeTornarResponsavel();" mdbWavesEffect>Sim</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div mdbModal #modalCriarEvento="mdbModal" [config]="{backdrop: true}" class="modal fade right" role="dialog"
+    aria-labelledby="myBasicModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title w-100" id="myModalLabel">Criar Evento</h4>
+        </div>
+        <div class="modal-body" style="overflow: auto; height: 80vh;">
+          <app-criar-evento (fechaModal)="fechaModal()"></app-criar-evento>
         </div>
       </div>
     </div>

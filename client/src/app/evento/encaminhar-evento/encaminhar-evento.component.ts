@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-encaminhar-evento',
@@ -9,10 +9,15 @@ export class EncaminharEventoComponent implements OnInit {
 
   @Input() pessoa: any
   @Input() evento: any
+  @Output() fechaModal = new EventEmitter();
 
   constructor() { }
 
   ngOnInit() {
+  }
+
+  fechaModalPai() {
+    this.fechaModal.emit();
   }
 
 }
