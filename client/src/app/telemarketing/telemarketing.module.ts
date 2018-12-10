@@ -3,8 +3,6 @@ import { CommonModule } from '@angular/common';
 import { TelemarketingComponent } from './telemarketing.component';
 import { TelemarketingQuestionarioModule } from '../telemarketing-questionario/telemarketing-questionario.module';
 import { MDBBootstrapModulesPro, ToastModule } from '../../lib/ng-uikit-pro-standard';
-import { MascaraTelefonePipe } from '../shared/pipes/mascaraTelefone/mascara-telefone.pipe';
-import { PipesModule } from '../shared/pipes/pipesModule';
 import { CadastroPessoaModule } from '../cadastro-pessoa/cadastro-pessoa.module';
 
 @NgModule({

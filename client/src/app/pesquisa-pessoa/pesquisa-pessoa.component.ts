@@ -1,7 +1,7 @@
-import { Component, OnInit, ElementRef, ViewChildren, QueryList } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChildren, QueryList, ViewChild } from '@angular/core';
 import { ConnectHTTP } from '../shared/services/connectHTTP';
 import { LocalStorage } from '../shared/services/localStorage';
-import { ToastService } from '../../lib/ng-uikit-pro-standard';
+import { ToastService, ModalDirective } from '../../lib/ng-uikit-pro-standard';
 import { Observable } from 'rxjs';
 
 
@@ -19,12 +19,12 @@ export class PesquisaPessoaComponent implements OnInit {
   sorted = false;
   maxVisibleItems: number = 10;
   @ViewChildren('list') list: QueryList<ElementRef>;
+  @ViewChild('pessoaEditando') pessoaEditando: ModalDirective;
   paginators: Array<any> = [];
   activePage: number = 1;
   firstVisibleIndex: number = 1;
   lastVisibleIndex: number = 10;
-  editandoPessoa: Observable<any>;
-  pessoaCarregou: boolean;
+  pessoa: Observable<object>;
   editandoPessoaObject: any;
   constructor(private connectHTTP: ConnectHTTP,
     private localStorage: LocalStorage,
@@ -88,10 +88,6 @@ export class PesquisaPessoaComponent implements OnInit {
     return event.keyCode == 13 && this.pesquisar();
   }
 
-  fecharPessoa() {
-    this.pessoaCarregou = false;
-  }
-
   async pesquisar() {
     try {
       let pessoasEncontradas = await this.connectHTTP.callService({
@@ -123,7 +119,6 @@ export class PesquisaPessoaComponent implements OnInit {
     }
   }
   async editarPessoa(pessoa: any) {
-    debugger;
     this.editandoPessoaObject = pessoa;
     let pessoaId = pessoa.id
     let p = await this.connectHTTP.callService({
@@ -134,11 +129,9 @@ export class PesquisaPessoaComponent implements OnInit {
         id_pessoa: pessoaId
       }
     }) as any;
-    this.pessoaCarregou = true;
-    this.editandoPessoa = new Observable(o => o.next(p.resposta));
-    debugger;
+    this.pessoa = new Observable(o => o.next(p.resposta));
+    this.pessoaEditando.show()
   }
-
   async refresh() {
     let pessoaId = this.editandoPessoaObject.id
     let pessoa = await this.connectHTTP.callService({
@@ -149,7 +142,7 @@ export class PesquisaPessoaComponent implements OnInit {
         id_pessoa: pessoaId
       }
     }) as any;
-    this.editandoPessoa = new Observable(o => o.next(pessoa.resposta));
+    this.pessoa = new Observable(o => o.next(pessoa.resposta));
   }
 
 }

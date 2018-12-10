@@ -211,7 +211,6 @@ export class TelemarketingQuestionarioComponent implements OnInit {
       let minutos = trataTempo(data.getMinutes())
       return `${hora}:${minutos}`
     }
-
     function trataTempo(tempo: number) {
       if (tempo.toString().length == 1) return `0${tempo}`
       return tempo;

@@ -37,7 +37,7 @@
 
   <!--Table body-->
   <tbody>
-    <tr (click)="editarPessoa(pessoa); pessoaEditando.show()" #list *ngFor="let pessoa of pessoasEncontradas; let i = index">
+    <tr (click)="editarPessoa(pessoa)" #list *ngFor="let pessoa of pessoasEncontradas; let i = index">
       <td *ngIf="i+1 >= firstVisibleIndex && i+1 <= lastVisibleIndex">{{pessoa.id}}</td>
       <td *ngIf="i+1 >= firstVisibleIndex && i+1 <= lastVisibleIndex">{{pessoa.nome}}</td>
       <td *ngIf="i+1 >= firstVisibleIndex && i+1 <= lastVisibleIndex">{{pessoa.apelido_fantasia}}</td>
@@ -103,7 +103,7 @@
 
 <div mdbModal #pessoaEditando="mdbModal" [config]="{backdrop: true, ignoreBackdropClick: true}" class="modal fade right"
   role="dialog" aria-labelledby="myBasicModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-fluid" role="document">
+  <div *ngIf="pessoa | async" class="modal-dialog modal-fluid" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close pull-right" aria-label="Close" (click)="pessoaEditando.hide()">
@@ -113,8 +113,8 @@
       </div>
       <div class="modal-body" style="overflow: auto; height: 80vh;">
         <div class="row">
-          <div *ngIf="editandoPessoa" class="col">
-            <app-cadastro-pessoa [pessoa]="editandoPessoa" (refresh)="refresh()"></app-cadastro-pessoa>
+          <div *ngIf="pessoa | async" class="col">
+            <app-cadastro-pessoa [pessoa]="pessoa" (refresh)="refresh()"></app-cadastro-pessoa>
           </div>
         </div>
       </div>

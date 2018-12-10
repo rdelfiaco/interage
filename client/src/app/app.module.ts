@@ -13,7 +13,6 @@ import { LoginModule } from './login/login.module';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { EventoModule } from './evento/evento.module';
-import { PesquisaPessoaComponent } from './pesquisa-pessoa/pesquisa-pessoa.component';
 import { AnalisaCampanhaComponent } from './analisa-campanha/analisa-campanha.component';
 import { ProdutividadeCallCenterComponent } from './produtividade-call-center/produtividade-call-center.component';
 import { TrocarSenhaComponent } from './usuario/trocar-senha/trocar-senha.component';
@@ -23,6 +22,7 @@ import { CarregandoModule } from './shared/carregando/carregando.module';
 import { SemPermissaoModule } from './sem-permissao/sem-permissao.module';
 import { TelemarketingModule } from './telemarketing/telemarketing.module';
 import { PipesModule } from './shared/pipes/pipesModule';
+import { PesquisaPessoaModule } from './pesquisa-pessoa/pesquisa-pessoa.module';
 
 
 @NgModule({
@@ -32,7 +32,6 @@ import { PipesModule } from './shared/pipes/pipesModule';
     DashboardOperadorComponent,
     DashboardSupervisorComponent,
     PageNotFoundComponent,
-    PesquisaPessoaComponent,
     AnalisaCampanhaComponent,
     ProdutividadeCallCenterComponent,
     TrocarSenhaComponent,
@@ -55,7 +54,8 @@ import { PipesModule } from './shared/pipes/pipesModule';
     CarregandoModule,
     SemPermissaoModule,
     TelemarketingModule,
-    PipesModule
+    PipesModule,
+    PesquisaPessoaModule
   ],
   providers: [MDBSpinningPreloader
 
