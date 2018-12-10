@@ -1,22 +1,20 @@
-  <!-- <iframe style="border: 0;" id="tbl-fipe"
+<!-- <iframe style="border: 0;" id="tbl-fipe"
     src="https://www.qualveiculo.net" 
     width="1100px" height="800px" frameborder="0" scrolling="no">
   </iframe> -->
 
-  <form  [formGroup]="formulario" >
+<form [formGroup]="formulario">
 
 
-    <div class="md-form  col-md-4" >
-      <input mdbInputDirective type="text" formControlName="placa" 
-      id="placa" class="form-control" (keyup)="consultarPlaca($event)" >
-      <label for="placa" class="">Digita número da Placa e tecle ENTER para consulta</label>
-    </div>
+  <div class="md-form  col-md-4">
+    <input mdbInputDirective type="text" formControlName="placa" id="placa" class="form-control" (keyup)="consultarPlaca($event)">
+    <label for="placa" class="">Digita número da Placa e tecle ENTER para consulta</label>
+  </div>
   <br>
   <br>
   <div class="md-form">
-    <input mdbInputDirective type="text" formControlName="placaConsultada" disabled
-    id="placaConsultada" class="form-control">
+    <input mdbInputDirective type="text" formControlName="placaConsultada" disabled id="placaConsultada" class="form-control">
     <label for="placaConsultada" class="">Resultado da consulta</label>
   </div>
 
-  </form>
+</form>

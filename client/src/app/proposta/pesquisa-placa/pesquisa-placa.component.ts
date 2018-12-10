@@ -5,6 +5,7 @@ import { LocalStorage } from '../../shared/services/localStorage';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { ComunicaPropostaService } from '../comunica-proposta.service';
 import { ToastService } from '../../../lib/ng-uikit-pro-standard';
+import { PlacaPipe } from '../../shared/pipes/placa/placa.pipe';
 
 @Component({
   selector: 'app-pesquisa-placa',
@@ -12,18 +13,19 @@ import { ToastService } from '../../../lib/ng-uikit-pro-standard';
   styleUrls: ['./pesquisa-placa.component.scss']
 })
 export class PesquisaPlacaComponent implements OnInit {
- 
+
   formulario: FormGroup;
-  
 
 
-  constructor(private connectHTTP: ConnectHTTP, 
-              private localStorage: LocalStorage,
-              private formBuilder: FormBuilder,
-              private propostaComuc: ComunicaPropostaService,
-              private proposta: Proposta,
-              private aba: ComunicaPropostaService,
-              private toastrService: ToastService) { }
+
+  constructor(private connectHTTP: ConnectHTTP,
+    private localStorage: LocalStorage,
+    private formBuilder: FormBuilder,
+    private propostaComuc: ComunicaPropostaService,
+    private proposta: Proposta,
+    private mascaraPlaca: PlacaPipe,
+    private aba: ComunicaPropostaService,
+    private toastrService: ToastService) { }
 
   ngOnInit() {
     this.formulario = this.formBuilder.group({
@@ -32,17 +34,20 @@ export class PesquisaPlacaComponent implements OnInit {
     });
 
 
-      this.propostaComuc.emitiProposta.subscribe(
-        proposta => { 
-          //this.proposta = proposta;
-          console.log('placa ', this.proposta )
-          }
-      );
+    this.propostaComuc.emitiProposta.subscribe(
+      proposta => {
+        //this.proposta = proposta;
+        console.log('placa ', this.proposta)
+      }
+    );
 
   }
 
-  async consultarPlaca(evento) {
-    
+  async consultarPlaca(event: any) {
+
+    let valorFormatado = this.mascaraPlaca.transform(event.target.value);
+    debugger;
+    this.formulario.controls['placa'].setValue(valorFormatado)
     if (event.keyCode === 13) {
       debugger
       // let respPlacaConsultada = await this.connectHTTP.callService({
@@ -51,12 +56,12 @@ export class PesquisaPlacaComponent implements OnInit {
       //     placa: this.formulario.value.placa.replace('-','')
       //   }
       // }) as any;
-      
-      
+
+
       // this.formulario.patchValue( {placaConsultada: respPlacaConsultada.resposta});
       this.proposta.placa = this.formulario.value.placa;
       this.propostaComuc.setProposta(this.proposta);
-      
+
       //console.log(respPlacaConsultada.resposta)
     }
   }

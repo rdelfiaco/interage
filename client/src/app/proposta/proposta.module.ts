@@ -18,6 +18,7 @@ import { EnviaPropostaComponent } from './envia-proposta/envia-proposta.componen
 import { LerTabelaFipeComponent } from './ler-tabela-fipe/ler-tabela-fipe.component';
 import { PropostasEnviadasComponent } from './propostas-enviadas/propostas-enviadas.component';
 import { PesquisaClienteModule } from '../pesquisa-cliente/pesquisa-cliente.module';
+import { PlacaPipe } from '../shared/pipes/placa/placa.pipe';
 
 
 @NgModule({
@@ -30,7 +31,7 @@ import { PesquisaClienteModule } from '../pesquisa-cliente/pesquisa-cliente.modu
     FormsModule,
     SharedModule,
     PesquisaClienteModule,
-    
+
   ],
   declarations: [
     PropostaComponent,
@@ -43,7 +44,8 @@ import { PesquisaClienteModule } from '../pesquisa-cliente/pesquisa-cliente.modu
   ],
   providers: [
     Proposta,
-    ComunicaPropostaService
+    ComunicaPropostaService,
+    PlacaPipe
   ]
 
 })

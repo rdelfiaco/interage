@@ -1,12 +1,15 @@
 import { NgModule } from "@angular/core";
 import { MascaraTelefonePipe } from "./mascaraTelefone/mascara-telefone.pipe";
+import { PlacaPipe } from "./placa/placa.pipe";
 
 @NgModule({
   declarations: [
-    MascaraTelefonePipe
+    MascaraTelefonePipe,
+    PlacaPipe
   ],
   exports: [
-    MascaraTelefonePipe
+    MascaraTelefonePipe,
+    PlacaPipe
   ]
 })
 export class PipesModule { }
