@@ -18,11 +18,11 @@ export class PesquisaClienteComponent implements OnInit {
   @Input() disabled: boolean;
   @Input()
   set initValueId(initValueId: any) {
-    initValueId.subscribe(i => {
-      debugger;
-      if (i)
-        this.initValue(i);
-    })
+    if (initValueId)
+      initValueId.subscribe(i => {
+        if (i)
+          this.initValue(i);
+      })
   }
 
 
@@ -45,10 +45,9 @@ export class PesquisaClienteComponent implements OnInit {
     }) as any;
 
     this.clienteSelecionado = initValueId;
-   
+
     pessoa = pessoa.resposta.principal
     this.clienteSelecionadoObject = [{ label: pessoa.nome, value: pessoa.id }];
-    debugger;
     this.clientes = this.clientes.concat(this.clienteSelecionadoObject)
   }
 

@@ -20,7 +20,6 @@ export class TelemarketingComponent implements OnInit {
   evento: Observable<object>;
   eventoObject: any;
   pessoa: Observable<object>;
-  observerPessoa: Subscriber<object>;
   observerEvento: Subscriber<object>;
   motivos_respostas: Observable<Array<object>>;
   predicoes: Observable<Array<object>>;
@@ -102,7 +101,6 @@ export class TelemarketingComponent implements OnInit {
       self.carregouEvento = true;
     });
     this.pessoa = new Observable((observer) => {
-      self.observerPessoa = observer;
       observer.next(telemarketing.resposta.pessoa)
       setTimeout(() => {
         self.carregouPessoa = true;

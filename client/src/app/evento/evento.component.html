@@ -29,14 +29,14 @@
         <div class="row justify-content-around">
           <!-- Data do compromisso -->
           <div class="form-check-inline">
-            <input type="radio" class="form-check-input" style="margin-right: 0px;" id="dtCompromissoRadio" name="dataEventoRadio"
+            <input type="radio" class="form-check-input" (change)="tipoDeData('dtCompromissoRadio')" style="margin-right: 0px;" id="dtCompromissoRadio" name="dataEventoRadio"
               [checked]=dtCompromissoRadio>
             <label class="form-check-label" for="dtCompromissoRadio" style="font-size: 0.8rem; margin-left: 0px; margin-right: 0px;  ">Data
               do compromisso</label>
           </div>
           <!-- Data de ciração do evento -->
           <div class="form-check-inline ">
-            <input type="radio" class="form-check-input" id="dtCricaoRadio" name="dataEventoRadio" [checked]=dtCricaoRadio>
+            <input type="radio" class="form-check-input" id="dtCricaoRadio" (change)="tipoDeData('dtCricaoRadio')" name="dataEventoRadio" [checked]=dtCricaoRadio>
             <label class="form-check-label" for="dtCricaoRadio" style="font-size: 0.8rem; ">Data de criação</label>
           </div>
         </div>

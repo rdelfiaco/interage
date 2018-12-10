@@ -13,7 +13,6 @@ import { AuthService } from '../login/auth.service';
 export class CadastroPessoaComponent implements OnInit {
 
   private _pessoa;
-  observerPessoa: Subscriber<object>;
   pessoaObject: any;
   @Output() refresh = new EventEmitter();
   @Input() pessoa: Observable<string[]>;

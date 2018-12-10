@@ -207,11 +207,12 @@ export class TelemarketingQuestionarioComponent implements OnInit {
     this.questionarioForm.controls['hora'].setValue(hours);
 
     function getHora(data: Date) {
-      let hora = trataTempo(data.getHours() + 1)
+      let h = data.getHours();
+      if (h == 23) h = -1;
+      let hora = trataTempo(h + 1)
       let minutos = trataTempo(data.getMinutes())
       return `${hora}:${minutos}`
     }
-
     function trataTempo(tempo: number) {
       if (tempo.toString().length == 1) return `0${tempo}`
       return tempo;
@@ -259,25 +260,28 @@ export class TelemarketingQuestionarioComponent implements OnInit {
   }
   async gravarLigacao() {
     const usuarioLogado = this.localStorage.getLocalStorage('usuarioLogado') as any;
+    let parametros = {
+      token: usuarioLogado.token,
+      id_pessoa: usuarioLogado.id_pessoa,
+      id_usuario: usuarioLogado.id,
+      id_evento: this._eventoObject.id,
+      id_evento_pai: this._eventoObject.id_evento_pai ? this._eventoObject.id_evento_pai : this._eventoObject.id,
+      id_pessoa_receptor: this._eventoObject.id_pessoa_receptor,
+      id_motivos_respostas: this.questionarioForm.value.motivoRespostaSelecionado,
+      id_telefoneDiscado: this.questionarioForm.value.idTelefoneSelecionado,
+      id_predicao: this.questionarioForm.value.id_predicao,
+      id_objecao: this.questionarioForm.value.id_objecao,
+      id_campanha: this.campanhaSelecionada,
+      observacao: this.questionarioForm.value.observacao,
+      data: moment(this.questionarioForm.value.data + ' - ' + this.questionarioForm.value.hora, 'DD/MM/YYYY - hh:mm').toISOString(),
+    }
+    debugger;
     let metaPessoa = await this.connectHTTP.callService({
       service: 'salvarEvento',
-      paramsService: {
-        token: usuarioLogado.token,
-        id_pessoa: usuarioLogado.id_pessoa,
-        id_usuario: usuarioLogado.id,
-        id_evento: this._eventoObject.id,
-        id_evento_pai: this._eventoObject.id_evento_pai ? this._eventoObject.id_evento_pai : this._eventoObject.id,
-        id_pessoa_receptor: this._eventoObject.id_pessoa_receptor,
-        id_motivos_respostas: this.questionarioForm.value.motivoRespostaSelecionado,
-        id_telefoneDiscado: this.questionarioForm.value.idTelefoneSelecionado,
-        id_predicao: this.questionarioForm.value.id_predicao,
-        id_objecao: this.questionarioForm.value.id_objecao,
-        id_campanha: this.campanhaSelecionada,
-        observacao: this.questionarioForm.value.observacao,
-        data: moment(this.questionarioForm.value.data + ' - ' + this.questionarioForm.value.hora, 'DD/MM/YYYY - hh:mm').toISOString(),
-      }
+      paramsService: parametros
     });
     this._limpar();
+    debugger;
     this.atualizaMeta.emit(metaPessoa.resposta[0]);
     this.modal.hide()
   }

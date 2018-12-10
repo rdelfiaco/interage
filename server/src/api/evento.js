@@ -415,7 +415,7 @@ function salvarEvento(req, res) {
         }
 
         let id_prioridade = getPrioridadeDoEvento();
-
+        console.log(req.query.data)
         return `INSERT INTO eventos(
             id_campanha,
             id_motivo,
@@ -816,7 +816,7 @@ function getEventosFiltrados(req, res) {
       if (req.query.dtCricaoRadio == 'true') {
         sql = sql + ` and date(dt_criou) between date('${req.query.dt_inicial}') and date('${req.query.dt_final}')` // data de criação 
       } else {
-        sql = sql + ` and dt_para_exibir <= now()` // data de compromisso 
+        sql = sql + ` and dt_para_exibir <= date('${req.query.dt_final}')` // data de compromisso 
       }
 
       sql = sql + ` order by dt_criou limit 100` //

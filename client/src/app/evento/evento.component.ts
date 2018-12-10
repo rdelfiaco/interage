@@ -225,6 +225,7 @@ export class EventoComponent implements OnInit {
 
   async listaEventos() {
     try {
+      debugger;
       let eventos = await this.connectHTTP.callService({
         service: 'getEventosFiltrados',
         paramsService: {
@@ -304,10 +305,14 @@ export class EventoComponent implements OnInit {
           id_pessoa_visualizou: this.usuarioLogado.id_pessoa
         }
       }) as any;
-      this.tornarResponsavel = null;
+      var self = this;
+      setTimeout(() => {
+        self.tornarResponsavel = null;
+      }, 100)
       this.router.navigate([`/evento/${this.tornarResponsavel.id}`]);
     }
     catch (e) {
+      debugger
       this.toastrService.error(e.error);
     }
   }
@@ -321,6 +326,17 @@ export class EventoComponent implements OnInit {
 
   fechaModal() {
     this.modalCriarEvento.hide();
+  }
+
+  tipoDeData(tipoData) {
+    if ('dtCompromissoRadio' === tipoData) {
+      this.dtCompromissoRadio = true;
+      this.dtCricaoRadio = false;
+    }
+    else {
+      this.dtCompromissoRadio = false;
+      this.dtCricaoRadio = true;
+    }
   }
 
 }

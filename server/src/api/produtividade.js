@@ -297,18 +297,17 @@ function getEventosPredicaoUsuario(req, res) {
         from eventos  
         where id_status_evento in (3,7)
         and id_resp_motivo = 7
-        and CASE  WHEN id_evento_pai is null then id else id_evento_pai end 
-          in ( select id from eventos where id_campanha = ${req.query.id_campanha}
-                  and id_pessoa_resolveu = ${req.query.id_pessoa_usuario_select}
-                  and id_evento_pai is null  
-            and date(dt_resolvido) between '${req.query.dtInicial}'  and '${req.query.dtFinal}' )
+        and id_campanha = ${req.query.id_campanha}
+        and id_pessoa_resolveu = ${req.query.id_pessoa_usuario_select} 
+        and date(dt_resolvido) between '${req.query.dtInicial}'  and '${req.query.dtFinal}' 
         and  CASE  WHEN id_evento_pai is null then id else id_evento_pai end not in ( select id_evento_pai  
                         from eventos 
-                        where id_evento_pai is not null and id_resp_motivo in (8,9) )
+                        where id_evento_pai is not null and id_resp_motivo in (8,9) and  excedeu_tentativas = false )
         group by id_pessoa_receptor) mx on e.id = mx.id_evento
         group by pr.nome, pr.id
         order by pr.id`
 
+      console.log('produtividade', sql)
       client.query(sql)
         .then(res => {
           let registros = res.rows;
