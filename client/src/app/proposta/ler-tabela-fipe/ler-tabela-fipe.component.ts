@@ -15,7 +15,7 @@ import { ToastService } from '../../../lib/ng-uikit-pro-standard';
 export class LerTabelaFipeComponent implements OnInit {
 
 formulario: FormGroup;
-proposta: Proposta = new Proposta();
+
 
 
 // @Output() refresh = new EventEmitter();
@@ -23,6 +23,7 @@ proposta: Proposta = new Proposta();
   constructor(
     private formBuilder: FormBuilder,
     private propostaComuc: ComunicaPropostaService,
+    private proposta: Proposta, 
     private aba: ComunicaPropostaService,
     private toastrService: ToastService
   ) { }
@@ -43,9 +44,16 @@ proposta: Proposta = new Proposta();
       
       });
 
+      this.propostaComuc.emitiProposta.subscribe(
+        proposta => { 
+          //this.proposta = proposta;
+          console.log('ler tabela fipe ', proposta )
+          this.proposta = proposta;
+          }
+      );
+
       this.limparTabelaFipe()
 
-      //this.propostaComuc.emitiProposta.subscribe();
   
   }
 
@@ -142,7 +150,10 @@ proposta: Proposta = new Proposta();
   limparTabelaFipe(){
     this.formulario.patchValue({tabelaFipe : null });
     this.formulario.patchValue({tabelaLimpa : true });
-    this.propostaComuc.setProposta(null);
+    let placa = this.proposta.placa;  // para não perder a placa que foi digitado na aba pesquisa placa
+    this.proposta = new Proposta();
+    this.proposta.placa = placa;
+    this.propostaComuc.setProposta(this.proposta);
      }
 
 }

@@ -23,6 +23,14 @@ export class Proposta {
     private _propostaJSON: any;
     private _idPessoaUsuario: number;
     private _idPessoaCliente: number;
+    private _placa: string;
+    
+    public get placa(): string {
+        return this._placa;
+    }
+    public set placa(value: string) {
+        this._placa = value;
+    }
     
     public get idPessoaCliente(): number {
         return this._idPessoaCliente;
