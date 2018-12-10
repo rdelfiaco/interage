@@ -163,6 +163,7 @@ export class ProdutividadeCallCenterComponent implements OnInit {
           dtFinal: this.dataFinal
         }
       }) as any;
+      debugger;
 
       this.agentesVendasSelectNome = this.agentesVendasSelectNomeTemp || this.agentesVendasSelectNome;
       this.eventosPendentesDepartamento = getProdutividadeCallCenter.resposta.EventosPendentesDepartamento;
