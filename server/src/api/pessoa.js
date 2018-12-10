@@ -727,7 +727,7 @@ function pesquisaPessoas(req, res) {
             WHERE id=${pesquisaTexto}
             limit 100`
       }
-      console.log(pesquisa)
+      
       client.query(pesquisa).then((res) => {
         if (res.rowCount > 0) {
           resolve(res.rows);

@@ -44,7 +44,7 @@ export class ConnectHTTP {
       xhttp.onload = function () {
         const selfXhttp = this
         if (selfXhttp.status === 200) {
-          debugger
+          
           resolve({ resposta: JSON.parse(selfXhttp.responseText) })
         } else if (selfXhttp.status === 401) {
           reject({ resposta: {}, error: selfXhttp.responseText })
@@ -59,6 +59,8 @@ export class ConnectHTTP {
       xhttp.send()
     })
   }
+
+
 
   sendFile(options: optionsCallService): Promise<retObjectCallService> | retObjectCallService {
     const mensagem = this._checkOptionsCallService(options);

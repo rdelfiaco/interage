@@ -1,23 +1,19 @@
 const { checkTokenAccess } = require('./checkTokenAccess');
+const sinesp = require('sinesp-nodejs')
 
-function busca(req, res) {
+function consultarPlaca(req, res) {
+
     return new Promise(function (resolve, reject) {
-
-        // checkTokenAccess(req).then(historico => {
-        sinesp = require('sinesp-nodejs')
-
+       
         /* Realizar uma consulta contra a placa AAA-0001 */
-        sinesp.consultaPlaca('NFU9272').then(dados => {
-            console.log(dados);
-            resolve(dados);
+        sinesp.consultaPlaca( req.query.placa ).then(dados => {
+            resolve('dados', dados);
         }).catch(err => {
-            reject(dados);
-            console.log(err);
+            reject(err);
+            
         })
-        // }).catch(e => {
-        //     reject(e)
-        // })
+
     })
 }
 
-module.exports = { busca }
+module.exports = { consultarPlaca }

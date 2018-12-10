@@ -63,8 +63,8 @@ export class ElaboraPropostaComponent implements OnInit {
 
   proposta: Proposta;
 
-  initValueId: string = '12';
-  idPessoaCliente: string;
+  // initValueId: string = '12';
+  // idPessoaCliente: string;
 
 // radios 
   chkPrecos: string = "2";
@@ -97,8 +97,6 @@ export class ElaboraPropostaComponent implements OnInit {
         id_organograma: this.usuarioLogado.id_organograma
       }
     }) as any;
-
-    console.log(' carrega tabelas de preços')
     this.rastreadores = tabelaPrecos.resposta.Rastreador;  
     this.protecoesVidros = tabelaPrecos.resposta.ProtecaoVidros;
     this.fundosTerceiros = tabelaPrecos.resposta.FundoTerceiros; 
@@ -117,15 +115,13 @@ export class ElaboraPropostaComponent implements OnInit {
     
     this.propostaComuc.emitiProposta.subscribe(
     proposta => {
-      console.log( 'elaborar ', proposta)
       this.proposta = proposta;
-      if (proposta.precoMedio.length > 0 ) {
-      this.atualizaValorVeiculo(proposta )
-      }else {
+      if (proposta.codigoFipe === undefined || proposta.codigoFipe  === null){
         this.valores = [];
         this.sVlrVeiculo =  ''
+      }else {
+          this.atualizaValorVeiculo(proposta )
       }
-      
     }
     );
   }
@@ -136,12 +132,9 @@ export class ElaboraPropostaComponent implements OnInit {
   }
 
   atualizaTipoVeiculo(){
-    if (this.tipoVeiculoSelectValue < 3){
-      this.chkPrecos = "2";
-    }else {
-      this.chkPrecos = "6";
-    }
-    
+
+    this.chkPrecos = "6";
+
     this.atualizaTabelas()
 
   }
@@ -150,8 +143,9 @@ export class ElaboraPropostaComponent implements OnInit {
   atualizaTabelas(){
     
     this.nVlrVeiculo =  Number(this.sVlrVeiculo.substr(2,12).trim().replace('.','').replace(',','.'));
-
-    this.combos = this.tabelaCombos.filter( this.filtraTabelas, [this.nVlrVeiculo, this.tipoVeiculoSelectValue ]);
+    if (this.tabelaCombos.length > 0){
+      this.combos = this.tabelaCombos.filter( this.filtraTabelas, [this.nVlrVeiculo, this.tipoVeiculoSelectValue ]);
+    }
 
     this.valores = this.tabelaValores.filter( this.filtraTabelas, [this.nVlrVeiculo, this.tipoVeiculoSelectValue ]);
 
@@ -217,7 +211,7 @@ export class ElaboraPropostaComponent implements OnInit {
 
   somaValoresProposta(){
     if (this.chkPrecos != "6" ){
-      this.vlrPoposta = this.combos[this.chkPrecos].valor_combo;
+      if (this.tabelaCombos.length > 0)this.vlrPoposta = this.combos[this.chkPrecos].valor_combo;
     } else{
       this.vlrPoposta = Number(this.valorPPV);
       if ( this.fundoTerceiro.length > 0){
@@ -273,9 +267,9 @@ export class ElaboraPropostaComponent implements OnInit {
     this.somaValoresProposta()
   }
 
-  onSelectCliente(valor) {
-    this.idPessoaCliente = valor.value;
-  }
+  // onSelectCliente(valor) {
+  //   this.idPessoaCliente = valor.value;
+  // }
 
   geraProposta(){
 
@@ -473,7 +467,7 @@ export class ElaboraPropostaComponent implements OnInit {
     
    
     this.proposta.idPessoaUsuario = this.usuarioLogado.id;
-    this.proposta.idPessoaCliente = Number(this.idPessoaCliente);
+    this.proposta.idPessoaCliente =  200; //Number(this.idPessoaCliente);
     this.propostaComuc.setProposta(this.proposta);
     this.propostaComuc.setPropostaJSON(docDefinition) 
 

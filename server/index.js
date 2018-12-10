@@ -23,6 +23,8 @@ declaraServico('informacoesParaCriarEvento', evento.informacoesParaCriarEvento);
 declaraServico('salvarProposta', proposta.salvarProposta); 
 declaraServico('encaminhaEvento', evento.encaminhaEvento);
 declaraServico('criarEvento', evento.criarEvento);
+declaraServico('consultarPlaca', consultaPlaca.consultarPlaca);
+
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
@@ -425,18 +427,7 @@ app.get('/trocarSenhaUsuarioLogado', (req, res) => {
     })
 });
 
-app.get('/busca', (req, res) => {
-  consultaPlaca.busca(req)
-    .then(linhas => {
-      headerResponse(res)
-      res.status(200).send(linhas)
-    })
-    .catch(error => {
-      headerResponse(res)
-      console.log(error)
-      res.status(401).send(error)
-    })
-});
+
 
 app.listen(nodeStart.port, "0.0.0.0");
 console.log(`Servidor iniciado na em http://localhost:${nodeStart.port}`)
