@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { } from 'pdfkit';
+import { ComunicaPropostaService } from '../comunica-proposta.service';
 
 
 @Component({
@@ -9,7 +10,7 @@ import { } from 'pdfkit';
 })
 export class EnviaPropostaComponent implements OnInit {
 
-  constructor() { }
+  constructor( private propostaComuc: ComunicaPropostaService, ) { }
 
 
 
@@ -17,6 +18,21 @@ export class EnviaPropostaComponent implements OnInit {
     var docDefinition = { content: 'This is an sample PDF printed with pdfMake' };
 
     //pdfMake.createPdf(docDefinition).open();
+  }
+
+  enviarEmail(){
+
+
+  }
+
+  abrirPDF() {
+
+
+  }
+
+  downloadPDF() {
+
+    
   }
 
 }

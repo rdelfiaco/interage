@@ -1,8 +1,9 @@
-<h5>
-	Enviar para o email:
-
-	abrir proposta: 
-
-	download: 
-	
-</h5>
+<a mdbBtn floating="true" size="lg" gradient="purple" mdbWavesEffect (click)="enviarEmail()" >
+	<mdb-icon icon="send"></mdb-icon>
+  </a>
+  <a mdbBtn floating="true" size="lg" gradient="peach" mdbWavesEffect (click)="abrirPDF()" >
+	<mdb-icon icon="envelope-open"></mdb-icon>
+  </a>
+  <a mdbBtn floating="true" size="lg" gradient="blue" mdbWavesEffect (click)="downloadPDF()">
+	<mdb-icon icon="cloud-download"></mdb-icon>
+  </a>
