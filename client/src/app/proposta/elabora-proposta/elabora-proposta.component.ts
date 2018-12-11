@@ -478,10 +478,6 @@ export class ElaboraPropostaComponent implements OnInit {
     this.propostaComuc.setPropostaJSON(docDefinition)
 
     this.salvarProposta();
-
-
-
-
   }
 
   async salvarProposta() {
@@ -493,11 +489,11 @@ export class ElaboraPropostaComponent implements OnInit {
         paramsService: {
           id_usuario: this.usuarioLogado.id,
           token: this.usuarioLogado.token,
-          proposta: JSON.stringify(this.propostaComuc.getProposta()),
-          propostaJSON: JSON.stringify(this.propostaComuc.getPropostaJSON())
+          proposta: JSON.stringify(this.propostaComuc.getProposta()).replace(/\#/gim, '%23'),
+          propostaJSON: JSON.stringify(this.propostaComuc.getPropostaJSON()).replace(/\#/gim, '%23')
         }
       });
-      this.toastrService.success('Prposta salva com sucesso!');
+      this.toastrService.success('Proposta salva com sucesso!');
       this.aba.setAba(5);
     }
     catch (e) {
