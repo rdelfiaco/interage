@@ -20,10 +20,11 @@ const consultaPlaca = require('./src/api/consultaPlaca');
 declaraServico('getEventoPorId', evento.getEventoPorId);
 declaraServico('visualizarEvento', evento.visualizarEvento);
 declaraServico('informacoesParaCriarEvento', evento.informacoesParaCriarEvento);
-declaraServico('salvarProposta', proposta.salvarProposta); 
+declaraServico('salvarProposta', proposta.salvarProposta);
 declaraServico('encaminhaEvento', evento.encaminhaEvento);
 declaraServico('criarEvento', evento.criarEvento);
 declaraServico('consultarPlaca', consultaPlaca.consultarPlaca);
+declaraServico('getPropostasDoUsuario', proposta.getPropostasDoUsuario);
 
 
 app.use(bodyParser.json());

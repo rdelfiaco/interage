@@ -12,8 +12,6 @@ import { ComunicaPropostaService } from '../comunica-proposta.service';
 
 import * as pdfMake from 'pdfmake/build/pdfmake';
 import * as pdfFonts from 'pdfmake/build/vfs_fonts';
-import { FormataDinheiroPipe } from '../../shared/pipes/mascaraDinheiro/formata-dinheiro.pipe';
-import { img } from './imagem';
 
 interface selectValues {
   value: string
@@ -85,7 +83,6 @@ export class ElaboraPropostaComponent implements OnInit {
     this.usuarioLogado = this.localStorage.getLocalStorage('usuarioLogado') as Usuario;
     pdfMake.vfs = pdfFonts.pdfMake.vfs;
   }
-
 
   async ngOnInit() {
     let tabelaPrecos = await this.connectHTTP.callService({
@@ -483,7 +480,6 @@ export class ElaboraPropostaComponent implements OnInit {
   async salvarProposta() {
     console.log(' getProposta ', this.propostaComuc.getProposta());
     try {
-      debugger;
       await this.connectHTTP.callService({
         service: 'salvarProposta',
         paramsService: {

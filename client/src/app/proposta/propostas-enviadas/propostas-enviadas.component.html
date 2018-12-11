@@ -1,3 +1,19 @@
-<p>
-  propostas-enviadas works!
-</p>
+<table class="table">
+  <thead>
+    <tr>
+      <th>Id</th>
+      <th>Ações</th>
+    </tr>
+  </thead>
+  <tbody *ngFor="let proposta of propostas">
+    <tr>
+      <th scope="row">{{proposta.id}}</th>
+      <td>
+        <a mdbBtn floating="true" size="lg" gradient="blue" mdbWavesEffect (click)="downloadPDF(proposta.propostaPDF)">
+          <mdb-icon icon="cloud-download"></mdb-icon>
+        </a>
+      </td>
+    </tr>
+
+  </tbody>
+</table>

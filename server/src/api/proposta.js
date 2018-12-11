@@ -1,4 +1,3 @@
-
 const { executaSQL } = require('./executaSQL')
 
 function salvarProposta(req, res) {
@@ -49,4 +48,27 @@ function salvarProposta(req, res) {
   });
 }
 
-module.exports = { salvarProposta }
+function getPropostasDoUsuario(req, res) {
+  return new Promise(function (resolve, reject) {
+    let credenciais = {
+      token: req.query.token,
+      idUsuario: req.query.id_usuario
+    };
+
+    let sql = `select * from view_proposta where id_usuario=${req.query.id_usuario}`
+    console.log(sql);
+    executaSQL(credenciais, sql)
+      .then(res => {
+        if (res.length > 0) {
+          let propostas = res;
+          resolve(propostas)
+        }
+        else reject('Não há propostas!')
+      })
+      .catch(err => {
+        reject(err)
+      })
+  })
+}
+
+module.exports = { salvarProposta, getPropostasDoUsuario }
