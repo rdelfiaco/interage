@@ -225,7 +225,6 @@ export class EventoComponent implements OnInit {
 
   async listaEventos() {
     try {
-      debugger;
       let eventos = await this.connectHTTP.callService({
         service: 'getEventosFiltrados',
         paramsService: {
@@ -312,7 +311,6 @@ export class EventoComponent implements OnInit {
       this.router.navigate([`/evento/${this.tornarResponsavel.id}`]);
     }
     catch (e) {
-      debugger
       this.toastrService.error(e.error);
     }
   }

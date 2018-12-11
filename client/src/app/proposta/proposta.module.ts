@@ -19,6 +19,7 @@ import { LerTabelaFipeComponent } from './ler-tabela-fipe/ler-tabela-fipe.compon
 import { PropostasEnviadasComponent } from './propostas-enviadas/propostas-enviadas.component';
 import { PesquisaClienteModule } from '../pesquisa-cliente/pesquisa-cliente.module';
 import { PlacaPipe } from '../shared/pipes/placa/placa.pipe';
+import { FormataDinheiroPipe } from '../shared/pipes/mascaraDinheiro/formata-dinheiro.pipe';
 
 
 @NgModule({
@@ -45,7 +46,8 @@ import { PlacaPipe } from '../shared/pipes/placa/placa.pipe';
   providers: [
     Proposta,
     ComunicaPropostaService,
-    PlacaPipe
+    PlacaPipe,
+    FormataDinheiroPipe
   ]
 
 })

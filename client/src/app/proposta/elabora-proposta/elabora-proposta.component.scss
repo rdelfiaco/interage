@@ -4,23 +4,30 @@
     margin-right: 5px;
     text-align: center;
 }
+
 .content {
     display: flex;
 }
 
-.tabelaPrecos{
-
-    //height: 600px;
-    width: 1240px !important;
-    //margin-left: -10px; 
+.tabelaPrecos {
     background-color: powderblue;
-
 }
 
 .tabelaChck {
     //margin-left: 100px; 
-    text-align: center;
-    //width: 150px;
+    text-align: center; //width: 150px;
 }
 
+.precosDaProposta>.row {
+    background-color: #99daf7;
+    border-radius: 10px;
+    padding: 4px;
+}
 
+.cabecalhoValorBase {
+    padding-top: 20px;
+}
+
+.tituloProposta {
+    font-size: 0.9em;
+}

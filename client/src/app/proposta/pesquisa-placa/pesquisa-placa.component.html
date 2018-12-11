@@ -12,9 +12,12 @@
   </div>
   <br>
   <br>
-  <div class="md-form">
-    <input mdbInputDirective type="text" formControlName="placaConsultada" disabled id="placaConsultada" class="form-control">
-    <label for="placaConsultada" class="">Resultado da consulta</label>
+  <div class="row">
+    <div class="md-form col">
+      <textarea type="text" id="placaConsultada" rows="20" formControlName="placaConsultada" class="md-textarea form-control"
+        mdbInputDirective></textarea>
+      <label for="placaConsultada">Resultado da consulta</label>
+    </div>
   </div>
 
 </form>

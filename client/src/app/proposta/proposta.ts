@@ -24,14 +24,14 @@ export class Proposta {
     private _idPessoaUsuario: number;
     private _idPessoaCliente: number;
     private _placa: string;
-    
+
     public get placa(): string {
         return this._placa;
     }
     public set placa(value: string) {
         this._placa = value;
     }
-    
+
     public get idPessoaCliente(): number {
         return this._idPessoaCliente;
     }
@@ -42,9 +42,36 @@ export class Proposta {
     public get idPessoaUsuario(): number {
         return this._idPessoaUsuario;
     }
-    
+
     public set idPessoaUsuario(value: number) {
         this._idPessoaUsuario = value;
+    }
+
+    public propostaObj(): any {
+        return {
+            idTipoVeiculo: this._idTipoVeiculo,
+            mesReferencia: this._mesReferencia,
+            codigoFipe: this._codigoFipe,
+            marca: this._marca,
+            modelo: this._modelo,
+            anoModelo: this._anoModelo,
+            autenticacao: this._autenticacao,
+            dataConsulta: this._dataConsulta,
+            precoMedio: this._precoMedio,
+            adesão: this._adesão,
+            mensalidade: this._mensalidade,
+            participacao: this._participacao,
+            cota: this._cota,
+            terceiros: this._terceiros,
+            idFundoTerceiros: this._idFundoTerceiros,
+            idCarroReserva: this._idCarroReserva,
+            idApp: this._idApp,
+            idRastreador: this._idRastreador,
+            idProtecaoVidros: this._idProtecaoVidros,
+            idPessoaUsuario: this._idPessoaUsuario,
+            idPessoaCliente: this._idPessoaCliente,
+            placa: this._placa
+        };
     }
 
     public get propostaJSON(): any {
@@ -67,7 +94,7 @@ export class Proposta {
     public set cota(value: number) {
         this._cota = value;
     }
-    
+
     public get idRastreador(): number {
         return this._idRastreador;
     }
@@ -104,7 +131,7 @@ export class Proposta {
     public set idTipoVeiculo(value: number) {
         this._idTipoVeiculo = value;
     }
-    
+
     public get terceiros(): string {
         return this._terceiros;
     }
@@ -125,7 +152,7 @@ export class Proposta {
     public set mensalidade(value: number) {
         this._mensalidade = value;
     }
-   
+
     public get adesão(): number {
         return this._adesão;
     }
@@ -187,6 +214,6 @@ export class Proposta {
     }
     public set precoMedio(value: string) {
         this._precoMedio = value;
-        
+
     }
 }

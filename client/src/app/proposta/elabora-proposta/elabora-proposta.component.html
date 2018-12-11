@@ -1,32 +1,31 @@
+<div class="row">
 
-<div class="row" >
-  
-  <!-- <div class=" col-md-5 md-form input-group" >
+    <!-- <div class=" col-md-5 md-form input-group" >
       <input mdbInputDirective type="text" id="cliente" class="form-control" >
       <label for="cliente" style="margin-left: 15px" >Cliente</label>
       <a mdbBtn floating="true" size="sm" gradient="blue" mdbWavesEffect (click)="teste()"  >
           <i class="fa fa-search-plus" aria-hidden="true"></i>
       </a>
   </div> -->
-  <!-- <div class=" col-md-5" style="margin-top: 25px">
-      <app-pesquisa-cliente [initValueId]="initValueId" (onSelectCliente)="onSelectCliente($event)"></app-pesquisa-cliente>
-  </div> -->
-      
-  <div class="col-md-4" style="margin-top: 25px" >
+    <div class=" col-md-5" style="margin-top: 25px">
+        <app-pesquisa-cliente [initValueId]="initValueId" (onSelectCliente)="onSelectCliente($event)"></app-pesquisa-cliente>
+    </div>
+
+    <div class="col-md-4" style="margin-top: 25px">
         <mdb-select [(ngModel)]="tipoVeiculoSelectValue" [options]="tipoVeiculoSelect" placeholder="Escolha o tipo do veículo"
-          style="font-size: 0.5rem;" (selected)="atualizaTipoVeiculo($event)" ></mdb-select>
+            style="font-size: 0.5rem;" (selected)="atualizaTipoVeiculo($event)"></mdb-select>
         <label>Tipo do Veículo</label>
-  </div>
-        
-  <div class=" col-md-2 md-form " style="margin-top: 30px" >
-        <input mdbInputDirective type="text" id="vlrVeiculo" class="form-control" [(ngModel)]="sVlrVeiculo"  disabled >
-        <label for="vlrVeiculo" style="margin-left: 15px" >Valor do veículo</label>
-  </div>
+    </div>
+
+    <div class=" col-md-2 md-form " style="margin-top: 30px">
+        <input mdbInputDirective type="text" id="vlrVeiculo" class="form-control" [(ngModel)]="sVlrVeiculo" disabled>
+        <label for="vlrVeiculo" style="margin-left: 15px">Valor do veículo</label>
+    </div>
 
 </div>
 
-<div *ngIf="valores.length > 0 ;  else limpaTela " >
-
+<div *ngIf="valores.length > 0 ;  else limpaTela ">
+    <!-- 
     <div class="row ">
         <div class="content" >
             <div *ngFor="let combo of combos; let i = index">  
@@ -51,38 +50,39 @@
             </div>
         </div>
     </div>
-    <br>
+    <br> -->
+
     <div class="row ">
-        <div class=" col-md-4 md-form " style="text-align: center">
-            Valor da proposta 
+        <div *ngIf="vlrPoposta" class=" col-md-4 md-form " style="text-align: center">
+            Valor da proposta
             <br>
-            {{vlrPoposta}}
+            R$ {{vlrPoposta}}
         </div>
         <div class=" col-md-4 md-form " style="text-align: center">
-            <button type="button" mdbBtn color="primary" (click)="geraProposta();" 
-                class="relative waves-light" mdbWavesEffect>
+            <button type="button" mdbBtn color="primary" (click)="geraProposta();" class="relative waves-light"
+                mdbWavesEffect>
                 Salvar Proposta
             </button>
         </div>
-       
+
     </div>
 
     <br>
     <br class="form-check form-check-inline">
-        <input type="radio" class="form-check-input" value="6"  id=chkCombo6 (change)="mudouPlano(6)" [checked]="chkPrecos == 6"
-            name="chckCombo" mdbInputDirective  >
-        <label class="form-check-label" for=chkCombo6 >Calculo personalizado</label>
+    <input type="radio" class="form-check-input" value="6" id=chkCombo6 (change)="mudouPlano(6)" [checked]="chkPrecos == 6"
+        name="chckCombo" mdbInputDirective>
+    <label class="form-check-label" for=chkCombo6>Calculo personalizado</label>
     <br>
 
-    <div *ngIf="chkPrecos == 6"> 
-        <div class="container tabelaPrecos" >
-            <div class="col-md-12" >
-                <div class="row">
+    <div *ngIf="chkPrecos == 6">
+        <div class="container tabelaPrecos">
+            <div class="col-md-12">
+                <div class="row cabecalhoValorBase">
                     <div class="col-md-2">
-                        COTA 
+                        COTA
                     </div>
-                    <div class="col-md-3"> 
-                        VALOR 24H + PLANO PPV 
+                    <div class="col-md-3">
+                        VALOR 24H + PLANO PPV
                     </div>
                     <div class="col-md-3">
                         ADESÃO
@@ -90,118 +90,115 @@
                     <div class="col-md-3">
                         COTA PARTICIPAÇÃO
                     </div>
-                </div>        
+                </div>
                 <div class="row">
                     <div class="col-md-2">
                         {{cota}}
                     </div>
-                    <div class="col-md-3"> 
-                        {{valorPPV}}
+                    <div class="col-md-3">
+                        R$ {{valorPPV}}
                     </div>
                     <div class="col-md-3">
-                        {{adesao}}
+                        R$ {{adesao}}
                     </div>
                     <div class="col-md-3">
                         <a *ngIf="prcParticipacao > 0">
-                            {{prcParticipacao}} %  =  
+                            {{prcParticipacao}} % =
                         </a>
                         {{vlrParticipacao}}
                     </div>
-                </div>  
+                </div>
                 <br>
-                <div class="row">
-                    <!-- <div>
+                <div class="precosDaProposta">
+                    <div class="row">
+                        <!-- <div>
                         Fundo para terceiro..:  
                     </div> -->
-                        <th  *ngFor="let _fundoTerceiro of fundoTerceiro; let i = index"  
-                            class=" col-md-3 tabelaChck">  
-                            <div class="form-check form-check-inline">
-                                <input type="radio" class="form-check-input" id="{{ 'chkFundo' + i}}" (change)="mudouFundo(i)" [checked]="chkFundo == i"
-                                name="chckFundoTerceiro" mdbInputDirective>
-                                <label class="form-check-label" for="{{ 'chkFundo' + i}}" ></label>
+                        <th *ngFor="let _fundoTerceiro of fundoTerceiro; let i = index" class=" col-md-3 tabelaChck">
+                            <div class="form-check form-check-inline tituloProposta">
+                                <input type="radio" class="form-check-input" id="{{ 'chkFundo' + i}}" (change)="mudouFundo(i)"
+                                    [checked]="chkFundo == i" name="chckFundoTerceiro" mdbInputDirective>
+                                <label class="form-check-label" for="{{ 'chkFundo' + i}}"></label>
                                 {{_fundoTerceiro.nome}}
                             </div>
                             <div>
-                                {{_fundoTerceiro.valor}}
+                                R$ {{_fundoTerceiro.valor}}
                             </div>
                         </th>
-                </div>
-                <br>
-                <div class="row">
-                    <!-- <div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <!-- <div>
                         Carro reserva
                     </div> -->
-                        <th  *ngFor="let _carroReserva of carroReserva; let i = index"  
-                        class=" col-md-3 tabelaChck">  
-                            <div class="form-check form-check-inline">
-                                <input type="radio" class="form-check-input" id="{{ 'chckCarroRes' + i}}" (change)="mudouCarroReserva(i)" [checked]="chckCarroRes == i"
-                                name="chckCarroReserva" mdbInputDirective>
-                                <label class="form-check-label" for="{{ 'chckCarroRes' + i}}" ></label>
+                        <th *ngFor="let _carroReserva of carroReserva; let i = index" class=" col-md-3 tabelaChck">
+                            <div class="form-check form-check-inline tituloProposta">
+                                <input type="radio" class="form-check-input" id="{{ 'chckCarroRes' + i}}" (change)="mudouCarroReserva(i)"
+                                    [checked]="chckCarroRes == i" name="chckCarroReserva" mdbInputDirective>
+                                <label class="form-check-label" for="{{ 'chckCarroRes' + i}}"></label>
                                 {{_carroReserva.nome}}
                             </div>
                             <div>
-                                {{_carroReserva.valor}}
+                                R$ {{_carroReserva.valor}}
                             </div>
                         </th>
-                </div>
-                <br>
-                <div class="row">
-                    <!-- <div> 
+                    </div>
+                    <br>
+                    <div class="row">
+                        <!-- <div> 
                         Proteção de vidros
                     </div> -->
-                    <th  *ngFor="let _protecaoVidro of protecaoVidro; let i = index"  
-                    class=" col-md-3 tabelaChck">  
-                        <div class="form-check form-check-inline">
-                            <input type="radio" class="form-check-input" id="{{ 'chckProtecaoVidro' + i}}" (change)="mudouProtecaoVidro(i)" [checked]="chckProtecaoVidro == i"
-                            name="chckProtecaoVidro" mdbInputDirective>
-                            <label class="form-check-label" for="{{ 'chckProtecaoVidro' + i}}" ></label>
-                            {{_protecaoVidro.nome}}
-                        </div>
-                        <div>
-                            {{_protecaoVidro.valor}}
-                        </div>
-                    </th>
+                        <th *ngFor="let _protecaoVidro of protecaoVidro; let i = index" class=" col-md-3 tabelaChck">
+                            <div class="form-check form-check-inline tituloProposta">
+                                <input type="radio" class="form-check-input" id="{{ 'chckProtecaoVidro' + i}}" (change)="mudouProtecaoVidro(i)"
+                                    [checked]="chckProtecaoVidro == i" name="chckProtecaoVidro" mdbInputDirective>
+                                <label class="form-check-label" for="{{ 'chckProtecaoVidro' + i}}"></label>
+                                {{_protecaoVidro.nome}}
+                            </div>
+                            <div>
+                                R$ {{_protecaoVidro.valor}}
+                            </div>
+                        </th>
 
-                </div>
-                <br>
-                <div class="row">
-                    <!-- <div> 
+                    </div>
+                    <br>
+                    <div class="row">
+                        <!-- <div> 
                         APP
                     </div> -->
-                    <th  *ngFor="let _app of app; let i = index"  
-                    class=" col-md-3 tabelaChck">  
-                        <div class="form-check form-check-inline">
-                            <input type="radio" class="form-check-input" id="{{ 'chckApp' + i}}" (change)="mudouApp(i)" [checked]="chckApp == i"
-                            name="chckApp" mdbInputDirective>
-                            <label class="form-check-label" for="{{ 'chckApp' + i}}" ></label>
-                            {{_app.nome}}
-                        </div>
-                        <div>
-                            {{_app.valor}}
-                        </div>
-                    </th>
+                        <th *ngFor="let _app of app; let i = index" class=" col-md-3 tabelaChck">
+                            <div class="form-check form-check-inline tituloProposta">
+                                <input type="radio" class="form-check-input" id="{{ 'chckApp' + i}}" (change)="mudouApp(i)"
+                                    [checked]="chckApp == i" name="chckApp" mdbInputDirective>
+                                <label class="form-check-label" for="{{ 'chckApp' + i}}"></label>
+                                {{_app.nome}}
+                            </div>
+                            <div>
+                                R$ {{_app.valor}}
+                            </div>
+                        </th>
 
-                </div>
-                <br>
-                <div class="row">
-                    <!-- <div> 
+                    </div>
+                    <br>
+                    <div class="row">
+                        <!-- <div> 
                         Rastreador
                     </div> -->
-                    <th  *ngFor="let _rastreador of rastreador; let i = index"  
-                    class=" col-md-3 tabelaChck">  
-                        <div class="form-check form-check-inline">
-                                <input type="radio" class="form-check-input" id="{{ 'chckRastreador' + i}}" (change)="mudouRastreador(i)" [checked]="chckRastreador == i"
-                                name="chckRastreador" mdbInputDirective>
-                                <label class="form-check-label" for="{{ 'chckRastreador' + i}}" ></label> 
-                            {{_rastreador.nome}}
-                        </div>
-                        <div>
-                            {{_rastreador.valor}}
-                        </div>
-                        <div>
-                            instalação: {{_rastreador.valor_instalacao}}
-                        </div> 
-                    </th>
+                        <th *ngFor="let _rastreador of rastreador; let i = index" class=" col-md-3 tabelaChck">
+                            <div class="form-check form-check-inline tituloProposta">
+                                <input type="radio" class="form-check-input" id="{{ 'chckRastreador' + i}}" (change)="mudouRastreador(i)"
+                                    [checked]="chckRastreador == i" name="chckRastreador" mdbInputDirective>
+                                <label class="form-check-label" for="{{ 'chckRastreador' + i}}"></label>
+                                {{_rastreador.nome}}
+                            </div>
+                            <div>
+                                R$ {{_rastreador.valor}}
+                            </div>
+                            <div>
+                                instalação: R$ {{_rastreador.valor_instalacao}}
+                            </div>
+                        </th>
+                    </div>
                 </div>
             </div>
             <br>
@@ -216,5 +213,5 @@
     <h4>
         Informa tabela Fipe!
     </h4>
-       
+
 </ng-template>

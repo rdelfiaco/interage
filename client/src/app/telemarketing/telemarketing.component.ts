@@ -137,7 +137,6 @@ export class TelemarketingComponent implements OnInit {
   }
 
   atualizaMeta(metaPessoa) {
-    debugger;
     this.metaPessoa = metaPessoa;
   }
 }

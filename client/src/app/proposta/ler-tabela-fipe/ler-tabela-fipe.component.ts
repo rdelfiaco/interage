@@ -46,7 +46,6 @@ formulario: FormGroup;
 
       this.propostaComuc.emitiProposta.subscribe(
         proposta => { 
-          //this.proposta = proposta;
           console.log('ler tabela fipe ', proposta )
           this.proposta = proposta;
           }

@@ -6,6 +6,7 @@ import { FormGroup, FormBuilder } from '@angular/forms';
 import { ComunicaPropostaService } from '../comunica-proposta.service';
 import { ToastService } from '../../../lib/ng-uikit-pro-standard';
 import { PlacaPipe } from '../../shared/pipes/placa/placa.pipe';
+import { FormataDinheiroPipe } from '../../shared/pipes/mascaraDinheiro/formata-dinheiro.pipe';
 
 @Component({
   selector: 'app-pesquisa-placa',
@@ -46,19 +47,17 @@ export class PesquisaPlacaComponent implements OnInit {
   async consultarPlaca(event: any) {
 
     let valorFormatado = this.mascaraPlaca.transform(event.target.value);
-    debugger;
     this.formulario.controls['placa'].setValue(valorFormatado)
-    if (event.keyCode === 13) {
-      debugger
-      // let respPlacaConsultada = await this.connectHTTP.callService({
-      //   service: 'consultarPlaca',
-      //   paramsService: {
-      //     placa: this.formulario.value.placa.replace('-','')
-      //   }
-      // }) as any;
+    if (this.mascaraPlaca.check(valorFormatado)) {
+      let respPlacaConsultada = await this.connectHTTP.callService({
+        service: 'consultarPlaca',
+        paramsService: {
+          placa: this.formulario.value.placa.replace('-', '')
+        }
+      }) as any;
 
 
-      // this.formulario.patchValue( {placaConsultada: respPlacaConsultada.resposta});
+      this.formulario.patchValue({ placaConsultada: JSON.stringify(respPlacaConsultada.resposta, null, 2) });
       this.proposta.placa = this.formulario.value.placa;
       this.propostaComuc.setProposta(this.proposta);
 
