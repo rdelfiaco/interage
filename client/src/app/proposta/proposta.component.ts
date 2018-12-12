@@ -21,7 +21,7 @@ export class PropostaComponent implements OnInit {
     private aba: ComunicaPropostaService,
 
   ) {
-    this.aba.setAba(6)
+    this.aba.setAba(5)
   }
 
   ngOnInit() {

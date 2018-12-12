@@ -29,6 +29,7 @@ export class ConnectHTTP {
 
       let url = `${host}${service}`
 
+      
       if (!options.naoExigeToken && (!options.paramsService.token || !options.paramsService.id_usuario)) {
         let usuarioLogado = this.localStorage.getLocalStorage('usuarioLogado') as Usuario;
         options.paramsService.id_usuario = usuarioLogado.id.toString();

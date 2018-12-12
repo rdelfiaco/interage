@@ -21,10 +21,17 @@ export class Proposta {
     private _idRastreador: number;
     private _idProtecaoVidros: number;
     private _propostaJSON: any;
+    private _idUsuario: number;
     private _idPessoaUsuario: number;
     private _idPessoaCliente: number;
     private _placa: string;
 
+    public get idPessoaUsuario(): number {
+        return this._idPessoaUsuario;
+    }
+    public set idPessoaUsuario(value: number) {
+        this._idPessoaUsuario = value;
+    }
     public get placa(): string {
         return this._placa;
     }
@@ -39,12 +46,12 @@ export class Proposta {
         this._idPessoaCliente = value;
     }
 
-    public get idPessoaUsuario(): number {
-        return this._idPessoaUsuario;
+    public get idUsuario(): number {
+        return this._idUsuario;
     }
 
-    public set idPessoaUsuario(value: number) {
-        this._idPessoaUsuario = value;
+    public set idUsuario(value: number) {
+        this._idUsuario = value;
     }
 
     public propostaObj(): any {
@@ -68,6 +75,7 @@ export class Proposta {
             idApp: this._idApp,
             idRastreador: this._idRastreador,
             idProtecaoVidros: this._idProtecaoVidros,
+            idUsuario: this._idUsuario,
             idPessoaUsuario: this._idPessoaUsuario,
             idPessoaCliente: this._idPessoaCliente,
             placa: this._placa

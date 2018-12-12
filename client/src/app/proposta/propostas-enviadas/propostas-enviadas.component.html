@@ -2,6 +2,12 @@
   <thead>
     <tr>
       <th>Id</th>
+      <th>Elaborada em:</th>
+      <th>Cliente</th>
+      <th>Marca</th>
+      <th>Modelo</th>
+      <th>Placa</th>
+      <th>Status</th>
       <th>Ações</th>
     </tr>
   </thead>
@@ -9,7 +15,25 @@
     <tr>
       <th scope="row">{{proposta.id}}</th>
       <td>
-        <a mdbBtn floating="true" size="lg" gradient="blue" mdbWavesEffect (click)="downloadPDF(proposta.propostaPDF)">
+        {{proposta.dtsalvou | date:'dd/MM/yyyy HH:mm:ss' }}
+      </td>
+      <td>
+        {{proposta.cliente}}
+      </td>
+      <td>
+        {{proposta.marca}}
+      </td>
+      <td>
+        {{proposta.modelo}}
+      </td>
+      <td>
+        {{proposta.placa}}
+      </td>
+      <td>
+        {{proposta.status_proposta}}
+      </td>
+      <td>
+        <a mdbBtn floating="true" size="sm" gradient="blue" mdbWavesEffect (click)="openPDF(proposta.propostaPDF)">
           <mdb-icon icon="cloud-download"></mdb-icon>
         </a>
       </td>

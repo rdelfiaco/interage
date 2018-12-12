@@ -1,6 +1,6 @@
 import { Injectable, EventEmitter } from '@angular/core';
 import { Proposta } from './proposta';
-import { Observable } from 'rxjs';
+
 
 @Injectable({
   providedIn: 'root'

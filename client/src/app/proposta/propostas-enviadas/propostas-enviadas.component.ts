@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ConnectHTTP } from '../../shared/services/connectHTTP';
 import { LocalStorage } from '../../shared/services/localStorage';
 import { Usuario } from '../../login/usuario';
-import { img } from './imagem';
+import { img } from '../imagem';
 import * as pdfMake from 'pdfmake/build/pdfmake';
 import * as pdfFonts from 'pdfmake/build/vfs_fonts';
 
@@ -38,7 +38,7 @@ export class PropostasEnviadasComponent implements OnInit {
     });
   }
 
-  downloadPDF(docDefinition) {
-    pdfMake.createPdf(docDefinition).download('proposta.pdf');
+  openPDF(docDefinition) {
+    pdfMake.createPdf(docDefinition).open()
   }
 }

@@ -33,20 +33,53 @@ function salvarProposta(req, res) {
                           ${req.query.proposta.idRastreador},
                           ${req.query.proposta.idProtecaoVidros},
                           '${req.query.propostaJSON}',    
-                          ${req.query.proposta.idPessoaUsuario},
+                          ${req.query.proposta.idUsuario},
                           ${req.query.proposta.idPessoaCliente},
                           '${req.query.proposta.placa}',
-                          5,now())`
+                          5,now()) RETURNING id`
 
-    console.log('sql', sql)
+    
 
     executaSQL(credenciais, sql).then(registros => {
-      resolve(registros);
+      
+      //criar evento para acompanhar poposta 
+      let id_proposta = registros[0].id
+     
+      sql = `INSERT INTO public.eventos(
+              id_motivo,  
+              id_status_evento, 
+              id_pessoa_criou, 
+              dt_criou, 
+              dt_prevista_resolucao, 
+              dt_para_exibir, 
+              tipodestino, 
+              id_pessoa_organograma, 
+              id_pessoa_receptor, 
+              id_prioridade,
+              observacao_origem,  
+              id_canal,
+              id_proposta)
+              VALUES (2,
+                      1, 
+                      ${req.query.proposta.idPessoaUsuario},
+                      now(),
+                      func_dt_expira(2),
+                      now(),
+                      'P',
+                      ${req.query.proposta.idPessoaUsuario},
+                      ${req.query.proposta.idPessoaCliente},
+                      2,
+                      'Registar se o cliente aceitou ou não proposta',
+                      7,
+                      ${id_proposta})`
+        executaSQL(credenciais, sql).then(registros => {
+          resolve(registros)
+        }).catch(e => {
+          eject(e);});
     }).catch(e => {
-      reject(e);
-    });
-  });
-}
+      eject(e);});
+  })
+};
 
 function getPropostasDoUsuario(req, res) {
   return new Promise(function (resolve, reject) {
@@ -55,7 +88,7 @@ function getPropostasDoUsuario(req, res) {
       idUsuario: req.query.id_usuario
     };
 
-    let sql = `select * from view_proposta where id_usuario=${req.query.id_usuario}`
+    let sql = `select * from view_proposta where id_usuario=${req.query.id_usuario} order by id desc `
     console.log(sql);
     executaSQL(credenciais, sql)
       .then(res => {

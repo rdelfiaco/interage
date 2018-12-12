@@ -12,6 +12,7 @@ import { ComunicaPropostaService } from '../comunica-proposta.service';
 
 import * as pdfMake from 'pdfmake/build/pdfmake';
 import * as pdfFonts from 'pdfmake/build/vfs_fonts';
+import { img } from '../imagem';
 
 interface selectValues {
   value: string
@@ -263,6 +264,7 @@ export class ElaboraPropostaComponent implements OnInit {
 
 
   geraProposta() {
+    debugger
     var docDefinition = {
       pageSize: 'A4',
       pageMargins: [10, 10, 5, 5],
@@ -299,7 +301,7 @@ export class ElaboraPropostaComponent implements OnInit {
 
             body: [
               [{
-                text: `Responsável ALTIS: ${this.usuarioLogado.nomeFantasia}  Whatsapp: ${this.usuarioLogado.telefonePrincipal} `,
+                text: `Responsável ALTIS: ${this.usuarioLogado.apelido}   - Whatsapp: (${this.usuarioLogado.ddd}) ${this.usuarioLogado.telefone}`,
                 fillColor: '#eeeeee',
                 margin: [5, 5, 0, 0],
                 border: [true, true, true, true],
@@ -462,19 +464,26 @@ export class ElaboraPropostaComponent implements OnInit {
         small: {
           fontSize: 8
         }
-      }
+      },
+      images : { logotipo: img }
     };
 
 
-    this.proposta.idPessoaUsuario = this.usuarioLogado.id;
-    this.proposta.idPessoaCliente = 200; //Number(this.idPessoaCliente);
+    this.proposta.idUsuario = this.usuarioLogado.id;
+    this.proposta.idPessoaUsuario = this.usuarioLogado.id_pessoa;
+    this.proposta.idPessoaCliente = Number(this.idPessoaCliente);
     this.proposta.idTipoVeiculo = this.tipoVeiculoSelectValue;
     this.proposta.cota = this.cota;
     this.propostaComuc.setProposta(this.proposta);
+    //pdfMake.createPdf(docDefinition).open()
+    docDefinition.images.logotipo = ''; // para salvar a imagem do logo 
 
     this.propostaComuc.setPropostaJSON(docDefinition)
 
     this.salvarProposta();
+
+    
+
   }
 
   async salvarProposta() {
@@ -490,7 +499,9 @@ export class ElaboraPropostaComponent implements OnInit {
         }
       });
       this.toastrService.success('Proposta salva com sucesso!');
-      this.aba.setAba(5);
+
+      document.location.reload(true); 
+
     }
     catch (e) {
       this.toastrService.error('Proposta não salva');

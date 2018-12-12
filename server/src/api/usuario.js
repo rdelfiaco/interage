@@ -12,7 +12,11 @@ function login(req, res) {
     client.connect()
 
     const senhaCriptografada = req.query.senha
-    let sql = `SELECT * from usuarios where login = '${req.query.login}' AND senha='${senhaCriptografada}'`
+    let sql = `SELECT u.*, pe.apelido_fantasia as apelido, ddd, to_char(telefone, '0000-0000'):: character varying(10) as telefone 
+                from usuarios u
+                inner join pessoas pe on u.id_pessoa = pe.id
+                left join pessoas_telefones tel on pe.id = tel.id_pessoa and principal 
+                where login = '${req.query.login}' AND senha='${senhaCriptografada}'`
 
     client.query(sql)
       .then(res => {

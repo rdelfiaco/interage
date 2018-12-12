@@ -9,25 +9,30 @@ export class Usuario {
     private _token: string;
     private _id_pessoa: number;
     private _responsavel_membro: number;
-    private _nomeFantasia: string;
-    private _telefonePrincipal: string;
+    private _apelido: string;
+    private _telefone: string ;
+    private _ddd: number;
 
-
-    public get telefonePrincipal(): string {
-        return this._telefonePrincipal;
+    public get ddd(): number {
+        return this._ddd;
     }
-    public set telefonePrincipal(value: string) {
-        this._telefonePrincipal = value;
-    }
-
-
-    public get nomeFantasia(): string {
-        return this._nomeFantasia;
-    }
-    public set nomeFantasia(value: string) {
-        this._nomeFantasia = value;
+    public set ddd(value: number) {
+        this._ddd = value;
     }
 
+    public get telefone(): string  {
+        return this._telefone;
+    }
+    public set telefone(value: string ) {
+        this._telefone = value;
+    }
+
+    public get apelido(): string {
+        return this._apelido;
+    }
+    public set apelido(value: string) {
+        this._apelido = value;
+    }
     
     public get responsavel_membro(): number {
         return this._responsavel_membro;
