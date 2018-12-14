@@ -107,7 +107,7 @@ export class TelemarketingComponent implements OnInit {
       }, 0);
       self.pessoaObject = telemarketing.resposta.pessoa;
     });
-
+    
     this.motivos_respostas = telemarketing.resposta.motivos_respostas
     this.predicoes = telemarketing.resposta.predicoes
     this.objecoes = telemarketing.resposta.objecoes

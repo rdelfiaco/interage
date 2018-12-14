@@ -53,6 +53,7 @@ export class TelemarketingQuestionarioComponent implements OnInit {
   podeGravar: boolean = false;
   quantEventosDaPessoa: number;
   corDoBotaoDiscar: string = 'danger';
+  motivoAcao: Array<object>;
   @ViewChild("dataReagendamento") datePicker: MDBDatePickerComponent;
 
   @Input() modal: any
@@ -65,6 +66,7 @@ export class TelemarketingQuestionarioComponent implements OnInit {
   @Input()
   set motivos_respostas(motivos_respostas: any) {
     this._motivos_respostas = motivos_respostas;
+    this.motivoAcao = motivos_respostas;
     this.motivosRespostasFormatado = motivos_respostas.sort((a, b) => {
       if (a.ordem_listagem > b.ordem_listagem) return 1;
       else if (a.ordem_listagem < b.ordem_listagem) return -1;
@@ -275,9 +277,21 @@ export class TelemarketingQuestionarioComponent implements OnInit {
       service: 'salvarEvento',
       paramsService: parametros
     });
+
+   
+    let acao = this.motivoAcao.filter((r) => {
+      if (r.id == this.questionarioForm.value.motivoRespostaSelecionado) 
+      return true;
+    });
+
     this._limpar();
     this.atualizaMeta.emit(metaPessoa.resposta[0]);
     this.modal.hide()
+
+    
+    //eval(acao[0].acao_js)
+
+
   }
 
   _limpar() {

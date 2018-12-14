@@ -10,6 +10,8 @@ function salvarProposta(req, res) {
 
     req.query.proposta = JSON.parse(req.query.proposta);
 
+    req.query.proposta.placa = req.query.proposta.placa ? req.query.proposta.placa : ''
+
     let sql = `INSERT INTO propostas(
                     id_tipo_veiculo, codigofipe, marca, modelo, ano_modelo, data_consulta 
                     , preco_medio, adesao, mensalidade , participacao, cota, id_fundo_terceiros

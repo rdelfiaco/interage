@@ -30,6 +30,7 @@ export class ConnectHTTP {
       let url = `${host}${service}`
 
       
+      
       if (!options.naoExigeToken && (!options.paramsService.token || !options.paramsService.id_usuario)) {
         let usuarioLogado = this.localStorage.getLocalStorage('usuarioLogado') as Usuario;
         options.paramsService.id_usuario = usuarioLogado.id.toString();
@@ -62,6 +63,7 @@ export class ConnectHTTP {
 
 
 
+  
   sendFile(options: optionsCallService): Promise<retObjectCallService> | retObjectCallService {
     const mensagem = this._checkOptionsCallService(options);
     if (mensagem && !mensagem.error) return mensagem;
