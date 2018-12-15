@@ -8,7 +8,7 @@
       </a>
   </div> -->
     <div class=" col-md-5" style="margin-top: 25px">
-        <app-pesquisa-cliente [initValueId]="initValueId" (onSelectCliente)="onSelectCliente($event)"></app-pesquisa-cliente>
+        <app-pesquisa-cliente [initValueId]="initValueId" [disabled]="pessoaObject" (onSelectCliente)="onSelectCliente($event)"></app-pesquisa-cliente>
     </div>
 
     <div class="col-md-4" style="margin-top: 25px">

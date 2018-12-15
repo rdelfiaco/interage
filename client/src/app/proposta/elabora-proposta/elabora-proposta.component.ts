@@ -1,7 +1,7 @@
 import { style } from '@angular/animations';
 
 import { Proposta } from '../proposta';
-import { Component, OnInit, Input, EventEmitter, OnChanges, SimpleChanges, Type } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, OnChanges, SimpleChanges, Type, Output } from '@angular/core';
 import { Usuario } from '../../login/usuario';
 import { ConnectHTTP } from '../../shared/services/connectHTTP';
 import { LocalStorage } from '../../shared/services/localStorage';
@@ -27,8 +27,20 @@ interface selectValues {
 
 
 export class ElaboraPropostaComponent implements OnInit {
-  @Input() pessoa: any
+  pessoaObject: any;
+  @Input()
+  set pessoa(pessoa: any) {
+    this.pessoaObject = pessoa;
+    this.initValueId = new Observable((observer) => {
+      observer.next(pessoa.principal.id);
+    });
+  }
+  get pessoa() {
+    return this.pessoaObject;
+  }
   @Input() evento: any
+  @Input() returnProp: boolean;
+  @Output() returnProposta = new EventEmitter();
 
   // @Input() refreshtabelaFipe: TabelaFipe;
 
@@ -103,7 +115,7 @@ export class ElaboraPropostaComponent implements OnInit {
     this.tabelaCombos = tabelaPrecos.resposta.TabelaCombos;
 
     this.initValueId = new Observable((observer) => {
-      observer.next('14');
+      observer.next('');
     });
     // combo tipo do veículo 
     this.tipoVeiculoSelect = tabelaPrecos.resposta.TipoVeiculos;
@@ -465,7 +477,7 @@ export class ElaboraPropostaComponent implements OnInit {
           fontSize: 8
         }
       },
-      images : { logotipo: img }
+      images: { logotipo: img }
     };
 
 
@@ -482,26 +494,29 @@ export class ElaboraPropostaComponent implements OnInit {
 
     this.salvarProposta();
 
-    
+
 
   }
 
   async salvarProposta() {
     console.log(' getProposta ', this.propostaComuc.getProposta());
     try {
-      await this.connectHTTP.callService({
-        service: 'salvarProposta',
-        paramsService: {
-          id_usuario: this.usuarioLogado.id,
-          token: this.usuarioLogado.token,
-          proposta: JSON.stringify(this.propostaComuc.getProposta()).replace(/\#/gim, '%23'),
-          propostaJSON: JSON.stringify(this.propostaComuc.getPropostaJSON()).replace(/\#/gim, '%23')
-        }
-      });
-      this.toastrService.success('Proposta salva com sucesso!');
+      let paramsService = {
+        proposta: JSON.stringify(this.propostaComuc.getProposta()).replace(/\#/gim, '%23'),
+        propostaJSON: JSON.stringify(this.propostaComuc.getPropostaJSON()).replace(/\#/gim, '%23')
+      };
 
-      document.location.reload(true); 
+      debugger;
+      if (this.returnProp) this.returnProposta.emit(paramsService)
+      else {
+        await this.connectHTTP.callService({
+          service: 'salvarProposta',
+          paramsService
+        });
+        this.toastrService.success('Proposta salva com sucesso!');
 
+        document.location.reload(true);
+      }
     }
     catch (e) {
       this.toastrService.error('Proposta não salva');

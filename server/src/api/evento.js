@@ -72,7 +72,7 @@ function motivosRespostas(req, res) {
       client.connect()
 
       let sqlMotivosResposta = `SELECT motivos_respostas.id, motivos_respostas.exige_predicao, motivos_respostas.exige_objecao, 
-                       motivos_respostas.nome, motivos_respostas.ordem_listagem, 
+                       motivos_respostas.nome, motivos_respostas.ordem_listagem, motivos_respostas.exige_proposta,
                        motivos_respostas.exige_observacao, motivos_eventos_automaticos.reagendar, motivos_respostas.acao_js
                        FROM motivos_respostas
                       LEFT JOIN motivos_eventos_automaticos ON motivos_respostas.id = motivos_eventos_automaticos.id_motivo_resposta
@@ -130,8 +130,8 @@ function _criarEvento(client, id_campanha, id_motivo, id_evento_pai, id_evento_a
       id_canal)
       VALUES (${id_campanha || 'NULL'},
       ${id_motivo},
-      ${id_evento_pai},
-      ${id_evento_anterior},
+      ${id_evento_pai || 'NULL'},
+      ${id_evento_anterior || 'NULL'},
       1,
       ${id_pessoa_criou},
       now(),

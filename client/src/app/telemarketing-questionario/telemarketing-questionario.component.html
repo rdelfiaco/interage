@@ -1,7 +1,7 @@
 <form [formGroup]="questionarioForm" class="formQuestionario">
   <div class="row">
-      <button mdbBtn type="button" color="danger" size="sm" mdbWavesEffect>Primeira Ligação</button>
-      <button mdbBtn type="button" color="dark-green" size="sm" mdbWavesEffect>Ligações Anteriores</button>
+    <button mdbBtn type="button" color="danger" size="sm" mdbWavesEffect>Primeira Ligação</button>
+    <button mdbBtn type="button" color="dark-green" size="sm" mdbWavesEffect>Ligações Anteriores</button>
     <div class="md-form input-group">
 
       <div *ngIf="quantEventosDaPessoa == 1" class="btn-group" mdbDropdown>
@@ -36,6 +36,28 @@
         placeholder="Resultado da Ligação"></mdb-select>
     </div>
   </div>
+
+  <div *ngIf="exige_proposta" class="row">
+    <button type="button" mdbBtn color="dark-green" class="relative waves-light" (click)="elaborarProposta.show();"
+      mdbWavesEffect>Elaborar Proposta</button>
+  </div>
+  <div *ngIf="_pessoaObject" mdbModal #elaborarProposta="mdbModal" [config]="{backdrop: true, ignoreBackdropClick: true}"
+    class="modal fade right" role="dialog" aria-labelledby="elaborarProposta" aria-hidden="true">
+    <div class="modal-dialog modal-fluid" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title w-100" id="myModalLabel">Elaborar Proposta - {{_pessoaObject.principal.nome}}</h4>
+          <button type="button" class="close pull-right" aria-label="Close" (click)="confirmExcluirTelefone.hide()">
+            <span aria-hidden="true">×</span>
+          </button>
+        </div>
+        <div class="modal-body" style="overflow: auto; height: 80vh;">
+          <app-proposta [returnProp]="returnProp" [abaSelecionada]="abaSelecionada" [pessoa]="_pessoaObject" (returnProposta)="recebeProposta($event)"></app-proposta>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div *ngIf="discando" class="row">
     <div class="md-form col">
       <textarea type="text" id="form7" formControlName="observacao" class="md-textarea form-control" mdbInputDirective></textarea>

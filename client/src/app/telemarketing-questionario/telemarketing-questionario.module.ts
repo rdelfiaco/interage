@@ -6,6 +6,7 @@ import { MDBBootstrapModulesPro, ToastModule } from '../../lib/ng-uikit-pro-stan
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BrowserModule } from '@angular/platform-browser';
 import { PipesModule } from '../shared/pipes/pipesModule';
+import { PropostaModule } from '../proposta/proposta.module';
 
 @NgModule({
   imports: [
@@ -16,7 +17,8 @@ import { PipesModule } from '../shared/pipes/pipesModule';
     MDBBootstrapModulesPro.forRoot(),
     ToastModule.forRoot(),
     BrowserAnimationsModule,
-    PipesModule
+    PipesModule,
+    PropostaModule
   ],
   declarations: [
     TelemarketingQuestionarioComponent,
