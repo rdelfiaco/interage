@@ -56,7 +56,7 @@ export class ElaboraPropostaComponent implements OnInit {
   adesao: number;
   vlrParticipacao: number;
   prcParticipacao: number;
-
+  bntGeraProposta: false;
 
   sVlrVeiculo: string;
   nVlrVeiculo: number;
@@ -101,6 +101,8 @@ export class ElaboraPropostaComponent implements OnInit {
     this.carrosReservas = tabelaPrecos.resposta.CarroReserva;
     this.tabelaValores = tabelaPrecos.resposta.TabelaValores;
     this.tabelaCombos = tabelaPrecos.resposta.TabelaCombos;
+    this.bntGeraProposta = false;
+
 
     this.initValueId = new Observable((observer) => {
       observer.next('14');
@@ -482,7 +484,7 @@ export class ElaboraPropostaComponent implements OnInit {
 
     this.salvarProposta();
 
-    
+    this.bntGeraProposta = true;
 
   }
 
@@ -498,6 +500,7 @@ export class ElaboraPropostaComponent implements OnInit {
           propostaJSON: JSON.stringify(this.propostaComuc.getPropostaJSON()).replace(/\#/gim, '%23')
         }
       });
+
       this.toastrService.success('Proposta salva com sucesso!');
 
       document.location.reload(true); 

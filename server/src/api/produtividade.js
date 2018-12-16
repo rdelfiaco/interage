@@ -143,15 +143,14 @@ function getEventosTentandoDepartamento(req, res) {
       let sql = `select tentativas, CASE  WHEN tentativas = 0 THEN count(*) else sum(tentativas) end  as ligacoes, count(tentativas) as clientes
                     from ( select id_pessoa_receptor, count(*) as tentativas
                             from eventos  
-                                where   id_campanha = ${req.query.id_campanha}
-                                        and date(dt_resolvido) between '${req.query.dtInicial}' and '${req.query.dtFinal}' 
+                                where   date(dt_resolvido) between '${req.query.dtInicial}' and '${req.query.dtFinal}' 
                             group by id_pessoa_receptor
 			    
                             union
 
                             select id_pessoa_receptor,  0 as tentativas
                             from eventos  
-                                where id_evento_pai is null and id_status_evento in (1,4) and id_campanha = ${req.query.id_campanha}
+                                where id_evento_pai is null and id_status_evento in (1,4) 
                                         and tipodestino = 'O' and id_pessoa_organograma = 4 
                             group by id_pessoa_receptor) a
                     group by tentativas
@@ -192,7 +191,6 @@ function getEventosTentandoUsuario(req, res) {
                     from ( select id_pessoa_receptor, count(*) as tentativas
                             from eventos  
                                 where  id_pessoa_resolveu = ${req.query.id_pessoa_usuario_select} 
-                                        and id_campanha = ${req.query.id_campanha}
                                         and date(dt_resolvido) between '${req.query.dtInicial}' and '${req.query.dtFinal}' 
                             group by id_pessoa_receptor
 			    
@@ -200,7 +198,7 @@ function getEventosTentandoUsuario(req, res) {
 
                             select id_pessoa_receptor,  0 as tentativas
                             from eventos  
-                                where id_evento_pai is null and id_status_evento in (1,4) and id_campanha = ${req.query.id_campanha}
+                                where id_evento_pai is null and id_status_evento in (1,4)
                                         and tipodestino = 'P' and id_pessoa_organograma = ${req.query.id_pessoa_usuario_select}  
                             group by id_pessoa_receptor) a
                     group by tentativas
@@ -247,8 +245,7 @@ function getEventosPredicaoDepartamento(req, res) {
         where id_status_evento in (3,7)
         and id_resp_motivo = 7
         and CASE  WHEN id_evento_pai is null then id else id_evento_pai end 
-          in ( select id from eventos where id_campanha = ${req.query.id_campanha}
-                  and id_status_evento in (3,7)
+          in ( select id from eventos where id_status_evento in (3,7)
                   and id_evento_pai is null  
             and date(dt_resolvido) between '${req.query.dtInicial}'  and '${req.query.dtFinal}' )
         and  CASE  WHEN id_evento_pai is null then id else id_evento_pai end not in ( select id_evento_pai  
@@ -297,7 +294,6 @@ function getEventosPredicaoUsuario(req, res) {
         from eventos  
         where id_status_evento in (3,7)
         and id_resp_motivo = 7
-        and id_campanha = ${req.query.id_campanha}
         and id_pessoa_resolveu = ${req.query.id_pessoa_usuario_select} 
         and date(dt_resolvido) between '${req.query.dtInicial}'  and '${req.query.dtFinal}' 
         and  CASE  WHEN id_evento_pai is null then id else id_evento_pai end not in ( select id_evento_pai  
@@ -340,20 +336,17 @@ function getEventosResultadoDepartamento(req, res) {
 
       let sql = `select '1' as id  ,'Comprou' as descricao, count(*) as qdte
                       from eventos 
-                    where id_campanha = ${req.query.id_campanha}
-                        and date(dt_resolvido) between '${req.query.dtInicial}' and '${req.query.dtFinal}'
+                    where  date(dt_resolvido) between '${req.query.dtInicial}' and '${req.query.dtFinal}'
                         and id_resp_motivo = 8
                   union 
                   select  '2' as id ,'Não comprou' as descricao, count(*) as qdte
                       from eventos 
-                    where id_campanha = ${req.query.id_campanha}
-                        and date(dt_resolvido) between '${req.query.dtInicial}' and '${req.query.dtFinal}'
+                    where  date(dt_resolvido) between '${req.query.dtInicial}' and '${req.query.dtFinal}'
                         and id_resp_motivo = 9
                   union	
                   select  '3' as id , 'Ligações excedidas' as descricao, count(*) as qdte 
                       from eventos 
-                    where id_campanha = ${req.query.id_campanha}
-                        and date(dt_resolvido) between '${req.query.dtInicial}' and '${req.query.dtFinal}'
+                    where  date(dt_resolvido) between '${req.query.dtInicial}' and '${req.query.dtFinal}'
                         and excedeu_tentativas 	
                   
                   order by id`
@@ -390,22 +383,19 @@ function getEventosResultadoUsuario(req, res) {
 
       let sql = `select '1' as id  ,'Comprou' as descricao, count(*) as qdte
                       from eventos 
-                    where id_campanha = ${req.query.id_campanha}
-                        and id_pessoa_resolveu = ${req.query.id_pessoa_usuario_select}
+                    where id_pessoa_resolveu = ${req.query.id_pessoa_usuario_select}
                         and date(dt_resolvido) between '${req.query.dtInicial}' and '${req.query.dtFinal}'
                         and id_resp_motivo = 8
                   union 
                   select  '2' as id ,'Não comprou' as descricao, count(*) as qdte
                       from eventos 
-                    where id_campanha = ${req.query.id_campanha}
-                        and id_pessoa_resolveu = ${req.query.id_pessoa_usuario_select}
+                    where  id_pessoa_resolveu = ${req.query.id_pessoa_usuario_select}
                         and date(dt_resolvido) between '${req.query.dtInicial}' and '${req.query.dtFinal}'
                         and id_resp_motivo = 9
                   union	
                   select  '3' as id , 'Ligações excedidas' as descricao, count(*) as qdte 
                       from eventos 
-                    where id_campanha = ${req.query.id_campanha}
-                        and id_pessoa_resolveu = ${req.query.id_pessoa_usuario_select}
+                    where  id_pessoa_resolveu = ${req.query.id_pessoa_usuario_select}
                         and date(dt_resolvido) between '${req.query.dtInicial}' and '${req.query.dtFinal}'
                         and excedeu_tentativas 	
                   

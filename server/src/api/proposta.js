@@ -11,7 +11,7 @@ function salvarProposta(req, res) {
     req.query.proposta = JSON.parse(req.query.proposta);
 
     req.query.proposta.placa = req.query.proposta.placa ? req.query.proposta.placa : ''
-
+   
     let sql = `INSERT INTO propostas(
                     id_tipo_veiculo, codigofipe, marca, modelo, ano_modelo, data_consulta 
                     , preco_medio, adesao, mensalidade , participacao, cota, id_fundo_terceiros
@@ -40,7 +40,7 @@ function salvarProposta(req, res) {
                           '${req.query.proposta.placa}',
                           5,now()) RETURNING id`
 
-    
+                         
 
     executaSQL(credenciais, sql).then(registros => {
       
@@ -91,7 +91,7 @@ function getPropostasDoUsuario(req, res) {
     };
 
     let sql = `select * from view_proposta where id_usuario=${req.query.id_usuario} order by id desc `
-    console.log(sql);
+    
     executaSQL(credenciais, sql)
       .then(res => {
         if (res.length > 0) {
