@@ -496,18 +496,13 @@ export class ElaboraPropostaComponent implements OnInit {
 
     this.salvarProposta();
 
-<<<<<<< HEAD
     this.bntGeraProposta = true;
-=======
-
->>>>>>> 5647b94b7ffe51cefc807fa612d0628fe9bae32a
 
   }
 
   async salvarProposta() {
     console.log(' getProposta ', this.propostaComuc.getProposta());
     try {
-<<<<<<< HEAD
       await this.connectHTTP.callService({
         service: 'salvarProposta',
         paramsService: {
@@ -519,12 +514,10 @@ export class ElaboraPropostaComponent implements OnInit {
       });
 
       this.toastrService.success('Proposta salva com sucesso!');
-=======
       let paramsService = {
         proposta: JSON.stringify(this.propostaComuc.getProposta()).replace(/\#/gim, '%23'),
         propostaJSON: JSON.stringify(this.propostaComuc.getPropostaJSON()).replace(/\#/gim, '%23')
       };
->>>>>>> 5647b94b7ffe51cefc807fa612d0628fe9bae32a
 
       debugger;
       if (this.returnProp) this.returnProposta.emit(paramsService)
