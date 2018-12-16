@@ -47,7 +47,10 @@ import { FormataDinheiroPipe } from '../shared/pipes/mascaraDinheiro/formata-din
     Proposta,
     ComunicaPropostaService,
     PlacaPipe,
-    FormataDinheiroPipe
+    FormataDinheiroPipe,
+  ],
+  exports: [
+    PropostaComponent
   ]
 
 })

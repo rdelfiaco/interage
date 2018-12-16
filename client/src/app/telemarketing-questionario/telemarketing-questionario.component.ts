@@ -1,17 +1,17 @@
 import { Component, OnInit, Input, ViewChild, ElementRef, EventEmitter, SimpleChanges, Output } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl, FormArray, Validators, AbstractControl } from '@angular/forms';
-import { IMyOptions, MDBDatePickerComponent } from '../../lib/ng-uikit-pro-standard';
+import { IMyOptions, MDBDatePickerComponent, ModalDirective } from '../../lib/ng-uikit-pro-standard';
 import { ConnectHTTP } from '../shared/services/connectHTTP';
 import { Usuario } from '../login/usuario';
 import { LocalStorage } from '../shared/services/localStorage';
 import * as moment from 'moment';
 import { MascaraTelefonePipe } from '../shared/pipes/mascaraTelefone/mascara-telefone.pipe';
+import { Observable } from 'rxjs';
 
 interface selectValues {
   value: string
   label: string
 }
-
 @Component({
   selector: 'app-telemarketing-questionario',
   templateUrl: './telemarketing-questionario.component.html',
@@ -28,7 +28,8 @@ export class TelemarketingQuestionarioComponent implements OnInit {
   objecoesFormatado: Array<object>
   questionarioForm: FormGroup;
   motivosRespostasFormatado: Array<object>
-  motivoRespostaSelecionado: object
+  motivoRespostaSelecionado: object;
+  returnProp: boolean = true;
   public myDatePickerOptions: IMyOptions = {
     // Strings and translations
     dayLabels: { su: 'Dom', mo: 'Seg', tu: 'Ter', we: 'Qua', th: 'Qui', fr: 'Sex', sa: 'Sab' },
@@ -49,12 +50,19 @@ export class TelemarketingQuestionarioComponent implements OnInit {
   exige_observacao: boolean = false;
   exige_predicao: boolean = false;
   exige_objecao: boolean = false;
+  exige_proposta: boolean = false;
   discando: boolean = false;
   podeGravar: boolean = false;
   quantEventosDaPessoa: number;
   corDoBotaoDiscar: string = 'danger';
   motivoAcao: Array<object>;
+  proposta: object;
+  abaSelecionada: Observable<number> = new Observable((observer) => {
+    observer.next(1);
+  });
+
   @ViewChild("dataReagendamento") datePicker: MDBDatePickerComponent;
+  @ViewChild('elaborarProposta') elaborarProposta: ModalDirective;
 
   @Input() modal: any
   @Input() campanhaSelecionada: any
@@ -121,6 +129,11 @@ export class TelemarketingQuestionarioComponent implements OnInit {
 
   ValidateReagendar(control: AbstractControl) {
     if (this.reagendar && !control.value) return { reagendar: true };
+    else return null;
+  }
+
+  ValidateProposta(control: AbstractControl) {
+    if (this.proposta && !Object.keys(control.value).length) return { proposta: true };
     else return null;
   }
 
@@ -193,7 +206,8 @@ export class TelemarketingQuestionarioComponent implements OnInit {
       data: ['', [this.ValidateReagendar.bind(this)]],
       hora: ['', [this.ValidateReagendar.bind(this)]],
       id_predicao: ['', [this.ValidateExigePredicao.bind(this)]],
-      id_objecao: ['', [this.ValidateExigeObjecao.bind(this)]]
+      id_objecao: ['', [this.ValidateExigeObjecao.bind(this)]],
+      proposta: [{}, [this.ValidateProposta.bind(this)]]
     })
 
     let data = new Date();
@@ -243,12 +257,16 @@ export class TelemarketingQuestionarioComponent implements OnInit {
         this.exige_observacao = motivo.exige_observacao;
         this.exige_predicao = motivo.exige_predicao;
         this.exige_objecao = motivo.exige_objecao;
+        this.exige_proposta = motivo.exige_proposta;
 
         self.questionarioForm.controls['observacao'].updateValueAndValidity();
         self.questionarioForm.controls['id_predicao'].updateValueAndValidity();
         self.questionarioForm.controls['id_objecao'].updateValueAndValidity();
         self.questionarioForm.controls['data'].updateValueAndValidity();
         self.questionarioForm.controls['hora'].updateValueAndValidity();
+        self.questionarioForm.controls['proposta'].updateValueAndValidity();
+
+        if (this.exige_proposta) this.elaborarProposta.show();
       }
     })
   }
@@ -272,26 +290,32 @@ export class TelemarketingQuestionarioComponent implements OnInit {
       id_campanha: this.campanhaSelecionada,
       observacao: this.questionarioForm.value.observacao,
       data: moment(this.questionarioForm.value.data + ' - ' + this.questionarioForm.value.hora, 'DD/MM/YYYY - hh:mm').toISOString(),
+      proposta: this.questionarioForm.value.proposta
     }
     let metaPessoa = await this.connectHTTP.callService({
       service: 'salvarEvento',
       paramsService: parametros
     });
 
-   
-    let acao = this.motivoAcao.filter((r) => {
-      if (r.id == this.questionarioForm.value.motivoRespostaSelecionado) 
-      return true;
-    });
+
+    let acao = this.motivoAcao.filter((r) => r.id == this.questionarioForm.value.motivoRespostaSelecionado);
 
     this._limpar();
     this.atualizaMeta.emit(metaPessoa.resposta[0]);
     this.modal.hide()
 
-    
+    this.abaSelecionada = new Observable((observer) => {
+      observer.next(5);
+    });
+
     //eval(acao[0].acao_js)
 
 
+  }
+
+  recebeProposta(proposta: any) {
+    this.questionarioForm.controls['idTelefoneSelecionado'].setValue(proposta);
+    this.gravarLigacao();
   }
 
   _limpar() {
