@@ -730,6 +730,7 @@ function pesquisaPessoas(req, res) {
       
       client.query(pesquisa).then((res) => {
         if (res.rowCount > 0) {
+          client.end()
           resolve(res.rows);
         }
         else reject(`Não há pessoas com o texto: ${req.query.searchText}`)

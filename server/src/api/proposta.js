@@ -74,12 +74,13 @@ function salvarProposta(req, res) {
                       'Registar se o cliente aceitou ou não proposta',
                       7,
                       ${id_proposta})`
+        console.log(sql)
         executaSQL(credenciais, sql).then(registros => {
-          resolve(registros)
+          resolve(id_proposta)
         }).catch(e => {
-          eject(e);});
+          reject(e);});
     }).catch(e => {
-      eject(e);});
+      reject(e);});
   })
 };
 

@@ -244,6 +244,7 @@ function getCampanhaResultado(req, res) {
         .then(res => {
           if (res.rowCount > 0) {
             let registros = res.rows;
+            client.end();
             resolve(registros)
           }
           else

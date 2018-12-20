@@ -46,8 +46,11 @@
     <div class="modal-dialog modal-fluid" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h4 class="modal-title w-100" id="myModalLabel">Elaborar Proposta - {{_pessoaObject.principal.nome}}</h4>
-          <button type="button" class="close pull-right" aria-label="Close" (click)="confirmExcluirTelefone.hide()">
+          <h4 class="modal-title w-100" id="myModalLabel">Elaboranado Proposta para - {{_pessoaObject.principal.nome}}</h4>
+          <!-- <button type="button" class="close pull-right" aria-label="Close" (click)="fecharElaborarProposta($event)">
+            <span aria-hidden="true">×</span>
+          </button> -->
+          <button type="button" class="close pull-right" aria-label="Close" (click)="elaborarProposta.hide()">
             <span aria-hidden="true">×</span>
           </button>
         </div>

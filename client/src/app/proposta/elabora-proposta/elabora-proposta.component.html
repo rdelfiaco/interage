@@ -11,10 +11,16 @@
         <app-pesquisa-cliente [initValueId]="initValueId" [disabled]="pessoaObject" (onSelectCliente)="onSelectCliente($event)"></app-pesquisa-cliente>
     </div>
 
-    <div class="col-md-4" style="margin-top: 25px">
+    <div class="col-md-3" style="margin-top: 25px">
         <mdb-select [(ngModel)]="tipoVeiculoSelectValue" [options]="tipoVeiculoSelect" placeholder="Escolha o tipo do veículo"
             style="font-size: 0.5rem;" (selected)="atualizaTipoVeiculo($event)"></mdb-select>
         <label>Tipo do Veículo</label>
+    </div>
+
+    <div   *ngIf="(tipoVeiculoSelectValue == 3)" class=" col-md-2 md-form " style="margin-top: 30px">
+            <input mdbInputDirective type="text" id="ccMoto" class="form-control" 
+            [(ngModel)]="sccMoto" (keyup)="atualizaTipoVeiculo(tipoVeiculoSelectValue)" >
+            <label for="ccMoto" style="margin-left: 15px">CC da moto</label>
     </div>
 
     <div class=" col-md-2 md-form " style="margin-top: 30px">
@@ -24,7 +30,7 @@
 
 </div>
 
-<div *ngIf="valores.length > 0 ;  else limpaTela ">
+<div *ngIf="(valores.length > 0) ;  else inconsistencias  ">
     <!-- 
     <div class="row ">
         <div class="content" >
@@ -209,9 +215,18 @@
 </div>
 
 
-<ng-template #limpaTela>
-    <h4>
-        Informa tabela Fipe!
-    </h4>
+<ng-template #inconsistencias>
+
+    <div *ngIf="(tipoVeiculoSelectValue == 3) ; else  inconsistencia_01" >
+            Informa Cilindrada da moto 
+    </div>
 
 </ng-template>
+
+<ng-template #inconsistencia_01>
+
+        <h4>
+            Informa tabela Fipe!
+        </h4>
+    
+    </ng-template>

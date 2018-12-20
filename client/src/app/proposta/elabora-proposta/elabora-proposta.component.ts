@@ -34,6 +34,8 @@ export class ElaboraPropostaComponent implements OnInit {
     this.initValueId = new Observable((observer) => {
       observer.next(pessoa.principal.id);
     });
+    this.idPessoaCliente = pessoa.principal.id;
+    
   }
   get pessoa() {
     return this.pessoaObject;
@@ -68,7 +70,8 @@ export class ElaboraPropostaComponent implements OnInit {
   adesao: number;
   vlrParticipacao: number;
   prcParticipacao: number;
-  bntGeraProposta: false;
+  bntGeraProposta: boolean = false;
+  sccMoto: number;
 
   sVlrVeiculo: string;
   nVlrVeiculo: number;
@@ -152,10 +155,14 @@ export class ElaboraPropostaComponent implements OnInit {
 
   atualizaTabelas() {
     this.nVlrVeiculo = Number(this.sVlrVeiculo.substr(2, 12).trim().replace('.', '').replace(',', '.'));
+
+    let nVlrBusca = this.nVlrVeiculo;
+    if (this.tipoVeiculoSelectValue == 3){ nVlrBusca = this.sccMoto}
+
     if (this.tabelaCombos.length > 0) {
-      this.combos = this.tabelaCombos.filter(this.filtraTabelas, [this.nVlrVeiculo, this.tipoVeiculoSelectValue]);
+      this.combos = this.tabelaCombos.filter(this.filtraTabelas, [nVlrBusca, this.tipoVeiculoSelectValue]);
     }
-    this.valores = this.tabelaValores.filter(this.filtraTabelas, [this.nVlrVeiculo, this.tipoVeiculoSelectValue]);
+    this.valores = this.tabelaValores.filter(this.filtraTabelas, [nVlrBusca, this.tipoVeiculoSelectValue]);
 
     this.fundoTerceiro = this.fundosTerceiros.filter(this.filtraTabelasTipoVeiculos, [this.tipoVeiculoSelectValue]);
 
@@ -181,7 +188,8 @@ export class ElaboraPropostaComponent implements OnInit {
       }
 
       this.somaValoresProposta();
-      this.proposta.mensalidade = this.vlrPoposta;
+      debugger
+      this.proposta.mensalidade = Number(this.vlrPoposta.toFixed(2));
       // quando for combro ajustar 
       this.proposta.adesão = this.adesao;
       this.proposta.participacao = this.vlrParticipacao;
@@ -278,7 +286,8 @@ export class ElaboraPropostaComponent implements OnInit {
 
 
   geraProposta() {
-    debugger
+    
+    
     var docDefinition = {
       pageSize: 'A4',
       pageMargins: [10, 10, 5, 5],
@@ -411,7 +420,7 @@ export class ElaboraPropostaComponent implements OnInit {
                         \nReboque do veículo –1000 km (500 km ida e 500 km volta) até 6x ao mês;  
                         \nSocorro elétrico e mecânico; Chaveiro; Taxi, SOS Pneus;
                         \nMensalidade Contínua (sem renovação); Não trabalhamos com Bônus; 
-                        \nIndenização 100% tabela Fipe, exceto veículos de leilão e remarcados( 80% DE IDENIZAÇAO)
+                        \nIndenização 100% tabela Fipe, exceto veículos de leilão é remarcado( 80% DE INDENIZAÇÃO)
                         \n`,
                     fontSize: 10
                   }
@@ -489,21 +498,24 @@ export class ElaboraPropostaComponent implements OnInit {
     this.proposta.idTipoVeiculo = this.tipoVeiculoSelectValue;
     this.proposta.cota = this.cota;
     this.propostaComuc.setProposta(this.proposta);
-    //pdfMake.createPdf(docDefinition).open()
+    pdfMake.createPdf(docDefinition).open()
     docDefinition.images.logotipo = ''; // para salvar a imagem do logo 
 
     this.propostaComuc.setPropostaJSON(docDefinition)
 
     this.salvarProposta();
-
-    this.bntGeraProposta = true;
+    
+    this.aba.setAba(5);
+    
+    
 
   }
 
   async salvarProposta() {
+    
     console.log(' getProposta ', this.propostaComuc.getProposta());
     try {
-      await this.connectHTTP.callService({
+      let proposta =  await this.connectHTTP.callService({
         service: 'salvarProposta',
         paramsService: {
           id_usuario: this.usuarioLogado.id,
@@ -512,7 +524,11 @@ export class ElaboraPropostaComponent implements OnInit {
           propostaJSON: JSON.stringify(this.propostaComuc.getPropostaJSON()).replace(/\#/gim, '%23')
         }
       });
+      // debugger
+      // this.bntGeraProposta = true;
 
+      // this.returnProposta.emit(proposta.resposta.idProposta )
+      
       this.toastrService.success('Proposta salva com sucesso!');
       let paramsService = {
         proposta: JSON.stringify(this.propostaComuc.getProposta()).replace(/\#/gim, '%23'),
@@ -533,6 +549,7 @@ export class ElaboraPropostaComponent implements OnInit {
     }
     catch (e) {
       this.toastrService.error('Proposta não salva');
+      this.bntGeraProposta = false;
     }
   }
 

@@ -18,6 +18,7 @@ interface selectValues {
   styleUrls: ['./telemarketing-questionario.component.scss'],
   providers: [MascaraTelefonePipe]
 })
+
 export class TelemarketingQuestionarioComponent implements OnInit {
   private _pessoaObject: any;
   private _eventoObject: any;
@@ -267,6 +268,7 @@ export class TelemarketingQuestionarioComponent implements OnInit {
         self.questionarioForm.controls['proposta'].updateValueAndValidity();
 
         if (this.exige_proposta) this.elaborarProposta.show();
+
       }
     })
   }
@@ -309,14 +311,20 @@ export class TelemarketingQuestionarioComponent implements OnInit {
     });
 
     //eval(acao[0].acao_js)
-
-
   }
 
   recebeProposta(proposta: any) {
-    this.questionarioForm.controls['idTelefoneSelecionado'].setValue(proposta);
+    debugger
+    this.questionarioForm.controls['idProposta'].setValue(proposta);
     this.gravarLigacao();
   }
+
+  // fecharElaborarProposta(proposta: any) {
+  //   debugger
+  //   this.gravarLigacao();
+  //   this.elaborarProposta.hide()
+  // }
+  
 
   _limpar() {
     this.questionarioForm = null;
@@ -339,4 +347,5 @@ export class TelemarketingQuestionarioComponent implements OnInit {
     this.motivoRespostaSelecionado = null;
     this.clear.emit();
   }
+
 }

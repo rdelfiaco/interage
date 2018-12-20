@@ -22,12 +22,12 @@ exports.checkToken = function checkToken(token, idUsuario) {
               resolve(historico)
             else reject('Token não compativel');
           }
+          client.end();
           reject('Token não é válido')
         }
         )
         .catch(err => {
           client.end();
-          console.log(err)
         })
     })
   }
