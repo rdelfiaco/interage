@@ -45,7 +45,8 @@ function salvarProposta(req, res) {
     executaSQL(credenciais, sql).then(registros => {
       
       //criar evento para acompanhar poposta 
-      let id_proposta = registros[0].id
+      let id_proposta = registros[0].id;
+      let idProposta = registros;
      
       sql = `INSERT INTO public.eventos(
               id_motivo,  
@@ -74,9 +75,8 @@ function salvarProposta(req, res) {
                       'Registar se o cliente aceitou ou não proposta',
                       7,
                       ${id_proposta})`
-        console.log(sql)
         executaSQL(credenciais, sql).then(registros => {
-          resolve(id_proposta)
+          resolve(idProposta)
         }).catch(e => {
           reject(e);});
     }).catch(e => {

@@ -1,3 +1,4 @@
+import { EventTarget } from './../../../lib/ng-uikit-pro-standard/free/utils/facade/browser';
 
 import { Proposta } from '../proposta';
 import { Component, OnInit, SimpleChanges, Input, Output, EventEmitter, ViewChild, OnDestroy } from '@angular/core';
@@ -56,10 +57,12 @@ formulario: FormGroup;
   
   }
 
-  lerTabelaFipe(){
+  lerTabelaFipe($event: any){
 
-
-    let strTabelaFipe : string = this.formulario.get("tabelaFipe").value;
+ 
+    // let strTabelaFipe : string = this.formulario.get("tabelaFipe").value;
+    let strTabelaFipe: string  = $event.target.value;
+    debugger
     if (strTabelaFipe.length > 200){
       let i, ij, j: number;
       let colunaDados : boolean;
@@ -82,10 +85,10 @@ formulario: FormGroup;
         };
       this.colocaConteudoCampo(j,strTabelaFipe.substr(ij+1,i-ij).trim());
 
-      console.log( 'ler ', this.proposta)
+      
       this.propostaComuc.setProposta(this.proposta);
-  
-      this.mudaAba()
+      
+      this.mudaAba();
 
   } else{
     this.toastrService.error('Dados incorretos! Favor clique no botão limpar e cole a tabela Fipe novamente');

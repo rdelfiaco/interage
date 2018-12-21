@@ -188,7 +188,7 @@ export class ElaboraPropostaComponent implements OnInit {
       }
 
       this.somaValoresProposta();
-      debugger
+      
       this.proposta.mensalidade = Number(this.vlrPoposta.toFixed(2));
       // quando for combro ajustar 
       this.proposta.adesão = this.adesao;
@@ -287,233 +287,241 @@ export class ElaboraPropostaComponent implements OnInit {
 
   geraProposta() {
     
-    
-    var docDefinition = {
-      pageSize: 'A4',
-      pageMargins: [10, 10, 5, 5],
-      content: [
-        {
-          style: 'tableExample',
-          table: {
-            widths: [150, 380],
-            body: [
-              [{
-                image: 'logotipo',
-                width: 80,
-                height: 95,
-                alignment: 'center',
-                margin: [0, 0, 0, 0],
-                border: [false, false, false, false]
-              }, {
-                text: 'AV. LAUDELINO GOMES QD 210 LT 01 N. 61 \nPEDRO LUDOVICO – GOIÂNIA - GO\n www.altispv.com.br',
-                alignment: 'center',
-                fontSize: 10,
-                height: 95,
-                margin: [0, 50, 0, 0],
-                border: [false, false, false, false]
-              }
+   
+    if (!this.idPessoaCliente){
+      this.toastrService.error('Selecione um cliente');
+    }else 
+    {
+      
+      var docDefinition = {
+        pageSize: 'A4',
+        pageMargins: [10, 10, 5, 5],
+        content: [
+          {
+            style: 'tableExample',
+            table: {
+              widths: [150, 380],
+              body: [
+                [{
+                  image: 'logotipo',
+                  width: 80,
+                  height: 95,
+                  alignment: 'center',
+                  margin: [0, 0, 0, 0],
+                  border: [false, false, false, false]
+                }, {
+                  text: 'AV. LAUDELINO GOMES QD 210 LT 01 N. 61 \nPEDRO LUDOVICO – GOIÂNIA - GO\n www.altispv.com.br',
+                  alignment: 'center',
+                  fontSize: 10,
+                  height: 95,
+                  margin: [0, 50, 0, 0],
+                  border: [false, false, false, false]
+                }
+                ]
               ]
-            ]
-          }
-        },
-        {   // responsável
-          style: 'tableExample',
-          table: {
-            widths: [570],
-            heights: [30],
+            }
+          },
+          {   // responsável
+            style: 'tableExample',
+            table: {
+              widths: [570],
+              heights: [30],
 
-            body: [
-              [{
-                text: `Responsável ALTIS: ${this.usuarioLogado.apelido}   - Whatsapp: (${this.usuarioLogado.ddd}) ${this.usuarioLogado.telefone}`,
-                fillColor: '#eeeeee',
-                margin: [5, 5, 0, 0],
-                border: [true, true, true, true],
-              }]
-            ]
-          }
-        },
-        {   // Tabela Fipe
-          style: 'tableExample',
-          table: {
-            widths: [200, 360],
-            heights: [20],
-
-            body: [
-              [{
-                text: 'Marca/Modelo:',
-                margin: [5, 5, 0, 0],
-                border: [true, false, true, true],
-              },
-              {
-                text: `${this.proposta.marca} / ${this.proposta.modelo}`,
-                margin: [5, 5, 0, 0],
-                border: [true, false, true, true],
-              }
-              ],
-              [{
-                text: 'Ano Modelo:',
-                margin: [5, 5, 0, 0],
-                border: [true, true, true, true],
-              },
-              {
-                text: `${this.proposta.anoModelo}`,
-                margin: [5, 5, 0, 0],
-                border: [true, true, true, true],
-              }
-              ],
-              [{
-                text: 'Cód. FIPE',
-                margin: [5, 5, 0, 0],
-                border: [true, false, true, true],
-              },
-              {
-                text: `${this.proposta.codigoFipe}`,
-                margin: [5, 5, 0, 0],
-                border: [true, false, true, true],
-              }
-              ],
-              [{
-                text: 'Valor fipe',
-                margin: [5, 5, 0, 0],
-                border: [true, true, true, true],
-              },
-              {
-                text: `${this.proposta.precoMedio}`,
-                margin: [5, 5, 0, 0],
-                border: [true, true, true, true],
-              }
+              body: [
+                [{
+                  text: `Responsável ALTIS: ${this.usuarioLogado.apelido}   - Whatsapp: (${this.usuarioLogado.ddd}) ${this.usuarioLogado.telefone}`,
+                  fillColor: '#eeeeee',
+                  margin: [5, 5, 0, 0],
+                  border: [true, true, true, true],
+                }]
               ]
+            }
+          },
+          {   // Tabela Fipe
+            style: 'tableExample',
+            table: {
+              widths: [200, 360],
+              heights: [20],
 
-            ]
-          }
-        },
-        {   // valores da proposta 
-          style: 'tableExample',
-          table: {
-            widths: [200, 360],
-            heights: [200],
-
-            body: [
-              [{
-                text: `ADESÃO:\n R$ ${this.proposta.adesão}
-                    \n\n MENSALIDADE:\n R$ ${this.proposta.mensalidade} 
-                    \n\n PARTICIPAÇÃO:\n R$ ${this.proposta.participacao}
-                    \n\n ${this.proposta.terceiros}`,
-                style: 'header',
-                margin: [15, 20, 0, 5],
-                border: [true, false, true, true],
-              },
-              {
-                text: [
-                  {
-                    text: 'COBERTURAS OFERECIDAS',
-                    alignment: 'center',
-                    style: 'subheader',
-                  },
-                  {
-                    text: `\n\nSem perfil de condutor! (Qualquer pessoa habilitada pode conduzir o veículo) 
-                        \nSem Consulta SPC/SERASA 
-                        \nSem limite de km rodado; Sem perfil de guarda de veículo, não exige garagem;
-                        \nCarro Reserva (Opcional);
-                        \nRoubo, furto, incêndio, colisão, capotamento, tombamento, enchente, chuva de granizo, queda de árvore; 
-                        \nAssistência 24H em todo Brasil; 
-                        \nReboque do veículo –1000 km (500 km ida e 500 km volta) até 6x ao mês;  
-                        \nSocorro elétrico e mecânico; Chaveiro; Taxi, SOS Pneus;
-                        \nMensalidade Contínua (sem renovação); Não trabalhamos com Bônus; 
-                        \nIndenização 100% tabela Fipe, exceto veículos de leilão é remarcado( 80% DE INDENIZAÇÃO)
-                        \n`,
-                    fontSize: 10
-                  }
-                ],
-                margin: [5, 5, 0, 0],
-                border: [true, false, true, true],
-              }
-              ],
-              [
-                {
-                  text: 'PRODUTOS ADICIONAIS',
-                  style: 'subheader',
-                  margin: [5, 25, 0, 0],
+              body: [
+                [{
+                  text: 'Marca/Modelo:',
+                  margin: [5, 5, 0, 0],
+                  border: [true, false, true, true],
                 },
                 {
-                  text: `Carro reserva de 30 dias*
-                      APP (ACIDENTES PESSOAIS DE PASSAGEIROS) *
-                      Fundo para terceiros de 50 mil*
-                      Fundo para terceiros de 70 mil*
-                      ` ,
-                  alignment: 'center',
-                  style: 'ParagrafoBold',
-                  margin: [5, 0, 0, 0],
+                  text: `${this.proposta.marca} / ${this.proposta.modelo}`,
+                  margin: [5, 5, 0, 0],
+                  border: [true, false, true, true],
                 }
-              ],
-            ]
+                ],
+                [{
+                  text: 'Ano Modelo:',
+                  margin: [5, 5, 0, 0],
+                  border: [true, true, true, true],
+                },
+                {
+                  text: `${this.proposta.anoModelo}`,
+                  margin: [5, 5, 0, 0],
+                  border: [true, true, true, true],
+                }
+                ],
+                [{
+                  text: 'Cód. FIPE',
+                  margin: [5, 5, 0, 0],
+                  border: [true, false, true, true],
+                },
+                {
+                  text: `${this.proposta.codigoFipe}`,
+                  margin: [5, 5, 0, 0],
+                  border: [true, false, true, true],
+                }
+                ],
+                [{
+                  text: 'Valor fipe',
+                  margin: [5, 5, 0, 0],
+                  border: [true, true, true, true],
+                },
+                {
+                  text: `${this.proposta.precoMedio}`,
+                  margin: [5, 5, 0, 0],
+                  border: [true, true, true, true],
+                }
+                ]
+
+              ]
+            }
+          },
+          {   // valores da proposta 
+            style: 'tableExample',
+            table: {
+              widths: [200, 360],
+              heights: [200],
+
+              body: [
+                [{
+                  text: `ADESÃO:\n R$ ${this.proposta.adesão}
+                      \n\n MENSALIDADE:\n R$ ${this.proposta.mensalidade} 
+                      \n\n PARTICIPAÇÃO:\n R$ ${this.proposta.participacao}
+                      \n\n ${this.proposta.terceiros}`,
+                  style: 'header',
+                  margin: [15, 20, 0, 5],
+                  border: [true, false, true, true],
+                },
+                {
+                  text: [
+                    {
+                      text: 'COBERTURAS OFERECIDAS',
+                      alignment: 'center',
+                      style: 'subheader',
+                    },
+                    {
+                      text: `\n\nSem perfil de condutor! (Qualquer pessoa habilitada pode conduzir o veículo) 
+                          \nSem Consulta SPC/SERASA 
+                          \nSem limite de km rodado; Sem perfil de guarda de veículo, não exige garagem;
+                          \nCarro Reserva (Opcional);
+                          \nRoubo, furto, incêndio, colisão, capotamento, tombamento, enchente, chuva de granizo, queda de árvore; 
+                          \nAssistência 24H em todo Brasil; 
+                          \nReboque do veículo –1000 km (500 km ida e 500 km volta) até 6x ao mês;  
+                          \nSocorro elétrico e mecânico; Chaveiro; Taxi, SOS Pneus;
+                          \nMensalidade Contínua (sem renovação); Não trabalhamos com Bônus; 
+                          \nIndenização 100% tabela Fipe, exceto veículos de leilão é remarcado( 80% DE INDENIZAÇÃO)
+                          \n`,
+                      fontSize: 10
+                    }
+                  ],
+                  margin: [5, 5, 0, 0],
+                  border: [true, false, true, true],
+                }
+                ],
+                [
+                  {
+                    text: 'PRODUTOS ADICIONAIS',
+                    style: 'subheader',
+                    margin: [5, 25, 0, 0],
+                  },
+                  {
+                    text: `Carro reserva de 30 dias*
+                        APP (ACIDENTES PESSOAIS DE PASSAGEIROS) *
+                        Fundo para terceiros de 50 mil*
+                        Fundo para terceiros de 70 mil*
+                        ` ,
+                    alignment: 'center',
+                    style: 'ParagrafoBold',
+                    margin: [5, 0, 0, 0],
+                  }
+                ],
+              ]
+            }
+          },
+          {   // responsável
+            style: 'tableExample',
+            table: {
+              widths: [570],
+              heights: [30],
+              body: [
+                [{
+                  text: `A ALTIS atua legalmente perante a lei, respeitando a constituição e o código civil. Não possui nenhum impedimento legal e se responsabiliza solidariamente com os princípios embasado nas leis* Lei no 9.790, de 23 de março de 1999.  / CAPÍTULO I / DA QUALIFICAÇÃO COMO ORGANIZAÇÃO DA SOCIEDADE CIVIL* Constituição da Republica Federativa do Brasil 1988 / TÍTULO II / Dos Direitos / Garantias Fundamentais / CAPÍTULO I / DOS DIREITOS E DEVERES NDIVIDUAIS E COLETIVOS / Art. 5º /Incisos: XVII a XXI.* Código Civil - Lei 10406/02 | Lei no 10.406, de 10 de janeiro de 2002 / TÍTULO II / Da Sociedade / CAPÍTULO II / DAS ASSOCIAÇÕES
+                  `,
+                  fillColor: '#eeeeee',
+                  margin: [5, 5, 5, 5],
+                  alignment: 'left',
+                  style: 'small',
+                  border: [true, false, true, true],
+                }]
+              ]
+            }
+          },
+        ],
+        styles: {
+          header: {
+            fontSize: 18,
+            bold: true
+          },
+          subheader: {
+            fontSize: 15,
+            bold: true
+          },
+          ParagrafoBold: {
+            fontSize: 12,
+            bold: true
+          },
+          quote: {
+            italics: true
+          },
+          small: {
+            fontSize: 8
           }
         },
-        {   // responsável
-          style: 'tableExample',
-          table: {
-            widths: [570],
-            heights: [30],
-            body: [
-              [{
-                text: `A ALTIS atua legalmente perante a lei, respeitando a constituição e o código civil. Não possui nenhum impedimento legal e se responsabiliza solidariamente com os princípios embasado nas leis* Lei no 9.790, de 23 de março de 1999.  / CAPÍTULO I / DA QUALIFICAÇÃO COMO ORGANIZAÇÃO DA SOCIEDADE CIVIL* Constituição da Republica Federativa do Brasil 1988 / TÍTULO II / Dos Direitos / Garantias Fundamentais / CAPÍTULO I / DOS DIREITOS E DEVERES NDIVIDUAIS E COLETIVOS / Art. 5º /Incisos: XVII a XXI.* Código Civil - Lei 10406/02 | Lei no 10.406, de 10 de janeiro de 2002 / TÍTULO II / Da Sociedade / CAPÍTULO II / DAS ASSOCIAÇÕES
-                `,
-                fillColor: '#eeeeee',
-                margin: [5, 5, 5, 5],
-                alignment: 'left',
-                style: 'small',
-                border: [true, false, true, true],
-              }]
-            ]
-          }
-        },
-      ],
-      styles: {
-        header: {
-          fontSize: 18,
-          bold: true
-        },
-        subheader: {
-          fontSize: 15,
-          bold: true
-        },
-        ParagrafoBold: {
-          fontSize: 12,
-          bold: true
-        },
-        quote: {
-          italics: true
-        },
-        small: {
-          fontSize: 8
-        }
-      },
-      images: { logotipo: img }
-    };
+        images: { logotipo: img }
+      };
 
 
-    this.proposta.idUsuario = this.usuarioLogado.id;
-    this.proposta.idPessoaUsuario = this.usuarioLogado.id_pessoa;
-    this.proposta.idPessoaCliente = Number(this.idPessoaCliente);
-    this.proposta.idTipoVeiculo = this.tipoVeiculoSelectValue;
-    this.proposta.cota = this.cota;
-    this.propostaComuc.setProposta(this.proposta);
-    pdfMake.createPdf(docDefinition).open()
-    docDefinition.images.logotipo = ''; // para salvar a imagem do logo 
+      this.proposta.idUsuario = this.usuarioLogado.id;
+      this.proposta.idPessoaUsuario = this.usuarioLogado.id_pessoa;
+      this.proposta.idPessoaCliente = Number(this.idPessoaCliente);
+      this.proposta.idTipoVeiculo = this.tipoVeiculoSelectValue;
+      this.proposta.cota = this.cota;
+      this.propostaComuc.setProposta(this.proposta);
 
-    this.propostaComuc.setPropostaJSON(docDefinition)
+      let docDefinition_ = docDefinition;
 
-    this.salvarProposta();
-    
-    this.aba.setAba(5);
-    
-    
+      docDefinition.images.logotipo = ''; // retira  a imagem do logo para salvar
 
+      this.propostaComuc.setPropostaJSON(docDefinition)
+
+      let id_proposta = this.salvarProposta();
+      debugger
+      if (this.returnProp) {
+        this.returnProposta.emit(id_proposta)
+        pdfMake.createPdf(docDefinition_).open()
+      }else {
+        window.location.reload()
+      }
   }
+}
 
   async salvarProposta() {
-    
-    console.log(' getProposta ', this.propostaComuc.getProposta());
     try {
       let proposta =  await this.connectHTTP.callService({
         service: 'salvarProposta',
@@ -523,34 +531,37 @@ export class ElaboraPropostaComponent implements OnInit {
           proposta: JSON.stringify(this.propostaComuc.getProposta()).replace(/\#/gim, '%23'),
           propostaJSON: JSON.stringify(this.propostaComuc.getPropostaJSON()).replace(/\#/gim, '%23')
         }
-      });
-      // debugger
-      // this.bntGeraProposta = true;
-
-      // this.returnProposta.emit(proposta.resposta.idProposta )
-      
+      }) as any;
+      this.bntGeraProposta = true;
       this.toastrService.success('Proposta salva com sucesso!');
-      let paramsService = {
-        proposta: JSON.stringify(this.propostaComuc.getProposta()).replace(/\#/gim, '%23'),
-        propostaJSON: JSON.stringify(this.propostaComuc.getPropostaJSON()).replace(/\#/gim, '%23')
-      };
+      return proposta.resposta[0].id
 
-      debugger;
-      if (this.returnProp) this.returnProposta.emit(paramsService)
-      else {
-        await this.connectHTTP.callService({
-          service: 'salvarProposta',
-          paramsService
-        });
-        this.toastrService.success('Proposta salva com sucesso!');
+      // let paramsService = {
+      //   proposta: JSON.stringify(this.propostaComuc.getProposta()).replace(/\#/gim, '%23'),
+      //   propostaJSON: JSON.stringify(this.propostaComuc.getPropostaJSON()).replace(/\#/gim, '%23')
+      // };
+      
+      // if (this.returnProp) this.returnProposta.emit(paramsService)
+      // else {
+      //   await this.connectHTTP.callService({
+      //     service: 'salvarProposta',
+      //     paramsService
+      //   });
+      //   this.toastrService.success('Proposta salva com sucesso!');
 
-        document.location.reload(true);
-      }
+      //   document.location.reload(true);
+      // }
     }
-    catch (e) {
+    catch (error) {
+      console.log(error)
       this.toastrService.error('Proposta não salva');
       this.bntGeraProposta = false;
+      return 0;
     }
+
+    
+   
+
   }
 
 

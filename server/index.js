@@ -443,7 +443,7 @@ function declaraServico(nomeServico, funcao) {
       })
       .catch(error => {
         headerResponse(res)
-        console.log(error)
+        console.log( nomeServico, error)
         res.status(401).send(error)
       })
   });

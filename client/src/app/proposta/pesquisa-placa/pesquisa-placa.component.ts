@@ -17,8 +17,6 @@ export class PesquisaPlacaComponent implements OnInit {
 
   formulario: FormGroup;
 
-
-
   constructor(private connectHTTP: ConnectHTTP,
     private localStorage: LocalStorage,
     private formBuilder: FormBuilder,
@@ -41,7 +39,6 @@ export class PesquisaPlacaComponent implements OnInit {
         console.log('placa ', this.proposta)
       }
     );
-
   }
 
   async consultarPlaca(event: any) {
@@ -49,19 +46,23 @@ export class PesquisaPlacaComponent implements OnInit {
     let valorFormatado = this.mascaraPlaca.transform(event.target.value);
     this.formulario.controls['placa'].setValue(valorFormatado)
     if (this.mascaraPlaca.check(valorFormatado)) {
+      try {
       let respPlacaConsultada = await this.connectHTTP.callService({
         service: 'consultarPlaca',
         paramsService: {
           placa: this.formulario.value.placa.replace('-', '')
         }
-      }) as any;
-
+      }) 
 
       this.formulario.patchValue({ placaConsultada: JSON.stringify(respPlacaConsultada.resposta, null, 2) });
       this.proposta.placa = this.formulario.value.placa;
       this.propostaComuc.setProposta(this.proposta);
+    
+    }catch (error) {
+      this.formulario.patchValue({ placaConsultada: 'Veículo não encontrado' })    
+    }
 
-      //console.log(respPlacaConsultada.resposta)
+      
     }
   }
 
