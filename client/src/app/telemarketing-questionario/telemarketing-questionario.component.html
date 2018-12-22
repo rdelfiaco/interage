@@ -15,7 +15,6 @@
         </div>
       </div>
 
-
       <div *ngIf="quantEventosDaPessoa > 1" class="btn-group" mdbDropdown>
         <button type="button" mdbBtn color="dark-green" class="waves-light" mdbWavesEffect (click)="discar()">Discar</button>
         <button type="button" mdbDropdownToggle mdbBtn color="dark-green" class="dropdown-toggle dropdown-toggle-split px-3 waves-light"
@@ -47,12 +46,10 @@
       <div class="modal-content">
         <div class="modal-header">
           <h4 class="modal-title w-100" id="myModalLabel">Elaboranado Proposta para - {{_pessoaObject.principal.nome}}</h4>
-          <!-- <button type="button" class="close pull-right" aria-label="Close" (click)="fecharElaborarProposta($event)">
-            <span aria-hidden="true">×</span>
-          </button> -->
-          <button type="button" class="close pull-right" aria-label="Close" (click)="elaborarProposta.hide()">
+          <button type="button" class="close pull-right" aria-label="Close" (click)="fecharElaborarProposta($event)">
             <span aria-hidden="true">×</span>
           </button>
+
         </div>
         <div class="modal-body" style="overflow: auto; height: 80vh;">
           <app-proposta [returnProp]="returnProp" [abaSelecionada]="abaSelecionada" [pessoa]="_pessoaObject" (returnProposta)="recebeProposta($event)"></app-proposta>

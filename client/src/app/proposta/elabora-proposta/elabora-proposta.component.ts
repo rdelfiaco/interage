@@ -1,3 +1,5 @@
+import { ModalModule } from './../../../lib/ng-uikit-pro-standard/free/modals/modal.module';
+import { ModalDirective } from './../../../lib/ng-uikit-pro-standard/free/modals/modal.directive';
 import { style } from '@angular/animations';
 
 import { Proposta } from '../proposta';
@@ -186,10 +188,10 @@ export class ElaboraPropostaComponent implements OnInit {
         this.vlrParticipacao = this.valores[0].valor_participacao
         this.prcParticipacao = 0
       }
-
+      
       this.somaValoresProposta();
       
-      this.proposta.mensalidade = Number(this.vlrPoposta.toFixed(2));
+      
       // quando for combro ajustar 
       this.proposta.adesão = this.adesao;
       this.proposta.participacao = this.vlrParticipacao;
@@ -249,6 +251,7 @@ export class ElaboraPropostaComponent implements OnInit {
         this.proposta.idRastreador = this.rastreador[this.chckRastreador].id;
       };
     }
+    this.proposta.mensalidade = Number(this.vlrPoposta.toFixed(2));
   }
 
   mudouPlano(opcao) {
@@ -503,20 +506,27 @@ export class ElaboraPropostaComponent implements OnInit {
       this.proposta.idTipoVeiculo = this.tipoVeiculoSelectValue;
       this.proposta.cota = this.cota;
       this.propostaComuc.setProposta(this.proposta);
-
-      let docDefinition_ = docDefinition;
-
+      
+      
+      
+      pdfMake.createPdf(docDefinition).open()    
+   
       docDefinition.images.logotipo = ''; // retira  a imagem do logo para salvar
 
       this.propostaComuc.setPropostaJSON(docDefinition)
 
       let id_proposta = this.salvarProposta();
-      debugger
+      const sleep = (milliseconds) => {
+        return new Promise(resolve => setTimeout(resolve, milliseconds))
+      }
+
       if (this.returnProp) {
         this.returnProposta.emit(id_proposta)
-        pdfMake.createPdf(docDefinition_).open()
+        
       }else {
-        window.location.reload()
+              sleep(5000).then(() => {
+                window.location.reload();
+              })
       }
   }
 }
@@ -564,5 +574,7 @@ export class ElaboraPropostaComponent implements OnInit {
 
   }
 
+
+  
 
 }

@@ -319,13 +319,6 @@ export class TelemarketingQuestionarioComponent implements OnInit {
     this.gravarLigacao();
   }
 
-  // fecharElaborarProposta(proposta: any) {
-  //   debugger
-  //   this.gravarLigacao();
-  //   this.elaborarProposta.hide()
-  // }
-  
-
   _limpar() {
     this.questionarioForm = null;
     this.questionarioForm = this.formBuilder.group({

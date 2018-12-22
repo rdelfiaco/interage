@@ -59,10 +59,10 @@ formulario: FormGroup;
 
   lerTabelaFipe($event: any){
 
- 
+    console.log($event)
     // let strTabelaFipe : string = this.formulario.get("tabelaFipe").value;
     let strTabelaFipe: string  = $event.target.value;
-    debugger
+    
     if (strTabelaFipe.length > 200){
       let i, ij, j: number;
       let colunaDados : boolean;

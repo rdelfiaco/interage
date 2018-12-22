@@ -15,9 +15,6 @@ interface retObjectCallService {
 
 
 
-
-
-
 export class ConnectHTTP {
   localStorage: LocalStorage = new LocalStorage();
   callService(options: optionsCallService): Promise<retObjectCallService> | retObjectCallService {
