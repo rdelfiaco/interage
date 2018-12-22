@@ -83,6 +83,7 @@ export class TelemarketingComponent implements OnInit {
   async solicitarLigacao() {
     var self = this;
     this.formAberto = true;
+    debugger;
     let telemarketing = await this.connectHTTP.callService({
       service: 'getLigacaoTelemarketing',
       paramsService: {
@@ -93,29 +94,34 @@ export class TelemarketingComponent implements OnInit {
         id_organograma: this.usuarioLogado.id_organograma
       }
     }) as any;
-
-    this.eventoObject = telemarketing.resposta.evento;
-
-    this.evento = new Observable((observer) => {
-      observer.next(telemarketing.resposta.evento);
+    if (telemarketing.error) {
       self.carregouEvento = true;
-    });
-    this.pessoa = new Observable((observer) => {
-      observer.next(telemarketing.resposta.pessoa)
-      setTimeout(() => {
-        self.carregouPessoa = true;
-      }, 0);
-      self.pessoaObject = telemarketing.resposta.pessoa;
-    });
-    
-    this.motivos_respostas = telemarketing.resposta.motivos_respostas
-    this.predicoes = telemarketing.resposta.predicoes
-    this.objecoes = telemarketing.resposta.objecoes
+    }
+    else {
+      this.eventoObject = telemarketing.resposta.evento;
+
+      this.evento = new Observable((observer) => {
+        observer.next(telemarketing.resposta.evento);
+        self.carregouEvento = true;
+      });
+      this.pessoa = new Observable((observer) => {
+        observer.next(telemarketing.resposta.pessoa)
+        setTimeout(() => {
+          self.carregouPessoa = true;
+        }, 0);
+        self.pessoaObject = telemarketing.resposta.pessoa;
+      });
+
+      this.motivos_respostas = telemarketing.resposta.motivos_respostas
+      this.predicoes = telemarketing.resposta.predicoes
+      this.objecoes = telemarketing.resposta.objecoes
+    }
   }
 
   _limpar() {
     this.formAberto = false;
     this.pessoa = null;
+    this.evento = null;
     this.eventoObject = null;
     this.pessoaObject = null;
     this.pessoaNome = null;

@@ -53,7 +53,7 @@ export class ConnectHTTP {
           if (!selfXhttp.responseText) return resolve({ resposta: {} })
           else resolve({ resposta: JSON.parse(selfXhttp.responseText) })
         } else if (selfXhttp.status === 401) {
-          reject({ resposta: {}, error: selfXhttp.responseText })
+          resolve({ resposta: {}, error: selfXhttp.responseText })
         }
       }
 
@@ -105,7 +105,7 @@ export class ConnectHTTP {
         if (selfXhttp.status === 200) {
           resolve({ resposta: JSON.parse(selfXhttp.responseText) })
         } else if (selfXhttp.status === 401) {
-          reject({ resposta: {}, error: selfXhttp.responseText })
+          resolve({ resposta: {}, error: selfXhttp.responseText })
         }
       }
 
