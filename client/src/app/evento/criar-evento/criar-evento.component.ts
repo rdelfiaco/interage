@@ -32,6 +32,9 @@ export class CriarEventoComponent implements OnInit {
   @Input()
   set evento(evento: any): any {
     this._evento = evento;
+    debugger;
+    this.criarEventoForm.controls['canal'].setValue(evento.id_canal);
+    this.criarEventoForm.controls['id_motivo'].setValue(evento.id_motivo);
   }
   get evento(): any {
     return this._evento
@@ -85,7 +88,7 @@ export class CriarEventoComponent implements OnInit {
   }
 
   async ngOnInit() {
-   
+
     let eventoEncontrado = await this.connectHTTP.callService({
       service: 'informacoesParaCriarEvento',
       paramsService: {
@@ -107,7 +110,8 @@ export class CriarEventoComponent implements OnInit {
       return { value: usuario.id, label: usuario.nome }
     });
 
-    this.motivosDoCanal = eventoEncontrado.resposta.motivosCanais;   
+    this.motivosDoCanal = eventoEncontrado.resposta.motivosCanais;
+    this.onSelectCanal({ value: this._evento.id_canal });
 
     this.optionsTipoDestino = this.usuarioSelect;
 
@@ -141,6 +145,7 @@ export class CriarEventoComponent implements OnInit {
     this.motivosDoCanalSelecionado = this.motivosDoCanal.filter(m => m.id_canal == valor.value).map(m => {
       return { value: m.id, label: m.nome }
     });
+    debugger;
 
     if (!this.motivosDoCanalSelecionado.length) this.toastrService.error('Canal sem nenhum motivo cadastrado!');
   }

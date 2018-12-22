@@ -10,13 +10,14 @@
   </div>
   <div class="row">
     <div class="col">
-      <mdb-select formControlName="canal" [options]="canaisSelect" (selected)="onSelectCanal($event)" [multiple]="false"
-        placeholder="Canal"></mdb-select>
+      <mdb-select formControlName="canal" [disabled]="_evento" [options]="canaisSelect" (selected)="onSelectCanal($event)"
+        [multiple]="false" placeholder="Canal"></mdb-select>
     </div>
   </div>
   <div class="row">
     <div class="col">
-      <mdb-select formControlName="id_motivo" [options]="motivosDoCanalSelecionado" [multiple]="false" placeholder="Motivo"></mdb-select>
+      <mdb-select formControlName="id_motivo" [disabled]="_evento" [options]="motivosDoCanalSelecionado" [multiple]="false"
+        placeholder="Motivo"></mdb-select>
     </div>
   </div>
   <div class="row">

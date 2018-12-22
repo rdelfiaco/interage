@@ -36,8 +36,8 @@
     </mdb-tabset>
   </div>
   <div class="row justify-content-end">
-    <button type="button" style="white-space: nowrap;" mdbBtn color="danger" class="waves-light" aria-label="Cancelar"
-      mdbWavesEffect>Cancelar</button>
+    <button type="button" style="white-space: nowrap;" (click)="voltar()" mdbBtn color="danger" class="waves-light"
+      aria-label="Voltar" mdbWavesEffect>Voltar</button>
   </div>
 
   <div mdbModal #modalConcluirEvento="mdbModal" [config]="{backdrop: true}" class="modal fade right" role="dialog"
