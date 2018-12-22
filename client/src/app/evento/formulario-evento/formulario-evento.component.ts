@@ -32,6 +32,7 @@ export class FormularioEventoComponent implements OnInit {
       dt_resolvido: [''],
       observacao_origem: [''],
       observacao_retorno: [''],
+      observacao_retorno: [''],
     });
   }
 

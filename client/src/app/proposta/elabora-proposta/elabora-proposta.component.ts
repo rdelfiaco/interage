@@ -37,7 +37,7 @@ export class ElaboraPropostaComponent implements OnInit {
       observer.next(pessoa.principal.id);
     });
     this.idPessoaCliente = pessoa.principal.id;
-    
+
   }
   get pessoa() {
     return this.pessoaObject;
@@ -159,7 +159,7 @@ export class ElaboraPropostaComponent implements OnInit {
     this.nVlrVeiculo = Number(this.sVlrVeiculo.substr(2, 12).trim().replace('.', '').replace(',', '.'));
 
     let nVlrBusca = this.nVlrVeiculo;
-    if (this.tipoVeiculoSelectValue == 3){ nVlrBusca = this.sccMoto}
+    if (this.tipoVeiculoSelectValue == 3) { nVlrBusca = this.sccMoto }
 
     if (this.tabelaCombos.length > 0) {
       this.combos = this.tabelaCombos.filter(this.filtraTabelas, [nVlrBusca, this.tipoVeiculoSelectValue]);
@@ -176,7 +176,7 @@ export class ElaboraPropostaComponent implements OnInit {
 
     this.app = this.apps.filter(this.filtraTabelasTipoVeiculos, [this.tipoVeiculoSelectValue]);
 
-    if (this.valores.length > 0 ) {
+    if (this.valores.length > 0) {
       this.valorPPV = this.valores[0].valor_ppv;
       this.cota = this.valores[0].cota;
       this.adesao = this.valores[0].adesao
@@ -188,10 +188,10 @@ export class ElaboraPropostaComponent implements OnInit {
         this.vlrParticipacao = this.valores[0].valor_participacao
         this.prcParticipacao = 0
       }
-      
+
       this.somaValoresProposta();
-      
-      
+
+
       // quando for combro ajustar 
       this.proposta.adesão = this.adesao;
       this.proposta.participacao = this.vlrParticipacao;
@@ -289,13 +289,12 @@ export class ElaboraPropostaComponent implements OnInit {
 
 
   geraProposta() {
-    
-   
-    if (!this.idPessoaCliente){
+
+
+    if (!this.idPessoaCliente) {
       this.toastrService.error('Selecione um cliente');
-    }else 
-    {
-      
+    } else {
+
       var docDefinition = {
         pageSize: 'A4',
         pageMargins: [10, 10, 5, 5],
@@ -506,75 +505,56 @@ export class ElaboraPropostaComponent implements OnInit {
       this.proposta.idTipoVeiculo = this.tipoVeiculoSelectValue;
       this.proposta.cota = this.cota;
       this.propostaComuc.setProposta(this.proposta);
-      
-      
-      
-      pdfMake.createPdf(docDefinition).open()    
-   
+
+
+      let docDefinition_ = docDefinition
+
       docDefinition.images.logotipo = ''; // retira  a imagem do logo para salvar
 
       this.propostaComuc.setPropostaJSON(docDefinition)
 
-      let id_proposta = this.salvarProposta();
       const sleep = (milliseconds) => {
         return new Promise(resolve => setTimeout(resolve, milliseconds))
       }
 
-      if (this.returnProp) {
-        this.returnProposta.emit(id_proposta)
-        
-      }else {
-              sleep(5000).then(() => {
-                window.location.reload();
-              })
+      this.salvarProposta();
+
+      if (!this.returnProp) {
+        pdfMake.createPdf(docDefinition_).open()
+        sleep(5000).then(() => {
+          window.location.reload();
+        })
       }
+    }
   }
-}
 
   async salvarProposta() {
-    try {
-      let proposta =  await this.connectHTTP.callService({
-        service: 'salvarProposta',
-        paramsService: {
-          id_usuario: this.usuarioLogado.id,
-          token: this.usuarioLogado.token,
+    if (this.returnProp) {
+      try {
+        let paramsService = {
           proposta: JSON.stringify(this.propostaComuc.getProposta()).replace(/\#/gim, '%23'),
           propostaJSON: JSON.stringify(this.propostaComuc.getPropostaJSON()).replace(/\#/gim, '%23')
+        };
+
+        if (this.returnProp) {
+          this.returnProposta.emit(paramsService)
         }
-      }) as any;
-      this.bntGeraProposta = true;
-      this.toastrService.success('Proposta salva com sucesso!');
-      return proposta.resposta[0].id
+        else {
+          await this.connectHTTP.callService({
+            service: 'salvarProposta',
+            paramsService
+          });
+          this.toastrService.success('Proposta salva com sucesso!');
 
-      // let paramsService = {
-      //   proposta: JSON.stringify(this.propostaComuc.getProposta()).replace(/\#/gim, '%23'),
-      //   propostaJSON: JSON.stringify(this.propostaComuc.getPropostaJSON()).replace(/\#/gim, '%23')
-      // };
-      
-      // if (this.returnProp) this.returnProposta.emit(paramsService)
-      // else {
-      //   await this.connectHTTP.callService({
-      //     service: 'salvarProposta',
-      //     paramsService
-      //   });
-      //   this.toastrService.success('Proposta salva com sucesso!');
-
-      //   document.location.reload(true);
-      // }
+          document.location.reload(true);
+        }
+      }
+      catch (error) {
+        console.log(error)
+        this.toastrService.error('Proposta não salva');
+        this.bntGeraProposta = false;
+        return 0;
+      }
     }
-    catch (error) {
-      console.log(error)
-      this.toastrService.error('Proposta não salva');
-      this.bntGeraProposta = false;
-      return 0;
-    }
-
-    
-   
-
   }
-
-
-  
-
 }

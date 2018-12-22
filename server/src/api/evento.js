@@ -3,6 +3,7 @@ const { getMetaPessoa } = require('./metaLigacoes');
 const { getPredicao } = require('./predicao');
 const { getObjecoes } = require('./objecoes');
 const { getPessoa } = require('./pessoa');
+const { salvarProposta } = require('./proposta');
 
 function getUmEvento(req, res) {
   return new Promise(function (resolve, reject) {
@@ -265,33 +266,47 @@ function salvarEvento(req, res) {
           const motivoResposta = res.rows[0];
 
           client.query('BEGIN').then((res1) => {
-            let update;
-            update = `UPDATE eventos SET id_status_evento=3,
+
+            if (req.query.proposta) {
+              salvarProposta(req, res).then((idproposta) => {
+                console.log('salvo proposta ' + idproposta[0].id);
+                finalizaEvento(idproposta[0].id);
+              })
+            }
+            else {
+              finalizaEvento();
+            }
+
+
+            function finalizaEvento(idproposta) {
+              let update;
+              update = `UPDATE eventos SET id_status_evento=3,
               dt_resolvido=now(),
                   id_pessoa_resolveu=${req.query.id_pessoa}, 
                   observacao_retorno='${req.query.observacao}',
                   id_resp_motivo=${req.query.id_motivos_respostas},
                   id_telefone=${req.query.id_telefoneDiscado || 'NULL'},
                   id_predicao=${req.query.id_predicao || 'NULL'},
-                  id_objecao=${req.query.id_objecao || 'NULL'}
+                  id_objecao=${req.query.id_objecao || 'NULL'},
+                  id_proposta=${idproposta || 'NULL'}
                   WHERE eventos.id=${req.query.id_evento} AND eventos.id_status_evento in(5,6)
                   RETURNING tipoDestino, id_pessoa_organograma;
                   `;
-            console.log(update)
-            client.query(update).then((updateEventoEncerrado) => {
-              if (updateEventoEncerrado.rowCount != 1) {
-                client.query('COMMIT').then((resposta) => {
-                  getMetaPessoa(req).then(metaPessoa => {
-                    client.end();
-                    resolve(metaPessoa)
-                  }).catch(err => {
-                    client.end();
-                    reject(err)
+              console.log(update)
+              client.query(update).then((updateEventoEncerrado) => {
+                if (updateEventoEncerrado.rowCount != 1) {
+                  client.query('COMMIT').then((resposta) => {
+                    getMetaPessoa(req).then(metaPessoa => {
+                      client.end();
+                      resolve(metaPessoa)
+                    }).catch(err => {
+                      client.end();
+                      reject(err)
+                    })
                   })
-                })
-                return;
-              }
-              const selectQuantidadeTentativas = `SELECT COUNT(id_resp_motivo) from eventos
+                  return;
+                }
+                const selectQuantidadeTentativas = `SELECT COUNT(id_resp_motivo) from eventos
 
                                              WHERE ((id_resp_motivo=${req.query.id_motivos_respostas} AND 
                                              id_evento_pai = ${req.query.id_evento_pai}) OR
@@ -299,45 +314,72 @@ function salvarEvento(req, res) {
                                              (id_resp_motivo=${req.query.id_motivos_respostas} AND
                                               id = ${req.query.id_evento_pai}))`
 
-              console.log('selectQuantidadeTentativas', selectQuantidadeTentativas)
-              client.query(selectQuantidadeTentativas).then((qtdTentativas) => {
-                qtdTentativas = parseInt(qtdTentativas.rows[0].count);
-                console.log('motivoResposta_automatico.length', motivoResposta_automatico)
+                console.log('selectQuantidadeTentativas', selectQuantidadeTentativas)
+                client.query(selectQuantidadeTentativas).then((qtdTentativas) => {
+                  qtdTentativas = parseInt(qtdTentativas.rows[0].count);
+                  console.log('motivoResposta_automatico.length', motivoResposta_automatico)
 
-                console.log('qtdTentativas', qtdTentativas)
-                console.log('motivoResposta.tentativas', motivoResposta.tentativas)
-                console.log('motivoResposta.tentativas > qtdTentativas', motivoResposta.tentativas > qtdTentativas)
-                if (motivoResposta.tentativas > qtdTentativas) {
+                  console.log('qtdTentativas', qtdTentativas)
+                  console.log('motivoResposta.tentativas', motivoResposta.tentativas)
+                  console.log('motivoResposta.tentativas > qtdTentativas', motivoResposta.tentativas > qtdTentativas)
+                  if (motivoResposta.tentativas > qtdTentativas) {
 
-                  if (motivoResposta_automatico.length > 0) {
-                    motivoResposta_automatico.map((m, index, array) => {
-                      eventoCriar = createEvent(m, motivoResposta, updateEventoEncerrado)
-                      console.log('eventoCriar', eventoCriar)
+                    if (motivoResposta_automatico.length > 0) {
+                      motivoResposta_automatico.map((m, index, array) => {
+                        eventoCriar = createEvent(m, motivoResposta, updateEventoEncerrado)
+                        console.log('eventoCriar', eventoCriar)
 
-                      client.query(eventoCriar).then(res => {
-                        console.log('index == array.length - 1', index == array.length - 1)
+                        client.query(eventoCriar).then(res => {
+                          console.log('index == array.length - 1', index == array.length - 1)
 
-                        if (index == array.length - 1)
-                          client.query('COMMIT').then((resposta) => {
-                            getMetaPessoa(req).then(metaPessoa => {
-                              client.end();
-                              resolve(metaPessoa)
-                            }).catch(err => {
-                              client.end();
-                              reject(err)
+                          if (index == array.length - 1)
+                            client.query('COMMIT').then((resposta) => {
+                              getMetaPessoa(req).then(metaPessoa => {
+                                client.end();
+                                resolve(metaPessoa)
+                              }).catch(err => {
+                                client.end();
+                                reject(err)
+                              })
                             })
-                          })
+                        }).catch(err => {
+                          client.end();
+                          reject(err)
+                        })
+
+                      })
+                    } else {
+                      client.query('COMMIT').then(() => {
+                        getMetaPessoa(req).then(metaPessoa => {
+                          client.end();
+                          resolve(metaPessoa)
+                        }).catch(err => {
+                          client.end();
+                          reject(err)
+                        })
                       }).catch(err => {
                         client.end();
                         reject(err)
                       })
+                    }
 
-                    })
-                  } else {
-                    client.query('COMMIT').then(() => {
-                      getMetaPessoa(req).then(metaPessoa => {
-                        client.end();
-                        resolve(metaPessoa)
+
+                  }
+                  else {
+                    updateQuantidadeMaxTentativas = `UPDATE eventos SET 
+                      excedeu_tentativas=true
+                      WHERE eventos.id=${req.query.id_evento};
+                      `;
+
+                    client.query(updateQuantidadeMaxTentativas).then(() => {
+                      client.query('COMMIT').then(() => {
+                        getMetaPessoa(req).then(metaPessoa => {
+                          client.end();
+                          resolve(metaPessoa)
+                        }).catch(err => {
+                          client.end();
+                          reject(err)
+                        })
                       }).catch(err => {
                         client.end();
                         reject(err)
@@ -349,41 +391,18 @@ function salvarEvento(req, res) {
                   }
 
 
-                }
-                else {
-                  updateQuantidadeMaxTentativas = `UPDATE eventos SET 
-                      excedeu_tentativas=true
-                      WHERE eventos.id=${req.query.id_evento};
-                      `;
-
-                  client.query(updateQuantidadeMaxTentativas).then(() => {
-                    client.query('COMMIT').then(() => {
-                      getMetaPessoa(req).then(metaPessoa => {
-                        client.end();
-                        resolve(metaPessoa)
-                      }).catch(err => {
-                        client.end();
-                        reject(err)
-                      })
-                    }).catch(err => {
-                      client.end();
-                      reject(err)
-                    })
-                  }).catch(err => {
-                    client.end();
-                    reject(err)
-                  })
-                }
-
-
+                }).catch(err => {
+                  client.end();
+                  reject(err)
+                })
               }).catch(err => {
                 client.end();
                 reject(err)
               })
-            }).catch(err => {
-              client.end();
-              reject(err)
-            })
+            }
+          }).catch(err => {
+            client.end();
+            reject(err)
           })
 
         }).catch(err => {

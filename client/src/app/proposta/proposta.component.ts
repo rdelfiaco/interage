@@ -48,6 +48,7 @@ export class PropostaComponent implements OnInit {
   }
 
   returnPropostaPai(proposta: any) {
+    debugger;
     this.returnProposta.emit(proposta);
   }
 

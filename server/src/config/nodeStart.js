@@ -7,6 +7,6 @@
 //     port: 3000
 // })
 
-module.exports =  ({ //local
+module.exports = ({ //local
     port: 3010
 })

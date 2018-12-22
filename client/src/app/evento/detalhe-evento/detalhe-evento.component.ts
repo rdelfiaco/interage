@@ -103,6 +103,7 @@ export class DetalheEventoComponent implements OnInit {
     this.modalConcluirEvento.hide();
     this.carregaEvento();
   }
+
   voltar() {
     history.back();
   }

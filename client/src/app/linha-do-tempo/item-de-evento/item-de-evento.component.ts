@@ -33,9 +33,9 @@ export class ItemDeEventoComponent implements OnInit {
       dt_resolvido: [''],
       observacao_origem: [''],
       observacao_retorno: [''],
+      id_proposta: ['']
     });
   }
-
   ngOnInit() {
     console.log(this.eventos)
   }
@@ -63,6 +63,7 @@ export class ItemDeEventoComponent implements OnInit {
       dt_visualizou: [evento.dt_visualizou ? moment(evento.dt_visualizou).format('DD/MM/YYYY hh:mm:ss') : evento.dt_visualizou],
       dt_resolvido: [evento.dt_resolvido ? moment(evento.dt_resolvido).format('DD/MM/YYYY hh:mm:ss') : evento.dt_resolvido],
       observacao_origem: [evento.observacao_origem],
+      id_proposta: [evento.id_proposta],
       observacao_retorno: [evento.observacao_retorno],
     });
   }

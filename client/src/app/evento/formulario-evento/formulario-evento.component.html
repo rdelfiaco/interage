@@ -98,6 +98,10 @@
       <input mdbInputDirective formControlName="predicao" type="text" id="predicao" class="form-control" disabled>
       <label for="predicao">Predição</label>
     </div>
+    <div class="md-form col" [hidden]="!evento.id_proposta">
+      <input mdbInputDirective formControlName="id_proposta" type="text" id="id_proposta" class="form-control" disabled>
+      <label for="id_proposta">Proposta</label>
+    </div>
     <div class="md-form col-12" [hidden]="!evento.observacao_retorno">
       <textarea type="text" formControlName="observacao_retorno" id="observacao_retorno" class="md-textarea form-control"
         mdbInputDirective disabled></textarea>

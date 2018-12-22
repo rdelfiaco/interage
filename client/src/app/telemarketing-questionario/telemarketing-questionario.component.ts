@@ -8,6 +8,10 @@ import * as moment from 'moment';
 import { MascaraTelefonePipe } from '../shared/pipes/mascaraTelefone/mascara-telefone.pipe';
 import { Observable } from 'rxjs';
 
+import * as pdfMake from 'pdfmake/build/pdfmake';
+import * as pdfFonts from 'pdfmake/build/vfs_fonts';
+import { img } from '../proposta/imagem';
+
 interface selectValues {
   value: string
   label: string
@@ -208,7 +212,8 @@ export class TelemarketingQuestionarioComponent implements OnInit {
       hora: ['', [this.ValidateReagendar.bind(this)]],
       id_predicao: ['', [this.ValidateExigePredicao.bind(this)]],
       id_objecao: ['', [this.ValidateExigeObjecao.bind(this)]],
-      proposta: [{}, [this.ValidateProposta.bind(this)]]
+      proposta: [{}, [this.ValidateProposta.bind(this)]],
+      propostaJSON: ['', [this.ValidateProposta.bind(this)]]
     })
 
     let data = new Date();
@@ -292,30 +297,32 @@ export class TelemarketingQuestionarioComponent implements OnInit {
       id_campanha: this.campanhaSelecionada,
       observacao: this.questionarioForm.value.observacao,
       data: moment(this.questionarioForm.value.data + ' - ' + this.questionarioForm.value.hora, 'DD/MM/YYYY - hh:mm').toISOString(),
-      proposta: this.questionarioForm.value.proposta
+      proposta: this.questionarioForm.value.proposta,
+      propostaJSON: this.questionarioForm.value.propostaJSON
     }
     let metaPessoa = await this.connectHTTP.callService({
       service: 'salvarEvento',
       paramsService: parametros
     });
+    debugger;
 
 
     let acao = this.motivoAcao.filter((r) => r.id == this.questionarioForm.value.motivoRespostaSelecionado);
 
-    this._limpar();
     this.atualizaMeta.emit(metaPessoa.resposta[0]);
     this.modal.hide()
 
-    this.abaSelecionada = new Observable((observer) => {
-      observer.next(5);
-    });
-
-    //eval(acao[0].acao_js)
+    let docDefinition_ = JSON.parse(this.questionarioForm.value.propostaJSON);
+    docDefinition_.images = { logotipo: img };
+    pdfMake.createPdf(docDefinition_).open()
+    setTimeout(() => {
+      this._limpar();
+    }, 1)
   }
 
   recebeProposta(proposta: any) {
-    debugger
-    this.questionarioForm.controls['idProposta'].setValue(proposta);
+    this.questionarioForm.controls['proposta'].setValue(proposta.proposta);
+    this.questionarioForm.controls['propostaJSON'].setValue(proposta.propostaJSON);
     this.gravarLigacao();
   }
 
