@@ -53,17 +53,23 @@ export class PesquisaPlacaComponent implements OnInit {
           placa: this.formulario.value.placa.replace('-', '')
         }
       }) 
-
+      debugger
       this.formulario.patchValue({ placaConsultada: JSON.stringify(respPlacaConsultada.resposta, null, 2) });
+      if (JSON.stringify(respPlacaConsultada.resposta, null, 2).length < 10) {this.placaErrada()};
       this.proposta.placa = this.formulario.value.placa;
       this.propostaComuc.setProposta(this.proposta);
     
     }catch (error) {
-      this.formulario.patchValue({ placaConsultada: 'Veículo não encontrado' })    
+      this.placaErrada()    
     }
 
       
     }
+  }
+
+  placaErrada() {
+
+    this.formulario.patchValue({ placaConsultada: 'Veículo não encontrado' })
   }
 
 }

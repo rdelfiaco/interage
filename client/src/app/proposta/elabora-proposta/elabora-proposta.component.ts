@@ -176,7 +176,7 @@ export class ElaboraPropostaComponent implements OnInit {
 
     this.app = this.apps.filter(this.filtraTabelasTipoVeiculos, [this.tipoVeiculoSelectValue]);
 
-    if (this.valores) {
+    if (this.valores.length > 0 ) {
       this.valorPPV = this.valores[0].valor_ppv;
       this.cota = this.valores[0].cota;
       this.adesao = this.valores[0].adesao
