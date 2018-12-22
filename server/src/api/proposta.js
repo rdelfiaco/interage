@@ -110,4 +110,28 @@ function getPropostasDoUsuario(req, res) {
   })
 }
 
-module.exports = { salvarProposta, getPropostasDoUsuario }
+function getPropostaPorId(req, res) {
+  return new Promise(function (resolve, reject) {
+    let credenciais = {
+      token: req.query.token,
+      idUsuario: req.query.id_usuario
+    };
+
+    let sql = `select * from view_proposta where id=${req.query.id} `
+    executaSQL(credenciais, sql)
+      .then(res => {
+        if (res.length > 0) {
+          let propostas = res;
+          resolve(propostas)
+        }
+        else reject('Proposta não encontrada!')
+      })
+      .catch(err => {
+        reject(err)
+      })
+  })
+}
+
+
+
+module.exports = { salvarProposta, getPropostasDoUsuario, getPropostaPorId }

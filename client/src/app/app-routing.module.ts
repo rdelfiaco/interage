@@ -1,3 +1,4 @@
+import { DetalhePropostaComponent } from './proposta/detalhe-proposta/detalhe-proposta.component';
 import { ImportaLeadComponent } from './importa-lead/importa-lead.component';
 import { PropostaComponent } from './proposta/proposta.component';
 import { EventoComponent } from './evento/evento.component';
@@ -89,10 +90,16 @@ const routes: Routes = [
     canActivate: [AuthGuard]
   },
   {
-    path: 'proposta',
+    path: 'propostas',
     component: PropostaComponent,
     canActivate: [AuthGuard]
   },
+  {
+    path: 'proposta/:id',
+    component: DetalhePropostaComponent,
+    canActivate: [AuthGuard]
+  },
+
   {
     path: 'importaLead',
     component: ImportaLeadComponent,

@@ -1,3 +1,79 @@
-<p>
-  detalhe-proposta works!
-</p>
+<!-- Nav tabs -->
+<mdb-tabset #propostaDetalhesTabs [buttonClass]="'classic-tabs tabs-cyan'" [contentClass]="'card'" class="classic-tabs tabHead">
+  <!--Panel 1-->
+  <mdb-tab heading= "Proposta">
+    <div class="row">
+      <div class="col-12">
+          <form [formGroup]="propostaForm" class="formQuestionario">
+              <div class="row">
+                  <div class="md-form col-1" [hidden]="!proposta.id">
+                      <input mdbInputDirective formControlName="id" type="text" id="id" class="form-control" disabled>
+                      <label for="id">ID</label>
+                    </div>
+                    <div class="md-form col-2" [hidden]="!proposta.placa">
+                        <input mdbInputDirective formControlName="placa" type="text" id="placa" class="form-control" disabled>
+                        <label for="placa">Placa</label>
+                    </div>                    
+                    <div class="md-form col" [hidden]="!proposta.cliente">
+                        <input mdbInputDirective formControlName="cliente" type="text" id="cliente" class="form-control" disabled>
+                        <label for="cliente">Cliente</label>
+                    </div>
+                    <div class="md-form col-3" [hidden]="!proposta.status_proposta">
+                      <input mdbInputDirective formControlName="status" type="text" id="status" class="form-control" disabled>
+                      <label for="status">Status</label>
+                    </div>
+              </div>
+              <div class="row">
+                  <div class="md-form col-3" [hidden]="!proposta.tipo_veiculo_">
+                      <input mdbInputDirective formControlName="tipo_veiculo" type="text" id="tipo_veiculo" class="form-control" disabled>
+                      <label for="tipo_veiculo">Tipo do veículo</label>
+                  </div>
+                  <div class="md-form col-3" [hidden]="!proposta.marca">
+                        <input mdbInputDirective formControlName="marca" type="text" id="marca" class="form-control" disabled>
+                        <label for="marca">Marca</label>
+                  </div>
+                  <div class="md-form col-3" [hidden]="!proposta.modelo">
+                          <input mdbInputDirective formControlName="modelo" type="text" id="modelo" class="form-control" disabled>
+                          <label for="modelo">Modelo</label>
+                    </div>
+                    <div class="md-form col-3" [hidden]="!proposta.codigofipe">
+                            <input mdbInputDirective formControlName="codigofipe" type="text" id="codigofipe" class="form-control" disabled>
+                            <label for="codigofipe">Código tabela FIPE</label>
+                    </div>
+              </div>
+          </form>
+
+
+
+
+      </div>
+    </div>
+  </mdb-tab>
+  <!--Panel 2-->
+  <mdb-tab  heading="Eventos">
+    <div class="row">
+      <div class="col-12">
+        <br>
+        <h3>
+          Em construção... 
+        </h3>
+      </div>
+    </div>
+  </mdb-tab>
+  <!--Panel 3-->
+  <mdb-tab heading="Financeiro">
+    <div class="row">
+      <div class="col-12">
+        <br>
+        <h3>
+          Em construção
+        </h3>
+      </div>
+    </div>
+  </mdb-tab>
+  
+</mdb-tabset>
+<div class="row justify-content-end">
+    <button type="button" style="white-space: nowrap;" (click)="voltar()" mdbBtn color="danger" class="waves-light"
+      aria-label="Voltar" mdbWavesEffect>Voltar</button>
+</div>

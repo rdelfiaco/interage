@@ -25,7 +25,7 @@ declaraServico('encaminhaEvento', evento.encaminhaEvento);
 declaraServico('criarEvento', evento.criarEvento);
 declaraServico('consultarPlaca', consultaPlaca.consultarPlaca);
 declaraServico('getPropostasDoUsuario', proposta.getPropostasDoUsuario);
-
+declaraServico('getPropostaPorId', proposta.getPropostaPorId);
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({

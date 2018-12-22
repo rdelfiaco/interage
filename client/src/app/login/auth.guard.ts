@@ -41,7 +41,8 @@ export class AuthGuard implements CanActivate {
       analisaCampanha: ['admin', 'supervisor'],
       produtividadeCallCenter: ['admin', 'supervisor', 'operador'],
       trocarSenha: ['admin', 'supervisor', 'operador'],
-      proposta: ['admin', 'supervisor', 'operador'],
+      propostas: ['admin', 'supervisor', 'operador'],
+      "proposta/:id": ['admin', 'supervisor', 'operador'],
       importaLead: ['admin', 'supervisor'],
       "evento/:id": ['admin', 'supervisor', 'operador'],
     }
