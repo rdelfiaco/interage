@@ -27,15 +27,14 @@ export class ConnectHTTP {
       //TROCA DADOS SERVIDOR
       // const host = options.host || "http://159.69.205.116:3010/" //treinamento
       // const host = options.host || "http://159.69.205.116:3000/" //Producao
-      //const host = options.host || "http://localhost:3010/" //Local
-      
-      const host = options.host || "http://192.168.100.163:3010/" //MCPRO
+      const host = options.host || "http://localhost:3010/" //Local
+      // const host = options.host || "http://192.168.100.163:3010/" //MCPRO
       const service = options.service
 
       let url = `${host}${service}`
 
- 
-    
+
+
       if (!options.naoExigeToken && (!options.paramsService.token || !options.paramsService.id_usuario)) {
         let usuarioLogado = this.localStorage.getLocalStorage('usuarioLogado') as Usuario;
         options.paramsService.id_usuario = usuarioLogado.id.toString();
@@ -67,7 +66,7 @@ export class ConnectHTTP {
   }
 
 
-  
+
   sendFile(options: optionsCallService): Promise<retObjectCallService> | retObjectCallService {
     const mensagem = this._checkOptionsCallService(options);
     if (mensagem && !mensagem.error) return mensagem;
@@ -77,8 +76,8 @@ export class ConnectHTTP {
       //TROCA DADOS SERVIDOR
       // const host = options.host || "http://159.69.205.116:3010/" //treinamento
       // const host = options.host || "http://159.69.205.116:3000/" //Producao
-      //const host = options.host || "http://localhost:3010/" //Local
-      const host = options.host || "http://192.168.100.163:3010/" //MACPRO
+      const host = options.host || "http://localhost:3010/" //Local
+      // const host = options.host || "http://192.168.100.163:3010/" //MACPRO
       const service = options.service
 
       let url = `${host}${service}`
