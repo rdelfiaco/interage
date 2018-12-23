@@ -5,6 +5,11 @@ import { LocalStorage } from '../../shared/services/localStorage';
 import { Usuario } from '../../login/usuario';
 import { ActivatedRoute } from '@angular/router';
 import { FormGroup, FormBuilder } from '@angular/forms';
+import * as moment from 'moment';
+import * as pdfMake from 'pdfmake/build/pdfmake';
+import * as pdfFonts from 'pdfmake/build/vfs_fonts';
+import { img } from '../imagem';
+
 
 @Component({
   selector: 'app-detalhe-proposta',
@@ -26,6 +31,7 @@ export class DetalhePropostaComponent implements OnInit {
     private localStorage: LocalStorage,
     private formBuilder: FormBuilder) {
     this.usuarioLogado = this.localStorage.getLocalStorage('usuarioLogado') as Usuario;
+    pdfMake.vfs = pdfFonts.pdfMake.vfs;
     this.usuarioLogadoSupervisor = this.usuarioLogado.dashboard === "supervisor" || this.usuarioLogado.dashboard === "admin";
     this.route.params.subscribe(res => {
       this.idProposta = res.id
@@ -39,7 +45,22 @@ export class DetalhePropostaComponent implements OnInit {
       tipo_veiculo: [''],
       marca:[''],
       modelo: [''],
-      codigofipe: ['']
+      codigofipe: [''],
+      ano_modelo:[''],
+      preco_medio:[''],
+      cota:[''],
+      data_consulta:[''],
+      adesao:[''],
+      mensalidade:[''],
+      participacao:[''],
+      app:[''],
+      carro_reserva_:[''],
+      fundo_terceiros_:[''],
+      protecao_vidros_:[''],
+      rastreador_:[''],
+      usuario:[''],
+      dtsalvou:['']
+
     })
   }
 
@@ -58,13 +79,13 @@ export class DetalhePropostaComponent implements OnInit {
     }) as any;
     this.proposta = propostaEncontrada.resposta[0];
     console.log(this.proposta)
-    this.ngOnChanges();
+    this.povoaFormulario();
 
 
     this.carregando = false;
   }
 
-  ngOnChanges() {
+  povoaFormulario() {
     this.propostaForm.setValue({
       id: this.proposta.id,
       status: this.proposta.status_proposta,
@@ -73,13 +94,30 @@ export class DetalhePropostaComponent implements OnInit {
       tipo_veiculo: this.proposta.tipo_veiculo_,
       marca:this.proposta.marca,
       modelo: this.proposta.modelo,
-      codigofipe: this.proposta.codigofipe     
-
-    })
+      codigofipe: this.proposta.codigofipe,     
+      ano_modelo:this.proposta.ano_modelo,
+      preco_medio:this.proposta.preco_medio,
+      cota:this.proposta.cota,
+      data_consulta:this.proposta.data_consulta,
+      adesao:this.proposta.adesao,
+      mensalidade:this.proposta.mensalidade,
+      participacao:this.proposta.participacao,
+      app:this.proposta.app,
+      carro_reserva_:this.proposta.carro_reserva_,
+      fundo_terceiros_:this.proposta.fundo_terceiros_,
+      protecao_vidros_:this.proposta.protecao_vidros_,
+      rastreador_:this.proposta.rastreador_,
+      usuario:this.proposta.usuario,
+      dtsalvou:this.proposta.dtsalvou ? moment(this.proposta.dtsalvou).format('DD/MM/YYYY HH:mm:ss') : this.proposta.dtsalvou,
+    })                                
   }
 
 
-
+  openPDF(docDefinition) {
+    let propostaPDF = JSON.parse(docDefinition.replace(/\%23/gim, '#'));
+    propostaPDF.images = { logotipo: img }
+    pdfMake.createPdf(propostaPDF).open()
+  }
 
   voltar() {
     history.back();

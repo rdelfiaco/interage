@@ -35,12 +35,81 @@
                   <div class="md-form col-3" [hidden]="!proposta.modelo">
                           <input mdbInputDirective formControlName="modelo" type="text" id="modelo" class="form-control" disabled>
                           <label for="modelo">Modelo</label>
-                    </div>
-                    <div class="md-form col-3" [hidden]="!proposta.codigofipe">
-                            <input mdbInputDirective formControlName="codigofipe" type="text" id="codigofipe" class="form-control" disabled>
-                            <label for="codigofipe">Código tabela FIPE</label>
-                    </div>
+                  </div>
+                  <div class="md-form col-3" [hidden]="!proposta.ano_modelo">
+                            <input mdbInputDirective formControlName="ano_modelo" type="text" id="ano_modelo" class="form-control" disabled>
+                            <label for="ano_modelo">Ano</label>
+                  </div>
               </div>
+              <div class="row">
+                <div class="md-form col" [hidden]="!proposta.codigofipe">
+                  <input mdbInputDirective formControlName="codigofipe" type="text" id="codigofipe" class="form-control" disabled>
+                  <label for="codigofipe">Código tabela FIPE</label>
+                </div>
+                <div class="md-form col" [hidden]="!proposta.preco_medio">
+                  <input mdbInputDirective formControlName="preco_medio" type="text" id="preco_medio" class="form-control" disabled>
+                  <label for="preco_medio">Preço médio</label>
+                </div>
+                <div class="md-form col-4" [hidden]="!proposta.data_consulta">
+                  <input mdbInputDirective formControlName="data_consulta" type="text" id="data_consulta" class="form-control" disabled>
+                  <label for="data_consulta">Data da consulta</label>
+                </div>
+                <div class="md-form col" [hidden]="!proposta.cota">
+                  <input mdbInputDirective formControlName="cota" type="text" id="cota" class="form-control" disabled>
+                  <label for="cota">Cota</label>
+                </div>
+                <div class="md-form col" [hidden]="!proposta.adesao">
+                  <input mdbInputDirective formControlName="adesao" type="text" id="adesao" class="form-control" disabled>
+                  <label for="adesao">Adesão</label>
+                </div>
+                <div class="md-form col" [hidden]="!proposta.mensalidade">
+                  <input mdbInputDirective formControlName="mensalidade" type="text" id="mensalidade" class="form-control" disabled>
+                  <label for="mensalidade">Mensalidade</label>
+                </div>
+                <div class="md-form col" [hidden]="!proposta.participacao">
+                  <input mdbInputDirective formControlName="participacao" type="text" id="participacao" class="form-control" disabled>
+                  <label for="participacao">Cota de participação</label>
+                </div>
+              </div>
+              <div class="row">
+                <div class="md-form col" [hidden]="!proposta.fundo_terceiros_">
+                  <input mdbInputDirective formControlName="fundo_terceiros_" type="text" id="fundo_terceiros_" class="form-control" disabled>
+                  <label for="fundo_terceiros_">Fundo para Terceiros</label>
+                </div>
+                <div class="md-form col" [hidden]="!proposta.carro_reserva_">
+                  <input mdbInputDirective formControlName="carro_reserva_" type="text" id="carro_reserva_" class="form-control" disabled>
+                  <label for="carro_reserva_">Carro reserva</label>
+                </div>
+                <div class="md-form col" [hidden]="!proposta.protecao_vidros_">
+                  <input mdbInputDirective formControlName="protecao_vidros_" type="text" id="protecao_vidros_" class="form-control" disabled>
+                  <label for="protecao_vidros_">Proteção de vidros</label>
+                </div>
+                <div class="md-form col" [hidden]="!proposta.app">
+                  <input mdbInputDirective formControlName="app" type="text" id="app" class="form-control" disabled>
+                  <label for="app">APP</label>
+                </div>
+                <div class="md-form col" [hidden]="!proposta.rastreador_">
+                  <input mdbInputDirective formControlName="rastreador_" type="text" id="rastreador_" class="form-control" disabled>
+                  <label for="rastreador_">Rastreador</label>
+                </div>
+              </div>
+              <div class="row">
+                <div class="md-form col-5" [hidden]="!proposta.usuario">
+                  <input mdbInputDirective formControlName="usuario" type="text" id="usuario" class="form-control" disabled>
+                  <label for="usuario">Usuário que registrou</label>
+                </div>
+                <div class="md-form col-5" [hidden]="!proposta.dtsalvou">
+                  <input mdbInputDirective formControlName="dtsalvou" type="text" id="dtsalvou" class="form-control" disabled>
+                  <label for="dtsalvou">data do registro</label>
+                </div>
+
+                <a mdbBtn floating="true" size="sm" gradient="blue" style="margin-left: 70px "
+                   mdbWavesEffect (click)="openPDF(proposta.proposta_json)">
+                  <mdb-icon icon="cloud-download"></mdb-icon>
+                </a>
+
+              </div>
+
           </form>
 
 

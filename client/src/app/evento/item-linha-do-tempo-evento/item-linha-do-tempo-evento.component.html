@@ -9,7 +9,7 @@
         <div class=" col-4 h6" style="white-space: nowrap;">{{(evento.dt_resolvido
           || evento.dt_resolvido ||
           evento.dt_prevista_resolucao) |
-          date:'dd/MM/yyyy hh:mm:ss'}}</div>
+          date:'dd/MM/yyyy HH:mm:ss'}}</div>
       </div>
     </mdb-accordion-item-head>
     <mdb-accordion-item-body *ngIf="evento.eventosFilho">
