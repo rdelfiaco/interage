@@ -16,6 +16,9 @@ import * as pdfMake from 'pdfmake/build/pdfmake';
 import * as pdfFonts from 'pdfmake/build/vfs_fonts';
 import { img } from '../imagem';
 
+import * as numeral from 'numeral';
+
+
 interface selectValues {
   value: string
   label: string
@@ -66,7 +69,7 @@ export class ElaboraPropostaComponent implements OnInit {
   tabelaCombos: Array<any>;
   combos: Array<any>;
   valores: Array<any> = [];
-  vlrPoposta: number;
+  vlrProposta: number;
   valorPPV: number;
   cota: number;
   adesao: number;
@@ -226,32 +229,33 @@ export class ElaboraPropostaComponent implements OnInit {
 
   somaValoresProposta() {
     if (this.chkPrecos != "6") {
-      if (this.tabelaCombos.length > 0) this.vlrPoposta = this.combos[this.chkPrecos].valor_combo;
+      if (this.tabelaCombos.length > 0) this.vlrProposta = this.combos[this.chkPrecos].valor_combo;
     } else {
-      this.vlrPoposta = Number(this.valorPPV);
+      this.vlrProposta = Number(this.valorPPV);
       if (this.fundoTerceiro.length > 0) {
-        this.vlrPoposta = this.vlrPoposta + Number(this.fundoTerceiro[this.chkFundo].valor);
+        this.vlrProposta = this.vlrProposta + Number(this.fundoTerceiro[this.chkFundo].valor);
         this.proposta.terceiros = this.fundoTerceiro[this.chkFundo].nome;
         this.proposta.idFundoTerceiros = this.fundoTerceiro[this.chkFundo].id;
       };
       if (this.carroReserva.length > 0) {
-        this.vlrPoposta = this.vlrPoposta + Number(this.carroReserva[this.chckCarroRes].valor)
+        this.vlrProposta = this.vlrProposta + Number(this.carroReserva[this.chckCarroRes].valor)
         this.proposta.idCarroReserva = this.carroReserva[this.chckCarroRes].id;
       };
       if (this.protecaoVidro.length > 0) {
-        this.vlrPoposta = this.vlrPoposta + Number(this.protecaoVidro[this.chckProtecaoVidro].valor)
+        this.vlrProposta = this.vlrProposta + Number(this.protecaoVidro[this.chckProtecaoVidro].valor)
         this.proposta.idProtecaoVidros = this.protecaoVidro[this.chckProtecaoVidro].id;
       };
       if (this.app.length) {
-        this.vlrPoposta = this.vlrPoposta + Number(this.app[this.chckApp].valor)
+        this.vlrProposta = this.vlrProposta + Number(this.app[this.chckApp].valor)
         this.proposta.idApp = this.app[this.chckApp].id;
       };
       if (this.rastreador.length > 0) {
-        this.vlrPoposta = this.vlrPoposta + Number(this.rastreador[this.chckRastreador].valor)
+        this.vlrProposta = this.vlrProposta + Number(this.rastreador[this.chckRastreador].valor)
         this.proposta.idRastreador = this.rastreador[this.chckRastreador].id;
       };
     }
-    this.proposta.mensalidade = Number(this.vlrPoposta.toFixed(2));
+    
+    this.proposta.mensalidade = numeral(this.vlrProposta).format('000.00')
   }
 
   mudouPlano(opcao) {
@@ -525,6 +529,8 @@ export class ElaboraPropostaComponent implements OnInit {
           window.location.reload();
         })
       }
+
+      this.proposta.observacao = '';
 
     }
   }

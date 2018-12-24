@@ -59,14 +59,18 @@
     <br> -->
 
     <div class="row ">
-        <div *ngIf="vlrPoposta" class=" col-md-4 md-form " style="text-align: center">
+        <div *ngIf="proposta.mensalidade" class=" col-md-3 md-form " style="text-align: center">
             Mensalidade : 
             <br>
-            R$ {{vlrPoposta}}
+            R$ {{proposta.mensalidade}}
         </div>
 
+        <div class="md-form col-md-6" >
+            <input mdbInputDirective [(ngModel)] ="proposta.observacao" type="text" id="observacao" class="form-control" [disabled]=bntGeraProposta >
+            <label for="observacao">Observação (será salva no evento da proposta)</label>
+          </div>
         
-        <div class=" col-md-4 md-form " style="text-align: center">
+        <div class=" col-md-3 md-form " style="text-align: center">
             <button type="button" mdbBtn color="primary" (click)="geraProposta();" class="relative waves-light" [disabled]=bntGeraProposta
                 mdbWavesEffect>
                 Salvar Proposta

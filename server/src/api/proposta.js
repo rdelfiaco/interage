@@ -73,16 +73,16 @@ function salvarProposta(req, res) {
                       ${req.query.proposta.idPessoaUsuario},
                       ${req.query.proposta.idPessoaCliente},
                       2,
-                      'Registar se o cliente aceitou ou não proposta',
+                      '${req.query.proposta.observacao}',
                       7,
                       ${id_proposta})`
       executaSQL(credenciais, sql).then(registros => {
         resolve(idProposta)
       }).catch(e => {
-        reject(e);
+        reject('Salvar evento de proposta: ', e);
       });
     }).catch(e => {
-      reject(e);
+      reject('Salvar proposta: ',e);
     });
   })
 };
