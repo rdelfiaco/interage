@@ -506,8 +506,9 @@ export class ElaboraPropostaComponent implements OnInit {
       this.proposta.cota = this.cota;
       this.propostaComuc.setProposta(this.proposta);
 
-
-      let docDefinition_ = docDefinition
+      if (!this.returnProp) {
+        pdfMake.createPdf(docDefinition).open()
+      }
 
       docDefinition.images.logotipo = ''; // retira  a imagem do logo para salvar
 
@@ -520,17 +521,15 @@ export class ElaboraPropostaComponent implements OnInit {
       this.salvarProposta();
 
       if (!this.returnProp) {
-        pdfMake.createPdf(docDefinition_).open()
         sleep(5000).then(() => {
           window.location.reload();
         })
       }
+
     }
   }
 
   async salvarProposta() {
-    if (this.returnProp) {
-      try {
         let paramsService = {
           proposta: JSON.stringify(this.propostaComuc.getProposta()).replace(/\#/gim, '%23'),
           propostaJSON: JSON.stringify(this.propostaComuc.getPropostaJSON()).replace(/\#/gim, '%23')
@@ -540,21 +539,20 @@ export class ElaboraPropostaComponent implements OnInit {
           this.returnProposta.emit(paramsService)
         }
         else {
-          await this.connectHTTP.callService({
-            service: 'salvarProposta',
-            paramsService
-          });
-          this.toastrService.success('Proposta salva com sucesso!');
-
-          document.location.reload(true);
+          try {
+              await this.connectHTTP.callService({
+                service: 'salvarProposta',
+                paramsService
+              });
+              this.toastrService.success('Proposta salva com sucesso!');
+          }catch (error) {
+              console.log(error)
+              this.toastrService.error('Proposta não salva');
+              this.bntGeraProposta = false;
+              return 0;
+          }
         }
-      }
-      catch (error) {
-        console.log(error)
-        this.toastrService.error('Proposta não salva');
-        this.bntGeraProposta = false;
-        return 0;
-      }
+
     }
-  }
+  
 }

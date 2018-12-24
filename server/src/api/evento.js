@@ -26,7 +26,7 @@ function getUmEvento(req, res) {
             and id_campanha = ${req.query.id_campanha}
             order by id_status_evento desc, id_prioridade, dt_para_exibir LIMIT 1`
 
-      console.log(sql)
+      //console.log(sql)
       client.query(sql)
         .then(res => {
           if (res.rowCount > 0) {
@@ -79,7 +79,7 @@ function motivosRespostas(req, res) {
                       LEFT JOIN motivos_eventos_automaticos ON motivos_respostas.id = motivos_eventos_automaticos.id_motivo_resposta
                       WHERE motivos_respostas.id_motivo=${req.query.id_motivo} AND status=true`
 
-      console.log(sqlMotivosResposta);
+      //console.log(sqlMotivosResposta);
       client.query(sqlMotivosResposta).then(res => {
         let motivos_respostas = res.rows;
 
@@ -100,7 +100,7 @@ function encerrarEvento(client, id_pessoa, id_evento, id_status_evento) {
           id_pessoa_resolveu=${id_pessoa} 
           WHERE eventos.id=${id_evento} AND eventos.id_status_evento in(5,6)
           RETURNING tipoDestino, id_pessoa_organograma;`;
-    console.log(update)
+    //console.log(update)
     client.query(update).then((updateEventoEncerrado) => {
       resolve(updateEventoEncerrado)
     }).catch(err => {
@@ -146,7 +146,7 @@ function _criarEvento(client, id_campanha, id_motivo, id_evento_pai, id_evento_a
       ${id_canal})
       RETURNING id`;
 
-    console.log(update)
+    //console.log(update)
     client.query(update).then((updateEventoCriado) => {
       resolve(updateEventoCriado)
     }).catch(err => {
@@ -168,7 +168,7 @@ function encaminhaEvento(req, res) {
 
       client.connect();
       client.query('BEGIN').then((res1) => {
-        console.log('req.query', req.query)
+        //console.log('req.query', req.query)
         let statusEvento;
         if (req.query.id_status_evento === '5') statusEvento = 2;
         if (req.query.id_status_evento === '6') statusEvento = 8;
@@ -266,8 +266,8 @@ function salvarEvento(req, res) {
           const motivoResposta = res.rows[0];
 
           client.query('BEGIN').then((res1) => {
-
-            if (req.query.proposta) {
+           
+            if (req.query.proposta && req.query.proposta != {}  )  {
               salvarProposta(req, res).then((idproposta) => {
                 console.log('salvo proposta ' + idproposta[0].id);
                 finalizaEvento(idproposta[0].id);
@@ -292,7 +292,6 @@ function salvarEvento(req, res) {
                   WHERE eventos.id=${req.query.id_evento} AND eventos.id_status_evento in(5,6)
                   RETURNING tipoDestino, id_pessoa_organograma;
                   `;
-              console.log(update)
               client.query(update).then((updateEventoEncerrado) => {
                 if (updateEventoEncerrado.rowCount != 1) {
                   client.query('COMMIT').then((resposta) => {
@@ -314,23 +313,23 @@ function salvarEvento(req, res) {
                                              (id_resp_motivo=${req.query.id_motivos_respostas} AND
                                               id = ${req.query.id_evento_pai}))`
 
-                console.log('selectQuantidadeTentativas', selectQuantidadeTentativas)
+                //console.log('selectQuantidadeTentativas', selectQuantidadeTentativas)
                 client.query(selectQuantidadeTentativas).then((qtdTentativas) => {
                   qtdTentativas = parseInt(qtdTentativas.rows[0].count);
-                  console.log('motivoResposta_automatico.length', motivoResposta_automatico)
+                  //console.log('motivoResposta_automatico.length', motivoResposta_automatico)
 
-                  console.log('qtdTentativas', qtdTentativas)
-                  console.log('motivoResposta.tentativas', motivoResposta.tentativas)
-                  console.log('motivoResposta.tentativas > qtdTentativas', motivoResposta.tentativas > qtdTentativas)
+                  //console.log('qtdTentativas', qtdTentativas)
+                  //console.log('motivoResposta.tentativas', motivoResposta.tentativas)
+                  //console.log('motivoResposta.tentativas > qtdTentativas', motivoResposta.tentativas > qtdTentativas)
                   if (motivoResposta.tentativas > qtdTentativas) {
 
                     if (motivoResposta_automatico.length > 0) {
                       motivoResposta_automatico.map((m, index, array) => {
                         eventoCriar = createEvent(m, motivoResposta, updateEventoEncerrado)
-                        console.log('eventoCriar', eventoCriar)
+                        //console.log('eventoCriar', eventoCriar)
 
                         client.query(eventoCriar).then(res => {
-                          console.log('index == array.length - 1', index == array.length - 1)
+                          //console.log('index == array.length - 1', index == array.length - 1)
 
                           if (index == array.length - 1)
                             client.query('COMMIT').then((resposta) => {
@@ -437,7 +436,7 @@ function salvarEvento(req, res) {
         }
 
         let id_prioridade = getPrioridadeDoEvento();
-        console.log(req.query.data)
+        //console.log(req.query.data)
         return `INSERT INTO eventos(
             id_campanha,
             id_motivo,
@@ -498,7 +497,7 @@ function getEventosPendentes(req, res) {
                 and dt_para_exibir <= now()
                 order by dt_criou limit 100`
 
-      console.log(sql)
+      //console.log(sql)
       client.query(sql)
         .then(res => {
           if (res.rowCount > 0) {

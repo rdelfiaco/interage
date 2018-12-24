@@ -83,7 +83,7 @@ export class TelemarketingComponent implements OnInit {
   async solicitarLigacao() {
     var self = this;
     this.formAberto = true;
-    debugger;
+    
     let telemarketing = await this.connectHTTP.callService({
       service: 'getLigacaoTelemarketing',
       paramsService: {

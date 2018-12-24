@@ -8,7 +8,7 @@ function salvarProposta(req, res) {
       idUsuario: req.query.id_usuario
     };
 
-    console.log(req.query.proposta);
+    
     req.query.proposta = JSON.parse(req.query.proposta);
 
     req.query.proposta.placa = req.query.proposta.placa ? req.query.proposta.placa : ''
