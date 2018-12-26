@@ -3,7 +3,7 @@ import { Usuario } from "../../login/usuario";
 
 interface optionsCallService {
   service: string
-  paramsService?: object,
+  paramsService?: any,
   host?: string,
   naoExigeToken?: boolean
 }
@@ -30,10 +30,13 @@ export class ConnectHTTP {
 
       let url = `${host}${service}`
 
-      if (!options.naoExigeToken && (!options.paramsService.token || !options.paramsService.id_usuario)) {
+      if (!options.naoExigeToken) {
         let usuarioLogado = this.localStorage.getLocalStorage('usuarioLogado') as Usuario;
-        options.paramsService.id_usuario = usuarioLogado.id.toString();
-        options.paramsService.token = usuarioLogado.token;
+        options.paramsService = {
+          ...options.paramsService,
+          id_usuario: usuarioLogado.id.toString(),
+          token: usuarioLogado.token
+        }
       }
 
       if (options.paramsService) {
@@ -77,10 +80,13 @@ export class ConnectHTTP {
 
       let url = `${host}${service}`
 
-      if (!options.naoExigeToken && (!options.paramsService.token || !options.paramsService.id_usuario)) {
+      if (!options.naoExigeToken) {
         let usuarioLogado = this.localStorage.getLocalStorage('usuarioLogado') as Usuario;
-        options.paramsService.id_usuario = usuarioLogado.id.toString();
-        options.paramsService.token = usuarioLogado.token;
+        options.paramsService = {
+          ...options.paramsService,
+          id_usuario: usuarioLogado.id.toString(),
+          token: usuarioLogado.token
+        }
       }
 
 

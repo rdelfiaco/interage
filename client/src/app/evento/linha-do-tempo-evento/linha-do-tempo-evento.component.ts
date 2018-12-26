@@ -35,8 +35,6 @@ export class LinhaDoTempoEventoComponent implements OnInit {
       let eventosEncontrados = await this.connectHTTP.callService({
         service: 'getEventosLinhaDoTempo',
         paramsService: {
-          id_usuario: this.usuarioLogado.id,
-          token: this.usuarioLogado.token,
           id_pessoa_receptor: this.pessoa.principal.id
         }
       }) as any;

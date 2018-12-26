@@ -97,8 +97,6 @@ export class ProdutividadeCallCenterComponent implements OnInit {
     let agentesVendas = await this.connectHTTP.callService({
       service: 'getAgentesVendas',
       paramsService: {
-        token: this.usuarioLogado.token,
-        id_usuario: this.usuarioLogado.id,
         id_organograma: this.usuarioLogado.id_organograma,
       }
     }) as any;
@@ -154,8 +152,6 @@ export class ProdutividadeCallCenterComponent implements OnInit {
       let getProdutividadeCallCenter = await this.connectHTTP.callService({
         service: 'getProdutividadeCallCenter',
         paramsService: {
-          token: this.usuarioLogado.token,
-          id_usuario: this.usuarioLogado.id,
           id_pessoa_usuario_select: this.agentesVendasSelectValue,
           id_organograma: this.usuarioLogado.id_organograma,
           id_campanha: 5,
@@ -188,8 +184,6 @@ export class ProdutividadeCallCenterComponent implements OnInit {
       let getProdutividadeCallCenter = await this.connectHTTP.callService({
         service: 'getEventosRelatorioUsuario',
         paramsService: {
-          token: this.usuarioLogado.token,
-          id_usuario: this.usuarioLogado.id,
           id_pessoa_organograma: this.agentesVendasSelectValue,
           id_organograma: this.usuarioLogado.id_organograma,
           id_campanha: 5,

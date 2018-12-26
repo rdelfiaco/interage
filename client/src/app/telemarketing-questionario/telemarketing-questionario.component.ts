@@ -185,8 +185,6 @@ export class TelemarketingQuestionarioComponent implements OnInit {
     let eventosPessoa = await this.connectHTTP.callService({
       service: 'getEventosLinhaDoTempo',
       paramsService: {
-        id_usuario: usuarioLogado.id,
-        token: usuarioLogado.token,
         id_pessoa_receptor: this._pessoaObject.principal.id
       }
     }) as any;
@@ -286,9 +284,7 @@ export class TelemarketingQuestionarioComponent implements OnInit {
     const usuarioLogado = this.localStorage.getLocalStorage('usuarioLogado') as any;
     debugger;
     let parametros = {
-      token: usuarioLogado.token,
       id_pessoa: usuarioLogado.id_pessoa,
-      id_usuario: usuarioLogado.id,
       id_evento: this._eventoObject.id,
       id_evento_pai: this._eventoObject.id_evento_pai ? this._eventoObject.id_evento_pai : this._eventoObject.id,
       id_pessoa_receptor: this._eventoObject.id_pessoa_receptor,

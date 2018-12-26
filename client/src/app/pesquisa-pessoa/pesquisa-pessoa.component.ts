@@ -93,8 +93,6 @@ export class PesquisaPessoaComponent implements OnInit {
       let pessoasEncontradas = await this.connectHTTP.callService({
         service: 'pesquisaPessoas',
         paramsService: {
-          id_usuario: this.usuarioLogado.id,
-          token: this.usuarioLogado.token,
           searchText: this.textoPesquisaPessoa
         }
       }) as any;
@@ -124,8 +122,6 @@ export class PesquisaPessoaComponent implements OnInit {
     let p = await this.connectHTTP.callService({
       service: 'getPessoa',
       paramsService: {
-        token: this.usuarioLogado.token,
-        id_usuario: this.usuarioLogado.id,
         id_pessoa: pessoaId
       }
     }) as any;
@@ -137,8 +133,6 @@ export class PesquisaPessoaComponent implements OnInit {
     let pessoa = await this.connectHTTP.callService({
       service: 'getPessoa',
       paramsService: {
-        token: this.usuarioLogado.token,
-        id_usuario: this.usuarioLogado.id,
         id_pessoa: pessoaId
       }
     }) as any;

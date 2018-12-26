@@ -38,8 +38,6 @@ export class TelemarketingComponent implements OnInit {
     let r = await this.connectHTTP.callService({
       service: 'getCampanhasDoUsuario',
       paramsService: {
-        token: this.usuarioLogado.token,
-        id_usuario: this.usuarioLogado.id,
         id_pessoa: this.usuarioLogado.id_pessoa,
       }
     }) as any;
@@ -87,8 +85,6 @@ export class TelemarketingComponent implements OnInit {
     let telemarketing = await this.connectHTTP.callService({
       service: 'getLigacaoTelemarketing',
       paramsService: {
-        token: this.usuarioLogado.token,
-        id_usuario: this.usuarioLogado.id,
         id_campanha: this.campanhaSelecionada.value,
         id_pessoa: this.usuarioLogado.id_pessoa,
         id_organograma: this.usuarioLogado.id_organograma
@@ -134,8 +130,6 @@ export class TelemarketingComponent implements OnInit {
     let pessoa = await this.connectHTTP.callService({
       service: 'getPessoa',
       paramsService: {
-        token: this.usuarioLogado.token,
-        id_usuario: this.usuarioLogado.id,
         id_pessoa: pessoaId
       }
     }) as any;
