@@ -5,7 +5,7 @@
         <button class="col-2" (click)="selecionaEvento($event, evento)" mdbBtn type="button" gradient="peach" size="sm"
           mdbWavesEffect>Detalhe</button>
         <div class="col-2 h6" style="white-space: pre;">{{evento.motivo}}</div>
-        <div class="col-2 h6">{{evento.resposta_motivo}}</div>
+        <div class="col-2 h6">{{evento.status}}</div>
         <div class=" col-4 h6" style="white-space: nowrap;">{{(evento.dt_resolvido
           || evento.dt_resolvido ||
           evento.dt_prevista_resolucao) |

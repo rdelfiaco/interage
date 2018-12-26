@@ -95,7 +95,6 @@ export class LinhaDoTempoEventoComponent implements OnInit {
           return maiorData;
         }
       }
-
       this.eventosDaPessoa = ordenaEventos(juntaEventosPaiEFilhos(eventosEncontrados.resposta, null));
     }
     catch (e) {
