@@ -109,8 +109,6 @@ export class ElaboraPropostaComponent implements OnInit {
     let tabelaPrecos = await this.connectHTTP.callService({
       service: 'getTabelaPrecos',
       paramsService: {
-        token: this.usuarioLogado.token,
-        id_usuario: this.usuarioLogado.id,
         id_organograma: this.usuarioLogado.id_organograma
       }
     }) as any;

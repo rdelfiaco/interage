@@ -97,8 +97,6 @@ export class EventoComponent implements OnInit {
     let eventoFiltros = await this.connectHTTP.callService({
       service: 'getEventoFiltros',
       paramsService: {
-        token: this.usuarioLogado.token,
-        id_usuario: this.usuarioLogado.id,
         id_organograma: this.usuarioLogado.id_organograma
       }
     }) as any;
@@ -230,8 +228,6 @@ export class EventoComponent implements OnInit {
       let eventos = await this.connectHTTP.callService({
         service: 'getEventosFiltrados',
         paramsService: {
-          token: this.usuarioLogado.token,
-          id_usuario: this.usuarioLogado.id,
           id_organograma: this.usuarioLogado.id_organograma,
           dt_inicial: this.dataInicial,
           dt_final: this.dataFinal,

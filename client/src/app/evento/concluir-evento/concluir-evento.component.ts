@@ -198,9 +198,7 @@ export class ConcluirEventoComponent implements OnInit {
     await this.connectHTTP.callService({
       service: 'salvarEvento',
       paramsService: {
-        token: usuarioLogado.token,
         id_pessoa: usuarioLogado.id_pessoa,
-        id_usuario: usuarioLogado.id,
         id_evento: this._eventoObject.id,
         id_evento_pai: this._eventoObject.id_evento_pai ? this._eventoObject.id_evento_pai : this._eventoObject.id,
         id_pessoa_receptor: this._eventoObject.id_pessoa_receptor,

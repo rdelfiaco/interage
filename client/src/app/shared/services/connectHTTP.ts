@@ -3,7 +3,7 @@ import { Usuario } from "../../login/usuario";
 
 interface optionsCallService {
   service: string
-  paramsService?: object,
+  paramsService?: any,
   host?: string,
   naoExigeToken?: boolean
 }
@@ -24,16 +24,24 @@ export class ConnectHTTP {
       //TROCA DADOS SERVIDOR
       // const host = options.host || "http://159.69.205.116:3010/" //treinamento
       // const host = options.host || "http://159.69.205.116:3000/" //Producao
+<<<<<<< HEAD
       //const host = options.host || "http://localhost:3010/" //Local
        const host = options.host || "http://192.168.100.53:3010/" //MCPRO
+=======
+      const host = options.host || "http://localhost:3010/" //Local
+      //  const host = options.host || "http://192.168.100.163:3010/" //MCPRO
+>>>>>>> 178f86ebf7ecc6131042af0452fbb249c1e0c5dc
       const service = options.service
 
       let url = `${host}${service}`
 
-      if (!options.naoExigeToken && (!options.paramsService.token || !options.paramsService.id_usuario)) {
+      if (!options.naoExigeToken) {
         let usuarioLogado = this.localStorage.getLocalStorage('usuarioLogado') as Usuario;
-        options.paramsService.id_usuario = usuarioLogado.id.toString();
-        options.paramsService.token = usuarioLogado.token;
+        options.paramsService = {
+          ...options.paramsService,
+          id_usuario: usuarioLogado.id.toString(),
+          token: usuarioLogado.token
+        }
       }
 
       if (options.paramsService) {
@@ -77,10 +85,13 @@ export class ConnectHTTP {
 
       let url = `${host}${service}`
 
-      if (!options.naoExigeToken && (!options.paramsService.token || !options.paramsService.id_usuario)) {
+      if (!options.naoExigeToken) {
         let usuarioLogado = this.localStorage.getLocalStorage('usuarioLogado') as Usuario;
-        options.paramsService.id_usuario = usuarioLogado.id.toString();
-        options.paramsService.token = usuarioLogado.token;
+        options.paramsService = {
+          ...options.paramsService,
+          id_usuario: usuarioLogado.id.toString(),
+          token: usuarioLogado.token
+        }
       }
 
 

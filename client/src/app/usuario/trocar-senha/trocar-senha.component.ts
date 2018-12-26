@@ -35,9 +35,6 @@ export class TrocarSenhaComponent implements OnInit {
   }
 
   async salvarSenha() {
-    this.trocarSenhaForm.value.id_usuario = this.usuarioLogado.id;
-    this.trocarSenhaForm.value.token = this.usuarioLogado.token;
-
     this.trocarSenhaForm.value.senhaAntiga = SHA1(this.trocarSenhaForm.value.senhaAntiga);
     this.trocarSenhaForm.value.senhaNova = SHA1(this.trocarSenhaForm.value.senhaNova);
     this.trocarSenhaForm.value.senhaNovaRepete = SHA1(this.trocarSenhaForm.value.senhaNovaRepete);

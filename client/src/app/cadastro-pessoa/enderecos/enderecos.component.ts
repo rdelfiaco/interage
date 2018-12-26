@@ -88,8 +88,6 @@ export class EnderecosComponent implements OnInit {
       await this.connectHTTP.callService({
         service: 'editaEnderecoDeCorrespondencia',
         paramsService: {
-          id_usuario: this.usuarioLogado.id,
-          token: this.usuarioLogado.token,
           id_endereco: endereco.id,
           id_pessoa: endereco.id_pessoa
         }
@@ -108,8 +106,6 @@ export class EnderecosComponent implements OnInit {
   }
 
   async salvar() {
-    this.enderecoForm.value.id_usuario = this.usuarioLogado.id;
-    this.enderecoForm.value.token = this.usuarioLogado.token;
     this.enderecoForm.value.cep = this.enderecoForm.value.cep.replace(/\D/g, '')
     try {
       await this.connectHTTP.callService({
@@ -136,8 +132,6 @@ export class EnderecosComponent implements OnInit {
       await this.connectHTTP.callService({
         service: 'excluirEnderecoPessoa',
         paramsService: {
-          id_usuario: this.usuarioLogado.id,
-          token: this.usuarioLogado.token,
           id_endereco: this.enderecoExclusao.id
         }
       });

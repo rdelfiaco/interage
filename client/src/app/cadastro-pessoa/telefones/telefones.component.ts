@@ -45,10 +45,7 @@ export class TelefonesComponent implements OnInit {
   async ngOnInit() {
     let tipoTelefone = await this.connectHTTP.callService({
       service: 'getTipoTelefone',
-      paramsService: {
-        token: this.usuarioLogado.token,
-        id_usuario: this.usuarioLogado.id,
-      }
+      paramsService: {}
     });
     this.tipoTelefone = new Observable((observer) => {
       let tel = tipoTelefone.resposta as Array<object>
@@ -72,8 +69,6 @@ export class TelefonesComponent implements OnInit {
       await this.connectHTTP.callService({
         service: 'editaTelefonePrincipal',
         paramsService: {
-          id_usuario: this.usuarioLogado.id,
-          token: this.usuarioLogado.token,
           id_telefone: telefone.id,
           id_pessoa: telefone.id_pessoa
         }
@@ -113,8 +108,6 @@ export class TelefonesComponent implements OnInit {
       await this.connectHTTP.callService({
         service: 'excluirTelefonePessoa',
         paramsService: {
-          id_usuario: this.usuarioLogado.id,
-          token: this.usuarioLogado.token,
           id_telefone: this.telefoneExclusao.id
         }
       });
@@ -149,8 +142,7 @@ export class TelefonesComponent implements OnInit {
     this.telefoneSelecionado = false;
   }
   async salvar() {
-    this.telefoneForm.value.id_usuario = this.usuarioLogado.id;
-    this.telefoneForm.value.token = this.usuarioLogado.token;
+
     try {
       await this.connectHTTP.callService({
         service: 'salvarTelefonePessoa',

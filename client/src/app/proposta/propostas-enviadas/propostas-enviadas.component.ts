@@ -73,6 +73,7 @@ export class PropostasEnviadasComponent implements OnInit  {
   }
 
   async ngOnInit() {
+<<<<<<< HEAD
     let propostaFiltros = await this.connectHTTP.callService({
       service: 'getPropostaFiltros',
       paramsService: {
@@ -80,6 +81,11 @@ export class PropostasEnviadasComponent implements OnInit  {
         id_usuario: this.usuarioLogado.id,
         id_organograma: this.usuarioLogado.id_organograma
       }
+=======
+    let propostas = await this.connectHTTP.callService({
+      service: 'getPropostasDoUsuario',
+      paramsService: {}
+>>>>>>> 178f86ebf7ecc6131042af0452fbb249c1e0c5dc
     }) as any;
 
     // combo usuário

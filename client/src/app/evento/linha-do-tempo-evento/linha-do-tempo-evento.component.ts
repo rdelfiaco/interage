@@ -11,7 +11,7 @@ import { LocalStorage } from '../../shared/services/localStorage';
 export class LinhaDoTempoEventoComponent implements OnInit {
   private usuarioLogado: any;
   eventosDaPessoa: any;
-  eventoSelecionado: object;
+  eventoSelecionado: any;
   @Input() pessoa: any;
 
 
@@ -24,8 +24,9 @@ export class LinhaDoTempoEventoComponent implements OnInit {
   ngOnInit() {
   }
 
-  setEventoSelecionado(eventoSelecionado: object) {
-    this.eventoSelecionado = eventoSelecionado;
+  setEventoSelecionado(eventoSelecionado: any) {
+    if (this.eventoSelecionado && this.eventoSelecionado.id === eventoSelecionado.id) this.eventoSelecionado = null;
+    else this.eventoSelecionado = eventoSelecionado;
   }
 
   async ngOnChanges() {
@@ -34,8 +35,6 @@ export class LinhaDoTempoEventoComponent implements OnInit {
       let eventosEncontrados = await this.connectHTTP.callService({
         service: 'getEventosLinhaDoTempo',
         paramsService: {
-          id_usuario: this.usuarioLogado.id,
-          token: this.usuarioLogado.token,
           id_pessoa_receptor: this.pessoa.principal.id
         }
       }) as any;
@@ -94,7 +93,6 @@ export class LinhaDoTempoEventoComponent implements OnInit {
           return maiorData;
         }
       }
-
       this.eventosDaPessoa = ordenaEventos(juntaEventosPaiEFilhos(eventosEncontrados.resposta, null));
     }
     catch (e) {
