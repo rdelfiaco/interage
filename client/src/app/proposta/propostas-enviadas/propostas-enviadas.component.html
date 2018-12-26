@@ -11,7 +11,7 @@
       <th>Ações</th>
     </tr>
   </thead>
-  <tbody *ngFor="let proposta of propostas">
+  <tbody (click)="abreDetalheProposta(proposta.id)" *ngFor="let proposta of propostas">
     <tr>
       <th scope="row">{{proposta.id}}</th>
       <td>
@@ -41,3 +41,18 @@
 
   </tbody>
 </table>
+
+
+<!-- <div mdbModal #modalDetalheProposta="mdbModal" [config]="{backdrop: true}" class="modal fade right" role="dialog"
+aria-labelledby="myBasicModalLabel" aria-hidden="true">
+<div class="modal-dialog" role="document">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h4 class="modal-title w-200" id="myModalLabel">Proposta</h4>
+    </div>
+    <div class="modal-body" style="overflow: auto; height: 100vh;">
+      <app-detalhe-proposta  [idProposta]="idProposta"   (fechaModal)="fechaModal()"></app-detalhe-proposta>
+    </div>
+  </div>
+</div>
+</div> -->

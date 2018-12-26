@@ -8,7 +8,7 @@ function salvarProposta(req, res) {
       idUsuario: req.query.id_usuario
     };
 
-    console.log(req.query.proposta);
+    
     req.query.proposta = JSON.parse(req.query.proposta);
 
     req.query.proposta.placa = req.query.proposta.placa ? req.query.proposta.placa : ''
@@ -73,16 +73,16 @@ function salvarProposta(req, res) {
                       ${req.query.proposta.idPessoaUsuario},
                       ${req.query.proposta.idPessoaCliente},
                       2,
-                      'Registar se o cliente aceitou ou não proposta',
+                      '${req.query.proposta.observacao}',
                       7,
                       ${id_proposta})`
       executaSQL(credenciais, sql).then(registros => {
         resolve(idProposta)
       }).catch(e => {
-        reject(e);
+        reject('Salvar evento de proposta: ', e);
       });
     }).catch(e => {
-      reject(e);
+      reject('Salvar proposta: ',e);
     });
   })
 };
@@ -110,4 +110,28 @@ function getPropostasDoUsuario(req, res) {
   })
 }
 
-module.exports = { salvarProposta, getPropostasDoUsuario }
+function getPropostaPorId(req, res) {
+  return new Promise(function (resolve, reject) {
+    let credenciais = {
+      token: req.query.token,
+      idUsuario: req.query.id_usuario
+    };
+
+    let sql = `select * from view_proposta where id=${req.query.id} `
+    executaSQL(credenciais, sql)
+      .then(res => {
+        if (res.length > 0) {
+          let propostas = res;
+          resolve(propostas)
+        }
+        else reject('Proposta não encontrada!')
+      })
+      .catch(err => {
+        reject(err)
+      })
+  })
+}
+
+
+
+module.exports = { salvarProposta, getPropostasDoUsuario, getPropostaPorId }

@@ -13,7 +13,7 @@ function getPessoa(req, res) {
       let sql = `SELECT * FROM pessoas
                   WHERE id=${req.query.id_pessoa}`
 
-      console.log(sql);
+      //console.log(sql);
       client.query(sql)
         .then(res => {
           if (res.rowCount > 0) {
@@ -121,7 +121,7 @@ function salvarPessoa(req, res) {
           WHERE pessoas.id=${req.query.id};
           `;
         }
-        console.log(update)
+       // console.log(update)
 
         client.query(update).then((res) => {
           client.query('COMMIT').then((resposta) => {
@@ -586,7 +586,7 @@ function salvarEnderecoPessoa(req, res) {
                     TRUE
                     ) RETURNING id`;
 
-            console.log('insert', insert)
+            //console.log('insert', insert)
             client.query(insert).then((res) => {
               req.query.id_cidade = res.rows[0].id
               salvaEndereco()

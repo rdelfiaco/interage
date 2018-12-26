@@ -166,7 +166,7 @@ export class CriarEventoComponent implements OnInit {
   ]
 
   async criarEvento() {
-    let dataExibir = moment(this.criarEventoForm.value.data + ' - ' + this.criarEventoForm.value.hora, 'DD/MM/YYYY - hh:mm').toISOString()
+    let dataExibir = moment(this.criarEventoForm.value.data + ' - ' + this.criarEventoForm.value.hora, 'DD/MM/YYYY - HH:mm').toISOString()
     const usuarioLogado = this.localStorage.getLocalStorage('usuarioLogado') as any;
 
     if (this.evento) {

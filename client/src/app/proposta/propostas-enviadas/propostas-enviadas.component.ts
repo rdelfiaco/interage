@@ -1,10 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Proposta } from './../proposta';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ConnectHTTP } from '../../shared/services/connectHTTP';
 import { LocalStorage } from '../../shared/services/localStorage';
 import { Usuario } from '../../login/usuario';
 import { img } from '../imagem';
 import * as pdfMake from 'pdfmake/build/pdfmake';
 import * as pdfFonts from 'pdfmake/build/vfs_fonts';
+import { ModalDirective } from 'ng-uikit-pro-standard';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-propostas-enviadas',
@@ -14,11 +17,16 @@ import * as pdfFonts from 'pdfmake/build/vfs_fonts';
 export class PropostasEnviadasComponent implements OnInit {
   propostas: any;
   usuarioLogado: any;
+  idProposta: number;
+  
+  @ViewChild('modalDetalheProposta') modalDetalheProposta: ModalDirective;
 
   constructor(private connectHTTP: ConnectHTTP,
-    private localStorage: LocalStorage) {
+    private localStorage: LocalStorage,
+    private router: Router) {
     this.usuarioLogado = this.localStorage.getLocalStorage('usuarioLogado') as Usuario;
     pdfMake.vfs = pdfFonts.pdfMake.vfs;
+    
   }
 
   async ngOnInit() {
@@ -41,4 +49,17 @@ export class PropostasEnviadasComponent implements OnInit {
   openPDF(docDefinition) {
     pdfMake.createPdf(docDefinition).open()
   }
+
+  abreDetalheProposta(idProposta: number){
+
+    this.idProposta = idProposta;
+    this.router.navigate([`/proposta/${idProposta}`]);
+
+  }
+
+  fechaModal() {
+    this.modalDetalheProposta.hide();
+  }
+
+
 }

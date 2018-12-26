@@ -210,7 +210,7 @@ export class ConcluirEventoComponent implements OnInit {
         id_objecao: this.questionarioForm.value.id_objecao,
         id_campanha: this._eventoObject.id_campanha,
         observacao: this.questionarioForm.value.observacao,
-        data: moment(this.questionarioForm.value.data + ' - ' + this.questionarioForm.value.hora, 'DD/MM/YYYY - hh:mm').toISOString(),
+        data: moment(this.questionarioForm.value.data + ' - ' + this.questionarioForm.value.hora, 'DD/MM/YYYY - HH:mm').toISOString(),
       }
     });
     this.fechaModal.emit();

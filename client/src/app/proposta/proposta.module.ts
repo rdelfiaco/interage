@@ -1,6 +1,4 @@
 
-
-
 import { ComunicaPropostaService } from './comunica-proposta.service';
 import { Proposta } from './proposta';
 import { PropostaComponent } from './proposta.component';
@@ -21,7 +19,7 @@ import { PesquisaClienteModule } from '../pesquisa-cliente/pesquisa-cliente.modu
 import { PlacaPipe } from '../shared/pipes/placa/placa.pipe';
 import { FormataDinheiroPipe } from '../shared/pipes/mascaraDinheiro/formata-dinheiro.pipe';
 import { DetalhePropostaComponent } from './detalhe-proposta/detalhe-proposta.component';
-
+import { CarregandoModule } from '../shared/carregando/carregando.module';
 
 @NgModule({
   imports: [
@@ -33,7 +31,7 @@ import { DetalhePropostaComponent } from './detalhe-proposta/detalhe-proposta.co
     FormsModule,
     SharedModule,
     PesquisaClienteModule,
-
+    CarregandoModule,
   ],
   declarations: [
     PropostaComponent,

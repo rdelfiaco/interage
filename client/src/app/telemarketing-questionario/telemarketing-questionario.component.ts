@@ -282,6 +282,7 @@ export class TelemarketingQuestionarioComponent implements OnInit {
     this.discando = true;
   }
   async gravarLigacao() {
+
     const usuarioLogado = this.localStorage.getLocalStorage('usuarioLogado') as any;
     debugger;
     let parametros = {
@@ -305,12 +306,19 @@ export class TelemarketingQuestionarioComponent implements OnInit {
       service: 'salvarEvento',
       paramsService: parametros
     });
+
     debugger;
 
+    if (this.exige_proposta) {
+      let docDefinition_ = JSON.parse(this.questionarioForm.value.propostaJSON.replace(/\%23/gim, '#'));
+      docDefinition_.images = { logotipo: img };
+      pdfMake.createPdf(docDefinition_).open()
+    }
 
     let acao = this.motivoAcao.filter((r) => r.id == this.questionarioForm.value.motivoRespostaSelecionado);
 
     this.atualizaMeta.emit(metaPessoa.resposta[0]);
+
     this.modal.hide()
 
     if (this.questionarioForm.value.propostaJSON) {

@@ -25,6 +25,14 @@ export class Proposta {
     private _idPessoaUsuario: number;
     private _idPessoaCliente: number;
     private _placa: string;
+    private _observacao: string;
+
+    public get observacao(): string {
+        return this._observacao;
+    }
+    public set observacao(value: string) {
+        this._observacao = value;
+    }
 
     public get idPessoaUsuario(): number {
         return this._idPessoaUsuario;
@@ -78,7 +86,8 @@ export class Proposta {
             idUsuario: this._idUsuario,
             idPessoaUsuario: this._idPessoaUsuario,
             idPessoaCliente: this._idPessoaCliente,
-            placa: this._placa
+            placa: this._placa,
+            observacao: this._observacao
         };
     }
 
