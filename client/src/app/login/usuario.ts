@@ -10,7 +10,7 @@ export class Usuario {
     private _id_pessoa: number;
     private _responsavel_membro: number;
     private _apelido: string;
-    private _telefone: string ;
+    private _telefone: string;
     private _ddd: number;
 
     public get ddd(): number {

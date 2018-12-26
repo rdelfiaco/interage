@@ -43,8 +43,8 @@
 
         <div class="row" style="margin-top: 40px; margin-left: 5px; font-size: 0.8rem; ">
           <!-- Material unchecked -->
-          <mdb-checkbox [checked]=eventosUsuarioChk>Listar apenas eventos do usuário.</mdb-checkbox>
-          <mdb-checkbox [checked]=eventosFinalizadosChk>Listar apenas eventos não finalizados.</mdb-checkbox>
+          <mdb-checkbox [checked]=eventosUsuarioChk [disabled]="!usuarioLogadoSupervisor" >Listar apenas eventos do usuário.</mdb-checkbox>
+          <mdb-checkbox [checked]=eventosFinalizadosChk [disabled]="!usuarioLogadoSupervisor" >Listar apenas eventos não finalizados.</mdb-checkbox>
           <mdb-checkbox [disabled]="true" [checked]="true">Listar apenas os cem últinos eventos</mdb-checkbox>
         </div>
 
@@ -55,7 +55,7 @@
           <!-- Enviados Por -->
           <div class="form-check form-check-inline">
             <input type="radio" class="form-check-input" style="margin-right: 0px;" id="enviadoPoroRadio" name="EnviadoRecebidoEventoRadio"
-              [checked]=enviadoPorRadio>
+              [checked]=enviadoPorRadio  [disabled]="!usuarioLogadoSupervisor">
             <label class="form-check-label" for="enviadoPoroRadio" style="font-size: 0.8rem; margin-left: 0px; margin-right: 0px;  ">Enviados
               por</label>
           </div>
@@ -63,20 +63,20 @@
           <!-- Recebidos por -->
           <div class="form-check form-check-inline ">
             <input type="radio" class="form-check-input" id="recebidoPorRadio" name="EnviadoRecebidoEventoRadio"
-              [checked]=recebidoPorRadio>
+              [checked]=recebidoPorRadio  [disabled]="!usuarioLogadoSupervisor">
             <label class="form-check-label" for="recebidoPorRadio" style="font-size: 0.8rem; ">Recebidos por</label>
           </div>
         </div>
         <div class="row" style="margin-top: 15px">
           <div class="col-md-12">
-            <mdb-select [(ngModel)]="departamentoSelectValue" [options]="departamentoSelect" [multiple]="true"
+            <mdb-select [(ngModel)]="departamentoSelectValue" [options]="departamentoSelect" [multiple]="false" [disabled]="!usuarioLogadoSupervisor"
               placeholder="Escolha o departamento" style="font-size: 0.5rem;"></mdb-select>
             <label>Departamento</label>
           </div>
         </div>
         <div class="row" style="margin-top: 15px">
           <div class="col-md-12">
-            <mdb-select [(ngModel)]="usuarioSelectValue" [options]="usuarioSelect" placeholder="Escolha o usuário"
+            <mdb-select [(ngModel)]="usuarioSelectValue" [options]="usuarioSelect" placeholder="Escolha o usuário" [disabled]="!usuarioLogadoSupervisor"
               style="font-size: 0.5rem;"></mdb-select>
             <label>Usuário</label>
           </div>
@@ -105,7 +105,7 @@
             <label>Status</label>
           </div>
         </div>
-        <div class="row justify-content-around">
+        <!-- <div class="row justify-content-around">
           <a mdbBtn floating="true" size="lg" gradient="peach" mdbWavesEffect>
             <mdb-icon icon="search"></mdb-icon>
           </a>
@@ -113,13 +113,11 @@
             <mdb-icon icon="cloud-download"></mdb-icon>
           </a>
 
-        </div>
+        </div> -->
 
       </div>
 
     </div>
-
-
   </div>
 
 

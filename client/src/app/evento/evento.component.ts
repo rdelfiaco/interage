@@ -22,7 +22,7 @@ export class EventoComponent implements OnInit {
   departamentoSelect: Array<any>;
   motivoSelect: Array<any>;
   statusSelect: Array<any>;
-  departamentoSelectValue: Array<number>;
+  departamentoSelectValue: number;
   usuarioSelectValue: number;
   motivoSelectValue: number;
   statusSelectValue: number;
@@ -92,7 +92,7 @@ export class EventoComponent implements OnInit {
 
   async ngOnInit() {
 
-
+ 
 
     let eventoFiltros = await this.connectHTTP.callService({
       service: 'getEventoFiltros',
@@ -103,14 +103,15 @@ export class EventoComponent implements OnInit {
       }
     }) as any;
 
-
+    debugger
     // combo departamento 
     this.departamentoSelect = eventoFiltros.resposta.Organograma;
     this.departamentoSelect = this.departamentoSelect.map(departamento => {
       return { value: departamento.id, label: departamento.nome }
     });
 
-    this.departamentoSelectValue = [this.usuarioLogado.id_organograma];
+
+    this.departamentoSelectValue = Number(this.usuarioLogado.id_organograma);
 
     // combo usuário
     this.usuarioSelect = eventoFiltros.resposta.Usuarios;
@@ -118,7 +119,7 @@ export class EventoComponent implements OnInit {
       return { value: usuario.id, label: usuario.nome }
     });
 
-    this.usuarioSelectValue = this.usuarioLogado.id_pessoa;
+    this.usuarioSelectValue = this.usuarioLogado.id;
 
 
     // combo motivos
@@ -224,6 +225,7 @@ export class EventoComponent implements OnInit {
 
 
   async listaEventos() {
+    debugger
     try {
       let eventos = await this.connectHTTP.callService({
         service: 'getEventosFiltrados',
@@ -235,20 +237,19 @@ export class EventoComponent implements OnInit {
           dt_final: this.dataFinal,
           responsavel_membro: this.usuarioLogado.responsavel_membro,
           departamentos: this.departamentoSelectValue,
-          usuarios: this.usuarioSelectValue,
+          idusuarioSelecionado: this.usuarioSelectValue,
           motivos: this.motivoSelectValue,
           status: this.statusSelectValue,
           eventosUsuarioChk: this.eventosUsuarioChk,
           dtCricaoRadio: this.dtCricaoRadio,
+          
         }
       }) as any;
-
       this.tableData = eventos.resposta as Array<object>;
       console.log(this.dtCricaoRadio)
-
     }
     catch (e) {
-      this.toastrService.error(e.error);
+      this.toastrService.error('Erro em getEventosFiltrados : ', e.error);
       this.tableData = [];
     }
   }
@@ -311,7 +312,7 @@ export class EventoComponent implements OnInit {
       this.router.navigate([`/evento/${this.tornarResponsavel.id}`]);
     }
     catch (e) {
-      this.toastrService.error(e.error);
+      this.toastrService.error('Erro em visualizarEvento: ', e.error);
     }
   }
 

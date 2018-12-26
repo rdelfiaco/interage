@@ -1,4 +1,5 @@
 const { checkTokenAccess } = require('./checkTokenAccess');
+const { executaSQL } = require('./executaSQL');
 
 function login(req, res) {
   console.log('Chama Login')
@@ -17,7 +18,6 @@ function login(req, res) {
                 inner join pessoas pe on u.id_pessoa = pe.id
                 left join pessoas_telefones tel on pe.id = tel.id_pessoa and principal 
                 where login = '${req.query.login}' AND senha='${senhaCriptografada}'`
-
     client.query(sql)
       .then(res => {
         if (res.rowCount > 0) {
@@ -90,8 +90,9 @@ function getAgentesVendas(req, res) {
       client.connect()
 
       let sql = `SELECT pessoas.nome, usuarios.id_pessoa FROM usuarios
-                  INNER JOIN pessoas ON pessoas.id = usuarios.id_pessoa
-                  WHERE id_organograma = 4 and responsavel_membro = 'M' order by pessoas.nome`
+                  INNER JOIN pessoas ON pessoas.id = usuarios.id_pessoa 
+                  WHERE id_organograma = 4 and responsavel_membro = 'M' and usuarios.status
+                  order by pessoas.nome`
 
       client.query(sql)
         .then(res => {
@@ -175,4 +176,32 @@ function trocarSenhaUsuarioLogado(req, res) {
   })
 }
 
-module.exports = { login, logout, getAgentesVendas, trocarSenhaUsuarioLogado }  
+function getUsuarios(req, res) {
+  return new Promise(function (resolve, reject) {
+
+    let credenciais = {
+      token: req.query.token,
+      idUsuario: req.query.id_usuario
+    };
+
+    let sql = `select u.id, p.nome, u.id_organograma, u.id_pessoa, u.id as id_usuario, 
+                      iif( p.apelido_fantasia is null, nome , p.apelido_fantasia) as apelido   
+                      from usuarios u
+                      inner join pessoas p on u.id_pessoa = p.id and u.status
+                      order by p.nome`
+
+    executaSQL(credenciais, sql)
+      .then(res => {
+        if (res.length > 0) {
+          let usuarios = res;
+          resolve(usuarios )
+        }
+        else reject('Usuários não encontrado!')
+      })
+      .catch(err => {
+        reject('Erro no getUsuarios :', err)
+      })
+    })
+  }
+
+module.exports = { login, logout, getAgentesVendas, trocarSenhaUsuarioLogado, getUsuarios }  

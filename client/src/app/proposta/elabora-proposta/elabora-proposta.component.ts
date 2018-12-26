@@ -255,7 +255,7 @@ export class ElaboraPropostaComponent implements OnInit {
       };
     }
     
-    this.proposta.mensalidade = numeral(this.vlrProposta).format('000.00')
+    this.proposta.mensalidade = numeral(this.vlrProposta).format('00.00')
   }
 
   mudouPlano(opcao) {

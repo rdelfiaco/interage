@@ -4,6 +4,8 @@ const { getPredicao } = require('./predicao');
 const { getObjecoes } = require('./objecoes');
 const { getPessoa } = require('./pessoa');
 const { salvarProposta } = require('./proposta');
+const { getUsuarios } = require('./usuario');
+const { executaSQL } = require('./executaSQL'); 
 
 function getUmEvento(req, res) {
   return new Promise(function (resolve, reject) {
@@ -633,8 +635,8 @@ function getOrganograma(req, res) {
 
       client.connect()
 
-      let sql = `select * from organograma order by nome`
-
+      let sql = `select * from organograma where status order by nome`
+  
       client.query(sql)
         .then(res => {
           if (res.rowCount > 0) {
@@ -659,44 +661,6 @@ function getOrganograma(req, res) {
 }
 
 
-function getUsuarios(req, res) {
-  return new Promise(function (resolve, reject) {
-
-    checkTokenAccess(req).then(historico => {
-      const dbconnection = require('../config/dbConnection')
-      const { Client } = require('pg')
-
-      const client = new Client(dbconnection)
-
-      client.connect()
-
-      let sql = `select p.id, p.nome, u.id_organograma
-                  from usuarios u
-                  inner join pessoas p on u.id_pessoa = p.id and u.status = true 
-                  order by p.nome`
-
-      client.query(sql)
-        .then(res => {
-          if (res.rowCount > 0) {
-            let eventos = res.rows;
-            client.end();
-            resolve(eventos)
-          }
-          else {
-            reject('Não há usuário!')
-            client.end();
-          }
-        }
-        )
-        .catch(err => {
-          client.end();
-          reject(err)
-        })
-    }).catch(e => {
-      reject(e)
-    })
-  })
-}
 function getMotivos(req, res) {
   return new Promise(function (resolve, reject) {
 
@@ -818,18 +782,16 @@ function getStatusEvento(req, res) {
 function getEventosFiltrados(req, res) {
   return new Promise(function (resolve, reject) {
 
-    checkTokenAccess(req).then(historico => {
-      const dbconnection = require('../config/dbConnection')
-      const { Client } = require('pg')
+    let credenciais = {
+      token: req.query.token,
+      idUsuario: req.query.id_usuario
+    };
 
-      const client = new Client(dbconnection)
-
-      client.connect()
 
       let sql = `select * from view_eventos where `
       sql = sql + `id_status_evento in (${req.query.status}) `  // status 
       if (req.query.eventosUsuarioChk == 'true') {
-        sql = sql + ` and (tipodestino = 'P' and id_pessoa_organograma in ( ${req.query.usuarios}) )` // usuário
+        sql = sql + ` and (tipodestino = 'P' and id_usuario in ( ${req.query.idusuarioSelecionado}) )` // usuário
       } else {
         sql = sql + ` and ( tipodestino = 'O' and id_pessoa_organograma in (${req.query.departamentos}) )` // departamentos 
       }
@@ -843,28 +805,18 @@ function getEventosFiltrados(req, res) {
       sql = sql + ` order by dt_criou limit 100` //
 
       console.log(sql)
-      console.log(req.query.dtCricaoRadio)
 
-      client.query(sql)
-        .then(res => {
-          if (res.rowCount > 0) {
-            let eventos = res.rows;
-            client.end();
-            resolve(eventos)
-          }
-          else {
-            reject('Não há eventos!')
-            client.end();
-          }
+      executaSQL(credenciais, sql)
+      .then(res => {
+        if (res) {
+          let eventos = res;
+          resolve(eventos )
         }
-        )
-        .catch(err => {
-          client.end();
-          reject(err)
-        })
-    }).catch(e => {
-      reject(e)
-    })
+        else reject('Eventos não encontrado!')
+      })
+      .catch(err => {
+        reject('Erro no getEventosFiltrados : ', err)
+      })
   })
 }
 

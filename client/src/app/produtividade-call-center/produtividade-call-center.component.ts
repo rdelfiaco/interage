@@ -103,6 +103,7 @@ export class ProdutividadeCallCenterComponent implements OnInit {
       }
     }) as any;
 
+    
     this.agentesVendasSelect = agentesVendas.resposta as Array<object>;
     this.agentesVendasSelect = this.agentesVendasSelect.map(agenteVenda => {
       return { value: agenteVenda.id_pessoa, label: agenteVenda.nome }

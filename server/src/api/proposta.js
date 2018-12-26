@@ -1,4 +1,5 @@
 const { executaSQL } = require('./executaSQL')
+const { getUsuarios } = require('./usuario')
 
 function salvarProposta(req, res) {
   return new Promise(function (resolve, reject) {
@@ -8,7 +9,6 @@ function salvarProposta(req, res) {
       idUsuario: req.query.id_usuario
     };
 
-    
     req.query.proposta = JSON.parse(req.query.proposta);
 
     req.query.proposta.placa = req.query.proposta.placa ? req.query.proposta.placa : ''
@@ -91,14 +91,17 @@ function getPropostasDoUsuario(req, res) {
   return new Promise(function (resolve, reject) {
     let credenciais = {
       token: req.query.token,
-      idUsuario: req.query.id_usuario
+      idUsuario: req.query.idUsuarioLogado
     };
-
-    let sql = `select * from view_proposta where id_usuario=${req.query.id_usuario} order by id desc `
-
+    
+    let sql = `select * from view_proposta where id_usuario = ${req.query.idUsuarioSelect} 
+               and id_status_proposta = ${req.query.id_statusProposta}
+               and date(dtsalvou) between date('${req.query.dataInicial}') and date('${req.query.dataFinal}') 
+              order by id desc `
+    
     executaSQL(credenciais, sql)
       .then(res => {
-        if (res.length > 0) {
+        if (res) {
           let propostas = res;
           resolve(propostas)
         }
@@ -132,6 +135,43 @@ function getPropostaPorId(req, res) {
   })
 }
 
+function getPropostaFiltros(req, res){
+  return new Promise(function (resolve, reject) {
+    getUsuarios(req).then(Usuarios => {
+      getStatusProposta(req).then(StatusProposta => {
+        if (!Usuarios || !StatusProposta)
+          reject('Filtro não pode ser elaborado ');
 
+        resolve({ Usuarios, StatusProposta });
+        
+      }).catch(e => {
+        reject(e);
+      });
+    }).catch(e => {
+      reject(e);
+    });
+  });
+}
 
-module.exports = { salvarProposta, getPropostasDoUsuario, getPropostaPorId }
+function getStatusProposta(req, res){
+  return new Promise(function (resolve, reject) {
+    let credenciais = {
+      token: req.query.token,
+      idUsuario: req.query.id_usuario
+    };
+    let sql = `select * from status_proposta where status  `
+    executaSQL(credenciais, sql)
+      .then(res => {
+        if (res.length > 0) {
+          let status = res;
+          resolve(status )
+        }
+        else reject('Status não encontrado!')
+      })
+      .catch(err => {
+        reject(err)
+      })
+  })
+}
+
+module.exports = { salvarProposta, getPropostasDoUsuario, getPropostaPorId, getPropostaFiltros }

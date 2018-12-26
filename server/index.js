@@ -26,6 +26,11 @@ declaraServico('criarEvento', evento.criarEvento);
 declaraServico('consultarPlaca', consultaPlaca.consultarPlaca);
 declaraServico('getPropostasDoUsuario', proposta.getPropostasDoUsuario);
 declaraServico('getPropostaPorId', proposta.getPropostaPorId);
+declaraServico('getPropostaFiltros', proposta.getPropostaFiltros);
+declaraServico('getEventoFiltros', evento.getEventoFiltros);
+declaraServico('getEventosFiltrados', evento.getEventosFiltrados);
+declaraServico('getAgentesVendas', usuario.getAgentesVendas);
+
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
@@ -138,35 +143,6 @@ app.get('/salvarEvento', (req, res) => {
       res.status(401).send(error)
     })
 });
-
-
-app.get('/getEventoFiltros', (req, res) => {
-  evento.getEventoFiltros(req)
-    .then(linhas => {
-      headerResponse(res)
-      res.status(200).send(linhas)
-    })
-    .catch(error => {
-      headerResponse(res)
-      console.log(error)
-      res.status(401).send(error)
-    })
-});
-
-app.get('/getEventosFiltrados', (req, res) => {
-  evento.getEventosFiltrados(req)
-    .then(linhas => {
-      headerResponse(res)
-      res.status(200).send(linhas)
-    })
-    .catch(error => {
-      headerResponse(res)
-      console.log(error)
-      res.status(401).send(error)
-    })
-});
-
-
 
 
 app.get('/salvarPessoa', (req, res) => {
@@ -326,19 +302,6 @@ app.get('/adicionarPessoa', (req, res) => {
 
 app.get('/getEventosPendentes', (req, res) => {
   evento.getEventosPendentes(req)
-    .then(linhas => {
-      headerResponse(res)
-      res.status(200).send(linhas)
-    })
-    .catch(error => {
-      headerResponse(res)
-      console.log(error)
-      res.status(401).send(error)
-    })
-});
-
-app.get('/getAgentesVendas', (req, res) => {
-  usuario.getAgentesVendas(req)
     .then(linhas => {
       headerResponse(res)
       res.status(200).send(linhas)
