@@ -15,7 +15,7 @@ export class CriarEventoComponent implements OnInit {
   private _pessoa: any
   private _evento: any
   @Input()
-  set pessoa(pessoa: any): any {
+  set pessoa(pessoa: any) {
     if (pessoa)
       pessoa.subscribe((pessoa) => {
         this.pessoaId = new Observable((observer) => {
@@ -30,9 +30,8 @@ export class CriarEventoComponent implements OnInit {
   pessoaId: any;
 
   @Input()
-  set evento(evento: any): any {
+  set evento(evento: any) {
     this._evento = evento;
-    debugger;
     this.criarEventoForm.controls['canal'].setValue(evento.id_canal);
     this.criarEventoForm.controls['id_motivo'].setValue(evento.id_motivo);
   }

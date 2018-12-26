@@ -79,10 +79,7 @@ export class AuthService {
     await this.connectHTTP.callService({
       service: 'logout',
       naoExigeToken: true,
-      paramsService: {
-        token_access: usuarioLogado.token,
-        id_usuario: usuarioLogado.id
-      }
+      paramsService: {}
     })
 
     this.localStorage.delLocalStorage(`${usuarioLogado.token}_date`)

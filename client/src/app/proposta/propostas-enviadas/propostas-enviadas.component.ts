@@ -32,9 +32,7 @@ export class PropostasEnviadasComponent implements OnInit {
   async ngOnInit() {
     let propostas = await this.connectHTTP.callService({
       service: 'getPropostasDoUsuario',
-      paramsService: {
-        id_usuario: this.usuarioLogado.id
-      }
+      paramsService: {}
     }) as any;
     this.propostas = propostas.resposta.map(p => {
       let propostaPDF = JSON.parse(p.proposta_json.replace(/\%23/gim, '#'));

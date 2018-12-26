@@ -54,7 +54,7 @@ function logout(req, res) {
     client.connect()
 
     let sql = `UPDATE historico_login SET ativo=false
-                    WHERE token_access='${req.query.token_access}' OR id_usuario=${req.query.id_usuario}`
+                    WHERE token_access='${req.query.token}' OR id_usuario=${req.query.id_usuario}`
 
     client.query(sql)
       .then(res => {

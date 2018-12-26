@@ -128,10 +128,7 @@ export class PrincipalComponent implements OnInit {
 
     let tratamento = await this.connectHTTP.callService({
       service: 'getTratamentoPessoaFisica',
-      paramsService: {
-        id_usuario: this.usuarioLogado.id,
-        token: this.usuarioLogado.token
-      }
+      paramsService: {}
     }) as any;
 
     this.tipoDeTratamentoFisica = tratamento.resposta.map((t) => {
@@ -141,10 +138,7 @@ export class PrincipalComponent implements OnInit {
 
     let atividades = await this.connectHTTP.callService({
       service: 'getAtividades',
-      paramsService: {
-        id_usuario: this.usuarioLogado.id,
-        token: this.usuarioLogado.token
-      }
+      paramsService: {}
     }) as any;
 
     this.atividadesPessoaFisica = atividades.resposta
@@ -165,8 +159,6 @@ export class PrincipalComponent implements OnInit {
   }
 
   async salvarPessoa() {
-    this.principalForm.value.id_usuario = this.usuarioLogado.id;
-    this.principalForm.value.token = this.usuarioLogado.token;
     this.principalForm.value.cpf_cnpj = this.principalForm.value.cpf_cnpj && this.principalForm.value.cpf_cnpj.replace(/\W/gi, '')
 
     this.checkAtividadePessoa()

@@ -12,12 +12,12 @@ import { Observable } from 'rxjs';
   // providers: [FormataDinheiroPipe]
 })
 export class PropostaComponent implements OnInit {
-  _abaSelecionada: number;
+  _abaSelecionada: Observable<number>;
   @ViewChild('propostaTabs') staticTabs: TabsetComponent;
   @Input() pessoa: string;
   @Input() set abaSelecionada(abaSelecionada: Observable<number>) {
+    this._abaSelecionada = abaSelecionada;
     abaSelecionada.subscribe(aba => {
-      this._abaSelecionada = aba;
       this.aba.setAba(aba);
     })
   };

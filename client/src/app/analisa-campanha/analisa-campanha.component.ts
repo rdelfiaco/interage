@@ -86,8 +86,6 @@ export class AnalisaCampanhaComponent implements OnInit {
     let agentesVendas = await this.connectHTTP.callService({
       service: 'getAgentesVendas',
       paramsService: {
-        token: this.usuarioLogado.token,
-        id_usuario: this.usuarioLogado.id,
         id_organograma: this.usuarioLogado.id_organograma,
       }
     });
@@ -102,8 +100,6 @@ export class AnalisaCampanhaComponent implements OnInit {
     let campanha = await this.connectHTTP.callService({
       service: 'getCampanhas',
       paramsService: {
-        token: this.usuarioLogado.token,
-        id_usuario: this.usuarioLogado.id,
         id_organograma: this.usuarioLogado.id_organograma,
       }
     });
@@ -148,8 +144,6 @@ export class AnalisaCampanhaComponent implements OnInit {
       let analisarCampanha = await this.connectHTTP.callService({
         service: 'getCampanhaAnalisar',
         paramsService: {
-          token: this.usuarioLogado.token,
-          id_usuario: this.usuarioLogado.id,
           id_organograma: this.usuarioLogado.id_organograma,
           id_campanha: this.campanhaSelectValue,
           dtInicial: this.dataInicial,
@@ -171,8 +165,6 @@ export class AnalisaCampanhaComponent implements OnInit {
       let getCampanhaCallCenter = await this.connectHTTP.callService({
         service: 'getEventosRelatorioCampanha',
         paramsService: {
-          token: this.usuarioLogado.token,
-          id_usuario: this.usuarioLogado.id,
           id_campanha: this.campanhaSelectValue,
         }
       }) as any;
