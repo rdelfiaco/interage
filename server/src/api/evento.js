@@ -266,8 +266,7 @@ function salvarEvento(req, res) {
           const motivoResposta = res.rows[0];
 
           client.query('BEGIN').then((res1) => {
-
-            if (req.query.proposta) {
+            if (req.query.proposta !== "null") {
               salvarProposta(req, res).then((idproposta) => {
                 console.log('salvo proposta ' + idproposta[0].id);
                 finalizaEvento(idproposta[0].id);

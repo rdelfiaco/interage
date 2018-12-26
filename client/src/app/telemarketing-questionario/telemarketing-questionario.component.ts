@@ -212,7 +212,7 @@ export class TelemarketingQuestionarioComponent implements OnInit {
       hora: ['', [this.ValidateReagendar.bind(this)]],
       id_predicao: ['', [this.ValidateExigePredicao.bind(this)]],
       id_objecao: ['', [this.ValidateExigeObjecao.bind(this)]],
-      proposta: [{}, [this.ValidateProposta.bind(this)]],
+      proposta: [null, [this.ValidateProposta.bind(this)]],
       propostaJSON: ['', [this.ValidateProposta.bind(this)]]
     })
 
@@ -283,6 +283,7 @@ export class TelemarketingQuestionarioComponent implements OnInit {
   }
   async gravarLigacao() {
     const usuarioLogado = this.localStorage.getLocalStorage('usuarioLogado') as any;
+    debugger;
     let parametros = {
       token: usuarioLogado.token,
       id_pessoa: usuarioLogado.id_pessoa,
@@ -312,12 +313,12 @@ export class TelemarketingQuestionarioComponent implements OnInit {
     this.atualizaMeta.emit(metaPessoa.resposta[0]);
     this.modal.hide()
 
-    let docDefinition_ = JSON.parse(this.questionarioForm.value.propostaJSON);
-    docDefinition_.images = { logotipo: img };
-    pdfMake.createPdf(docDefinition_).open()
-    setTimeout(() => {
-      this._limpar();
-    }, 1)
+    if (this.questionarioForm.value.propostaJSON) {
+      let docDefinition_ = JSON.parse(this.questionarioForm.value.propostaJSON.replace(/\%23/gim, '#'));
+      docDefinition_.images = { logotipo: img };
+      pdfMake.createPdf(docDefinition_).open()
+    }
+    this._limpar();
   }
 
   recebeProposta(proposta: any) {
@@ -327,6 +328,7 @@ export class TelemarketingQuestionarioComponent implements OnInit {
   }
 
   _limpar() {
+    debugger;
     this.questionarioForm = null;
     this.questionarioForm = this.formBuilder.group({
       pessoaALigar: [''],
