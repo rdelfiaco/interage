@@ -216,7 +216,7 @@ function criarEvento(req, res) {
       const { Client } = require('pg')
 
       const client = new Client(dbconnection)
-
+      
       client.connect();
       client.query('BEGIN').then((res1) => {
         _criarEvento(client, req.query.id_campanha, req.query.id_motivo, 'NULL', 'NULL',

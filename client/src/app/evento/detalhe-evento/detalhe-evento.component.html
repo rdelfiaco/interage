@@ -48,7 +48,7 @@
           <h4 class="modal-title w-100" id="myModalLabel">{{concluirOuEncaminhar}} Evento -
             {{pessoaObject.principal.nome}}</h4>
         </div>
-        <div class="modal-body" style="overflow: auto; height: 80vh;">
+        <div *ngIf="pessoaObject" class="modal-body" style="overflow: auto; height: 80vh;">
           <app-concluir-evento *ngIf="concluir" [evento]="evento" [pessoa]="pessoa" [motivos_respostas]="motivos_respostas"
             [predicoes]="predicoes" [objecoes]="objecoes" (fechaModal)="fechaModal()"></app-concluir-evento>
 

@@ -63,10 +63,10 @@ export class CriarEventoComponent implements OnInit {
     dateFormat: 'dd/mm/yyyy',
   }
 
-  constructor(formBuilder: FormBuilder, private connectHTTP: ConnectHTTP,
+  constructor(private formBuilder: FormBuilder, private connectHTTP: ConnectHTTP,
     private localStorage: LocalStorage, private toastrService: ToastService,
     private router: Router) {
-    this.criarEventoForm = formBuilder.group({
+    this.criarEventoForm = this.formBuilder.group({
       tipodestino: ['P', [
         Validators.required
       ]],
@@ -106,14 +106,15 @@ export class CriarEventoComponent implements OnInit {
 
     this.usuarioSelect = eventoEncontrado.resposta.usuarios;
     this.usuarioSelect = this.usuarioSelect.map(usuario => {
-      return { value: usuario.id, label: usuario.nome }
+      return { value: usuario.id_pessoa, label: usuario.nome }
     });
 
     this.motivosDoCanal = eventoEncontrado.resposta.motivosCanais;
-    this.onSelectCanal({ value: this._evento.id_canal });
+    if (this._evento && this._evento.id_canal)
+      this.onSelectCanal({ value: this._evento.id_canal });
 
     this.optionsTipoDestino = this.usuarioSelect;
-
+    
     let data = new Date();
     let date = moment().format('DD/MM/YYYY');
 
@@ -121,17 +122,6 @@ export class CriarEventoComponent implements OnInit {
 
     let hours = getHora(data);
     this.criarEventoForm.controls['hora'].setValue(hours);
-
-    function getHora(data: Date) {
-      let hora = trataTempo(data.getHours() + 1)
-      let minutos = trataTempo(data.getMinutes())
-      return `${hora}:${minutos}`
-    }
-
-    function trataTempo(tempo: number) {
-      if (tempo.toString().length == 1) return `0${tempo}`
-      return tempo;
-    }
   }
 
   onSelectTipoPessoa(valor) {
@@ -209,4 +199,34 @@ export class CriarEventoComponent implements OnInit {
   cancelar() {
     this.fechaModal.emit();
   }
+  limpar() {
+    this.criarEventoForm.controls['tipodestino'].setValue('P');
+    this.criarEventoForm.controls['pessoaOrgonograma'].setValue('');
+    this.criarEventoForm.controls['canal'].setValue('');
+    this.criarEventoForm.controls['id_motivo'].setValue('');
+    this.criarEventoForm.controls['pessoaId'].setValue('');
+    this.criarEventoForm.controls['observacao'].setValue('');
+
+    let data = new Date();
+    let date = moment().format('DD/MM/YYYY');
+
+    this.criarEventoForm.controls['data'].setValue(date);
+
+    let hours = getHora(data);
+    this.criarEventoForm.controls['hora'].setValue(hours);
+
+    this._pessoa = null;
+    this._evento = null;
+  }
+}
+
+function getHora(data: Date) {
+  let hora = trataTempo(data.getHours() + 1)
+  let minutos = trataTempo(data.getMinutes())
+  return `${hora}:${minutos}`
+}
+
+function trataTempo(tempo: number) {
+  if (tempo.toString().length == 1) return `0${tempo}`
+  return tempo;
 }
