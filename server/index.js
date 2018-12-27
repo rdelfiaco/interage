@@ -406,7 +406,7 @@ function declaraServico(nomeServico, funcao) {
       })
       .catch(error => {
         headerResponse(res)
-        console.log( nomeServico, error)
+        console.log(`Erro no serviço: ${nomeServico}; erro: ` , error)
         res.status(401).send(error)
       })
   });
