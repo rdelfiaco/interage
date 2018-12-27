@@ -204,8 +204,6 @@ function getEventosTentandoUsuario(req, res) {
                     group by tentativas
                     order by tentativas `
 
-      console.log(sql)
-
       client.query(sql)
         .then(res => {
           let registros = res.rows;
@@ -303,7 +301,7 @@ function getEventosPredicaoUsuario(req, res) {
         group by pr.nome, pr.id
         order by pr.id`
 
-      console.log('produtividade', sql)
+      
       client.query(sql)
         .then(res => {
           let registros = res.rows;

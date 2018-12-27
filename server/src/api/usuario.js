@@ -2,7 +2,7 @@ const { checkTokenAccess } = require('./checkTokenAccess');
 const { executaSQL } = require('./executaSQL');
 
 function login(req, res) {
-  console.log('Chama Login')
+  
   return new Promise(function (resolve, reject) {
     const dbconnection = require('../config/dbConnection')
     const { Client } = require('pg')
@@ -22,15 +22,25 @@ function login(req, res) {
       .then(res => {
         if (res.rowCount > 0) {
           let token_access = generateTokenUserAcess()
-          client.query(`insert into historico_login(id_usuario, ip, datahora, token_access, ativo)
-            VALUES ( ${res.rows[0].id} , '${req.ip}', now(), '${token_access}', true ) `);
-
           let usuario = res.rows[0];
-          delete usuario.senha;
-          delete usuario.login;
-          usuario.token = token_access;
-          resolve(usuario)
-          client.end();
+
+          client.query(`insert into historico_login(id_usuario, ip, datahora, token_access, ativo)
+            VALUES ( ${res.rows[0].id} , '${req.ip}', now(), '${token_access}', true ) `)
+            .then( res => {
+
+          
+                  delete usuario.senha;
+                  delete usuario.login;
+                  usuario.token = token_access;
+                  
+                  resolve(usuario)
+                  client.end();
+                })
+            .catch(err => {
+              client.end();
+              reject('Historio de login não criado : ', err)
+            })
+
         }
         else {
           client.end();
@@ -54,8 +64,9 @@ function logout(req, res) {
     client.connect()
 
     let sql = `UPDATE historico_login SET ativo=false
-                    WHERE token_access='${req.query.token}' OR id_usuario=${req.query.id_usuario}`
+                    WHERE token_access = '${req.query.token}' OR id_usuario = ${req.query.id_usuario}`
 
+    
     client.query(sql)
       .then(res => {
         client.end();

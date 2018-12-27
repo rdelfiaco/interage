@@ -802,7 +802,7 @@ function getEventosFiltrados(req, res) {
       }
 
       sql = sql + ` order by dt_criou limit 100` //
-
+      console.log(sql)
       executaSQL(credenciais, sql)
       .then(res => {
         if (res) {
