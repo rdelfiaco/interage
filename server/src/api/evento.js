@@ -5,7 +5,7 @@ const { getObjecoes } = require('./objecoes');
 const { getPessoa } = require('./pessoa');
 const { salvarProposta } = require('./proposta');
 const { getUsuarios } = require('./usuario');
-const { executaSQL } = require('./executaSQL'); 
+const { executaSQL } = require('./executaSQL');
 
 function getUmEvento(req, res) {
   return new Promise(function (resolve, reject) {
@@ -635,7 +635,7 @@ function getOrganograma(req, res) {
       client.connect()
 
       let sql = `select * from organograma where status order by nome`
-  
+
       client.query(sql)
         .then(res => {
           if (res.rowCount > 0) {
@@ -787,33 +787,34 @@ function getEventosFiltrados(req, res) {
     };
 
 
-      let sql = `select * from view_eventos where `
-      sql = sql + `id_status_evento in (${req.query.status}) `  // status 
-      if (req.query.eventosUsuarioChk == 'true') {
-        sql = sql + ` and (tipodestino = 'P' and id_usuario in ( ${req.query.idusuarioSelecionado}) )` // usuário
-      } else {
-        sql = sql + ` and ( tipodestino = 'O' and id_pessoa_organograma in (${req.query.departamentos}) )` // departamentos 
-      }
-      sql = sql + ` and (id_motivo in ( ${req.query.motivos})  )` // motivos 
-      if (req.query.dtCricaoRadio == 'true') {
-        sql = sql + ` and date(dt_criou) between date('${req.query.dt_inicial}') and date('${req.query.dt_final}')` // data de criação 
-      } else {
-        sql = sql + ` and dt_para_exibir <= date('${req.query.dt_final}')` // data de compromisso 
-      }
+    let sql = `select * from view_eventos where `
+    sql = sql + `id_status_evento in (${req.query.status}) `  // status 
+    if (req.query.eventosUsuarioChk == 'true') {
+      sql = sql + ` and (tipodestino = 'P' and id_usuario in ( ${req.query.idusuarioSelecionado}) )` // usuário
+    } else {
+      sql = sql + ` and ( tipodestino = 'O' and id_pessoa_organograma in (${req.query.departamentos}) )` // departamentos 
+    }
+    sql = sql + ` and (id_motivo in ( ${req.query.motivos})  )` // motivos 
+    if (req.query.dtCricaoRadio == 'true') {
+      sql = sql + ` and date(dt_criou) between date('${req.query.dt_inicial}') and date('${req.query.dt_final}')` // data de criação 
+    } else {
+      sql = sql + ` and dt_para_exibir <= date('${req.query.dt_final}')` // data de compromisso 
+    }
 
-      sql = sql + ` order by dt_criou limit 100` //
-      console.log(sql)
-      executaSQL(credenciais, sql)
+    sql = sql + ` order by dt_criou limit 100` //
+    console.log(sql)
+    executaSQL(credenciais, sql)
       .then(res => {
         if (res) {
           let eventos = res;
-          resolve(eventos )
+          resolve(eventos)
         }
-        else { let eventos = [];
-          reject('Eventos não encontrado!', eventos )}
+        else {
+          reject('Eventos não encontrado!')
+        }
       })
       .catch(err => {
-        reject('Erro no getEventosFiltrados : ', err)
+        reject(`Erro no getEventosFiltrados : ${err}`)
       })
   })
 }
