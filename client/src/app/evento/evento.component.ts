@@ -91,9 +91,6 @@ export class EventoComponent implements OnInit {
   }
 
   async ngOnInit() {
-
- 
-
     let eventoFiltros = await this.connectHTTP.callService({
       service: 'getEventoFiltros',
       paramsService: {
@@ -101,7 +98,6 @@ export class EventoComponent implements OnInit {
       }
     }) as any;
 
-    debugger
     // combo departamento 
     this.departamentoSelect = eventoFiltros.resposta.Organograma;
     this.departamentoSelect = this.departamentoSelect.map(departamento => {
@@ -223,7 +219,6 @@ export class EventoComponent implements OnInit {
 
 
   async listaEventos() {
-    debugger
     try {
       let eventos = await this.connectHTTP.callService({
         service: 'getEventosFiltrados',
