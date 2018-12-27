@@ -199,7 +199,8 @@ function getUsuarios(req, res) {
         else reject('Usuários não encontrado!')
       })
       .catch(err => {
-        reject('Erro no getUsuarios :', err)
+        console.log(err)
+        reject(`Erro no getUsuarios :  ${err}`)
       })
     })
   }

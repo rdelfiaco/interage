@@ -144,7 +144,6 @@ export class CriarEventoComponent implements OnInit {
     this.motivosDoCanalSelecionado = this.motivosDoCanal.filter(m => m.id_canal == valor.value).map(m => {
       return { value: m.id, label: m.nome }
     });
-    debugger;
 
     if (!this.motivosDoCanalSelecionado.length) this.toastrService.error('Canal sem nenhum motivo cadastrado!');
   }

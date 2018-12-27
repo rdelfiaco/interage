@@ -52,8 +52,8 @@ export class PesquisaPlacaComponent implements OnInit {
         paramsService: {
           placa: this.formulario.value.placa.replace('-', '')
         }
-      }) 
-      debugger
+      });
+      
       this.formulario.patchValue({ placaConsultada: JSON.stringify(respPlacaConsultada.resposta, null, 2) });
       if (JSON.stringify(respPlacaConsultada.resposta, null, 2).length < 10) {this.placaErrada()};
       this.proposta.placa = this.formulario.value.placa;

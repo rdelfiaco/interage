@@ -1,6 +1,6 @@
-import {Option} from './option';
-import {IOption} from './option-interface';
-import {Diacritics} from './diacritics';
+import { Option } from './option';
+import { IOption } from './option-interface';
+import { Diacritics } from './diacritics';
 
 export class OptionList {
 
@@ -32,12 +32,7 @@ export class OptionList {
   }
 
   constructor(options: Array<IOption>) {
-
-    if (typeof options === 'undefined' || options === null) {
-      options = [];
-    }
-
-    this._options = options.map((option) => {
+    this._options = options ? options.map((option) => {
       const o: Option = new Option(option);
       if (option.disabled) {
         o.disabled = true;
@@ -47,7 +42,7 @@ export class OptionList {
         o.group = true;
       }
       return o;
-    });
+    }) : [];
 
     this._hasShown = this._options.length > 0;
     this.highlight();

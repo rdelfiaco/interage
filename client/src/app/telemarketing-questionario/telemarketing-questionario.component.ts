@@ -282,7 +282,6 @@ export class TelemarketingQuestionarioComponent implements OnInit {
   async gravarLigacao() {
 
     const usuarioLogado = this.localStorage.getLocalStorage('usuarioLogado') as any;
-    debugger;
     let parametros = {
       id_pessoa: usuarioLogado.id_pessoa,
       id_evento: this._eventoObject.id,
@@ -322,7 +321,6 @@ export class TelemarketingQuestionarioComponent implements OnInit {
   }
 
   _limpar() {
-    debugger;
     this.questionarioForm = null;
     this.questionarioForm = this.formBuilder.group({
       pessoaALigar: [''],

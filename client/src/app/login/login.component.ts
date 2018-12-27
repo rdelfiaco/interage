@@ -56,7 +56,6 @@ export class LoginComponent implements OnInit {
       this.toastrService.error(res.error);
     }
     else {
-      debugger
       let usuarioLogado = res.resposta
       this.router.navigate([usuarioLogado.dashboard]);
     }

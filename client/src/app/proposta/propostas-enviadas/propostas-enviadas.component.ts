@@ -115,7 +115,6 @@ export class PropostasEnviadasComponent implements OnInit  {
   }
 
   async lerPropostas(){
-    debugger
     let propostas = await this.connectHTTP.callService({
       service: 'getPropostasDoUsuario',
       paramsService: {
