@@ -7,7 +7,7 @@ import { img } from '../imagem';
 import * as pdfMake from 'pdfmake/build/pdfmake';
 import * as pdfFonts from 'pdfmake/build/vfs_fonts';
 import { ModalDirective } from 'ng-uikit-pro-standard';
-import { ToastService } from '../../../lib/ng-uikit-pro-standard';
+import { ToastService, IMyOptions } from '../../../lib/ng-uikit-pro-standard';
 import { Router } from '@angular/router';
 import * as moment from 'moment';
 
