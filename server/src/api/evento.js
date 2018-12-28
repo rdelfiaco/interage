@@ -175,6 +175,7 @@ function encaminhaEvento(req, res) {
         if (req.query.id_status_evento === '5') statusEvento = 2;
         if (req.query.id_status_evento === '6') statusEvento = 8;
 
+        console.log('req.query', req.query)
         encerrarEvento(client, req.query.id_pessoa_resolveu, req.query.id_evento, statusEvento).then(eventoEncerrado => {
           _criarEvento(client, req.query.id_campanha, req.query.id_motivo, req.query.id_evento_pai, req.query.id_evento,
             req.query.id_pessoa_resolveu, req.query.dt_para_exibir, req.query.tipoDestino, req.query.id_pessoa_organograma, req.query.id_pessoa_receptor,
@@ -268,7 +269,8 @@ function salvarEvento(req, res) {
           const motivoResposta = res.rows[0];
 
           client.query('BEGIN').then((res1) => {
-            if (req.query.proposta !== "null") {
+            console.log('req.query.proposta', req.query.proposta)
+            if (req.query.proposta && req.query.proposta !== "null" && req.query.proposta !== "undefined") {
               salvarProposta(req, res).then((idproposta) => {
                 console.log('salvo proposta ' + idproposta[0].id);
                 finalizaEvento(idproposta[0].id);

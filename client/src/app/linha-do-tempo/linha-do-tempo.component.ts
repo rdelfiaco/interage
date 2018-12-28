@@ -52,7 +52,6 @@ export class LinhaDoTempoComponent implements OnInit {
               ...evento,
               dt_prevista_resolucao: new Date(evento.dt_prevista_resolucao),
               dt_resolvido: evento.dt_resolvido ? new Date(evento.dt_resolvido) : evento.dt_resolvido,
-              dataFilhoMaisNovo: calcularDataFilhoMaisNovo(eventos, evento.id),
               eventosFilho: ordenaEventos(juntaEventosPaiEFilhos(eventos, evento.id))
             })
           }
@@ -67,25 +66,6 @@ export class LinhaDoTempoComponent implements OnInit {
           else return;
         });
         return eventosRetorno.length && eventosRetorno || null;
-
-        function calcularDataFilhoMaisNovo(eventos: Array<any>, idEventoPai: string): Date {
-          let maiorData: Date;
-
-          eventos.forEach(evento => {
-            if (idEventoPai === evento.id_evento_pai) {
-              let dt_resolvido = evento.dt_resolvido ? new Date(evento.dt_resolvido) : evento.dt_resolvido;
-              let dt_prevista_resolucao = new Date(evento.dt_prevista_resolucao);
-
-              if (!maiorData)
-                maiorData = dt_resolvido || dt_prevista_resolucao;
-              else if (dt_resolvido && maiorData.getTime() < dt_resolvido.getTime())
-                maiorData = dt_resolvido;
-              else if (dt_prevista_resolucao && maiorData.getTime() < dt_prevista_resolucao.getTime())
-                maiorData = dt_prevista_resolucao;
-            }
-          });
-          return maiorData;
-        }
       }
 
       this.eventosDaPessoa = ordenaEventos(juntaEventosPaiEFilhos(eventosEncontrados.resposta, null));

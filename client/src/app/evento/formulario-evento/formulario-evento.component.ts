@@ -12,6 +12,7 @@ export class FormularioEventoComponent implements OnInit {
   @Input() evento: any;
   eventoForm: FormGroup;
   constructor(private formBuilder: FormBuilder) {
+    debugger;
     this.eventoForm = this.formBuilder.group({
       id: [''],
       status: [''],

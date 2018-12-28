@@ -114,7 +114,7 @@ export class CriarEventoComponent implements OnInit {
       this.onSelectCanal({ value: this._evento.id_canal });
 
     this.optionsTipoDestino = this.usuarioSelect;
-    
+
     let data = new Date();
     let date = moment().format('DD/MM/YYYY');
 
@@ -154,9 +154,12 @@ export class CriarEventoComponent implements OnInit {
   ]
 
   async criarEvento() {
-    let dataExibir = moment(this.criarEventoForm.value.data + ' - ' + this.criarEventoForm.value.hora, 'DD/MM/YYYY - HH:mm').toISOString()
-    const usuarioLogado = this.localStorage.getLocalStorage('usuarioLogado') as any;
+    let dataHora = this.criarEventoForm.value.hora.split(':');
+    dataHora[0] = parseInt(dataHora[0]) === 24 ? "00" : dataHora[0];
 
+    let dataExibir = moment(`${this.criarEventoForm.value.data} - ${dataHora[0]}:${dataHora[1]}`, 'DD/MM/YYYY - HH:mm').toISOString()
+    const usuarioLogado = this.localStorage.getLocalStorage('usuarioLogado') as any;
+    debugger
     if (this.evento) {
       await this.connectHTTP.callService({
         service: 'encaminhaEvento',

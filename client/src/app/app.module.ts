@@ -41,13 +41,13 @@ import { PesquisaPessoaModule } from './pesquisa-pessoa/pesquisa-pessoa.module';
   imports: [
     BrowserModule,
     MDBBootstrapModulesPro.forRoot(),
+    ToastModule.forRoot(),
     BrowserAnimationsModule,
     AppRoutingModule,
     LoginModule,
     FormsModule,
     ReactiveFormsModule,
     EventoModule,
-    ToastModule.forRoot(),
 
     CarregandoModule,
     SemPermissaoModule,

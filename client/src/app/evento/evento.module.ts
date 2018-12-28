@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, NO_ERRORS_SCHEMA } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { EventoComponent } from './evento.component';
 import { SharedModule } from '../shared/shared.module';
@@ -10,14 +10,15 @@ import { DetalheEventoComponent } from './detalhe-evento/detalhe-evento.componen
 import { CarregandoModule } from '../shared/carregando/carregando.module';
 import { LinhaDoTempoEventoComponent } from './linha-do-tempo-evento/linha-do-tempo-evento.component';
 import { ItemLinhaDoTempoEventoComponent } from './item-linha-do-tempo-evento/item-linha-do-tempo-evento.component';
-import { FormularioEventoComponent } from './formulario-evento/formulario-evento.component';
 import { SemPermissaoModule } from '../sem-permissao/sem-permissao.module';
 import { ConcluirEventoComponent } from './concluir-evento/concluir-evento.component';
 import { TelemarketingQuestionarioModule } from '../telemarketing-questionario/telemarketing-questionario.module';
 import { CadastroPessoaModule } from '../cadastro-pessoa/cadastro-pessoa.module';
-import { CriarEventoComponent } from './criar-evento/criar-evento.component';
-import { EncaminharEventoComponent } from './encaminhar-evento/encaminhar-evento.component';
 import { PesquisaClienteModule } from '../pesquisa-cliente/pesquisa-cliente.module';
+import { FormularioEventoModule } from './formulario-evento/formulario-evento.module';
+import { ConcluirEventoModule } from './concluir-evento/concluir-evento.module';
+import { EncaminharEventoModule } from './encaminhar-evento/encaminhar-evento.module';
+import { CriarEventoModule } from './criar-evento/criar-evento.module';
 
 @NgModule({
   imports: [
@@ -32,7 +33,10 @@ import { PesquisaClienteModule } from '../pesquisa-cliente/pesquisa-cliente.modu
     SemPermissaoModule,
     TelemarketingQuestionarioModule,
     CadastroPessoaModule,
-    PesquisaClienteModule
+    FormularioEventoModule,
+    ConcluirEventoModule,
+    EncaminharEventoModule,
+    CriarEventoModule
   ],
   providers: [
 
@@ -41,11 +45,15 @@ import { PesquisaClienteModule } from '../pesquisa-cliente/pesquisa-cliente.modu
     EventoComponent,
     DetalheEventoComponent,
     LinhaDoTempoEventoComponent,
+    ItemLinhaDoTempoEventoComponent
+  ],
+  exports: [
+    EventoComponent,
+    DetalheEventoComponent,
+    LinhaDoTempoEventoComponent,
     ItemLinhaDoTempoEventoComponent,
-    FormularioEventoComponent,
-    ConcluirEventoComponent,
-    CriarEventoComponent,
-    EncaminharEventoComponent
-  ]
+    ConcluirEventoComponent
+  ],
+  schemas: [NO_ERRORS_SCHEMA]
 })
 export class EventoModule { }

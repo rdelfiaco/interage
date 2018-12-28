@@ -3,12 +3,11 @@
     <mdb-accordion-item [collapsed]="true" [customClass]="'itemAcordion'">
       <mdb-accordion-item-head [indicator]="evento.eventosFilho" [customClass]="'text-center justify-content-start align-items-center'">
         <div class="row align-items-center">
-          <button class="col-2" (click)="visualizarDetalhesEvento.show(); selecionaEvento($event, evento)" mdbBtn type="button"
+          <button class="col-2" (click)="abreEvento($event, evento);" mdbBtn type="button"
             gradient="peach" size="sm" mdbWavesEffect>Detalhe</button>
           <div class="col-2 h6" style="white-space: pre;">{{evento.motivo}}</div>
-          <div class="col-2 h6">{{evento.resposta_motivo}}</div>
-          <div class=" col-4 h6" style="white-space: nowrap;">{{(evento.dataFilhoMaisNovo
-            || evento.dt_resolvido ||
+          <div class="col-2 h6">{{evento.status}}</div>
+          <div class=" col-4 h6" style="white-space: nowrap;">{{(evento.dt_resolvido ||
             evento.dt_prevista_resolucao) |
             date:'dd/MM/yyyy HH:mm:ss'}}</div>
         </div>
@@ -20,6 +19,49 @@
   </mdb-accordion>
 </div>
 
+<div mdbModal #modalConcluirEvento="mdbModal" [config]="{backdrop: true}" class="modal fade right" role="dialog"
+aria-labelledby="myBasicModalLabel" aria-hidden="true">
+<div class="modal-dialog" role="document">
+  <div class="modal-content">
+    <div *ngIf="pessoaObject" class="modal-header">
+      <h4 class="modal-title w-100" id="myModalLabel">{{concluirOuEncaminhar}} Evento -
+        {{pessoaObject.principal.nome}}</h4>
+    </div>
+    <div *ngIf="pessoaObject" class="modal-body" style="overflow: auto; height: 80vh;">
+      <app-concluir-evento *ngIf="concluir" [evento]="evento" [pessoa]="pessoa" [motivos_respostas]="motivos_respostas"
+        [predicoes]="predicoes" [objecoes]="objecoes" (fechaModal)="fechaModal()"></app-concluir-evento>
+
+      <app-encaminhar-evento *ngIf="encaminhar" [evento]="evento" [pessoa]="pessoa" (fechaModal)="fechaModal()"></app-encaminhar-evento>
+    </div>
+  </div>
+</div>
+</div>
+
+<div mdbModal #confirmSeTornarResponsavelModal="mdbModal" class="modal fade" tabindex="-1" role="dialog"
+aria-labelledby="myBasicModalLabel" aria-hidden="true" [config]="{backdrop: true}">
+<div class="modal-dialog modal-md modal-dialog-centered" role="document">
+  <div class="modal-content">
+    <div class="modal-header">
+      <button type="button" class="close pull-right" aria-label="Close" (click)="confirmSeTornarResponsavelModal.hide()">
+        <span aria-hidden="true">×</span>
+      </button>
+      <h4 class="modal-title w-100" id="myModalLabel">Confirma Responsabilidade</h4>
+    </div>
+    <div *ngIf="tornarResponsavel" class="modal-body">
+      Deseja se tornar responsável do evento do cliente {{tornarResponsavel.cliente}}
+    </div>
+    <div class="modal-footer">
+      <button type="button" style="white-space: nowrap;" mdbBtn color="danger" class="waves-light" aria-label="Cancelar"
+        (click)="confirmSeTornarResponsavelModal.hide(); cancelaSeTornarResponsavel()" mdbWavesEffect>Cancelar</button>
+      <button *ngIf="usuarioLogadoSupervisor" type="button" style="white-space: nowrap;" mdbBtn color="warning"
+        class="waves-light" aria-label="Somente Visualizar" (click)="confirmSeTornarResponsavelModal.hide(); visualizarEvento($event)"
+        mdbWavesEffect>Somente Visualizar</button>
+      <button type="button" style="white-space: nowrap;" mdbBtn color="primary" class="relative waves-light"
+        (click)="confirmSeTornarResponsavelModal.hide(); confirmaSeTornarResponsavel($event);" mdbWavesEffect>Sim</button>
+    </div>
+  </div>
+</div>
+</div>
 
 <div mdbModal #visualizarDetalhesEvento="mdbModal" [config]="{backdrop: true, ignoreBackdropClick: true}" class="modal fade right"
   role="dialog" aria-labelledby="myBasicModalLabel" aria-hidden="true">
@@ -36,146 +78,21 @@
       <div class="modal-body" style="overflow: auto; height: 80vh;">
         <div class="row" style="padding: 0px 15px;">
           <div class="md-form col-12">
-            <form [formGroup]="eventoForm" class="formQuestionario">
-              <div class="row">
-                <div class="md-form col-2">
-                  <input mdbInputDirective formControlName="id" type="text" id="id" class="form-control" disabled>
-                  <label for="id">ID</label>
-                </div>
-                <div class="md-form col-4">
-                  <input mdbInputDirective formControlName="status" type="text" id="status" class="form-control"
-                    disabled>
-                  <label for="status">Status</label>
-                </div>
-                <div class="md-form col-6">
-                  <input mdbInputDirective formControlName="motivo" type="text" id="motivo" class="form-control"
-                    disabled>
-                  <label for="motivo">Motivo</label>
-                </div>
-              </div>
+            <div *ngIf="eventoSelecionado" style="padding: 10px;">
+              <button type="button" [disabled]="podeConcluir" style="white-space: nowrap;" mdbBtn color="primary" class="waves-light"
+                aria-label="Somente Visualizar" (click)="concluirEvento()" mdbWavesEffect>Concluir</button>
+              <button type="button" [disabled]="podeEncaminhar" (click)="encaminharEvento()" style="white-space: nowrap;"
+                mdbBtn color="warning" class="relative waves-light" mdbWavesEffect>Encaminhar</button>
 
-
-              <div class="row">
-                <div class="md-form col-6">
-                  <input mdbInputDirective formControlName="dt_criou" type="text" id="dt_criou" class="form-control"
-                    disabled>
-                  <label for="dt_criou">Criado em</label>
-                </div>
-                <div class="md-form col-6">
-                  <input mdbInputDirective formControlName="dt_para_exibir" type="text" id="dt_para_exibir" class="form-control"
-                    disabled>
-                  <label for="dt_para_exibir">Agendado para</label>
-                </div>
-              </div>
-
-
-              <div class="row">
-                <div class="md-form col-6">
-                  <input mdbInputDirective formControlName="dt_prevista_resolucao" type="text" id="dt_prevista_resolucao"
-                    class="form-control" disabled>
-                  <label for="dt_prevista_resolucao">Resolver até</label>
-                </div>
-                <div class="md-form col-6">
-                  <input mdbInputDirective formControlName="pessoa_criou" type="text" id="pessoa_criou" class="form-control"
-                    disabled>
-                  <label for="pessoa_criou">Registrado por</label>
-                </div>
-              </div>
-
-              <div class="row">
-                <div class="md-form col-6">
-                  <input mdbInputDirective formControlName="destino" type="text" id="destino" class="form-control"
-                    disabled>
-                  <label for="destino">Destinatário</label>
-                </div>
-                <div class="md-form col-6">
-                  <input mdbInputDirective formControlName="cliente" type="text" id="cliente" class="form-control"
-                    disabled>
-                  <label for="cliente">Cliente</label>
-                </div>
-              </div>
-
-              <div class="row">
-                <div class="md-form col">
-                  <textarea type="text" formControlName="observacao_origem" id="observacao_origem" class="md-textarea form-control"
-                    mdbInputDirective></textarea>
-                  <label for="observacao_origem">Observação de Origem</label>
-                </div>
-              </div>
-
-
-              <div class="row">
-                <div class="md-form col-6">
-                  <input mdbInputDirective formControlName="dt_visualizou" type="text" id="dt_visualizou" class="form-control"
-                    disabled>
-                  <label for="dt_visualizou">Aberto em</label>
-                </div>
-                <div class="md-form col-6">
-                  <input mdbInputDirective formControlName="dt_resolvido" type="text" id="dt_resolvido" class="form-control"
-                    disabled>
-                  <label for="dt_resolvido">Resolvido em </label>
-                </div>
-              </div>
-
-
-              <div class="row">
-                <div class="md-form col-6">
-                  <input mdbInputDirective formControlName="pessoa_visualizou" type="text" id="pessoa_visualizou" class="form-control"
-                    disabled>
-                  <label for="pessoa_visualizou">Visualizado por</label>
-                </div>
-                <div class="md-form col-6">
-                  <input mdbInputDirective formControlName="pessoa_resolveu" type="text" id="pessoa_resolveu" class="form-control"
-                    disabled>
-                  <label for="pessoa_resolveu">Resolvido por</label>
-                </div>
-              </div>
-
-
-
-
-              <div class="row">
-                <div class="md-form col">
-                  <input mdbInputDirective formControlName="telefone" type="text" id="telefone" class="form-control"
-                    disabled>
-                  <label for="telefone">Telefone Discado</label>
-                </div>
-                <div class="md-form col">
-                  <input mdbInputDirective formControlName="objecao" type="text" id="objecao" class="form-control"
-                    disabled>
-                  <label for="objecao">Objeção</label>
-                </div>
-              </div>
-
-              <div class="row">
-                <div class="md-form col">
-                  <input mdbInputDirective formControlName="resposta_motivo" type="text" id="resposta_motivo" class="form-control"
-                    disabled>
-                  <label for="resposta_motivo">Resposta Motivo</label>
-                </div>
-                <div class="md-form col">
-                  <input mdbInputDirective formControlName="predicao" type="text" id="predicao" class="form-control"
-                    disabled>
-                  <label for="predicao">Predição</label>
-                </div>
-              </div>
-
-              <div class="md-form col">
-                <input mdbInputDirective formControlName="id_proposta" type="text" id="id_proposta" class="form-control" disabled>
-                <label for="id_proposta">Proposta</label>
-              </div>
-
-              <div class="row">
-                <div class="md-form col">
-                  <textarea type="text" formControlName="observacao_retorno" id="observacao_retorno" class="md-textarea form-control"
-                    mdbInputDirective></textarea>
-                  <label for="observacao_retorno">Observação de Retorno</label>
-                </div>
-              </div>
-            </form>
+              <app-formulario-evento [evento]="eventoSelecionado"></app-formulario-evento>
+            </div>
           </div>
         </div>
       </div>
     </div>
   </div>
+</div>
+
+<div *ngIf="!podeVisualizarEvento">
+  <app-sem-permissao></app-sem-permissao>
 </div>

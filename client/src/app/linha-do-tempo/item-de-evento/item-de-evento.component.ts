@@ -1,6 +1,13 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import * as moment from 'moment';
+import { LocalStorage } from '../../shared/services/localStorage';
+import { Usuario } from '../../login/usuario';
+// import { ModalDirective, ToastService } from 'ng-uikit-pro-standard';
+import { ConnectHTTP } from '../../shared/services/connectHTTP';
+import { Router } from '@angular/router';
+import { ModalDirective, ToastService } from '../../../lib/ng-uikit-pro-standard';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-item-de-evento',
@@ -8,11 +15,38 @@ import * as moment from 'moment';
   styleUrls: ['./item-de-evento.component.scss']
 })
 export class ItemDeEventoComponent implements OnInit {
+  podeConcluir: boolean;
+  podeEncaminhar: boolean;
+  concluirOuEncaminhar: string;
+
+  encaminhar: boolean;
+  concluir: boolean;
+  carregando: boolean;
+  podeVisualizarEvento: boolean;
 
   eventoSelecionado: any;
   eventoForm: FormGroup;
+  usuarioLogado: any;
+  usuarioLogadoSupervisor: any;
+  tornarResponsavel: any;
+
+  motivos_respostas: any;
+  predicoes: any;
+  objecoes: any;
+  evento: any;
+  eventoObject: any;
+  pessoa: any;
+  pessoaObject: any;
+
+  @ViewChild('modalConcluirEvento') modalConcluirEvento: ModalDirective;
+  @ViewChild('confirmSeTornarResponsavelModal') confirmSeTornarResponsavelModal: ModalDirective;
+  @ViewChild('visualizarDetalhesEvento') visualizarDetalhesEvento: ModalDirective;
+
   @Input() eventos: any;
-  constructor(private formBuilder: FormBuilder) {
+  constructor(private formBuilder: FormBuilder, private localStorage: LocalStorage,
+    private connectHTTP: ConnectHTTP, private router: Router, private toastrService: ToastService) {
+    this.usuarioLogado = this.localStorage.getLocalStorage('usuarioLogado') as Usuario;
+    this.usuarioLogadoSupervisor = this.usuarioLogado.dashboard === "supervisor" || this.usuarioLogado.dashboard === "admin";
     this.eventoForm = this.formBuilder.group({
       id: [''],
       status: [''],
@@ -40,10 +74,32 @@ export class ItemDeEventoComponent implements OnInit {
     console.log(this.eventos)
   }
 
-  selecionaEvento(event, evento) {
+  async selecionaEvento(event, evento) {
     event.preventDefault();
     event.stopPropagation();
+    this.carregando = true;
     this.eventoSelecionado = evento;
+
+    let eventoEncontrado = await this.connectHTTP.callService({
+      service: 'getEventoPorId',
+      paramsService: {
+        id_evento: evento.id
+      }
+    }) as any;
+
+    this.motivos_respostas = eventoEncontrado.resposta.motivos_respostas;
+    this.predicoes = eventoEncontrado.resposta.predicoes;
+    this.objecoes = eventoEncontrado.resposta.objecoes;
+    this.evento = new Observable(o => {
+      o.next(eventoEncontrado.resposta.evento)
+    });
+    evento = eventoEncontrado.resposta.evento;
+    this.eventoSelecionado = eventoEncontrado.resposta.evento;
+    this.eventoObject = eventoEncontrado.resposta.evento;
+    this.pessoa = new Observable(o => o.next(eventoEncontrado.resposta.pessoa));
+    this.pessoaObject = eventoEncontrado.resposta.pessoa;
+
+
     this.eventoForm = this.formBuilder.group({
       id: [evento.id],
       status: [evento.status],
@@ -66,53 +122,115 @@ export class ItemDeEventoComponent implements OnInit {
       id_proposta: [evento.id_proposta],
       observacao_retorno: [evento.observacao_retorno],
     });
+
+    const eventoParaPessoaLogada = (this.eventoSelecionado.tipodestino === "P" && this.usuarioLogado.id_pessoa === this.eventoSelecionado.id_pessoa_organograma);
+    const eventoParaPessoaOrgonogramaLogadaQueVisualizou = (this.eventoSelecionado.tipodestino === "O" && this.usuarioLogado.id_organograma === this.eventoSelecionado.id_pessoa_organograma && this.eventoSelecionado.id_pessoa_visualizou == this.eventoSelecionado.id_pessoa);
+
+    if (eventoParaPessoaLogada || eventoParaPessoaOrgonogramaLogadaQueVisualizou || this.usuarioLogadoSupervisor) {
+      this.podeVisualizarEvento = true;
+    }
+    else {
+      this.podeVisualizarEvento = false;
+    }
+
+    this.podeConcluir = !(this.eventoSelecionado.id_status_evento == 5 || this.eventoSelecionado.id_status_evento == 6)
+    this.podeEncaminhar = !(this.eventoSelecionado.id_status_evento == 5 || this.eventoSelecionado.id_status_evento == 6)
+    this.carregando = false;
+  }
+
+  async abreEvento(event: any, evento: any) {
+    debugger
+    if (evento.id_status_evento == 1 || evento.id_status_evento == 4) {
+      const eventoParaPessoaLogada = (evento.tipodestino === "P" && this.usuarioLogado.id_pessoa === evento.id_pessoa_organograma);
+      const eventoParaPessoaOrgonogramaLogada = (evento.tipodestino === "O" && this.usuarioLogado.id_organograma === evento.id_pessoa_organograma);
+      if (eventoParaPessoaLogada) {
+        await this.connectHTTP.callService({
+          service: 'visualizarEvento',
+          paramsService: {
+            id_evento: evento.id,
+            id_pessoa_visualizou: this.usuarioLogado.id_pessoa
+          }
+        }) as any;
+        this.selecionaEvento(event, evento);
+        this.visualizarDetalhesEvento.show();
+      }
+      else if (this.usuarioLogadoSupervisor || eventoParaPessoaOrgonogramaLogada) {
+        this.tornarResponsavel = evento;
+        this.confirmSeTornarResponsavelModal.show();
+      }
+      else
+        this.toastrService.error("Você não pode visualizar esse evento!");
+    }
+    if (evento.id_status_evento == 5 || evento.id_status_evento == 6) {
+      const eventoParaPessoaLogada = (evento.tipodestino === "P" && this.usuarioLogado.id_pessoa === evento.id_pessoa_organograma);
+      if (eventoParaPessoaLogada) {
+        this.selecionaEvento(event, evento);
+        this.visualizarDetalhesEvento.show();
+      }
+      else this.toastrService.error("Você não pode visualizar esse evento!");
+    }
+  }
+
+  async visualizarEvento(event) {
+    if (this.usuarioLogadoSupervisor) {
+      this.selecionaEvento(event, this.tornarResponsavel);
+      this.visualizarDetalhesEvento.show();
+      this.tornarResponsavel = null;
+    }
+    else this.toastrService.error("Você não tem permissão de visualizar esse evento!");
+  }
+
+  cancelaSeTornarResponsavel() {
+    this.tornarResponsavel = null;
+    this.toastrService.error("Você não assumiu a responsabilidade não tem permissão para visualizar");
+  }
+
+  async confirmaSeTornarResponsavel(event) {
+    try {
+      await this.connectHTTP.callService({
+        service: 'visualizarEvento',
+        paramsService: {
+          id_evento: this.tornarResponsavel.id,
+          id_pessoa_visualizou: this.usuarioLogado.id_pessoa
+        }
+      }) as any;
+      var self = this;
+      setTimeout(() => {
+        self.tornarResponsavel = null;
+      }, 100)
+      this.selecionaEvento(event, this.tornarResponsavel);
+      this.visualizarDetalhesEvento.show();
+    }
+    catch (e) {
+      this.toastrService.error('Erro em visualizarEvento: ', e.error);
+    }
+  }
+
+  encaminharEvento() {
+    this.concluirOuEncaminhar = "Encaminhar"
+    this.encaminhar = true;
+    this.concluir = false;
+    this.mostrarModal();
+  }
+
+  concluirEvento() {
+    this.concluirOuEncaminhar = "Concluir"
+    this.encaminhar = false;
+    this.concluir = true;
+    this.mostrarModal();
+  }
+
+  mostrarModal() {
+    this.visualizarDetalhesEvento.hide();
+    this.modalConcluirEvento.show();
+  }
+
+  fechaModal() {
+    this.concluirOuEncaminhar = '';
+    this.encaminhar = false;
+    this.concluir = false;
+    this.modalConcluirEvento.hide();
+    this.selecionaEvento(event, this.eventoSelecionado)
+    this.visualizarDetalhesEvento.show();
   }
 }
-
-
-// {
-//   "id": "6",
-//   "id_evento_pai": null,
-//   "id_evento_anterior": null,
-//   "id_campanha": 5,
-//   "campanha": "Prospecção",
-//   "id_motivo": 1,
-//   "motivo": "Prospecção",
-//   "id_status_evento": 3,
-//   "status": "CONCLUÍDO",
-//   "status_evento_cor_texto": "text-success",
-//   "status_evento_icone": "hourglass-end",
-//   "id_pessoa_criou": "1",
-//   "pessoa_criou": "Interage",
-//   "dt_criou": "2018-09-26T03:00:00.000Z",
-//   "dt_prevista_resolucao": "2018-10-03T03:00:00.000Z",
-//   "dt_para_exibir": "2018-09-26T03:00:00.000Z",
-//   "tipodestino": "O",
-//   "id_pessoa_organograma": "4",
-//   "destino": "Call Center",
-//   "id_usuario": null,
-//   "id_pessoa_receptor": "38",
-//   "cliente": "Cliente 1",
-//   "id_prioridade": 2,
-//   "prioridade": "Normal",
-//   "dt_visualizou": null,
-//   "id_pessoa_visualizou": null,
-//   "pessoa_visualizou": null,
-//   "dt_resolvido": "2018-09-28T19:00:51.195Z",
-//   "id_pessoa_resolveu": "4",
-//   "pessoa_resolveu": "Atendente 3",
-//   "exigi_aviso_leitura": "0",
-//   "observacao_origem": "Ligar para vender o produto",
-//   "observacao_retorno": "ola",
-//   "id_resp_motivo": 6,
-//   "resposta_motivo": "Não pode falar no momento",
-//   "id_predicao": null,
-//   "predicao": null,
-//   "id_canal": 3,
-//   "canal": "Ligação Ativa",
-//   "id_telefone": 3,
-//   "telefone": "(62) 998402546",
-//   "complemento_resposta": null,
-//   "tempo": "2 days 16:00:51.195784",
-//   "eventosFilho": null
-// }
