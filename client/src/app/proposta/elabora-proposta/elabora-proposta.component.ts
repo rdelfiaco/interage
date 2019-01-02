@@ -40,7 +40,7 @@ export class ElaboraPropostaComponent implements OnInit {
       observer.next(pessoa.principal.id);
     });
     this.idPessoaCliente = pessoa.principal.id;
-
+    this.Cliente = pessoa.principal.nome;
   }
   get pessoa() {
     return this.pessoaObject;
@@ -85,12 +85,13 @@ export class ElaboraPropostaComponent implements OnInit {
 
   initValueId: Observable<any>;
   idPessoaCliente: string;
+  Cliente: string;
 
   // radios 
   chkPrecos: string = "6";
   chkFundo: string = "1";
   chckCarroRes: string = "1";
-  chckProtecaoVidro: string = "0";
+  chckProtecaoVidro: string = "1";
   chckApp: string = "1";
   chckRastreador: string = "0";
   // 
@@ -173,7 +174,7 @@ export class ElaboraPropostaComponent implements OnInit {
 
     this.protecaoVidro = this.protecoesVidros.filter(this.filtraTabelasTipoVeiculos, [this.tipoVeiculoSelectValue]);
 
-    this.rastreador = this.rastreadores.filter(this.filtraTabelasTipoVeiculos, [this.tipoVeiculoSelectValue]);
+    this.rastreador = this.rastreadores.filter(this.filtraTabelas, [nVlrBusca, this.tipoVeiculoSelectValue]);
 
     this.app = this.apps.filter(this.filtraTabelasTipoVeiculos, [this.tipoVeiculoSelectValue]);
 
@@ -194,9 +195,9 @@ export class ElaboraPropostaComponent implements OnInit {
 
 
       // quando for combro ajustar 
-      this.proposta.adesão = this.adesao;
+      this.proposta.adesao = this.adesao;
       this.proposta.participacao = this.vlrParticipacao;
-
+      
 
     } else {
       this.toastrService.error('Tabela correspondente não encontrada')
@@ -238,18 +239,23 @@ export class ElaboraPropostaComponent implements OnInit {
       if (this.carroReserva.length > 0) {
         this.vlrProposta = this.vlrProposta + Number(this.carroReserva[this.chckCarroRes].valor)
         this.proposta.idCarroReserva = this.carroReserva[this.chckCarroRes].id;
+        this.proposta.carroReserva = this.carroReserva[this.chckCarroRes].nome;
       };
       if (this.protecaoVidro.length > 0) {
         this.vlrProposta = this.vlrProposta + Number(this.protecaoVidro[this.chckProtecaoVidro].valor)
         this.proposta.idProtecaoVidros = this.protecaoVidro[this.chckProtecaoVidro].id;
+        this.proposta.protecaoVidros = this.protecaoVidro[this.chckProtecaoVidro].nome;
       };
       if (this.app.length) {
         this.vlrProposta = this.vlrProposta + Number(this.app[this.chckApp].valor)
         this.proposta.idApp = this.app[this.chckApp].id;
+        this.proposta.app =  this.app[this.chckApp].nome;
+        this.proposta.appDescricao = this.app[this.chckApp].descricao;
       };
       if (this.rastreador.length > 0) {
         this.vlrProposta = this.vlrProposta + Number(this.rastreador[this.chckRastreador].valor)
         this.proposta.idRastreador = this.rastreador[this.chckRastreador].id;
+        this.proposta.rastreador = this.rastreador[this.chckRastreador].nome; 
       };
     }
     
@@ -287,6 +293,7 @@ export class ElaboraPropostaComponent implements OnInit {
 
   onSelectCliente(valor) {
     this.idPessoaCliente = valor.value;
+    this.Cliente = valor.label;
   }
 
 
@@ -304,7 +311,7 @@ export class ElaboraPropostaComponent implements OnInit {
           {
             style: 'tableExample',
             table: {
-              widths: [150, 380],
+              widths: [150, 370],
               body: [
                 [{
                   image: 'logotipo',
@@ -334,6 +341,12 @@ export class ElaboraPropostaComponent implements OnInit {
               body: [
                 [{
                   text: `Responsável ALTIS: ${this.usuarioLogado.apelido}   - Whatsapp: (${this.usuarioLogado.ddd}) ${this.usuarioLogado.telefone}`,
+                  fillColor: '#eeeeee',
+                  margin: [5, 5, 0, 0],
+                  border: [true, true, true, true],
+                }],
+                [{
+                  text: `Associado : ${this.Cliente}  `,
                   fillColor: '#eeeeee',
                   margin: [5, 5, 0, 0],
                   border: [true, true, true, true],
@@ -404,10 +417,9 @@ export class ElaboraPropostaComponent implements OnInit {
 
               body: [
                 [{
-                  text: `ADESÃO:\n R$ ${this.proposta.adesão}
+                  text: `ADESÃO:\n R$ ${this.proposta.adesao}
                       \n\n MENSALIDADE:\n R$ ${this.proposta.mensalidade} 
-                      \n\n PARTICIPAÇÃO:\n R$ ${this.proposta.participacao}
-                      \n\n ${this.proposta.terceiros}`,
+                      \n\n PARTICIPAÇÃO:\n R$ ${this.proposta.participacao}`,
                   style: 'header',
                   margin: [15, 20, 0, 5],
                   border: [true, false, true, true],
@@ -423,14 +435,17 @@ export class ElaboraPropostaComponent implements OnInit {
                       text: `\n\nSem perfil de condutor! (Qualquer pessoa habilitada pode conduzir o veículo) 
                           \nSem Consulta SPC/SERASA 
                           \nSem limite de km rodado; Sem perfil de guarda de veículo, não exige garagem;
-                          \nCarro Reserva (Opcional);
                           \nRoubo, furto, incêndio, colisão, capotamento, tombamento, enchente, chuva de granizo, queda de árvore; 
                           \nAssistência 24H em todo Brasil; 
-                          \nReboque do veículo –1000 km (500 km ida e 500 km volta) até 6x ao mês;  
                           \nSocorro elétrico e mecânico; Chaveiro; Taxi, SOS Pneus;
                           \nMensalidade Contínua (sem renovação); Não trabalhamos com Bônus; 
                           \nIndenização 100% tabela Fipe, exceto veículos de leilão é remarcado( 80% DE INDENIZAÇÃO)
-                          \n`,
+                          \n${this.proposta.carroReserva};
+                          \n${this.proposta.protecaoVidros};
+                          \n${this.proposta.terceiros};
+                          \n${this.proposta.appDescricao};
+                          \n${this.proposta.rastreador};
+                          `,
                       fontSize: 10
                     }
                   ],
@@ -445,12 +460,12 @@ export class ElaboraPropostaComponent implements OnInit {
                     margin: [5, 25, 0, 0],
                   },
                   {
-                    text: `Carro reserva de 30 dias*
-                        APP (ACIDENTES PESSOAIS DE PASSAGEIROS) *
-                        Fundo para terceiros de 50 mil*
-                        Fundo para terceiros de 70 mil*
+                    text: `Carro reserva de 30 dias;
+                        \nAPP (ACIDENTES PESSOAIS DE PASSAGEIROS) até 20 mil 
+                        \nFundo para terceiros de 50 mil;
+                        \nFundo para terceiros de 70 mil
                         ` ,
-                    alignment: 'center',
+                    alignment: 'left',
                     style: 'ParagrafoBold',
                     margin: [5, 0, 0, 0],
                   }
@@ -465,8 +480,7 @@ export class ElaboraPropostaComponent implements OnInit {
               heights: [30],
               body: [
                 [{
-                  text: `A ALTIS atua legalmente perante a lei, respeitando a constituição e o código civil. Não possui nenhum impedimento legal e se responsabiliza solidariamente com os princípios embasado nas leis* Lei no 9.790, de 23 de março de 1999.  / CAPÍTULO I / DA QUALIFICAÇÃO COMO ORGANIZAÇÃO DA SOCIEDADE CIVIL* Constituição da Republica Federativa do Brasil 1988 / TÍTULO II / Dos Direitos / Garantias Fundamentais / CAPÍTULO I / DOS DIREITOS E DEVERES NDIVIDUAIS E COLETIVOS / Art. 5º /Incisos: XVII a XXI.* Código Civil - Lei 10406/02 | Lei no 10.406, de 10 de janeiro de 2002 / TÍTULO II / Da Sociedade / CAPÍTULO II / DAS ASSOCIAÇÕES
-                  `,
+                  text: `A ALTIS atua legalmente perante a lei, respeitando a constituição e o código civil. Não possui nenhum impedimento legal e se responsabiliza solidariamente com os princípios embasado nas leis* Lei no 9.790, de 23 de março de 1999.  / CAPÍTULO I / DA QUALIFICAÇÃO COMO ORGANIZAÇÃO DA SOCIEDADE CIVIL* Constituição da Republica Federativa do Brasil 1988 / TÍTULO II / Dos Direitos / Garantias Fundamentais / CAPÍTULO I / DOS DIREITOS E DEVERES NDIVIDUAIS E COLETIVOS / Art. 5º /Incisos: XVII a XXI.* Código Civil - Lei 10406/02 | Lei no 10.406, de 10 de janeiro de 2002 / TÍTULO II / Da Sociedade / CAPÍTULO II / DAS ASSOCIAÇÕES`,
                   fillColor: '#eeeeee',
                   margin: [5, 5, 5, 5],
                   alignment: 'left',

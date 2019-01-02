@@ -10,23 +10,64 @@ export class Proposta {
     private _autenticacao: string;
     private _dataConsulta: string;
     private _precoMedio: string;
-    private _adesão: number;
+    private _adesao: number;
+    private _adesaoNome: string;
     private _mensalidade: number;
     private _participacao: number;
     private _cota: number;
     private _terceiros: string;
     private _idFundoTerceiros: number;
     private _idCarroReserva: number;
+    private _carroReserva: String;
     private _idApp: number;
+    private _app: string;
+    private _appDescricao: string;
     private _idRastreador: number;
+    private _rastreador: string;
     private _idProtecaoVidros: number;
+    private _protecaoVidros: string;
     private _propostaJSON: any;
     private _idUsuario: number;
     private _idPessoaUsuario: number;
     private _idPessoaCliente: number;
     private _placa: string;
     private _observacao: string;
-
+    public get protecaoVidros(): string {
+        return this._protecaoVidros;
+    }
+    public set protecaoVidros(value: string) {
+        this._protecaoVidros = value;
+    }
+    public get rastreador(): string {
+        return this._rastreador;
+    }
+    public set rastreador(value: string) {
+        this._rastreador = value;
+    }
+    public get app(): string {
+        return this._app;
+    }
+    public set app(value: string) {
+        this._app = value;
+    }
+    public get appDescricao(): string {
+        return this._appDescricao;
+    }
+    public set appDescricao(value: string) {
+        this._appDescricao = value;
+    }
+    public get carroReserva(): String {
+        return this._carroReserva;
+    }
+    public set carroReserva(value: String) {
+        this._carroReserva = value;
+    }
+    public get adesaoNome(): string {
+        return this._adesaoNome;
+    }
+    public set adesaoNome(value: string) {
+        this._adesaoNome = value;
+    }
     public get observacao(): string {
         return this._observacao;
     }
@@ -73,16 +114,22 @@ export class Proposta {
             autenticacao: this._autenticacao,
             dataConsulta: this._dataConsulta,
             precoMedio: this._precoMedio,
-            adesão: this._adesão,
+            adesao: this._adesao,
+            adesaoNome: this.adesaoNome,
             mensalidade: this._mensalidade,
             participacao: this._participacao,
             cota: this._cota,
             terceiros: this._terceiros,
             idFundoTerceiros: this._idFundoTerceiros,
             idCarroReserva: this._idCarroReserva,
+            carroReserva: this._carroReserva,
             idApp: this._idApp,
+            app: this._app,
+            appDescricao: this._appDescricao,
             idRastreador: this._idRastreador,
+            rastreador: this._rastreador,
             idProtecaoVidros: this._idProtecaoVidros,
+            protecaoVidros: this._protecaoVidros,
             idUsuario: this._idUsuario,
             idPessoaUsuario: this._idPessoaUsuario,
             idPessoaCliente: this._idPessoaCliente,
@@ -170,11 +217,11 @@ export class Proposta {
         this._mensalidade = value;
     }
 
-    public get adesão(): number {
-        return this._adesão;
+    public get adesao(): number {
+        return this._adesao;
     }
-    public set adesão(value: number) {
-        this._adesão = value;
+    public set adesao(value: number) {
+        this._adesao = value;
     }
 
     public get mesReferencia(): string {

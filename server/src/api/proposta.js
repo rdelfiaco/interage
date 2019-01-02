@@ -26,7 +26,7 @@ function salvarProposta(req, res) {
                           '${req.query.proposta.anoModelo}',
                           '${req.query.proposta.dataConsulta}',
                           '${req.query.proposta.precoMedio}',
-                          '${req.query.proposta.adesão}',
+                          '${req.query.proposta.adesao}',
                           '${req.query.proposta.mensalidade}',
                           '${req.query.proposta.participacao}',
                           ${req.query.proposta.cota},
@@ -159,7 +159,7 @@ function getStatusProposta(req, res){
       token: req.query.token,
       idUsuario: req.query.id_usuario
     };
-    let sql = `select * from status_proposta where status  `
+    let sql = `select * from status_proposta where status order by nome`
     executaSQL(credenciais, sql)
       .then(res => {
         if (res.length > 0) {
