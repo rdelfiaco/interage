@@ -130,7 +130,7 @@ export class ElaboraPropostaComponent implements OnInit {
     // combo tipo do veículo 
     this.tipoVeiculoSelect = tabelaPrecos.resposta.TipoVeiculos;
     this.tipoVeiculoSelect = this.tipoVeiculoSelect.map(tipoVeiculo => {
-      return { value: tipoVeiculo.id, label: tipoVeiculo.nome }
+      return { value: tipoVeiculo.id, label: tipoVeiculo.nome, reboque: tipoVeiculo.reboque, id_tipo_veiculo: tipoVeiculo.id }
     });
 
     this.tipoVeiculoSelectValue = 1;
@@ -182,6 +182,7 @@ export class ElaboraPropostaComponent implements OnInit {
     if (this.valores.length > 0) {
       this.valorPPV = this.valores[0].valor_ppv;
       this.cota = this.valores[0].cota;
+      
       this.adesao = this.valores[0].adesao
       // para participação P Percentual se faz o calculo caso contralio o valor é fixo 
       if (this.valores[0].tipo_participacao == 'P') {
@@ -261,10 +262,11 @@ export class ElaboraPropostaComponent implements OnInit {
     }
     
     this.proposta.mensalidade = numeral(this.vlrProposta).format('00.00')
+    let reboque = this.tipoVeiculoSelect.filter(this.filtraTabelasTipoVeiculos, [this.tipoVeiculoSelectValue]);
+    this.proposta.reboque = reboque[0].reboque;
   }
 
   mudouPortabilidade(){
-    debugger
     if (this.chckPortabilidade) {
         this.chckPortabilidade = false;
         this.adesao = this.valores[0].adesao
@@ -315,6 +317,7 @@ export class ElaboraPropostaComponent implements OnInit {
   geraProposta() {
 
 
+    
     if (!this.idPessoaCliente) {
       this.toastrService.error('Selecione um cliente');
     } else {
@@ -460,8 +463,9 @@ export class ElaboraPropostaComponent implements OnInit {
                           \n${this.proposta.terceiros};
                           \n${this.proposta.appDescricao};
                           \n${this.proposta.rastreador};
+                          \n${this.proposta.reboque};
                           `,
-                      fontSize: 10
+                      fontSize: 9,
                     }
                   ],
                   margin: [5, 5, 0, 0],
@@ -481,7 +485,7 @@ export class ElaboraPropostaComponent implements OnInit {
                         \nFundo para terceiros de 70 mil
                         ` ,
                     alignment: 'left',
-                    style: 'ParagrafoBold',
+                    fontSize: 9,
                     margin: [5, 0, 0, 0],
                   }
                 ],
@@ -495,7 +499,7 @@ export class ElaboraPropostaComponent implements OnInit {
               heights: [30],
               body: [
                 [{
-                  text: `A ALTIS atua legalmente perante a lei, respeitando a constituição e o código civil. Não possui nenhum impedimento legal e se responsabiliza solidariamente com os princípios embasado nas leis* Lei no 9.790, de 23 de março de 1999.  / CAPÍTULO I / DA QUALIFICAÇÃO COMO ORGANIZAÇÃO DA SOCIEDADE CIVIL* Constituição da Republica Federativa do Brasil 1988 / TÍTULO II / Dos Direitos / Garantias Fundamentais / CAPÍTULO I / DOS DIREITOS E DEVERES NDIVIDUAIS E COLETIVOS / Art. 5º /Incisos: XVII a XXI.* Código Civil - Lei 10406/02 | Lei no 10.406, de 10 de janeiro de 2002 / TÍTULO II / Da Sociedade / CAPÍTULO II / DAS ASSOCIAÇÕES`,
+                  text: `A ALTIS atua legalmente perante a lei, respeitando a constituição e o código civil. Não possui nenhum impedimento legal e se responsabiliza solidariamente com os princípios embasado nas leis* Lei no 9.790, de 23 de março de 1999.  / CAPÍTULO I / DA QUALIFICAÇÃO COMO ORGANIZAÇÃO DA SOCIEDADE CIVIL* Constituição da Republica Federativa do Brasil 1988 / TÍTULO II / Dos Direitos / Garantias Fundamentais / CAPÍTULO I / DOS DIREITOS E DEVERES INDIVIDUAIS E COLETIVOS / Art. 5º /Incisos: XVII a XXI.* Código Civil - Lei 10406/02 | Lei no 10.406, de 10 de janeiro de 2002 / TÍTULO II / Da Sociedade / CAPÍTULO II / DAS ASSOCIAÇÕES`,
                   fillColor: '#eeeeee',
                   margin: [5, 5, 5, 5],
                   alignment: 'left',
@@ -529,13 +533,15 @@ export class ElaboraPropostaComponent implements OnInit {
         images: { logotipo: img }
       };
 
-
+      console.log(this.proposta)
+      debugger;
+      
       this.proposta.idUsuario = this.usuarioLogado.id;
       this.proposta.idPessoaUsuario = this.usuarioLogado.id_pessoa;
       this.proposta.idPessoaCliente = Number(this.idPessoaCliente);
       this.proposta.idTipoVeiculo = this.tipoVeiculoSelectValue;
       this.proposta.cota = this.cota;
-      this.propostaComuc.setProposta(this.proposta);
+      //this.propostaComuc.setProposta(this.proposta);
 
       if (!this.returnProp) {
         pdfMake.createPdf(docDefinition).open()
@@ -548,6 +554,8 @@ export class ElaboraPropostaComponent implements OnInit {
       const sleep = (milliseconds) => {
         return new Promise(resolve => setTimeout(resolve, milliseconds))
       }
+      
+      
 
       this.salvarProposta();
 

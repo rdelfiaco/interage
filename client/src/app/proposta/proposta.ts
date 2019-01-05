@@ -33,6 +33,14 @@ export class Proposta {
     private _idPessoaCliente: number;
     private _placa: string;
     private _observacao: string;
+    private _reboque: string;
+
+    public get reboque(): string {
+        return this._reboque;
+    }
+    public set reboque(value: string) {
+        this._reboque = value;
+    }
 
     public get descontoAdesao(): number {
         return this._descontoAdesao;
@@ -286,7 +294,8 @@ export class Proposta {
             idPessoaUsuario: this._idPessoaUsuario,
             idPessoaCliente: this._idPessoaCliente,
             placa: this._placa,
-            observacao: this._observacao
+            observacao: this._observacao,
+            reboque: this._reboque
         };
     }
 }
