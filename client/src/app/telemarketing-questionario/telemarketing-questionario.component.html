@@ -45,7 +45,7 @@
     <div class="modal-dialog modal-fluid" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h4 class="modal-title w-100" id="myModalLabel">Elaboranado Proposta para - {{_pessoaObject.principal.nome}}</h4>
+          <h4 class="modal-title w-100" id="myModalLabel">Elaborando Proposta para - {{_pessoaObject.principal.nome}}</h4>
           <button type="button" class="close pull-right" aria-label="Close" (click)="fecharElaborarProposta($event)">
             <span aria-hidden="true">×</span>
           </button>
@@ -87,7 +87,8 @@
     </div>
     <div class="md-form form-group col">
       <mdb-time-picker [buttonLabel]="'Done'" [twelvehour]="false" [darktheme]="true" [placeholder]="'Selecione a hora'"
-        [label]="'Hora Reagendamento'" formControlName="hora"></mdb-time-picker>
+        formControlName="hora"></mdb-time-picker>
+       <label class="">Hora Reagendamento</label>
     </div>
   </div>
   <div class="row">

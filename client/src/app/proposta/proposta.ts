@@ -11,6 +11,7 @@ export class Proposta {
     private _dataConsulta: string;
     private _precoMedio: string;
     private _adesao: number;
+    private _descontoAdesao: number;
     private _adesaoNome: string;
     private _mensalidade: number;
     private _participacao: number;
@@ -32,6 +33,13 @@ export class Proposta {
     private _idPessoaCliente: number;
     private _placa: string;
     private _observacao: string;
+
+    public get descontoAdesao(): number {
+        return this._descontoAdesao;
+    }
+    public set descontoAdesao(value: number) {
+        this._descontoAdesao = value;
+    }
     public get protecaoVidros(): string {
         return this._protecaoVidros;
     }
@@ -101,41 +109,6 @@ export class Proposta {
 
     public set idUsuario(value: number) {
         this._idUsuario = value;
-    }
-
-    public propostaObj(): any {
-        return {
-            idTipoVeiculo: this._idTipoVeiculo,
-            mesReferencia: this._mesReferencia,
-            codigoFipe: this._codigoFipe,
-            marca: this._marca,
-            modelo: this._modelo,
-            anoModelo: this._anoModelo,
-            autenticacao: this._autenticacao,
-            dataConsulta: this._dataConsulta,
-            precoMedio: this._precoMedio,
-            adesao: this._adesao,
-            adesaoNome: this.adesaoNome,
-            mensalidade: this._mensalidade,
-            participacao: this._participacao,
-            cota: this._cota,
-            terceiros: this._terceiros,
-            idFundoTerceiros: this._idFundoTerceiros,
-            idCarroReserva: this._idCarroReserva,
-            carroReserva: this._carroReserva,
-            idApp: this._idApp,
-            app: this._app,
-            appDescricao: this._appDescricao,
-            idRastreador: this._idRastreador,
-            rastreador: this._rastreador,
-            idProtecaoVidros: this._idProtecaoVidros,
-            protecaoVidros: this._protecaoVidros,
-            idUsuario: this._idUsuario,
-            idPessoaUsuario: this._idPessoaUsuario,
-            idPessoaCliente: this._idPessoaCliente,
-            placa: this._placa,
-            observacao: this._observacao
-        };
     }
 
     public get propostaJSON(): any {
@@ -279,5 +252,41 @@ export class Proposta {
     public set precoMedio(value: string) {
         this._precoMedio = value;
 
+    }
+
+    public propostaObj(): any {
+        return {
+            idTipoVeiculo: this._idTipoVeiculo,
+            mesReferencia: this._mesReferencia,
+            codigoFipe: this._codigoFipe,
+            marca: this._marca,
+            modelo: this._modelo,
+            anoModelo: this._anoModelo,
+            autenticacao: this._autenticacao,
+            dataConsulta: this._dataConsulta,
+            precoMedio: this._precoMedio,
+            adesao: this._adesao,
+            descontoAdesao: this._descontoAdesao,
+            adesaoNome: this.adesaoNome,
+            mensalidade: this._mensalidade,
+            participacao: this._participacao,
+            cota: this._cota,
+            terceiros: this._terceiros,
+            idFundoTerceiros: this._idFundoTerceiros,
+            idCarroReserva: this._idCarroReserva,
+            carroReserva: this._carroReserva,
+            idApp: this._idApp,
+            app: this._app,
+            appDescricao: this._appDescricao,
+            idRastreador: this._idRastreador,
+            rastreador: this._rastreador,
+            idProtecaoVidros: this._idProtecaoVidros,
+            protecaoVidros: this._protecaoVidros,
+            idUsuario: this._idUsuario,
+            idPessoaUsuario: this._idPessoaUsuario,
+            idPessoaCliente: this._idPessoaCliente,
+            placa: this._placa,
+            observacao: this._observacao
+        };
     }
 }

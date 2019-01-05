@@ -75,7 +75,7 @@ export class ElaboraPropostaComponent implements OnInit {
   adesao: number;
   vlrParticipacao: number;
   prcParticipacao: number;
-  bntGeraProposta: boolean = false;
+  bntGeraProposta: boolean = true;
   sccMoto: number;
 
   sVlrVeiculo: string;
@@ -94,6 +94,7 @@ export class ElaboraPropostaComponent implements OnInit {
   chckProtecaoVidro: string = "1";
   chckApp: string = "1";
   chckRastreador: string = "0";
+  chckPortabilidade: boolean = false;
   // 
 
 
@@ -260,6 +261,20 @@ export class ElaboraPropostaComponent implements OnInit {
     }
     
     this.proposta.mensalidade = numeral(this.vlrProposta).format('00.00')
+  }
+
+  mudouPortabilidade(){
+    debugger
+    if (this.chckPortabilidade) {
+        this.chckPortabilidade = false;
+        this.adesao = this.valores[0].adesao
+    }else
+    {
+        this.chckPortabilidade = true; 
+        this.adesao = this.valores[0].adesao  - this.valores[0].desconto_adesao;
+    }
+    this.adesao = numeral(this.adesao).format('0.00')
+    this.proposta.adesao = this.adesao;
   }
 
   mudouPlano(opcao) {

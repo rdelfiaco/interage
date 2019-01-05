@@ -24,7 +24,7 @@ export class EventoComponent implements OnInit {
   statusSelect: Array<any>;
   departamentoSelectValue: number;
   usuarioSelectValue: number;
-  motivoSelectValue: number;
+  motivoSelectValue: Array<any>;
   statusSelectValue: number;
   eventosUsuarioChk: boolean = true;
   eventosFinalizadosChk: boolean = true;
@@ -118,11 +118,16 @@ export class EventoComponent implements OnInit {
 
     // combo motivos
     this.motivoSelect = eventoFiltros.resposta.Motivos;
+    
     this.motivoSelect = this.motivoSelect.map(motivos => {
       return { value: motivos.id, label: motivos.nome }
     });
 
-    this.motivoSelectValue = 1
+     this.motivoSelect.push({value: -1, label: "Todos"});
+    
+
+
+    this.motivoSelectValue = [-1]
 
     // combo status_evento
     this.statusSelect = eventoFiltros.resposta.StatusEvento;

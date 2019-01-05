@@ -3,7 +3,8 @@ import { CommonModule } from '@angular/common';
 import { EventoComponent } from './evento.component';
 import { SharedModule } from '../shared/shared.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { MDBBootstrapModulesPro } from '../../lib/ng-uikit-pro-standard';
+import { MDBBootstrapModulesPro, SelectModule, WavesModule } from '../../lib/ng-uikit-pro-standard';
+
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { DetalheEventoComponent } from './detalhe-evento/detalhe-evento.component';
@@ -20,12 +21,15 @@ import { ConcluirEventoModule } from './concluir-evento/concluir-evento.module';
 import { EncaminharEventoModule } from './encaminhar-evento/encaminhar-evento.module';
 import { CriarEventoModule } from './criar-evento/criar-evento.module';
 
+
 @NgModule({
   imports: [
     CommonModule,
     BrowserAnimationsModule,
     BrowserModule,
     MDBBootstrapModulesPro,
+    SelectModule,
+    WavesModule,
     ReactiveFormsModule,
     FormsModule,
     SharedModule,

@@ -95,7 +95,9 @@
       <div class="col-6 col-sm-4" style="z-index: 0">
         <div class="row" style="margin-top: 50px">
           <div class="col-md-12">
-            <mdb-select [(ngModel)]="motivoSelectValue" [options]="motivoSelect" placeholder="Escolha o motivo" style="font-size: 0.5rem;"></mdb-select>
+            <mdb-select [(ngModel)]="motivoSelectValue" [options]="motivoSelect" [multiple]="true" 
+            [highlightFirst]="false" placeholder="Escolha o motivo" style="font-size: 0.5rem;">
+            </mdb-select>
             <label>Motivo</label>
           </div>
         </div>

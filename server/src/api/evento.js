@@ -175,7 +175,7 @@ function encaminhaEvento(req, res) {
         if (req.query.id_status_evento === '5') statusEvento = 2;
         if (req.query.id_status_evento === '6') statusEvento = 8;
 
-        console.log('req.query', req.query)
+        //console.log('req.query', req.query)
         encerrarEvento(client, req.query.id_pessoa_resolveu, req.query.id_evento, statusEvento).then(eventoEncerrado => {
           _criarEvento(client, req.query.id_campanha, req.query.id_motivo, req.query.id_evento_pai, req.query.id_evento,
             req.query.id_pessoa_resolveu, req.query.dt_para_exibir, req.query.tipoDestino, req.query.id_pessoa_organograma, req.query.id_pessoa_receptor,
@@ -269,10 +269,10 @@ function salvarEvento(req, res) {
           const motivoResposta = res.rows[0];
 
           client.query('BEGIN').then((res1) => {
-            console.log('req.query.proposta', req.query.proposta)
+            //console.log('req.query.proposta', req.query.proposta)
             if (req.query.proposta && req.query.proposta !== "null" && req.query.proposta !== "undefined") {
               salvarProposta(req, res).then((idproposta) => {
-                console.log('salvo proposta ' + idproposta[0].id);
+                //console.log('salvo proposta ' + idproposta[0].id);
                 finalizaEvento(idproposta[0].id);
               })
             }
@@ -788,7 +788,6 @@ function getEventosFiltrados(req, res) {
       idUsuario: req.query.id_usuario
     };
 
-
     let sql = `select * from view_eventos where `
     sql = sql + `id_status_evento in (${req.query.status}) `  // status 
     if (req.query.eventosUsuarioChk == 'true') {
@@ -796,7 +795,7 @@ function getEventosFiltrados(req, res) {
     } else {
       sql = sql + ` and ( tipodestino = 'O' and id_pessoa_organograma in (${req.query.departamentos}) )` // departamentos 
     }
-    sql = sql + ` and (id_motivo in ( ${req.query.motivos})  )` // motivos 
+    sql = sql + ` and (id_motivo in ( ${req.query.motivos} )  or -1 in ( ${req.query.motivos} )  )` // motivos 
     if (req.query.dtCricaoRadio == 'true') {
       sql = sql + ` and date(dt_criou) between date('${req.query.dt_inicial}') and date('${req.query.dt_final}')` // data de criação 
     } else {
@@ -804,7 +803,6 @@ function getEventosFiltrados(req, res) {
     }
 
     sql = sql + ` order by dt_criou limit 100` //
-    console.log(sql)
     executaSQL(credenciais, sql)
       .then(res => {
         if (res) {
@@ -837,7 +835,6 @@ function getEventoPorId(req, res) {
                   from view_eventos
                   where id=${req.query.id_evento}`
 
-      console.log(sql);
       client.query(sql)
         .then(evento => {
           evento = evento.rows[0];
@@ -890,7 +887,7 @@ function visualizarEvento(req, res) {
                   dt_visualizou = now(),
                   id_status_evento=5
                   where id=${req.query.id_evento}`
-      console.log(sql);
+      //console.log(sql);
       client.query(sql)
         .then(res => {
           client.end();
