@@ -27,9 +27,13 @@ declaraServico('consultarPlaca', consultaPlaca.consultarPlaca);
 declaraServico('getPropostasDoUsuario', proposta.getPropostasDoUsuario);
 declaraServico('getPropostaPorId', proposta.getPropostaPorId);
 declaraServico('getPropostaFiltros', proposta.getPropostaFiltros);
+declaraServico('salvarPlacaDaProposta', proposta.salvarPlacaDaProposta);
 declaraServico('getEventoFiltros', evento.getEventoFiltros);
 declaraServico('getEventosFiltrados', evento.getEventosFiltrados);
 declaraServico('getAgentesVendas', usuario.getAgentesVendas);
+declaraServico('getPessoa', pessoa.getPessoa);
+
+
 
 
 app.use(bodyParser.json());
@@ -171,19 +175,6 @@ app.get('/getTipoTelefone', (req, res) => {
     })
 });
 
-
-app.get('/getPessoa', (req, res) => {
-  pessoa.getPessoa(req)
-    .then(linhas => {
-      headerResponse(res)
-      res.status(200).send(linhas)
-    })
-    .catch(error => {
-      headerResponse(res)
-      console.log(error)
-      res.status(401).send(error)
-    })
-});
 app.get('/getTratamentoPessoaFisica', (req, res) => {
   pessoa.getTratamentoPessoaFisica(req)
     .then(linhas => {

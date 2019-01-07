@@ -1,6 +1,9 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import * as moment from 'moment';
+import { ModalDirective } from '../../../lib/ng-uikit-pro-standard';
+import { ConnectHTTP } from '../../shared/services/connectHTTP';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-formulario-evento',
@@ -10,9 +13,11 @@ import * as moment from 'moment';
 export class FormularioEventoComponent implements OnInit {
 
   @Input() evento: any;
+  @ViewChild('pessoaEditando') pessoaEditando: ModalDirective;
   eventoForm: FormGroup;
-  constructor(private formBuilder: FormBuilder) {
-    debugger;
+  pessoa: Observable<object>;
+  constructor(private formBuilder: FormBuilder,
+    private connectHTTP: ConnectHTTP) {
     this.eventoForm = this.formBuilder.group({
       id: [''],
       status: [''],
@@ -33,6 +38,7 @@ export class FormularioEventoComponent implements OnInit {
       dt_resolvido: [''],
       observacao_origem: [''],
       observacao_retorno: [''],
+      id_proposta:['']
     });
   }
 
@@ -62,7 +68,34 @@ export class FormularioEventoComponent implements OnInit {
       dt_resolvido: this.evento.dt_resolvido ? moment(this.evento.dt_resolvido).format('DD/MM/YYYY HH:mm:ss') : this.evento.dt_resolvido,
       observacao_origem: this.evento.observacao_origem,
       observacao_retorno: this.evento.observacao_retorno,
+      id_proposta: this.evento.id_proposta,
     });
+  }
+
+
+  async cadastroPessoa() {
+    
+    let pessoaId = this.evento.id_pessoa_receptor;
+    let p = await this.connectHTTP.callService({
+      service: 'getPessoa',
+      paramsService: {
+        id_pessoa: pessoaId
+      }
+    }) as any;
+    this.pessoa = new Observable(o => o.next(p.resposta));
+    debugger;
+    this.pessoaEditando.show()
+  }
+
+  async refresh() {
+    let pessoaId = this.evento.id_pessoa_receptor;
+    let pessoa = await this.connectHTTP.callService({
+      service: 'getPessoa',
+      paramsService: {
+        id_pessoa: pessoaId
+      }
+    }) as any;
+    this.pessoa = new Observable(o => o.next(pessoa.resposta));
   }
 
 }

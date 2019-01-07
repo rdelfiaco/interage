@@ -16,6 +16,8 @@ import { SharedModule } from '../../shared/shared.module';
     ReactiveFormsModule,
     FormsModule,
     SharedModule,
+    
+    
   ],
   declarations: [
     FormularioEventoComponent

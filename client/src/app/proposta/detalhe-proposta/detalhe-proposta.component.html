@@ -10,8 +10,9 @@
                       <input mdbInputDirective formControlName="id" type="text" id="id" class="form-control" disabled>
                       <label for="id">ID</label>
                     </div>
-                    <div class="md-form col-2" [hidden]="!proposta.placa">
-                        <input mdbInputDirective formControlName="placa" type="text" id="placa" class="form-control" disabled>
+                    <div class="md-form col-2" >
+                        <input mdbInputDirective formControlName="placa" type="text" id="placa" (blur)="salvarPlacaDaProposta()" 
+                        class="form-control" [disabled]="!proposta.alterar_proposta">
                         <label for="placa">Placa</label>
                     </div>                    
                     <div class="md-form col" [hidden]="!proposta.cliente">

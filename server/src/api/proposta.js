@@ -12,7 +12,7 @@ function salvarProposta(req, res) {
     req.query.proposta = JSON.parse(req.query.proposta);
 
     req.query.proposta.placa = req.query.proposta.placa ? req.query.proposta.placa : ''
-    console.log(req.query.proposta)
+    //console.log(req.query.proposta)
 
     let sql = `INSERT INTO propostas(
                     id_tipo_veiculo, codigofipe, marca, modelo, ano_modelo, data_consulta 
@@ -175,4 +175,31 @@ function getStatusProposta(req, res){
   })
 }
 
-module.exports = { salvarProposta, getPropostasDoUsuario, getPropostaPorId, getPropostaFiltros }
+function salvarPlacaDaProposta(req, res) {
+  return new Promise(function (resolve, reject) {
+
+    let credenciais = {
+      token: req.query.token,
+      idUsuario: req.query.id_usuario
+    };
+
+    
+   
+    
+    let sql = `UPDATE propostas set placa = '${req.query.placa}' where id = ${req.query.id}`
+
+    console.log(sql)
+
+    executaSQL(credenciais, sql).then(registros => {
+
+     resolve('Placa salva com sucesso')
+      
+    }).catch(e => {
+      reject('Salvar placa da proposta: ',e);
+    });
+  })
+};
+
+
+
+module.exports = { salvarProposta, getPropostasDoUsuario, getPropostaPorId, getPropostaFiltros, salvarPlacaDaProposta }

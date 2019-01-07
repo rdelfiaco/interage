@@ -126,6 +126,7 @@ export class PesquisaPessoaComponent implements OnInit {
       }
     }) as any;
     this.pessoa = new Observable(o => o.next(p.resposta));
+    debugger
     this.pessoaEditando.show()
   }
   async refresh() {

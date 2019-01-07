@@ -4,12 +4,12 @@ import { ConnectHTTP } from '../../shared/services/connectHTTP';
 import { LocalStorage } from '../../shared/services/localStorage';
 import { Usuario } from '../../login/usuario';
 import { ActivatedRoute } from '@angular/router';
-import { FormGroup, FormBuilder } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import * as moment from 'moment';
 import * as pdfMake from 'pdfmake/build/pdfmake';
 import * as pdfFonts from 'pdfmake/build/vfs_fonts';
 import { img } from '../imagem';
-
+import { ToastService } from '../../../lib/ng-uikit-pro-standard';
 
 @Component({
   selector: 'app-detalhe-proposta',
@@ -29,7 +29,8 @@ export class DetalhePropostaComponent implements OnInit {
     private route: ActivatedRoute,
     private connectHTTP: ConnectHTTP, 
     private localStorage: LocalStorage,
-    private formBuilder: FormBuilder) {
+    private formBuilder: FormBuilder,
+    private toastrService: ToastService) {
     this.usuarioLogado = this.localStorage.getLocalStorage('usuarioLogado') as Usuario;
     pdfMake.vfs = pdfFonts.pdfMake.vfs;
     this.usuarioLogadoSupervisor = this.usuarioLogado.dashboard === "supervisor" || this.usuarioLogado.dashboard === "admin";
@@ -123,4 +124,22 @@ export class DetalhePropostaComponent implements OnInit {
     history.back();
   }
 
+
+
+  async salvarPlacaDaProposta() {
+    try {
+      await this.connectHTTP.callService({
+        service: 'salvarPlacaDaProposta',
+        paramsService: {
+          id: this.idProposta,
+          placa: this.propostaForm.value.placa
+        }
+      });
+      this.toastrService.success('Placa salva com sucesso');
+    }
+    catch (e) {
+      this.toastrService.error('Erro ao salvar placa');
+    }
+
+  }
 }
