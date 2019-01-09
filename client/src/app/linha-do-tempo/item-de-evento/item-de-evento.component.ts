@@ -226,6 +226,7 @@ export class ItemDeEventoComponent implements OnInit {
   }
 
   fechaModal() {
+    debugger
     this.concluirOuEncaminhar = '';
     this.encaminhar = false;
     this.concluir = false;

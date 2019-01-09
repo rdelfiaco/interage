@@ -265,15 +265,22 @@ function salvarEvento(req, res) {
 
         let sqlMotivoResposta = `SELECT * from motivos_respostas
                               WHERE motivos_respostas.id=${req.query.id_motivos_respostas}`;
+
         client.query(sqlMotivoResposta).then(res => {
           const motivoResposta = res.rows[0];
+          
+          let sqlMotivos = `SELECT * from motivos WHERE id=${motivoResposta.id_motivo}`;
+                                 
+          client.query(sqlMotivos).then(res => {
+          const motivoAcaoSQL = res.rows[0].acao_sql;
+          
 
           client.query('BEGIN').then((res1) => {
             //console.log('req.query.proposta', req.query.proposta)
             if (req.query.proposta && req.query.proposta !== "null" && req.query.proposta !== "undefined") {
               salvarProposta(req, res).then((idproposta) => {
                 //console.log('salvo proposta ' + idproposta[0].id);
-                finalizaEvento(idproposta[0].id);
+                finalizaEvento(idproposta[0].id, true);
               })
             }
             else {
@@ -281,7 +288,7 @@ function salvarEvento(req, res) {
             }
 
 
-            function finalizaEvento(idproposta) {
+            function finalizaEvento(idproposta, temProposta) {
               let update;
               update = `UPDATE eventos SET id_status_evento=3,
               dt_resolvido=now(),
@@ -290,11 +297,15 @@ function salvarEvento(req, res) {
                   id_resp_motivo=${req.query.id_motivos_respostas},
                   id_telefone=${req.query.id_telefoneDiscado || 'NULL'},
                   id_predicao=${req.query.id_predicao || 'NULL'},
-                  id_objecao=${req.query.id_objecao || 'NULL'},
-                  id_proposta=${idproposta || 'NULL'}
-                  WHERE eventos.id=${req.query.id_evento} AND eventos.id_status_evento in(5,6)
+                  id_objecao=${req.query.id_objecao || 'NULL'}`
+              if(temProposta) {
+                  update = update + 
+                  ` ,id_proposta=${idproposta || 'NULL'}` }
+              update = update + 
+                  ` WHERE eventos.id=${req.query.id_evento} AND eventos.id_status_evento in(5,6)
                   RETURNING tipoDestino, id_pessoa_organograma;
                   `;
+                  
               client.query(update).then((updateEventoEncerrado) => {
                 if (updateEventoEncerrado.rowCount != 1) {
                   client.query('COMMIT').then((resposta) => {
@@ -391,8 +402,22 @@ function salvarEvento(req, res) {
                       reject(err)
                     })
                   }
-
-
+                
+                  // executa ação do motivo 
+                  if (motivoAcaoSQL){
+                  let sql = motivoAcaoSQL.replace('${req.query.id_evento}', `${req.query.id_evento}`)
+                  let credenciais = {
+                    token: req.query.token,
+                    idUsuario: req.query.id_usuario
+                  };
+                  console.log(credenciais, sql )
+                  executaSQL(credenciais, sql).then(() =>{
+                    resolve('Status de proposta alterado')
+                  }).catch(err => {
+                      client.end();
+                      reject(err)
+                    })
+                  }
                 }).catch(err => {
                   client.end();
                   reject(err)
@@ -406,7 +431,10 @@ function salvarEvento(req, res) {
             client.end();
             reject(err)
           })
-
+        }).catch(err => {
+          client.end();
+          reject(err)
+        })
         }).catch(err => {
           client.end();
           reject(err)
