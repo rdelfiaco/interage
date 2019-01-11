@@ -14,14 +14,14 @@
           <div class="col-6 col-sm-6">
             <div class="md-form datas">
               <mdb-date-picker #dataReagendamento name="mydate" [options]="myDatePickerOptions" required [(ngModel)]="dataInicial"
-                class="datas"></mdb-date-picker>
+                class="datas"  (ngModelChange)="listaEventos()"  ></mdb-date-picker>
               <label class="datas" style="height: 10px">Data inicial</label>
             </div>
           </div>
           <div class="col-6 col-sm-6">
             <div class="md-form datas">
               <mdb-date-picker #dataReagendamento name="mydate" [options]="myDatePickerOptions" required [(ngModel)]="dataFinal"
-                class="datas"></mdb-date-picker>
+                class="datas" (ngModelChange)="listaEventos()"  ></mdb-date-picker>
               <label class="datas" style="height: 10px">Data final</label>
             </div>
           </div>
@@ -43,49 +43,52 @@
 
         <div class="row" style="margin-top: 40px; margin-left: 5px; font-size: 0.8rem; ">
           <!-- Material unchecked -->
-          <mdb-checkbox [checked]=eventosUsuarioChk [disabled]="!usuarioLogadoSupervisor" >Listar apenas eventos do usuário.</mdb-checkbox>
-          <mdb-checkbox [checked]=eventosFinalizadosChk [disabled]="!usuarioLogadoSupervisor" >Listar apenas eventos não finalizados.</mdb-checkbox>
+          <mdb-checkbox [checked]=eventosUsuarioChk 
+          (change)="onChangeEventosUsuarioChk(eventosUsuarioChk)"   >Listar apenas eventos do usuário.</mdb-checkbox>
           <mdb-checkbox [disabled]="true" [checked]="true">Listar apenas os cem últimos eventos.</mdb-checkbox>
+          <mdb-checkbox [disabled]="true" [checked]="true">Os eventos de campanhas não são listados.</mdb-checkbox>
         </div>
 
       </div>
       <div class="col-6 col-sm-4 " style="z-index: 0">
-        <div class="row" style="margin-left: 50px; margin-top: 10px">
+        <!-- <div class="row" style="margin-left: 50px; margin-top: 10px"> -->
 
           <!-- Enviados Por -->
-          <div class="form-check form-check-inline">
+          <!-- <div class="form-check form-check-inline">
             <input type="radio" class="form-check-input" style="margin-right: 0px;" id="enviadoPoroRadio" name="EnviadoRecebidoEventoRadio"
               [checked]=enviadoPorRadio  [disabled]="!usuarioLogadoSupervisor">
             <label class="form-check-label" for="enviadoPoroRadio" style="font-size: 0.8rem; margin-left: 0px; margin-right: 0px;  ">Enviados
               por</label>
-          </div>
+          </div> -->
 
           <!-- Recebidos por -->
-          <div class="form-check form-check-inline ">
+          <!-- <div class="form-check form-check-inline ">
             <input type="radio" class="form-check-input" id="recebidoPorRadio" name="EnviadoRecebidoEventoRadio"
               [checked]=recebidoPorRadio  [disabled]="!usuarioLogadoSupervisor">
             <label class="form-check-label" for="recebidoPorRadio" style="font-size: 0.8rem; ">Recebidos por</label>
-          </div>
-        </div>
-        <div class="row" style="margin-top: 15px">
+          </div> -->
+        <!-- </div> -->
+        <div class="row" style="margin-top: 25px">
           <div class="col-md-12">
-            <mdb-select [(ngModel)]="departamentoSelectValue" [options]="departamentoSelect" [multiple]="false" [disabled]="!usuarioLogadoSupervisor"
+            <mdb-select [(ngModel)]="departamentoSelectValue" [options]="departamentoSelect" 
+                [multiple]="false" [disabled]="!usuarioLogadoSupervisor"  (selected)="onChangeDepartamento()"
               placeholder="Escolha o departamento" style="font-size: 0.5rem;"></mdb-select>
             <label>Departamento</label>
           </div>
         </div>
         <div class="row" style="margin-top: 15px">
           <div class="col-md-12">
-            <mdb-select [(ngModel)]="usuarioSelectValue" [options]="usuarioSelect" placeholder="Escolha o usuário" [disabled]="!usuarioLogadoSupervisor"
+            <mdb-select [(ngModel)]="usuarioSelectValue" [options]="usuarioSelect"  (selected)="listaEventos()"
+            placeholder="Escolha o usuário" [disabled]="!usuarioLogadoSupervisor"
               style="font-size: 0.5rem;"></mdb-select>
             <label>Usuário</label>
           </div>
         </div>
         <div class="row justify-content-around">
 
-          <a mdbBtn floating="true" size="lg" gradient="blue" (click)="listaEventos()" mdbWavesEffect>
+          <!-- <a mdbBtn floating="true" size="lg" gradient="blue" (click)="listaEventos()" mdbWavesEffect>
             <mdb-icon icon="refresh"></mdb-icon>
-          </a>
+          </a> -->
           <a mdbBtn floating="true" size="lg" gradient="purple" (click)="modalCriarEvento.show()" mdbWavesEffect>
             <mdb-icon icon="calendar-plus-o"></mdb-icon>
           </a>
@@ -93,9 +96,9 @@
 
       </div>
       <div class="col-6 col-sm-4" style="z-index: 0">
-        <div class="row" style="margin-top: 50px">
+        <div class="row" style="margin-top: 25px" >
           <div class="col-md-12">
-            <mdb-select [(ngModel)]="motivoSelectValue" [options]="motivoSelect" [multiple]="true" 
+            <mdb-select [(ngModel)]="motivoSelectValue" [options]="motivoSelect" [multiple]="true" (selected)="listaEventos()"
             [highlightFirst]="false" placeholder="Escolha o motivo" style="font-size: 0.5rem;">
             </mdb-select>
             <label>Motivo</label>
@@ -103,7 +106,8 @@
         </div>
         <div class="row" style="margin-top: 15px">
           <div class="col-md-12">
-            <mdb-select [(ngModel)]="statusSelectValue" [options]="statusSelect" placeholder="Escolha o status" style="font-size: 0.5rem;"></mdb-select>
+            <mdb-select [(ngModel)]="statusSelectValue" [options]="statusSelect" [multiple]="true" (selected)="listaEventos()"
+            placeholder="Escolha o status" style="font-size: 0.5rem;"></mdb-select>
             <label>Status</label>
           </div>
         </div>

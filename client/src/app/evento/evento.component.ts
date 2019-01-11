@@ -25,15 +25,15 @@ export class EventoComponent implements OnInit {
   departamentoSelectValue: number;
   usuarioSelectValue: number;
   motivoSelectValue: Array<any>;
-  statusSelectValue: number;
-  eventosUsuarioChk: boolean = true;
+  statusSelectValue: Array<any>;
+  eventosUsuarioChk: boolean = false;
   eventosFinalizadosChk: boolean = true;
   dtCricaoRadio: boolean = false;
   dtCompromissoRadio: boolean = true;
   enviadoPorRadio: boolean = false;
   recebidoPorRadio: boolean = true;
   usuarioLogadoSupervisor: boolean = true;
-
+  eventoFiltros: any;
   tornarResponsavel: any;
 
   dataInicial: string = moment().subtract(1, 'days').format('DD/MM/YYYY')
@@ -91,7 +91,7 @@ export class EventoComponent implements OnInit {
   }
 
   async ngOnInit() {
-    let eventoFiltros = await this.connectHTTP.callService({
+    this.eventoFiltros = await this.connectHTTP.callService({
       service: 'getEventoFiltros',
       paramsService: {
         id_organograma: this.usuarioLogado.id_organograma
@@ -99,7 +99,7 @@ export class EventoComponent implements OnInit {
     }) as any;
 
     // combo departamento 
-    this.departamentoSelect = eventoFiltros.resposta.Organograma;
+    this.departamentoSelect = this.eventoFiltros.resposta.Organograma;
     this.departamentoSelect = this.departamentoSelect.map(departamento => {
       return { value: departamento.id, label: departamento.nome }
     });
@@ -108,16 +108,13 @@ export class EventoComponent implements OnInit {
     this.departamentoSelectValue = Number(this.usuarioLogado.id_organograma);
 
     // combo usuário
-    this.usuarioSelect = eventoFiltros.resposta.Usuarios;
-    this.usuarioSelect = this.usuarioSelect.map(usuario => {
-      return { value: usuario.id, label: usuario.nome }
-    });
 
-    this.usuarioSelectValue = this.usuarioLogado.id;
+    this.comboUsuarios()
+    this.usuarioSelectValue =  this.usuarioLogado.id
 
 
     // combo motivos
-    this.motivoSelect = eventoFiltros.resposta.Motivos;
+    this.motivoSelect = this.eventoFiltros.resposta.Motivos;
     
     this.motivoSelect = this.motivoSelect.map(motivos => {
       return { value: motivos.id, label: motivos.nome }
@@ -125,17 +122,15 @@ export class EventoComponent implements OnInit {
 
      this.motivoSelect.push({value: -1, label: "Todos"});
     
-
-
     this.motivoSelectValue = [-1]
 
     // combo status_evento
-    this.statusSelect = eventoFiltros.resposta.StatusEvento;
+    this.statusSelect = this.eventoFiltros.resposta.StatusEvento;
     this.statusSelect = this.statusSelect.map(status => {
       return { value: status.id, label: status.nome }
     });
 
-    this.statusSelectValue = 1;
+    this.statusSelectValue = [1,4,5,6];
 
 
     this.listaEventos();
@@ -224,7 +219,15 @@ export class EventoComponent implements OnInit {
 
 
   async listaEventos() {
+    debugger
+    
     try {
+        let usuarioIdPessoa = this.usuarioSelect.filter( usuario => {
+        if (usuario.value == this.usuarioSelectValue ){
+          return usuario.idPessoa
+        }
+      } )
+      let usuarioIdPessoa_ = usuarioIdPessoa[0].idPessoa
       let eventos = await this.connectHTTP.callService({
         service: 'getEventosFiltrados',
         paramsService: {
@@ -238,7 +241,9 @@ export class EventoComponent implements OnInit {
           status: this.statusSelectValue,
           eventosUsuarioChk: this.eventosUsuarioChk,
           dtCricaoRadio: this.dtCricaoRadio,
-
+          recebidoPorRadio: this.recebidoPorRadio,
+          usuarioIdPessoa: usuarioIdPessoa_
+          
         }
       }) as any;
       if (eventos.error) this.tableData = [];
@@ -324,16 +329,62 @@ export class EventoComponent implements OnInit {
     this.modalCriarEvento.hide();
   }
 
-  tipoDeData(tipoData) {
+  tipoDeData(tipoData: any) {
     if ('dtCompromissoRadio' === tipoData) {
       this.dtCompromissoRadio = true;
       this.dtCricaoRadio = false;
+      this.listaEventos();
     }
     else {
       this.dtCompromissoRadio = false;
       this.dtCricaoRadio = true;
+      this.eventosUsuarioChk = true;
+      this.listaEventos();
     }
   }
+
+  comboUsuarios(){
+
+    this.usuarioSelect = this.eventoFiltros.resposta.Usuarios;
+    this.usuarioSelect = this.usuarioSelect.filter( usuario => {
+      if (usuario.id_organograma == this.departamentoSelectValue ){
+        return usuario
+      }
+    } )
+    this.usuarioSelect = this.usuarioSelect.map(usuario => {
+      return { value: usuario.id, label: usuario.nome, idPessoa: usuario.id_pessoa }
+    });
+
+    this.usuarioSelectValue =  this.usuarioSelect[0].value;
+  }
+
+  onChangeDepartamento(){
+
+    this.comboUsuarios()
+
+    this.listaEventos()
+
+  }
+
+  onChangeEventosUsuarioChk(eventosUsuarioChk_: any){
+    if (eventosUsuarioChk_){
+       this.eventosUsuarioChk = false
+       this.listaEventos()
+    }else{
+      this.eventosUsuarioChk = true
+      this.listaEventos()
+    }
+
+    
+
+  }
+
+  onSelectedMotivos(){
+
+
+  }
+
+
 
 }
 
