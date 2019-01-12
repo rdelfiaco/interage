@@ -63,8 +63,16 @@ export class DetalheEventoComponent implements OnInit {
     this.pessoa = new Observable(o => o.next(eventoEncontrado.resposta.pessoa));
     this.pessoaObject = eventoEncontrado.resposta.pessoa;
 
-    this.podeConcluir = !(this.eventoObject.id_status_evento == 5 || this.eventoObject.id_status_evento == 6)
-    this.podeEncaminhar = !(this.eventoObject.id_status_evento == 5 || this.eventoObject.id_status_evento == 6)
+    const eventoParaPessoaLogada = (this.eventoObject.tipodestino === "P" && this.usuarioLogado.id_pessoa === this.eventoObject.id_pessoa_organograma);
+    const eventoParaPessoaOrgonogramaLogadaQueVisualizou = (this.eventoObject.tipodestino === "O" && this.usuarioLogado.id_organograma === this.eventoObject.id_pessoa_organograma && this.eventoObject.id_pessoa_visualizou == this.eventoObject.id_pessoa);
+    const eventoQueVisualizei = (this.eventoObject.id_pessoa_visualizou == this.usuarioLogado.id_pessoa);
+
+    const eventoPodeSerConcluidoEncaminhado = this.eventoObject.id_status_evento == 5 || this.eventoObject.id_status_evento == 6
+    const podeConcluirEncaminhar = ((eventoParaPessoaLogada || eventoParaPessoaOrgonogramaLogadaQueVisualizou || eventoQueVisualizei) && eventoPodeSerConcluidoEncaminhado);
+    debugger;
+    this.podeConcluir = podeConcluirEncaminhar
+    this.podeEncaminhar = podeConcluirEncaminhar
+    this.carregando = false;
     this.carregando = false;
   }
 

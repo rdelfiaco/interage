@@ -121,8 +121,15 @@ export class ItemDeEventoComponent implements OnInit {
       observacao_retorno: [evento.observacao_retorno],
     });
 
-    this.podeConcluir = !(this.eventoSelecionado.id_status_evento == 5 || this.eventoSelecionado.id_status_evento == 6)
-    this.podeEncaminhar = !(this.eventoSelecionado.id_status_evento == 5 || this.eventoSelecionado.id_status_evento == 6)
+    const eventoParaPessoaLogada = (this.eventoSelecionado.tipodestino === "P" && this.usuarioLogado.id_pessoa === this.eventoSelecionado.id_pessoa_organograma);
+    const eventoParaPessoaOrgonogramaLogadaQueVisualizou = (this.eventoSelecionado.tipodestino === "O" && this.usuarioLogado.id_organograma === this.eventoSelecionado.id_pessoa_organograma && this.eventoSelecionado.id_pessoa_visualizou == this.eventoSelecionado.id_pessoa);
+    const eventoQueVisualizei = (this.eventoSelecionado.id_pessoa_visualizou == this.usuarioLogado.id_pessoa);
+
+    const eventoPodeSerConcluidoEncaminhado = this.eventoSelecionado.id_status_evento == 5 || this.eventoSelecionado.id_status_evento == 6
+    const podeConcluirEncaminhar = ((eventoParaPessoaLogada || eventoParaPessoaOrgonogramaLogadaQueVisualizou || eventoQueVisualizei) && eventoPodeSerConcluidoEncaminhado);
+
+    this.podeConcluir = podeConcluirEncaminhar
+    this.podeEncaminhar = podeConcluirEncaminhar
     this.carregando = false;
   }
 

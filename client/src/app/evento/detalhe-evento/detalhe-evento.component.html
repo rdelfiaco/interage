@@ -4,7 +4,7 @@
 
 <div *ngIf="!carregando">
   <!-- Nav tabs -->
-  <div *ngIf="podeVisualizarEvento">
+  <div>
     <mdb-tabset [buttonClass]="'classic-tabs tabs-cyan'" [contentClass]="'card'" class="classic-tabs">
       <!--Panel 1-->
       <mdb-tab heading="Evento">
@@ -13,9 +13,9 @@
             <div class="row" style="padding: 0px 15px;">
               <div class="md-form col-12">
                 <div class="row justify-content-start">
-                  <button type="button" [disabled]="podeConcluir" style="white-space: nowrap;" mdbBtn color="primary"
+                  <button type="button" [disabled]="!podeConcluir" style="white-space: nowrap;" mdbBtn color="primary"
                     class="waves-light" aria-label="Somente Visualizar" (click)="concluirEvento()" mdbWavesEffect>Concluir</button>
-                  <button type="button" [disabled]="podeEncaminhar" (click)="encaminharEvento()" style="white-space: nowrap;"
+                  <button type="button" [disabled]="!podeEncaminhar" (click)="encaminharEvento()" style="white-space: nowrap;"
                     mdbBtn color="warning" class="relative waves-light" mdbWavesEffect>Encaminhar</button>
                 </div>
                 <app-formulario-evento [evento]="evento | async"></app-formulario-evento>
@@ -57,8 +57,5 @@
         </div>
       </div>
     </div>
-  </div>
-  <div *ngIf="!podeVisualizarEvento">
-    <app-sem-permissao></app-sem-permissao>
   </div>
 </div>
