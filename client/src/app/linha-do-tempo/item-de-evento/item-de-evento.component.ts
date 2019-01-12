@@ -123,6 +123,7 @@ export class ItemDeEventoComponent implements OnInit {
       observacao_retorno: [evento.observacao_retorno],
     });
 
+    debugger;
     const eventoParaPessoaLogada = (this.eventoSelecionado.tipodestino === "P" && this.usuarioLogado.id_pessoa === this.eventoSelecionado.id_pessoa_organograma);
     const eventoParaPessoaOrgonogramaLogadaQueVisualizou = (this.eventoSelecionado.tipodestino === "O" && this.usuarioLogado.id_organograma === this.eventoSelecionado.id_pessoa_organograma && this.eventoSelecionado.id_pessoa_visualizou == this.eventoSelecionado.id_pessoa);
 
@@ -138,11 +139,12 @@ export class ItemDeEventoComponent implements OnInit {
     this.carregando = false;
   }
 
-  async abreEvento(event: any, evento: any) {
-    debugger
+  async abreEvento(evento: any) {
+    const pessoaQueResolvelOEvento = (this.usuarioLogado.id_pessoa === evento.id_pessoa_resolveu);
+    const eventoParaPessoaLogada = (evento.tipodestino === "P" && this.usuarioLogado.id_pessoa === evento.id_pessoa_organograma);
+    const eventoParaPessoaOrgonogramaLogada = (evento.tipodestino === "O" && this.usuarioLogado.id_organograma === evento.id_pessoa_organograma);
+
     if (evento.id_status_evento == 1 || evento.id_status_evento == 4) {
-      const eventoParaPessoaLogada = (evento.tipodestino === "P" && this.usuarioLogado.id_pessoa === evento.id_pessoa_organograma);
-      const eventoParaPessoaOrgonogramaLogada = (evento.tipodestino === "O" && this.usuarioLogado.id_organograma === evento.id_pessoa_organograma);
       if (eventoParaPessoaLogada) {
         await this.connectHTTP.callService({
           service: 'visualizarEvento',
@@ -151,8 +153,7 @@ export class ItemDeEventoComponent implements OnInit {
             id_pessoa_visualizou: this.usuarioLogado.id_pessoa
           }
         }) as any;
-        this.selecionaEvento(event, evento);
-        this.visualizarDetalhesEvento.show();
+        this.router.navigate([`/evento/${evento.id}`]);
       }
       else if (this.usuarioLogadoSupervisor || eventoParaPessoaOrgonogramaLogada) {
         this.tornarResponsavel = evento;
@@ -162,11 +163,11 @@ export class ItemDeEventoComponent implements OnInit {
         this.toastrService.error("Você não pode visualizar esse evento!");
     }
     if (evento.id_status_evento == 5 || evento.id_status_evento == 6) {
-      const eventoParaPessoaLogada = (evento.tipodestino === "P" && this.usuarioLogado.id_pessoa === evento.id_pessoa_organograma);
-      if (eventoParaPessoaLogada) {
-        this.selecionaEvento(event, evento);
-        this.visualizarDetalhesEvento.show();
-      }
+      if (eventoParaPessoaLogada || this.usuarioLogadoSupervisor) this.router.navigate([`/evento/${evento.id}`]);
+      else this.toastrService.error("Você não pode visualizar esse evento!");
+    }
+    if (evento.id_status_evento == 3 || evento.id_status_evento == 7) {
+      if (pessoaQueResolvelOEvento || this.usuarioLogadoSupervisor) this.router.navigate([`/evento/${evento.id}`]);
       else this.toastrService.error("Você não pode visualizar esse evento!");
     }
   }
