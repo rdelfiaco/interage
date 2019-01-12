@@ -4,18 +4,22 @@ import { Injectable } from '@angular/core';
 import { ConnectHTTP } from '../shared/services/connectHTTP';
 import { LocalStorage } from '../shared/services/localStorage'
 import { Router } from '@angular/router';
-import { Observable, Subscriber, BehaviorSubject } from 'rxjs';
+import { Observable, BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
   usuarioLogado: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(!!this._getTokenLogadoLocalStorage());
+  counterEvents: BehaviorSubject<number> = new BehaviorSubject<number>(0);
   usuarioLogadoObject: any;
+  setInterval: any;
+  config: any;
 
   constructor(private router?: Router, private localStorage?: LocalStorage, private connectHTTP?: ConnectHTTP) {
     let self = this;
     let tm;
+    this.initConfig();
     document.addEventListener("mousemove", () => {
       if (tm) clearTimeout(tm);
       tm = setTimeout(() => {
@@ -24,6 +28,45 @@ export class AuthService {
     });
   }
 
+  async getCounterEvents() {
+    return this.counterEvents;
+  }
+
+  async initConfig() {
+    let config = await this.connectHTTP.callService({
+      service: 'getConfiguracao',
+      paramsService: {
+        nomeConfiguracao: "tempoDeAlertaDeEventos"
+      }
+    }) as any;
+    this.config = config.resposta[0].valor;
+    this.ativaGetEventos(parseInt(config));
+  }
+
+  async ativaGetEventos(timer: number) {
+    let self = this;
+    let res = await self.connectHTTP.callService({
+      service: 'getCountEventosPendentes',
+      paramsService: {
+        idUsuarioLogado: self.usuarioLogadoObject.id
+      }
+    }) as any;
+    let counter = res.resposta[0].count as number;
+    this.counterEvents.next(counter);
+
+    this.setInterval = setInterval(async () => {
+      if (!self.usuarioLogadoObject) return clearInterval(self.setInterval);
+
+      let res = await self.connectHTTP.callService({
+        service: 'getCountEventosPendentes',
+        paramsService: {
+          idUsuarioLogado: self.usuarioLogadoObject.id
+        }
+      }) as any;
+      let counter = res.resposta[0].count as number;
+      this.counterEvents.next(counter);
+    }, timer)
+  }
   estaLogado(): Observable<boolean> {
     return this.usuarioLogado.asObservable();
   }
@@ -41,6 +84,7 @@ export class AuthService {
       this.usuarioLogadoObject = usuarioLogado.resposta;
       this.localStorage.postLocalStorage('usuarioLogado', usuarioLogado.resposta)
       this._setValidadeToken();
+      this.ativaGetEventos(this.config);
 
       this.usuarioLogado.next(true)
       return usuarioLogado;
@@ -74,7 +118,6 @@ export class AuthService {
   }
 
   async logout() {
-    
     let usuarioLogado = this.getUsuarioLogadoLocalStorage();
     if (!usuarioLogado) return;
     await this.connectHTTP.callService({
@@ -85,10 +128,11 @@ export class AuthService {
         id_usuario: usuarioLogado.id
       }
     })
-
+    this.counterEvents.next(0);
     this.localStorage.delLocalStorage(`${usuarioLogado.token}_date`)
     this.localStorage.delLocalStorage('usuarioLogado_object')
     this.usuarioLogado.next(false);
+    this.usuarioLogadoObject = null;
     this.router.navigate(['/']);
   }
 

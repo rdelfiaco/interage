@@ -36,17 +36,17 @@ const routes: Routes = [
   },
   {
     path: 'admin',
-    component: ProdutividadeCallCenterComponent,
+    component: EventoComponent,
     canActivate: [AuthGuard]
   },
   {
     path: 'operador',
-    component: ProdutividadeCallCenterComponent,
+    component: EventoComponent,
     canActivate: [AuthGuard]
   },
   {
     path: 'supervisor',
-    component: ProdutividadeCallCenterComponent,
+    component: EventoComponent,
     canActivate: [AuthGuard]
   },
   {
@@ -67,6 +67,11 @@ const routes: Routes = [
   {
     path: 'pessoas',
     component: PesquisaPessoaComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'pessoas/:id',
+    component: CadastroPessoaComponent,
     canActivate: [AuthGuard]
   },
   {

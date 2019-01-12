@@ -850,6 +850,36 @@ function getEventosFiltrados(req, res) {
   })
 }
 
+function getCountEventosPendentes(req, res) {
+  return new Promise(function (resolve, reject) {
+
+    let credenciais = {
+      token: req.query.token,
+      idUsuario: req.query.id_usuario
+    };
+
+    let sql = `select count(*) from view_eventos where
+                   id_campanha is null and
+                   dt_para_exibir <= now() and
+                   id_status_evento in (1, 4, 5, 6) and
+                   tipodestino = 'P' and id_usuario in ( ${req.query.idUsuarioLogado})`
+
+    executaSQL(credenciais, sql)
+      .then(res => {
+        if (res) {
+          let eventos = res;
+          resolve(eventos)
+        }
+        else {
+          reject('Eventos não encontrado!')
+        }
+      })
+      .catch(err => {
+        reject(`Erro no getEventosFiltrados : ${err}`)
+      })
+  })
+}
+
 
 function getEventoPorId(req, res) {
   return new Promise(function (resolve, reject) {
@@ -1003,5 +1033,6 @@ module.exports = {
   visualizarEvento,
   informacoesParaCriarEvento,
   encaminhaEvento,
-  criarEvento
+  criarEvento,
+  getCountEventosPendentes
 }
