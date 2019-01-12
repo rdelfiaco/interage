@@ -3,13 +3,19 @@
     <mdb-accordion-item [collapsed]="true" [customClass]="'itemAcordion'">
       <mdb-accordion-item-head [indicator]="evento.eventosFilho" [customClass]="'text-center justify-content-start align-items-center'">
         <div class="row align-items-center">
-          <button class="col-2" (click)="abreEvento($event, evento);" mdbBtn type="button" gradient="peach" size="sm"
-            mdbWavesEffect>Detalhe</button>
-          <div class="col-2 h6" style="white-space: pre;">{{evento.motivo}}</div>
-          <div class="col-2 h6">{{evento.status}}</div>
-          <div class=" col-4 h6" style="white-space: nowrap;">{{(evento.dt_resolvido ||
-            evento.dt_prevista_resolucao) |
-            date:'dd/MM/yyyy HH:mm:ss'}}</div>
+          <div class="col-12">
+            <div class="row">
+              <button class="col-1" (click)="abreEvento($event, evento);" style="white-space: pre;" mdbBtn type="button" gradient="peach" size="sm"
+                mdbWavesEffect>Detalhe</button>
+              <div class="col-2 font12" style="white-space: pre;">{{evento.motivo}}</div>
+              <div class="col-2 font12">{{evento.status}}</div>
+              <div class=" col-2 font12" style="white-space: nowrap;">{{(evento.dt_resolvido ||
+                evento.dt_prevista_resolucao) |
+                date:'dd/MM/yyyy HH:mm:ss'}}</div>
+              <div class=" col-2 font12" style="white-space: nowrap;">{{evento.pessoa_visualizou}}</div>
+              <div class=" col-2 font12" style="white-space: nowrap;">{{evento.pessoa_resolveu}}</div>
+            </div>
+          </div>
         </div>
       </mdb-accordion-item-head>
       <mdb-accordion-item-body *ngIf="evento.eventosFilho">
