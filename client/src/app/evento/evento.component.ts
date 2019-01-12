@@ -219,8 +219,6 @@ export class EventoComponent implements OnInit {
 
 
   async listaEventos() {
-    
-
     try {
       let usuarioIdPessoa = this.usuarioSelect.filter(usuario => {
         if (usuario.value == this.usuarioSelectValue) {
@@ -279,13 +277,8 @@ export class EventoComponent implements OnInit {
       else
         this.toastrService.error("Você não pode visualizar esse evento!");
     }
-    if (evento.id_status_evento == 5 || evento.id_status_evento == 6) {
-      if (eventoParaPessoaLogada || this.usuarioLogadoSupervisor) this.router.navigate([`/evento/${evento.id}`]);
-      else this.toastrService.error("Você não pode visualizar esse evento!");
-    }
-    if (evento.id_status_evento == 3 || evento.id_status_evento == 7) {
-      if (pessoaQueResolvelOEvento || this.usuarioLogadoSupervisor) this.router.navigate([`/evento/${evento.id}`]);
-      else this.toastrService.error("Você não pode visualizar esse evento!");
+    else {
+      this.router.navigate([`/evento/${evento.id}`]);
     }
   }
 

@@ -74,9 +74,7 @@ export class ItemDeEventoComponent implements OnInit {
     console.log(this.eventos)
   }
 
-  async selecionaEvento(event, evento) {
-    event.preventDefault();
-    event.stopPropagation();
+  async selecionaEvento(evento) {
     this.carregando = true;
     this.eventoSelecionado = evento;
 
@@ -123,24 +121,14 @@ export class ItemDeEventoComponent implements OnInit {
       observacao_retorno: [evento.observacao_retorno],
     });
 
-    
-    const eventoParaPessoaLogada = (this.eventoSelecionado.tipodestino === "P" && this.usuarioLogado.id_pessoa === this.eventoSelecionado.id_pessoa_organograma);
-    const eventoParaPessoaOrgonogramaLogadaQueVisualizou = (this.eventoSelecionado.tipodestino === "O" && this.usuarioLogado.id_organograma === this.eventoSelecionado.id_pessoa_organograma && this.eventoSelecionado.id_pessoa_visualizou == this.eventoSelecionado.id_pessoa);
-
-    if (eventoParaPessoaLogada || eventoParaPessoaOrgonogramaLogadaQueVisualizou || this.usuarioLogadoSupervisor) {
-      this.podeVisualizarEvento = true;
-    }
-    else {
-      this.podeVisualizarEvento = false;
-    }
-
     this.podeConcluir = !(this.eventoSelecionado.id_status_evento == 5 || this.eventoSelecionado.id_status_evento == 6)
     this.podeEncaminhar = !(this.eventoSelecionado.id_status_evento == 5 || this.eventoSelecionado.id_status_evento == 6)
     this.carregando = false;
   }
 
-  async abreEvento(evento: any) {
-    const pessoaQueResolvelOEvento = (this.usuarioLogado.id_pessoa === evento.id_pessoa_resolveu);
+  async abreEvento(event, evento) {
+    event.preventDefault();
+    event.stopPropagation();
     const eventoParaPessoaLogada = (evento.tipodestino === "P" && this.usuarioLogado.id_pessoa === evento.id_pessoa_organograma);
     const eventoParaPessoaOrgonogramaLogada = (evento.tipodestino === "O" && this.usuarioLogado.id_organograma === evento.id_pessoa_organograma);
 
@@ -153,7 +141,9 @@ export class ItemDeEventoComponent implements OnInit {
             id_pessoa_visualizou: this.usuarioLogado.id_pessoa
           }
         }) as any;
-        this.router.navigate([`/evento/${evento.id}`]);
+        this.podeVisualizarEvento = true;
+        this.selecionaEvento(evento);
+        this.visualizarDetalhesEvento.show();
       }
       else if (this.usuarioLogadoSupervisor || eventoParaPessoaOrgonogramaLogada) {
         this.tornarResponsavel = evento;
@@ -162,19 +152,16 @@ export class ItemDeEventoComponent implements OnInit {
       else
         this.toastrService.error("Você não pode visualizar esse evento!");
     }
-    if (evento.id_status_evento == 5 || evento.id_status_evento == 6) {
-      if (eventoParaPessoaLogada || this.usuarioLogadoSupervisor) this.router.navigate([`/evento/${evento.id}`]);
-      else this.toastrService.error("Você não pode visualizar esse evento!");
-    }
-    if (evento.id_status_evento == 3 || evento.id_status_evento == 7) {
-      if (pessoaQueResolvelOEvento || this.usuarioLogadoSupervisor) this.router.navigate([`/evento/${evento.id}`]);
-      else this.toastrService.error("Você não pode visualizar esse evento!");
+    else {
+      this.podeVisualizarEvento = true;
+      this.selecionaEvento(evento);
+      this.visualizarDetalhesEvento.show();
     }
   }
 
   async visualizarEvento(event) {
     if (this.usuarioLogadoSupervisor) {
-      this.selecionaEvento(event, this.tornarResponsavel);
+      this.selecionaEvento(this.tornarResponsavel);
       this.visualizarDetalhesEvento.show();
       this.tornarResponsavel = null;
     }
@@ -199,7 +186,7 @@ export class ItemDeEventoComponent implements OnInit {
       setTimeout(() => {
         self.tornarResponsavel = null;
       }, 100)
-      this.selecionaEvento(event, this.tornarResponsavel);
+      this.selecionaEvento(this.tornarResponsavel);
       this.visualizarDetalhesEvento.show();
     }
     catch (e) {
@@ -227,12 +214,12 @@ export class ItemDeEventoComponent implements OnInit {
   }
 
   fechaModal() {
-    
+
     this.concluirOuEncaminhar = '';
     this.encaminhar = false;
     this.concluir = false;
     this.modalConcluirEvento.hide();
-    this.selecionaEvento(event, this.eventoSelecionado)
+    this.selecionaEvento(this.eventoSelecionado)
     this.visualizarDetalhesEvento.show();
   }
 }

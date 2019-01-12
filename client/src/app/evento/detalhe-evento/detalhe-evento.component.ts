@@ -63,16 +63,6 @@ export class DetalheEventoComponent implements OnInit {
     this.pessoa = new Observable(o => o.next(eventoEncontrado.resposta.pessoa));
     this.pessoaObject = eventoEncontrado.resposta.pessoa;
 
-    const eventoParaPessoaLogada = (this.eventoObject.tipodestino === "P" && this.usuarioLogado.id_pessoa === this.eventoObject.id_pessoa_organograma);
-    const eventoParaPessoaOrgonogramaLogadaQueVisualizou = (this.eventoObject.tipodestino === "O" && this.usuarioLogado.id_organograma === this.eventoObject.id_pessoa_organograma && this.eventoObject.id_pessoa_visualizou == this.usuarioLogado.id_pessoa);
-
-    if (eventoParaPessoaLogada || eventoParaPessoaOrgonogramaLogadaQueVisualizou || this.usuarioLogadoSupervisor) {
-      this.podeVisualizarEvento = true;
-    }
-    else {
-      this.podeVisualizarEvento = false;
-    }
-
     this.podeConcluir = !(this.eventoObject.id_status_evento == 5 || this.eventoObject.id_status_evento == 6)
     this.podeEncaminhar = !(this.eventoObject.id_status_evento == 5 || this.eventoObject.id_status_evento == 6)
     this.carregando = false;

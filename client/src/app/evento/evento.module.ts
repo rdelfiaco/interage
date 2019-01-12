@@ -20,6 +20,7 @@ import { FormularioEventoModule } from './formulario-evento/formulario-evento.mo
 import { ConcluirEventoModule } from './concluir-evento/concluir-evento.module';
 import { EncaminharEventoModule } from './encaminhar-evento/encaminhar-evento.module';
 import { CriarEventoModule } from './criar-evento/criar-evento.module';
+import { LinhaDoTempoModule } from '../linha-do-tempo/linha-do-tempo.module';
 
 
 @NgModule({
@@ -40,7 +41,8 @@ import { CriarEventoModule } from './criar-evento/criar-evento.module';
     FormularioEventoModule,
     ConcluirEventoModule,
     EncaminharEventoModule,
-    CriarEventoModule
+    CriarEventoModule,
+    LinhaDoTempoModule
   ],
   providers: [
 
