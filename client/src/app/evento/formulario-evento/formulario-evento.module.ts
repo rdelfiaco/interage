@@ -6,6 +6,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { MDBBootstrapModulesPro } from '../../../lib/ng-uikit-pro-standard';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { SharedModule } from '../../shared/shared.module';
+import { CadastroPessoaModule } from '../../cadastro-pessoa/cadastro-pessoa.module';
 
 @NgModule({
   imports: [
@@ -16,8 +17,7 @@ import { SharedModule } from '../../shared/shared.module';
     ReactiveFormsModule,
     FormsModule,
     SharedModule,
-    
-    
+    // CadastroPessoaModule,
   ],
   declarations: [
     FormularioEventoComponent

@@ -38,13 +38,13 @@ export class FormularioEventoComponent implements OnInit {
       dt_resolvido: [''],
       observacao_origem: [''],
       observacao_retorno: [''],
-      id_proposta:['']
+      id_proposta: ['']
     });
   }
 
   ngOnInit() {
 
-    
+
   }
 
   ngOnChanges() {
@@ -72,9 +72,13 @@ export class FormularioEventoComponent implements OnInit {
     });
   }
 
+  abrirCadastroPessoa() {
+    debugger;
+    window.open(`/pessoas/${this.evento.id_pessoa_receptor}`, '_blank')
+  }
 
   async cadastroPessoa() {
-    
+
     let pessoaId = this.evento.id_pessoa_receptor;
     let p = await this.connectHTTP.callService({
       service: 'getPessoa',
@@ -83,7 +87,7 @@ export class FormularioEventoComponent implements OnInit {
       }
     }) as any;
     this.pessoa = new Observable(o => o.next(p.resposta));
-    debugger;
+
     this.pessoaEditando.show()
   }
 

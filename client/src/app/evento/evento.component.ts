@@ -110,18 +110,18 @@ export class EventoComponent implements OnInit {
     // combo usuário
 
     this.comboUsuarios()
-    this.usuarioSelectValue =  this.usuarioLogado.id
+    this.usuarioSelectValue = this.usuarioLogado.id
 
 
     // combo motivos
     this.motivoSelect = this.eventoFiltros.resposta.Motivos;
-    
+
     this.motivoSelect = this.motivoSelect.map(motivos => {
       return { value: motivos.id, label: motivos.nome }
     });
 
-     this.motivoSelect.push({value: -1, label: "Todos"});
-    
+    this.motivoSelect.push({ value: -1, label: "Todos" });
+
     this.motivoSelectValue = [-1]
 
     // combo status_evento
@@ -130,7 +130,7 @@ export class EventoComponent implements OnInit {
       return { value: status.id, label: status.nome }
     });
 
-    this.statusSelectValue = [1,4,5,6];
+    this.statusSelectValue = [1, 4, 5, 6];
 
 
     this.listaEventos();
@@ -219,14 +219,12 @@ export class EventoComponent implements OnInit {
 
 
   async listaEventos() {
-    debugger
-    
     try {
-        let usuarioIdPessoa = this.usuarioSelect.filter( usuario => {
-        if (usuario.value == this.usuarioSelectValue ){
+      let usuarioIdPessoa = this.usuarioSelect.filter(usuario => {
+        if (usuario.value == this.usuarioSelectValue) {
           return usuario.idPessoa
         }
-      } )
+      })
       let usuarioIdPessoa_ = usuarioIdPessoa[0].idPessoa
       let eventos = await this.connectHTTP.callService({
         service: 'getEventosFiltrados',
@@ -243,7 +241,7 @@ export class EventoComponent implements OnInit {
           dtCricaoRadio: this.dtCricaoRadio,
           recebidoPorRadio: this.recebidoPorRadio,
           usuarioIdPessoa: usuarioIdPessoa_
-          
+
         }
       }) as any;
       if (eventos.error) this.tableData = [];
@@ -257,10 +255,11 @@ export class EventoComponent implements OnInit {
   }
 
   async abreEvento(evento: any) {
-    if (evento.id_status_evento == 1 || evento.id_status_evento == 4) {
-      const eventoParaPessoaLogada = (evento.tipodestino === "P" && this.usuarioLogado.id_pessoa === evento.id_pessoa_organograma);
-      const eventoParaPessoaOrgonogramaLogada = (evento.tipodestino === "O" && this.usuarioLogado.id_organograma === evento.id_pessoa_organograma);
+    const pessoaQueResolvelOEvento = (this.usuarioLogado.id_pessoa === evento.id_pessoa_resolveu);
+    const eventoParaPessoaLogada = (evento.tipodestino === "P" && this.usuarioLogado.id_pessoa === evento.id_pessoa_organograma);
+    const eventoParaPessoaOrgonogramaLogada = (evento.tipodestino === "O" && this.usuarioLogado.id_organograma === evento.id_pessoa_organograma);
 
+    if (evento.id_status_evento == 1 || evento.id_status_evento == 4) {
       if (eventoParaPessoaLogada) {
         await this.connectHTTP.callService({
           service: 'visualizarEvento',
@@ -278,10 +277,8 @@ export class EventoComponent implements OnInit {
       else
         this.toastrService.error("Você não pode visualizar esse evento!");
     }
-    if (evento.id_status_evento == 5 || evento.id_status_evento == 6) {
-      const eventoParaPessoaLogada = (evento.tipodestino === "P" && this.usuarioLogado.id_pessoa === evento.id_pessoa_organograma);
-      if (eventoParaPessoaLogada) this.router.navigate([`/evento/${evento.id}`]);
-      else this.toastrService.error("Você não pode visualizar esse evento!");
+    else {
+      this.router.navigate([`/evento/${evento.id}`]);
     }
   }
 
@@ -343,22 +340,22 @@ export class EventoComponent implements OnInit {
     }
   }
 
-  comboUsuarios(){
+  comboUsuarios() {
 
     this.usuarioSelect = this.eventoFiltros.resposta.Usuarios;
-    this.usuarioSelect = this.usuarioSelect.filter( usuario => {
-      if (usuario.id_organograma == this.departamentoSelectValue ){
+    this.usuarioSelect = this.usuarioSelect.filter(usuario => {
+      if (usuario.id_organograma == this.departamentoSelectValue) {
         return usuario
       }
-    } )
+    })
     this.usuarioSelect = this.usuarioSelect.map(usuario => {
       return { value: usuario.id, label: usuario.nome, idPessoa: usuario.id_pessoa }
     });
 
-    this.usuarioSelectValue =  this.usuarioSelect[0].value;
+    this.usuarioSelectValue = this.usuarioSelect[0].value;
   }
 
-  onChangeDepartamento(){
+  onChangeDepartamento() {
 
     this.comboUsuarios()
 
@@ -366,20 +363,20 @@ export class EventoComponent implements OnInit {
 
   }
 
-  onChangeEventosUsuarioChk(eventosUsuarioChk_: any){
-    if (eventosUsuarioChk_){
-       this.eventosUsuarioChk = false
-       this.listaEventos()
-    }else{
+  onChangeEventosUsuarioChk(eventosUsuarioChk_: any) {
+    if (eventosUsuarioChk_) {
+      this.eventosUsuarioChk = false
+      this.listaEventos()
+    } else {
       this.eventosUsuarioChk = true
       this.listaEventos()
     }
 
-    
+
 
   }
 
-  onSelectedMotivos(){
+  onSelectedMotivos() {
 
 
   }

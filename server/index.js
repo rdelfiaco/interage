@@ -14,6 +14,7 @@ const produtividade = require('./src/api/produtividade');
 const tabelaPrecos = require('./src/api/tabelasPrecos');
 const importar = require('./src/api/importaLead');
 const proposta = require('./src/api/proposta')
+const config = require('./src/api/config')
 
 const consultaPlaca = require('./src/api/consultaPlaca');
 
@@ -32,6 +33,8 @@ declaraServico('getEventoFiltros', evento.getEventoFiltros);
 declaraServico('getEventosFiltrados', evento.getEventosFiltrados);
 declaraServico('getAgentesVendas', usuario.getAgentesVendas);
 declaraServico('getPessoa', pessoa.getPessoa);
+declaraServico('getCountEventosPendentes', evento.getCountEventosPendentes);
+declaraServico('getConfiguracao', config.getConfiguracao);
 
 
 

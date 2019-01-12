@@ -48,8 +48,8 @@
       <input mdbInputDirective formControlName="cliente" type="text" id="cliente" class="form-control" disabled>
       <label for="cliente">Cliente</label>
       <div class="input-group-append">
-        <button mdbBtn color="default" size="md" class="m-0 px-3 py-2" type="button" id="button-addon2"
-          mdbWavesEffect (click)="cadastroPessoa()" >Ver cadastro</button>
+        <button mdbBtn color="default" size="md" class="m-0 px-3 py-2" type="button" id="button-addon2" mdbWavesEffect
+          (click)="abrirCadastroPessoa()">Ver cadastro</button>
       </div>
     </div>
 
@@ -115,7 +115,7 @@
 
 
 
-  <div mdbModal #pessoaEditando="mdbModal" [config]="{backdrop: true, ignoreBackdropClick: true}" class="modal fade right"
+  <!-- <div mdbModal #pessoaEditando="mdbModal" [config]="{backdrop: true, ignoreBackdropClick: true}" class="modal fade right"
     role="dialog" aria-labelledby="myBasicModalLabel" aria-hidden="true">
     <div *ngIf="pessoa | async" class="modal-dialog modal-full-height modal-fluid" role="document">
       <div class="modal-content">
@@ -128,12 +128,12 @@
         <div class="modal-body" style="overflow: auto; height: 80vh;">
           <div class="row">
             <div *ngIf="pessoa | async" class="col">
-              <!-- <app-cadastro-pessoa [pessoa]="pessoa" (refresh)="refresh()" ></app-cadastro-pessoa> -->
+              <app-cadastro-pessoa [pessoa]="pessoa" (refresh)="refresh()" ></app-cadastro-pessoa>
             </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
+  </div> -->
 
 </form>

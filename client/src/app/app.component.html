@@ -1,7 +1,7 @@
 <body>
 
     <!--Double navigation-->
-    <header *ngIf="(usuarioLogado | async)">
+    <header *ngIf="(hasLogado | async)">
 
         <!-- Sidebar navigation -->
         <mdb-side-nav #sidenav class="sn-bg-1 fixed" [fixed]="true">
@@ -66,7 +66,8 @@
                                 </mdb-accordion-item-head>
                                 <mdb-accordion-item-head mdbWavesEffect>
                                     <i class="fa fa-volume-control-phone font-weight-bold text-dark"></i>
-                                    <span class="h6 font-weight-bold text-dark" (click)="openPage('vendasInternas'); sidenav.hide()">Vendas Internas</span>
+                                    <span class="h6 font-weight-bold text-dark" (click)="openPage('vendasInternas'); sidenav.hide()">Vendas
+                                        Internas</span>
                                 </mdb-accordion-item-head>
                                 <mdb-accordion-item-head mdbWavesEffect>
                                     <i class="fa fa-search font-weight-bold text-dark"></i>
@@ -94,13 +95,15 @@
                                     </span>
                                 </mdb-accordion-item-head>
                                 <mdb-accordion-item-head mdbWavesEffect>
-                                        <i class="fa fa-cloud-upload text-dark" aria-hidden="true"></i>
-                                        <span class="h6 font-weight-bold text-dark" (click)="openPage('importaLead'); sidenav.hide()">Importar Lead
-                                        </span>
-                                    </mdb-accordion-item-head>
+                                    <i class="fa fa-cloud-upload text-dark" aria-hidden="true"></i>
+                                    <span class="h6 font-weight-bold text-dark" (click)="openPage('importaLead'); sidenav.hide()">Importar
+                                        Lead
+                                    </span>
+                                </mdb-accordion-item-head>
                                 <mdb-accordion-item-head mdbWavesEffect>
                                     <i class="fa fa-asterisk font-weight-bold text-dark"></i>
-                                    <span class="h6 font-weight-bold text-dark" (click)="openPage('trocarSenha'); sidenav.hide()">Trocar de Senha
+                                    <span class="h6 font-weight-bold text-dark" (click)="openPage('trocarSenha'); sidenav.hide()">Trocar
+                                        de Senha
                                     </span>
                                 </mdb-accordion-item-head>
 
@@ -141,7 +144,7 @@
                     <img src="/assets/imagens/logos/logo_altis.jpg" />
 
                     <!-- TROCA DADOS SERVIDOR -->
-                    <button mdbBtn type="button" color="danger" size="sm" mdbWavesEffect disabled >SERVIDOR DE TESTE</button>
+                    <button mdbBtn type="button" color="danger" size="sm" mdbWavesEffect disabled>SERVIDOR DE TESTE</button>
                 </div>
                 <!--/. Breadcrumb-->
             </mdb-navbar-brand>
@@ -153,17 +156,20 @@
                         <i class="fa fa-envelope"></i>
                         <span class="clearfix d-none d-sm-inline-block">Contact</span>
                     </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link waves-light" mdbWavesEffect>
-                        <i class="fa fa-comments-o"></i>
-                        <span class="clearfix d-none d-sm-inline-block">Support</span>
-                    </a>
-                </li> -->
+                </li>-->
                     <li class="nav-item">
                         <a class="nav-link waves-light" mdbWavesEffect>
+                            <i class="fa fa-bell">
+                                <div *ngIf="counterEvents" class="counterEvents">
+                                    <span>{{counterEvents}}</span>
+                                </div>
+                            </i>
+                        </a>
+                    </li>
+                    <li class="nav-item" (click)="logout()">
+                        <a class="nav-link waves-light" mdbWavesEffect>
                             <i class="fa fa-sign-out"></i>
-                            <span class="clearfix d-none d-sm-inline-block" (click)="logout()">Sair</span>
+                            <span class="clearfix d-none d-sm-inline-block">Sair</span>
                         </a>
                     </li>
                     <!-- <li class="nav-item dropdown btn-group" dropdown>
