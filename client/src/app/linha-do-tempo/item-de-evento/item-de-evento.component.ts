@@ -123,7 +123,7 @@ export class ItemDeEventoComponent implements OnInit {
       observacao_retorno: [evento.observacao_retorno],
     });
 
-    debugger;
+    
     const eventoParaPessoaLogada = (this.eventoSelecionado.tipodestino === "P" && this.usuarioLogado.id_pessoa === this.eventoSelecionado.id_pessoa_organograma);
     const eventoParaPessoaOrgonogramaLogadaQueVisualizou = (this.eventoSelecionado.tipodestino === "O" && this.usuarioLogado.id_organograma === this.eventoSelecionado.id_pessoa_organograma && this.eventoSelecionado.id_pessoa_visualizou == this.eventoSelecionado.id_pessoa);
 
@@ -227,7 +227,7 @@ export class ItemDeEventoComponent implements OnInit {
   }
 
   fechaModal() {
-    debugger
+    
     this.concluirOuEncaminhar = '';
     this.encaminhar = false;
     this.concluir = false;

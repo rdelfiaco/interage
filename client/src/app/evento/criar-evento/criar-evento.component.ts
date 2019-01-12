@@ -159,7 +159,7 @@ export class CriarEventoComponent implements OnInit {
 
     let dataExibir = moment(`${this.criarEventoForm.value.data} - ${dataHora[0]}:${dataHora[1]}`, 'DD/MM/YYYY - HH:mm').toISOString()
     const usuarioLogado = this.localStorage.getLocalStorage('usuarioLogado') as any;
-    debugger
+    
     if (this.evento) {
       await this.connectHTTP.callService({
         service: 'encaminhaEvento',

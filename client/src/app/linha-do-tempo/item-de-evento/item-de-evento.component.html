@@ -3,7 +3,7 @@
     <mdb-accordion-item [collapsed]="true" [customClass]="'itemAcordion'">
       <mdb-accordion-item-head [indicator]="evento.eventosFilho" [customClass]="'text-center justify-content-start align-items-center'">
         <div class="row align-items-center">
-          <button class="col-2" (click)="abreEvento($event, evento);" mdbBtn type="button"
+          <button class="col-2" (click)="abreEvento(evento);" mdbBtn type="button"
             gradient="peach" size="sm" mdbWavesEffect>Detalhe</button>
           <div class="col-2 h6" style="white-space: pre;">{{evento.motivo}}</div>
           <div class="col-2 h6">{{evento.status}}</div>

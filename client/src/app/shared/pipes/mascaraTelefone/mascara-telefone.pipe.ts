@@ -6,7 +6,6 @@ import { Pipe, PipeTransform, NgModule } from '@angular/core';
 export class MascaraTelefonePipe implements PipeTransform {
 
   transform(telefone: any, ddd?: any): any {
-    debugger;
     telefone = telefone.replace(/\W/, '');
     let testTelefoneCelularCompleto = /^([0-9]{2})([0-9]{2})([0-9]{1})([0-9]{4})([0-9]{4}$)/gmi.exec(telefone);
     let testTelefoneCelularIncompletoSemDDI = /^([0-9]{2})([0-9]{1})([0-9]{4})([0-9]{4}$)/gmi.exec(telefone);

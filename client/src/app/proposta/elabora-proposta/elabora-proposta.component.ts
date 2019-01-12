@@ -534,7 +534,7 @@ export class ElaboraPropostaComponent implements OnInit {
       };
 
       console.log(this.proposta)
-      debugger;
+      
       
       this.proposta.idUsuario = this.usuarioLogado.id;
       this.proposta.idPessoaUsuario = this.usuarioLogado.id_pessoa;
