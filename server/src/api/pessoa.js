@@ -352,11 +352,12 @@ function salvarTelefonePessoa(req, res) {
                       principal=${req.query.telefone},
                       id_tipo_telefone=${req.query.id_tipo_telefone},
                       contato='${req.query.contato}',
-                      ddi=55
+                      ddi=55,
+                      dtalteracao=now()
                       WHERE pessoas_telefones.id=${req.query.id}`;
           else
             update = `INSERT INTO pessoas_telefones(
-            id_pessoa, ddd, telefone, ramal, principal, id_tipo_telefone, contato, ddi)
+            id_pessoa, ddd, telefone, ramal, principal, id_tipo_telefone, contato, ddi,dtalteracao)
             VALUES('${req.query.id_pessoa}',
                   '${req.query.ddd}',
                   '${req.query.telefone}',
@@ -364,7 +365,7 @@ function salvarTelefonePessoa(req, res) {
                   ${principal},
                   ${req.query.id_tipo_telefone},
                   '${req.query.contato}',
-                  '55')`;
+                  '55', now())`;
 
           client.query(update).then((res) => {
             client.query('COMMIT').then((resposta) => {
@@ -607,18 +608,20 @@ function salvarEnderecoPessoa(req, res) {
                       logradouro='${req.query.logradouro}',
                       bairro='${req.query.bairro}',
                       complemento='${req.query.complemento}',
-                      recebe_correspondencia=${req.query.recebe_correspondencia}
+                      recebe_correspondencia=${req.query.recebe_correspondencia},
+                      dtalteracao=now()
                       WHERE pessoas_enderecos.id=${req.query.id}`;
               else
                 update = `INSERT INTO pessoas_enderecos(
-                      id_pessoa, id_cidade, cep, logradouro, bairro, complemento, recebe_correspondencia)
+                      id_pessoa, id_cidade, cep, logradouro, bairro, complemento, recebe_correspondencia,dtalteracao)
                       VALUES(${req.query.id_pessoa},
                             ${req.query.id_cidade},
                             ${req.query.cep},
                             '${req.query.logradouro}',
                             '${req.query.bairro}',
                             '${req.query.complemento}',
-                            '${recebe_correspondencia}'
+                            '${recebe_correspondencia}',
+                            now()
                             )`;
 
               client.query(update).then((res) => {
