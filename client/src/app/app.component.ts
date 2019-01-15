@@ -28,7 +28,6 @@ export class AppComponent {
     let self = this;
     let res = await this.auth.getCounterEvents();
     res.subscribe(o => {
-      debugger;
       self.counterEvents = o;
     });
   }

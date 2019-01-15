@@ -25,7 +25,7 @@ export class ConnectHTTP {
       // const host = options.host || "http://159.69.205.116:3010/" //treinamento
       // const host = options.host || "http://159.69.205.116:3000/" //Producao
       // const host = options.host || "http://localhost:3010/" //Local
-        const host = options.host || "http://192.168.100.101:3010/" //MCPRO
+        const host = options.host || "http://192.168.100.140:3010/" //MCPRO
       const service = options.service
 
       let url = `${host}${service}`

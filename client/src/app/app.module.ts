@@ -22,6 +22,7 @@ import { SemPermissaoModule } from './sem-permissao/sem-permissao.module';
 import { TelemarketingModule } from './telemarketing/telemarketing.module';
 import { PipesModule } from './shared/pipes/pipesModule';
 import { PesquisaPessoaModule } from './pesquisa-pessoa/pesquisa-pessoa.module';
+import { ExportarComponent } from './exportar/exportar.component';
 
 
 @NgModule({
@@ -35,7 +36,8 @@ import { PesquisaPessoaModule } from './pesquisa-pessoa/pesquisa-pessoa.module';
     ProdutividadeCallCenterComponent,
     TrocarSenhaComponent,
     ImportaLeadComponent,
-    TrocarSenhaComponent
+    TrocarSenhaComponent,
+    ExportarComponent
   ],
 
   imports: [

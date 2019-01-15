@@ -46,6 +46,7 @@ export class AuthGuard implements CanActivate {
       importaLead: ['admin', 'supervisor'],
       "evento/:id": ['admin', 'supervisor', 'operador'],
       "pessoas/:id": ['admin', 'supervisor', 'operador'],
+      exportar: ['admin', 'supervisor'],
     }
     if (rotas[route.routeConfig.path].indexOf(usuarioLogado.dashboard) != -1) return true;
   }
