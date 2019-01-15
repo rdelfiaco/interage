@@ -1,3 +1,4 @@
+import { DashboardComponent } from './dashboard/dashboard.component';
 import { ExportarComponent } from './exportar/exportar.component';
 import { DetalhePropostaComponent } from './proposta/detalhe-proposta/detalhe-proposta.component';
 import { ImportaLeadComponent } from './importa-lead/importa-lead.component';
@@ -114,6 +115,11 @@ const routes: Routes = [
   {
     path: 'exportar',
     component: ExportarComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'dashboard',
+    component: DashboardComponent,
     canActivate: [AuthGuard]
   },
   {

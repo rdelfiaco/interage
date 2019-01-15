@@ -1,3 +1,4 @@
+import { DashboardModule } from './dashboard/dashboard.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule, NO_ERRORS_SCHEMA } from '@angular/core';
@@ -50,12 +51,12 @@ import { ExportarComponent } from './exportar/exportar.component';
     FormsModule,
     ReactiveFormsModule,
     EventoModule,
-
     CarregandoModule,
     SemPermissaoModule,
     TelemarketingModule,
     PipesModule,
-    PesquisaPessoaModule
+    PesquisaPessoaModule,
+    DashboardModule
   ],
   providers: [MDBSpinningPreloader
 

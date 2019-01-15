@@ -33,12 +33,14 @@ export class AuthService {
   }
 
   async initConfig() {
+    // ler paramentros de configuração 
     let config = await this.connectHTTP.callService({
       service: 'getConfiguracao',
       paramsService: {
         nomeConfiguracao: "tempoDeAlertaDeEventos"
       }
     }) as any;
+    debugger
     this.config = config.resposta[0].valor;
     this.ativaGetEventos(parseInt(config));
   }
@@ -56,7 +58,7 @@ export class AuthService {
 
     this.setInterval = setInterval(async () => {
       if (!self.usuarioLogadoObject) return clearInterval(self.setInterval);
-
+      debugger
       let res = await self.connectHTTP.callService({
         service: 'getCountEventosPendentes',
         paramsService: {
@@ -65,7 +67,7 @@ export class AuthService {
       }) as any;
       let counter = res.resposta[0].count as number;
       this.counterEvents.next(counter);
-    }, timer)
+    }, 10000)
   }
   estaLogado(): Observable<boolean> {
     return this.usuarioLogado.asObservable();

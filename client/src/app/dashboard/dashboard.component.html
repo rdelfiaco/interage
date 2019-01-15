@@ -1,0 +1,65 @@
+<div class="container">
+  <div class="row">
+    <div class="col-6 col-sm-6">
+      <div style="display: block">
+        <canvas mdbChart
+            [chartType]="chartType"
+            [datasets]="chartDatasets"
+            [labels]="chartLabels"
+            [colors]="chartColors"
+            [options]="chartOptions"
+            [legend]="true"
+            (chartHover)="chartHovered($event)"
+            (chartClick)="chartClicked($event)">
+        </canvas>
+      </div>
+    </div>
+    <div class="col-6 col-sm-6">
+      <div style="display: block">
+        <canvas mdbChart
+            [chartType]="chartTypeI"
+            [datasets]="chartDatasetsI"
+            [labels]="chartLabelsI"
+            [colors]="chartColorsI"
+            [options]="chartOptionsI"
+            [legend]="true"
+            (chartHover)="chartHoveredI($event)"
+            (chartClick)="chartClickedI($event)">
+        </canvas>
+      </div>
+    </div>
+  </div>
+  <br>
+  <br>
+  <div class="row">
+    <div class="col-6 col-sm-6">
+        <div style="display: block">
+            <canvas mdbChart
+                [chartType]="chartTypeIA"
+                [datasets]="chartDatasetsIA"
+                [labels]="chartLabelsIA"
+                [colors]="chartColorsIA"
+                [options]="chartOptionsIA"
+                [legend]="true"
+                (chartHover)="chartHoveredIA($event)"
+                (chartClick)="chartClickedIA($event)">
+            </canvas>
+          </div>
+
+    </div>
+    <div class="col-6 col-sm-6">
+        <div style="display: block">
+            <canvas mdbChart
+                [chartType]="chartTypeIB"
+                [datasets]="chartDatasetsIB"
+                [labels]="chartLabelsIB"
+                [colors]="chartColorsIB"
+                [options]="chartOptionsIB"
+                [legend]="true"
+                (chartHover)="chartHoveredIB($event)"
+                (chartClick)="chartClickedIB($event)">
+            </canvas>
+          </div>
+    </div>
+  </div>
+</div>
