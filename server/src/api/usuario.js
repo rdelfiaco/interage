@@ -2,11 +2,10 @@ const { checkTokenAccess } = require('./checkTokenAccess');
 const { executaSQL } = require('./executaSQL');
 
 function login(req, res) {
-  
+
   return new Promise(function (resolve, reject) {
     const dbconnection = require('../config/dbConnection')
     const { Client } = require('pg')
-    const { SHA1 } = require('./SHA1.js')
 
     const client = new Client(dbconnection)
 
@@ -26,16 +25,16 @@ function login(req, res) {
 
           client.query(`insert into historico_login(id_usuario, ip, datahora, token_access, ativo)
             VALUES ( ${res.rows[0].id} , '${req.ip}', now(), '${token_access}', true ) `)
-            .then( res => {
+            .then(res => {
 
-          
-                  delete usuario.senha;
-                  delete usuario.login;
-                  usuario.token = token_access;
-                  
-                  resolve(usuario)
-                  client.end();
-                })
+
+              delete usuario.senha;
+              delete usuario.login;
+              usuario.token = token_access;
+
+              resolve(usuario)
+              client.end();
+            })
             .catch(err => {
               client.end();
               reject('Historio de login não criado : ', err)
@@ -66,7 +65,7 @@ function logout(req, res) {
     let sql = `UPDATE historico_login SET ativo=false
                     WHERE token_access = '${req.query.token}' OR id_usuario = ${req.query.id_usuario}`
 
-    
+
     client.query(sql)
       .then(res => {
         client.end();
@@ -135,7 +134,6 @@ function trocarSenhaUsuarioLogado(req, res) {
     checkTokenAccess(req).then(historico => {
       const dbconnection = require('../config/dbConnection')
       const { Client } = require('pg')
-      const { SHA1 } = require('./SHA1.js')
 
       const client = new Client(dbconnection)
 
@@ -205,7 +203,7 @@ function getUsuarios(req, res) {
       .then(res => {
         if (res.length > 0) {
           let usuarios = res;
-          resolve(usuarios )
+          resolve(usuarios)
         }
         else reject('Usuários não encontrado!')
       })
@@ -213,7 +211,7 @@ function getUsuarios(req, res) {
         console.log(err)
         reject(`Erro no getUsuarios :  ${err}`)
       })
-    })
-  }
+  })
+}
 
 module.exports = { login, logout, getAgentesVendas, trocarSenhaUsuarioLogado, getUsuarios }  
