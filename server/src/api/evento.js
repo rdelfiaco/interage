@@ -410,7 +410,7 @@ function salvarEvento(req, res) {
                     token: req.query.token,
                     idUsuario: req.query.id_usuario
                   };
-                  console.log(credenciais, sql )
+                  //console.log(credenciais, sql )
                   executaSQL(credenciais, sql).then(() =>{
                     resolve('Status de proposta alterado')
                   }).catch(err => {
@@ -816,7 +816,7 @@ function getEventosFiltrados(req, res) {
       idUsuario: req.query.id_usuario
     };
 
-    console.log(req.query)
+    //console.log(req.query)
     let sql = `select * from view_eventos where  id_campanha is null`
     sql = sql + ` and (id_status_evento in (${req.query.status})  or -1 in (${req.query.status})) `  // status 
     if (req.query.dtCricaoRadio == 'true') {
@@ -833,7 +833,7 @@ function getEventosFiltrados(req, res) {
     }
     sql = sql + ` and (id_motivo in ( ${req.query.motivos} )  or -1 in ( ${req.query.motivos} )  )` // motivos 
     sql = sql + ` order by dt_criou limit 100` //
-    console.log(sql)
+    //console.log(sql)
     executaSQL(credenciais, sql)
       .then(res => {
         if (res) {
