@@ -13,13 +13,13 @@
 
     <div class="col-md-3" style="margin-top: 25px">
         <mdb-select [(ngModel)]="tipoVeiculoSelectValue" [options]="tipoVeiculoSelect" placeholder="Escolha o tipo do veículo"
-            style="font-size: 0.5rem;" (selected)="atualizaTipoVeiculo($event)"></mdb-select>
+            style="font-size: 0.5rem;" (selected)="atualizaTipoVeiculo()"></mdb-select>
         <label>Tipo do Veículo</label>
     </div>
 
     <div   *ngIf="(tipoVeiculoSelectValue == 3)" class=" col-md-2 md-form " style="margin-top: 30px">
             <input mdbInputDirective type="text" id="ccMoto" class="form-control" 
-            [(ngModel)]="sccMoto" (keyup)="atualizaTipoVeiculo(tipoVeiculoSelectValue)" >
+            [(ngModel)]="sccMoto" (keyup)="atualizaTipoVeiculo()" >
             <label for="ccMoto" style="margin-left: 15px">CC da moto</label>
     </div>
 

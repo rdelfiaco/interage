@@ -24,7 +24,7 @@ interface selectValues {
 })
 
 export class TelemarketingQuestionarioComponent implements OnInit {
-  private _pessoaObject: any;
+  public _pessoaObject: any;
   private _eventoObject: any;
   private _motivos_respostas: Array<object>;
   private _predicoes: Array<object>;

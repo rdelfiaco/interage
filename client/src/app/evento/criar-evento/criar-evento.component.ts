@@ -13,7 +13,7 @@ import { Router } from '@angular/router';
 })
 export class CriarEventoComponent implements OnInit {
   private _pessoa: any
-  private _evento: any
+  public _evento: any
   @Input()
   set pessoa(pessoa: any) {
     if (pessoa)

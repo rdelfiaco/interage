@@ -22,9 +22,11 @@
   </div>
   <div class="row">
     <div class="md-form col">
-      <mdb-date-picker formControlName="data" #dataReagendamento (dateChanged)="onDateChange($event)" name="mydate"
+      <!-- <mdb-date-picker formControlName="data" #dataReagendamento (dateChanged)="onDateChange($event)" name="mydate"
+        [options]="myDatePickerOptions" [placeholder]="'Selecione a data'" required></mdb-date-picker> -->
+      <mdb-date-picker formControlName="data" #dataReagendamento  name="mydate"
         [options]="myDatePickerOptions" [placeholder]="'Selecione a data'" required></mdb-date-picker>
-      <label for="telefoneDiscado" class="">Agendar para:</label>
+        <label for="telefoneDiscado" class="">Agendar para:</label>
     </div>
     <div class="md-form col">
       <mdb-time-picker formControlName="hora" [buttonLabel]="'Done'" [twelvehour]="false" [darktheme]="true"

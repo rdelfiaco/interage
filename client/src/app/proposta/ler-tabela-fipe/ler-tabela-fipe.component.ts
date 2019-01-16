@@ -16,6 +16,7 @@ import { ToastService } from '../../../lib/ng-uikit-pro-standard';
 export class LerTabelaFipeComponent implements OnInit {
 
 formulario: FormGroup;
+tabelaLimpa: boolean;
 
 
 
