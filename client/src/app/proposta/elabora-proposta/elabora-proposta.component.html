@@ -14,7 +14,7 @@
     <div class="col-md-3" style="margin-top: 25px">
         <mdb-select [(ngModel)]="tipoVeiculoSelectValue" [options]="tipoVeiculoSelect" placeholder="Escolha o tipo do veículo"
             style="font-size: 0.5rem;" (selected)="atualizaTipoVeiculo()"></mdb-select>
-        <label>Tipo do Veículo</label>
+        <label>Tipo do Veículo/Tabela</label>
     </div>
 
     <div   *ngIf="(tipoVeiculoSelectValue == 3)" class=" col-md-2 md-form " style="margin-top: 30px">
@@ -63,9 +63,21 @@
                 name="chckPortabilidade" mdbInputDirective>
             <label class="form-check-label" for=chckPortabilidade>Portabilidade</label>
         </div> -->
+
         <!-- Default checked -->
-        <mdb-checkbox  input class="form-check  md-form  col-md-2 " [checked]="chckPortabilidade"   (change)="mudouPortabilidade()"  >Portabilidade</mdb-checkbox>
         
+        <div class="form-check  md-form  col-md-2 " style="margin-top: 40px" >
+            
+                <input type="radio" class="form-check-input" id="chckNovo" [checked]="chckNovo"   (change)="mudouNovoPortabilidade()"
+                name="chckNovoPortabilidade" mdbInputDirective>
+                <label class="form-check-label" for="chckNovo">Novo</label>
+
+                <input type="radio" class="form-check-input" id="materialChecked" [checked]="chckPortabilidade"   (change)="mudouNovoPortabilidade()"
+                name="chckNovoPortabilidade" checked mdbInputDirective>
+                <label class="form-check-label" for="materialChecked">Portabilidade</label>
+              
+            <!-- <mdb-checkbox  input [checked]="chckPortabilidade"   (change)="mudouPortabilidade()"  >Portabilidade</mdb-checkbox> -->
+        </div>
         <div *ngIf="proposta.mensalidade" class="md-form  col-md-3 " style="text-align: center">
             Mensalidade : 
             <br>
@@ -102,7 +114,7 @@
                     <div class="col-md-3">
                         VALOR 24H + PLANO PPV
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-md-4">
                         ADESÃO
                     </div>
                     <div class="col-md-3">
@@ -116,8 +128,14 @@
                     <div class="col-md-3">
                         R$ {{valorPPV}}
                     </div>
-                    <div class="col-md-3">
-                        R$ {{adesao}}
+                    <div class="col-md-4">
+                        <div *ngIf="chckPortabilidade" >
+                            <input  type="text" id="adesao" class="form-control" style="background-color: powderblue" 
+                            [(ngModel)]="adesao"  (blur)="validaAdesao()"  >
+                        </div>
+                        <div *ngIf="!chckPortabilidade" >
+                                {{adesao}}
+                        </div>
                     </div>
                     <div class="col-md-3">
                         <a *ngIf="prcParticipacao > 0">

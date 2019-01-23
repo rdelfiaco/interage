@@ -17,6 +17,7 @@ import * as pdfFonts from 'pdfmake/build/vfs_fonts';
 import { img } from '../imagem';
 
 import * as numeral from 'numeral';
+import * as moment from 'moment';
 
 
 interface selectValues {
@@ -77,6 +78,7 @@ export class ElaboraPropostaComponent implements OnInit {
   prcParticipacao: number;
   bntGeraProposta: boolean = true;
   sccMoto: number;
+  hoje: string = moment().format('DD/MM/YYYY')
 
   sVlrVeiculo: string;
   nVlrVeiculo: number;
@@ -95,6 +97,7 @@ export class ElaboraPropostaComponent implements OnInit {
   chckApp: string = "1";
   chckRastreador: string = "0";
   chckPortabilidade: boolean = false;
+  chckNovo: boolean = true;
   // 
 
 
@@ -266,17 +269,18 @@ export class ElaboraPropostaComponent implements OnInit {
     this.proposta.reboque = reboque[0].reboque;
   }
 
-  mudouPortabilidade(){
+  mudouNovoPortabilidade(){
     if (this.chckPortabilidade) {
         this.chckPortabilidade = false;
         this.adesao = this.valores[0].adesao
     }else
     {
         this.chckPortabilidade = true; 
-        this.adesao = this.valores[0].adesao  - this.valores[0].desconto_adesao;
+        this.adesao = this.valores[0].adesao_maxima;
     }
     this.adesao = numeral(this.adesao).format('0.00')
     this.proposta.adesao = this.adesao;
+    
   }
 
   mudouPlano(opcao) {
@@ -311,6 +315,17 @@ export class ElaboraPropostaComponent implements OnInit {
   onSelectCliente(valor) {
     this.idPessoaCliente = valor.value;
     this.Cliente = valor.label;
+  }
+
+  validaAdesao(){
+    if (this.adesao > this.valores[0].adesao_maxima ){
+        this.toastrService.error(`Adesão não pode ser maior que ${this.valores[0].adesao_maxima}`);
+        this.adesao = this.valores[0].adesao_maxima;
+    }
+    if (this.adesao < this.valores[0].adesao_minima ){
+      this.toastrService.error(`Adesão não pode ser menor que ${this.valores[0].adesao_minima}`);
+      this.adesao = this.valores[0].adesao_minima
+  }
   }
 
 
@@ -492,14 +507,16 @@ export class ElaboraPropostaComponent implements OnInit {
               ]
             }
           },
-          {   // responsável
+          {   // texto informativo e validade da proposta
             style: 'tableExample',
             table: {
               widths: [570],
               heights: [30],
               body: [
                 [{
-                  text: `A ALTIS atua legalmente perante a lei, respeitando a constituição e o código civil. Não possui nenhum impedimento legal e se responsabiliza solidariamente com os princípios embasado nas leis* Lei no 9.790, de 23 de março de 1999.  / CAPÍTULO I / DA QUALIFICAÇÃO COMO ORGANIZAÇÃO DA SOCIEDADE CIVIL* Constituição da Republica Federativa do Brasil 1988 / TÍTULO II / Dos Direitos / Garantias Fundamentais / CAPÍTULO I / DOS DIREITOS E DEVERES INDIVIDUAIS E COLETIVOS / Art. 5º /Incisos: XVII a XXI.* Código Civil - Lei 10406/02 | Lei no 10.406, de 10 de janeiro de 2002 / TÍTULO II / Da Sociedade / CAPÍTULO II / DAS ASSOCIAÇÕES`,
+                  text: `A ALTIS atua legalmente perante a lei, respeitando a constituição e o código civil. Não possui nenhum impedimento legal e se responsabiliza solidariamente com os princípios embasado nas leis* Lei no 9.790, de 23 de março de 1999.  / CAPÍTULO I / DA QUALIFICAÇÃO COMO ORGANIZAÇÃO DA SOCIEDADE CIVIL* Constituição da Republica Federativa do Brasil 1988 / TÍTULO II / Dos Direitos / Garantias Fundamentais / CAPÍTULO I / DOS DIREITOS E DEVERES INDIVIDUAIS E COLETIVOS / Art. 5º /Incisos: XVII a XXI.* Código Civil - Lei 10406/02 | Lei no 10.406, de 10 de janeiro de 2002 / TÍTULO II / Da Sociedade / CAPÍTULO II / DAS ASSOCIAÇÕES. 
+                  
+                  Validade: 15 dias a partir de ${this.hoje}. `,
                   fillColor: '#eeeeee',
                   margin: [5, 5, 5, 5],
                   alignment: 'left',
