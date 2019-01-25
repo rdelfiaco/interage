@@ -34,6 +34,14 @@ export class Proposta {
     private _placa: string;
     private _observacao: string;
     private _reboque: string;
+    private _cotaAlterada: boolean;
+
+    public get cotaAlterada(): boolean {
+        return this._cotaAlterada;
+    }
+    public set cotaAlterada(value: boolean) {
+        this._cotaAlterada = value;
+    }
 
     public get reboque(): string {
         return this._reboque;
@@ -295,7 +303,8 @@ export class Proposta {
             idPessoaCliente: this._idPessoaCliente,
             placa: this._placa,
             observacao: this._observacao,
-            reboque: this._reboque
+            reboque: this._reboque,
+            cotaAlterada: this._cotaAlterada
         };
     }
 }

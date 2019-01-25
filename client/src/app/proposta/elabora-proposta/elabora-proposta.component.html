@@ -108,13 +108,17 @@
         <div class="container tabelaPrecos">
             <div class="col-md-12">
                 <div class="row cabecalhoValorBase">
-                    <div class="col-md-2">
+                    <div class="col-md-3">
                         COTA
+                            <div class="btn-group btn-group-sm" role="group" aria-label="Basic example">
+                                <button mdbBtn type="button" color="default" size="sm" class="waves-light"  [disabled]="cotaAlterada" (click)="cotaAnterior()"   mdbWavesEffect> << </button>
+                                <button mdbBtn type="button" color="default" size="sm" class="waves-light"  [disabled]="!cotaAlterada" (click)="cotaPosterior()"  mdbWavesEffect> >> </button>
+                            </div>
                     </div>
                     <div class="col-md-3">
                         VALOR 24H + PLANO PPV
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         ADESÃO
                     </div>
                     <div class="col-md-3">
@@ -122,13 +126,13 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-2">
+                    <div class="col-md-3">
                         {{cota}}
                     </div>
                     <div class="col-md-3">
                         R$ {{valorPPV}}
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <div *ngIf="chckPortabilidade" >
                             <input  type="text" id="adesao" class="form-control" style="background-color: powderblue" 
                             [(ngModel)]="adesao"  (blur)="validaAdesao()"  >

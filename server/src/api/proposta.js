@@ -18,7 +18,7 @@ function salvarProposta(req, res) {
                     id_tipo_veiculo, codigofipe, marca, modelo, ano_modelo, data_consulta 
                     , preco_medio, adesao, mensalidade , participacao, cota, id_fundo_terceiros
                     , id_carro_reserva, id_app, id_rastreador, id_protecao_vidros, proposta_json
-                    , id_usuario, id_pessoa_cliente, placa 
+                    , id_usuario, id_pessoa_cliente, placa, cota_alterada, 
                     , id_status_proposta,  dtsalvou)
                 VALUES (  ${req.query.proposta.idTipoVeiculo},
                           '${req.query.proposta.codigoFipe}',
@@ -40,15 +40,22 @@ function salvarProposta(req, res) {
                           ${req.query.proposta.idUsuario},
                           ${req.query.proposta.idPessoaCliente},
                           '${req.query.proposta.placa}',
+                          ${req.query.proposta.cotaAlterada},
                           5,now()) RETURNING id`
 
 
 
     executaSQL(credenciais, sql).then(registros => {
 
-      //criar evento para acompanhar poposta 
+      //criar evento para acompanhar poposta ou pedir autorização para uso de conta alterada
       let id_proposta = registros[0].id;
       let idProposta = registros;
+      let motivo = 2;
+      if (req.query.proposta.cotaAlterada){ 
+          motivo = 3;
+          
+      }
+
 
       sql = `INSERT INTO public.eventos(
               id_motivo,  
@@ -64,7 +71,7 @@ function salvarProposta(req, res) {
               observacao_origem,  
               id_canal,
               id_proposta)
-              VALUES (2,
+              VALUES (${motivo},
                       1, 
                       ${req.query.proposta.idPessoaUsuario},
                       now(),

@@ -18,6 +18,7 @@ import { img } from '../imagem';
 
 import * as numeral from 'numeral';
 import * as moment from 'moment';
+import { timestamp } from 'rxjs/operators';
 
 
 interface selectValues {
@@ -79,6 +80,7 @@ export class ElaboraPropostaComponent implements OnInit {
   bntGeraProposta: boolean = true;
   sccMoto: number;
   hoje: string = moment().format('DD/MM/YYYY')
+  cotaAlterada: boolean = false;
 
   sVlrVeiculo: string;
   nVlrVeiculo: number;
@@ -170,7 +172,8 @@ export class ElaboraPropostaComponent implements OnInit {
     if (this.tabelaCombos.length > 0) {
       this.combos = this.tabelaCombos.filter(this.filtraTabelas, [nVlrBusca, this.tipoVeiculoSelectValue]);
     }
-    this.valores = this.tabelaValores.filter(this.filtraTabelas, [nVlrBusca, this.tipoVeiculoSelectValue]);
+
+    this.filtraTabelasCota(nVlrBusca) // busca tabela de valores 
 
     this.fundoTerceiro = this.fundosTerceiros.filter(this.filtraTabelasTipoVeiculos, [this.tipoVeiculoSelectValue]);
 
@@ -181,18 +184,18 @@ export class ElaboraPropostaComponent implements OnInit {
     this.rastreador = this.rastreadores.filter(this.filtraTabelas, [nVlrBusca, this.tipoVeiculoSelectValue]);
 
     this.app = this.apps.filter(this.filtraTabelasTipoVeiculos, [this.tipoVeiculoSelectValue]);
-
-    if (this.valores.length > 0) {
+    
+    if (this.valores.length > 0 ) {
       this.valorPPV = this.valores[0].valor_ppv;
       this.cota = this.valores[0].cota;
       
       this.adesao = this.valores[0].adesao
       // para participação P Percentual se faz o calculo caso contralio o valor é fixo 
       if (this.valores[0].tipo_participacao == 'P') {
-        this.vlrParticipacao = this.valores[0].valor_participacao * this.nVlrVeiculo / 100
+        this.vlrParticipacao =  numeral(this.valores[0].valor_participacao * this.nVlrVeiculo / 100).format('00.00')
         this.prcParticipacao = this.valores[0].valor_participacao
       } else {
-        this.vlrParticipacao = this.valores[0].valor_participacao
+        this.vlrParticipacao =  numeral(this.valores[0].valor_participacao).format('00.00')
         this.prcParticipacao = 0
       }
 
@@ -208,7 +211,22 @@ export class ElaboraPropostaComponent implements OnInit {
       this.toastrService.error('Tabela correspondente não encontrada')
     }
   }
-
+  filtraTabelasCota(valorDeBusca: any) {
+    for ( var i = 0; i <= this.tabelaValores.length -1 ; i++ ) {
+        if ((valorDeBusca >= this.tabelaValores[i].valor_inicial) && (valorDeBusca <= this.tabelaValores[i].valor_final)
+             && (this.tipoVeiculoSelectValue == this.tabelaValores[i].id_tipo_veiculo)) {
+               if ((this.cotaAlterada) && (i > 1)){
+                this.valores[0]=  this.tabelaValores[i-1];
+                return;
+               }else{
+                 this.valores[0]= this.tabelaValores[i] ;
+                 return;
+               }
+             }
+    }
+     this.valores = [];
+     return;
+  }
 
 
 
@@ -281,6 +299,15 @@ export class ElaboraPropostaComponent implements OnInit {
     this.adesao = numeral(this.adesao).format('0.00')
     this.proposta.adesao = this.adesao;
     
+  }
+
+  cotaAnterior(){
+    this.cotaAlterada = true;
+    this.atualizaTabelas()
+  }
+  cotaPosterior(){
+    this.cotaAlterada = false; 
+    this.atualizaTabelas()
   }
 
   mudouPlano(opcao) {
@@ -452,7 +479,7 @@ export class ElaboraPropostaComponent implements OnInit {
                 [{
                   text: `ADESÃO:\n R$ ${this.proposta.adesao}
                       \n\n MENSALIDADE:\n R$ ${this.proposta.mensalidade} 
-                      \n\n PARTICIPAÇÃO:\n R$ ${this.proposta.participacao}`,
+                      \n\n PARTICIPAÇÃO:\n R$ ${this.proposta.participacao} `,
                   style: 'header',
                   margin: [15, 20, 0, 5],
                   border: [true, false, true, true],
@@ -558,6 +585,8 @@ export class ElaboraPropostaComponent implements OnInit {
       this.proposta.idPessoaCliente = Number(this.idPessoaCliente);
       this.proposta.idTipoVeiculo = this.tipoVeiculoSelectValue;
       this.proposta.cota = this.cota;
+      this.proposta.cotaAlterada = this.cotaAlterada;
+      
       //this.propostaComuc.setProposta(this.proposta);
 
       if (!this.returnProp) {
