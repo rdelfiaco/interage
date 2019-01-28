@@ -403,7 +403,7 @@ function declaraServico(nomeServico, funcao) {
       })
       .catch(error => {
         headerResponse(res)
-        console.log(`Erro no serviço: ${nomeServico}; erro: ` , error)
+        console.log(`Serviço: ${nomeServico}; Situação: ` , error)
         res.status(401).send(error)
       })
   });

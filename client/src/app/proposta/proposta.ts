@@ -35,6 +35,46 @@ export class Proposta {
     private _observacao: string;
     private _reboque: string;
     private _cotaAlterada: boolean;
+    private _idStatusProposta: number;
+    private _idMotivo: number;
+    private _idPessoaDestinatario: number;
+    private _veiculoComercial: boolean;
+    private _leilaoSinistrado: boolean;
+
+    public get veiculoComercial(): boolean {
+        return this._veiculoComercial;
+    }
+    public set veiculoComercial(value: boolean) {
+        this._veiculoComercial = value;
+    }
+
+    public get leilaoSinistrado(): boolean {
+        return this._leilaoSinistrado;
+    }
+    public set leilaoSinistrado(value: boolean) {
+        this._leilaoSinistrado = value;
+    }
+
+    public get idPessoaDestinatario(): number {
+        return this._idPessoaDestinatario;
+    }
+    public set idPessoaDestinatario(value: number) {
+        this._idPessoaDestinatario = value;
+    }
+
+    public get idMotivo(): number {
+        return this._idMotivo;
+    }
+    public set idMotivo(value: number) {
+        this._idMotivo = value;
+    }
+
+    public get idStatusProposta(): number {
+        return this._idStatusProposta;
+    }
+    public set idStatusProposta(value: number) {
+        this._idStatusProposta = value;
+    }
 
     public get cotaAlterada(): boolean {
         return this._cotaAlterada;
@@ -304,7 +344,13 @@ export class Proposta {
             placa: this._placa,
             observacao: this._observacao,
             reboque: this._reboque,
-            cotaAlterada: this._cotaAlterada
+            cotaAlterada: this._cotaAlterada,
+            idStatusProposta: this. _idStatusProposta,
+            idMotivo: this._idMotivo,
+            idPessoaDestinatario: this._idPessoaDestinatario,
+            veiculoComercial: this._veiculoComercial,
+            leilaoSinistrado: this._leilaoSinistrado,
+
         };
     }
 }

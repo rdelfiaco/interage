@@ -100,6 +100,10 @@ export class ElaboraPropostaComponent implements OnInit {
   chckRastreador: string = "0";
   chckPortabilidade: boolean = false;
   chckNovo: boolean = true;
+  chckParticular: boolean = true;
+  chckComercial: boolean = false;
+  chckNormal: boolean = true;
+  chckLeilaoSinistrado: boolean = false;
   // 
 
 
@@ -190,12 +194,20 @@ export class ElaboraPropostaComponent implements OnInit {
       this.cota = this.valores[0].cota;
       
       this.adesao = this.valores[0].adesao
+      // para carro comercial a participação é maior que carro particular 
+      if (this.chckParticular) {
+        this.vlrParticipacao = this.valores[0].valor_participacao_particular
+      } else {
+        this.vlrParticipacao = this.valores[0].valor_participacao_comercial
+      }
+
+      // 
       // para participação P Percentual se faz o calculo caso contralio o valor é fixo 
       if (this.valores[0].tipo_participacao == 'P') {
-        this.vlrParticipacao =  numeral(this.valores[0].valor_participacao * this.nVlrVeiculo / 100).format('00.00')
-        this.prcParticipacao = this.valores[0].valor_participacao
+        this.vlrParticipacao =  numeral(this.vlrParticipacao * this.nVlrVeiculo / 100).format('00.00')
+        this.prcParticipacao = this.vlrParticipacao
       } else {
-        this.vlrParticipacao =  numeral(this.valores[0].valor_participacao).format('00.00')
+        this.vlrParticipacao =  numeral(this.vlrParticipacao).format('00.00')
         this.prcParticipacao = 0
       }
 
@@ -298,7 +310,28 @@ export class ElaboraPropostaComponent implements OnInit {
     }
     this.adesao = numeral(this.adesao).format('0.00')
     this.proposta.adesao = this.adesao;
-    
+  }
+
+  mudouParticularComercial(){
+    if (this.chckParticular){
+      this.chckParticular = false;
+      this.chckComercial = true;
+    }else{
+      this.chckParticular = true;
+      this.chckComercial = false;
+    }
+    this.atualizaTabelas()
+  }
+
+  mudouLeilaoSinistrado(){
+    if (this.chckNormal){
+      this.chckNormal = false;
+      this.chckLeilaoSinistrado = true;
+    }else {
+      this.chckNormal = true;
+      this.chckLeilaoSinistrado = false;
+    }
+    this.atualizaTabelas()
   }
 
   cotaAnterior(){
@@ -353,13 +386,17 @@ export class ElaboraPropostaComponent implements OnInit {
       this.toastrService.error(`Adesão não pode ser menor que ${this.valores[0].adesao_minima}`);
       this.adesao = this.valores[0].adesao_minima
   }
+    this.proposta.adesao = this.adesao;
   }
 
 
   geraProposta() {
 
+    let normalLeilaoSisnsitro = 'Indenização 100% tabela Fipe, exceto veículos de leilão é remarcado'
+    if (this.chckLeilaoSinistrado) {
+      normalLeilaoSisnsitro = 'Indenização 80% tabela Fipe'
+    }
 
-    
     if (!this.idPessoaCliente) {
       this.toastrService.error('Selecione um cliente');
     } else {
@@ -495,11 +532,12 @@ export class ElaboraPropostaComponent implements OnInit {
                       text: `\n\nSem perfil de condutor! (Qualquer pessoa habilitada pode conduzir o veículo) 
                           \nSem Consulta SPC/SERASA 
                           \nSem limite de km rodado; Sem perfil de guarda de veículo, não exige garagem;
-                          \nRoubo, furto, incêndio, colisão, capotamento, tombamento, enchente, chuva de granizo, queda de árvore; 
+                          \nRoubo, furto, incêndio, colisão, capotamento, tombamento, desastres naturais como: enchente, chuva de granizo, queda de árvore; 
                           \nAssistência 24H em todo Brasil; 
+                          \nReboque ilimitado em caso de colisão; 
                           \nSocorro elétrico e mecânico; Chaveiro; Taxi, SOS Pneus;
                           \nMensalidade Contínua (sem renovação); Não trabalhamos com Bônus; 
-                          \nIndenização 100% tabela Fipe, exceto veículos de leilão é remarcado( 80% DE INDENIZAÇÃO)
+                          \n${normalLeilaoSisnsitro};
                           \n${this.proposta.carroReserva};
                           \n${this.proposta.protecaoVidros};
                           \n${this.proposta.terceiros};
@@ -576,17 +614,28 @@ export class ElaboraPropostaComponent implements OnInit {
         },
         images: { logotipo: img }
       };
-
-      console.log(this.proposta)
-      
-      
+            
       this.proposta.idUsuario = this.usuarioLogado.id;
       this.proposta.idPessoaUsuario = this.usuarioLogado.id_pessoa;
       this.proposta.idPessoaCliente = Number(this.idPessoaCliente);
       this.proposta.idTipoVeiculo = this.tipoVeiculoSelectValue;
       this.proposta.cota = this.cota;
       this.proposta.cotaAlterada = this.cotaAlterada;
-      
+      this.proposta.idStatusProposta = 3;
+      this.proposta.idMotivo = 2;
+      this.proposta.idPessoaDestinatario = this.usuarioLogado.id_pessoa;
+      this.proposta.veiculoComercial = this.chckComercial;
+      this.proposta.leilaoSinistrado = this.chckLeilaoSinistrado;
+
+          // caso a proposta tenha a cota alterada  
+      if (this.cotaAlterada){ 
+        this.proposta.idStatusProposta = 5;
+        this.proposta.idMotivo = 3;
+        this.proposta.idPessoaDestinatario = 5 // buscar supervisor das vendas internas 
+    }
+
+    console.log(this.proposta)
+
       //this.propostaComuc.setProposta(this.proposta);
 
       if (!this.returnProp) {
