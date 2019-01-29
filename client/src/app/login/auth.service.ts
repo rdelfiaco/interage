@@ -42,12 +42,10 @@ export class AuthService {
     }) as any;
     
     this.config = config.resposta[0].valor;
-    debugger
-    this.ativaGetEventos(parseInt(config));
+   // this.ativaGetEventos(parseInt(config));
   }
 
   async ativaGetEventos(timer: number) {
-    debugger
     let self = this;
     let res = await self.connectHTTP.callService({
       service: 'getCountEventosPendentes',
