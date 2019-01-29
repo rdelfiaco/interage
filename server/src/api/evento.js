@@ -412,7 +412,7 @@ function salvarEvento(req, res) {
                   };
                   //console.log(credenciais, sql )
                   executaSQL(credenciais, sql).then(() =>{
-                    resolve('Status de proposta alterado')
+                    resolve('SQL da ação motivo resolvido com sucesso ')
                   }).catch(err => {
                       client.end();
                       reject(err)
