@@ -860,7 +860,7 @@ function getCountEventosPendentes(req, res) {
     };
 
     let sql = `select count(*) from view_eventos where
-                   id_campanha is null and
+                   -- id_campanha is null and
                    dt_para_exibir <= now() and
                    id_status_evento in (1, 4, 5, 6) and
                    tipodestino = 'P' and id_usuario in ( ${req.query.idUsuarioLogado})`

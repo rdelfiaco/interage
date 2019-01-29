@@ -136,6 +136,7 @@ export class ElaboraPropostaComponent implements OnInit {
     this.initValueId = new Observable((observer) => {
       observer.next('');
     });
+
     // combo tipo do veículo 
     this.tipoVeiculoSelect = tabelaPrecos.resposta.TipoVeiculos;
     this.tipoVeiculoSelect = this.tipoVeiculoSelect.map(tipoVeiculo => {
@@ -614,7 +615,9 @@ export class ElaboraPropostaComponent implements OnInit {
         },
         images: { logotipo: img }
       };
-            
+      
+      debugger;
+      
       this.proposta.idUsuario = this.usuarioLogado.id;
       this.proposta.idPessoaUsuario = this.usuarioLogado.id_pessoa;
       this.proposta.idPessoaCliente = Number(this.idPessoaCliente);
@@ -626,6 +629,7 @@ export class ElaboraPropostaComponent implements OnInit {
       this.proposta.idPessoaDestinatario = this.usuarioLogado.id_pessoa;
       this.proposta.veiculoComercial = this.chckComercial;
       this.proposta.leilaoSinistrado = this.chckLeilaoSinistrado;
+      this.proposta.portabilidade = this.chckPortabilidade; 
 
           // caso a proposta tenha a cota alterada  
       if (this.cotaAlterada){ 
@@ -650,8 +654,6 @@ export class ElaboraPropostaComponent implements OnInit {
         return new Promise(resolve => setTimeout(resolve, milliseconds))
       }
       
-      
-
       this.salvarProposta();
 
       if (!this.returnProp) {

@@ -2,7 +2,7 @@
   <!-- Card Filtros -->
 <div>
   <div class="row ">
-    <div class="col">
+    <div class="col-3">
       <div class="row justify-content-around">
         <div class="col-5 col-sm-6">
           <div class="md-form datas">
@@ -20,17 +20,17 @@
         </div>
       </div>
     </div>
-    <div class="col " style="margin-top: 20px">
+    <div class="col-3" style="margin-top: 20px">
           <mdb-select [(ngModel)]="usuarioSelectValue" [options]="usuarioSelect" placeholder="Escolha o usuário" [disabled]="!usuarioLogadoSupervisor"
             style="font-size: 0.5rem;"></mdb-select>
           <label>Usuário</label>
     </div>
-    <div class="col" style="margin-top: 20px">
+    <div class="col-5" style="margin-top: 20px">
       <mdb-select [(ngModel)]="statusPropostaSelectValue" [options]="statusPropostaSelect" placeholder="Escolha o status" style="font-size: 0.5rem;"></mdb-select>
       <label>Status</label>
     </div>
-    <div class="col" style="margin-left: 10px; margin-top: 5px">
-        <a mdbBtn floating="true" size="lg" gradient="blue" (click)="lerPropostas()" mdbWavesEffect>
+    <div class="col-1" style="margin-top: 5px">
+        <a mdbBtn floating="true" size="md" gradient="blue" (click)="lerPropostas()" mdbWavesEffect>
           <mdb-icon icon="refresh"></mdb-icon>
         </a>
     <!-- </div>

@@ -42,7 +42,7 @@ export class AuthService {
     }) as any;
     
     this.config = config.resposta[0].valor;
-    this.ativaGetEventos(parseInt(config));
+    //this.ativaGetEventos(parseInt(config));
   }
 
   async ativaGetEventos(timer: number) {
@@ -67,7 +67,7 @@ export class AuthService {
       }) as any;
       let counter = res.resposta[0].count as number;
       this.counterEvents.next(counter);
-    }, timer)
+    }, 0)
   }
   estaLogado(): Observable<boolean> {
     return this.usuarioLogado.asObservable();
@@ -86,7 +86,7 @@ export class AuthService {
       this.usuarioLogadoObject = usuarioLogado.resposta;
       this.localStorage.postLocalStorage('usuarioLogado', usuarioLogado.resposta)
       this._setValidadeToken();
-      this.ativaGetEventos(this.config);
+      //this.ativaGetEventos(this.config);
 
       this.usuarioLogado.next(true)
       return usuarioLogado;

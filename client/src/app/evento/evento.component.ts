@@ -140,6 +140,7 @@ export class EventoComponent implements OnInit {
 
   @ViewChild('modalCriarEvento') modalCriarEvento: ModalDirective;
   @ViewChild('confirmSeTornarResponsavelModal') confirmSeTornarResponsavelModal: ModalDirective;
+
   @HostListener('input') oninput() {
     this.paginators = [];
     for (let i = 1; i <= this.search().length; i++) {
@@ -149,6 +150,7 @@ export class EventoComponent implements OnInit {
     }
     this.lastPageNumber = this.paginators.length;
   }
+  
   changePage(event: any) {
     if (event.target.text >= 1 && event.target.text <= this.maxVisibleItems) {
       this.activePage = +event.target.text;

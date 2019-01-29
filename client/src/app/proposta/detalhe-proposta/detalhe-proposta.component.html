@@ -12,7 +12,7 @@
                     </div>
                     <div class="md-form col-2" >
                         <input mdbInputDirective formControlName="placa" type="text" id="placa" (blur)="salvarPlacaDaProposta()" 
-                        class="form-control" [disabled]="!proposta.alterar_proposta">
+                        class="form-control" [disabled]="proposta.id_status_proposta != 3 ">
                         <label for="placa">Placa</label>
                     </div>                    
                     <div class="md-form col" [hidden]="!proposta.cliente">
@@ -93,6 +93,24 @@
                   <input mdbInputDirective formControlName="rastreador_" type="text" id="rastreador_" class="form-control" disabled>
                   <label for="rastreador_">Rastreador</label>
                 </div>
+              </div>
+              <div class="row">
+                <div class="md-form col" >
+                  <input mdbInputDirective formControlName="novoPortabilidade_" type="text" id="novoPortabilidade_" class="form-control" disabled>
+                  <label for="novoPortabilidade_">Novo/Portabilidade</label>
+                </div>
+                <div class="md-form col" >
+                  <input mdbInputDirective formControlName="particularComercial_" type="text" id="particularComercial_" class="form-control" disabled>
+                  <label for="particularComercial_">Particular/Comercial</label>
+                </div>
+                <div class="md-form col" >
+                  <input mdbInputDirective formControlName="normalLeilao_" type="text" id="normalLeilao_" class="form-control" disabled>
+                  <label for="normalLeilao_">Normal/Leilão-Sinistrado</label>
+                </div>
+                <div class="md-form col" >
+                  <input mdbInputDirective formControlName="cotaAlterada" type="text" id="cotaAlterada" class="form-control" disabled>
+                  <label for="cotaAlterada">Tipo da cota</label>
+                </div>               
               </div>
               <div class="row">
                 <div class="md-form col-5" [hidden]="!proposta.usuario">

@@ -22,6 +22,7 @@ function salvarProposta(req, res) {
                     , id_status_proposta
                     , veiculo_comercial
                     , leilao_sinistrado
+                    , portabilidade
                     , dtsalvou)
                 VALUES (  ${req.query.proposta.idTipoVeiculo},
                           '${req.query.proposta.codigoFipe}',
@@ -47,9 +48,10 @@ function salvarProposta(req, res) {
                           ${req.query.proposta.idStatusProposta},
                           ${req.query.proposta.veiculoComercial},
                           ${req.query.proposta.leilaoSinistrado},
+                          ${req.query.proposta.portabilidade},
                           now()) RETURNING id`
 
-                          console.log('evento', sql)
+    console.log('proposta inserir', sql)
 
 
     executaSQL(credenciais, sql).then(registros => {
@@ -111,7 +113,7 @@ function getPropostasDoUsuario(req, res) {
                and date(dtsalvou) between date('${req.query.dataInicial}') and date('${req.query.dataFinal}') 
               order by id desc `
 
-    //console.log('getPropostasDoUsuario',sql )
+    console.log('getPropostasDoUsuario',sql )
     executaSQL(credenciais, sql)
       .then(res => {
         if (res) {

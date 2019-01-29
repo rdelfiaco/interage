@@ -40,6 +40,15 @@ export class Proposta {
     private _idPessoaDestinatario: number;
     private _veiculoComercial: boolean;
     private _leilaoSinistrado: boolean;
+    private _portabilidade: boolean;
+
+    public get portabilidade(): boolean {
+        return this._portabilidade;
+    }
+    public set portabilidade(value: boolean) {
+        this._portabilidade = value;
+    }
+
 
     public get veiculoComercial(): boolean {
         return this._veiculoComercial;
@@ -350,6 +359,7 @@ export class Proposta {
             idPessoaDestinatario: this._idPessoaDestinatario,
             veiculoComercial: this._veiculoComercial,
             leilaoSinistrado: this._leilaoSinistrado,
+            portabilidade: this._portabilidade,
 
         };
     }
