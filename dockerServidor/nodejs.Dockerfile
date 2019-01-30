@@ -6,10 +6,10 @@ RUN apt-get update && \
 WORKDIR /usr/share/
 RUN git clone https://3e05c6b42c79eeba167ab0d0895077e218f669c8@github.com/rdelfiaco/interage.git
 
-WORKDIR /usr/share/interage/interage-back-end
+WORKDIR /usr/share/interage/server
 RUN git fetch
-RUN git pull origin treinamento
-RUN git checkout origin/treinamento
+RUN git pull origin tendenciaParaMeta
+RUN git checkout origin/tendenciaParaMeta
 
 RUN npm install
 
