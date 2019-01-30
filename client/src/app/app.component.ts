@@ -17,6 +17,7 @@ export class AppComponent {
   // TROCA DADOS SERVIDOR TROCAR NUMERO DA VERSÃO
   versaoSistema: string = 't.1.0.17';
   counterEvents: number;
+  sub: any;
   constructor(private router: Router, private auth: AuthService, private connectHTTP: ConnectHTTP,
     private localStorage: LocalStorage) {
     this.hasLogado = this.auth.estaLogado();
@@ -25,12 +26,12 @@ export class AppComponent {
   }
 
   async getCounterEvents() {
-    
     let self = this;
     let res = await this.auth.getCounterEvents();
-    res.subscribe(o => {
-      self.counterEvents = o;
-    });
+    if (!this.sub)
+      this.sub = res.subscribe(o => {
+        self.counterEvents = o;
+      });
   }
 
   logout() {

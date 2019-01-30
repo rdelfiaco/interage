@@ -40,9 +40,8 @@ export class AuthService {
         nomeConfiguracao: 'tempoDealertaDeEventos'
       }
     }) as any;
-    
     this.config = config.resposta[0].valor;
-   // this.ativaGetEventos(parseInt(config));
+    this.ativaGetEventos(parseInt(this.config));
   }
 
   async ativaGetEventos(timer: number) {
@@ -58,7 +57,7 @@ export class AuthService {
 
     this.setInterval = setInterval(async () => {
       if (!self.usuarioLogadoObject) return clearInterval(self.setInterval);
-      
+
       let res = await self.connectHTTP.callService({
         service: 'getCountEventosPendentes',
         paramsService: {

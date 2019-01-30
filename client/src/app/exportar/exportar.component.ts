@@ -81,7 +81,6 @@ export class ExportarComponent implements OnInit {
 
   async executarSQL(){
 
-    debugger;
     try {
       
 

@@ -69,7 +69,7 @@ export class DetalheEventoComponent implements OnInit {
 
     const eventoPodeSerConcluidoEncaminhado = this.eventoObject.id_status_evento == 5 || this.eventoObject.id_status_evento == 6
     const podeConcluirEncaminhar = ((eventoParaPessoaLogada || eventoParaPessoaOrgonogramaLogadaQueVisualizou || eventoQueVisualizei) && eventoPodeSerConcluidoEncaminhado);
-    debugger;
+    
     this.podeConcluir = podeConcluirEncaminhar
     this.podeEncaminhar = podeConcluirEncaminhar
     this.carregando = false;

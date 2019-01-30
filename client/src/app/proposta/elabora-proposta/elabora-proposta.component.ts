@@ -616,7 +616,6 @@ export class ElaboraPropostaComponent implements OnInit {
         images: { logotipo: img }
       };
       
-      debugger;
       
       this.proposta.idUsuario = this.usuarioLogado.id;
       this.proposta.idPessoaUsuario = this.usuarioLogado.id_pessoa;

@@ -73,7 +73,6 @@ export class FormularioEventoComponent implements OnInit {
   }
 
   abrirCadastroPessoa() {
-    debugger;
     window.open(`/pessoas/${this.evento.id_pessoa_receptor}`, '_blank')
   }
 
