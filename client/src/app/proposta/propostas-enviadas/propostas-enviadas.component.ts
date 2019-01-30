@@ -96,7 +96,7 @@ export class PropostasEnviadasComponent implements OnInit  {
       return { value: statusProposta.id, label: statusProposta.nome }
     });
 
-    this.statusPropostaSelectValue = 5 // status elaborada  
+    this.statusPropostaSelectValue = 3 // aguardando resposta do cliente 
 
     this.lerPropostas()
   }

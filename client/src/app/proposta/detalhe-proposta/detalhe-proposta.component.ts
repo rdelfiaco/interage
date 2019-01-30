@@ -41,6 +41,7 @@ export class DetalhePropostaComponent implements OnInit {
     this.propostaForm = this.formBuilder.group({
       id: [''],
       status: [''],
+      id_status_proposta: [''],
       cliente: [''],
       placa:[''],
       tipo_veiculo: [''],
@@ -60,7 +61,11 @@ export class DetalhePropostaComponent implements OnInit {
       protecao_vidros_:[''],
       rastreador_:[''],
       usuario:[''],
-      dtsalvou:['']
+      dtsalvou:[''],
+      novoPortabilidade_:[''],
+      particularComercial_:[''],
+      normalLeilao_:[''],
+      cotaAlterada:[''],
 
     })
   }
@@ -89,6 +94,7 @@ export class DetalhePropostaComponent implements OnInit {
   povoaFormulario() {
     this.propostaForm.setValue({
       id: this.proposta.id,
+      id_status_proposta: this.proposta.id_status_proposta,
       status: this.proposta.status_proposta,
       cliente: this.proposta.cliente,
       placa: this.proposta.placa,
@@ -108,6 +114,10 @@ export class DetalhePropostaComponent implements OnInit {
       fundo_terceiros_:this.proposta.fundo_terceiros_,
       protecao_vidros_:this.proposta.protecao_vidros_,
       rastreador_:this.proposta.rastreador_,
+      novoPortabilidade_:this.proposta.novo_portabilidade_,
+      particularComercial_:this.proposta.particular_comercial_,
+      normalLeilao_:this.proposta.normal_leilao_,
+      cotaAlterada:this.proposta.cota_alterada_,
       usuario:this.proposta.usuario,
       dtsalvou:this.proposta.dtsalvou ? moment(this.proposta.dtsalvou).format('DD/MM/YYYY HH:mm:ss') : this.proposta.dtsalvou,
     })                                

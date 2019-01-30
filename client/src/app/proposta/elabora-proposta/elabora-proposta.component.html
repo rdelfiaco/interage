@@ -7,16 +7,18 @@
           <i class="fa fa-search-plus" aria-hidden="true"></i>
       </a>
   </div> -->
-    <div class=" col-md-5" style="margin-top: 25px">
+    <div class=" col-md-6" style="margin-top: 25px">
         <app-pesquisa-cliente [initValueId]="initValueId" [disabled]="pessoaObject" (onSelectCliente)="onSelectCliente($event)"></app-pesquisa-cliente>
     </div>
 
-    <div class="col-md-3" style="margin-top: 25px">
+    <div class="col-md-6" style="margin-top: 25px">
         <mdb-select [(ngModel)]="tipoVeiculoSelectValue" [options]="tipoVeiculoSelect" placeholder="Escolha o tipo do veículo"
             style="font-size: 0.5rem;" (selected)="atualizaTipoVeiculo()"></mdb-select>
-        <label>Tipo do Veículo</label>
+        <label>Tipo do Veículo/Tabela</label>
     </div>
+</div>
 
+<div class="row">
     <div   *ngIf="(tipoVeiculoSelectValue == 3)" class=" col-md-2 md-form " style="margin-top: 30px">
             <input mdbInputDirective type="text" id="ccMoto" class="form-control" 
             [(ngModel)]="sccMoto" (keyup)="atualizaTipoVeiculo()" >
@@ -27,6 +29,44 @@
         <input mdbInputDirective type="text" id="vlrVeiculo" class="form-control" [(ngModel)]="sVlrVeiculo" disabled>
         <label for="vlrVeiculo" style="margin-left: 15px">Valor do veículo</label>
     </div>
+
+    <!-- portatilidade  -->
+    <div class="form-check  md-form  col-md-2 " style="margin-top: 40px" >
+            
+        <input type="radio" class="form-check-input" id="chckNovo" [checked]="chckNovo"   (change)="mudouNovoPortabilidade()"
+        name="chckNovoPortabilidade" mdbInputDirective>
+        <label class="form-check-label" for="chckNovo">Novo</label>
+
+        <input type="radio" class="form-check-input" id="materialChecked" [checked]="chckPortabilidade"   (change)="mudouNovoPortabilidade()"
+        name="chckNovoPortabilidade" checked mdbInputDirective>
+        <label class="form-check-label" for="materialChecked">Portabilidade</label> 
+    </div>
+
+    <!-- participação particular / comercial -->
+    <div class="form-check  md-form  col-md-2 " style="margin-top: 40px" >
+            
+        <input type="radio" class="form-check-input" id="chckParticular" [checked]="chckParticular"   (change)="mudouParticularComercial()"
+        name="chckParticular" mdbInputDirective>
+        <label class="form-check-label" for="chckParticular">Particular</label>
+
+        <input type="radio" class="form-check-input" id="chckComercial" [checked]="chckComercial"   (change)="mudouParticularComercial()"
+        name="chckParticular" checked mdbInputDirective>
+        <label class="form-check-label" for="chckComercial">Comercial</label>
+    </div>
+
+    <!-- veiculo normal ou leilão / sinistrado -->
+    <div class="form-check  md-form  col-md-2 " style="margin-top: 40px" >
+            
+        <input type="radio" class="form-check-input" id="chckNormal" [checked]="chckNormal"   (change)="mudouLeilaoSinistrado()"
+        name="chckLeilaoSinistrado_" mdbInputDirective>
+        <label class="form-check-label" for="chckNormal">Normal</label>
+
+        <input type="radio" class="form-check-input" id="chckLeilaoSinistrado" [checked]="chckLeilaoSinistrado"   (change)="mudouLeilaoSinistrado()"
+        name="chckLeilaoSinistrado_" checked mdbInputDirective>
+        <label class="form-check-label" for="chckLeilaoSinistrado">Leilão/Sinistrado</label>
+    </div>
+
+
 </div>
 
 <div *ngIf="(valores.length > 0) ;  else inconsistencias  ">
@@ -63,9 +103,10 @@
                 name="chckPortabilidade" mdbInputDirective>
             <label class="form-check-label" for=chckPortabilidade>Portabilidade</label>
         </div> -->
+
         <!-- Default checked -->
-        <mdb-checkbox  input class="form-check  md-form  col-md-2 " [checked]="chckPortabilidade"   (change)="mudouPortabilidade()"  >Portabilidade</mdb-checkbox>
         
+
         <div *ngIf="proposta.mensalidade" class="md-form  col-md-3 " style="text-align: center">
             Mensalidade : 
             <br>
@@ -96,8 +137,12 @@
         <div class="container tabelaPrecos">
             <div class="col-md-12">
                 <div class="row cabecalhoValorBase">
-                    <div class="col-md-2">
+                    <div class="col-md-3">
                         COTA
+                            <div class="btn-group btn-group-sm" role="group" aria-label="Basic example">
+                                <button mdbBtn type="button" color="default" size="sm" class="waves-light"  [disabled]="cotaAlterada" (click)="cotaAnterior()"   mdbWavesEffect> << </button>
+                                <button mdbBtn type="button" color="default" size="sm" class="waves-light"  [disabled]="!cotaAlterada" (click)="cotaPosterior()"  mdbWavesEffect> >> </button>
+                            </div>
                     </div>
                     <div class="col-md-3">
                         VALOR 24H + PLANO PPV
@@ -110,14 +155,20 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-2">
+                    <div class="col-md-3">
                         {{cota}}
                     </div>
                     <div class="col-md-3">
                         R$ {{valorPPV}}
                     </div>
                     <div class="col-md-3">
-                        R$ {{adesao}}
+                        <div *ngIf="chckPortabilidade" >
+                            <input  type="text" id="adesao" class="form-control" style="background-color: powderblue" 
+                            [(ngModel)]="adesao"  (blur)="validaAdesao()"  >
+                        </div>
+                        <div *ngIf="!chckPortabilidade" >
+                                {{adesao}}
+                        </div>
                     </div>
                     <div class="col-md-3">
                         <a *ngIf="prcParticipacao > 0">

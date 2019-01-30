@@ -412,7 +412,7 @@ function salvarEvento(req, res) {
                   };
                   //console.log(credenciais, sql )
                   executaSQL(credenciais, sql).then(() =>{
-                    resolve('Status de proposta alterado')
+                    resolve('SQL da ação motivo resolvido com sucesso ')
                   }).catch(err => {
                       client.end();
                       reject(err)
@@ -817,7 +817,7 @@ function getEventosFiltrados(req, res) {
     };
 
     //console.log(req.query)
-    let sql = `select * from view_eventos where  id_campanha is null`
+    let sql = `select * from view_eventos where  (id_campanha is null or tipodestino = 'P' ) `
     sql = sql + ` and (id_status_evento in (${req.query.status})  or -1 in (${req.query.status})) `  // status 
     if (req.query.dtCricaoRadio == 'true') {
       sql = sql + ` and date(dt_criou) between date('${req.query.dt_inicial}') and date('${req.query.dt_final}')` // data de criação 
@@ -833,6 +833,7 @@ function getEventosFiltrados(req, res) {
     }
     sql = sql + ` and (id_motivo in ( ${req.query.motivos} )  or -1 in ( ${req.query.motivos} )  )` // motivos 
     sql = sql + ` order by dt_criou limit 100` //
+    
     //console.log(sql)
     executaSQL(credenciais, sql)
       .then(res => {
@@ -859,7 +860,7 @@ function getCountEventosPendentes(req, res) {
     };
 
     let sql = `select count(*) from view_eventos where
-                   id_campanha is null and
+                   -- id_campanha is null and
                    dt_para_exibir <= now() and
                    id_status_evento in (1, 4, 5, 6) and
                    tipodestino = 'P' and id_usuario in ( ${req.query.idUsuarioLogado})`

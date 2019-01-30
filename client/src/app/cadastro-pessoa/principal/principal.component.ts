@@ -199,4 +199,11 @@ export class PrincipalComponent implements OnInit {
       if (!atividadeDaPessoa.length) this.principalForm.value.id_atividade = null;
     }
   }
+
+  nomeMaiusculo(){
+    this.principalForm.controls['nome'].setValue(this.principalForm.value.nome.toUpperCase())
+  }
+
+
+
 }

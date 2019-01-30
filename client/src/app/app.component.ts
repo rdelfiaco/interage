@@ -15,7 +15,7 @@ export class AppComponent {
   hasLogado: Observable<boolean>;
   usuarioLogado: Usuario;
   // TROCA DADOS SERVIDOR TROCAR NUMERO DA VERSÃO
-  versaoSistema: string = 't.1.0.12';
+  versaoSistema: string = 't.1.0.17';
   counterEvents: number;
   constructor(private router: Router, private auth: AuthService, private connectHTTP: ConnectHTTP,
     private localStorage: LocalStorage) {
@@ -25,7 +25,7 @@ export class AppComponent {
   }
 
   async getCounterEvents() {
-    debugger
+    
     let self = this;
     let res = await this.auth.getCounterEvents();
     res.subscribe(o => {

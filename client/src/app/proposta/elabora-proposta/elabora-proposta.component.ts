@@ -17,6 +17,8 @@ import * as pdfFonts from 'pdfmake/build/vfs_fonts';
 import { img } from '../imagem';
 
 import * as numeral from 'numeral';
+import * as moment from 'moment';
+import { timestamp } from 'rxjs/operators';
 
 
 interface selectValues {
@@ -77,6 +79,8 @@ export class ElaboraPropostaComponent implements OnInit {
   prcParticipacao: number;
   bntGeraProposta: boolean = true;
   sccMoto: number;
+  hoje: string = moment().format('DD/MM/YYYY')
+  cotaAlterada: boolean = false;
 
   sVlrVeiculo: string;
   nVlrVeiculo: number;
@@ -95,6 +99,11 @@ export class ElaboraPropostaComponent implements OnInit {
   chckApp: string = "1";
   chckRastreador: string = "0";
   chckPortabilidade: boolean = false;
+  chckNovo: boolean = true;
+  chckParticular: boolean = true;
+  chckComercial: boolean = false;
+  chckNormal: boolean = true;
+  chckLeilaoSinistrado: boolean = false;
   // 
 
 
@@ -127,6 +136,7 @@ export class ElaboraPropostaComponent implements OnInit {
     this.initValueId = new Observable((observer) => {
       observer.next('');
     });
+
     // combo tipo do veículo 
     this.tipoVeiculoSelect = tabelaPrecos.resposta.TipoVeiculos;
     this.tipoVeiculoSelect = this.tipoVeiculoSelect.map(tipoVeiculo => {
@@ -167,7 +177,8 @@ export class ElaboraPropostaComponent implements OnInit {
     if (this.tabelaCombos.length > 0) {
       this.combos = this.tabelaCombos.filter(this.filtraTabelas, [nVlrBusca, this.tipoVeiculoSelectValue]);
     }
-    this.valores = this.tabelaValores.filter(this.filtraTabelas, [nVlrBusca, this.tipoVeiculoSelectValue]);
+
+    this.filtraTabelasCota(nVlrBusca) // busca tabela de valores 
 
     this.fundoTerceiro = this.fundosTerceiros.filter(this.filtraTabelasTipoVeiculos, [this.tipoVeiculoSelectValue]);
 
@@ -178,18 +189,26 @@ export class ElaboraPropostaComponent implements OnInit {
     this.rastreador = this.rastreadores.filter(this.filtraTabelas, [nVlrBusca, this.tipoVeiculoSelectValue]);
 
     this.app = this.apps.filter(this.filtraTabelasTipoVeiculos, [this.tipoVeiculoSelectValue]);
-
-    if (this.valores.length > 0) {
+    
+    if (this.valores.length > 0 ) {
       this.valorPPV = this.valores[0].valor_ppv;
       this.cota = this.valores[0].cota;
       
       this.adesao = this.valores[0].adesao
+      // para carro comercial a participação é maior que carro particular 
+      if (this.chckParticular) {
+        this.vlrParticipacao = this.valores[0].valor_participacao_particular
+      } else {
+        this.vlrParticipacao = this.valores[0].valor_participacao_comercial
+      }
+
+      // 
       // para participação P Percentual se faz o calculo caso contralio o valor é fixo 
       if (this.valores[0].tipo_participacao == 'P') {
-        this.vlrParticipacao = this.valores[0].valor_participacao * this.nVlrVeiculo / 100
-        this.prcParticipacao = this.valores[0].valor_participacao
+        this.vlrParticipacao =  numeral(this.vlrParticipacao * this.nVlrVeiculo / 100).format('00.00')
+        this.prcParticipacao = this.vlrParticipacao
       } else {
-        this.vlrParticipacao = this.valores[0].valor_participacao
+        this.vlrParticipacao =  numeral(this.vlrParticipacao).format('00.00')
         this.prcParticipacao = 0
       }
 
@@ -205,7 +224,22 @@ export class ElaboraPropostaComponent implements OnInit {
       this.toastrService.error('Tabela correspondente não encontrada')
     }
   }
-
+  filtraTabelasCota(valorDeBusca: any) {
+    for ( var i = 0; i <= this.tabelaValores.length -1 ; i++ ) {
+        if ((valorDeBusca >= this.tabelaValores[i].valor_inicial) && (valorDeBusca <= this.tabelaValores[i].valor_final)
+             && (this.tipoVeiculoSelectValue == this.tabelaValores[i].id_tipo_veiculo)) {
+               if ((this.cotaAlterada) && (i > 1)){
+                this.valores[0]=  this.tabelaValores[i-1];
+                return;
+               }else{
+                 this.valores[0]= this.tabelaValores[i] ;
+                 return;
+               }
+             }
+    }
+     this.valores = [];
+     return;
+  }
 
 
 
@@ -266,17 +300,48 @@ export class ElaboraPropostaComponent implements OnInit {
     this.proposta.reboque = reboque[0].reboque;
   }
 
-  mudouPortabilidade(){
+  mudouNovoPortabilidade(){
     if (this.chckPortabilidade) {
         this.chckPortabilidade = false;
         this.adesao = this.valores[0].adesao
     }else
     {
         this.chckPortabilidade = true; 
-        this.adesao = this.valores[0].adesao  - this.valores[0].desconto_adesao;
+        this.adesao = this.valores[0].adesao_maxima;
     }
     this.adesao = numeral(this.adesao).format('0.00')
     this.proposta.adesao = this.adesao;
+  }
+
+  mudouParticularComercial(){
+    if (this.chckParticular){
+      this.chckParticular = false;
+      this.chckComercial = true;
+    }else{
+      this.chckParticular = true;
+      this.chckComercial = false;
+    }
+    this.atualizaTabelas()
+  }
+
+  mudouLeilaoSinistrado(){
+    if (this.chckNormal){
+      this.chckNormal = false;
+      this.chckLeilaoSinistrado = true;
+    }else {
+      this.chckNormal = true;
+      this.chckLeilaoSinistrado = false;
+    }
+    this.atualizaTabelas()
+  }
+
+  cotaAnterior(){
+    this.cotaAlterada = true;
+    this.atualizaTabelas()
+  }
+  cotaPosterior(){
+    this.cotaAlterada = false; 
+    this.atualizaTabelas()
   }
 
   mudouPlano(opcao) {
@@ -313,11 +378,26 @@ export class ElaboraPropostaComponent implements OnInit {
     this.Cliente = valor.label;
   }
 
+  validaAdesao(){
+    if (this.adesao > this.valores[0].adesao_maxima ){
+        this.toastrService.error(`Adesão não pode ser maior que ${this.valores[0].adesao_maxima}`);
+        this.adesao = this.valores[0].adesao_maxima;
+    }
+    if (this.adesao < this.valores[0].adesao_minima ){
+      this.toastrService.error(`Adesão não pode ser menor que ${this.valores[0].adesao_minima}`);
+      this.adesao = this.valores[0].adesao_minima
+  }
+    this.proposta.adesao = this.adesao;
+  }
+
 
   geraProposta() {
 
+    let normalLeilaoSisnsitro = 'Indenização 100% tabela Fipe, exceto veículos de leilão é remarcado'
+    if (this.chckLeilaoSinistrado) {
+      normalLeilaoSisnsitro = 'Indenização 80% tabela Fipe'
+    }
 
-    
     if (!this.idPessoaCliente) {
       this.toastrService.error('Selecione um cliente');
     } else {
@@ -437,7 +517,7 @@ export class ElaboraPropostaComponent implements OnInit {
                 [{
                   text: `ADESÃO:\n R$ ${this.proposta.adesao}
                       \n\n MENSALIDADE:\n R$ ${this.proposta.mensalidade} 
-                      \n\n PARTICIPAÇÃO:\n R$ ${this.proposta.participacao}`,
+                      \n\n PARTICIPAÇÃO:\n R$ ${this.proposta.participacao} `,
                   style: 'header',
                   margin: [15, 20, 0, 5],
                   border: [true, false, true, true],
@@ -453,11 +533,12 @@ export class ElaboraPropostaComponent implements OnInit {
                       text: `\n\nSem perfil de condutor! (Qualquer pessoa habilitada pode conduzir o veículo) 
                           \nSem Consulta SPC/SERASA 
                           \nSem limite de km rodado; Sem perfil de guarda de veículo, não exige garagem;
-                          \nRoubo, furto, incêndio, colisão, capotamento, tombamento, enchente, chuva de granizo, queda de árvore; 
+                          \nRoubo, furto, incêndio, colisão, capotamento, tombamento, desastres naturais como: enchente, chuva de granizo, queda de árvore; 
                           \nAssistência 24H em todo Brasil; 
+                          \nReboque ilimitado em caso de colisão; 
                           \nSocorro elétrico e mecânico; Chaveiro; Taxi, SOS Pneus;
                           \nMensalidade Contínua (sem renovação); Não trabalhamos com Bônus; 
-                          \nIndenização 100% tabela Fipe, exceto veículos de leilão é remarcado( 80% DE INDENIZAÇÃO)
+                          \n${normalLeilaoSisnsitro};
                           \n${this.proposta.carroReserva};
                           \n${this.proposta.protecaoVidros};
                           \n${this.proposta.terceiros};
@@ -492,14 +573,16 @@ export class ElaboraPropostaComponent implements OnInit {
               ]
             }
           },
-          {   // responsável
+          {   // texto informativo e validade da proposta
             style: 'tableExample',
             table: {
               widths: [570],
               heights: [30],
               body: [
                 [{
-                  text: `A ALTIS atua legalmente perante a lei, respeitando a constituição e o código civil. Não possui nenhum impedimento legal e se responsabiliza solidariamente com os princípios embasado nas leis* Lei no 9.790, de 23 de março de 1999.  / CAPÍTULO I / DA QUALIFICAÇÃO COMO ORGANIZAÇÃO DA SOCIEDADE CIVIL* Constituição da Republica Federativa do Brasil 1988 / TÍTULO II / Dos Direitos / Garantias Fundamentais / CAPÍTULO I / DOS DIREITOS E DEVERES INDIVIDUAIS E COLETIVOS / Art. 5º /Incisos: XVII a XXI.* Código Civil - Lei 10406/02 | Lei no 10.406, de 10 de janeiro de 2002 / TÍTULO II / Da Sociedade / CAPÍTULO II / DAS ASSOCIAÇÕES`,
+                  text: `A ALTIS atua legalmente perante a lei, respeitando a constituição e o código civil. Não possui nenhum impedimento legal e se responsabiliza solidariamente com os princípios embasado nas leis* Lei no 9.790, de 23 de março de 1999.  / CAPÍTULO I / DA QUALIFICAÇÃO COMO ORGANIZAÇÃO DA SOCIEDADE CIVIL* Constituição da Republica Federativa do Brasil 1988 / TÍTULO II / Dos Direitos / Garantias Fundamentais / CAPÍTULO I / DOS DIREITOS E DEVERES INDIVIDUAIS E COLETIVOS / Art. 5º /Incisos: XVII a XXI.* Código Civil - Lei 10406/02 | Lei no 10.406, de 10 de janeiro de 2002 / TÍTULO II / Da Sociedade / CAPÍTULO II / DAS ASSOCIAÇÕES. 
+                  
+                  Validade: 15 dias a partir de ${this.hoje}. `,
                   fillColor: '#eeeeee',
                   margin: [5, 5, 5, 5],
                   alignment: 'left',
@@ -532,15 +615,31 @@ export class ElaboraPropostaComponent implements OnInit {
         },
         images: { logotipo: img }
       };
-
-      console.log(this.proposta)
       
+      debugger;
       
       this.proposta.idUsuario = this.usuarioLogado.id;
       this.proposta.idPessoaUsuario = this.usuarioLogado.id_pessoa;
       this.proposta.idPessoaCliente = Number(this.idPessoaCliente);
       this.proposta.idTipoVeiculo = this.tipoVeiculoSelectValue;
       this.proposta.cota = this.cota;
+      this.proposta.cotaAlterada = this.cotaAlterada;
+      this.proposta.idStatusProposta = 3;
+      this.proposta.idMotivo = 2;
+      this.proposta.idPessoaDestinatario = this.usuarioLogado.id_pessoa;
+      this.proposta.veiculoComercial = this.chckComercial;
+      this.proposta.leilaoSinistrado = this.chckLeilaoSinistrado;
+      this.proposta.portabilidade = this.chckPortabilidade; 
+
+          // caso a proposta tenha a cota alterada  
+      if (this.cotaAlterada){ 
+        this.proposta.idStatusProposta = 5;
+        this.proposta.idMotivo = 3;
+        this.proposta.idPessoaDestinatario = 5 // buscar supervisor das vendas internas 
+    }
+
+    console.log(this.proposta)
+
       //this.propostaComuc.setProposta(this.proposta);
 
       if (!this.returnProp) {
@@ -555,8 +654,6 @@ export class ElaboraPropostaComponent implements OnInit {
         return new Promise(resolve => setTimeout(resolve, milliseconds))
       }
       
-      
-
       this.salvarProposta();
 
       if (!this.returnProp) {

@@ -22,10 +22,11 @@ export class ConnectHTTP {
     if (mensagem && !mensagem.error) return mensagem;
     return new Promise((resolve, reject) => {
       //TROCA DADOS SERVIDOR
-       const host = options.host || "http://159.69.205.116:3010/" //treinamento
+      const host = options.host || "http://159.69.205.116:3010/" //treinamento
       // const host = options.host || "http://159.69.205.116:3000/" //Producao
       // const host = options.host || "http://localhost:3010/" //Local
-      //const host = options.host || "http://192.168.100.140:3010/" //MCPRO
+      //const host = options.host || "http://192.168.100.108:3010/" //MCPRO
+       //const host = options.host || "http://192.168.0.95:3010/" //altis
       const service = options.service
 
       let url = `${host}${service}`
@@ -72,10 +73,11 @@ export class ConnectHTTP {
     if (!options.paramsService.arquivo) return { error: 'É necessário enviar o arquivo.', resposta: {} };
     return new Promise((resolve, reject) => {
       //TROCA DADOS SERVIDOR
-       const host = options.host || "http://159.69.205.116:3010/" //treinamento
+      const host = options.host || "http://159.69.205.116:3010/" //treinamento
       // const host = options.host || "http://159.69.205.116:3000/" //Producao
       //const host = options.host || "http://localhost:3010/" //Local
-      //  const host = options.host || "http://192.168.100.101:3010/" //MACPRO
+      //const host = options.host || "http://192.168.100.108:3010/" //MACPRO
+      //const host = options.host || "http://192.168.0.95:3010/" //altis
       const service = options.service
 
       let url = `${host}${service}`

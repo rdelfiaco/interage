@@ -37,12 +37,12 @@ export class AuthService {
     let config = await this.connectHTTP.callService({
       service: 'getConfiguracao',
       paramsService: {
-        nomeConfiguracao: "tempoDeAlertaDeEventos"
+        nomeConfiguracao: 'tempoDealertaDeEventos'
       }
     }) as any;
-    debugger
+    
     this.config = config.resposta[0].valor;
-    this.ativaGetEventos(parseInt(config));
+   // this.ativaGetEventos(parseInt(config));
   }
 
   async ativaGetEventos(timer: number) {
@@ -58,7 +58,7 @@ export class AuthService {
 
     this.setInterval = setInterval(async () => {
       if (!self.usuarioLogadoObject) return clearInterval(self.setInterval);
-      debugger
+      
       let res = await self.connectHTTP.callService({
         service: 'getCountEventosPendentes',
         paramsService: {
@@ -67,7 +67,7 @@ export class AuthService {
       }) as any;
       let counter = res.resposta[0].count as number;
       this.counterEvents.next(counter);
-    }, 10000)
+    }, timer)
   }
   estaLogado(): Observable<boolean> {
     return this.usuarioLogado.asObservable();
@@ -86,7 +86,7 @@ export class AuthService {
       this.usuarioLogadoObject = usuarioLogado.resposta;
       this.localStorage.postLocalStorage('usuarioLogado', usuarioLogado.resposta)
       this._setValidadeToken();
-      this.ativaGetEventos(this.config);
+      this.ativaGetEventos(parseInt(this.config));
 
       this.usuarioLogado.next(true)
       return usuarioLogado;

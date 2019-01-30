@@ -9,13 +9,13 @@
       </div>
       <div class="col-4 mdb-select-form">
         <mdb-select formControlName="id_pronome_tratamento" [options]="tipoDeTratamentoFisica" [multiple]="false"
-          placeholder="Tipo de pessoa"></mdb-select>
+          placeholder="Tipo de tratamento"></mdb-select>
         <label>Tipo de tratamento</label>
       </div>
     </div>
     <div class="row">
       <div class="md-form col">
-        <input mdbInputDirective formControlName="nome" type="text" id="nome" class="form-control">
+        <input mdbInputDirective formControlName="nome" type="text" id="nome" (blur)="nomeMaiusculo()" class="form-control">
         <label for="nome">Nome</label>
       </div>
     </div>

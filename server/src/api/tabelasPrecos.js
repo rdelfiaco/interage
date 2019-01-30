@@ -93,7 +93,7 @@ function getCarroReserva(req, res) {
   
         client.connect()
   
-        let sql = 'SELECT * FROM tabela_valores where status'
+        let sql = 'SELECT * FROM tabela_valores where status order by id_tipo_veiculo, cota'
 
         client.query(sql)
           .then(res => {
