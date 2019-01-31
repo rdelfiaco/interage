@@ -199,7 +199,9 @@ export class ConcluirEventoComponent implements OnInit {
       service: 'salvarEvento',
       paramsService: {
         id_pessoa: usuarioLogado.id_pessoa,
+        id_pessoa_criou: this._eventoObject.id_pessoa_criou, 
         id_evento: this._eventoObject.id,
+        id_motivo: this._eventoObject.id_motivo,
         id_evento_pai: this._eventoObject.id_evento_pai ? this._eventoObject.id_evento_pai : this._eventoObject.id,
         id_pessoa_receptor: this._eventoObject.id_pessoa_receptor,
         id_motivos_respostas: this.questionarioForm.value.motivoRespostaSelecionado,

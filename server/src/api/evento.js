@@ -268,10 +268,11 @@ function salvarEvento(req, res) {
 
         client.query(sqlMotivoResposta).then(res => {
           const motivoResposta = res.rows[0];
+          const motivoRespostaAcaoSQL = res.rows[0].acao_sql;
           
-          let sqlMotivos = `SELECT * from motivos WHERE id=${motivoResposta.id_motivo}`;
+          let sqlMotivo = `SELECT * from motivos WHERE id=${req.query.id_motivo}`;
                                  
-          client.query(sqlMotivos).then(res => {
+          client.query(sqlMotivo).then(res => {
           const motivoAcaoSQL = res.rows[0].acao_sql;
           
 
@@ -403,7 +404,7 @@ function salvarEvento(req, res) {
                     })
                   }
                 
-                  // executa ação do motivo 
+                  // executa ação SQL do motivo 
                   if (motivoAcaoSQL){
                   let sql = motivoAcaoSQL.replace('${req.query.id_evento}', `${req.query.id_evento}`)
                   let credenciais = {
@@ -415,9 +416,24 @@ function salvarEvento(req, res) {
                     resolve('SQL da ação motivo resolvido com sucesso ')
                   }).catch(err => {
                       client.end();
-                      reject(err)
+                      reject('Erro em SQL da ação motivo ', err)
                     })
                   }
+                  // executa ação SQL da resposta do motivo 
+                  if (motivoRespostaAcaoSQL){
+                    let sql = motivoRespostaAcaoSQL.replace('${req.query.id_evento}', `${req.query.id_evento}`)
+                    let credenciais = {
+                      token: req.query.token,
+                      idUsuario: req.query.id_usuario
+                    };
+                    //console.log(credenciais, sql )
+                    executaSQL(credenciais, sql).then(() =>{
+                      resolve('SQL da ação da resposta do motivo resolvido com sucesso ')
+                    }).catch(err => {
+                        client.end();
+                        reject('Erro em SQL da ação da resposta do motivo ', err)
+                      })
+                    }
                 }).catch(err => {
                   client.end();
                   reject(err)
@@ -433,7 +449,7 @@ function salvarEvento(req, res) {
           })
         }).catch(err => {
           client.end();
-          reject(err)
+          reject('Motivo não encontrado :', err)
         })
         }).catch(err => {
           client.end();
@@ -448,7 +464,6 @@ function salvarEvento(req, res) {
       function createEvent(motivoRespostaAutomatico, motivoResposta, updateEventoEncerrado) {
         let tipoDestino;
         let id_pessoa_organograma;
-
         if (motivoRespostaAutomatico.gera_para == 1) {
           tipoDestino = motivoRespostaAutomatico.tipodestino;
           id_pessoa_organograma = motivoRespostaAutomatico.id_pessoa_organograma;
@@ -457,9 +472,13 @@ function salvarEvento(req, res) {
           tipoDestino = 'P';
           id_pessoa_organograma = req.query.id_pessoa
         }
-        else if (motivoRespostaAutomatico.gera_para == 4) {
+        else if (motivoRespostaAutomatico.gera_para == 3) {
           tipoDestino = updateEventoEncerrado.rows[0].tipodestino;
-          id_pessoa_organograma = updateEventoEncerrado.rows[0].id_pessoa_organograma
+          id_pessoa_organograma = updateEventoEncerrado.rows[0].id_pessoa_organograma;
+        }
+        else if (motivoRespostaAutomatico.gera_para == 4) {
+          tipoDestino = 'P';
+          id_pessoa_organograma = req.query.id_pessoa_criou;
         }
         else {
           tipoDestino = req.query.tipoDestino;

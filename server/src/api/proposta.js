@@ -51,7 +51,7 @@ function salvarProposta(req, res) {
                           ${req.query.proposta.portabilidade},
                           now()) RETURNING id`
 
-    console.log('proposta inserir', sql)
+    //console.log('proposta inserir', sql)
 
 
     executaSQL(credenciais, sql).then(registros => {
@@ -89,7 +89,7 @@ function salvarProposta(req, res) {
                       '${req.query.proposta.observacao}',
                       7,
                       ${id_proposta})`
-      console.log('evento', sql)
+      //console.log('evento', sql)
       executaSQL(credenciais, sql).then(registros => {
         resolve(idProposta)
       }).catch(e => {
@@ -113,7 +113,7 @@ function getPropostasDoUsuario(req, res) {
                and date(dtsalvou) between date('${req.query.dataInicial}') and date('${req.query.dataFinal}') 
               order by id desc `
 
-    console.log('getPropostasDoUsuario',sql )
+    //console.log('getPropostasDoUsuario',sql )
     executaSQL(credenciais, sql)
       .then(res => {
         if (res) {
@@ -202,7 +202,7 @@ function salvarPlacaDaProposta(req, res) {
     
     let sql = `UPDATE propostas set placa = '${req.query.placa}' where id = ${req.query.id}`
 
-    console.log(sql)
+    //console.log(sql)
 
     executaSQL(credenciais, sql).then(registros => {
 

@@ -86,7 +86,7 @@ export class AuthService {
       this.localStorage.postLocalStorage('usuarioLogado', usuarioLogado.resposta)
       this._setValidadeToken();
       this.ativaGetEventos(parseInt(this.config));
-
+      debugger
       this.usuarioLogado.next(true)
       return usuarioLogado;
     }

@@ -52,6 +52,7 @@ export class LoginComponent implements OnInit {
     this.usuario.senha = SHA1(this.loginForm.value.senha);
    
     const res = await this.auth.autenticacao(this.usuario)
+    
     if (res.error) {
       this.toastrService.error(res.error);
     }

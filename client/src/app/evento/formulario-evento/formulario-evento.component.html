@@ -55,10 +55,14 @@
 
     <div class="md-form col-12" [hidden]="!evento.observacao_origem">
       <textarea type="text" formControlName="observacao_origem" id="observacao_origem" class="md-textarea form-control"
-        mdbInputDirective></textarea>
+        mdbInputDirective disabled ></textarea>
       <label for="observacao_origem">Observação de Origem</label>
     </div>
 
+    <div class="md-form col-6" [hidden]="!evento.campanha">
+      <input mdbInputDirective formControlName="campanha" type="text" id="campanha" class="form-control" disabled>
+      <label for="campanha">Campanha</label>
+    </div>
 
     <div class="md-form col-6" [hidden]="!evento.dt_visualizou">
       <input mdbInputDirective formControlName="dt_visualizou" type="text" id="dt_visualizou" class="form-control"

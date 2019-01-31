@@ -284,9 +284,11 @@ export class TelemarketingQuestionarioComponent implements OnInit {
     const usuarioLogado = this.localStorage.getLocalStorage('usuarioLogado') as any;
     let parametros = {
       id_pessoa: usuarioLogado.id_pessoa,
+      id_pessoa_criou: this._eventoObject.id_pessoa_criou,
       id_evento: this._eventoObject.id,
       id_evento_pai: this._eventoObject.id_evento_pai ? this._eventoObject.id_evento_pai : this._eventoObject.id,
       id_pessoa_receptor: this._eventoObject.id_pessoa_receptor,
+      id_motivo: this._eventoObject.id_motivo,
       id_motivos_respostas: this.questionarioForm.value.motivoRespostaSelecionado,
       id_telefoneDiscado: this.questionarioForm.value.idTelefoneSelecionado,
       id_predicao: this.questionarioForm.value.id_predicao,
