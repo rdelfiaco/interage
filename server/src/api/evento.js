@@ -276,18 +276,36 @@ function salvarEvento(req, res) {
           const motivoAcaoSQL = res.rows[0].acao_sql;
           
 
+
+
           client.query('BEGIN').then((res1) => {
             //console.log('req.query.proposta', req.query.proposta)
             if (req.query.proposta && req.query.proposta !== "null" && req.query.proposta !== "undefined") {
               salvarProposta(req, res).then((idproposta) => {
                 //console.log('salvo proposta ' + idproposta[0].id);
                 finalizaEvento(idproposta[0].id, true);
+
               })
             }
             else {
               finalizaEvento();
             }
 
+            // executa ação SQL do motivo 
+            if (motivoAcaoSQL){
+              let sql = motivoAcaoSQL.replace('${req.query.id_evento}', `${req.query.id_evento}`)
+              let credenciais = {
+                token: req.query.token,
+                idUsuario: req.query.id_usuario
+              };
+              //console.log(credenciais, sql )
+              executaSQL(credenciais, sql).then(() =>{
+                resolve('SQL da ação motivo resolvido com sucesso ')
+              }).catch(err => {
+                  client.end();
+                  reject('Erro em SQL da ação motivo ', err)
+                })
+              }
 
             function finalizaEvento(idproposta, temProposta) {
               let update;
@@ -404,21 +422,6 @@ function salvarEvento(req, res) {
                     })
                   }
                 
-                  // executa ação SQL do motivo 
-                  if (motivoAcaoSQL){
-                  let sql = motivoAcaoSQL.replace('${req.query.id_evento}', `${req.query.id_evento}`)
-                  let credenciais = {
-                    token: req.query.token,
-                    idUsuario: req.query.id_usuario
-                  };
-                  //console.log(credenciais, sql )
-                  executaSQL(credenciais, sql).then(() =>{
-                    resolve('SQL da ação motivo resolvido com sucesso ')
-                  }).catch(err => {
-                      client.end();
-                      reject('Erro em SQL da ação motivo ', err)
-                    })
-                  }
                   // executa ação SQL da resposta do motivo 
                   if (motivoRespostaAcaoSQL){
                     let sql = motivoRespostaAcaoSQL.replace('${req.query.id_evento}', `${req.query.id_evento}`)
