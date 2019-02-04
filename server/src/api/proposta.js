@@ -23,6 +23,7 @@ function salvarProposta(req, res) {
                     , veiculo_comercial
                     , leilao_sinistrado
                     , portabilidade
+                    , parcelas_adesao
                     , dtsalvou)
                 VALUES (  ${req.query.proposta.idTipoVeiculo},
                           '${req.query.proposta.codigoFipe}',
@@ -49,6 +50,7 @@ function salvarProposta(req, res) {
                           ${req.query.proposta.veiculoComercial},
                           ${req.query.proposta.leilaoSinistrado},
                           ${req.query.proposta.portabilidade},
+                          ${req.query.proposta.parcelas},
                           now()) RETURNING id`
 
     //console.log('proposta inserir', sql)

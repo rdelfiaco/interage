@@ -71,16 +71,20 @@ export class ElaboraPropostaComponent implements OnInit {
   tabelaCombos: Array<any>;
   combos: Array<any>;
   valores: Array<any> = [];
-  vlrProposta: number;
+  vlrProposta: number = 0 ;
   valorPPV: number;
   cota: number;
   adesao: number;
   vlrParticipacao: number;
   prcParticipacao: number;
   bntGeraProposta: boolean = true;
-  sccMoto: number;
+  sccMoto: number = 0;
+  moto:boolean = false;
   hoje: string = moment().format('DD/MM/YYYY')
   cotaAlterada: boolean = false;
+  parcelas: number = 1;
+  adesaoParcelada: number;
+  mensalidadeSemParcelamento: number;
 
   sVlrVeiculo: string;
   nVlrVeiculo: number;
@@ -132,7 +136,6 @@ export class ElaboraPropostaComponent implements OnInit {
     this.tabelaCombos = tabelaPrecos.resposta.TabelaCombos;
     this.bntGeraProposta = false;
 
-
     this.initValueId = new Observable((observer) => {
       observer.next('');
     });
@@ -140,7 +143,11 @@ export class ElaboraPropostaComponent implements OnInit {
     // combo tipo do veículo 
     this.tipoVeiculoSelect = tabelaPrecos.resposta.TipoVeiculos;
     this.tipoVeiculoSelect = this.tipoVeiculoSelect.map(tipoVeiculo => {
-      return { value: tipoVeiculo.id, label: tipoVeiculo.nome, reboque: tipoVeiculo.reboque, id_tipo_veiculo: tipoVeiculo.id }
+      return { value: tipoVeiculo.id, 
+               label: tipoVeiculo.nome, 
+               reboque: tipoVeiculo.reboque, 
+               id_tipo_veiculo: tipoVeiculo.id,
+               moto: tipoVeiculo.moto }
     });
 
     this.tipoVeiculoSelectValue = 1;
@@ -164,15 +171,22 @@ export class ElaboraPropostaComponent implements OnInit {
   }
 
   atualizaTipoVeiculo() {
+    let TabelasTipoVeiculosDados = this.tipoVeiculoSelect.filter(this.filtraTabelasTipoVeiculos, [this.tipoVeiculoSelectValue]);
+    this.moto = TabelasTipoVeiculosDados[0].moto;
     this.atualizaTabelas()
   }
 
 
   atualizaTabelas() {
-    this.nVlrVeiculo = Number(this.sVlrVeiculo.substr(2, 12).trim().replace('.', '').replace(',', '.'));
 
-    let nVlrBusca = this.nVlrVeiculo;
-    if (this.tipoVeiculoSelectValue == 3) { nVlrBusca = this.sccMoto }
+    let nVlrBusca = 0;
+
+    if (!this.moto){
+      this.nVlrVeiculo = Number(this.sVlrVeiculo.substr(2, 12).trim().replace('.', '').replace(',', '.'));
+      nVlrBusca = this.nVlrVeiculo;
+    }else{
+      nVlrBusca = this.sccMoto }
+
 
     if (this.tabelaCombos.length > 0) {
       this.combos = this.tabelaCombos.filter(this.filtraTabelas, [nVlrBusca, this.tipoVeiculoSelectValue]);
@@ -205,23 +219,26 @@ export class ElaboraPropostaComponent implements OnInit {
       // 
       // para participação P Percentual se faz o calculo caso contralio o valor é fixo 
       if (this.valores[0].tipo_participacao == 'P') {
-        this.vlrParticipacao =  numeral(this.vlrParticipacao * this.nVlrVeiculo / 100).format('00.00')
         this.prcParticipacao = this.vlrParticipacao
+        this.vlrParticipacao =  numeral(this.vlrParticipacao * this.nVlrVeiculo / 100).format('00.00')
       } else {
         this.vlrParticipacao =  numeral(this.vlrParticipacao).format('00.00')
         this.prcParticipacao = 0
       }
 
-      this.somaValoresProposta();
 
 
       // quando for combro ajustar 
       this.proposta.adesao = this.adesao;
       this.proposta.participacao = this.vlrParticipacao;
-      
+
+      this.somaValoresProposta();
+
 
     } else {
+      
       this.toastrService.error('Tabela correspondente não encontrada')
+      
     }
   }
   filtraTabelasCota(valorDeBusca: any) {
@@ -263,6 +280,7 @@ export class ElaboraPropostaComponent implements OnInit {
   }
 
   somaValoresProposta() {
+   
     if (this.chkPrecos != "6") {
       if (this.tabelaCombos.length > 0) this.vlrProposta = this.combos[this.chkPrecos].valor_combo;
     } else {
@@ -295,9 +313,16 @@ export class ElaboraPropostaComponent implements OnInit {
       };
     }
     
-    this.proposta.mensalidade = numeral(this.vlrProposta).format('00.00')
-    let reboque = this.tipoVeiculoSelect.filter(this.filtraTabelasTipoVeiculos, [this.tipoVeiculoSelectValue]);
-    this.proposta.reboque = reboque[0].reboque;
+    this.proposta.mensalidade = this.vlrProposta;
+    let TabelasTipoVeiculosDados = this.tipoVeiculoSelect.filter(this.filtraTabelasTipoVeiculos, [this.tipoVeiculoSelectValue]);
+    this.proposta.reboque = TabelasTipoVeiculosDados[0].reboque;
+    this.moto = TabelasTipoVeiculosDados[0].moto;
+    this.adesaoParcelada = this.adesao / this.parcelas;
+    this.mensalidadeSemParcelamento =  this.proposta.mensalidade;
+    this.proposta.mensalidade = this.proposta.mensalidade  + this.adesaoParcelada;
+    this.proposta.mensalidade = numeral(this.proposta.mensalidade).format('00.00');
+    this.adesaoParcelada = numeral(this.adesaoParcelada).format('00.00');
+    this.mensalidadeSemParcelamento = numeral(this.mensalidadeSemParcelamento).format('00.00');
   }
 
   mudouNovoPortabilidade(){
@@ -309,8 +334,15 @@ export class ElaboraPropostaComponent implements OnInit {
         this.chckPortabilidade = true; 
         this.adesao = this.valores[0].adesao_maxima;
     }
-    this.adesao = numeral(this.adesao).format('0.00')
+    this.adesao = numeral(this.adesao).format('0.00');
     this.proposta.adesao = this.adesao;
+    this.adesaoParcelada = numeral(this.adesao / this.parcelas).format('0.00');
+  }
+
+  mudouParcelas(){
+    debugger;
+    this.adesaoParcelada = numeral(this.adesao / this.parcelas).format('0.00');
+    this.somaValoresProposta()
   }
 
   mudouParticularComercial(){
@@ -388,6 +420,7 @@ export class ElaboraPropostaComponent implements OnInit {
       this.adesao = this.valores[0].adesao_minima
   }
     this.proposta.adesao = this.adesao;
+    this.somaValoresProposta();
   }
 
 
@@ -515,9 +548,9 @@ export class ElaboraPropostaComponent implements OnInit {
 
               body: [
                 [{
-                  text: `ADESÃO:\n R$ ${this.proposta.adesao}
-                      \n\n MENSALIDADE:\n R$ ${this.proposta.mensalidade} 
-                      \n\n PARTICIPAÇÃO:\n R$ ${this.proposta.participacao} `,
+                  text: `Entrada:\n R$ ${this.adesaoParcelada }
+                      \n\n Parcelas mensais:\n R$ ${this.proposta.mensalidade} 
+                      \n\n Cota de participação:\n R$ ${this.proposta.participacao} `,
                   style: 'header',
                   margin: [15, 20, 0, 5],
                   border: [true, false, true, true],
@@ -535,7 +568,7 @@ export class ElaboraPropostaComponent implements OnInit {
                           \nSem limite de km rodado; Sem perfil de guarda de veículo, não exige garagem;
                           \nRoubo, furto, incêndio, colisão, capotamento, tombamento, desastres naturais como: enchente, chuva de granizo, queda de árvore; 
                           \nAssistência 24H em todo Brasil; 
-                          \nReboque ilimitado em caso de colisão; 
+                          \nReboque ilimitado em caso de colisão, uma vez a cada 12 meses;
                           \nSocorro elétrico e mecânico; Chaveiro; Taxi, SOS Pneus;
                           \nMensalidade Contínua (sem renovação); Não trabalhamos com Bônus; 
                           \n${normalLeilaoSisnsitro};
@@ -629,6 +662,7 @@ export class ElaboraPropostaComponent implements OnInit {
       this.proposta.veiculoComercial = this.chckComercial;
       this.proposta.leilaoSinistrado = this.chckLeilaoSinistrado;
       this.proposta.portabilidade = this.chckPortabilidade; 
+      this.proposta.parcelas = this.parcelas; 
 
           // caso a proposta tenha a cota alterada  
       if (this.cotaAlterada){ 
@@ -664,6 +698,10 @@ export class ElaboraPropostaComponent implements OnInit {
       this.proposta.observacao = '';
 
     }
+
+    function fechar() { 
+      document.getElementById("posiciona").style.display = 'none'; 
+    }
   }
 
   async salvarProposta() {
@@ -691,5 +729,6 @@ export class ElaboraPropostaComponent implements OnInit {
         }
 
     }
+    
   
 }

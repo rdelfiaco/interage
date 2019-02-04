@@ -51,10 +51,10 @@
                   <input mdbInputDirective formControlName="preco_medio" type="text" id="preco_medio" class="form-control" disabled>
                   <label for="preco_medio">Preço médio</label>
                 </div>
-                <div class="md-form col-4" [hidden]="!proposta.data_consulta">
+                <!-- <div class="md-form col-2" [hidden]="!proposta.data_consulta">
                   <input mdbInputDirective formControlName="data_consulta" type="text" id="data_consulta" class="form-control" disabled>
                   <label for="data_consulta">Data da consulta</label>
-                </div>
+                </div> -->
                 <div class="md-form col" [hidden]="!proposta.cota">
                   <input mdbInputDirective formControlName="cota" type="text" id="cota" class="form-control" disabled>
                   <label for="cota">Cota</label>
@@ -62,6 +62,10 @@
                 <div class="md-form col" [hidden]="!proposta.adesao">
                   <input mdbInputDirective formControlName="adesao" type="text" id="adesao" class="form-control" disabled>
                   <label for="adesao">Adesão</label>
+                </div>
+                <div class="md-form col" [hidden]="!proposta.parcelas_adesao">
+                    <input mdbInputDirective formControlName="parcelasAdesao" type="text" id="parcelas_adesao" class="form-control" disabled>
+                    <label for="parcelas_adesao">Parcelas</label>
                 </div>
                 <div class="md-form col" [hidden]="!proposta.mensalidade">
                   <input mdbInputDirective formControlName="mensalidade" type="text" id="mensalidade" class="form-control" disabled>

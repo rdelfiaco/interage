@@ -11,7 +11,6 @@ function getConfiguracao(req, res) {
     let sql = `select valor from interage_parametros where
                    nome_parametro = '${req.query.nomeConfiguracao}'`
 
-    console.log('getConfiguracao ', sql )
     executaSQL(credenciais, sql)
       .then(res => {
         if (res) {

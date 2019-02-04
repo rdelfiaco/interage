@@ -66,6 +66,7 @@ export class DetalhePropostaComponent implements OnInit {
       particularComercial_:[''],
       normalLeilao_:[''],
       cotaAlterada:[''],
+      parcelasAdesao:[''],
 
     })
   }
@@ -118,6 +119,7 @@ export class DetalhePropostaComponent implements OnInit {
       particularComercial_:this.proposta.particular_comercial_,
       normalLeilao_:this.proposta.normal_leilao_,
       cotaAlterada:this.proposta.cota_alterada_,
+      parcelasAdesao:this.proposta.parcelas_adesao,
       usuario:this.proposta.usuario,
       dtsalvou:this.proposta.dtsalvou ? moment(this.proposta.dtsalvou).format('DD/MM/YYYY HH:mm:ss') : this.proposta.dtsalvou,
     })                                

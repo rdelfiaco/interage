@@ -41,6 +41,14 @@ export class Proposta {
     private _veiculoComercial: boolean;
     private _leilaoSinistrado: boolean;
     private _portabilidade: boolean;
+    private _parcelas: number;
+
+    public get parcelas(): number {
+        return this._parcelas;
+    }
+    public set parcelas(value: number) {
+        this._parcelas = value;
+    }
 
     public get portabilidade(): boolean {
         return this._portabilidade;
@@ -360,6 +368,7 @@ export class Proposta {
             veiculoComercial: this._veiculoComercial,
             leilaoSinistrado: this._leilaoSinistrado,
             portabilidade: this._portabilidade,
+            parcelas: this._parcelas,
 
         };
     }
