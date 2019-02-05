@@ -319,7 +319,9 @@ export class ElaboraPropostaComponent implements OnInit {
     this.moto = TabelasTipoVeiculosDados[0].moto;
     this.adesaoParcelada = this.adesao / this.parcelas;
     this.mensalidadeSemParcelamento =  this.proposta.mensalidade;
-    this.proposta.mensalidade = this.proposta.mensalidade  + this.adesaoParcelada;
+    if (this.parcelas > 1 ){ 
+      this.proposta.mensalidade = this.proposta.mensalidade  + this.adesaoParcelada;
+    }
     this.proposta.mensalidade = numeral(this.proposta.mensalidade).format('00.00');
     this.adesaoParcelada = numeral(this.adesaoParcelada).format('00.00');
     this.mensalidadeSemParcelamento = numeral(this.mensalidadeSemParcelamento).format('00.00');
@@ -427,6 +429,9 @@ export class ElaboraPropostaComponent implements OnInit {
   geraProposta() {
 
     let normalLeilaoSisnsitro = 'Indenização 100% tabela Fipe, exceto veículos de leilão é remarcado'
+    let entrada = this.adesao;
+    if ( this.parcelas > 1 ){ entrada = this.proposta.mensalidade
+    }
     if (this.chckLeilaoSinistrado) {
       normalLeilaoSisnsitro = 'Indenização 80% tabela Fipe'
     }
@@ -548,7 +553,7 @@ export class ElaboraPropostaComponent implements OnInit {
 
               body: [
                 [{
-                  text: `Entrada:\n R$ ${this.adesaoParcelada }
+                  text: `Entrada:\n R$ ${entrada}
                       \n\n Parcelas mensais:\n R$ ${this.proposta.mensalidade} 
                       \n\n Cota de participação:\n R$ ${this.proposta.participacao} `,
                   style: 'header',
