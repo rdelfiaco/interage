@@ -25,19 +25,19 @@
                     </div>
               </div>
               <div class="row">
-                  <div class="md-form col-3" [hidden]="!proposta.tipo_veiculo_">
+                  <div class="md-form col-4" [hidden]="!proposta.tipo_veiculo_">
                       <input mdbInputDirective formControlName="tipo_veiculo" type="text" id="tipo_veiculo" class="form-control" disabled>
                       <label for="tipo_veiculo">Tipo do veículo</label>
                   </div>
-                  <div class="md-form col-3" [hidden]="!proposta.marca">
+                  <div class="md-form col-2" [hidden]="!proposta.marca">
                         <input mdbInputDirective formControlName="marca" type="text" id="marca" class="form-control" disabled>
                         <label for="marca">Marca</label>
                   </div>
-                  <div class="md-form col-3" [hidden]="!proposta.modelo">
+                  <div class="md-form col-4" [hidden]="!proposta.modelo">
                           <input mdbInputDirective formControlName="modelo" type="text" id="modelo" class="form-control" disabled>
                           <label for="modelo">Modelo</label>
                   </div>
-                  <div class="md-form col-3" [hidden]="!proposta.ano_modelo">
+                  <div class="md-form col-2" [hidden]="!proposta.ano_modelo">
                             <input mdbInputDirective formControlName="ano_modelo" type="text" id="ano_modelo" class="form-control" disabled>
                             <label for="ano_modelo">Ano</label>
                   </div>
@@ -99,6 +99,23 @@
                 </div>
               </div>
               <div class="row">
+                <div class="md-form col-4" [hidden]="!proposta.parcelas_rastreador">
+                  <input mdbInputDirective formControlName="parcelasRastreador" type="text" id="parcelasRastreador" class="form-control" disabled>
+                  <label for="parcelasRastreador">Parc. da instalação rastreador</label>
+                </div>
+                <div class="md-form col-4" [hidden]="!proposta.rastreador_instalacao">
+                  <input mdbInputDirective formControlName="rastreadorInstalacao" type="text" id="rastreadorInstalacao" class="form-control" disabled>
+                  <label for="rastreadorInstalacao">Vlr da instalação do rastreador</label>
+                </div>
+                <div class="md-form col-3" [hidden]="!proposta.entrada">
+                  <input mdbInputDirective formControlName="entrada" type="text" id="entrada" class="form-control" disabled>
+                  <label for="entrada">Valor da entrada</label>
+                </div>
+              </div>
+
+
+
+              <div class="row">
                 <div class="md-form col" >
                   <input mdbInputDirective formControlName="novoPortabilidade_" type="text" id="novoPortabilidade_" class="form-control" disabled>
                   <label for="novoPortabilidade_">Novo/Portabilidade</label>
@@ -116,6 +133,8 @@
                   <label for="cotaAlterada">Tipo da cota</label>
                 </div>               
               </div>
+
+
               <div class="row">
                 <div class="md-form col-5" [hidden]="!proposta.usuario">
                   <input mdbInputDirective formControlName="usuario" type="text" id="usuario" class="form-control" disabled>

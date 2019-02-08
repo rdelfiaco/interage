@@ -42,6 +42,13 @@
         <label class="form-check-label" for="materialChecked">Portabilidade</label> 
     </div>
 
+    <!-- Parcelas para dividir a adesão -->
+    <div class=" col-md-2 md-form " style="margin-top: 30px">
+        <input mdbInputDirective type="text" id="parcelas" class="form-control" 
+            [(ngModel)]="parcelas" (keyup)="mudouParcelas()" >
+        <label for="parcelas" style="margin-left: 15px">Parcelas da adesão</label>
+    </div>
+
     <!-- participação particular / comercial -->
     <div class="form-check  md-form  col-md-2 " style="margin-top: 40px" >
             
@@ -52,13 +59,6 @@
         <input type="radio" class="form-check-input" id="chckComercial" [checked]="chckComercial"   (change)="mudouParticularComercial()"
         name="chckParticular" checked mdbInputDirective>
         <label class="form-check-label" for="chckComercial">Comercial</label>
-    </div>
-
-    <!-- Parcelas para dividir a adesão -->
-    <div class=" col-md-2 md-form " style="margin-top: 30px">
-        <input mdbInputDirective type="text" id="parcelas" class="form-control" 
-            [(ngModel)]="parcelas" (keyup)="mudouParcelas()" >
-        <label for="parcelas" style="margin-left: 15px">Parcelas</label>
     </div>
 
     <!-- veiculo normal ou leilão / sinistrado -->
@@ -72,6 +72,13 @@
         name="chckLeilaoSinistrado_" checked mdbInputDirective>
         <label class="form-check-label" for="chckLeilaoSinistrado">Leilão/Sinistrado</label>
     </div>
+
+        <!-- Parcelas para dividir a adesão -->
+        <div class=" col-md-2 md-form " style="margin-top: 30px">
+            <input mdbInputDirective type="text" id="parcelasRastreador" class="form-control" 
+                [(ngModel)]="parcelasRastreador" (keyup)="mudouParcelasRastreador()" >
+            <label for="parcelasRastreador" style="margin-left: 15px">Parcelas do rastreador</label>
+        </div>
 
 
 </div>
@@ -105,25 +112,7 @@
     </div>
     <br> -->
 
-    <div class="row ">
 
-        
-
-
-
-        <div class="md-form col-md-8" style="margin-left: 50px" >
-            <input mdbInputDirective [(ngModel)] ="proposta.observacao" type="text" id="observacao" class="form-control" [disabled]=bntGeraProposta >
-            <label for="observacao">Observação (será salva no evento de acompanhamento da proposta)</label>
-          </div>
-        
-        <div class="md-form col-md-2  " style="text-align: center">
-            <button type="button" mdbBtn color="primary" (click)="geraProposta();" class="relative waves-light" [disabled]=bntGeraProposta
-                mdbWavesEffect>
-                Salvar Proposta
-            </button>
-        </div>
-
-    </div>
     <div class="row ">
 
                     <!-- mensalidade sem parcelamento  -->
@@ -143,6 +132,27 @@
             <input mdbInputDirective type="number" id="mensalidadeComParcelamento" class="form-control" 
                 [(ngModel)]="this.proposta.mensalidade" disabled >
             <label for="mensalidadeComParcelamento" style="margin-left: 15px; font-size: 20px;">Mensalidade com parcelamento</label>
+        </div>
+
+    </div>
+    <div class="row ">
+
+        <div class=" col-md-2 md-form " style="margin-top: 30px">
+            <input mdbInputDirective type="number" id="entrada" class="form-control" 
+                [(ngModel)]="this.proposta.entrada" disabled >
+            <label for="entrada" style="margin-left: 15px; font-size: 20px;">Entrada</label>
+        </div>        
+
+        <div class="md-form col-md-7" style="margin-left: 50px" >
+            <input mdbInputDirective [(ngModel)] ="proposta.observacao" type="text" id="observacao" class="form-control" [disabled]=bntGeraProposta >
+            <label for="observacao" style="margin-left: 15px;" >Observação (será salva no evento de acompanhamento da proposta)</label>
+          </div>
+        
+        <div class="md-form col-md-2  " style="text-align: center">
+            <button type="button" mdbBtn color="primary" (click)="geraProposta();" class="relative waves-light" [disabled]=bntGeraProposta
+                mdbWavesEffect>
+                Salvar Proposta
+            </button>
         </div>
 
     </div>
@@ -183,7 +193,7 @@
                     </div>
                     <div class="col-md-3">
                         <div *ngIf="chckPortabilidade" >
-                            <input  type="text" id="adesao" class="form-control" style="background-color: powderblue" 
+                            <input  type="number" id="adesao" class="form-control" style="background-color: powderblue" 
                             [(ngModel)]="adesao"  (keyup)="validaAdesao()"  >
                         </div>
                         <div *ngIf="!chckPortabilidade" >

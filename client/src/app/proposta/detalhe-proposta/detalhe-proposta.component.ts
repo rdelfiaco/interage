@@ -67,6 +67,9 @@ export class DetalhePropostaComponent implements OnInit {
       normalLeilao_:[''],
       cotaAlterada:[''],
       parcelasAdesao:[''],
+      parcelasRastreador: [''],
+      rastreadorInstalacao: [''],
+      entrada: [''],
 
     })
   }
@@ -121,6 +124,9 @@ export class DetalhePropostaComponent implements OnInit {
       cotaAlterada:this.proposta.cota_alterada_,
       parcelasAdesao:this.proposta.parcelas_adesao,
       usuario:this.proposta.usuario,
+      parcelasRastreador: this.proposta.parcelas_rastreador,
+      rastreadorInstalacao: this.proposta.rastreador_instalacao,
+      entrada: this.proposta.entrada,
       dtsalvou:this.proposta.dtsalvou ? moment(this.proposta.dtsalvou).format('DD/MM/YYYY HH:mm:ss') : this.proposta.dtsalvou,
     })                                
   }

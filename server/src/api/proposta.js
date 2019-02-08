@@ -24,6 +24,9 @@ function salvarProposta(req, res) {
                     , leilao_sinistrado
                     , portabilidade
                     , parcelas_adesao
+                    , parcelas_rastreador
+                    , rastreador_instalacao
+                    , entrada
                     , dtsalvou)
                 VALUES (  ${req.query.proposta.idTipoVeiculo},
                           '${req.query.proposta.codigoFipe}',
@@ -51,6 +54,9 @@ function salvarProposta(req, res) {
                           ${req.query.proposta.leilaoSinistrado},
                           ${req.query.proposta.portabilidade},
                           ${req.query.proposta.parcelas},
+                          ${req.query.proposta.parcelasRastreador},
+                          ${req.query.proposta.rastreadorInstalacao},
+                          ${req.query.proposta.entrada},
                           now()) RETURNING id`
 
     //console.log('proposta inserir', sql)

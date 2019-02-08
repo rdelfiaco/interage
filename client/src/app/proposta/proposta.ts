@@ -42,6 +42,30 @@ export class Proposta {
     private _leilaoSinistrado: boolean;
     private _portabilidade: boolean;
     private _parcelas: number;
+    private _parcelasRastreador: number;
+    private _rastreadorInstalacao: number;
+    private _entrada: number;
+
+    public get entrada(): number {
+        return this._entrada;
+    }
+    public set entrada(value: number) {
+        this._entrada = value;
+    }
+
+    public get rastreadorInstalacao(): number {
+        return this._rastreadorInstalacao;
+    }
+    public set rastreadorInstalacao(value: number) {
+        this._rastreadorInstalacao = value;
+    }
+
+    public get parcelasRastreador(): number {
+        return this._parcelasRastreador;
+    }
+    public set parcelasRastreador(value: number) {
+        this._parcelasRastreador = value;
+    }
 
     public get parcelas(): number {
         return this._parcelas;
@@ -56,7 +80,6 @@ export class Proposta {
     public set portabilidade(value: boolean) {
         this._portabilidade = value;
     }
-
 
     public get veiculoComercial(): boolean {
         return this._veiculoComercial;
@@ -369,7 +392,9 @@ export class Proposta {
             leilaoSinistrado: this._leilaoSinistrado,
             portabilidade: this._portabilidade,
             parcelas: this._parcelas,
-
+            parcelasRastreador: this._parcelasRastreador,
+            rastreadorInstalacao: this._rastreadorInstalacao,
+            entrada: this._entrada,
         };
     }
 }

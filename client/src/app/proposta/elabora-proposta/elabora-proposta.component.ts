@@ -83,8 +83,11 @@ export class ElaboraPropostaComponent implements OnInit {
   hoje: string = moment().format('DD/MM/YYYY')
   cotaAlterada: boolean = false;
   parcelas: number = 1;
+  parcelasRastreador: number = 1;
   adesaoParcelada: number;
   mensalidadeSemParcelamento: number;
+  entrada:number = 0.00; 
+  rastreadorInstalacao: number = 0.00;
 
   sVlrVeiculo: string;
   nVlrVeiculo: number;
@@ -208,7 +211,7 @@ export class ElaboraPropostaComponent implements OnInit {
       this.valorPPV = this.valores[0].valor_ppv;
       this.cota = this.valores[0].cota;
       
-      this.adesao = this.valores[0].adesao
+      this.adesao = Number(this.valores[0].adesao)
       // para carro comercial a participação é maior que carro particular 
       if (this.chckParticular) {
         this.vlrParticipacao = this.valores[0].valor_participacao_particular
@@ -281,6 +284,7 @@ export class ElaboraPropostaComponent implements OnInit {
 
   somaValoresProposta() {
    
+    this.rastreadorInstalacao = 0;
     if (this.chkPrecos != "6") {
       if (this.tabelaCombos.length > 0) this.vlrProposta = this.combos[this.chkPrecos].valor_combo;
     } else {
@@ -307,24 +311,35 @@ export class ElaboraPropostaComponent implements OnInit {
         this.proposta.appDescricao = this.app[this.chckApp].descricao;
       };
       if (this.rastreador.length > 0) {
-        this.vlrProposta = this.vlrProposta + Number(this.rastreador[this.chckRastreador].valor)
+        this.vlrProposta = this.vlrProposta + Number(this.rastreador[this.chckRastreador].valor);
         this.proposta.idRastreador = this.rastreador[this.chckRastreador].id;
         this.proposta.rastreador = this.rastreador[this.chckRastreador].nome; 
+        this.rastreadorInstalacao = Number(this.rastreador[this.chckRastreador].valor_instalacao);
+        if (this.parcelasRastreador > 1 ){
+          this.rastreadorInstalacao = ( this.rastreadorInstalacao / this.parcelasRastreador) ;
+        }
+
       };
     }
     
+    this.adesao  = Number(this.adesao );
     this.proposta.mensalidade = this.vlrProposta;
     let TabelasTipoVeiculosDados = this.tipoVeiculoSelect.filter(this.filtraTabelasTipoVeiculos, [this.tipoVeiculoSelectValue]);
     this.proposta.reboque = TabelasTipoVeiculosDados[0].reboque;
     this.moto = TabelasTipoVeiculosDados[0].moto;
     this.adesaoParcelada = this.adesao / this.parcelas;
     this.mensalidadeSemParcelamento =  this.proposta.mensalidade;
+    this.entrada = this.rastreadorInstalacao + this.adesao ;
     if (this.parcelas > 1 ){ 
       this.proposta.mensalidade = this.proposta.mensalidade  + this.adesaoParcelada;
+      this.entrada = this.rastreadorInstalacao + this.proposta.mensalidade;
     }
     this.proposta.mensalidade = numeral(this.proposta.mensalidade).format('00.00');
     this.adesaoParcelada = numeral(this.adesaoParcelada).format('00.00');
     this.mensalidadeSemParcelamento = numeral(this.mensalidadeSemParcelamento).format('00.00');
+    this.proposta.entrada = numeral(this.entrada).format('00.00');
+    this.proposta.rastreadorInstalacao = numeral( this.rastreadorInstalacao).format('00.00');
+    this.proposta.parcelasRastreador = this.parcelasRastreador;
   }
 
   mudouNovoPortabilidade(){
@@ -339,11 +354,23 @@ export class ElaboraPropostaComponent implements OnInit {
     this.adesao = numeral(this.adesao).format('0.00');
     this.proposta.adesao = this.adesao;
     this.adesaoParcelada = numeral(this.adesao / this.parcelas).format('0.00');
+    this.somaValoresProposta();
   }
 
   mudouParcelas(){
-    debugger;
-    this.adesaoParcelada = numeral(this.adesao / this.parcelas).format('0.00');
+    if (this.parcelas > 12){
+      this.toastrService.error(`A quantidade de parcelas não pode ser maior que 12`);
+      this.parcelas = 12;
+    }
+    this.adesaoParcelada = numeral( this.adesao / this.parcelas).format('0.00');
+    this.somaValoresProposta()
+  }
+
+  mudouParcelasRastreador(){
+    if (this.parcelasRastreador > 3 ){
+      this.toastrService.error('A quantidade de parcelas não pode ser maior que 3 ')
+      this.parcelasRastreador = 3;
+    }
     this.somaValoresProposta()
   }
 
@@ -429,9 +456,6 @@ export class ElaboraPropostaComponent implements OnInit {
   geraProposta() {
 
     let normalLeilaoSisnsitro = 'Indenização 100% tabela Fipe, exceto veículos de leilão é remarcado'
-    let entrada = this.adesao;
-    if ( this.parcelas > 1 ){ entrada = this.proposta.mensalidade
-    }
     if (this.chckLeilaoSinistrado) {
       normalLeilaoSisnsitro = 'Indenização 80% tabela Fipe'
     }
@@ -553,7 +577,7 @@ export class ElaboraPropostaComponent implements OnInit {
 
               body: [
                 [{
-                  text: `Entrada:\n R$ ${entrada}
+                  text: `Entrada:\n R$ ${this.proposta.entrada}
                       \n\n Parcelas mensais:\n R$ ${this.proposta.mensalidade} 
                       \n\n Cota de participação:\n R$ ${this.proposta.participacao} `,
                   style: 'header',
