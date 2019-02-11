@@ -27,6 +27,7 @@ function salvarProposta(req, res) {
                     , parcelas_rastreador
                     , rastreador_instalacao
                     , entrada
+                    , mensalidade_alterada
                     , dtsalvou)
                 VALUES (  ${req.query.proposta.idTipoVeiculo},
                           '${req.query.proposta.codigoFipe}',
@@ -57,6 +58,7 @@ function salvarProposta(req, res) {
                           ${req.query.proposta.parcelasRastreador},
                           ${req.query.proposta.rastreadorInstalacao},
                           ${req.query.proposta.entrada},
+                          ${req.query.proposta.mensalidadeAlterada},
                           now()) RETURNING id`
 
     //console.log('proposta inserir', sql)
@@ -101,10 +103,10 @@ function salvarProposta(req, res) {
       executaSQL(credenciais, sql).then(registros => {
         resolve(idProposta)
       }).catch(e => {
-        reject('Salvar evento de proposta: ', e);
+        reject('Erro ao salvar evento de proposta: ', e);
       });
     }).catch(e => {
-      reject('Salvar proposta: ',e);
+      reject('Erro ao salvar proposta: ',e);
     });
   })
 };

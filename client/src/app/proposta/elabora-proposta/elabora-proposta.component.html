@@ -117,19 +117,19 @@
 
                     <!-- mensalidade sem parcelamento  -->
         <div class=" col-md-4 md-form " style="margin-top: 30px">
-            <input mdbInputDirective type="number" id="mensalidadeSemParcelamento" class="form-control" 
-                [(ngModel)]="mensalidadeSemParcelamento" disabled >
+            <input mdbInputDirective type="text" id="mensalidadeSemParcelamento" class="form-control" 
+                [(ngModel)]="mensalidadeSemParcelamento" (change)="mudouMensalidade()"  >
             <label for="mensalidadeSemParcelamento" style="margin-left: 15px; font-size: 20px;">Mensalidade sem parcelamento</label>
         </div>
             <!-- Valor do parcelamento  -->
         <div class=" col-md-4 md-form " style="margin-top: 30px">
-            <input mdbInputDirective type="number" id="adesaoParcelada" class="form-control" 
+            <input mdbInputDirective type="text" id="adesaoParcelada" class="form-control" 
                 [(ngModel)]="adesaoParcelada" disabled >
             <label for="adesaoParcelada" style="margin-left: 15px; font-size: 20px;">Vlr da parcela da adesão</label>
         </div>
             <!-- mensalidade com parcelamento  -->
         <div class=" col-md-4 md-form " style="margin-top: 30px">
-            <input mdbInputDirective type="number" id="mensalidadeComParcelamento" class="form-control" 
+            <input mdbInputDirective type="text" id="mensalidadeComParcelamento" class="form-control" 
                 [(ngModel)]="this.proposta.mensalidade" disabled >
             <label for="mensalidadeComParcelamento" style="margin-left: 15px; font-size: 20px;">Mensalidade com parcelamento</label>
         </div>
@@ -138,7 +138,7 @@
     <div class="row ">
 
         <div class=" col-md-2 md-form " style="margin-top: 30px">
-            <input mdbInputDirective type="number" id="entrada" class="form-control" 
+            <input mdbInputDirective type="text" id="entrada" class="form-control" 
                 [(ngModel)]="this.proposta.entrada" disabled >
             <label for="entrada" style="margin-left: 15px; font-size: 20px;">Entrada</label>
         </div>        
@@ -193,8 +193,8 @@
                     </div>
                     <div class="col-md-3">
                         <div *ngIf="chckPortabilidade" >
-                            <input  type="number" id="adesao" class="form-control" style="background-color: powderblue" 
-                            [(ngModel)]="adesao"  (keyup)="validaAdesao()"  >
+                            <input  type="text" id="adesao" class="form-control" style="background-color: powderblue" 
+                            [(ngModel)]="adesao"  (change)="validaAdesao()"  >
                         </div>
                         <div *ngIf="!chckPortabilidade" >
                                 {{adesao}}

@@ -839,6 +839,13 @@ function getEventosFiltrados(req, res) {
     };
 
     //console.log(req.query)
+    if (req.query.status.length == 0 ){
+      req.query.status = '0';
+    }
+    if (req.query.motivos.length == 0){
+      req.query.motivos = '0';
+    }
+
     let sql = `select * from view_eventos where  (id_campanha is null or tipodestino = 'P' ) `
     sql = sql + ` and (id_status_evento in (${req.query.status})  or -1 in (${req.query.status})) `  // status 
     if (req.query.dtCricaoRadio == 'true') {
@@ -856,7 +863,6 @@ function getEventosFiltrados(req, res) {
     sql = sql + ` and (id_motivo in ( ${req.query.motivos} )  or -1 in ( ${req.query.motivos} )  )` // motivos 
     sql = sql + ` order by dt_criou limit 100` //
     
-    //console.log(sql)
     executaSQL(credenciais, sql)
       .then(res => {
         if (res) {

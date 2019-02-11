@@ -35,6 +35,7 @@ export class EventoComponent implements OnInit {
   usuarioLogadoSupervisor: boolean = true;
   eventoFiltros: any;
   tornarResponsavel: any;
+  totalEventos: number = 0;
 
   dataInicial: string = moment().subtract(1, 'days').format('DD/MM/YYYY')
   dataFinal: string = moment().add(1, 'days').format('DD/MM/YYYY')
@@ -142,6 +143,10 @@ export class EventoComponent implements OnInit {
   @ViewChild('confirmSeTornarResponsavelModal') confirmSeTornarResponsavelModal: ModalDirective;
 
   @HostListener('input') oninput() {
+      this.defineNumeroPagina();
+  }
+ 
+  defineNumeroPagina(){
     this.paginators = [];
     for (let i = 1; i <= this.search().length; i++) {
       if (!(this.paginators.indexOf(Math.ceil(i / this.maxVisibleItems)) !== -1)) {
@@ -150,7 +155,7 @@ export class EventoComponent implements OnInit {
     }
     this.lastPageNumber = this.paginators.length;
   }
-  
+
   changePage(event: any) {
     if (event.target.text >= 1 && event.target.text <= this.maxVisibleItems) {
       this.activePage = +event.target.text;
@@ -221,6 +226,7 @@ export class EventoComponent implements OnInit {
 
 
   async listaEventos() {
+    debugger
     try {
       let usuarioIdPessoa = this.usuarioSelect.filter(usuario => {
         if (usuario.value == this.usuarioSelectValue) {
@@ -248,12 +254,13 @@ export class EventoComponent implements OnInit {
       }) as any;
       if (eventos.error) this.tableData = [];
       else this.tableData = eventos.resposta as Array<object>;
-      console.log(this.dtCricaoRadio)
     }
     catch (e) {
       this.toastrService.error('Erro em getEventosFiltrados : ', e.error);
       this.tableData = [];
     }
+    this.totalEventos = this.tableData.length;
+    this.defineNumeroPagina();
   }
 
   async abreEvento(evento: any) {

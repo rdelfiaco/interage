@@ -45,6 +45,14 @@ export class Proposta {
     private _parcelasRastreador: number;
     private _rastreadorInstalacao: number;
     private _entrada: number;
+    private _mensalidadeAlterada: boolean;
+
+    public get mensalidadeAlterada(): boolean {
+        return this._mensalidadeAlterada;
+    }
+    public set mensalidadeAlterada(value: boolean) {
+        this._mensalidadeAlterada = value;
+    }
 
     public get entrada(): number {
         return this._entrada;
@@ -395,6 +403,7 @@ export class Proposta {
             parcelasRastreador: this._parcelasRastreador,
             rastreadorInstalacao: this._rastreadorInstalacao,
             entrada: this._entrada,
+            mensalidadeAlterada: this._mensalidadeAlterada, 
         };
     }
 }

@@ -44,10 +44,14 @@
         <div class="row" style="margin-top: 40px; margin-left: 5px; font-size: 0.8rem; ">
           <!-- Material unchecked -->
           <mdb-checkbox [checked]=eventosUsuarioChk 
-          (change)="onChangeEventosUsuarioChk(eventosUsuarioChk)"   >Listar apenas eventos do usuário.</mdb-checkbox>
+          (change)="onChangeEventosUsuarioChk(eventosUsuarioChk)">Listar apenas eventos do usuário.</mdb-checkbox>
           <mdb-checkbox [disabled]="true" [checked]="true">Listar até cem eventos.</mdb-checkbox>
           <mdb-checkbox [disabled]="true" [checked]="true">Os eventos de campanhas são listados.</mdb-checkbox>
         </div>
+        <div>
+            <label for="totalEventos" style="margin-left: 15px">Total de eventos: {{totalEventos}} </label>
+        </div>
+        
 
       </div>
       <div class="col-6 col-sm-4 " style="z-index: 0">
@@ -98,7 +102,7 @@
       <div class="col-6 col-sm-4" style="z-index: 0">
         <div class="row" style="margin-top: 25px" >
           <div class="col-md-12">
-            <mdb-select [(ngModel)]="motivoSelectValue" [options]="motivoSelect" [multiple]="true" (selected)="listaEventos()"
+            <mdb-select [(ngModel)]="motivoSelectValue" [options]="motivoSelect" [multiple]="true" (click)="listaEventos()"
             [highlightFirst]="false" placeholder="Escolha o motivo" style="font-size: 0.5rem;">
             </mdb-select>
             <label>Motivo</label>
@@ -106,7 +110,7 @@
         </div>
         <div class="row" style="margin-top: 15px">
           <div class="col-md-12">
-            <mdb-select [(ngModel)]="statusSelectValue" [options]="statusSelect" [multiple]="true" (selected)="listaEventos()"
+            <mdb-select [(ngModel)]="statusSelectValue" [options]="statusSelect" [multiple]="true" (click)="listaEventos()"
             placeholder="Escolha o status" style="font-size: 0.5rem;"></mdb-select>
             <label>Status</label>
           </div>

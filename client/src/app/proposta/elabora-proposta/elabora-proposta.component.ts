@@ -166,6 +166,14 @@ export class ElaboraPropostaComponent implements OnInit {
         }
       }
     );
+
+    this.chckPortabilidade = false;
+    this.chckNovo = false;
+    this.chckParticular = false;
+    this.chckComercial = false;
+    this.chckNormal = false;
+    this.chckLeilaoSinistrado = false;
+    this.bntGeraProposta = true;
   }
 
   atualizaValorVeiculo(proposta_: Proposta) {
@@ -211,22 +219,23 @@ export class ElaboraPropostaComponent implements OnInit {
       this.valorPPV = this.valores[0].valor_ppv;
       this.cota = this.valores[0].cota;
       
-      this.adesao = Number(this.valores[0].adesao)
+      this.adesao = Number(this.valores[0].adesao);
+      
       // para carro comercial a participação é maior que carro particular 
       if (this.chckParticular) {
-        this.vlrParticipacao = this.valores[0].valor_participacao_particular
+        this.vlrParticipacao = this.valores[0].valor_participacao_particular;
       } else {
-        this.vlrParticipacao = this.valores[0].valor_participacao_comercial
+        this.vlrParticipacao = this.valores[0].valor_participacao_comercial;
       }
 
       // 
       // para participação P Percentual se faz o calculo caso contralio o valor é fixo 
       if (this.valores[0].tipo_participacao == 'P') {
-        this.prcParticipacao = this.vlrParticipacao
-        this.vlrParticipacao =  numeral(this.vlrParticipacao * this.nVlrVeiculo / 100).format('00.00')
+        this.prcParticipacao = this.vlrParticipacao;
+        this.vlrParticipacao =  numeral(this.vlrParticipacao * this.nVlrVeiculo / 100).format('00.00');
       } else {
-        this.vlrParticipacao =  numeral(this.vlrParticipacao).format('00.00')
-        this.prcParticipacao = 0
+        this.vlrParticipacao =  numeral(this.vlrParticipacao).format('00.00');
+        this.prcParticipacao = 0;
       }
 
 
@@ -322,13 +331,21 @@ export class ElaboraPropostaComponent implements OnInit {
       };
     }
     
-    this.adesao  = Number(this.adesao );
-    this.proposta.mensalidade = this.vlrProposta;
     let TabelasTipoVeiculosDados = this.tipoVeiculoSelect.filter(this.filtraTabelasTipoVeiculos, [this.tipoVeiculoSelectValue]);
     this.proposta.reboque = TabelasTipoVeiculosDados[0].reboque;
     this.moto = TabelasTipoVeiculosDados[0].moto;
+    this.mensalidadeSemParcelamento = this.vlrProposta;
+    this.proposta.mensalidadeAlterada = false;
+    this.calculaValores();
+  }
+
+  calculaValores(){
+    this.adesao  = Number(this.adesao );
+    this.proposta.mensalidade = Number(this.mensalidadeSemParcelamento);
+    this.parcelas = Number(this.parcelas);
+    this.rastreadorInstalacao = Number(this.rastreadorInstalacao);
+
     this.adesaoParcelada = this.adesao / this.parcelas;
-    this.mensalidadeSemParcelamento =  this.proposta.mensalidade;
     this.entrada = this.rastreadorInstalacao + this.adesao ;
     if (this.parcelas > 1 ){ 
       this.proposta.mensalidade = this.proposta.mensalidade  + this.adesaoParcelada;
@@ -340,21 +357,38 @@ export class ElaboraPropostaComponent implements OnInit {
     this.proposta.entrada = numeral(this.entrada).format('00.00');
     this.proposta.rastreadorInstalacao = numeral( this.rastreadorInstalacao).format('00.00');
     this.proposta.parcelasRastreador = this.parcelasRastreador;
+    this.adesao = numeral(this.adesao).format('00.00');
   }
 
+  mudouMensalidade(){
+    this.proposta.mensalidadeAlterada = false;
+    if (this.mensalidadeSemParcelamento < this.vlrProposta){
+      this.toastrService.error(`A mensalidade não pode ser menor que R$ ${this.vlrProposta}`);
+      this.mensalidadeSemParcelamento = this.vlrProposta;
+    }
+    if (this.mensalidadeSemParcelamento != this.vlrProposta){ 
+      this.proposta.mensalidadeAlterada = true;
+     }
+    this.calculaValores();
+    }
+
   mudouNovoPortabilidade(){
-    if (this.chckPortabilidade) {
-        this.chckPortabilidade = false;
+    if (this.chckNovo) {
+        this.chckPortabilidade = true;
+        this.chckNovo = false;
         this.adesao = this.valores[0].adesao
     }else
     {
-        this.chckPortabilidade = true; 
+        this.chckPortabilidade = false; 
+        this.chckNovo = true;
         this.adesao = this.valores[0].adesao_maxima;
     }
-    this.adesao = numeral(this.adesao).format('0.00');
+    this.adesao = Number(this.adesao);
     this.proposta.adesao = this.adesao;
+    this.adesao = numeral(this.adesao).format('0.00');
     this.adesaoParcelada = numeral(this.adesao / this.parcelas).format('0.00');
     this.somaValoresProposta();
+    this.habilitaBntGeraProposta();
   }
 
   mudouParcelas(){
@@ -363,15 +397,15 @@ export class ElaboraPropostaComponent implements OnInit {
       this.parcelas = 12;
     }
     this.adesaoParcelada = numeral( this.adesao / this.parcelas).format('0.00');
-    this.somaValoresProposta()
+    this.somaValoresProposta();
   }
 
   mudouParcelasRastreador(){
     if (this.parcelasRastreador > 3 ){
-      this.toastrService.error('A quantidade de parcelas não pode ser maior que 3 ')
+      this.toastrService.error('A quantidade de parcelas não pode ser maior que 3 ');
       this.parcelasRastreador = 3;
     }
-    this.somaValoresProposta()
+    this.somaValoresProposta();
   }
 
   mudouParticularComercial(){
@@ -382,7 +416,8 @@ export class ElaboraPropostaComponent implements OnInit {
       this.chckParticular = true;
       this.chckComercial = false;
     }
-    this.atualizaTabelas()
+    this.atualizaTabelas();
+    this.habilitaBntGeraProposta();
   }
 
   mudouLeilaoSinistrado(){
@@ -393,7 +428,8 @@ export class ElaboraPropostaComponent implements OnInit {
       this.chckNormal = true;
       this.chckLeilaoSinistrado = false;
     }
-    this.atualizaTabelas()
+    this.atualizaTabelas();
+    this.habilitaBntGeraProposta();
   }
 
   cotaAnterior(){
@@ -440,6 +476,7 @@ export class ElaboraPropostaComponent implements OnInit {
   }
 
   validaAdesao(){
+    this.adesao = Number(this.adesao);
     if (this.adesao > this.valores[0].adesao_maxima ){
         this.toastrService.error(`Adesão não pode ser maior que ${this.valores[0].adesao_maxima}`);
         this.adesao = this.valores[0].adesao_maxima;
@@ -454,8 +491,11 @@ export class ElaboraPropostaComponent implements OnInit {
 
 
   geraProposta() {
-
-    let normalLeilaoSisnsitro = 'Indenização 100% tabela Fipe, exceto veículos de leilão é remarcado'
+    let parcelamentoRastreador = '';
+    if (this.parcelasRastreador > 1){
+      parcelamentoRastreador = `mais ${this.parcelasRastreador - 1} de ${numeral(this.rastreadorInstalacao).format('00.00') } da instalação do rastreador`
+    }
+    let normalLeilaoSisnsitro = 'Indenização 100% tabela Fipe, exceto veículos de leilão é remarcado';
     if (this.chckLeilaoSinistrado) {
       normalLeilaoSisnsitro = 'Indenização 80% tabela Fipe'
     }
@@ -578,7 +618,8 @@ export class ElaboraPropostaComponent implements OnInit {
               body: [
                 [{
                   text: `Entrada:\n R$ ${this.proposta.entrada}
-                      \n\n Parcelas mensais:\n R$ ${this.proposta.mensalidade} 
+                      \n\n Parcelas mensais:\n R$ ${this.proposta.mensalidade}
+                       ${parcelamentoRastreador} 
                       \n\n Cota de participação:\n R$ ${this.proposta.participacao} `,
                   style: 'header',
                   margin: [15, 20, 0, 5],
@@ -693,8 +734,8 @@ export class ElaboraPropostaComponent implements OnInit {
       this.proposta.portabilidade = this.chckPortabilidade; 
       this.proposta.parcelas = this.parcelas; 
 
-          // caso a proposta tenha a cota alterada  
-      if (this.cotaAlterada){ 
+          // caso a proposta tenha a cota alterada ou valor da mensalidade 
+      if (this.cotaAlterada || this.proposta.mensalidadeAlterada ){ 
         this.proposta.idStatusProposta = 5;
         this.proposta.idMotivo = 3;
         this.proposta.idPessoaDestinatario = 5 // buscar supervisor das vendas internas 
@@ -752,12 +793,20 @@ export class ElaboraPropostaComponent implements OnInit {
           }catch (error) {
               console.log(error)
               this.toastrService.error('Proposta não salva');
-              this.bntGeraProposta = false;
+              this.bntGeraProposta = true;
               return 0;
           }
         }
 
     }
     
+  habilitaBntGeraProposta(){
+    if( (this.chckPortabilidade || this.chckNovo) && 
+        (this.chckParticular || this.chckComercial) &&
+        (this.chckNormal || this.chckLeilaoSinistrado)
+    ){
+      this.bntGeraProposta = false;
+    }
+  }   
   
 }
