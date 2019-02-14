@@ -493,7 +493,7 @@ export class ElaboraPropostaComponent implements OnInit {
 
   geraProposta() {
     let produtoAdicionais1 = 'Carro reserva de 30 dias;';
-    let pontoEVirgula = ';';
+    let reboqueIlimitado = 'Reboque ilimitado em caso de colisão, uma vez a cada 12 meses;'
     // se for undefined coloca vazio
     this.proposta.carroReserva = this.proposta.carroReserva ? this.proposta.carroReserva : '';
     this.proposta.protecaoVidros = this.proposta.protecaoVidros ? this.proposta.protecaoVidros : '';
@@ -507,7 +507,7 @@ export class ElaboraPropostaComponent implements OnInit {
       this.proposta.protecaoVidros =  '';
       this.proposta.rastreador = '';
       produtoAdicionais1 = '';
-      pontoEVirgula = '';
+      reboqueIlimitado = '';
     }
 
     let parcelamentoRastreador = '';
@@ -657,7 +657,7 @@ export class ElaboraPropostaComponent implements OnInit {
                           \nSem limite de km rodado; Sem perfil de guarda de veículo, não exige garagem;
                           \nRoubo, furto, incêndio, colisão, capotamento, tombamento, desastres naturais como: enchente, chuva de granizo, queda de árvore; 
                           \nAssistência 24H em todo Brasil; 
-                          \nReboque ilimitado em caso de colisão, uma vez a cada 12 meses;
+                          \n${reboqueIlimitado}
                           \nSocorro elétrico e mecânico; Chaveiro; Taxi, SOS Pneus;
                           \nMensalidade Contínua (sem renovação); Não trabalhamos com Bônus; 
                           \n${normalLeilaoSisnsitro}
