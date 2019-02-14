@@ -257,7 +257,8 @@ export class ElaboraPropostaComponent implements OnInit {
     for ( var i = 0; i <= this.tabelaValores.length -1 ; i++ ) {
         if ((valorDeBusca >= this.tabelaValores[i].valor_inicial) && (valorDeBusca <= this.tabelaValores[i].valor_final)
              && (this.tipoVeiculoSelectValue == this.tabelaValores[i].id_tipo_veiculo)) {
-               if ((this.cotaAlterada) && (i > 1)){
+               if ((this.cotaAlterada) && (i > 1) 
+                  && (this.tipoVeiculoSelectValue == this.tabelaValores[i-1].id_tipo_veiculo) ){
                 this.valores[0]=  this.tabelaValores[i-1];
                 return;
                }else{
@@ -491,6 +492,24 @@ export class ElaboraPropostaComponent implements OnInit {
 
 
   geraProposta() {
+    let produtoAdicionais1 = 'Carro reserva de 30 dias;';
+    let pontoEVirgula = ';';
+    // se for undefined coloca vazio
+    this.proposta.carroReserva = this.proposta.carroReserva ? this.proposta.carroReserva : '';
+    this.proposta.protecaoVidros = this.proposta.protecaoVidros ? this.proposta.protecaoVidros : '';
+    this.proposta.terceiros = this.proposta.terceiros ? this.proposta.terceiros : '';
+    this.proposta.appDescricao = this.proposta.appDescricao ? this.proposta.appDescricao : '';
+    this.proposta.rastreador = this.proposta.rastreador ? this.proposta.rastreador : '';
+    this.proposta.reboque = this.proposta.reboque ? this.proposta.reboque : '';
+    // moto
+    if (this.moto) {
+      this.proposta.carroReserva = '';
+      this.proposta.protecaoVidros =  '';
+      this.proposta.rastreador = '';
+      produtoAdicionais1 = '';
+      pontoEVirgula = '';
+    }
+
     let parcelamentoRastreador = '';
     if (this.parcelasRastreador > 1){
       parcelamentoRastreador = `mais ${this.parcelasRastreador - 1} de ${numeral(this.rastreadorInstalacao).format('00.00') } da instalação do rastreador`
@@ -641,13 +660,13 @@ export class ElaboraPropostaComponent implements OnInit {
                           \nReboque ilimitado em caso de colisão, uma vez a cada 12 meses;
                           \nSocorro elétrico e mecânico; Chaveiro; Taxi, SOS Pneus;
                           \nMensalidade Contínua (sem renovação); Não trabalhamos com Bônus; 
-                          \n${normalLeilaoSisnsitro};
-                          \n${this.proposta.carroReserva};
-                          \n${this.proposta.protecaoVidros};
-                          \n${this.proposta.terceiros};
-                          \n${this.proposta.appDescricao};
-                          \n${this.proposta.rastreador};
-                          \n${this.proposta.reboque};
+                          \n${normalLeilaoSisnsitro}
+                          \n${this.proposta.terceiros}
+                          \n${this.proposta.appDescricao}
+                          \n${this.proposta.reboque}
+                          \n${this.proposta.carroReserva}
+                          \n${this.proposta.protecaoVidros}
+                          \n${this.proposta.rastreador}
                           `,
                       fontSize: 9,
                     }
@@ -663,10 +682,10 @@ export class ElaboraPropostaComponent implements OnInit {
                     margin: [5, 25, 0, 0],
                   },
                   {
-                    text: `Carro reserva de 30 dias;
-                        \nAPP (ACIDENTES PESSOAIS DE PASSAGEIROS) até 20 mil 
+                    text: `${produtoAdicionais1}
+                        \nAPP (ACIDENTES PESSOAIS DE PASSAGEIROS) até 20 mil;
                         \nFundo para terceiros de 50 mil;
-                        \nFundo para terceiros de 70 mil
+                        \nFundo para terceiros de 70 mil.
                         ` ,
                     alignment: 'left',
                     fontSize: 9,
