@@ -24,6 +24,7 @@ import { TelemarketingModule } from './telemarketing/telemarketing.module';
 import { PipesModule } from './shared/pipes/pipesModule';
 import { PesquisaPessoaModule } from './pesquisa-pessoa/pesquisa-pessoa.module';
 import { ExportarComponent } from './exportar/exportar.component';
+import { WorkflowComponent } from './workflow/workflow.component';
 
 
 @NgModule({
@@ -38,7 +39,8 @@ import { ExportarComponent } from './exportar/exportar.component';
     TrocarSenhaComponent,
     ImportaLeadComponent,
     TrocarSenhaComponent,
-    ExportarComponent
+    ExportarComponent,
+    WorkflowComponent
   ],
 
   imports: [

@@ -492,7 +492,7 @@ export class ElaboraPropostaComponent implements OnInit {
 
 
   geraProposta() {
-    let produtoAdicionais1 = 'Carro reserva de 30 dias;';
+    let produtoAdicionais1 = 'Carro reserva de 15 e 30 dias;';
     let reboqueIlimitado = 'Reboque ilimitado em caso de colisão, uma vez a cada 12 meses;'
     // se for undefined coloca vazio
     this.proposta.carroReserva = this.proposta.carroReserva ? this.proposta.carroReserva : '';

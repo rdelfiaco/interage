@@ -1,4 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { async } from 'rxjs/internal/scheduler/async';
+import { ConnectHTTP } from '../shared/services/connectHTTP';
+import { LocalStorage } from '../shared/services/localStorage';
+import { ToastService } from '../../lib/ng-uikit-pro-standard';
 
 
 @Component({
@@ -7,6 +11,12 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./dashboard.component.scss']
 })
 export class DashboardComponent implements OnInit {
+
+
+  usuarioLogado: any;
+  usuarioLogadoSupervisor: boolean = false;
+
+  propostas: Array<any>;
 
   public chartType: string = 'bar';
 
@@ -114,15 +124,15 @@ export class DashboardComponent implements OnInit {
   public chartTypeIB: string = 'pie';
 
   public chartDatasetsIB: Array<any> = [
-    { data: [300, 50, 100, 40, 120], label: 'My First dataset' }
+    { data: [300, 50, 100, 40], label: 'Status das propostas' }
   ];
 
-  public chartLabelsIB: Array<any> = ['Red', 'Green', 'Yellow', 'Grey', 'Dark Grey'];
+  public chartLabelsIB: Array<any> = ['Ativas', 'Em negociação', 'Recusadas', 'Canceladas'];
 
   public chartColorsIB: Array<any> = [
     {
-      backgroundColor: ['#F7464A', '#46BFBD', '#FDB45C', '#949FB1', '#4D5360'],
-      hoverBackgroundColor: ['#FF5A5E', '#5AD3D1', '#FFC870', '#A8B3C5', '#616774'],
+      backgroundColor: ['#FDB45C', '#46BFBD', '#F7464A', '#949FB1'],
+      hoverBackgroundColor: ['#FFC870', '#5AD3D1', '#FF5A5E', '#A8B3C5'],
       borderWidth: 2,
     }
   ];
@@ -130,15 +140,40 @@ export class DashboardComponent implements OnInit {
   public chartOptionsIB: any = {
     responsive: true
   };
-  public chartClickedIB(e: any): void { }
-  public chartHoveredIB(e: any): void { }
+  public chartClickedIB(e: any): void { 
 
-
-  constructor() { }
-
-  ngOnInit() {
-
+    console.log('status', e)
   }
+  public chartHoveredIB(e: any): void {
+    
+    console.log('Hoveerded', e)
+
+   }
+
+
+  constructor(private connectHTTP: ConnectHTTP,
+    private localStorage: LocalStorage,
+    private toastrService: ToastService ) {
+    this.usuarioLogado = this.localStorage.getLocalStorage('usuarioLogado') as Usuario;
+    this.usuarioLogadoSupervisor = this.usuarioLogado.responsavel_membro == "R"; 
+  }
+
+  async ngOnInit() {
+
+    
+      let propostas = await this.connectHTTP.callService({
+        service: 'getPropostasPorStatusSintetico',
+        paramsService: {
+          idUsuarioLogado: this.usuarioLogado.id,
+          // dataInicial: this.dataInicial,
+          // dataFinal: this.dataFinal
+        }
+      }) as any;
+  
+  
+    };
+
+  
 
 
 

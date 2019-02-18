@@ -1,3 +1,4 @@
+import { WorkflowComponent } from './workflow/workflow.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { ExportarComponent } from './exportar/exportar.component';
 import { DetalhePropostaComponent } from './proposta/detalhe-proposta/detalhe-proposta.component';
@@ -120,6 +121,11 @@ const routes: Routes = [
   {
     path: 'dashboard',
     component: DashboardComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'workflow',
+    component: WorkflowComponent,
     canActivate: [AuthGuard]
   },
   {
