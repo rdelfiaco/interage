@@ -160,6 +160,47 @@ function getPropostaPorId(req, res) {
   })
 }
 
+function getPropostasPorPeriodoSintetico(req, res) {
+  return new Promise(function (resolve, reject) {
+    let credenciais = {
+      token: req.query.token,
+      idUsuario: req.query.id_usuario
+    };
+
+    let sql = `select us.id_pessoa, 
+                sum(iif(id_status_proposta = 6, '1','0')::numeric) as ativas,
+                sum(iif(id_status_proposta in(3,5), '1','0')::numeric) as negociando,
+                sum(iif(id_status_proposta = 2, '1','0')::numeric) as recusadas,
+                sum(iif(id_status_proposta in (4,7,8,9,10), '1','0')::numeric) as canceladas,
+                sum(iif(id_status_proposta not in (2,3,4,5,6,7,8,9,10), '1','0')::numeric) as tramitando
+                from propostas pp
+                inner join status_proposta sp on pp.id_status_proposta = sp.id
+                inner join usuarios us on pp.id_usuario = us.id 
+                where date(dtsalvou) between date('${req.query.dataInicial}') and date('${req.query.dataFinal}') 
+                group by us.id_pessoa
+                union 
+                select 9999999 as id_pessoa, 
+                sum(iif(id_status_proposta = 6, '1','0')::numeric) as ativas,
+                sum(iif(id_status_proposta in(3,5), '1','0')::numeric) as negociando,
+                sum(iif(id_status_proposta = 2, '1','0')::numeric) as recusadas,
+                sum(iif(id_status_proposta in (4,7,8,9,10), '1','0')::numeric) as canceladas,
+                sum(iif(id_status_proposta not in (2,3,4,5,6,7,8,9,10), '1','0')::numeric) as tramitando
+                from propostas 
+                where date(dtsalvou) between date('${req.query.dataInicial}') and date('${req.query.dataFinal}')   `
+    executaSQL(credenciais, sql)
+      .then(res => {
+        if (res.length > 0) {
+          let propostas = res;
+          resolve(propostas)
+        }
+        else reject('Proposta não encontrada!')
+      })
+      .catch(err => {
+        reject(err)
+      })
+  })
+}
+
 function getPropostaFiltros(req, res){
   return new Promise(function (resolve, reject) {
     getUsuarios(req).then(Usuarios => {
@@ -226,4 +267,5 @@ function salvarPlacaDaProposta(req, res) {
 
 
 
-module.exports = { salvarProposta, getPropostasDoUsuario, getPropostaPorId, getPropostaFiltros, salvarPlacaDaProposta }
+module.exports = { salvarProposta, getPropostasDoUsuario, getPropostaPorId, 
+                  getPropostaFiltros, salvarPlacaDaProposta, getPropostasPorPeriodoSintetico }

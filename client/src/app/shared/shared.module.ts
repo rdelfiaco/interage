@@ -1,3 +1,4 @@
+import { Valida } from './services/valida';
 import { ConnectHTTP } from './services/connectHTTP';
 import { LocalStorage } from './services/localStorage';
 import { NgModule } from '@angular/core';
@@ -14,7 +15,8 @@ import { CommonModule } from '@angular/common';
   ],
   providers: [
     LocalStorage,
-    ConnectHTTP
+    ConnectHTTP,
+    Valida
 
   ]
 })

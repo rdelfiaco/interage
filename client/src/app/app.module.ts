@@ -2,7 +2,7 @@ import { DashboardModule } from './dashboard/dashboard.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule, NO_ERRORS_SCHEMA } from '@angular/core';
-import { MDBBootstrapModulesPro, MDBSpinningPreloader, ToastModule } from './../lib/ng-uikit-pro-standard';
+import { MDBBootstrapModulesPro, MDBSpinningPreloader, ToastModule, AccordionModule, WavesModule, SidenavModule } from './../lib/ng-uikit-pro-standard';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './/app-routing.module';
 import { DashboardAdminComponent } from './dashboard-admin/dashboard-admin.component';
@@ -25,6 +25,9 @@ import { PipesModule } from './shared/pipes/pipesModule';
 import { PesquisaPessoaModule } from './pesquisa-pessoa/pesquisa-pessoa.module';
 import { ExportarComponent } from './exportar/exportar.component';
 import { WorkflowComponent } from './workflow/workflow.component';
+import { DashboardPropostaComponent } from './dashboard-proposta/dashboard-proposta.component';
+import { DashboardAgenteComponent } from './dashboard-agente/dashboard-agente.component';
+
 
 
 @NgModule({
@@ -40,7 +43,9 @@ import { WorkflowComponent } from './workflow/workflow.component';
     ImportaLeadComponent,
     TrocarSenhaComponent,
     ExportarComponent,
-    WorkflowComponent
+    WorkflowComponent,
+    DashboardPropostaComponent,
+    DashboardAgenteComponent
   ],
 
   imports: [
@@ -58,7 +63,10 @@ import { WorkflowComponent } from './workflow/workflow.component';
     TelemarketingModule,
     PipesModule,
     PesquisaPessoaModule,
-    DashboardModule
+    DashboardModule,
+    AccordionModule,
+    WavesModule,
+    SidenavModule
   ],
   providers: [MDBSpinningPreloader
 

@@ -38,7 +38,8 @@ declaraServico('getCountEventosPendentes', evento.getCountEventosPendentes);
 declaraServico('getConfiguracao', config.getConfiguracao);
 declaraServico('getSQLs', exportaSQL.getSQLs);
 declaraServico('getResultadoSQLs', exportaSQL.getResultadoSQLs);
-
+declaraServico('getPropostasPorPeriodoSintetico', proposta.getPropostasPorPeriodoSintetico);
+declaraServico('getEventosPorPeriodoSintetico', evento.getEventosPorPeriodoSintetico);
 
 
 

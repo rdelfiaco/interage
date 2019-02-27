@@ -3,6 +3,7 @@ import { async } from 'rxjs/internal/scheduler/async';
 import { ConnectHTTP } from '../shared/services/connectHTTP';
 import { LocalStorage } from '../shared/services/localStorage';
 import { ToastService } from '../../lib/ng-uikit-pro-standard';
+import { Usuario } from '../login/usuario';
 
 
 @Component({
@@ -21,6 +22,7 @@ export class DashboardComponent implements OnInit {
   public chartType: string = 'bar';
 
   public chartDatasets: Array<any> = [
+    { data: [165, 159, 180, 181, 156, 155, 140], label: 'Todos' },
     { data: [65, 59, 80, 81, 56, 55, 40], label: 'Eventos' }
   ];
 

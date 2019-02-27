@@ -1,0 +1,67 @@
+<div class="card card-cascade narrower">
+
+  <!--Card image-->
+  <div class="view view-cascade gradient-card-header blue-gradient narrower py-1 mx-2  d-flex justify-content-center align-items-center">
+
+      <h4 class="white-text font-weight-bold text-uppercase ">Status das Propostas</h4>
+  
+    </div>
+    <!-- Card Filtros -->
+    <div style="z-index: 2; margin-left: 10px">
+      <div class="row">
+        <div class="col-6 col-sm-3">
+          <div class="row justify-content-around">
+            <div class="col-6 col-sm-6">
+              <div class="md-form datas">
+                <mdb-date-picker #dataEventos name="mydate" [options]="myDatePickerOptions" required [(ngModel)]="dataInicial"
+                  class="datas" (ngModelChange)="validaData('dtInicial')"  ></mdb-date-picker>
+                <label class="datas" style="height: 10px">Data inicial</label>
+              </div>
+            </div>
+            <div class="col-6 col-sm-6">
+              <div class="md-form datas">
+                <mdb-date-picker #dataEventos name="mydate" [options]="myDatePickerOptions" required [(ngModel)]="dataFinal"
+                  class="datas" (ngModelChange)="validaData('dtFinal')" ></mdb-date-picker>
+                <label class="datas" style="height: 10px">Data final</label>
+              </div>
+            </div>
+          </div>
+  
+        </div>
+
+        <div class="col-6 col-sm-4" style="z-index: 0">
+          <div class="row" style="margin-top: 50px">
+            <div class="col-md-12">
+              <mdb-select [disabled]="usuarioLogado.responsavel_membro == 'M'" [(ngModel)]="agentesVendasSelectValue"
+              (selected)="setNomeAtendente($event)" [options]="agentesVendasSelect" placeholder="Escolha os Agentes de vendas"
+              style="font-size: 0.5rem;"></mdb-select>
+              <label>Agentes de vendas interno</label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <br>
+    <div class="row">
+        <div class="col-6 col-sm-6">
+            <div style="display: block">
+                <!-- <canvas mdbChart
+                    [chartType]="chartType"
+                    [datasets]="datasets"
+                    [labels]="chartLabels"
+                    [colors]="chartColors"
+                    [options]="chartOptions"
+                    [legend]="true"
+                    (chartHover)="chartHovered($event)"
+                    (chartClick)="chartClicked($event)">
+                </canvas> -->
+
+                <canvas id="propostaChart" ></canvas>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+  

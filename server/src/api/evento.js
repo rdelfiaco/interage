@@ -1047,6 +1047,46 @@ function getMotivosCanais(client) {
   })
 }
 
+function getEventosPorPeriodoSintetico(req, res) {
+  return new Promise(function (resolve, reject) {
+    let credenciais = {
+      token: req.query.token,
+      idUsuario: req.query.id_usuario
+    };
+
+    let sql = `select id_pessoa_organograma,
+sum(1) as destinados,
+sum(iif(id_status_evento in (1,4,5,6),'1','0')::numeric) as pendentes,
+sum(iif(id_status_evento in (3),'1','0')::numeric) as concluidos,
+sum(iif(id_status_evento in (7),'1','0')::numeric) as concluidos_expirados,
+sum(iif(id_status_evento in (2,8),'1','0')::numeric) as encaminhados
+from eventos 
+where tipodestino = 'P'
+and date(dt_criou) between date('${req.query.dataInicial}') and date('${req.query.dataFinal}')  
+group by id_pessoa_organograma
+union
+select 9999999 as id_pessoa_organograma,
+sum(1) as destinados,
+sum(iif(id_status_evento in (1,4,5,6),'1','0')::numeric) as pendentes,
+sum(iif(id_status_evento in (3),'1','0')::numeric) as concluidos,
+sum(iif(id_status_evento in (7),'1','0')::numeric) as concluidos_expirados,
+sum(iif(id_status_evento in (2,8),'1','0')::numeric) as encaminhados
+from eventos 
+where tipodestino = 'P'
+and date(dt_criou) between date('${req.query.dataInicial}') and date('${req.query.dataFinal}')  `
+    executaSQL(credenciais, sql)
+      .then(res => {
+        if (res.length > 0) {
+          let eventos = res;
+          resolve(eventos)
+        }
+        else reject('Evento não encontrado!')
+      })
+      .catch(err => {
+        reject(err)
+      })
+  })
+}
 
 
 module.exports = {
@@ -1063,5 +1103,6 @@ module.exports = {
   informacoesParaCriarEvento,
   encaminhaEvento,
   criarEvento,
-  getCountEventosPendentes
+  getCountEventosPendentes,
+  getEventosPorPeriodoSintetico
 }
