@@ -78,6 +78,9 @@ export class FormularioEventoComponent implements OnInit {
     window.open(`/pessoas/${this.evento.id_pessoa_receptor}`, '_blank')
   }
 
+  abrirProposta() {
+    window.open(`/proposta/${this.evento.id_proposta}`, '_blank')
+  }
   async cadastroPessoa() {
 
     let pessoaId = this.evento.id_pessoa_receptor;
