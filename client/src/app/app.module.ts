@@ -27,6 +27,7 @@ import { ExportarComponent } from './exportar/exportar.component';
 import { WorkflowComponent } from './workflow/workflow.component';
 import { DashboardPropostaComponent } from './dashboard-proposta/dashboard-proposta.component';
 import { DashboardAgenteComponent } from './dashboard-agente/dashboard-agente.component';
+import { TarefaComponent } from './workflow/tarefa/tarefa.component';
 
 
 
@@ -45,7 +46,8 @@ import { DashboardAgenteComponent } from './dashboard-agente/dashboard-agente.co
     ExportarComponent,
     WorkflowComponent,
     DashboardPropostaComponent,
-    DashboardAgenteComponent
+    DashboardAgenteComponent,
+    TarefaComponent
   ],
 
   imports: [

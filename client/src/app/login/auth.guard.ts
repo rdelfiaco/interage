@@ -51,6 +51,7 @@ export class AuthGuard implements CanActivate {
       dashboardProposta: ['admin', 'supervisor'],
       dashboardAgente: ['admin', 'supervisor', 'operador'],
       workflow: ['admin', 'supervisor'],
+      "tarefa/:id": ['admin', 'supervisor']
     }
     if (rotas[route.routeConfig.path].indexOf(usuarioLogado.dashboard) != -1) return true;
   }

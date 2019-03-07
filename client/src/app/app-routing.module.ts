@@ -1,3 +1,4 @@
+import { TarefaComponent } from './workflow/tarefa/tarefa.component';
 import { DashboardAgenteComponent } from './dashboard-agente/dashboard-agente.component';
 import { DashboardPropostaComponent } from './dashboard-proposta/dashboard-proposta.component';
 import { WorkflowComponent } from './workflow/workflow.component';
@@ -135,10 +136,14 @@ const routes: Routes = [
     component: DashboardAgenteComponent,
     canActivate: [AuthGuard]
   },
-  
   {
     path: 'workflow',
     component: WorkflowComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'tarefa/:id',
+    component: TarefaComponent,
     canActivate: [AuthGuard]
   },
   {

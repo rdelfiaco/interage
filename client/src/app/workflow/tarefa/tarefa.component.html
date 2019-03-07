@@ -1,0 +1,210 @@
+<div class="card card-cascade narrower">
+
+  <!--Card image-->
+  <div class="view view-cascade gradient-card-header blue-gradient narrower py-1 mx-2  d-flex justify-content-center align-items-center">
+
+      <h4 class="white-text font-weight-bold text-uppercase ">Performance da tarefa : {{tarefa}}</h4>
+  
+  </div>
+    <!-- Card Filtros -->
+    <div style="z-index: 2; margin-left: 10px">
+      <div class="row">
+        <div class="col-6 col-sm-3">
+          <div class="row justify-content-around">
+            <div class="col-6 col-sm-6">
+              <div class="md-form datas">
+                <mdb-date-picker #dataEventos name="mydate" [options]="myDatePickerOptions" required [(ngModel)]="dataInicial"
+                  class="datas" (ngModelChange)="validaData('dtInicial')"     ></mdb-date-picker>
+                <label class="datas" style="height: 10px">Data inicial</label>
+              </div>
+            </div>
+            <div class="col-6 col-sm-6">
+              <div class="md-form datas">
+                <mdb-date-picker #dataEventos name="mydate" [options]="myDatePickerOptions" required [(ngModel)]="dataFinal"
+                  class="datas" (ngModelChange)="validaData('dtFinal')" ></mdb-date-picker>
+                <label class="datas" style="height: 10px">Data final</label>
+              </div>
+            </div>
+          </div>
+  
+        </div>
+        <div class="col-6 col-sm-6" style="margin-left: 30; margin-top: 20px">
+          <h6> Tempo médio que as tarefas são resolvidas: {{tmr}}  </h6>
+          <br>
+          <h6> Maior tempo gasto para resolver uma tarefa: {{mat}} </h6>
+          <br>
+          <h6> Menor tempo gasto para resovler uma tarefa: {{met}} </h6>
+        </div>
+
+
+      </div>
+      <div>
+          <label for="totalEventos" style="margin-left: 15px">Total de tarefas pendentes: {{totalEventos}} </label>
+      </div>
+
+    </div>
+    <div  style="margin-top: 40px">
+      <div class="view view-cascade gradient-card-header blue-gradient narrower py-1 mx-2  d-flex justify-content-center align-items-center">
+
+        <h5 class="white-text font-weight-bold text-uppercase ">Tarefas Pendentes</h5>
+    
+      </div>
+
+      <div class="px-2">
+
+          <!--Table-->
+          <table class="table table-hover table-responsive-md mb-0">
+      
+            <!--Table head-->
+            <thead>
+              <tr>
+                <th class="status">Status
+                </th>
+                <th class="th-sm dtCriacao">Dt. criação
+                  <mdb-icon icon="sort" (click)="sortBy('dt_criou')"></mdb-icon>
+                </th>
+                <th class="th-sm">Cliente
+                  <mdb-icon icon="sort" (click)="sortBy('cliente')"></mdb-icon>
+                </th>
+                <th class="th-sm">P.
+                  <mdb-icon icon="sort" (click)="sortBy('prioridade')"></mdb-icon>
+                </th>
+                <th class="th-sm">Dt.prevista
+                  <mdb-icon icon="sort" (click)="sortBy('dt_prevista_resolucao')"></mdb-icon>
+                </th>
+                <th class="th-sm">Destino
+                  <mdb-icon icon="sort" (click)="sortBy('destino')"></mdb-icon>
+                </th>
+                <th class="th-sm">Criador
+                  <mdb-icon icon="sort" (click)="sortBy('pessoa_criou')"></mdb-icon>
+                </th>
+                <th class="th-sm">Tempo
+                  <mdb-icon icon="sort" (click)="sortBy('tempo')"></mdb-icon>
+                </th>
+              </tr>
+            </thead>
+            <!--Table head-->
+      
+            <!--Table body-->
+            <tbody>
+              <tr (click)="abreEvento(evento)" #list *ngFor="let evento of tableData; let i = index">
+                <td *ngIf="i+1 >= firstVisibleIndex && i+1 <= lastVisibleIndex">
+                  <a>
+                    <mdb-icon class={{evento.status_evento_cor_texto}} icon={{evento.status_evento_icone}} class="mr-2 "
+                      title={{evento.status}}></mdb-icon>
+                  </a>
+                </td>
+                <td *ngIf="i+1 >= firstVisibleIndex && i+1 <= lastVisibleIndex" class="{{evento.status_evento_cor_texto}} dtCriacao">{{evento.dt_criou
+                  | date:'dd/MM/yyyy' }}</td>
+                <td *ngIf="i+1 >= firstVisibleIndex && i+1 <= lastVisibleIndex" class={{evento.status_evento_cor_texto}}>{{evento.cliente}}</td>
+                <td *ngIf="i+1 >= firstVisibleIndex && i+1 <= lastVisibleIndex" class={{evento.status_evento_cor_texto}}>{{evento.prioridade}}</td>
+                <td *ngIf="i+1 >= firstVisibleIndex && i+1 <= lastVisibleIndex" class={{evento.status_evento_cor_texto}}>{{evento.dt_prevista_resolucao
+                  | date:'dd/MM/yyyy HH:mm:ss' }}</td>
+                <td *ngIf="i+1 >= firstVisibleIndex && i+1 <= lastVisibleIndex" class={{evento.status_evento_cor_texto}}>{{evento.destino}}</td>
+                <td *ngIf="i+1 >= firstVisibleIndex && i+1 <= lastVisibleIndex" class={{evento.status_evento_cor_texto}}>{{evento.pessoa_criou}}</td>
+                <td *ngIf="i+1 >= firstVisibleIndex && i+1 <= lastVisibleIndex" class={{evento.status_evento_cor_texto}}>{{evento.tempo}}</td>
+              </tr>
+            </tbody>
+            <!--Table body-->
+          </table>
+      
+        </div>
+      
+
+        <hr class="my-0">
+
+        <!--Bottom Table UI-->
+        <div class="d-flex justify-content-center">
+      
+          <!--Pagination -->
+          <nav class="my-4 pt-2">
+            <ul class="pagination pagination-circle pg-purple mb-0">
+      
+              <!--First-->
+              <li class="page-item clearfix d-none d-md-block" (click)="firstPage()" [ngClass]="{disabled: activePage == firstPageNumber}">
+                <a class="page-link">First</a>
+              </li>
+      
+              <!--Arrow left-->
+              <li class="page-item" (click)="previousPage()" [ngClass]="{disabled: activePage == firstPageNumber}">
+                <a class="page-link" aria-label="Previous">
+                  <span aria-hidden="true">&laquo;</span>
+                  <span class="sr-only">Previous</span>
+                </a>
+              </li>
+      
+              <!--Numbers-->
+              <li *ngFor="let page of paginators; let i = index" class="page-item" [ngClass]="{active: i+1 == activePage}">
+                <a class="page-link waves-light" (click)="changePage($event)" mdbWavesEffect>{{page}}</a>
+              </li>
+      
+      
+      
+              <!--Arrow right-->
+              <li class="page-item" (click)="nextPage()" [ngClass]="{disabled: activePage == lastPageNumber}">
+                <a class="page-link" aria-label="Next">
+                  <span aria-hidden="true">&raquo;</span>
+                  <span class="sr-only">Next</span>
+                </a>
+              </li>
+      
+              <!--First-->
+              <li class="page-item clearfix d-none d-md-block" (click)="lastPage()" [ngClass]="{disabled: activePage == lastPageNumber}">
+                <a class="page-link">Last</a>
+              </li>
+      
+            </ul>
+          </nav>
+          <!--/Pagination -->
+      
+        </div>
+      
+
+        <div mdbModal #confirmSeTornarResponsavelModal="mdbModal" class="modal fade" tabindex="-1" role="dialog"
+        aria-labelledby="myBasicModalLabel" aria-hidden="true" [config]="{backdrop: true}">
+        <div class="modal-dialog modal-md modal-dialog-centered" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close pull-right" aria-label="Close" (click)="confirmSeTornarResponsavelModal.hide()">
+                <span aria-hidden="true">×</span>
+              </button>
+              <h4 class="modal-title w-100" id="myModalLabel">Confirma Responsabilidade</h4>
+            </div>
+            <div *ngIf="tornarResponsavel" class="modal-body">
+              Deseja se tornar responsável do evento do cliente {{tornarResponsavel.cliente}}
+            </div>
+            <div class="modal-footer">
+              <button type="button" style="white-space: nowrap;" mdbBtn color="danger" class="waves-light" aria-label="Cancelar"
+                (click)="confirmSeTornarResponsavelModal.hide(); cancelaSeTornarResponsavel()" mdbWavesEffect>Cancelar</button>
+              <button *ngIf="usuarioLogadoSupervisor" type="button" style="white-space: nowrap;" mdbBtn color="warning"
+                class="waves-light" aria-label="Somente Visualizar" (click)="confirmSeTornarResponsavelModal.hide(); visualizarEvento()"
+                mdbWavesEffect>Somente Visualizar</button>
+              <button type="button" style="white-space: nowrap;" mdbBtn color="primary" class="relative waves-light"
+                (click)="confirmSeTornarResponsavelModal.hide(); confirmaSeTornarResponsavel();" mdbWavesEffect>Sim</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    
+      <div mdbModal #modalCriarEvento="mdbModal" [config]="{backdrop: true}" class="modal fade right" role="dialog"
+        aria-labelledby="myBasicModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title w-100" id="myModalLabel">Criar Evento</h4>
+            </div>
+            <div class="modal-body" style="overflow: auto; height: 80vh;">
+              <app-criar-evento (fechaModal)="fechaModal()"></app-criar-evento>
+            </div>
+          </div>
+        </div>
+      </div>
+    
+
+
+
+
+
+    </div>
+
+</div>

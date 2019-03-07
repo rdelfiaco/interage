@@ -16,6 +16,7 @@ const importar = require('./src/api/importaLead');
 const proposta = require('./src/api/proposta');
 const config = require('./src/api/config');
 const exportaSQL = require('./src/api/exportaSQL');
+const tarefa = require('./src/api/tarefa');
 
 const consultaPlaca = require('./src/api/consultaPlaca');
 
@@ -40,8 +41,8 @@ declaraServico('getSQLs', exportaSQL.getSQLs);
 declaraServico('getResultadoSQLs', exportaSQL.getResultadoSQLs);
 declaraServico('getPropostasPorPeriodoSintetico', proposta.getPropostasPorPeriodoSintetico);
 declaraServico('getEventosPorPeriodoSintetico', evento.getEventosPorPeriodoSintetico);
-
-
+declaraServico('getTarefaPorId', tarefa.getTarefaPorId);
+declaraServico('getTarefaPerformance',tarefa.getTarefaPerformance);
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
