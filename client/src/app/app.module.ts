@@ -1,3 +1,4 @@
+import { WorkflowModule } from './workflow/workflow.module';
 import { DashboardModule } from './dashboard/dashboard.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BrowserModule } from '@angular/platform-browser';
@@ -24,10 +25,8 @@ import { TelemarketingModule } from './telemarketing/telemarketing.module';
 import { PipesModule } from './shared/pipes/pipesModule';
 import { PesquisaPessoaModule } from './pesquisa-pessoa/pesquisa-pessoa.module';
 import { ExportarComponent } from './exportar/exportar.component';
-import { WorkflowComponent } from './workflow/workflow.component';
 import { DashboardPropostaComponent } from './dashboard-proposta/dashboard-proposta.component';
 import { DashboardAgenteComponent } from './dashboard-agente/dashboard-agente.component';
-import { TarefaComponent } from './workflow/tarefa/tarefa.component';
 
 
 
@@ -44,10 +43,8 @@ import { TarefaComponent } from './workflow/tarefa/tarefa.component';
     ImportaLeadComponent,
     TrocarSenhaComponent,
     ExportarComponent,
-    WorkflowComponent,
     DashboardPropostaComponent,
     DashboardAgenteComponent,
-    TarefaComponent
   ],
 
   imports: [
@@ -68,7 +65,7 @@ import { TarefaComponent } from './workflow/tarefa/tarefa.component';
     DashboardModule,
     AccordionModule,
     WavesModule,
-    SidenavModule
+    WorkflowModule
   ],
   providers: [MDBSpinningPreloader
 
