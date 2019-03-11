@@ -1,3 +1,4 @@
+import { AnalisarCampanhaTelemarketingComponent } from './analisar-campanha-telemarketing/analisar-campanha-telemarketing.component';
 import { TarefaComponent } from './workflow/tarefa/tarefa.component';
 import { DashboardAgenteComponent } from './dashboard-agente/dashboard-agente.component';
 import { DashboardPropostaComponent } from './dashboard-proposta/dashboard-proposta.component';
@@ -88,6 +89,11 @@ const routes: Routes = [
   {
     path: 'analisaCampanha',
     component: AnalisaCampanhaComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'analisarCampanhaTelemarketing',
+    component: AnalisarCampanhaTelemarketingComponent,
     canActivate: [AuthGuard]
   },
   {

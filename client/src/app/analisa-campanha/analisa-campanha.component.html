@@ -1,13 +1,13 @@
 <div class="card card-cascade narrower">
 
   <!--Card image-->
-  <div class="view view-cascade gradient-card-header blue-gradient narrower py-1 mx-2  d-flex justify-content-center align-items-center">
+  <div class="view view-cascade gradient-card-header blue-gradient narrower py-1 mx-0  d-flex justify-content-center align-items-center">
 
-    <h4 class="white-text font-weight-bold text-uppercase ">Analisa Campanha</h4>
+    <a class="white-text font-weight-bold text-uppercase ">Analisar Campanha</a>
 
   </div>
   <!-- Card Filtros -->
-  <div>
+  <div  >
     <div class="row ">
       <div class="col-6 col-sm-3">
         <div class="row justify-content-around">
@@ -28,9 +28,9 @@
         </div>
 
       </div>
-      <div class="col-6 col-sm-4 " style="z-index: 0">
+      <div class="col-6 col-sm-6 " style="z-index: 0">
 
-        <div class="row" style="margin-top: 30px">
+        <div class="row" style="margin-top: 30px; margin-left: 10px">
           <div class="col-md-12">
             <mdb-select [(ngModel)]="campanhaSelectValue" [options]="campanhaSelect" placeholder="Escolha a campanha"
               style="font-size: 0.5rem;"></mdb-select>
@@ -38,16 +38,7 @@
           </div>
         </div>
       </div>
-      <!-- <div class="col-6 col-sm-4" style="z-index: 0">
 
-              <div class="row" style="margin-top: 30px" >
-                  <div class="col-md-12">
-                      <mdb-select  [(ngModel)]="agentesVendasSelectValue" [multiple]="true" [options]="agentesVendasSelect" placeholder="Escolha os Agentes de vendas"
-                      style="font-size: 0.5rem;" ></mdb-select>
-                      <label>Agentes de venda interna</label>
-                  </div>
-              </div>
-          </div> -->
       <div class="col-6 col-sm-1 " style="z-index: 0">
         <div class="row justify-content-around">
           <a mdbBtn floating="true" size="lg" gradient="blue" (click)="analisarCampanha()" mdbWavesEffect>
@@ -67,8 +58,6 @@
     </div>
   </div>
 
-  <br>
-  <br>
 
   <div class="row no-gutters justify-content-center">
     <div class="relatorioFunil col-md-6 justify-content-center align-items-center">
@@ -124,4 +113,6 @@
       </div>
     </div>
   </div>
+
+
 </div>

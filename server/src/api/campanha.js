@@ -1,6 +1,18 @@
 const { checkTokenAccess } = require('./checkTokenAccess');
 const { getPredicoesCampanha } = require('./predicao');
 const { getMetaPessoa } = require('./metaLigacoes');
+const { executaSQL } = require('./executaSQL')
+
+function sqlEventosPaiDaCampanha(req){
+  
+  let sqlEventosPaiDaCampanha = `select id from eventos 
+  where id_campanha = ${req.query.id_campanha} 
+  and date(dt_criou) between '${req.query.dtInicial}' and '${req.query.dtFinal}'
+  and id_evento_pai is null`
+
+  return sqlEventosPaiDaCampanha
+
+}
 
 function getCampanhasDoUsuario(req, res) {
   return new Promise(function (resolve, reject) {
@@ -88,11 +100,11 @@ function getCampanhaAnalisar(req, res) {
           getPredicoesCampanha(req).then(campanhaPredicoes => {
             getCampanhaResultado(req).then(campanhaResultado => {
               getTotalLigacoesCampanha(req).then(totalLigacoesCampanha => {
+                  if (!campanhaProspects || !campanhaTentando || !campanhaPredicoes 
+                      || !campanhaResultado || !totalLigacoesCampanha  ) reject('Campanha sem retorno');
 
-                if (!campanhaProspects || !campanhaTentando || !campanhaPredicoes || !campanhaResultado || !totalLigacoesCampanha) reject('Campanha sem retorno');
-
-                resolve({ campanhaProspects, campanhaTentando, campanhaPredicoes, campanhaResultado, totalLigacoesCampanha });
-
+                  resolve({ campanhaProspects, campanhaTentando, campanhaPredicoes, 
+                          campanhaResultado, totalLigacoesCampanha });
               }).catch(e => {
                 reject(e);
               });
@@ -115,6 +127,7 @@ function getCampanhaAnalisar(req, res) {
 }
 
 
+
 function getCampanhaProspects(req, res) {
   return new Promise(function (resolve, reject) {
 
@@ -130,7 +143,6 @@ function getCampanhaProspects(req, res) {
 						where id_campanha = ${req.query.id_campanha} 
 						and date(dt_criou) between '${req.query.dtInicial}' and '${req.query.dtFinal}'
 						and id_evento_pai is null`
-
 
       client.query(sql)
         .then(res => {
@@ -342,4 +354,81 @@ function getTotalLigacoesCampanha(req, res) {
   })
 }
 
-module.exports = { getCampanhasDoUsuario, getCampanhas, getCampanhaAnalisar, getCampanhaResultado, getEventosRelatorioCampanha }
+function getCampanhaTelemarketing(req, res){
+  return new Promise(function (resolve, reject) {
+    let credenciais = {
+      token: req.query.token,
+      idUsuario: req.query.idUsuarioLogado
+    };
+                                            
+    let sql = `select e.id_campanha,ca.nome, date(e.dt_criou) ,count(e.*) as tot_inseridos 
+              from eventos e
+              inner join campanhas ca on e.id_campanha = ca.id
+              where e.id_evento_pai is null 
+              and e.id_campanha is not null 
+              and ca.id_canal = 3
+              group by e.id_campanha, ca.nome, date(e.dt_criou)
+              order by ca.nome, date(e.dt_criou)`
+
+    console.log('getCampanhaTelemarketing',sql )
+    executaSQL(credenciais, sql)
+      .then(res => {
+        if (res) {
+          resolve(res);
+        }
+        else resolve('0');
+      })
+      .catch(err => {
+        reject(err)
+      })
+  })
+
+}
+
+function getCampanhaTelemarketingAnalisar(req, res){
+  return new Promise(function (resolve, reject) {
+    checkTokenAccess(req).then(historico => {
+      getLigacoesPendentes(req).then(ligacoesPendentes => {
+        if (!ligacoesPendentes ) reject('Campanha sem retorno');
+
+        resolve({ ligacoesPendentes });
+      }).catch(e => {
+        reject(e);
+      })
+    }).catch(e => {
+      reject(e)
+    })
+  })
+}
+
+function getLigacoesPendentes(req, res){
+  return new Promise(function (resolve, reject) {
+    let credenciais = {
+      token: req.query.token,
+      idUsuario: req.query.idUsuarioLogado
+    };
+                                            
+    let sql = `select * from view_eventos 
+    where id_campanha = ${req.query.id_campanha} 
+    and id_status_evento in (1, 4)                                      
+    and (id_evento_pai is null or id_evento_pai in (${sqlEventosPaiDaCampanha(req)}))`
+
+    console.log('getLigacoesPendentes',sql )
+    executaSQL(credenciais, sql)
+      .then(res => {
+        if (res) {
+          let ligacoesPendentes = res;
+          resolve(ligacoesPendentes);
+        }
+        else resolve('0');
+      })
+      .catch(err => {
+        reject(err)
+      })
+  })
+
+}
+
+
+module.exports = { getCampanhasDoUsuario, getCampanhas, getCampanhaAnalisar, getCampanhaResultado, 
+  getEventosRelatorioCampanha, getLigacoesPendentes, getCampanhaTelemarketingAnalisar, getCampanhaTelemarketing }

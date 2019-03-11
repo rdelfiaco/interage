@@ -1,0 +1,63 @@
+<div class="card card-cascade narrower">
+
+    <!--Card image-->
+    <div class="view view-cascade gradient-card-header blue-gradient narrower py-1 mx-0  d-flex justify-content-center align-items-center">
+  
+      <a class="white-text font-weight-bold text-uppercase ">Analisar Campanha</a>
+  
+    </div>
+    <!-- Card Filtros -->
+    <div  >
+      <div class="row ">
+
+        <div class="col-6 col-sm-6 " style="z-index: 0">
+  
+          <div class="row" style="margin-top: 30px; margin-left: 10px">
+            <div class="col-md-12">
+              <mdb-select [(ngModel)]="campanhaSelectValue" [options]="campanhaSelect" placeholder="Escolha a campanha"
+                style="font-size: 0.5rem;"></mdb-select>
+              <label>Campanha</label>
+            </div>
+          </div>
+        </div>
+  
+        <div class="col-6 col-sm-1 " style="z-index: 0">
+          <div class="row justify-content-around">
+            <a mdbBtn floating="true" size="lg" gradient="blue" (click)="analisarCampanha()" mdbWavesEffect>
+              <mdb-icon icon="bolt"></mdb-icon>
+            </a>
+          </div>
+  
+        </div>
+
+      </div>
+    </div>
+  
+    <div class="row">
+        <div class="col-12">
+
+          <div class="row">  
+            <div class="md-form  col-3" style="margin-left: 20px" >
+                <input mdbInputDirective [(ngModel)]="prospects" type="text" id="Tot-01" class="form-control" disabled>
+                <label for="Tot-01" style="font-size: 14px">Total de clientes da campanha</label>
+            </div>
+            <div class="md-form col-3"  >
+                <input mdbInputDirective [(ngModel)]="prospects" type="text" id="Tot-01" class="form-control" disabled>
+                <label for="Tot-01" style="font-size: 14px">Total de clientes pendentes</label>
+            </div>
+            <div class="md-form col-3"  >
+                <input mdbInputDirective [(ngModel)]="prospects" type="text" id="Tot-01" class="form-control" disabled>
+                <label for="Tot-01" style="font-size: 14px">Total de clientes concluidos</label>
+            </div>
+            <div class="md-form col-2"  >
+                <input mdbInputDirective [(ngModel)]="totalLigacoesCampanha" type="text" id="Tot-01" class="form-control" disabled>
+                <label for="Tot-01" style="font-size: 14px">Total de ligações realizadas</label>
+            </div>
+          </div>
+      </div>
+  
+  
+    </div>
+  
+  
+  </div>

@@ -80,11 +80,27 @@
                                         <span class="h6 font-weight-bold text-dark" (click)="openPage('pessoasAdd'); sidenav.hide()">Cadastrar
                                             Pessoa</span>
                                     </mdb-accordion-item-head>
-                                    <mdb-accordion-item-head mdbWavesEffect>
+
+                                    <!-- <mdb-accordion-item-head mdbWavesEffect>
                                         <i class="fa fa-area-chart font-weight-bold text-dark"></i>
                                         <span class="h6 font-weight-bold text-dark" (click)="openPage('analisaCampanha'); sidenav.hide()">Analisar
                                             Campanha</span>
-                                    </mdb-accordion-item-head>
+                                    </mdb-accordion-item-head> -->
+
+                                    <mdb-accordion-item [collapsed]="true" >
+                                            <mdb-accordion-item-head mdbWavesEffect indicator="true" >
+                                                    <i class="fa fa-angle-down rotate-icon" aria-hidden="true"></i>
+                                                    <span class="h6 font-weight-bold text-dark" >Analisar Campanha 
+                                                    </span>
+                                            </mdb-accordion-item-head>
+                                            <mdb-accordion-item-body>
+                                              <ul>
+                                                <li><a (click)="openPage('analisaCampanha'); sidenav.hide()" class="h6 font-weight-bold text-dark"  mdbWavesEffect>Utilizando o funil</a></li>
+                                                <li><a (click)="openPage('analisarCampanhaTelemarketing'); sidenav.hide()" class="h6 font-weight-bold text-dark"  mdbWavesEffect>Textual</a></li>
+                                              </ul>
+                                            </mdb-accordion-item-body>
+                                    </mdb-accordion-item>
+
                                     <mdb-accordion-item-head mdbWavesEffect>
                                         <i class="fa fa-line-chart font-weight-bold text-dark"></i>
                                         <span class="h6 font-weight-bold text-dark" (click)="openPage('produtividadeCallCenter'); sidenav.hide()">Produtividade
@@ -122,7 +138,7 @@
                                             <mdb-accordion-item-body>
                                               <ul>
                                                 <!-- <li><a (click)="openPage('dashboard'); sidenav.hide()" class="h6 font-weight-bold text-dark"  mdbWavesEffect>Eventos/Tarefas</a></li> -->
-                                                <li><a (click)="openPage('dashboardAgente'); sidenav.hide()" class="h6 font-weight-bold text-dark"  mdbWavesEffect>Agentes de vendas</a></li>
+                                                <li><a (click)="openPage('dashboardAgente'); sidenav.hide()" class="h6 font-weight-bold text-dark"  mdbWavesEffect>Consultores de vendas</a></li>
                                               </ul>
                                             </mdb-accordion-item-body>
                                     </mdb-accordion-item>
