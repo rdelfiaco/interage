@@ -43,6 +43,8 @@ declaraServico('getPropostasPorPeriodoSintetico', proposta.getPropostasPorPeriod
 declaraServico('getEventosPorPeriodoSintetico', evento.getEventosPorPeriodoSintetico);
 declaraServico('getTarefaPorId', tarefa.getTarefaPorId);
 declaraServico('getTarefaPerformance',tarefa.getTarefaPerformance);
+declaraServico('getCampanhaTelemarketing',campanha.getCampanhaTelemarketing);
+declaraServico('getCampanhaTelemarketingAnalisar',campanha.getCampanhaTelemarketingAnalisar);
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({

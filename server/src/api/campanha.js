@@ -6,8 +6,8 @@ const { executaSQL } = require('./executaSQL')
 function sqlEventosPaiDaCampanha(req){
   
   let sqlEventosPaiDaCampanha = `select id from eventos 
-  where id_campanha = ${req.query.id_campanha} 
-  and date(dt_criou) between '${req.query.dtInicial}' and '${req.query.dtFinal}'
+  where id_campanha = ${req.query.idCampanha} 
+  and date(dt_criou) = date('${req.query.dtCriou}')
   and id_evento_pai is null`
 
   return sqlEventosPaiDaCampanha
@@ -361,22 +361,61 @@ function getCampanhaTelemarketing(req, res){
       idUsuario: req.query.idUsuarioLogado
     };
                                             
-    let sql = `select e.id_campanha,ca.nome, date(e.dt_criou) ,count(e.*) as tot_inseridos 
-              from eventos e
-              inner join campanhas ca on e.id_campanha = ca.id
-              where e.id_evento_pai is null 
-              and e.id_campanha is not null 
-              and ca.id_canal = 3
-              group by e.id_campanha, ca.nome, date(e.dt_criou)
-              order by ca.nome, date(e.dt_criou)`
+    // let sql = `select e.id_campanha,  ROW_NUMBER() OVER (ORDER BY nome) AS sequencia,
+    //           ca.nome || ' - inseridos ' || count(e.*) || ' clientes em: ' || to_char(date(e.dt_criou), 'DD/MM/YYYY')  as nome_completo, 
+    //           ca.nome, date(e.dt_criou) as dt_criou, count(e.*) as tot_inseridos 
+    //           from eventos e
+    //           inner join campanhas ca on e.id_campanha = ca.id
+    //           where e.id_evento_pai is null 
+    //           and e.id_campanha is not null 
+    //           and ca.id_canal = 3
+    //           group by e.id_campanha, ca.nome, date(e.dt_criou)
+    //           order by ca.nome, date(e.dt_criou)`
 
-    console.log('getCampanhaTelemarketing',sql )
+    let sql = `
+                select camp.id, camp.nome, inseridos
+                , COALESCE(pendentes, 0) as pendentes 
+                , COALESCE(concluidos, 0) as concluidos
+                , COALESCE(ligacoes_realizadas, 0) as ligacoes_realizadas 
+                , ligacoes_realizadas / concluidos   as media_ligacoes_por_cliente_concluidos
+                , dt_primeira_ligacao
+                , dt_ultima_ligacao
+                from campanhas camp
+                inner join	(select id_campanha, count(*) as inseridos 
+                        from eventos 
+                        where id_evento_pai is null
+                        and id_campanha is not null
+                        group by id_campanha) inser on camp.id = inser.id_campanha				
+                left join ( select id_campanha, count(*) as pendentes
+                        from eventos e
+                        where id_status_evento in (1, 4, 5, 6)
+                        and id_campanha is not null
+                        group by id_campanha) pend on camp.id = pend.id_campanha
+                left join ( select e.id_campanha, count(*) as concluidos 
+                            from eventos e
+                        inner join (select id_campanha, id_pessoa_receptor, max(id) as id_evento
+                                from eventos 
+                                where id_campanha is not null
+                                  group by id_campanha, id_pessoa_receptor
+                              ) ult_ev on e.id = ult_ev.id_evento
+                          where e.id_status_evento in (3, 7)
+                          group by e.id_campanha) conc on camp.id = conc.id_campanha 
+                left join ( select id_campanha, count(*) as ligacoes_realizadas
+                            , min(date(dt_resolvido)) as dt_primeira_ligacao
+                            , max(date(dt_resolvido)) as dt_ultima_ligacao
+                        from eventos e
+                        where id_status_evento in (3,7)
+                        and id_campanha is not null
+                        group by id_campanha) lig on camp.id = lig.id_campanha			  
+                order by camp.nome		
+                `
+
     executaSQL(credenciais, sql)
       .then(res => {
         if (res) {
           resolve(res);
         }
-        else resolve('0');
+        else resolve({total_registros: 0});
       })
       .catch(err => {
         reject(err)
@@ -388,10 +427,19 @@ function getCampanhaTelemarketing(req, res){
 function getCampanhaTelemarketingAnalisar(req, res){
   return new Promise(function (resolve, reject) {
     checkTokenAccess(req).then(historico => {
-      getLigacoesPendentes(req).then(ligacoesPendentes => {
-        if (!ligacoesPendentes ) reject('Campanha sem retorno');
+      getClientesPendentes(req).then(clientesPendentes => {
+        getLigacoesRealizadas(req).then(ligacoesRealizadas => {
+          getClientesConcluidos(req).then(clientesConcluidos => {
+            if (!clientesPendentes || !ligacoesRealizadas || !clientesConcluidos 
+                ) reject('Campanha de telemarketing sem retorno');
 
-        resolve({ ligacoesPendentes });
+            resolve({ clientesPendentes, ligacoesRealizadas, clientesConcluidos });
+          }).catch(e => {
+            reject(e);
+          })
+        }).catch(e => {
+          reject(e);
+        })
       }).catch(e => {
         reject(e);
       })
@@ -401,7 +449,42 @@ function getCampanhaTelemarketingAnalisar(req, res){
   })
 }
 
-function getLigacoesPendentes(req, res){
+function getClientesConcluidos(req, res){
+  return new Promise(function (resolve, reject) {
+    let credenciais = {
+      token: req.query.token,
+      idUsuario: req.query.idUsuarioLogado
+    };
+                                            
+    let sql = `select distinct id_pessoa_receptor, cliente from view_eventos 
+          where id_campanha = ${req.query.idCampanha}                                      
+          and  id_evento_pai is null 
+          and date(dt_criou) = date('${req.query.dtCriou}') 
+          and id_pessoa_receptor not in(
+            select distinct  id_pessoa_receptor from view_eventos 
+            where id_campanha = ${req.query.idCampanha} 
+            and id_status_evento in (1, 4)                                      
+            and ( (id_evento_pai is null and date(dt_criou) = date('${req.query.dtCriou}') )
+                or id_evento_pai in (${sqlEventosPaiDaCampanha(req)})
+                ) 
+            ) order by cliente`
+
+    executaSQL(credenciais, sql)
+      .then(res => {
+        if (res) {
+          let clientesConcluidos = res ;
+          resolve(clientesConcluidos);
+        }
+        else resolve({total_registros: 0});
+      })
+      .catch(err => {
+        reject(err)
+      })
+  })
+}
+
+
+function getLigacoesRealizadas(req, res){
   return new Promise(function (resolve, reject) {
     let credenciais = {
       token: req.query.token,
@@ -409,18 +492,49 @@ function getLigacoesPendentes(req, res){
     };
                                             
     let sql = `select * from view_eventos 
-    where id_campanha = ${req.query.id_campanha} 
-    and id_status_evento in (1, 4)                                      
-    and (id_evento_pai is null or id_evento_pai in (${sqlEventosPaiDaCampanha(req)}))`
+    where id_campanha = ${req.query.idCampanha} 
+    and id_status_evento in (3, 7)                                      
+    and ( (id_evento_pai is null and date(dt_criou) = date('${req.query.dtCriou}') )
+         or id_evento_pai in (${sqlEventosPaiDaCampanha(req)})
+         )
+    order by cliente, dt_resolvido    `
 
-    console.log('getLigacoesPendentes',sql )
     executaSQL(credenciais, sql)
       .then(res => {
         if (res) {
-          let ligacoesPendentes = res;
-          resolve(ligacoesPendentes);
+          let ligacoesRealizadas = res;
+          resolve(ligacoesRealizadas);
         }
-        else resolve('0');
+        else resolve({total_registros: 0});
+      })
+      .catch(err => {
+        reject(err)
+      })
+  })
+}
+
+function getClientesPendentes(req, res){
+  return new Promise(function (resolve, reject) {
+    let credenciais = {
+      token: req.query.token,
+      idUsuario: req.query.idUsuarioLogado
+    };
+                                            
+    let sql = `select * from view_eventos 
+    where id_campanha = ${req.query.idCampanha} 
+    and id_status_evento in (1, 4)                                      
+    and ( (id_evento_pai is null and date(dt_criou) = date('${req.query.dtCriou}') )
+         or id_evento_pai in (${sqlEventosPaiDaCampanha(req)})
+         )
+    order by cliente, dt_resolvido`
+    executaSQL(credenciais, sql)
+      .then(res => {
+        
+        if (res) {
+          let clientesPendentes = res;
+          resolve(clientesPendentes);
+        }
+        else resolve({total_registros: 0});
       })
       .catch(err => {
         reject(err)
@@ -431,4 +545,4 @@ function getLigacoesPendentes(req, res){
 
 
 module.exports = { getCampanhasDoUsuario, getCampanhas, getCampanhaAnalisar, getCampanhaResultado, 
-  getEventosRelatorioCampanha, getLigacoesPendentes, getCampanhaTelemarketingAnalisar, getCampanhaTelemarketing }
+  getEventosRelatorioCampanha, getClientesPendentes, getCampanhaTelemarketingAnalisar, getCampanhaTelemarketing }
