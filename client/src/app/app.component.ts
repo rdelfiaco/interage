@@ -43,4 +43,9 @@ export class AppComponent {
   openPage(page: string) {
     this.router.navigate([page]);
   }
+
+  abrirCadastroPessoa() {
+    window.open(`/pessoas/${this.usuarioLogado.id_pessoa }`, '_blank')
+  }
+
 }

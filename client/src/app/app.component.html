@@ -1,4 +1,4 @@
-<body>
+<body class="fixed-sn white-skin">
 
         <!--Double navigation-->
         <header *ngIf="(hasLogado | async)">
@@ -17,154 +17,126 @@
                     <!--/. Logo -->
                 </mdb-navbar-brand>
     
-                <links>
-                    <!--Social-->
-                    <!-- <li>
-                    <ul class="social">
-                        <li>
-                            <a class="icons-sm fb-ic">
-                                <i class="fa fa-facebook"> </i>
-                            </a>
-                        </li>
-                        <li>
-                            <a class="icons-sm pin-ic">
-                                <i class="fa fa-pinterest"> </i>
-                            </a>
-                        </li>
-                        <li>
-                            <a class="icons-sm gplus-ic">
-                                <i class="fa fa-google-plus"> </i>
-                            </a>
-                        </li>
-                        <li>
-                            <a class="icons-sm tw-ic">
-                                <i class="fa fa-twitter"> </i>
-                            </a>
-                        </li>
-                    </ul>
-                </li> -->
-                    <!--/Social-->
-                    <!--Search Form-->
-                    <!-- <li>
-                    <form class="search-form" role="search">
-                        <div class="form-group md-form mt-0 pt-1 waves-light" mdbWavesEffect>
-                            <input type="text" class="form-control" placeholder="Search">
-                        </div>
-                    </form>
-                </li> -->
-                    <!--/.Search Form-->
-                    <!-- Side navigation links -->
-                    <li>
-                        <ul class="collapsible collapsible-accordion">
-                            <mdb-accordion [multiple]="flase" aria-multiselectable="false">
-                                
-                                <!-- Simple link -->
-                                <mdb-accordion-item class="no-collase">
-                                    <mdb-accordion-item-head mdbWavesEffect>
-                                        <i class="fa fa-calendar font-weight-bold text-dark"></i>
-                                        <span class="h6 font-weight-bold text-dark" (click)="openPage('eventos'); sidenav.hide()">Tarefas
-                                            / Eventos</span>
-                                    </mdb-accordion-item-head>
-                                    <mdb-accordion-item-head mdbWavesEffect>
-                                        <i class="fa fa-volume-control-phone font-weight-bold text-dark"></i>
-                                        <span class="h6 font-weight-bold text-dark" (click)="openPage('vendasInternas'); sidenav.hide()">Vendas
+                <li>
+                    <ul class="collapsible collapsible-accordion">
+                        <mdb-squeezebox [multiple]="false" aria-multiselectable="false">
+                <!-- Tarefas/eventos link -->
+                            <mdb-item class="no-collase">
+                                    <mdb-item-head mdbRippleRadius>
+                                        <i class="fa fa-calendar font-weight "></i> 
+                                        <span class="h6 font-weight " 
+                                            (click)="openPage('eventos'); sidenav.hide()">Tarefas/ Eventos
+                                        </span>  
+                                    </mdb-item-head> 
+                                    <mdb-item-body></mdb-item-body>                             
+                            </mdb-item>
+                            <!-- Vendas Internas link -->
+                            <mdb-item class="no-collase">
+                                    <mdb-item-head mdbRippleRadius>
+                                        <i class="fa fa-volume-control-phone font-weight "></i>
+                                        <span class="h6 font-weight " (click)="openPage('vendasInternas'); sidenav.hide()">Vendas
                                             Internas</span>
-                                    </mdb-accordion-item-head>
-                                    <mdb-accordion-item-head mdbWavesEffect>
-                                        <i class="fa fa-search font-weight-bold text-dark"></i>
-                                        <span class="h6 font-weight-bold text-dark" (click)="openPage('pessoas'); sidenav.hide()">Pesquisar
+                                    </mdb-item-head> 
+                                    <mdb-item-body></mdb-item-body>                             
+                            </mdb-item>
+                    
+                            <!-- Pesquisar Pessoa link -->
+                            <mdb-item class="no-collase">
+                                    <mdb-item-head mdbRippleRadius>
+                                        <i class="fa fa-search font-weight "></i>
+                                        <span class="h6 font-weight " (click)="openPage('pessoas'); sidenav.hide()">Pesquisar
                                             Pessoa</span>
-                                    </mdb-accordion-item-head>
-                                    <mdb-accordion-item-head mdbWavesEffect>
-                                        <i class="fa fa-user font-weight-bold text-dark"></i>
-                                        <span class="h6 font-weight-bold text-dark" (click)="openPage('pessoasAdd'); sidenav.hide()">Cadastrar
+                                    </mdb-item-head> 
+                                    <mdb-item-body></mdb-item-body>                             
+                            </mdb-item>
+                    
+                            <!-- Cadastrar Pessoa link -->
+                            <mdb-item class="no-collase">
+                                    <mdb-item-head mdbRippleRadius>
+                                        <i class="fa fa-user font-weight "></i>
+                                        <span class="h6 font-weight " (click)="openPage('pessoasAdd'); sidenav.hide()">Cadastrar
                                             Pessoa</span>
-                                    </mdb-accordion-item-head>
+                                    </mdb-item-head> 
+                                    <mdb-item-body></mdb-item-body>                             
+                            </mdb-item>
+                    
+                            <!-- Proposta link -->
+                            <mdb-item class="no-collase">
+                                    <mdb-item-head mdbRippleRadius>
+                                        <i class="fa fa-diamond font-weight "></i>
+                                        <span class="h6 font-weight " (click)="openPage('propostas'); sidenav.hide()">Propostas
+                                        </span> 
+                                    </mdb-item-head> 
+                                    <mdb-item-body></mdb-item-body>                             
+                            </mdb-item>
 
-                                    <!-- <mdb-accordion-item-head mdbWavesEffect>
-                                        <i class="fa fa-area-chart font-weight-bold text-dark"></i>
-                                        <span class="h6 font-weight-bold text-dark" (click)="openPage('analisaCampanha'); sidenav.hide()">Analisar
-                                            Campanha</span>
-                                    </mdb-accordion-item-head> -->
+                <!-- Collapsible link -->
+                            <mdb-item>
+                                <mdb-item-head mdbRippleRadius><i class="fa fa-eye font-weight "></i>
+                                    <span class="h6 font-weight ">Informações</span>
+                                </mdb-item-head>
+                                <mdb-item-body>
+                                    <ul>
+                                        <li><a class="waves-effect" mdbRippleRadius>
+                                                <i class="fa fa-line-chart "></i>
+                                                <span class="h6 font-weight"
+                                                    (click)="openPage('produtividadeCallCenter'); sidenav.hide()">Produtividade
+                                                </span>
+                                            </a>
+                                        </li>
+                                        <li><a class="waves-effect" mdbRippleRadius>
+                                                <i class="fa fa-dashboard " ></i>
+                                                <span class="h6 font-weight" 
+                                                    (click)="openPage('dashboardAgente'); sidenav.hide()">Desempenho
+                                                </span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </mdb-item-body>
+                            </mdb-item>
+                <!-- Collapsible link -->
+                            <mdb-item>
+                                <mdb-item-head mdbRippleRadius><i class="fa fa-chevron-right font-weight "></i>
+                                    <span class="h6 font-weight ">Administrativo</span>
+                                </mdb-item-head>
+                                <mdb-item-body>
+                                    <ul>
+                                        <li><a class="waves-effect" mdbRippleRadius>
+                                                <i class="fa fa-area-chart "></i>
+                                                <span class="h6 font-weight" 
+                                                    (click)="openPage('analisaCampanha'); sidenav.hide()">Analisar Campanha
+                                                </span>
+                                            </a>
+                                        </li>
+                                        <li><a class="waves-effect" mdbRippleRadius>
+                                                <i class="fa fa-cubes "></i>
+                                                <span class="h6 font-weight" 
+                                                    (click)="openPage('workflow'); sidenav.hide()">Workflow
+                                                </span>
+                                            </a>
+                                        </li>
+                                        <li><a class="waves-effect" mdbRippleRadius>
+                                                <i class="fa fa-cloud-download "></i>
+                                                <span class="h6 font-weight" 
+                                                    (click)="openPage('exportar'); sidenav.hide()">Exporta
+                                                </span>
+                                            </a>
+                                        </li>
+                                        <li><a class="waves-effect" mdbRippleRadius>
+                                                <i class="fa  fa-cloud-upload "></i>
+                                                <span class="h6 font-weight" 
+                                                    (click)="openPage('importaLead'); sidenav.hide()">Importar
+                                                </span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </mdb-item-body>
+                            </mdb-item>
 
-                                    <mdb-accordion-item [collapsed]="true" >
-                                            <mdb-accordion-item-head mdbWavesEffect indicator="true" >
-                                                    <i class="fa fa-angle-down rotate-icon" aria-hidden="true"></i>
-                                                    <span class="h6 font-weight-bold text-dark" >Analisar Campanha 
-                                                    </span>
-                                            </mdb-accordion-item-head>
-                                            <mdb-accordion-item-body>
-                                              <ul>
-                                                <li><a (click)="openPage('analisaCampanha'); sidenav.hide()" class="h6 font-weight-bold text-dark"  mdbWavesEffect>Sintética</a></li>
-                                                <li><a (click)="openPage('analisarCampanhaTelemarketing'); sidenav.hide()" class="h6 font-weight-bold text-dark"  mdbWavesEffect>Analítica</a></li>
-                                              </ul>
-                                            </mdb-accordion-item-body>
-                                    </mdb-accordion-item>
-
-                                    <mdb-accordion-item-head mdbWavesEffect>
-                                        <i class="fa fa-line-chart font-weight-bold text-dark"></i>
-                                        <span class="h6 font-weight-bold text-dark" (click)="openPage('produtividadeCallCenter'); sidenav.hide()">Produtividade
-                                        </span>
-                                    </mdb-accordion-item-head>
-                                    <mdb-accordion-item-head mdbWavesEffect>
-                                        <i class="fa fa-file-text font-weight-bold text-dark"></i>
-                                        <span class="h6 font-weight-bold text-dark" (click)="openPage('propostas'); sidenav.hide()">Propostas
-                                        </span>
-                                    </mdb-accordion-item-head>
-                                    <mdb-accordion-item-head mdbWavesEffect>
-                                        <i class="fa fa-cloud-upload text-dark" aria-hidden="true"></i>
-                                        <span class="h6 font-weight-bold text-dark" (click)="openPage('importaLead'); sidenav.hide()">Importar
-                                            Lead
-                                        </span>
-                                    </mdb-accordion-item-head>
-                                    <mdb-accordion-item-head mdbWavesEffect>
-                                        <i class="fa fa-cloud-download text-dark" aria-hidden="true"></i>
-                                        <span class="h6 font-weight-bold text-dark" (click)="openPage('exportar'); sidenav.hide()">Exportar
-                                        </span>
-                                    </mdb-accordion-item-head>
-
-                                    <!-- <mdb-accordion-item-head mdbWavesEffect>
-                                        <i class="fa fa-dashboard text-dark" aria-hidden="true"></i>
-                                        <span class="h6 font-weight-bold text-dark" (click)="openPage('dashboard'); sidenav.hide()">Dashboard
-                                        </span>
-                                    </mdb-accordion-item-head> -->
-                                    <!-- Collapsible link -->
-
-                                    <mdb-accordion-item [collapsed]="true" >
-                                            <mdb-accordion-item-head mdbWavesEffect indicator="true" >
-                                                    <i class="fa fa-dashboard text-dark" aria-hidden="true"></i>
-                                                    <span class="h6 font-weight-bold text-dark" >Dashboard </span>
-                                            </mdb-accordion-item-head>
-                                            <mdb-accordion-item-body>
-                                              <ul>
-                                                <!-- <li><a (click)="openPage('dashboard'); sidenav.hide()" class="h6 font-weight-bold text-dark"  mdbWavesEffect>Eventos/Tarefas</a></li> -->
-                                                <li><a (click)="openPage('dashboardAgente'); sidenav.hide()" class="h6 font-weight-bold text-dark"  mdbWavesEffect>Consultores de vendas</a></li>
-                                              </ul>
-                                            </mdb-accordion-item-body>
-                                    </mdb-accordion-item>
-    
-                                    <mdb-accordion-item-head mdbWavesEffect>
-                                        <i class="fa fa-cubes text-dark" aria-hidden="true"></i>
-                                        <span class="h6 font-weight-bold text-dark" (click)="openPage('workflow'); sidenav.hide()">Workflow
-                                        </span>
-                                    </mdb-accordion-item-head>
-                                    <mdb-accordion-item-head mdbWavesEffect>
-                                        <i class="fa fa-asterisk font-weight-bold text-dark"></i>
-                                        <span class="h6 font-weight-bold text-dark" (click)="openPage('trocarSenha'); sidenav.hide()">Trocar
-                                            de Senha
-                                        </span>
-                                    </mdb-accordion-item-head>
-    
-                                    <mdb-accordion-item-body></mdb-accordion-item-body>
-                                </mdb-accordion-item>
-    
-    
-    
-                            </mdb-accordion>
-                        </ul>
-                    </li>
-                    <!--/. Side navigation links -->
-                </links>
+                        </mdb-squeezebox>
+                    </ul>
+                </li>
+  
     
                 <div class="sidenav-bg mask-strong"></div>
                 <div class="versaoSistema">{{versaoSistema}}</div>
@@ -214,6 +186,15 @@
                                 </i>
                             </a>
                         </li>
+                        <li  class="nav-item dropdown btn-group" dropdown>
+                                <a dropdownToggle type="button" class="nav-link dropdown-toggle waves-light" mdbRippleRadius mdbWavesEffect>
+                                        <i class="fa fa-user-circle"></i>     
+                                </a>
+                                    <div class="dropdown-menu dropdown-primary dropdown-menu-right" role="menu">
+                                        <a class="dropdown-item" (click)="abrirCadastroPessoa()">Cadastro</a>
+                                        <a class="dropdown-item"  (click)="openPage('trocarSenha')">Trocar Senha</a>
+                                    </div>
+                            </li>
                         <li class="nav-item" (click)="logout()">
                             <a class="nav-link waves-light" mdbWavesEffect>
                                 <i class="fa fa-sign-out"></i>

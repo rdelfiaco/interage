@@ -3,7 +3,8 @@ import { DashboardModule } from './dashboard/dashboard.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule, NO_ERRORS_SCHEMA } from '@angular/core';
-import { MDBBootstrapModulesPro, MDBSpinningPreloader, ToastModule, AccordionModule, WavesModule, SidenavModule } from './../lib/ng-uikit-pro-standard';
+import { MDBBootstrapModulesPro, MDBSpinningPreloader, ToastModule, AccordionModule, WavesModule, SidenavModule, NavbarModule } from './../lib/ng-uikit-pro-standard';
+
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './/app-routing.module';
 import { DashboardAdminComponent } from './dashboard-admin/dashboard-admin.component';
@@ -67,7 +68,9 @@ import { AnalisarCampanhaTelemarketingComponent } from './analisar-campanha-tele
     DashboardModule,
     AccordionModule,
     WavesModule,
-    WorkflowModule
+    WorkflowModule,
+    NavbarModule,
+    SidenavModule
   ],
   providers: [MDBSpinningPreloader
 

@@ -4,17 +4,17 @@
       <mdb-accordion-item-head [indicator]="evento.eventosFilho" [customClass]="'text-center justify-content-start align-items-center'">
         <div class="row align-items-center">
           <div class="col-12">
-            <div class="row">
+            <div class="row" >
               <button class="col-1" (click)="abreEvento($event, evento);" style="white-space: pre;" mdbBtn type="button"
                 gradient="peach" size="sm" mdbWavesEffect>Detalhe</button>
-              <div class="col-2 font12" title="Motivo do evento" style="white-space: pre;">{{evento.motivo}}</div>
-              <div class="col-2 font12" title="Status do evento">{{evento.status}}</div>
-              <div class=" col-2 font12" title="Data resolvido ou data prevista para resolução" style="white-space: nowrap;">{{(evento.dt_resolvido
+              <div class="col-2 font12" title="Motivo do evento" style="white-space: pre; margin-top: 15px">{{evento.motivo}}</div>
+              <div class="col-2 font12" title="Status do evento" style="margin-top: 15px" >{{evento.status}}</div>
+              <div class=" col-2 font12" title="Data resolvido ou data prevista para resolução" style="white-space: nowrap; margin-top: 15px">{{(evento.dt_resolvido
                 ||
                 evento.dt_prevista_resolucao) |
                 date:'dd/MM/yyyy HH:mm:ss'}}</div>
-              <div class=" col-2 font12" title="Pessoa que visualizou o evento" style="white-space: nowrap;">{{evento.pessoa_visualizou}}</div>
-              <div class=" col-2 font12" title="Pessoa que resolveu o evento" style="white-space: nowrap;">{{evento.pessoa_resolveu}}</div>
+              <div class=" col-2 font12" title="Pessoa que visualizou o evento" style="white-space: nowrap; margin-top: 15px">{{evento.pessoa_visualizou}}</div>
+              <div class=" col-2 font12" title="Pessoa que resolveu o evento" style="white-space: nowrap; margin-top: 15px">{{evento.pessoa_resolveu}}</div>
             </div>
           </div>
         </div>
