@@ -88,6 +88,11 @@ export class ElaboraPropostaComponent implements OnInit {
   mensalidadeSemParcelamento: number;
   entrada:number = 0.00; 
   rastreadorInstalacao: number = 0.00;
+  fundoTerceiroOutros: string = '';
+  carroReservaOutros: string = '';
+  protecaoVidroOutros: string = '';
+  appOutros: string = '';
+  rastreadorOutros: string = '';
 
   sVlrVeiculo: string;
   nVlrVeiculo: number;
@@ -204,7 +209,7 @@ export class ElaboraPropostaComponent implements OnInit {
     }
 
     this.filtraTabelasCota(nVlrBusca) // busca tabela de valores 
-
+    
     this.fundoTerceiro = this.fundosTerceiros.filter(this.filtraTabelasTipoVeiculos, [this.tipoVeiculoSelectValue]);
 
     this.carroReserva = this.carrosReservas.filter(this.filtraTabelasTipoVeiculos, [this.tipoVeiculoSelectValue]);
@@ -293,7 +298,12 @@ export class ElaboraPropostaComponent implements OnInit {
   }
 
   somaValoresProposta() {
-   
+    this.fundoTerceiroOutros = '';
+    this.carroReservaOutros = '';
+    this.protecaoVidroOutros = '';
+    this.appOutros = '';
+    this.rastreadorOutros = '';
+
     this.rastreadorInstalacao = 0;
     if (this.chkPrecos != "6") {
       if (this.tabelaCombos.length > 0) this.vlrProposta = this.combos[this.chkPrecos].valor_combo;
@@ -302,29 +312,34 @@ export class ElaboraPropostaComponent implements OnInit {
       if (this.fundoTerceiro.length > 0) {
         this.vlrProposta = this.vlrProposta + Number(this.fundoTerceiro[this.chkFundo].valor);
         this.proposta.terceiros = this.fundoTerceiro[this.chkFundo].nome;
+        this.fundoTerceiroOutros = this.fundoTerceiro[this.chkFundo].outros;
         this.proposta.idFundoTerceiros = this.fundoTerceiro[this.chkFundo].id;
       };
       if (this.carroReserva.length > 0) {
         this.vlrProposta = this.vlrProposta + Number(this.carroReserva[this.chckCarroRes].valor)
         this.proposta.idCarroReserva = this.carroReserva[this.chckCarroRes].id;
         this.proposta.carroReserva = this.carroReserva[this.chckCarroRes].nome;
+        this.carroReservaOutros = this.carroReserva[this.chckCarroRes].outros;
       };
       if (this.protecaoVidro.length > 0) {
         this.vlrProposta = this.vlrProposta + Number(this.protecaoVidro[this.chckProtecaoVidro].valor)
         this.proposta.idProtecaoVidros = this.protecaoVidro[this.chckProtecaoVidro].id;
         this.proposta.protecaoVidros = this.protecaoVidro[this.chckProtecaoVidro].nome;
+        this.protecaoVidroOutros = this.protecaoVidro[this.chckProtecaoVidro].outros;
       };
       if (this.app.length) {
         this.vlrProposta = this.vlrProposta + Number(this.app[this.chckApp].valor)
         this.proposta.idApp = this.app[this.chckApp].id;
         this.proposta.app =  this.app[this.chckApp].nome;
         this.proposta.appDescricao = this.app[this.chckApp].descricao;
+        this.appOutros = this.app[this.chckApp].outros;
       };
       if (this.rastreador.length > 0) {
         this.vlrProposta = this.vlrProposta + Number(this.rastreador[this.chckRastreador].valor);
         this.proposta.idRastreador = this.rastreador[this.chckRastreador].id;
         this.proposta.rastreador = this.rastreador[this.chckRastreador].nome; 
         this.rastreadorInstalacao = Number(this.rastreador[this.chckRastreador].valor_instalacao);
+        this.rastreadorOutros = this.rastreador[this.chckRastreador].outros
         if (this.parcelasRastreador > 1 ){
           this.rastreadorInstalacao = ( this.rastreadorInstalacao / this.parcelasRastreador) ;
         }
@@ -482,7 +497,7 @@ export class ElaboraPropostaComponent implements OnInit {
         this.toastrService.error(`Adesão não pode ser maior que ${this.valores[0].adesao_maxima}`);
         this.adesao = this.valores[0].adesao_maxima;
     }
-    if (this.adesao < this.valores[0].adesao_minima ){
+    if ((this.adesao < this.valores[0].adesao_minima ) && (this.chckNovo)) {
       this.toastrService.error(`Adesão não pode ser menor que ${this.valores[0].adesao_minima}`);
       this.adesao = this.valores[0].adesao_minima
   }
@@ -492,7 +507,7 @@ export class ElaboraPropostaComponent implements OnInit {
 
 
   geraProposta() {
-    let produtoAdicionais1 = 'Carro reserva de 15 e 30 dias;';
+
     let reboqueIlimitado = 'Reboque ilimitado em caso de colisão, uma vez a cada 12 meses;'
     // se for undefined coloca vazio
     this.proposta.carroReserva = this.proposta.carroReserva ? this.proposta.carroReserva : '';
@@ -506,7 +521,6 @@ export class ElaboraPropostaComponent implements OnInit {
       this.proposta.carroReserva = '';
       this.proposta.protecaoVidros =  '';
       this.proposta.rastreador = '';
-      produtoAdicionais1 = '';
       reboqueIlimitado = '';
     }
 
@@ -554,7 +568,7 @@ export class ElaboraPropostaComponent implements OnInit {
           {   // responsável
             style: 'tableExample',
             table: {
-              widths: [570],
+              widths: [568.5],
               heights: [30],
 
               body: [
@@ -637,7 +651,7 @@ export class ElaboraPropostaComponent implements OnInit {
               body: [
                 [{
                   text: `Entrada:\n R$ ${this.proposta.entrada}
-                      \n\n Parcelas mensais:\n R$ ${this.proposta.mensalidade}
+                      \n\n Onze parcelas mensais:\n R$ ${this.proposta.mensalidade}
                        ${parcelamentoRastreador} 
                       \n\n Cota de participação:\n R$ ${this.proposta.participacao} `,
                   style: 'header',
@@ -647,7 +661,7 @@ export class ElaboraPropostaComponent implements OnInit {
                 {
                   text: [
                     {
-                      text: 'COBERTURAS OFERECIDAS',
+                      text: 'COBERTURAS INCLUSAS',
                       alignment: 'center',
                       style: 'subheader',
                     },
@@ -675,30 +689,63 @@ export class ElaboraPropostaComponent implements OnInit {
                   border: [true, false, true, true],
                 }
                 ],
-                [
-                  {
-                    text: 'PRODUTOS ADICIONAIS',
-                    style: 'subheader',
-                    margin: [5, 25, 0, 0],
-                  },
-                  {
-                    text: `${produtoAdicionais1}
-                        \nAPP (ACIDENTES PESSOAIS DE PASSAGEIROS) até 20 mil;
-                        \nFundo para terceiros de 50 mil;
-                        \nFundo para terceiros de 70 mil.
-                        ` ,
-                    alignment: 'left',
-                    fontSize: 9,
-                    margin: [5, 0, 0, 0],
-                  }
-                ],
+                // [
+                //   {
+                //     text: 'OUTRAS COBERTURAS OPCIONAIS OFERECIDAS',
+                //     style: 'subheader',
+                //     margin: [5, 25, 0, 0],
+                //   },
+                //   {
+                //     text: `${produtoAdicionais1}
+                //         \nAPP (ACIDENTES PESSOAIS DE PASSAGEIROS) até 20 mil;
+                //         \nFundo para terceiros de 50 mil;
+                //         \nFundo para terceiros de 70 mil.
+                //         ` ,
+                //     alignment: 'left',
+                //     fontSize: 9,
+                //     margin: [5, 0, 0, 0],
+                //   }
+                // ],
+              ]
+            }
+          },
+          {// texto OUTRAS COBERTURAS OPCIONAIS OFERECIDAS
+            style: 'tableExample',
+            table: { 
+              widths: [568.5],
+              heights: [30],
+              body: [
+                [{
+                  text: [
+                    { 
+                      text:'OUTRAS COBERTURAS OPCIONAIS OFERECIDAS',
+                      style: 'ParagrafoBold',
+                      alignment: 'center',
+
+                    },
+                    {
+                      text: `\n\n${this.fundoTerceiroOutros}
+                      ${this.carroReservaOutros}
+                      ${this.protecaoVidroOutros}
+                      ${this.appOutros}
+                      ${this.rastreadorOutros}`,
+                      fontSize: 9,
+                      alignment: 'left',
+                    }
+                  ], 
+                  
+                  margin: [0, 0, 0, 0],
+                  
+                  border: [true, false, true, true],
+                }
+              ]
               ]
             }
           },
           {   // texto informativo e validade da proposta
             style: 'tableExample',
             table: {
-              widths: [570],
+              widths: [568.5],
               heights: [30],
               body: [
                 [{

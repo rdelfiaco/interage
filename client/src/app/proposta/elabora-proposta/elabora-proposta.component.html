@@ -192,13 +192,13 @@
                         R$ {{valorPPV}}
                     </div>
                     <div class="col-md-3">
-                        <div *ngIf="chckPortabilidade" >
+                        <div>
                             <input  type="text" id="adesao" class="form-control" style="background-color: powderblue" 
                             [(ngModel)]="adesao"  (change)="validaAdesao()"  >
                         </div>
-                        <div *ngIf="!chckPortabilidade" >
+                        <!-- <div >
                                 {{adesao}}
-                        </div>
+                        </div> -->
                     </div>
                     <div class="col-md-3">
                         <a *ngIf="prcParticipacao > 0">
