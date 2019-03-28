@@ -45,6 +45,9 @@ declaraServico('getTarefaPorId', tarefa.getTarefaPorId);
 declaraServico('getTarefaPerformance',tarefa.getTarefaPerformance);
 declaraServico('getCampanhaTelemarketing',campanha.getCampanhaTelemarketing);
 declaraServico('getCampanhaTelemarketingAnalisar',campanha.getCampanhaTelemarketingAnalisar);
+declaraServico('getLigacaoTelemarketing', telemarketing.getLigacaoTelemarketing);
+declaraServico('getCampanhaFollowDoUsuario', campanha.getCampanhaFollowDoUsuario);
+
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
@@ -121,19 +124,6 @@ app.get('/getCampanhasDoUsuario', (req, res) => {
 
 app.get('/getCampanhas', (req, res) => {
   campanha.getCampanhas(req)
-    .then(linhas => {
-      headerResponse(res)
-      res.status(200).send(linhas)
-    })
-    .catch(error => {
-      headerResponse(res)
-      console.log(error)
-      res.status(401).send(error)
-    })
-});
-
-app.get('/getLigacaoTelemarketing', (req, res) => {
-  telemarketing.getLigacaoTelemarketing(req)
     .then(linhas => {
       headerResponse(res)
       res.status(200).send(linhas)

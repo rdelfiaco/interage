@@ -226,7 +226,7 @@ export class EventoComponent implements OnInit {
 
 
   async listaEventos() {
-    debugger
+    
     try {
       let usuarioIdPessoa = this.usuarioSelect.filter(usuario => {
         if (usuario.value == this.usuarioSelectValue) {

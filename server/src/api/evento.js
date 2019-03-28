@@ -25,7 +25,7 @@ function getUmEvento(req, res) {
             or (tipodestino = 'P' and id_usuario = ${req.query.id_usuario} )
             or (id_pessoa_visualizou = ${req.query.id_pessoa} and id_status_evento in(5,6) ))
             and dt_para_exibir <= now()
-            and id_campanha = ${req.query.id_campanha}
+            and (id_campanha = ${req.query.id_campanha} or (tipodestino = 'P' and id_campanha is not null ))
             order by id_status_evento desc, id_prioridade, dt_para_exibir LIMIT 1`
 
       //console.log(sql)
@@ -846,7 +846,7 @@ function getEventosFiltrados(req, res) {
       req.query.motivos = '0';
     }
 
-    let sql = `select * from view_eventos where  (id_campanha is null or tipodestino = 'P' ) `
+    let sql = `select * from view_eventos where  (id_campanha is null and tipodestino = 'P' ) `
     sql = sql + ` and (id_status_evento in (${req.query.status})  or -1 in (${req.query.status})) `  // status 
     if (req.query.dtCricaoRadio == 'true') {
       sql = sql + ` and date(dt_criou) between date('${req.query.dt_inicial}') and date('${req.query.dt_final}')` // data de criação 
@@ -888,7 +888,7 @@ function getCountEventosPendentes(req, res) {
     };
 
     let sql = `select count(*) from view_eventos where
-                   -- id_campanha is null and
+                   id_campanha is null and
                    dt_para_exibir <= now() and
                    id_status_evento in (1, 4, 5, 6) and
                    tipodestino = 'P' and id_usuario in ( ${req.query.idUsuarioLogado})`

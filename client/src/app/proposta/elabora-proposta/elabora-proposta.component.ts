@@ -650,10 +650,12 @@ export class ElaboraPropostaComponent implements OnInit {
 
               body: [
                 [{
-                  text: `Entrada:\n R$ ${this.proposta.entrada}
-                      \n\n Onze parcelas mensais:\n R$ ${this.proposta.mensalidade}
+                  text: [ `Entrada:\n R$ ${this.proposta.entrada}
+                        \n\n Onze parcelas:\n`, 
+                       {text:  '(plano anual)',  style: 'font14'},
+                       `\n R$ ${this.proposta.mensalidade}
                        ${parcelamentoRastreador} 
-                      \n\n Cota de participação:\n R$ ${this.proposta.participacao} `,
+                      \n\n Cota de participação:\n R$ ${this.proposta.participacao} `],
                   style: 'header',
                   margin: [15, 20, 0, 5],
                   border: [true, false, true, true],
@@ -778,9 +780,12 @@ export class ElaboraPropostaComponent implements OnInit {
           quote: {
             italics: true
           },
+          font14: {
+            fontSize: 14
+          },
           small: {
             fontSize: 8
-          }
+          },
         },
         images: { logotipo: img }
       };

@@ -543,6 +543,33 @@ function getClientesPendentes(req, res){
 
 }
 
+function getCampanhaFollowDoUsuario(req, res){
+  return new Promise(function (resolve, reject) {
+    let credenciais = {
+      token: req.query.token,
+      idUsuario: req.query.id_usuario
+    };
+    let sql = `Select  id_campanha, campanha,  count(*) as qtde
+                from view_eventos 
+                where id_status_evento in (1,5,4,6)
+                and tipodestino = 'P' and id_campanha is not null 
+                and id_usuario = ${req.query.id_usuario} 
+                group by  id_campanha, campanha
+                order by campanha `
+    executaSQL(credenciais, sql)
+      .then(res => {
+        if (res) {
+          let clientesPendentes = res;
+          resolve(clientesPendentes);
+        }
+        else resolve({total_registros: 0});
+      })
+      .catch(err => {
+        reject(err)
+      })
+  })
 
-module.exports = { getCampanhasDoUsuario, getCampanhas, getCampanhaAnalisar, getCampanhaResultado, 
+}
+
+module.exports = { getCampanhasDoUsuario, getCampanhas, getCampanhaAnalisar, getCampanhaResultado, getCampanhaFollowDoUsuario,
   getEventosRelatorioCampanha, getClientesPendentes, getCampanhaTelemarketingAnalisar, getCampanhaTelemarketing }

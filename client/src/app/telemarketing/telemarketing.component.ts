@@ -29,6 +29,7 @@ export class TelemarketingComponent implements OnInit {
   pessoaObject: any;
   pessoaNome: string;
   velocimetro: string;
+  tableData = [];
 
   constructor(private connectHTTP: ConnectHTTP, private localStorage: LocalStorage, private dt: ChangeDetectorRef) {
     this.usuarioLogado = this.localStorage.getLocalStorage('usuarioLogado') as Usuario;
@@ -49,8 +50,12 @@ export class TelemarketingComponent implements OnInit {
       observer.next(camp)
     })
 
+    this.getFollowDoUsuario();
+    
     this.metaPessoa = r.resposta.metaPessoa[0];
     this._constroiGraficoMeta(this.metaPessoa);
+   
+
   }
 
   _constroiGraficoMeta(meta) {
@@ -66,6 +71,21 @@ export class TelemarketingComponent implements OnInit {
     arr.push('&chxl=0:|0|100')
     this.velocimetro = arr.join('')
   }
+
+
+  async getFollowDoUsuario(){
+    let follow = await this.connectHTTP.callService({
+      service: 'getCampanhaFollowDoUsuario',
+      paramsService: {
+        id_organograma: this.usuarioLogado.id_organograma,
+      }
+    }) as any;
+    
+    if (follow.error) this.tableData = [];
+    else this.tableData = follow.resposta as Array<object>;
+    console.log(this.tableData)
+  }
+
 
   getSelectedValue(campanhaSelecionada: any) {
     this.campanhaSelecionada = campanhaSelecionada
