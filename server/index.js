@@ -17,6 +17,7 @@ const proposta = require('./src/api/proposta');
 const config = require('./src/api/config');
 const exportaSQL = require('./src/api/exportaSQL');
 const tarefa = require('./src/api/tarefa');
+const whatsap = require('./src/api/whatsap')
 
 const consultaPlaca = require('./src/api/consultaPlaca');
 
@@ -47,6 +48,7 @@ declaraServico('getCampanhaTelemarketing',campanha.getCampanhaTelemarketing);
 declaraServico('getCampanhaTelemarketingAnalisar',campanha.getCampanhaTelemarketingAnalisar);
 declaraServico('getLigacaoTelemarketing', telemarketing.getLigacaoTelemarketing);
 declaraServico('getCampanhaFollowDoUsuario', campanha.getCampanhaFollowDoUsuario);
+declaraServico('getWhatsapTeste', whatsap.getWhatsapTeste);
 
 
 app.use(bodyParser.json());
@@ -381,7 +383,6 @@ app.get('/trocarSenhaUsuarioLogado', (req, res) => {
       res.status(401).send(error)
     })
 });
-
 
 
 app.listen(nodeStart.port, "0.0.0.0");

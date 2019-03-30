@@ -1,3 +1,4 @@
+import { ShowTableComponent } from './show-table/show-table.component';
 import { AnalisarCampanhaTelemarketingComponent } from './analisar-campanha-telemarketing/analisar-campanha-telemarketing.component';
 import { TarefaComponent } from './workflow/tarefa/tarefa.component';
 import { DashboardAgenteComponent } from './dashboard-agente/dashboard-agente.component';
@@ -150,6 +151,11 @@ const routes: Routes = [
   {
     path: 'tarefa/:id',
     component: TarefaComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'showTable/:sql',
+    component: ShowTableComponent,
     canActivate: [AuthGuard]
   },
   {
