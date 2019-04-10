@@ -203,7 +203,7 @@
   <div class="d-flex justify-content-center">
 
     <!--Pagination -->
-    <nav class="my-4 pt-2">
+    <nav class="my-4 pt-2" >
       <ul class="pagination pagination-circle pg-purple mb-0">
 
         <!--First-->
@@ -223,8 +223,6 @@
         <li *ngFor="let page of paginators; let i = index" class="page-item" [ngClass]="{active: i+1 == activePage}">
           <a class="page-link waves-light" (click)="changePage($event)" mdbWavesEffect>{{page}}</a>
         </li>
-
-
 
         <!--Arrow right-->
         <li class="page-item" (click)="nextPage()" [ngClass]="{disabled: activePage == lastPageNumber}">

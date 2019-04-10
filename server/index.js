@@ -17,7 +17,6 @@ const proposta = require('./src/api/proposta');
 const config = require('./src/api/config');
 const exportaSQL = require('./src/api/exportaSQL');
 const tarefa = require('./src/api/tarefa');
-const whatsap = require('./src/api/whatsap')
 
 const consultaPlaca = require('./src/api/consultaPlaca');
 
@@ -40,6 +39,7 @@ declaraServico('getCountEventosPendentes', evento.getCountEventosPendentes);
 declaraServico('getConfiguracao', config.getConfiguracao);
 declaraServico('getSQLs', exportaSQL.getSQLs);
 declaraServico('getResultadoSQLs', exportaSQL.getResultadoSQLs);
+declaraServico('getSQL', exportaSQL.getSQL);
 declaraServico('getPropostasPorPeriodoSintetico', proposta.getPropostasPorPeriodoSintetico);
 declaraServico('getEventosPorPeriodoSintetico', evento.getEventosPorPeriodoSintetico);
 declaraServico('getTarefaPorId', tarefa.getTarefaPorId);
@@ -48,7 +48,6 @@ declaraServico('getCampanhaTelemarketing',campanha.getCampanhaTelemarketing);
 declaraServico('getCampanhaTelemarketingAnalisar',campanha.getCampanhaTelemarketingAnalisar);
 declaraServico('getLigacaoTelemarketing', telemarketing.getLigacaoTelemarketing);
 declaraServico('getCampanhaFollowDoUsuario', campanha.getCampanhaFollowDoUsuario);
-declaraServico('getWhatsapTeste', whatsap.getWhatsapTeste);
 
 
 app.use(bodyParser.json());
@@ -391,6 +390,22 @@ console.log(`Servidor iniciado na em http://localhost:${nodeStart.port}`)
 
 function declaraServico(nomeServico, funcao) {
   app.get(`/${nomeServico}`, (req, res) => {
+    funcao(req)
+      .then(linhas => {
+        headerResponse(res)
+        res.status(200).send(linhas)
+      })
+      .catch(error => {
+        headerResponse(res)
+        console.log(`Serviço: ${nomeServico}; Situação: ` , error)
+        res.status(401).send(error)
+      })
+  });
+  console.log(`Serviço ${nomeServico}, declarado com sucesso!`)
+}
+
+function declaraServicoPost(nomeServico, funcao) {
+  app.post(`/${nomeServico}`, (req, res) => {
     funcao(req)
       .then(linhas => {
         headerResponse(res)

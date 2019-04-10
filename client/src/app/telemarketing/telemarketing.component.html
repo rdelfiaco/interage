@@ -98,7 +98,7 @@
 
             <!--Table body-->
             <tbody>
-              <tr *ngFor="let follow of tableData">
+              <tr (click)="showEventosCampanha(follow.id_campanha, follow.campanha )" *ngFor="let follow of tableData">
                 <td>{{follow.campanha}}</td>
                 <td>{{follow.qtde}}</td>
               </tr>

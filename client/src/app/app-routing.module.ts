@@ -154,7 +154,7 @@ const routes: Routes = [
     canActivate: [AuthGuard]
   },
   {
-    path: 'showTable/:sql',
+    path: 'showTable/:parametros',
     component: ShowTableComponent,
     canActivate: [AuthGuard]
   },

@@ -103,7 +103,8 @@ export class ExportarComponent implements OnInit {
 
       new Angular5Csv(getResultadoSQLs.resposta, 'data-table', {
         fieldSeparator: ';',
-        headers: Object.keys(getResultadoSQLs.resposta[0])
+        headers: Object.keys(getResultadoSQLs.resposta[0]),
+        type: 'text/csv;charset=utf-8;'
       });
 
     }

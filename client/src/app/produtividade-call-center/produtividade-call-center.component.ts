@@ -7,6 +7,7 @@ import { ConnectHTTP } from '../shared/services/connectHTTP';
 import { LocalStorage } from '../shared/services/localStorage';
 import { IMyOptions, ToastService } from '../../lib/ng-uikit-pro-standard';
 import * as moment from 'moment';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-produtividade-call-center',
@@ -88,7 +89,10 @@ export class ProdutividadeCallCenterComponent implements OnInit {
   maxVisibleItems: number = 10;
   radioModel: string = 'dtCompromisso';
 
-  constructor(private http: Http, private connectHTTP: ConnectHTTP, private localStorage: LocalStorage,
+  constructor(private http: Http, 
+    private connectHTTP: ConnectHTTP, 
+    private localStorage: LocalStorage,
+    private router: Router,
     private toastrService: ToastService) {
     this.usuarioLogado = this.localStorage.getLocalStorage('usuarioLogado') as any;
   }
@@ -202,5 +206,14 @@ export class ProdutividadeCallCenterComponent implements OnInit {
       this.toastrService.error(e.error);
     }
   }
+
+  showTable(idSql: number, idRegistro: any, titulo: any){
+
+    this.router.navigate([`/showTable/{"idSql":${idSql},"idRegistro":${idRegistro},"titulo": "${titulo}"}`]);
+
+  }
+
+
+
 }
 

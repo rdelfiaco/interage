@@ -3,6 +3,7 @@ import { ConnectHTTP } from '../shared/services/connectHTTP';
 import { LocalStorage } from '../shared/services/localStorage';
 import { Usuario } from '../login/usuario';
 import { Observable, Subscriber } from 'rxjs';
+import {  Router } from '@angular/router';
 
 @Component({
   selector: 'telemarketing',
@@ -31,7 +32,10 @@ export class TelemarketingComponent implements OnInit {
   velocimetro: string;
   tableData = [];
 
-  constructor(private connectHTTP: ConnectHTTP, private localStorage: LocalStorage, private dt: ChangeDetectorRef) {
+  constructor(private connectHTTP: ConnectHTTP, 
+              private localStorage: LocalStorage, 
+              private dt: ChangeDetectorRef,
+              private router: Router) {
     this.usuarioLogado = this.localStorage.getLocalStorage('usuarioLogado') as Usuario;
   }
 
@@ -83,7 +87,6 @@ export class TelemarketingComponent implements OnInit {
     
     if (follow.error) this.tableData = [];
     else this.tableData = follow.resposta as Array<object>;
-    console.log(this.tableData)
   }
 
 
@@ -159,4 +162,14 @@ export class TelemarketingComponent implements OnInit {
   atualizaMeta(metaPessoa) {
     this.metaPessoa = metaPessoa;
   }
+
+  showEventosCampanha(id: any, campanha:string){
+
+    let idSql= 3; 
+    let idRegistro = id;
+    
+    this.router.navigate([`/showTable/{"idSql":${idSql},"idRegistro":${idRegistro},"titulo": "Eventos da campanha: ${campanha} "}`]);
+
+  }
+
 }

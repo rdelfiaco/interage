@@ -171,7 +171,8 @@ export class AnalisaCampanhaComponent implements OnInit {
 
       new Angular5Csv(getCampanhaCallCenter.resposta, 'data-table', {
         fieldSeparator: ';',
-        headers: Object.keys(getCampanhaCallCenter.resposta[0])
+        headers: Object.keys(getCampanhaCallCenter.resposta[0]),
+        type: 'text/csv;charset=utf-8;'
       });
     }
     catch (e) {

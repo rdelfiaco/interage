@@ -33,8 +33,11 @@ function getSQLs(req, res) {
       
       let sql = req.query.sql
 
-      sql = sql.replace('${dataInicial}', `${req.query.dataInicial}`)
-      sql = sql.replace('${dataFinal}', `${req.query.dataFinal}`)
+      if (req.query.dataInicial) sql = sql.replace('${dataInicial}', `${req.query.dataInicial}`)
+      if (req.query.dataFinal) sql = sql.replace('${dataFinal}', `${req.query.dataFinal}`)
+      if (req.query.idRegistro) sql = sql.replace('${idRegistro}', `${req.query.idRegistro}`)
+      sql = sql.replace('${idUsuario}',`${req.query.idUsuarioLogado}`)
+
       
       executaSQL(credenciais, sql)
         .then(res => {
@@ -51,4 +54,36 @@ function getSQLs(req, res) {
   }
 
 
-  module.exports = {getSQLs, getResultadoSQLs}
+  function getSQL(req, res) {
+    return new Promise(function (resolve, reject) {
+      let credenciais = {
+        token: req.query.token,
+        idUsuario: req.query.idUsuarioLogado
+      };
+
+      let sql = `Select sql from sql_exportar where id = ${req.query.idSql}`
+      
+      executaSQL(credenciais, sql)
+        .then(res => {
+          if (res) {
+            req.query.sql = res[0].sql
+            getResultadoSQLs(req, res)
+              .then(res => {
+                resolve(res)
+              })
+              .catch(err => {reject(err)})
+
+          }
+          else reject(' há SQL!')
+        })
+        .catch(err => {
+          reject(err)
+        })
+    })
+
+
+
+  }
+
+
+  module.exports = {getSQLs, getResultadoSQLs, getSQL}

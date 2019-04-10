@@ -136,14 +136,16 @@
       <div class="bocaFunil">
       </div>
       <div class="propect">
-        <span *ngIf="eventosPendentesUsuario && eventosPendentesUsuario[0]" title="Eventos pendentes do usuário">
+        <span *ngIf="eventosPendentesUsuario && eventosPendentesUsuario[0]" 
+              title="Eventos pendentes do usuário" 
+              (click)="showTable(4,agentesVendasSelectValue,'Eventos pendentes do(a) ' + agentesVendasSelectNome )"  >
           {{eventosPendentesUsuario[0].eventos_usuarios}}</span>
       </div>
       <div class="tentando" title="Tentando">
         <div class="table_scroll">
           <table *ngIf="eventosTentandoUsuario.length" class="table table-bordered table-striped">
             <!--Table head-->
-            <thead>
+            <thead> 
               <tr>
                 <th class="justify-content-center">Tentativas</th>
                 <th class="justify-content-center">Ligações</th>
