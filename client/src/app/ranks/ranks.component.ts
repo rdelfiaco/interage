@@ -135,7 +135,8 @@ export class RanksComponent implements OnInit {
   }
 
 
-  graficoProspeccao(grafico: string, router: Router){
+  graficoProspeccao(grafico: string){
+  let router: Router;
   let ctx = document.getElementById(grafico);
   let myChart = new Chart(ctx, {
     type: 'bar',
