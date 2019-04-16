@@ -1,3 +1,4 @@
+import { RanksComponent } from './ranks/ranks.component';
 import { ShowTableComponent } from './show-table/show-table.component';
 import { AnalisarCampanhaTelemarketingComponent } from './analisar-campanha-telemarketing/analisar-campanha-telemarketing.component';
 import { TarefaComponent } from './workflow/tarefa/tarefa.component';
@@ -16,7 +17,7 @@ import { DashboardOperadorComponent } from './dashboard-operador/dashboard-opera
 
 import { DashboardAdminComponent } from './dashboard-admin/dashboard-admin.component';
 import { LoginComponent } from './login/login.component';
-import { NgModule } from '@angular/core';
+import { NgModule, Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Routes, RouterModule } from '@angular/router';
 import { AuthGuard } from './login/auth.guard';
@@ -156,6 +157,11 @@ const routes: Routes = [
   {
     path: 'showTable/:parametros',
     component: ShowTableComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'ranks',
+    component: RanksComponent,
     canActivate: [AuthGuard]
   },
   {

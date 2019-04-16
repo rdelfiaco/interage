@@ -3,7 +3,7 @@
   <!--Card image-->
   <div class="view view-cascade gradient-card-header blue-gradient narrower py-1 mx-2  d-flex justify-content-center align-items-center">
 
-      <h4 class="white-text font-weight-bold text-uppercase ">Desempenho do Consultor de Vendas Internas</h4>
+      <h4 class="white-text font-weight-bold text-uppercase ">Ranks dos Consultores de Vendas Internas</h4>
   
   </div>
     <!-- Card Filtros -->
@@ -28,39 +28,57 @@
           </div>
   
         </div>
-
-        <div class="col-6 col-sm-4" style="z-index: 0">
-          <div class="row" style="margin-top: 50px">            
-            <div class="col-md-12">
-              <mdb-select [disabled]="usuarioLogado.responsavel_membro == 'M'" [(ngModel)]="agentesVendasSelectValue"
-              (selected)="setNomeAtendente($event)" [options]="agentesVendasSelect" placeholder="Escolha os Agentes de vendas"
-              style="font-size: 0.5rem;"></mdb-select>
-              <label>Consultores de vendas interno</label>
-            </div>
-          </div>
+        <div class="col-1">
+          <a mdbBtn floating=" true" size="lg" (click)="getRanks()" gradient="blue" mdbWavesEffect>
+            <mdb-icon icon="bolt"></mdb-icon>
+          </a>
         </div>
+
+
+
       </div>
     </div>
     <br>
     <div class="row">
         <div class="col-6 col-sm-6">
             <div class="view view-cascade gradient-card-header blue-gradient narrower py-1 mx-2  d-flex justify-content-center align-items-center">
-                <h6 class="white-text font-weight-bold text-uppercase ">Propostas</h6>            
+                <h6 class="white-text font-weight-bold text-uppercase ">Prospecções</h6>            
             </div>
-            <div style="display: block">
-                <canvas id="propostaChart" ></canvas>
+            <div style="display: block; margin-top: 20px">
+                <canvas id="prospeccaoChart" ></canvas>
             </div>
         </div>
         <div class="col-6 col-sm-6">
             <div class="view view-cascade gradient-card-header blue-gradient narrower py-1 mx-2  d-flex justify-content-center align-items-center">
-                <h6 class="white-text font-weight-bold text-uppercase ">Eventos/Tarefas</h6>            
+                <h6 class="white-text font-weight-bold text-uppercase ">Propostas emitidas</h6>            
             </div>
-            <div style="display: block">
-                <canvas id="eventosChart" ></canvas>
+            <div style="display: block; margin-top: 20px">
+                <canvas id="propostaEmitidasChart" ></canvas>
+            </div>
+        </div>
+    </div>
+    <br>
+    <br>
+    <div class="row">
+        <div class="col-6 col-sm-6">
+            <div class="view view-cascade gradient-card-header blue-gradient narrower py-1 mx-2  d-flex justify-content-center align-items-center">
+                <h6 class="white-text font-weight-bold text-uppercase ">Propostas fechadas</h6>            
+            </div>
+            <div style="display: block; margin-top: 20px">
+                <canvas id="propostasFechadas" ></canvas>
+            </div>
+        </div>
+        <div class="col-6 col-sm-6">
+            <div class="view view-cascade gradient-card-header blue-gradient narrower py-1 mx-2  d-flex justify-content-center align-items-center">
+                <h6 class="white-text font-weight-bold text-uppercase ">Valores das propostas</h6>            
+            </div>
+            <div style="display: block; margin-top: 20px">
+                <canvas id="valoresPropostas" ></canvas>
             </div>
         </div>
     </div>
 
+    
 </div>
 
 

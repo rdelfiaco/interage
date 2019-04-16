@@ -30,6 +30,7 @@ import { DashboardPropostaComponent } from './dashboard-proposta/dashboard-propo
 import { DashboardAgenteComponent } from './dashboard-agente/dashboard-agente.component';
 import { AnalisarCampanhaTelemarketingComponent } from './analisar-campanha-telemarketing/analisar-campanha-telemarketing.component';
 import { ShowTableComponent } from './show-table/show-table.component';
+import { RanksComponent } from './ranks/ranks.component';
 
 
 
@@ -50,6 +51,7 @@ import { ShowTableComponent } from './show-table/show-table.component';
     DashboardAgenteComponent,
     AnalisarCampanhaTelemarketingComponent,
     ShowTableComponent,
+    RanksComponent,
   ],
 
   imports: [

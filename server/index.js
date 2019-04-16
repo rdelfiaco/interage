@@ -17,6 +17,7 @@ const proposta = require('./src/api/proposta');
 const config = require('./src/api/config');
 const exportaSQL = require('./src/api/exportaSQL');
 const tarefa = require('./src/api/tarefa');
+const ranks =  require('./src/api/ranks');
 
 const consultaPlaca = require('./src/api/consultaPlaca');
 
@@ -48,6 +49,7 @@ declaraServico('getCampanhaTelemarketing',campanha.getCampanhaTelemarketing);
 declaraServico('getCampanhaTelemarketingAnalisar',campanha.getCampanhaTelemarketingAnalisar);
 declaraServico('getLigacaoTelemarketing', telemarketing.getLigacaoTelemarketing);
 declaraServico('getCampanhaFollowDoUsuario', campanha.getCampanhaFollowDoUsuario);
+declaraServico('getRanks', ranks.getRanks);
 
 
 app.use(bodyParser.json());

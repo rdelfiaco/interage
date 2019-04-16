@@ -84,7 +84,7 @@ export class TelemarketingComponent implements OnInit {
         id_organograma: this.usuarioLogado.id_organograma,
       }
     }) as any;
-    
+    debugger
     if (follow.error) this.tableData = [];
     else this.tableData = follow.resposta as Array<object>;
   }
@@ -165,7 +165,7 @@ export class TelemarketingComponent implements OnInit {
 
   showEventosCampanha(id: any, campanha:string){
 
-    let idSql= 3; 
+    let idSql= 4; 
     let idRegistro = id;
     
     this.router.navigate([`/showTable/{"idSql":${idSql},"idRegistro":${idRegistro},"titulo": "Eventos da campanha: ${campanha} "}`]);

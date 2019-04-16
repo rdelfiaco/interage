@@ -82,32 +82,32 @@
     <span *ngIf="velocimetro" class="h6 text-left">Tendência para alcançar a meta das ligações diárias.</span>
   </div>
   <div class="col-md-7 text-center">
-      <div class="card card-cascade narrower">
-        <div class="view view-cascade gradient-card-header blue-gradient narrower py-1 mx-2  d-flex justify-content-center align-items-center">
-            <h6 class="white-text font-weight-bold text-uppercase ">Follow</h6>
-        </div>
-        <table class="table">
-            <!--Table head-->
-            <thead>
-              <tr>
-                <th class="th-sm">Campanha</th>
-                <th class="th-sm">Quatidade de ligações</th>
-              </tr>
-            </thead>
-            <!--Table head-->
-
-            <!--Table body-->
-            <tbody>
-              <tr (click)="showEventosCampanha(follow.id_campanha, follow.campanha )" *ngFor="let follow of tableData">
-                <td>{{follow.campanha}}</td>
-                <td>{{follow.qtde}}</td>
-              </tr>
-            </tbody>
-            <!--Table body-->
-          </table>
-          
+    <div class="card card-cascade narrower">
+      <div class="view view-cascade gradient-card-header blue-gradient narrower py-1 mx-2  d-flex justify-content-center align-items-center">
+          <h6 class="white-text font-weight-bold text-uppercase ">Follow</h6>
       </div>
-      <br>
-      <br>
+      <table class="table">
+          <!--Table head-->
+          <thead>
+            <tr>
+              <th class="th-sm">Campanha</th>
+              <th class="th-sm">Quatidade de ligações</th>
+            </tr>
+          </thead>
+          <!--Table head-->
+
+          <!--Table body-->
+          <tbody>
+            <tr (click)="showEventosCampanha(follow.id_campanha, follow.campanha )" *ngFor="let follow of tableData">
+              <td>{{follow.campanha}}</td>
+              <td>{{follow.qtde}}</td>
+            </tr>
+          </tbody>
+          <!--Table body-->
+        </table>
+        
+    </div>
+    <br>
+    <br>
   </div>
 </div>

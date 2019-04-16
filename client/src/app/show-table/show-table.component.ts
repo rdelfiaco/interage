@@ -1,3 +1,4 @@
+import { element } from 'protractor';
 import { Component, OnInit, HostListener, QueryList, ElementRef, ViewChildren } from '@angular/core';
 import { Usuario } from '../login/usuario';
 import { ActivatedRoute } from '@angular/router';
@@ -37,8 +38,6 @@ export class ShowTableComponent implements OnInit {
   lastPageNumber: number;
   maxVisibleItems: number = 10;
 
-
-
   constructor(
     private route: ActivatedRoute,
     private connectHTTP: ConnectHTTP, 
@@ -46,7 +45,6 @@ export class ShowTableComponent implements OnInit {
     private toastrService: ToastService) {
     this.usuarioLogado = this.localStorage.getLocalStorage('usuarioLogado') as Usuario;
     this.route.params.subscribe(res => {
-      debugger
       let parametros = res.parametros 
       parametros = JSON.parse(parametros);
       this.idRegistro = parametros.idRegistro;
@@ -114,7 +112,7 @@ export class ShowTableComponent implements OnInit {
       }
     }
     this.lastPageNumber = this.paginators.length;
-    this.atualizaTabelaPage();
+    
   }
 
   changePage(event: any) {
@@ -122,35 +120,29 @@ export class ShowTableComponent implements OnInit {
     this.activePage = +event.target.text;
     this.firstVisibleIndex = this.activePage * this.maxVisibleItems - this.maxVisibleItems + 1;
     this.lastVisibleIndex = this.activePage * this.maxVisibleItems;
-
-    this.atualizaTabelaPage();
   }
 
   nextPage() {
     this.activePage += 1;
     this.firstVisibleIndex = this.activePage * this.maxVisibleItems - this.maxVisibleItems + 1;
     this.lastVisibleIndex = this.activePage * this.maxVisibleItems;
-    this.atualizaTabelaPage();
   }
   previousPage() {
     this.activePage -= 1;
     this.firstVisibleIndex = this.activePage * this.maxVisibleItems - this.maxVisibleItems + 1;
     this.lastVisibleIndex = this.activePage * this.maxVisibleItems;
-    this.atualizaTabelaPage();
   }
 
   firstPage() {
     this.activePage = 1;
     this.firstVisibleIndex = Math.abs((this.activePage * this.maxVisibleItems) - this.maxVisibleItems + 1);
     this.lastVisibleIndex = this.activePage * this.maxVisibleItems;
-    this.atualizaTabelaPage();
   }
 
   lastPage() {
     this.activePage = this.lastPageNumber;
     this.firstVisibleIndex = this.activePage * this.maxVisibleItems - this.maxVisibleItems + 1;
     this.lastVisibleIndex = this.activePage * this.maxVisibleItems;
-    this.atualizaTabelaPage();
   }
 
   sortBy(by: string | any): void {
@@ -168,7 +160,6 @@ export class ShowTableComponent implements OnInit {
     });
     //}
     this.sorted = !this.sorted;
-    this.atualizaTabelaPage();
   }
 
   filterIt(arr: any, searchKey: any) {
@@ -186,11 +177,6 @@ export class ShowTableComponent implements OnInit {
     if (this.searchText) {
       return this.filterIt(this.tableData, this.searchText);
     }
-  }
-
-  atualizaTabelaPage(){
-    this.tableDataPage = this.tableData.slice(this.firstVisibleIndex - 1, this.lastVisibleIndex)
-
   }
 
   download(){

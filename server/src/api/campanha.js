@@ -562,7 +562,7 @@ function getCampanhaFollowDoUsuario(req, res){
           let clientesPendentes = res;
           resolve(clientesPendentes);
         }
-        else resolve({total_registros: 0});
+        else {resolve(0)}
       })
       .catch(err => {
         reject(err)

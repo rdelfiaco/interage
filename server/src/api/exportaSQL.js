@@ -38,7 +38,7 @@ function getSQLs(req, res) {
       if (req.query.idRegistro) sql = sql.replace('${idRegistro}', `${req.query.idRegistro}`)
       sql = sql.replace('${idUsuario}',`${req.query.idUsuarioLogado}`)
 
-      
+      console.log(sql)
       executaSQL(credenciais, sql)
         .then(res => {
           if (res) {
