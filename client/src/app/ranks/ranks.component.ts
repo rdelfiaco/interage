@@ -46,7 +46,8 @@ export class RanksComponent implements OnInit {
   }
 
   labels: Array<any> = [];
-  label: string ;
+  datasets: Array<any> = [];
+  label: Array<any> = [] ;
   data: Array<any> = [];
   backgroundColor: Array<any> = [];
   borderColor: Array<any> = [];
@@ -94,40 +95,136 @@ export class RanksComponent implements OnInit {
 
     // grafico prospecções
     this.labels = [];
-    this.label = '';
-    this.data = [];
-    this.backgroundColor = [];
-    this.borderColor = [];
+    this.label = [];
+    this.datasets = [];
+
 
     this.prospeccao.forEach( (value: any, index: number, array: any[]) =>{
         
-     this.labels.push( value.consultor);
-     this.data.push( value.total);
-     this.backgroundColor.push( `rgba(${value.color_r}, ${value.color_g}, ${value.color_b}, 0.2)`);
-     this.borderColor.push(`rgba(${value.color_r}, ${value.color_g}, ${value.color_b}, 1)`);
+        if (this.labels.indexOf(value.resposta_motivo)==-1) this.labels.push( value.resposta_motivo);
+        
+        if (this.label.indexOf(value.consultor)==-1 ) this.label.push( value.consultor);
+        
+    });
+    debugger
+    var i;
+    for ( i = 0; i < this.label.length; i++ ) {
+      let _data = [];
+      _data.length = this.labels.length
+      let _backgroundColor = [];
+      _backgroundColor.length = this.labels.length
+      let _borderColor = [];
+      _borderColor.length = this.labels.length
+      this.prospeccao.forEach( (value: any, index: number, array: any[]) =>{
+        if (this.label[i] == value.consultor ){
+          _data[this.labels.indexOf(value.resposta_motivo)] = value.total;
+          _backgroundColor[this.labels.indexOf(value.resposta_motivo)] = `rgba(${value.color_r}, ${value.color_g}, ${value.color_b}, 0.2)`;
+          _borderColor[this.labels.indexOf(value.resposta_motivo)] = `rgba(${value.color_r}, ${value.color_g}, ${value.color_b}, 1)`
+        }
+      });
+      this.datasets.push({
+          label: this.label[i],
+          data: _data,
+          backgroundColor: _backgroundColor,
+          borderColor: _borderColor,
+          borderWidth: 1   
+      })
 
-     })
+    }
+            // let i = label_.indexOf(value.consultor)
+            // this.data = [];
+            // this.backgroundColor = [];
+            // this.borderColor = [];
+
+            // prospeccao_.forEach( (value: any, index: number, array: any[]) =>{
+
+            //   if (label_[i] = value.consultor) {
+            //     this.data.push( value.total),
+            //     this.backgroundColor.push( `rgba(${value.color_r}, ${value.color_g}, ${value.color_b}, 0.2)`),
+            //     this.borderColor.push(`rgba(${value.color_r}, ${value.color_g}, ${value.color_b}, 1)`)
+            //   }
+            // });
+
+            // this.datasets.push({
+
+            //   label: value.consultor,
+            //   data: this.data,
+            //   backgroundColor: this.backgroundColor,
+            //   borderColor: this.borderColor,
+            //   borderWidth: 1
+
+            // });
+        
+     
+  
+
+     console.log(this.labels)
+     console.log('label', this.label)
+     console.log(this.datasets)
+
+
 
      this.graficoProspeccao('prospeccaoChart');
 
 
-     // grafico das propostas emitidas 
-     this.labels = [];
-     this.label = '';
-     this.data = [];
-     this.backgroundColor = [];
-     this.borderColor = [];
+    //  // grafico das propostas emitidas 
+    //  this.labels = [];
+    //  this.label = [];
+    //  this.data = [];
+    //  this.backgroundColor = [];
+    //  this.borderColor = [];
  
-     this.propostaEmitidas.forEach( (value: any, index: number, array: any[]) =>{
+    //  this.propostaEmitidas.forEach( (value: any, index: number, array: any[]) =>{
          
-      this.labels.push( value.consultor);
-      this.data.push( value.total);
-      this.backgroundColor.push( `rgba(${value.color_r}, ${value.color_g}, ${value.color_b}, 0.2)`);
-      this.borderColor.push(`rgba(${value.color_r}, ${value.color_g}, ${value.color_b}, 1)`);
+    //   this.labels.push( value.consultor);
+    //   this.data.push( value.total);
+    //   this.backgroundColor.push( `rgba(${value.color_r}, ${value.color_g}, ${value.color_b}, 0.2)`);
+    //   this.borderColor.push(`rgba(${value.color_r}, ${value.color_g}, ${value.color_b}, 1)`);
  
+    //   })
+ 
+    //   this.graficoProspeccao('propostaEmitidasChart');
+
+    // grafico das propostas emitidas 
+    this.labels = [];
+    this.label = [];
+    this.datasets = [];
+
+
+    this.propostaEmitidas.forEach( (value: any, index: number, array: any[]) =>{
+        
+        if (this.labels.indexOf(value.status_proposta)==-1) this.labels.push( value.status_proposta);
+        
+        if (this.label.indexOf(value.consultor)==-1 ) this.label.push( value.consultor);
+        
+    });
+    debugger
+    var i;
+    for ( i = 0; i < this.label.length; i++ ) {
+      let _data = [];
+      _data.length = this.labels.length
+      let _backgroundColor = [];
+      _backgroundColor.length = this.labels.length
+      let _borderColor = [];
+      _borderColor.length = this.labels.length
+      this.propostaEmitidas.forEach( (value: any, index: number, array: any[]) =>{
+        if (this.label[i] == value.consultor ){
+          _data[this.labels.indexOf(value.status_proposta)] = value.total;
+          _backgroundColor[this.labels.indexOf(value.status_proposta)] = `rgba(${value.color_r}, ${value.color_g}, ${value.color_b}, 0.2)`;
+          _borderColor[this.labels.indexOf(value.status_proposta)] = `rgba(${value.color_r}, ${value.color_g}, ${value.color_b}, 1)`
+        }
+      });
+      this.datasets.push({
+          label: this.label[i],
+          data: _data,
+          backgroundColor: _backgroundColor,
+          borderColor: _borderColor,
+          borderWidth: 1   
       })
- 
-      this.graficoProspeccao('propostaEmitidasChart');
+
+    }
+
+    this.graficoProspeccao('propostaEmitidasChart');
 
 
       
@@ -142,13 +239,7 @@ export class RanksComponent implements OnInit {
     type: 'bar',
     data: {
       labels: this.labels,
-      datasets: [{
-        label: this.label,
-        data: this.data,
-        backgroundColor: this.backgroundColor,
-        borderColor: this.borderColor,
-        borderWidth: 1
-      }]
+      datasets: this.datasets,
     },
     options: {
       scales: {
@@ -159,23 +250,22 @@ export class RanksComponent implements OnInit {
         }]
       },
       legend: { 
-        display: false 
+        display: true 
     },
-      'onClick': function (evt, item) {
-        var idRegistro = item[0]['_model'].label
-        console.log(idRegistro)
-        showTable(5,idRegistro, `Ligações de prospecções do(a) ${idRegistro}` )
-        
-      }
+      'onClick': function (event, item) {
+        console.log(event);
+        console.log(item)
+        },
+
 
       
   },
 });
 
-    function showTable(idSql: number, idRegistro: any, titulo: any){
-      router.navigate([`/showTable/{"idSql":${idSql},"idRegistro":${idRegistro},"titulo": "${titulo}"}`]);
+    // function showTable(idSql: number, idRegistro: any, titulo: any){
+    //   router.navigate([`/showTable/{"idSql":${idSql},"idRegistro":${idRegistro},"titulo": "${titulo}"}`]);
       
-    }
+    // }
 
 };
   
