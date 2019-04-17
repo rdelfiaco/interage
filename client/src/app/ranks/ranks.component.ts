@@ -293,6 +293,16 @@ export class RanksComponent implements OnInit {
 };
   
 
- 
+validaData(dataAlterada: string){
+  var validacao = this.valida.dataIncialFinal( this.dataInicial,this.dataFinal)
+  if (!validacao.resultado){
+    this.toastrService.error(validacao.mensagem)
+    if (dataAlterada == 'dtInicial' ){
+      this.dataInicial = moment().startOf('month').format('DD/MM/YYYY');
+    }else{
+      this.dataFinal = moment().endOf('month').format('DD/MM/YYYY');
+    }
+  }
+}
 
 }
