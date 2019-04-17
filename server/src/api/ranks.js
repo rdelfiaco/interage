@@ -107,14 +107,16 @@ function getRanks(req, res){
         token: req.query.token,
         idUsuario: req.query.id_usuario
       };
-      let sql = `select sp.legenda_grafico as status_proposta, u.login as consultor , u.color_r, u.color_g, u.color_b, count(pr.*) as total
-                from status_proposta sp
-                inner join usuarios u on u.status and id_organograma = 4 and responsavel_membro = 'M'
-                left join propostas pr on u.id = pr.id_usuario 
-                          and date(dtsalvou) between date('${req.query.dataInicial}') and date('${req.query.dataFinal}')
-                where sp.status 
-                group by sp.legenda_grafico, u.login, u.color_r, u.color_g, u.color_b
-                order by sp.legenda_grafico, u.login `
+      let sql = `select  sp.nome as status_proposta , u.login as consultor,  u.color_r, u.color_g, u.color_b, coalesce( tot.total, 0)   as total
+                  from  status_proposta sp
+                      left join usuarios u on u.status and id_organograma = 4 and responsavel_membro = 'M'
+                      left join (select id_status_proposta, id_usuario, count(*) as total
+                      from propostas
+                      where date(dtsalvou) between date('${req.query.dataInicial}') and date('${req.query.dataFinal}')
+                      group by id_status_proposta, id_usuario) tot on sp.id = tot.id_status_proposta and u.id = tot.id_usuario
+                      where sp.status
+                  order by sp.nome, u.login`
+      console.log(sql)
       executaSQL(credenciais, sql)
         .then(res => {
           if (res.length > 0) {

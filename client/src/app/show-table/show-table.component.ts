@@ -24,6 +24,10 @@ export class ShowTableComponent implements OnInit {
   headElements: Array<any>;
   totalRegistros: number;
   titulo: string;
+  dataInicial: string;
+  dataFinal: string;
+  colunas: string;
+  filtros: string;
 
 
   @ViewChildren('list') list: QueryList<ElementRef>;
@@ -50,9 +54,11 @@ export class ShowTableComponent implements OnInit {
       this.idRegistro = parametros.idRegistro;
       this.idSql = parametros.idSql;
       this.titulo = parametros.titulo;
-    
-
-      //this.idRegistro = res.idResquistro
+      this.dataInicial = parametros.dataInicial;
+      this.dataFinal = parametros.dataFinal;
+      this.colunas = parametros.colunas;
+      this.filtros = parametros.filtros;
+      
     });
   };
 
@@ -64,11 +70,17 @@ export class ShowTableComponent implements OnInit {
       let getResultadoSQLs = await this.connectHTTP.callService({
         service: 'getSQL',
         paramsService: {
+          
           token: this.usuarioLogado.token,
           idUsuarioLogado: this.usuarioLogado.id,
           idSql: this.idSql,
-          idRegistro: this.idRegistro
+          idRegistro: this.idRegistro,
+          dataInicial: this.dataInicial,
+          dataFinal: this.dataFinal,
+          colunas: this.colunas,
+          filtros: this.filtros
         }
+        
       });
       this.tableData = getResultadoSQLs.resposta as Array<object> ;
       this.totalRegistros = this.tableData.length;

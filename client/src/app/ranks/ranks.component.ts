@@ -58,7 +58,7 @@ export class RanksComponent implements OnInit {
         private localStorage: LocalStorage,
         private toastrService: ToastService, 
         private valida: Valida,
-        private router: Router,
+        private router: Router
         ) {
     this.usuarioLogado = this.localStorage.getLocalStorage('usuarioLogado') as any;
     }
@@ -164,7 +164,7 @@ export class RanksComponent implements OnInit {
 
 
 
-     this.graficoProspeccao('prospeccaoChart');
+     this.graficoProspeccao('bar','prospeccaoChart', this.router);
 
 
     //  // grafico das propostas emitidas 
@@ -224,7 +224,7 @@ export class RanksComponent implements OnInit {
 
     }
 
-    this.graficoProspeccao('propostaEmitidasChart');
+    this.graficoProspeccao( 'horizontalBar', 'propostaEmitidasChart', this.router);
 
 
       
@@ -232,11 +232,11 @@ export class RanksComponent implements OnInit {
   }
 
 
-  graficoProspeccao(grafico: string){
+  graficoProspeccao(tipoGrafico: string,  grafico: string, router_: Router, dataInicial_ = this.dataInicial, dataFinal_ = this.dataFinal){
   let router: Router;
   let ctx = document.getElementById(grafico);
   let myChart = new Chart(ctx, {
-    type: 'bar',
+    type: tipoGrafico ,
     data: {
       labels: this.labels,
       datasets: this.datasets,
@@ -249,12 +249,19 @@ export class RanksComponent implements OnInit {
           }
         }]
       },
+      responsive: true,
       legend: { 
         display: true 
     },
-      'onClick': function (event, item) {
-        console.log(event);
+      'onClick': function (evt, item) {
         console.log(item)
+
+        var activePoints = myChart.getElementsAtEvent(evt);
+        console.log(activePoints);
+
+        if (item.length > 0) {
+           showTable(grafico, item[0]._model.label)
+        }
         },
 
 
@@ -262,10 +269,26 @@ export class RanksComponent implements OnInit {
   },
 });
 
-    // function showTable(idSql: number, idRegistro: any, titulo: any){
-    //   router.navigate([`/showTable/{"idSql":${idSql},"idRegistro":${idRegistro},"titulo": "${titulo}"}`]);
+    function showTable(grafico_: string, label_: string){
+
+      debugger
+      let idRegistro = label_;
+      let idSql = 0;
+      let titulo = '';
+      let filtro = 'where '
+      dataInicial_ = dataInicial_.replace('/','').replace('/','');
+      dataFinal_ = dataFinal_.replace('/','').replace('/','');
       
-    // }
+        if(grafico_ == "prospeccaoChart") { 
+          idSql = 7;
+          titulo = `Eventos de prospecções concluidos com resposta ${label_}`;
+        } else if(grafico_ == "propostaEmitidasChart") {
+          idSql = 8;
+          titulo = `Proposas emitidas com status ${label_}`;
+      }
+
+      if (idSql>0) router_.navigate([`/showTable/{"idSql":${idSql},"idRegistro":"${idRegistro}","dataInicial":"${dataInicial_}","dataFinal":"${dataFinal_}" ,"titulo": "${titulo}"}`]);
+    }
 
 };
   
