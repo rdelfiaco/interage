@@ -1,12 +1,14 @@
+import { MouseEvent } from './../../lib/ng-uikit-pro-standard/free/utils/facade/browser';
 import { Component, OnInit } from '@angular/core';
 import * as moment from 'moment';
 import { IMyOptions, ToastService } from '../../lib/ng-uikit-pro-standard';
+import { ChartsModule, ChartSimpleModule, WavesModule } from 'ng-uikit-pro-standard'
 import { Http } from '@angular/http';
 import { ConnectHTTP } from '../shared/services/connectHTTP';
 import { LocalStorage } from '../shared/services/localStorage';
 import { Valida } from '../shared/services/valida';
-import { Chart } from 'chart.js';
 import { Router } from '@angular/router';
+import * as Chart from 'chart.js/dist/Chart';
 
 
 
@@ -51,6 +53,8 @@ export class RanksComponent implements OnInit {
   data: Array<any> = [];
   backgroundColor: Array<any> = [];
   borderColor: Array<any> = [];
+  ctxProspeccaoChart: any;
+  myChart: any;
 
   constructor(
         private http: Http, 
@@ -65,7 +69,11 @@ export class RanksComponent implements OnInit {
 
   ngOnInit() {
 
+    this.ctxProspeccaoChart = document.getElementById('ProspeccaoChart');
+
     this.getRanks()
+    
+   
    
 
   }
@@ -73,6 +81,7 @@ export class RanksComponent implements OnInit {
 
   async getRanks(){
 
+    
     let retorno = await this.connectHTTP.callService({
       service: 'getRanks',
       paramsService: {
@@ -87,6 +96,12 @@ export class RanksComponent implements OnInit {
     this.propostaEmitidas = retorno.resposta.propostasEmitidas;
 
     this.montaGraficos();
+    if (this.myChart == undefined || this.myChart == null) {
+        this.graficoProspeccao('bar','prospeccaoChart', this.router);
+    }else {
+        this.myChart.destroy();
+        this.graficoProspeccao('bar','prospeccaoChart', this.router);
+    }
     
   };
 
@@ -106,7 +121,6 @@ export class RanksComponent implements OnInit {
         if (this.label.indexOf(value.consultor)==-1 ) this.label.push( value.consultor);
         
     });
-    debugger
     var i;
     for ( i = 0; i < this.label.length; i++ ) {
       let _data = [];
@@ -158,13 +172,13 @@ export class RanksComponent implements OnInit {
      
   
 
-     console.log(this.labels)
-     console.log('label', this.label)
-     console.log(this.datasets)
+    //  console.log(this.labels)
+    //  console.log('label', this.label)
+    //  console.log(this.datasets)
 
 
 
-     this.graficoProspeccao('bar','prospeccaoChart', this.router);
+    
 
 
     //  // grafico das propostas emitidas 
@@ -186,45 +200,45 @@ export class RanksComponent implements OnInit {
     //   this.graficoProspeccao('propostaEmitidasChart');
 
     // grafico das propostas emitidas 
-    this.labels = [];
-    this.label = [];
-    this.datasets = [];
+    // this.labels = [];
+    // this.label = [];
+    // this.datasets = [];
 
 
-    this.propostaEmitidas.forEach( (value: any, index: number, array: any[]) =>{
+    // this.propostaEmitidas.forEach( (value: any, index: number, array: any[]) =>{
         
-        if (this.labels.indexOf(value.status_proposta)==-1) this.labels.push( value.status_proposta);
+    //     if (this.labels.indexOf(value.status_proposta)==-1) this.labels.push( value.status_proposta);
         
-        if (this.label.indexOf(value.consultor)==-1 ) this.label.push( value.consultor);
+    //     if (this.label.indexOf(value.consultor)==-1 ) this.label.push( value.consultor);
         
-    });
-    debugger
-    var i;
-    for ( i = 0; i < this.label.length; i++ ) {
-      let _data = [];
-      _data.length = this.labels.length
-      let _backgroundColor = [];
-      _backgroundColor.length = this.labels.length
-      let _borderColor = [];
-      _borderColor.length = this.labels.length
-      this.propostaEmitidas.forEach( (value: any, index: number, array: any[]) =>{
-        if (this.label[i] == value.consultor ){
-          _data[this.labels.indexOf(value.status_proposta)] = value.total;
-          _backgroundColor[this.labels.indexOf(value.status_proposta)] = `rgba(${value.color_r}, ${value.color_g}, ${value.color_b}, 0.2)`;
-          _borderColor[this.labels.indexOf(value.status_proposta)] = `rgba(${value.color_r}, ${value.color_g}, ${value.color_b}, 1)`
-        }
-      });
-      this.datasets.push({
-          label: this.label[i],
-          data: _data,
-          backgroundColor: _backgroundColor,
-          borderColor: _borderColor,
-          borderWidth: 1   
-      })
+    // });
+    
+    // var i;
+    // for ( i = 0; i < this.label.length; i++ ) {
+    //   let _data = [];
+    //   _data.length = this.labels.length
+    //   let _backgroundColor = [];
+    //   _backgroundColor.length = this.labels.length
+    //   let _borderColor = [];
+    //   _borderColor.length = this.labels.length
+    //   this.propostaEmitidas.forEach( (value: any, index: number, array: any[]) =>{
+    //     if (this.label[i] == value.consultor ){
+    //       _data[this.labels.indexOf(value.status_proposta)] = value.total;
+    //       _backgroundColor[this.labels.indexOf(value.status_proposta)] = `rgba(${value.color_r}, ${value.color_g}, ${value.color_b}, 0.2)`;
+    //       _borderColor[this.labels.indexOf(value.status_proposta)] = `rgba(${value.color_r}, ${value.color_g}, ${value.color_b}, 1)`
+    //     }
+    //   });
+    //   this.datasets.push({
+    //       label: this.label[i],
+    //       data: _data,
+    //       backgroundColor: _backgroundColor,
+    //       borderColor: _borderColor,
+    //       borderWidth: 1   
+    //   })
 
-    }
+    // }
 
-    this.graficoProspeccao( 'horizontalBar', 'propostaEmitidasChart', this.router);
+   // this.graficoProspeccao( 'horizontalBar', 'propostaEmitidasChart', this.router);
 
 
       
@@ -234,8 +248,19 @@ export class RanksComponent implements OnInit {
 
   graficoProspeccao(tipoGrafico: string,  grafico: string, router_: Router, dataInicial_ = this.dataInicial, dataFinal_ = this.dataFinal){
   let router: Router;
-  let ctx = document.getElementById(grafico);
-  let myChart = new Chart(ctx, {
+
+
+//   if (this.myChart != undefined || this.myChart !=null) {
+    
+//     this.myChart.destroy()
+
+// }
+
+  var ctx = document.getElementById(grafico);
+  var labelsFiltro: any;
+  var datasetsFiltro: any;
+
+  this.myChart = new Chart(ctx, {
     type: tipoGrafico ,
     data: {
       labels: this.labels,
@@ -252,43 +277,62 @@ export class RanksComponent implements OnInit {
       responsive: true,
       legend: { 
         display: true 
+
     },
-      'onClick': function (evt, item) {
-        console.log(item)
+    tooltips: {
+      callbacks: {
+        label: function(tooltipItem, data) {
+          var label = data.datasets[tooltipItem.datasetIndex].label || '';
+          labelsFiltro = data.labels[ tooltipItem.index];
+          datasetsFiltro = data.datasets[tooltipItem.datasetIndex].label
+          if (label) {
+              label += ': ';
+          }
+          label += Math.round(tooltipItem.yLabel * 100) / 100;
+          return label;
+      }
+      }
+    },
+    'onClick': function (evt, item) {
 
-        var activePoints = myChart.getElementsAtEvent(evt);
-        console.log(activePoints);
+      console.log('labelsFiltro ', labelsFiltro);
+      console.log('datasetsFiltro ', datasetsFiltro )
 
-        if (item.length > 0) {
-           showTable(grafico, item[0]._model.label)
-        }
-        },
+      if (item.length > 0) {
+          showTable(grafico, labelsFiltro, datasetsFiltro)
+      }
+      }
 
 
       
   },
 });
 
-    function showTable(grafico_: string, label_: string){
+    
 
-      debugger
-      let idRegistro = label_;
+    function showTable(grafico_: string, labelsFiltro: string, datasetsFiltro: string ){
+
+      let filtros: any = '';
       let idSql = 0;
       let titulo = '';
-      let filtro = 'where '
       dataInicial_ = dataInicial_.replace('/','').replace('/','');
       dataFinal_ = dataFinal_.replace('/','').replace('/','');
       
         if(grafico_ == "prospeccaoChart") { 
           idSql = 7;
-          titulo = `Eventos de prospecções concluidos com resposta ${label_}`;
+          filtros= `and resposta_motivo = '${labelsFiltro}' and  login = '${datasetsFiltro}' `
+          titulo = `Eventos de prospecções concluidos por ${datasetsFiltro} com resposta ${labelsFiltro}`;
         } else if(grafico_ == "propostaEmitidasChart") {
           idSql = 8;
-          titulo = `Proposas emitidas com status ${label_}`;
+          titulo = `Proposas emitidas com status ${labelsFiltro}`;
       }
 
-      if (idSql>0) router_.navigate([`/showTable/{"idSql":${idSql},"idRegistro":"${idRegistro}","dataInicial":"${dataInicial_}","dataFinal":"${dataFinal_}" ,"titulo": "${titulo}"}`]);
+      if (idSql>0) router_.navigate([`/showTable/{"idSql":${idSql},"filtros":"${filtros}","dataInicial":"${dataInicial_}","dataFinal":"${dataFinal_}" ,"titulo": "${titulo}"}`]);
     }
+
+
+
+
 
 };
   
@@ -304,5 +348,20 @@ validaData(dataAlterada: string){
     }
   }
 }
+
+RefrashGrafico(){
+
+  debugger;
+  if (this.myChart != undefined || this.myChart !=null) {
+      this.getRanks();
+      
+
+  }
+  
+
+};
+
+
+
 
 }

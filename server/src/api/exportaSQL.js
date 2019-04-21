@@ -38,6 +38,7 @@ function getSQLs(req, res) {
       if (req.query.dataInicial) sql = sql.replace('${dataInicial}', `${req.query.dataInicial}`)
       if (req.query.dataFinal) sql = sql.replace('${dataFinal}', `${req.query.dataFinal}`)
       if (req.query.idRegistro) sql = sql.replace('${idRegistro}', `${req.query.idRegistro}`)
+      if (req.query.filtros) sql = sql.replace('${filtros}', `${req.query.filtros}`)
       sql = sql.replace('${idUsuario}',`${req.query.idUsuarioLogado}`)
 
       console.log(sql)
