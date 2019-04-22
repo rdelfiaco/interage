@@ -31,6 +31,8 @@ export class DashboardAgenteComponent implements OnInit {
   eventos: Array<any> = [];
   eventoTodos: Array<any> = [];
   eventoIndividual: Array<any> = [];
+  eventosChart: any;
+  propostaChart: any;
 
   public myDatePickerOptions: IMyOptions = {
     // Strings and translations
@@ -65,7 +67,7 @@ export class DashboardAgenteComponent implements OnInit {
 graficoProposta(){
 
   var ctx = document.getElementById("propostaChart");
-  var propostaChart = new Chart(ctx, {
+  this.propostaChart = new Chart(ctx, {
       type: 'bar',
       data: {
           labels: ['Negociando', 'Recusadas', 'Canceladas', 'Tramitando', 'Ativas'],
@@ -136,7 +138,10 @@ graficoProposta(){
 
 graficoEventos(){
   var ctx = document.getElementById("eventosChart");
-  var eventosChart = new Chart(ctx, {
+
+ 
+
+  this.eventosChart = new Chart(ctx, {
       type: 'bar',
       data: {
           labels: ['Destinados', 'Pendentes', 'Concluidos', 'Conc.Expirados', 'Encaminhados' ],
@@ -313,7 +318,9 @@ graficoEventos(){
     this.agentesVendasSelectNome = value.label;
     this.povoaPropostaIndividual(value.value);
     this.povoaEventosIndividuais(value.value);
+    if (this.propostaChart != undefined){ this.propostaChart.destroy() }
     this.graficoProposta();
+    if (this.eventosChart != undefined){ this.eventosChart.destroy() }
     this.graficoEventos();
 
   };
@@ -333,7 +340,7 @@ graficoEventos(){
         ativas :0,
       }]
     }
-
+    if (this.propostaChart != undefined){ this.propostaChart.destroy() }
     this.graficoProposta();
 
   };
@@ -353,7 +360,8 @@ graficoEventos(){
         encaminhados :0,
       }]
     }
-
+    
+    if (this.eventosChart != undefined){ this.eventosChart.destroy() }
     this.graficoEventos();
 
   };

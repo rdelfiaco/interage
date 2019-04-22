@@ -20,33 +20,6 @@ function getRanks(req, res){
   }
 
 
-  // function getProspeccao(req, res){
-  //   return new Promise(function (resolve, reject) {
-  //     let credenciais = {
-  //       token: req.query.token,
-  //       idUsuario: req.query.id_usuario
-  //     };
-  //     let sql = `select  usu.login as consultor, color_r,color_g, color_b, count(*) as total 
-  //               from view_eventos ve
-  //               JOIN usuarios usu ON ve.id_usuario = usu.id and usu.status and usu.responsavel_membro = 'M'
-  //               where id_status_evento in (3,7)
-  //               and id_motivo in (1)
-  //               and date(dt_resolvido) between date('${req.query.dataInicial}') and date('${req.query.dataFinal}')
-  //               group by  usu.login, color_r,color_g, color_b
-  //               order by  usu.login`
-  //     executaSQL(credenciais, sql)
-  //       .then(res => {
-  //         if (res.length > 0) {
-  //           resolve( res )
-  //         }
-  //         else resolve( 0 )
-  //       })
-  //       .catch(err => {
-  //         reject(err)
-  //       })
-  //   })
-  // }
-
   function getProspeccao(req, res){
     return new Promise(function (resolve, reject) {
       let credenciais = {
@@ -76,30 +49,7 @@ function getRanks(req, res){
     })
   }
 
-  // function getPropostasEmitidas(req, res){
-  //   return new Promise(function (resolve, reject) {
-  //     let credenciais = {
-  //       token: req.query.token,
-  //       idUsuario: req.query.id_usuario
-  //     };
-  //     let sql = `select  usu.login as consultor, color_r,color_g, color_b, count(vp.*) as total 
-  //               from view_proposta vp
-  //               JOIN usuarios usu ON vp.id_usuario = usu.id and usu.status and usu.responsavel_membro = 'M'
-  //               where date(dtsalvou) between date('${req.query.dataInicial}') and date('${req.query.dataFinal}')
-  //               group by  usu.login , color_r,color_g, color_b
-  //               order by  usu.login `
-  //     executaSQL(credenciais, sql)
-  //       .then(res => {
-  //         if (res.length > 0) {
-  //           resolve( res )
-  //         }
-  //         else resolve( 0 )
-  //       })
-  //       .catch(err => {
-  //         reject(err)
-  //       })
-  //   })
-  // }
+
 
   function getPropostasEmitidas(req, res){
     return new Promise(function (resolve, reject) {
@@ -116,7 +66,6 @@ function getRanks(req, res){
                       group by id_status_proposta, id_usuario) tot on sp.id = tot.id_status_proposta and u.id = tot.id_usuario
                       where sp.status
                   order by sp.nome, u.login`
-      console.log(sql)
       executaSQL(credenciais, sql)
         .then(res => {
           if (res.length > 0) {

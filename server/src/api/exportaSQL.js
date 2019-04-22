@@ -33,8 +33,6 @@ function getSQLs(req, res) {
       
       let sql = req.query.sql
       
-      console.log(sql)
-
       if (req.query.dataInicial) sql = sql.replace('${dataInicial}', `${req.query.dataInicial}`)
       if (req.query.dataFinal) sql = sql.replace('${dataFinal}', `${req.query.dataFinal}`)
       if (req.query.idRegistro) sql = sql.replace('${idRegistro}', `${req.query.idRegistro}`)
@@ -66,7 +64,6 @@ function getSQLs(req, res) {
 
       let sql = `Select sql from sql_exportar where id = ${req.query.idSql}`
       
-      console.log(sql)
       executaSQL(credenciais, sql)
         .then(res => {
           if (res) {
