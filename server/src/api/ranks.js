@@ -5,11 +5,14 @@ function getRanks(req, res){
     return new Promise(function (resolve, reject) {
       getProspeccao(req).then(prospeccao => {
         getPropostasEmitidas(req).then(propostasEmitidas => {
-          if (!prospeccao || !propostasEmitidas)
-            reject('Filtro não pode ser elaborado ');
-  
-          resolve({ prospeccao, propostasEmitidas });
-          
+          getProspeccaoSolicitouProposta(req).then(ProspeccaoSolicitouProposta => {
+              if (!prospeccao || !propostasEmitidas || !ProspeccaoSolicitouProposta)
+                reject('Filtro não pode ser elaborado ');
+      
+              resolve({ prospeccao, propostasEmitidas, ProspeccaoSolicitouProposta });
+          }).catch(e => {
+            reject(e);
+          });              
         }).catch(e => {
           reject(e);
         });
@@ -78,5 +81,36 @@ function getRanks(req, res){
         })
     })
   }
+
+
+  function getProspeccaoSolicitouProposta(req, res){
+    return new Promise(function (resolve, reject) {
+      let credenciais = {
+        token: req.query.token,
+        idUsuario: req.query.id_usuario
+      };
+      let sql = `select  mr.nome as resposta_motivo, u.login as consultor , count(e.*) as total
+                  from motivos_respostas mr
+                  inner join usuarios u on u.status and id_organograma = 4 and responsavel_membro = 'M'
+                  left join eventos e on u.id_pessoa = e.id_pessoa_resolveu 
+                        and mr.id = e.id_resp_motivo 
+                        and e.id_status_evento in (3,7)
+                        and date(dt_resolvido)= date(now()) 
+                    where mr.id_motivo = 1 and mr.status and mr.id = 8
+                    group by mr.nome, u.login, u.color_r, u.color_g, u.color_b
+                    order by mr.nome, u.login`
+      executaSQL(credenciais, sql)
+        .then(res => {
+          if (res.length > 0) {
+            resolve( res )
+          }
+          else resolve( 0 )
+        })
+        .catch(err => {
+          reject(err)
+        })
+    })
+  }
+
 
 module.exports = {  getRanks };

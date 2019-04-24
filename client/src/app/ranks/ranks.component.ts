@@ -22,7 +22,8 @@ export class RanksComponent implements OnInit {
   usuarioLogado: any;
   prospeccao: Array<any> = []; // total de eventos com  motivo prospecção de cada usuario 
   propostaEmitidas: Array<any> = [];
-  
+  tableData = [];
+  sorted = false;
 
   dataInicial: string = moment().startOf('month').format('DD/MM/YYYY');
   dataFinal: string = moment().endOf('month').format('DD/MM/YYYY');
@@ -95,6 +96,7 @@ export class RanksComponent implements OnInit {
     
     this.prospeccao = retorno.resposta.prospeccao;  
     this.propostaEmitidas = retorno.resposta.propostasEmitidas;
+    this.tableData = retorno.resposta.ProspeccaoSolicitouProposta;
 
     this.montaGraficoProspeccao();
     if (this.myChartProspecao == undefined || this.myChartProspecao == null) {
@@ -348,7 +350,22 @@ validaData(dataAlterada: string){
   }
 }
 
-
+sortBy(by: string | any): void {
+  // if (by == 'dt_criou') {
+  //   this.search().reverse();
+  // } else {
+  this.tableData.sort((a: any, b: any) => {
+    if (a[by] < b[by]) {
+      return this.sorted ? 1 : -1;
+    }
+    if (a[by] > b[by]) {
+      return this.sorted ? -1 : 1;
+    }
+    return 0;
+  });
+  //}
+  this.sorted = !this.sorted;
+}
 
 
 

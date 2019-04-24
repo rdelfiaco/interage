@@ -44,7 +44,7 @@
             <mdb-select [disabled]="usuarioLogado.responsavel_membro == 'M'" [(ngModel)]="agentesVendasSelectValue"
               (selected)="setNomeAtendente($event)" [options]="agentesVendasSelect" placeholder="Escolha os Agentes de vendas"
               style="font-size: 0.5rem;"></mdb-select>
-            <label>Agentes de venda interna</label>
+            <label>Consultor de venda interna</label>
           </div>
         </div>
       </div>
@@ -163,7 +163,9 @@
         </div>
       </div>
       <div class="quantidadeDeLigacoes">
-        <span *ngIf="totalLigacoesUsuario" title="Quantidade de ligações">{{totalLigacoesUsuario}}</span>
+        <span *ngIf="totalLigacoesUsuario" title="Quantidade de ligações"
+        (click)="showTable(9,agentesVendasSelectValue,'Ligações realizadas do consultor de vendas internas ' + agentesVendasSelectNome )"
+         >{{totalLigacoesUsuario}}</span>
       </div>
       <div class="fundoFunil">
         <span *ngIf="eventosPredicaoUsuario" title="Frio">{{eventosPredicaoUsuario[0] ?
