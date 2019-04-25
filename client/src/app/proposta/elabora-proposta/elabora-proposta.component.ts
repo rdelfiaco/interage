@@ -516,6 +516,7 @@ export class ElaboraPropostaComponent implements OnInit {
     this.proposta.appDescricao = this.proposta.appDescricao ? this.proposta.appDescricao : '';
     this.proposta.rastreador = this.proposta.rastreador ? this.proposta.rastreador : '';
     this.proposta.reboque = this.proposta.reboque ? this.proposta.reboque : '';
+    this.rastreadorOutros = this.rastreadorOutros ? this.rastreadorOutros : '';
     // moto
     if (this.moto) {
       this.proposta.carroReserva = '';
