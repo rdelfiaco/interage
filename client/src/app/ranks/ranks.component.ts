@@ -25,9 +25,13 @@ export class RanksComponent implements OnInit {
   tableData = [];
   sorted = false;
 
-  dataInicial: string = moment().startOf('month').format('DD/MM/YYYY');
-  dataFinal: string = moment().endOf('month').format('DD/MM/YYYY');
+  // dataInicial: string = moment().startOf('month').format('DD/MM/YYYY');
+  // dataFinal: string = moment().endOf('month').format('DD/MM/YYYY');
+  dataInicial: string = moment().subtract(1, 'days').format('DD/MM/YYYY');
+  dataFinal:  string = moment().subtract(1, 'days').format('DD/MM/YYYY');
 
+  dataInicial_ : string;
+  dataFinal_: string
 
   public myDatePickerOptions: IMyOptions = {
     // Strings and translations
@@ -71,12 +75,10 @@ export class RanksComponent implements OnInit {
 
   ngOnInit() {
 
-    this.ctxProspeccaoChart = document.getElementById('ProspeccaoChart');
+    this.dataInicial_ = this.dataInicial;
+    this.dataFinal_ = this.dataFinal;
 
     this.getRanks()
-    
-   
-   
 
   }
 
@@ -258,17 +260,17 @@ export class RanksComponent implements OnInit {
       let titulo = '';
       dataInicial_ = dataInicial_.replace('/','').replace('/','');
       dataFinal_ = dataFinal_.replace('/','').replace('/','');
-      
-        if(grafico_ == "prospeccaoChart") { 
-          idSql = 7;
-          filtros= `and resposta_motivo = '${labelsFiltro}' and  login = '${datasetsFiltro}' `
-          titulo = `Eventos de prospecções concluidos por ${datasetsFiltro} com resposta ${labelsFiltro}`;
-        } else if(grafico_ == "propostaEmitidasChart") {
-          idSql = 8;
-          titulo = `Proposas emitidas com status ${labelsFiltro}`;
-      }
+        
+      idSql = 7;
+      filtros= `and resposta_motivo = '${labelsFiltro}' and  login = '${datasetsFiltro}' `
+      titulo = `Eventos de prospecções concluidos por ${datasetsFiltro} com resposta ${labelsFiltro}`;
 
-      if (idSql>0) router_.navigate([`/showTable/{"idSql":${idSql},"filtros":"${filtros}","dataInicial":"${dataInicial_}","dataFinal":"${dataFinal_}" ,"titulo": "${titulo}"}`]);
+
+      if (idSql>0) {
+         router_.navigate([`/showTable/{"idSql":${idSql},"filtros":"${filtros}","dataInicial":"${dataInicial_}","dataFinal":"${dataFinal_}" ,"titulo": "${titulo}"}`]);
+         this.dataInicial = this.dataInicial_;
+         this.dataFinal = this.dataFinal_;
+        }          
     }
 };
 
@@ -324,6 +326,7 @@ graficoPropostaEmitidas(tipoGrafico: string,  grafico: string, router_: Router, 
       let filtros: any = '';
       let idSql = 0;
       let titulo = '';
+      let rotaDetalhe = '';
       dataInicial_ = dataInicial_.replace('/','').replace('/','');
       dataFinal_ = dataFinal_.replace('/','').replace('/','');
       
@@ -331,9 +334,13 @@ graficoPropostaEmitidas(tipoGrafico: string,  grafico: string, router_: Router, 
       idSql = 8;
       titulo = `Proposas emitidas por ${datasetsFiltro} com status ${labelsFiltro}`;
       filtros= `and status_proposta = '${labelsFiltro}' and  login = '${datasetsFiltro}' `
-   
+      rotaDetalhe = 'proposta';
 
-      if (idSql>0) router_.navigate([`/showTable/{"idSql":${idSql},"filtros":"${filtros}","dataInicial":"${dataInicial_}","dataFinal":"${dataFinal_}" ,"titulo": "${titulo}"}`]);
+      if (idSql>0) {
+        router_.navigate([`/showTable/{"idSql":${idSql},"filtros":"${filtros}","dataInicial":"${dataInicial_}","dataFinal":"${dataFinal_}" ,"titulo": "${titulo}", "rotaDetalhe": "${rotaDetalhe}"}`]);
+        this.dataInicial = this.dataInicial_;
+        this.dataFinal = this.dataFinal_;
+      }
     }
 };
   

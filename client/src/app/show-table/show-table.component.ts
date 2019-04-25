@@ -1,7 +1,7 @@
 import { element } from 'protractor';
 import { Component, OnInit, HostListener, QueryList, ElementRef, ViewChildren } from '@angular/core';
 import { Usuario } from '../login/usuario';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ConnectHTTP } from '../shared/services/connectHTTP';
 import { LocalStorage } from '../shared/services/localStorage';
 import { ToastService } from '../../lib/ng-uikit-pro-standard';
@@ -28,6 +28,7 @@ export class ShowTableComponent implements OnInit {
   dataFinal: string;
   colunas: string;
   filtros: string;
+  rotaDetalhe: string;
 
 
   @ViewChildren('list') list: QueryList<ElementRef>;
@@ -44,6 +45,7 @@ export class ShowTableComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
+    private router: Router,
     private connectHTTP: ConnectHTTP, 
     private localStorage: LocalStorage,
     private toastrService: ToastService) {
@@ -58,6 +60,7 @@ export class ShowTableComponent implements OnInit {
       this.dataFinal = parametros.dataFinal;
       this.colunas = parametros.colunas;
       this.filtros = parametros.filtros;
+      this.rotaDetalhe = parametros.rotaDetalhe; 
       
     });
   };
@@ -85,17 +88,7 @@ export class ShowTableComponent implements OnInit {
       this.tableData = getResultadoSQLs.resposta as Array<object> ;
       this.totalRegistros = this.tableData.length;
       
-      // get the header of objeto 
-      // // caching map
-      // var objMap = new Map(Object.entries(this.tableData[0]));
-      // // fast iteration on Map object
-      // this.headElements = []
-      // objMap.forEach((item, key) => {
-      // // do something with an item
-      //     this.headElements.push(key)
-      // });
-
-      this.headElements = Object.keys(this.tableData[0])
+      this.headElements = Object.keys(this.tableData[0]);
 
       this.defineNumeroPagina();
       
@@ -200,6 +193,27 @@ export class ShowTableComponent implements OnInit {
   });
 
   }
+
+
+  async abreDetalhe(id: any){
+      console.log(id);
+  
+    if (this.rotaDetalhe = 'evento'){
+
+      this.router.navigate([`/evento/${id}`]);
+
+    }
+  
+    if (this.rotaDetalhe = 'proposta'){
+
+      this.router.navigate([`/proposta/${id}`]);
+
+    }
+  
+  
+    }
+
+
 
 }
 
