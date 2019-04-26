@@ -15,7 +15,7 @@ export class AppComponent {
   hasLogado: Observable<boolean>;
   usuarioLogado: Usuario;
   // TROCA DADOS SERVIDOR TROCAR NUMERO DA VERSÃO
-  versaoSistema: string = 'V.1.0.39';
+  versaoSistema: string = 'V.1.0.40';
   counterEvents: number;
   sub: any;
   constructor(private router: Router, private auth: AuthService, private connectHTTP: ConnectHTTP,
