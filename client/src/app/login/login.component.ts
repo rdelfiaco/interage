@@ -42,7 +42,7 @@ export class LoginComponent implements OnInit {
   ngOnInit() {
     if (this.auth.checkAutenticacao()) {
       let usuarioLogado = this.localStorage.getLocalStorage('usuarioLogado') as Usuario;
-      this.router.navigate([usuarioLogado.dashboard]);
+      this.router.navigate(['eventos']);
     }
     else this.auth.logout();
   }
@@ -58,7 +58,7 @@ export class LoginComponent implements OnInit {
     }
     else {
       let usuarioLogado = res.resposta
-      this.router.navigate([usuarioLogado.dashboard]);
+      this.router.navigate(['eventos']);
     }
   }
 

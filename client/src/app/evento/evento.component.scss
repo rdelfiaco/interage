@@ -19,3 +19,9 @@
     height: 60px;
 
 }
+
+@media screen and (max-width: 600px) {
+    div.mobile {
+      display: none;
+    }
+  }

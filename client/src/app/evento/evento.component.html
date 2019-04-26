@@ -9,7 +9,7 @@
   <!-- Card Filtros -->
   <div>
     <div class="row ">
-      <div class="col-6 col-sm-4">
+      <div class="col-6 col-sm-4 mobile">
         <div class="row justify-content-around">
           <div class="col-6 col-sm-6">
             <div class="md-form datas">
@@ -72,7 +72,7 @@
             <label class="form-check-label" for="recebidoPorRadio" style="font-size: 0.8rem; ">Recebidos por</label>
           </div> -->
         <!-- </div> -->
-        <div class="row" style="margin-top: 25px">
+        <div class="row mobile" style="margin-top: 25px">
           <div class="col-md-12">
             <mdb-select [(ngModel)]="departamentoSelectValue" [options]="departamentoSelect" 
                 [multiple]="false" [disabled]="!usuarioLogadoSupervisor"  (selected)="onChangeDepartamento()"
@@ -80,7 +80,7 @@
             <label>Departamento</label>
           </div>
         </div>
-        <div class="row" style="margin-top: 15px">
+        <div class="row mobile" style="margin-top: 15px">
           <div class="col-md-12">
             <mdb-select [(ngModel)]="usuarioSelectValue" [options]="usuarioSelect"  (selected)="listaEventos()"
             placeholder="Escolha o usuário" [disabled]="!usuarioLogadoSupervisor"
@@ -88,6 +88,7 @@
             <label>Usuário</label>
           </div>
         </div>
+
         <div class="row justify-content-around">
 
           <!-- <a mdbBtn floating="true" size="lg" gradient="blue" (click)="listaEventos()" mdbWavesEffect>
@@ -99,7 +100,7 @@
         </div>
 
       </div>
-      <div class="col-6 col-sm-4" style="z-index: 0">
+      <div class="col-6 col-sm-4 mobile" style="z-index: 0">
         <div class="row" style="margin-top: 25px" >
           <div class="col-md-12">
             <mdb-select [(ngModel)]="motivoSelectValue" [options]="motivoSelect" [multiple]="true" (click)="listaEventos()"
