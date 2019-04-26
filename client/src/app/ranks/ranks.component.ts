@@ -75,8 +75,7 @@ export class RanksComponent implements OnInit {
 
   ngOnInit() {
 
-    this.dataInicial_ = this.dataInicial;
-    this.dataFinal_ = this.dataFinal;
+
 
     this.getRanks()
 
@@ -85,7 +84,9 @@ export class RanksComponent implements OnInit {
 
   async getRanks(){
 
-    
+    this.dataInicial_ = this.dataInicial;
+    this.dataFinal_ = this.dataFinal;
+
     let retorno = await this.connectHTTP.callService({
       service: 'getRanks',
       paramsService: {
@@ -116,6 +117,10 @@ export class RanksComponent implements OnInit {
         this.graficoPropostaEmitidas('bar','propostaEmitidasChart', this.router);
     }
     
+    this.dataInicial = this.dataInicial_;
+    this.dataFinal = this.dataFinal_;
+
+
   };
 
 
@@ -258,18 +263,19 @@ export class RanksComponent implements OnInit {
       let filtros: any = '';
       let idSql = 0;
       let titulo = '';
+      let rotaDetalhe = '';
+
       dataInicial_ = dataInicial_.replace('/','').replace('/','');
       dataFinal_ = dataFinal_.replace('/','').replace('/','');
         
       idSql = 7;
       filtros= `and resposta_motivo = '${labelsFiltro}' and  login = '${datasetsFiltro}' `
       titulo = `Eventos de prospecções concluidos por ${datasetsFiltro} com resposta ${labelsFiltro}`;
+      rotaDetalhe = 'evento';
 
 
       if (idSql>0) {
-         router_.navigate([`/showTable/{"idSql":${idSql},"filtros":"${filtros}","dataInicial":"${dataInicial_}","dataFinal":"${dataFinal_}" ,"titulo": "${titulo}"}`]);
-         this.dataInicial = this.dataInicial_;
-         this.dataFinal = this.dataFinal_;
+         router_.navigate([`/showTable/{"idSql":${idSql},"filtros":"${filtros}","dataInicial":"${dataInicial_}","dataFinal":"${dataFinal_}" ,"titulo": "${titulo}", "rotaDetalhe": "${rotaDetalhe}"}`]);
         }          
     }
 };
@@ -338,8 +344,6 @@ graficoPropostaEmitidas(tipoGrafico: string,  grafico: string, router_: Router, 
 
       if (idSql>0) {
         router_.navigate([`/showTable/{"idSql":${idSql},"filtros":"${filtros}","dataInicial":"${dataInicial_}","dataFinal":"${dataFinal_}" ,"titulo": "${titulo}", "rotaDetalhe": "${rotaDetalhe}"}`]);
-        this.dataInicial = this.dataInicial_;
-        this.dataFinal = this.dataFinal_;
       }
     }
 };

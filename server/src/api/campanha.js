@@ -375,22 +375,26 @@ function getCampanhaTelemarketing(req, res){
     let sql = `
                 select camp.id, camp.nome, inseridos
                 , COALESCE(pendentes, 0) as pendentes 
-                , COALESCE(concluidos, 0) as concluidos
-                , COALESCE(ligacoes_realizadas, 0) as ligacoes_realizadas 
-                , ligacoes_realizadas / concluidos   as media_ligacoes_por_cliente_concluidos
+                , COALESCE(conc.concluidos, 0) as concluidos
+            , COALESCE(propostas, 0 ) as propostas_solicitadas
+                , COALESCE(lig.ligacoes_realizadas, 0) as ligacoes_realizadas 
+                , iif( COALESCE(conc.concluidos, 0) <> 0 , round( cast(COALESCE(lig.ligacoes_realizadas, 0)as Numeric(10,2)) / cast(conc.concluidos as Numeric(10,2)),2)  , 0)  as media_ligacoes_por_cliente_concluidos
                 , dt_primeira_ligacao
                 , dt_ultima_ligacao
                 from campanhas camp
-                inner join	(select id_campanha, count(*) as inseridos 
-                        from eventos 
-                        where id_evento_pai is null
-                        and id_campanha is not null
-                        group by id_campanha) inser on camp.id = inser.id_campanha				
-                left join ( select id_campanha, count(*) as pendentes
-                        from eventos e
-                        where id_status_evento in (1, 4, 5, 6)
-                        and id_campanha is not null
-                        group by id_campanha) pend on camp.id = pend.id_campanha
+                inner join	(select e.id_campanha, count(*) as inseridos
+                from eventos e
+                inner join (select id_campanha, id_pessoa_receptor, max(id) as id_evento
+                              from eventos where id_campanha is not null 
+                      group by id_campanha, id_pessoa_receptor) ult_e on e.id = ult_e. id_evento 
+                  group by e.id_campanha ) inser on camp.id = inser.id_campanha				
+                left join ( select e.id_campanha,  count(*) as pendentes 
+              from eventos e
+              inner join  (select id_campanha, id_pessoa_receptor, max(id) as id_evento
+                              from eventos where id_campanha is not null 
+                      group by id_campanha, id_pessoa_receptor) ult_e on e.id = ult_e. id_evento 
+              where id_status_evento in (1, 4, 5, 6)
+              group by e.id_campanha ) pend on camp.id = pend.id_campanha
                 left join ( select e.id_campanha, count(*) as concluidos 
                             from eventos e
                         inner join (select id_campanha, id_pessoa_receptor, max(id) as id_evento
@@ -406,7 +410,12 @@ function getCampanhaTelemarketing(req, res){
                         from eventos e
                         where id_status_evento in (3,7)
                         and id_campanha is not null
-                        group by id_campanha) lig on camp.id = lig.id_campanha			  
+            and id_canal in (3)
+                        group by id_campanha) lig on camp.id = lig.id_campanha	
+            left join ( select id_campanha, count(*) as propostas 
+                from eventos e 
+                  where id_resp_motivo = 8
+                  group by id_campanha) prop on camp.id = prop.id_campanha  
                 order by camp.nome		
                 `
 

@@ -24,6 +24,9 @@
           <th class="th-sm">Clientes concluidos
             <mdb-icon icon="sort" (click)="sortBy('concluidos')"></mdb-icon>
           </th>
+          <th class="th-sm">Propostas solicitadas 
+            <mdb-icon icon="sort" (click)="sortBy('propostas_solicitadas')"></mdb-icon>
+          </th>
           <th class="th-sm">Ligações realizadas
             <mdb-icon icon="sort" (click)="sortBy('ligacoes_realizadas')"></mdb-icon>
           </th>
@@ -46,6 +49,7 @@
             <td *ngIf="i+1 >= firstVisibleIndex && i+1 <= lastVisibleIndex" (click)="listaInseridos(evento)" >{{evento.inseridos}}</td>
             <td *ngIf="i+1 >= firstVisibleIndex && i+1 <= lastVisibleIndex" (click)="listaPendentes(evento)">{{evento.pendentes}}</td>
             <td *ngIf="i+1 >= firstVisibleIndex && i+1 <= lastVisibleIndex" (click)="listaConclidos(evento)">{{evento.concluidos}}</td>
+            <td *ngIf="i+1 >= firstVisibleIndex && i+1 <= lastVisibleIndex" (click)="listaPropostasSolicitadas(evento)">{{evento.propostas_solicitadas}}</td>
             <td *ngIf="i+1 >= firstVisibleIndex && i+1 <= lastVisibleIndex" (click)="listaLigacoesRealizadas(evento)">{{evento.ligacoes_realizadas}}</td>
             <td *ngIf="i+1 >= firstVisibleIndex && i+1 <= lastVisibleIndex" >{{evento.media_ligacoes_por_cliente_concluidos}}</td>
             <td *ngIf="i+1 >= firstVisibleIndex && i+1 <= lastVisibleIndex" >{{evento.dt_primeira_ligacao
