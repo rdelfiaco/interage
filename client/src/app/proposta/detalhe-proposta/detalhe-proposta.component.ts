@@ -10,6 +10,12 @@ import * as pdfMake from 'pdfmake/build/pdfmake';
 import * as pdfFonts from 'pdfmake/build/vfs_fonts';
 import { img } from '../imagem';
 import { ToastService } from '../../../lib/ng-uikit-pro-standard';
+import * as numeral from 'numeral';
+import 'numeral/locales';
+
+numeral.locale('pt-br');
+numeral(10000).format('0,0') // 10.000
+
 
 @Component({
   selector: 'app-detalhe-proposta',
@@ -52,8 +58,8 @@ export class DetalhePropostaComponent implements OnInit {
       preco_medio:[''],
       cota:[''],
       data_consulta:[''],
-      adesao:[''],
-      mensalidade:[''],
+      adesao:['' ],
+      mensalidade:['',],
       participacao:[''],
       app:[''],
       carro_reserva_:[''],
@@ -97,6 +103,7 @@ export class DetalhePropostaComponent implements OnInit {
 
   povoaFormulario() {
     this.propostaForm.setValue({
+
       id: this.proposta.id,
       id_status_proposta: this.proposta.id_status_proposta,
       status: this.proposta.status_proposta,
@@ -110,9 +117,9 @@ export class DetalhePropostaComponent implements OnInit {
       preco_medio:this.proposta.preco_medio,
       cota:this.proposta.cota,
       data_consulta:this.proposta.data_consulta,
-      adesao:this.proposta.adesao,
-      mensalidade:this.proposta.mensalidade,
-      participacao:this.proposta.participacao,
+      adesao: numeral(Number(this.proposta.adesao)).format('0.00'),
+      mensalidade:numeral(Number(this.proposta.mensalidade)).format('0.00'),
+      participacao:numeral(Number(this.proposta.participacao)).format('0.00'),
       app:this.proposta.app,
       carro_reserva_:this.proposta.carro_reserva_,
       fundo_terceiros_:this.proposta.fundo_terceiros_,
@@ -125,8 +132,8 @@ export class DetalhePropostaComponent implements OnInit {
       parcelasAdesao:this.proposta.parcelas_adesao,
       usuario:this.proposta.usuario,
       parcelasRastreador: this.proposta.parcelas_rastreador,
-      rastreadorInstalacao: this.proposta.rastreador_instalacao,
-      entrada: this.proposta.entrada,
+      rastreadorInstalacao: numeral(Number(this.proposta.rastreador_instalacao)).format('0.00'),
+      entrada: numeral(Number(this.proposta.entrada)).format('0.00'),
       dtsalvou:this.proposta.dtsalvou ? moment(this.proposta.dtsalvou).format('DD/MM/YYYY HH:mm:ss') : this.proposta.dtsalvou,
     })                                
   }

@@ -17,6 +17,11 @@ import * as pdfFonts from 'pdfmake/build/vfs_fonts';
 import { img } from '../imagem';
 
 import * as numeral from 'numeral';
+import 'numeral/locales';
+
+numeral.locale('pt-br');
+numeral(10000).format('0,0') // 10.000
+
 import * as moment from 'moment';
 import { timestamp } from 'rxjs/operators';
 
@@ -74,19 +79,25 @@ export class ElaboraPropostaComponent implements OnInit {
   vlrProposta: number = 0 ;
   valorPPV: number;
   cota: number;
+  adesao_: any;
   adesao: number;
   vlrParticipacao: number;
+  vlrParticipacao_: any;
   prcParticipacao: number;
   bntGeraProposta: boolean = true;
   sccMoto: number = 0;
   moto:boolean = false;
   hoje: string = moment().format('DD/MM/YYYY')
   cotaAlterada: boolean = false;
-  parcelas: number = 1;
+  parcelasAdesao: number = 1;
   parcelasRastreador: number = 1;
-  adesaoParcelada: number;
+  adesaoParcelada: number; // valor da parcela da adesão 
+  adesaoParcelada_: any;
   mensalidadeSemParcelamento: number;
+  mensalidadeSemParcelamento_: any;
+  mensalidadeComParcelamento_: any; //  this.proposta.mensalidade 
   entrada:number = 0.00; 
+  entrada_:any; // this.proposta.entrada
   rastreadorInstalacao: number = 0.00;
   fundoTerceiroOutros: string = '';
   carroReservaOutros: string = '';
@@ -195,6 +206,8 @@ export class ElaboraPropostaComponent implements OnInit {
 
   atualizaTabelas() {
 
+    debugger
+
     let nVlrBusca = 0;
 
     if (!this.moto){
@@ -224,22 +237,30 @@ export class ElaboraPropostaComponent implements OnInit {
       this.valorPPV = this.valores[0].valor_ppv;
       this.cota = this.valores[0].cota;
       
-      this.adesao = Number(this.valores[0].adesao);
-      
+
+      // Novo ou partabilidade 
+      if (this.chckNovo) {
+        this.adesao = Number(this.valores[0].adesao)
+      }else
+      {
+          this.adesao = Number(this.valores[0].adesao_maxima);
+      }
+
       // para carro comercial a participação é maior que carro particular 
       if (this.chckParticular) {
-        this.vlrParticipacao = this.valores[0].valor_participacao_particular;
+        this.vlrParticipacao = Number(this.valores[0].valor_participacao_particular);
       } else {
-        this.vlrParticipacao = this.valores[0].valor_participacao_comercial;
+        this.vlrParticipacao = Number(this.valores[0].valor_participacao_comercial);
       }
 
       // 
       // para participação P Percentual se faz o calculo caso contralio o valor é fixo 
       if (this.valores[0].tipo_participacao == 'P') {
         this.prcParticipacao = this.vlrParticipacao;
-        this.vlrParticipacao =  numeral(this.vlrParticipacao * this.nVlrVeiculo / 100).format('00.00');
+        this.vlrParticipacao =  this.vlrParticipacao * this.nVlrVeiculo / 100;
+        this.vlrParticipacao_ =  numeral(this.vlrParticipacao).format('00.00');
       } else {
-        this.vlrParticipacao =  numeral(this.vlrParticipacao).format('00.00');
+        this.vlrParticipacao_ =  numeral(this.vlrParticipacao).format('00.00');
         this.prcParticipacao = 0;
       }
 
@@ -356,30 +377,34 @@ export class ElaboraPropostaComponent implements OnInit {
   }
 
   calculaValores(){
-    this.adesao  = Number(this.adesao );
-    this.proposta.mensalidade = Number(this.mensalidadeSemParcelamento);
-    this.parcelas = Number(this.parcelas);
-    this.rastreadorInstalacao = Number(this.rastreadorInstalacao);
-
-    this.adesaoParcelada = this.adesao / this.parcelas;
+    debugger;
+    this.proposta.mensalidade = this.mensalidadeSemParcelamento;
+    this.adesaoParcelada =this.adesao / this.parcelasAdesao;
     this.entrada = this.rastreadorInstalacao + this.adesao ;
-    if (this.parcelas > 1 ){ 
+    if (this.parcelasAdesao > 1 ){ 
       this.proposta.mensalidade = this.proposta.mensalidade  + this.adesaoParcelada;
       this.entrada = this.rastreadorInstalacao + this.proposta.mensalidade;
     }
-    this.proposta.mensalidade = numeral(this.proposta.mensalidade).format('00.00');
-    this.adesaoParcelada = numeral(this.adesaoParcelada).format('00.00');
-    this.mensalidadeSemParcelamento = numeral(this.mensalidadeSemParcelamento).format('00.00');
-    this.proposta.entrada = numeral(this.entrada).format('00.00');
-    this.proposta.rastreadorInstalacao = numeral( this.rastreadorInstalacao).format('00.00');
+
+    this.proposta.entrada = this.entrada;
+    this.proposta.rastreadorInstalacao =  this.rastreadorInstalacao;
     this.proposta.parcelasRastreador = this.parcelasRastreador;
-    this.adesao = numeral(this.adesao).format('00.00');
+
+    // formatação valores em Real 
+    this.adesao_  = numeral(this.adesao).format('00.00');
+    this.mensalidadeSemParcelamento_ = numeral(this.mensalidadeSemParcelamento).format('00.00');
+    this.entrada_ = numeral(this.entrada).format('00.00');
+    this.adesaoParcelada_ = numeral(this.adesaoParcelada).format('00.00');
+    this.mensalidadeComParcelamento_ = numeral(this.proposta.mensalidade).format('00.00');
+
   }
 
   mudouMensalidade(){
+    debugger;
     this.proposta.mensalidadeAlterada = false;
+    this.mensalidadeSemParcelamento = Number(this.mensalidadeSemParcelamento_.replace(',','.')) ; 
     if (this.mensalidadeSemParcelamento < this.vlrProposta){
-      this.toastrService.error(`A mensalidade não pode ser menor que R$ ${this.vlrProposta}`);
+      this.toastrService.error(`A mensalidade não pode ser menor que R$ ${ numeral(this.vlrProposta).format('00.00')}`);
       this.mensalidadeSemParcelamento = this.vlrProposta;
     }
     if (this.mensalidadeSemParcelamento != this.vlrProposta){ 
@@ -392,27 +417,21 @@ export class ElaboraPropostaComponent implements OnInit {
     if (this.chckNovo) {
         this.chckPortabilidade = true;
         this.chckNovo = false;
-        this.adesao = this.valores[0].adesao
     }else
     {
         this.chckPortabilidade = false; 
         this.chckNovo = true;
-        this.adesao = this.valores[0].adesao_maxima;
     }
-    this.adesao = Number(this.adesao);
-    this.proposta.adesao = this.adesao;
-    this.adesao = numeral(this.adesao).format('0.00');
-    this.adesaoParcelada = numeral(this.adesao / this.parcelas).format('0.00');
-    this.somaValoresProposta();
+    this.atualizaTabelas();
     this.habilitaBntGeraProposta();
   }
 
-  mudouParcelas(){
-    if (this.parcelas > 12){
+  mudouParcelasAdesao(){
+    if (this.parcelasAdesao > 12){
       this.toastrService.error(`A quantidade de parcelas não pode ser maior que 12`);
-      this.parcelas = 12;
+      this.parcelasAdesao = 12;
     }
-    this.adesaoParcelada = numeral( this.adesao / this.parcelas).format('0.00');
+    this.adesaoParcelada = numeral( this.adesao / this.parcelasAdesao).format('0.00');
     this.somaValoresProposta();
   }
 
@@ -492,14 +511,15 @@ export class ElaboraPropostaComponent implements OnInit {
   }
 
   validaAdesao(){
-    this.adesao = Number(this.adesao);
-    if (this.adesao > this.valores[0].adesao_maxima ){
-        this.toastrService.error(`Adesão não pode ser maior que ${this.valores[0].adesao_maxima}`);
-        this.adesao = this.valores[0].adesao_maxima;
+    debugger;
+    this.adesao = Number(this.adesao_.replace(',','.'));
+    if (this.adesao > Number(this.valores[0].adesao_maxima) ){
+        this.toastrService.error(`Adesão não pode ser maior que ${Number(this.valores[0].adesao_maxima)}`);
+        this.adesao =  Number(this.valores[0].adesao_maxima);
     }
-    if ((this.adesao < this.valores[0].adesao_minima ) && (this.chckNovo)) {
-      this.toastrService.error(`Adesão não pode ser menor que ${this.valores[0].adesao_minima}`);
-      this.adesao = this.valores[0].adesao_minima
+    if ((this.adesao < Number(this.valores[0].adesao_minima) ) && (this.chckNovo)) {
+      this.toastrService.error(`Adesão não pode ser menor que ${Number(this.valores[0].adesao_minima)}`);
+      this.adesao =  Number(this.valores[0].adesao_minima);
   }
     this.proposta.adesao = this.adesao;
     this.somaValoresProposta();
@@ -651,12 +671,12 @@ export class ElaboraPropostaComponent implements OnInit {
 
               body: [
                 [{
-                  text: [ `Entrada:\n R$ ${this.proposta.entrada}
+                  text: [ `Entrada:\n R$ ${numeral(this.proposta.entrada).format('00.00')}
                         \n\n Onze parcelas:\n`, 
                        {text:  '(plano anual)',  style: 'font14'},
-                       `\n R$ ${this.proposta.mensalidade}
+                       `\n R$ ${numeral(this.proposta.mensalidade).format('00.00')}
                        ${parcelamentoRastreador} 
-                      \n\n Cota de participação:\n R$ ${this.proposta.participacao} `],
+                      \n\n Cota de participação:\n R$ ${numeral(this.proposta.participacao).format('00.00')} `],
                   style: 'header',
                   margin: [15, 20, 0, 5],
                   border: [true, false, true, true],
@@ -804,7 +824,7 @@ export class ElaboraPropostaComponent implements OnInit {
       this.proposta.veiculoComercial = this.chckComercial;
       this.proposta.leilaoSinistrado = this.chckLeilaoSinistrado;
       this.proposta.portabilidade = this.chckPortabilidade; 
-      this.proposta.parcelas = this.parcelas; 
+      this.proposta.parcelas = this.parcelasAdesao; 
 
           // caso a proposta tenha a cota alterada ou valor da mensalidade 
       if (this.cotaAlterada || this.proposta.mensalidadeAlterada ){ 

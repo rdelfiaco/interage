@@ -44,9 +44,9 @@
 
     <!-- Parcelas para dividir a adesão -->
     <div class=" col-md-2 md-form " style="margin-top: 30px">
-        <input mdbInputDirective type="text" id="parcelas" class="form-control" 
-            [(ngModel)]="parcelas" (keyup)="mudouParcelas()" >
-        <label for="parcelas" style="margin-left: 15px">Parcelas da adesão</label>
+        <input mdbInputDirective type="text" id="parcelasAdesao" class="form-control" 
+            [(ngModel)]="parcelasAdesao" (keyup)="mudouParcelasAdesao()" >
+        <label for="parcelasAdesao" style="margin-left: 15px">Parcelas da adesão</label>
     </div>
 
     <!-- participação particular / comercial -->
@@ -73,7 +73,7 @@
         <label class="form-check-label" for="chckLeilaoSinistrado">Leilão/Sinistrado</label>
     </div>
 
-        <!-- Parcelas para dividir a adesão -->
+        <!-- Parcelas para dividir o Rastreador -->
         <div class=" col-md-2 md-form " style="margin-top: 30px">
             <input mdbInputDirective type="text" id="parcelasRastreador" class="form-control" 
                 [(ngModel)]="parcelasRastreador" (keyup)="mudouParcelasRastreador()" >
@@ -118,19 +118,19 @@
                     <!-- mensalidade sem parcelamento  -->
         <div class=" col-md-4 md-form " style="margin-top: 30px">
             <input mdbInputDirective type="text" id="mensalidadeSemParcelamento" class="form-control" 
-                [(ngModel)]="mensalidadeSemParcelamento" (change)="mudouMensalidade()"  >
+                [(ngModel)]="mensalidadeSemParcelamento_" (change)="mudouMensalidade()"  >
             <label for="mensalidadeSemParcelamento" style="margin-left: 15px; font-size: 20px;">Mensalidade sem parcelamento</label>
         </div>
             <!-- Valor do parcelamento  -->
         <div class=" col-md-4 md-form " style="margin-top: 30px">
             <input mdbInputDirective type="text" id="adesaoParcelada" class="form-control" 
-                [(ngModel)]="adesaoParcelada" disabled >
+                [(ngModel)]="adesaoParcelada_" disabled >
             <label for="adesaoParcelada" style="margin-left: 15px; font-size: 20px;">Vlr da parcela da adesão</label>
         </div>
             <!-- mensalidade com parcelamento  -->
         <div class=" col-md-4 md-form " style="margin-top: 30px">
             <input mdbInputDirective type="text" id="mensalidadeComParcelamento" class="form-control" 
-                [(ngModel)]="this.proposta.mensalidade" disabled >
+                [(ngModel)]="mensalidadeComParcelamento_" disabled >
             <label for="mensalidadeComParcelamento" style="margin-left: 15px; font-size: 20px;">Mensalidade com parcelamento</label>
         </div>
 
@@ -139,7 +139,7 @@
 
         <div class=" col-md-2 md-form " style="margin-top: 30px">
             <input mdbInputDirective type="text" id="entrada" class="form-control" 
-                [(ngModel)]="this.proposta.entrada" disabled >
+                [(ngModel)]="entrada_" disabled >
             <label for="entrada" style="margin-left: 15px; font-size: 20px;">Entrada</label>
         </div>        
 
@@ -194,7 +194,7 @@
                     <div class="col-md-3">
                         <div>
                             <input  type="text" id="adesao" class="form-control" style="background-color: powderblue" 
-                            [(ngModel)]="adesao"  (change)="validaAdesao()"  >
+                            [(ngModel)]="adesao_"  (change)="validaAdesao()"  >
                         </div>
                         <!-- <div >
                                 {{adesao}}
@@ -204,7 +204,7 @@
                         <a *ngIf="prcParticipacao > 0">
                             {{prcParticipacao}} % =
                         </a>
-                        {{vlrParticipacao}}
+                        {{vlrParticipacao_}}
                     </div>
                 </div>
                 <br>
