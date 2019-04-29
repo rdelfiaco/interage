@@ -119,7 +119,7 @@ export class DetalhePropostaComponent implements OnInit {
       data_consulta:this.proposta.data_consulta,
       adesao: numeral(Number(this.proposta.adesao)).format('0.00'),
       mensalidade:numeral(Number(this.proposta.mensalidade)).format('0.00'),
-      participacao:numeral(Number(this.proposta.participacao)).format('0.00'),
+      participacao:numeral(Number(this.proposta.participacao)).format('0,000.00'),
       app:this.proposta.app,
       carro_reserva_:this.proposta.carro_reserva_,
       fundo_terceiros_:this.proposta.fundo_terceiros_,

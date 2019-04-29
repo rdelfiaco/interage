@@ -258,9 +258,9 @@ export class ElaboraPropostaComponent implements OnInit {
       if (this.valores[0].tipo_participacao == 'P') {
         this.prcParticipacao = this.vlrParticipacao;
         this.vlrParticipacao =  this.vlrParticipacao * this.nVlrVeiculo / 100;
-        this.vlrParticipacao_ =  numeral(this.vlrParticipacao).format('00.00');
+        this.vlrParticipacao_ =  numeral(this.vlrParticipacao).format('0,000.00');
       } else {
-        this.vlrParticipacao_ =  numeral(this.vlrParticipacao).format('00.00');
+        this.vlrParticipacao_ =  numeral(this.vlrParticipacao).format('0,000.00');
         this.prcParticipacao = 0;
       }
 
@@ -676,7 +676,7 @@ export class ElaboraPropostaComponent implements OnInit {
                        {text:  '(plano anual)',  style: 'font14'},
                        `\n R$ ${numeral(this.proposta.mensalidade).format('00.00')}
                        ${parcelamentoRastreador} 
-                      \n\n Cota de participação:\n R$ ${numeral(this.proposta.participacao).format('00.00')} `],
+                      \n\n Cota de participação:\n R$ ${numeral(this.proposta.participacao).format('0,000.00')} `],
                   style: 'header',
                   margin: [15, 20, 0, 5],
                   border: [true, false, true, true],
