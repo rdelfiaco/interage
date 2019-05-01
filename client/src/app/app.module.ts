@@ -28,9 +28,9 @@ import { PesquisaPessoaModule } from './pesquisa-pessoa/pesquisa-pessoa.module';
 import { ExportarComponent } from './exportar/exportar.component';
 import { DashboardPropostaComponent } from './dashboard-proposta/dashboard-proposta.component';
 import { DashboardAgenteComponent } from './dashboard-agente/dashboard-agente.component';
-import { AnalisarCampanhaTelemarketingComponent } from './analisar-campanha-telemarketing/analisar-campanha-telemarketing.component';
 import { ShowTableComponent } from './show-table/show-table.component';
 import { RanksComponent } from './ranks/ranks.component';
+import { AnalisarCampanhaTelemarketingModule } from './analisar-campanha-telemarketing/analisar-campanha-telemarketing.module';
 
 
 
@@ -49,7 +49,6 @@ import { RanksComponent } from './ranks/ranks.component';
     ExportarComponent,
     DashboardPropostaComponent,
     DashboardAgenteComponent,
-    AnalisarCampanhaTelemarketingComponent,
     ShowTableComponent,
     RanksComponent,
   ],
@@ -74,7 +73,8 @@ import { RanksComponent } from './ranks/ranks.component';
     WavesModule,
     WorkflowModule,
     NavbarModule,
-    SidenavModule
+    SidenavModule,
+    AnalisarCampanhaTelemarketingModule
   ],
   providers: [MDBSpinningPreloader
 
