@@ -19,10 +19,13 @@ interface selectValues {
 export class PrincipalComponent implements OnInit {
   private _pessoa: any;
   private usuarioLogado: any;
+  
   @Output() refresh = new EventEmitter();
   @Output() refreshPessoaAdd = new EventEmitter();
+
   @Input()
   set pessoa(evento: any) {
+    
     this._pessoa = evento;
     if (this._pessoa)
       this._setQuestionarioForm();
@@ -181,8 +184,13 @@ export class PrincipalComponent implements OnInit {
           service: 'adicionarPessoa',
           paramsService: this.principalForm.value
         }) as any;
+
         this.refreshPessoaAdd.emit({ idPessoa: res.resposta.id });
+        
+        this.principalForm.controls['id'].setValue(res.resposta.id);
+
         this.toastrService.success('Salvo com sucesso');
+
       }
       catch (e) {
         this.toastrService.error('Erro ao salvar pessoa');
@@ -201,7 +209,10 @@ export class PrincipalComponent implements OnInit {
   }
 
   nomeMaiusculo(){
-    this.principalForm.controls['nome'].setValue(this.principalForm.value.nome.toUpperCase())
+    this.principalForm.controls['nome'].setValue(this.principalForm.value.nome.toUpperCase());
+
+    this.principalForm.controls['apelido_fantasia'].setValue(this.principalForm.value.nome);
+
   }
 
 

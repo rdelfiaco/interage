@@ -26,4 +26,25 @@ const { checkToken} = require('./checkToken');
     });
 }
 
-module.exports = { executaSQL }
+async function executaSQLComTransacao(credenciais, client,  sql) {
+    return new Promise(function (resolve, reject) {
+        checkToken(credenciais.token, credenciais.idUsuario).then(historico => {
+            client.query(sql).then(res => {
+                    let registros 
+                    if (res.rowCount > 0) {
+                        registros = res.rows;
+                    } else {
+                        registros = null;
+                    };
+                    resolve(registros);
+                }).catch(err => {
+                    reject(err);
+                });
+        }).catch(e => {
+            reject(e);
+          });
+    });
+}
+
+
+module.exports = { executaSQL, executaSQLComTransacao  }

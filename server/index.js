@@ -50,14 +50,12 @@ declaraServico('getCampanhaTelemarketingAnalisar',campanha.getCampanhaTelemarket
 declaraServico('getLigacaoTelemarketing', telemarketing.getLigacaoTelemarketing);
 declaraServico('getCampanhaFollowDoUsuario', campanha.getCampanhaFollowDoUsuario);
 declaraServico('getRanks', ranks.getRanks);
-
+declaraServicoPost('importaLead', importar.importaLead )
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
   extended: true
 }));
-
-app.post('/api/uploadFile', importar.importaLead)
 
 
 app.get('/getAtividades', (req, res) => {
@@ -403,7 +401,7 @@ function declaraServico(nomeServico, funcao) {
         res.status(401).send(error)
       })
   });
-  console.log(`Serviço ${nomeServico}, declarado com sucesso!`)
+  console.log(`Serviço GET ${nomeServico}, declarado com sucesso!`)
 }
 
 function declaraServicoPost(nomeServico, funcao) {
@@ -419,8 +417,10 @@ function declaraServicoPost(nomeServico, funcao) {
         res.status(401).send(error)
       })
   });
-  console.log(`Serviço ${nomeServico}, declarado com sucesso!`)
+  console.log(`Serviço POST ${nomeServico}, declarado com sucesso!`)
 }
+
+
 
 function headerResponse(res) {
   res.set('Access-Control-Allow-Origin', '*');

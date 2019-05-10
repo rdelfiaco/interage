@@ -19,7 +19,12 @@
         <label for="nome">Nome</label>
       </div>
     </div>
-
+    <div class="row">
+      <div class="md-form col">
+        <input mdbInputDirective formControlName="apelido_fantasia" type="text" id="rg" class="form-control">
+        <label for="rg">Apelido</label>
+      </div>
+    </div>
     <div class="row">
       <div class="md-form form-group col mdb-date-form">
         <mdb-date-picker name="mydate" [options]="myDatePickerOptions" [placeholder]="'Selecione a data'" required></mdb-date-picker>
@@ -88,6 +93,12 @@
         <mdb-select formControlName="tipo" (selected)="getSelectedValuePessoa($event)" [options]="tipoDePessoa"
           [multiple]="false" placeholder="Tipo de pessoa"></mdb-select>
         <label>Pessoa</label>
+      </div>
+    </div>
+    <div class="row">
+      <div class="md-form col">
+        <input mdbInputDirective formControlName="nome" type="text" id="nome" (blur)="nomeMaiusculo()" class="form-control">
+        <label for="nome">Razaão Social</label>
       </div>
     </div>
     <div class="row">

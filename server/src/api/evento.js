@@ -50,7 +50,7 @@ function getUmEvento(req, res) {
           }
           else {
             client.end();
-            reject('Não há eventos!')
+            resolve('Não há eventos!')
           }
         })
         .catch(err => {
@@ -558,7 +558,7 @@ function getEventosPendentes(req, res) {
             client.end();
             resolve(evento)
           }
-          else reject('Não há eventos!')
+          else resolve('Não há eventos!')
         }
         ).catch(err => {
           client.end();
@@ -591,7 +591,7 @@ function getEventosLinhaDoTempo(req, res) {
             client.end();
             resolve(eventos)
           }
-          else reject('Não há eventos!')
+          else resolve('Não há eventos!')
         })
         .catch(err => {
           client.end();
@@ -627,7 +627,7 @@ function getEventosRelatorioUsuario(req, res) {
             resolve(eventos)
           }
           else {
-            reject('Não há eventos!')
+            resolve('Não há eventos!')
             client.end();
           }
         }
@@ -838,7 +838,6 @@ function getEventosFiltrados(req, res) {
       idUsuario: req.query.id_usuario
     };
 
-    //console.log(req.query)
     if (req.query.status.length == 0 ){
       req.query.status = '0';
     }
@@ -863,6 +862,7 @@ function getEventosFiltrados(req, res) {
     sql = sql + ` and (id_motivo in ( ${req.query.motivos} )  or -1 in ( ${req.query.motivos} )  )` // motivos 
     sql = sql + ` order by dt_criou limit 100` //
     
+
     executaSQL(credenciais, sql)
       .then(res => {
         if (res) {
@@ -870,7 +870,7 @@ function getEventosFiltrados(req, res) {
           resolve(eventos)
         }
         else {
-          reject('Eventos não encontrado!')
+          resolve('Eventos não encontrado!')
         }
       })
       .catch(err => {
@@ -892,7 +892,6 @@ function getCountEventosPendentes(req, res) {
                    dt_para_exibir <= now() and
                    id_status_evento in (1, 4, 5, 6) and
                    tipodestino = 'P' and id_usuario in ( ${req.query.idUsuarioLogado})`
-
     executaSQL(credenciais, sql)
       .then(res => {
         if (res) {

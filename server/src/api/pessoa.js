@@ -31,7 +31,7 @@ function getPessoa(req, res) {
             })
 
           }
-          else reject('Não há eventos!')
+          else resolve('')
         }).catch(err => {
           client.end();
           reject(err)
@@ -105,9 +105,7 @@ function salvarPessoa(req, res) {
           update = `UPDATE pessoas SET
             ${pessoaFisica},
             dtalteracao=now(),
-
-            apelido_fantasia = NULL
-
+            
             WHERE pessoas.id=${req.query.id};
             `;
         }
@@ -145,6 +143,7 @@ function salvarPessoa(req, res) {
           ret.push("nome='" + req.query.nome + "'")
           ret.push("tipo='" + req.query.tipo + "'")
           ret.push('id_pronome_tratamento=' + (req.query.id_pronome_tratamento != 'null' ? "'" + req.query.id_pronome_tratamento + "'" : 'NULL'))
+          ret.push('apelido_fantasia=' + (req.query.apelido_fantasia != 'null' ? "'" + req.query.apelido_fantasia + "'" : 'NULL'))
           ret.push('sexo=' + (req.query.sexo != 'null' ? "'" + req.query.sexo + "'" : 'NULL'))
           ret.push('rg_ie=' + (req.query.rg_ie != 'null' ? "'" + req.query.rg_ie + "'" : 'NULL'))
           ret.push('orgaoemissor=' + (req.query.orgaoemissor != 'null' ? "'" + req.query.orgaoemissor + "'" : 'NULL'))
@@ -228,6 +227,7 @@ function adicionarPessoa(req, res) {
         ret.push('email,')
         ret.push('website,')
         ret.push('observacoes,')
+        ret.push('apelido_fantasia,')
         ret.push('dtinclusao,')
         ret.push('dtalteracao')
         ret.push(')')
@@ -244,6 +244,7 @@ function adicionarPessoa(req, res) {
         ret.push((req.query.email != '' ? "'" + req.query.email + "'" : 'NULL') + ",")
         ret.push((req.query.website != '' ? "'" + req.query.website + "'" : 'NULL') + ",")
         ret.push((req.query.observacoes != '' ? "'" + req.query.observacoes + "'" : 'NULL') + ",")
+        ret.push((req.query.apelido_fantasia != 'null' ? "'" + req.query.apelido_fantasia + "'" : 'NULL') + ",")
         ret.push('now(),')
         ret.push('now()')
         ret.push(')')
@@ -272,15 +273,15 @@ function adicionarPessoa(req, res) {
 
         ret.push("'" + req.query.nome + "',")
         ret.push("'" + req.query.tipo + "',")
-        ret.push((req.query.id_pronome_tratamento != 'null' ? "'" + req.query.id_pronome_tratamento + "'" : 'NULL') + ",")
-        ret.push((req.query.sexo != 'null' ? "'" + req.query.sexo + "'" : 'NULL') + ",")
-        ret.push((req.query.rg_ie != 'null' ? "'" + req.query.rg_ie + "'" : 'NULL') + ",")
-        ret.push((req.query.orgaoemissor != 'null' ? "'" + req.query.orgaoemissor + "'" : 'NULL') + ",")
-        ret.push((req.query.cpf_cnpj != 'null' ? "'" + req.query.cpf_cnpj + "'" : 'NULL') + ",")
-        ret.push((req.query.email != 'null' ? "'" + req.query.email + "'" : 'NULL') + ",")
-        ret.push((req.query.website != 'null' ? "'" + req.query.website + "'" : 'NULL') + ",")
-        ret.push((req.query.observacoes != 'null' ? "'" + req.query.observacoes + "'" : 'NULL') + ",")
-        ret.push((req.query.apelido_fantasia != 'null' ? "'" + req.query.apelido_fantasia + "'" : 'NULL') + ",")
+        ret.push((req.query.id_pronome_tratamento != '' ? "'" + req.query.id_pronome_tratamento + "'" : 'NULL' ) + ",")
+        ret.push((req.query.sexo != '' ? "'" + req.query.sexo + "'" : 'NULL') + ",")
+        ret.push((req.query.rg_ie != '' ? "'" + req.query.rg_ie + "'" : 'NULL') + ",")
+        ret.push((req.query.orgaoemissor != '' ? "'" + req.query.orgaoemissor + "'" : 'NULL') + ",")
+        ret.push((req.query.cpf_cnpj != '' ? "'" + req.query.cpf_cnpj + "'" : 'NULL') + ",")
+        ret.push((req.query.email != '' ? "'" + req.query.email + "'" : 'NULL') + ",")
+        ret.push((req.query.website != '' ? "'" + req.query.website + "'" : 'NULL') + ",")
+        ret.push((req.query.observacoes != '' ? "'" + req.query.observacoes + "'" : 'NULL') + ",")
+        ret.push((req.query.apelido_fantasia != '' ? "'" + req.query.apelido_fantasia + "'" : 'NULL') + ",")
         ret.push('now(),')
         ret.push('now()')
         ret.push(')')

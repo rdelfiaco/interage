@@ -1,70 +1,59 @@
-  <form>
+
+<!-- <div *ngIf="importando" style="height: 100%; width: 100%">
+  <div class="justify-content-center align-items-center flex-column row">
+    <h1>Importando!</h1>
+    <mdb-spinner spinnerType="big"> </mdb-spinner>
+  </div>
+</div> -->
+
+<div *ngIf="!importando">
+<form>
       <div class="file-field md-form">
-          <div mdbBtn floating="true" size="md" gradient="purple" mdbWavesEffect>
-            <i class="fa fa-cloud-upload" aria-hidden="true"></i>
+          <div mdbBtn type="button"  size="md" gradient="purple" rounded="true"  mdbWavesEffect>Selecione o arquivo
             <input type="file" mdbFileSelect (uploadOutput)="onUploadOutput($event)" [uploadInput]="uploadInput" (change)="fileChangeListener($event)" accept=".csv" >
           </div>
         <div class="file-path-wrapper mt-3">
           <input class="file-path" type="text" placeholder="Upload your file" [value]="showFiles()">
         </div>
       </div>
-      <button mdbBtn type="button" gradient="purple" rounded="true"  (click)="importarCSV()" mdbWavesEffect>Importar</button>
-</form>
-<div>
-  <span>Total de linhas do arquivos: {{totalLinhas}}</span>
-</div>
 
+
+    <div class="row">
+      
+      <div class="col-4 col-sm-4">
+        <mdb-checkbox [checked]=excluiDuplicadosChk 
+          (change)="onChangeExcluiDuplicadosChk(excluiDuplicadosChk)"
+          >As linhas com id_lead_origem e CPF_CNPJ duplicadas serão excluidas
+        </mdb-checkbox>
+      </div>
+      <div class="col-6 col-sm-6">
+        <span>Total de linhas do arquivos: {{totalLinhas}}</span>
+      </div>
+      <div class="col-1 col-sm-1">
+        <button mdbBtn floating="true" size="md" gradient="purple" rounded="true"  (click)="importarCSV()" mdbWavesEffect [disabled]="!importar" >
+          <i class="fa fa-cloud-upload" aria-hidden="true"></i>
+        </button>
+      </div>
+
+    </div>
+</form>
 
 <div>
     <table class="table table-hover table-responsive-md mb-0">
       <thead>
         <tr>
-          <th>linha</th>
-          <th>tipo_pessoa</th> 
-          <th>cpf</th>
-          <th>nome</th>
-          <th>email</th>
-          <th>observacoes</th>
-          <th>rua</th>
-          <th>complemento</th>
-          <th>bairro</th>
-          <th>cidade</th>
-          <th>uf</th>
-          <th>cep</th>
-          <th>ddd1</th>
-          <th>fone1</th>
-          <th>ddd2</th>
-          <th>fone2</th>
-          <th>ddd3</th>
-          <th>fone3</th>
-          <th>origem_lead</th>
-          <th>id_origem_lead</th>
+          <th *ngFor="let head of headersRow" scope="col" > {{head}} 
+              <!-- <mdb-icon icon="sort" (click)="sortBy(head)"></mdb-icon> -->
+          </th>
         </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let csvData of csvRecords;let i = index;">
-          <td>{{i+1}}</td>
-          <td><span>{{csvData.tipo_pessoa}}</span></td> 
-          <td><span>{{csvData.cpf}}</span></td>
-          <td><span>{{csvData.nome}}</span></td>
-          <td><span>{{csvData.email}}</span></td>
-          <td><span>{{csvData.observacoes}}</span></td>
-          <td><span>{{csvData.rua}}</span></td>
-          <td><span>{{csvData.complemento}}</span></td>
-          <td><span>{{csvData.bairro}}</span></td>
-          <td><span>{{csvData.cidade}}</span></td>
-          <td><span>{{csvData.uf}}</span></td>
-          <td><span>{{csvData.cep}}</span></td>
-          <td><span>{{csvData.ddd1}}</span></td>
-          <td><span>{{csvData.fone1}}</span></td>
-          <td><span>{{csvData.ddd2}}</span></td>
-          <td><span>{{csvData.fone2}}</span></td>
-          <td><span>{{csvData.ddd3}}</span></td>
-          <td><span>{{csvData.fone3}}</span></td>
-          <td><span>{{csvData.origem_lead}}</span></td>
-          <td><span>{{csvData.id_origem_lead}}</span></td>
-        </tr>
-      </tbody>
+    </thead>
+    <tbody>
+      <tr  *ngFor="let el of csvRecords" >
+            <td  *ngFor="let head of headersRow" >{{el[head]}} </td>
+      </tr>
+  </tbody>
     </table>
   </div>
+
+</div>
   
