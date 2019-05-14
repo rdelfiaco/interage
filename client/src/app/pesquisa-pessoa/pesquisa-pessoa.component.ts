@@ -1,3 +1,4 @@
+import { AppComponent } from './../app.component';
 import { Component, OnInit, ElementRef, ViewChildren, QueryList, ViewChild } from '@angular/core';
 import { ConnectHTTP } from '../shared/services/connectHTTP';
 import { LocalStorage } from '../shared/services/localStorage';
@@ -113,6 +114,7 @@ export class PesquisaPessoaComponent implements OnInit {
       }, 200);
     }
     catch (e) {
+      console.log('error ', e )
       this.toastrService.error(e.error);
     }
   }
@@ -138,6 +140,10 @@ export class PesquisaPessoaComponent implements OnInit {
       }
     }) as any;
     this.pessoa = new Observable(o => o.next(pessoa.resposta));
+
   }
 
+
+ 
+  
 }

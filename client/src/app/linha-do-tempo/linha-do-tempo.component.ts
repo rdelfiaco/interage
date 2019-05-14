@@ -25,6 +25,7 @@ export class LinhaDoTempoComponent implements OnInit {
 
   async ngOnChanges() {
     if (!this.pessoa) return;
+
     try {
       let eventosEncontrados = await this.connectHTTP.callService({
         service: 'getEventosLinhaDoTempo',
@@ -33,6 +34,7 @@ export class LinhaDoTempoComponent implements OnInit {
         }
       }) as any;
 
+      this.eventosDaPessoa = eventosEncontrados.resposta; 
 
       const ordenaEventos = (eventos: Array<any>): Array<any> => {
         if (eventos && eventos.length)
@@ -71,7 +73,8 @@ export class LinhaDoTempoComponent implements OnInit {
       this.eventosDaPessoa = ordenaEventos(juntaEventosPaiEFilhos(eventosEncontrados.resposta, null));
     }
     catch (e) {
-      this.toastrService.error(e.error);
+      // não possui eventos
+      
     }
   }
 

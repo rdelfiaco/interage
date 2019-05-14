@@ -573,35 +573,55 @@ function getEventosPendentes(req, res) {
 
 function getEventosLinhaDoTempo(req, res) {
   return new Promise(function (resolve, reject) {
+    let credenciais = {
+      token: req.query.token,
+      idUsuario: req.query.id_usuario
+    };
 
-    checkTokenAccess(req).then(historico => {
-      const dbconnection = require('../config/dbConnection')
-      const { Client } = require('pg')
+    let sql = `select * from view_eventos where id_pessoa_receptor=${req.query.id_pessoa_receptor}`
 
-      const client = new Client(dbconnection)
-
-      client.connect()
-
-      let sql = `select * from view_eventos where id_pessoa_receptor=${req.query.id_pessoa_receptor}`
-
-      client.query(sql)
-        .then(res => {
-          if (res.rowCount > 0) {
-            let eventos = res.rows;
-            client.end();
-            resolve(eventos)
-          }
-          else resolve('Não há eventos!')
-        })
-        .catch(err => {
-          client.end();
-          reject(err)
-        })
-    }).catch(err => {
-      reject(err)
-    })
+    executaSQL(credenciais, sql)
+      .then(res => {
+        resolve(res)
+      })
+      .catch(err => {
+        reject(`Erro no getEventosLinhaDoTempo : ${err}`)
+      })
   })
 }
+
+
+  //   checkTokenAccess(req).then(historico => {
+  //     const dbconnection = require('../config/dbConnection')
+  //     const { Client } = require('pg')
+
+  //     const client = new Client(dbconnection)
+
+  //     client.connect()
+
+  //     let sql = `select * from view_eventos where id_pessoa_receptor=${req.query.id_pessoa_receptor}`
+
+  //     client.query(sql)
+
+
+  //       .then(res => {
+  //         if (res.rowCount > 0) {
+  //           let eventos = res.rows;
+  //           client.end();
+  //           resolve(eventos)
+  //         }
+  //         else resolve('Não há eventos!')
+  //       })
+  //       .catch(err => {
+  //         client.end();
+  //         reject(err)
+  //       })
+  //   }).catch(err => {
+  //     reject(err)
+  //   })
+
+//    })
+// }
 
 
 function getEventosRelatorioUsuario(req, res) {

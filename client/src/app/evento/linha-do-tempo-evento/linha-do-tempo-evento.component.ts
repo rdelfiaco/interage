@@ -30,6 +30,7 @@ export class LinhaDoTempoEventoComponent implements OnInit {
   }
 
   async ngOnChanges() {
+    console.log('LinhaDoTempoEventoComponent', this.pessoa )
     if (!this.pessoa) return;
     try {
       let eventosEncontrados = await this.connectHTTP.callService({
@@ -93,6 +94,7 @@ export class LinhaDoTempoEventoComponent implements OnInit {
           return maiorData;
         }
       }
+      console.log(eventosEncontrados.resposta);
       this.eventosDaPessoa = ordenaEventos(juntaEventosPaiEFilhos(eventosEncontrados.resposta, null));
     }
     catch (e) {

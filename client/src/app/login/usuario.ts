@@ -12,6 +12,14 @@ export class Usuario {
     private _apelido: string;
     private _telefone: string;
     private _ddd: number;
+    private _carteira: boolean;
+
+    public get carteira(): boolean {
+        return this._carteira;
+    }
+    public set carteira(value: boolean) {
+        this._carteira = value;
+    }
 
     public get ddd(): number {
         return this._ddd;

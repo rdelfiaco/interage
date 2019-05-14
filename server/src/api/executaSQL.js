@@ -12,7 +12,16 @@ const { checkToken} = require('./checkToken');
                     if (res.rowCount > 0) {
                         registros = res.rows;
                     } else {
-                        registros = null;
+                        registros = res.fields
+                        let registros_ = '{ '
+                        for (i= 0; i < registros.length; i++ ) {
+                            registros_ = registros_ + `"${registros[i].name}": null, `;
+                        }
+                        registros_ = registros_.substr(0, registros_.length - 2) 
+                        registros_ = registros_ +  '}';
+                        registros_ =  JSON.parse(registros_)
+                        registros = [];
+                        registros.push(registros_)
                     };
                     client.end();
                     resolve(registros);
@@ -34,7 +43,16 @@ async function executaSQLComTransacao(credenciais, client,  sql) {
                     if (res.rowCount > 0) {
                         registros = res.rows;
                     } else {
-                        registros = null;
+                        registros = res.fields
+                        let registros_ = '{ '
+                        for (i= 0; i < registros.length; i++ ) {
+                            registros_ = registros_ + `"${registros[i].name}": null, `;
+                        }
+                        registros_ = registros_.substr(0, registros_.length - 2) 
+                        registros_ = registros_ +  '}';
+                        registros_ =  JSON.parse(registros_)
+                        registros = [];
+                        registros.push(registros_)
                     };
                     resolve(registros);
                 }).catch(err => {

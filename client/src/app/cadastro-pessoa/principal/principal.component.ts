@@ -22,14 +22,13 @@ export class PrincipalComponent implements OnInit {
   
   @Output() refresh = new EventEmitter();
   @Output() refreshPessoaAdd = new EventEmitter();
-
   @Input()
-  set pessoa(evento: any) {
-    
-    this._pessoa = evento;
-    if (this._pessoa)
-      this._setQuestionarioForm();
-  }
+          set pessoa(evento: any) {
+            
+            this._pessoa = evento;
+            if (this._pessoa)
+              this._setQuestionarioForm();
+          }
 
   get pessoa(): any {
     return this._pessoa
@@ -179,22 +178,19 @@ export class PrincipalComponent implements OnInit {
       }
     }
     else {
-      try {
+      
         const res = await this.connectHTTP.callService({
           service: 'adicionarPessoa',
           paramsService: this.principalForm.value
         }) as any;
-
-        this.refreshPessoaAdd.emit({ idPessoa: res.resposta.id });
         
         this.principalForm.controls['id'].setValue(res.resposta.id);
 
         this.toastrService.success('Salvo com sucesso');
 
-      }
-      catch (e) {
-        this.toastrService.error('Erro ao salvar pessoa');
-      }
+        this.refreshPessoaAdd.emit({ idPessoa: res.resposta.id });
+
+    
     }
   }
   checkAtividadePessoa() {

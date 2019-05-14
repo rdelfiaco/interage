@@ -380,42 +380,40 @@ export class ImportaLeadComponent implements OnInit {
     //const options = { closeButton: true, actionButton: 'Action', tapToDismiss: false,  titleClass: 'blue' };
     this.toastrService.success(`Importação com sucesso!`);
     this.importar = false
+    this.csvRecords = [];
+
   }
 
   
   async importarCSVSQL() {
   
-    
-
      //this.importando = true;
+     try {
+        let resultado = await this.connectHTTP.sendFile({
+          service: 'importaLead',
+          paramsService: {
+            arquivo: JSON.stringify({
+                      csvHeader: this.headersRow,
+                      csvLinhas: this.csvRecords
+                      })
+          }
+        });
+        this.resultado = resultado.resposta as Array<object>;
 
-    let resultado = await this.connectHTTP.sendFile({
-      service: 'importaLead',
-      paramsService: {
-        arquivo: JSON.stringify({
-                  csvHeader: this.headersRow,
-                  csvLinhas: this.csvRecords
-                  })
-      }
-    });
-
-    
-
-    this.resultado = resultado.resposta as Array<object>;
-
-    console.log(this.resultado)
+        console.log(this.resultado)
 
     // this.sleepFor(5000).then(() => {
     //   this.importando = false;
     // })
-
-   
-   
-
     // const options = { closeButton: true, actionButton: 'Action', tapToDismiss: false,  titleClass: 'blue' };
     // this.toastrService.success(` ${resultado.resposta}`, 'Resultado da importação!', options);
     
    // window.location.reload();
+    }
+    
+    catch (e) {
+      return e;
+    }
 
   }
 
@@ -425,18 +423,15 @@ export class ImportaLeadComponent implements OnInit {
   async sleepFor( sleepDuration ){
     var now = new Date().getTime();
     while(new Date().getTime() < now + sleepDuration){ /* do nothing */ } 
-}
-
-
-onChangeExcluiDuplicadosChk(excluiDuplicadosChk_: any) {
-  if (excluiDuplicadosChk_) {
-    this.excluiDuplicadosChk = false
-  } else {
-    this.excluiDuplicadosChk = true
   }
 
 
+  onChangeExcluiDuplicadosChk(excluiDuplicadosChk_: any) {
+    if (excluiDuplicadosChk_) {
+      this.excluiDuplicadosChk = false
+    } else {
+      this.excluiDuplicadosChk = true
+    }
+  }
 
 }
-
-

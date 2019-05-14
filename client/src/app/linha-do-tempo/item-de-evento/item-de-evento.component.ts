@@ -70,8 +70,9 @@ export class ItemDeEventoComponent implements OnInit {
       id_proposta: ['']
     });
   }
+  
   ngOnInit() {
-    console.log(this.eventos)
+
   }
 
   async selecionaEvento(evento) {

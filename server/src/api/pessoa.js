@@ -1,90 +1,93 @@
 const { checkTokenAccess } = require('./checkTokenAccess');
+const { executaSQL } = require('./executaSQL')
+
 
 function getPessoa(req, res) {
   return new Promise(function (resolve, reject) {
+    let credenciais = {
+      token: req.query.token,
+      idUsuario: req.query.id_usuario
+    };
 
-    checkTokenAccess(req).then(historico => {
-      const dbconnection = require('../config/dbConnection')
-      const { Client } = require('pg')
-
-      const client = new Client(dbconnection)
-
-      client.connect()
-      let sql = `SELECT * FROM pessoas
-                  WHERE id=${req.query.id_pessoa}`
-
-      client.query(sql)
-        .then(res => {
-          if (res.rowCount > 0) {
-            let pessoa = res.rows;
-            getEnderecos().then(enderecos => {
-              getTelefones().then(telefones => {
-                client.end();
-                resolve({ principal: pessoa[0], enderecos, telefones })
-              }).catch(err => {
-                client.end();
-                reject(err)
-              })
+      let sql = `SELECT * FROM pessoas WHERE id=${req.query.id_pessoa}`
+      executaSQL(credenciais, sql).then(res => {
+        var enderecos = {};
+        var telefones = {};
+        if (res.length > 0) {
+          var pessoa = res[0];
+          getTelefones(req).then(resTelefones => {
+            getEnderecos(req).then(resEndereco => {
+              if (!resTelefones) { telefones = {} ;
+              }else telefones = resTelefones;
+              if (!resEndereco) {enderecos = {}
+              }else enderecos = resEndereco;
+              resolve({ principal: pessoa, enderecos, telefones })
+            })
+            .catch(err => {
+              reject(err)
+            });
+          })
+          .catch(err => {
+            reject(err)
+          })
+         // resolve({ principal: pessoa[0], enderecos, telefones })
+        }
+        else resolve({});
+      })
+      .catch(err => {
+        reject(err)
+      })
+                
+              
+  });
+}
+function getEnderecos(req) {
+  return new Promise((resolve, reject) => {
+    let credenciais = {
+      token: req.query.token,
+      idUsuario: req.query.id_usuario
+    };
+    let sqlEnderecos = `SELECT 
+                        pessoas_enderecos.id,
+                        pessoas_enderecos.id_pessoa,
+                        pessoas_enderecos.id_cidade,
+                        pessoas_enderecos.cep,
+                        pessoas_enderecos.logradouro, 
+                        pessoas_enderecos.bairro,
+                        pessoas_enderecos.complemento,
+                        pessoas_enderecos.recebe_correspondencia,
+                        pessoas_enderecos.status,
+                        cidades.nome,
+                        cidades.uf_cidade
+                        FROM pessoas_enderecos
+                        LEFT JOIN cidades ON pessoas_enderecos.id_cidade=cidades.id
+                        WHERE id_pessoa=${req.query.id_pessoa}
+                        ORDER BY recebe_correspondencia DESC`
+  executaSQL(credenciais, sqlEnderecos).then(res => {
+              resolve(res);
             }).catch(err => {
-              client.end();
               reject(err)
             })
-
-          }
-          else resolve('')
-        }).catch(err => {
-          client.end();
-          reject(err)
-        })
-
-
-      function getEnderecos() {
-        return new Promise((resolve, reject) => {
-          let sqlEnderecos = `SELECT 
-                              pessoas_enderecos.id,
-                              pessoas_enderecos.id_pessoa,
-                              pessoas_enderecos.id_cidade,
-                              pessoas_enderecos.cep,
-                              pessoas_enderecos.logradouro, 
-                              pessoas_enderecos.bairro,
-                              pessoas_enderecos.complemento,
-                              pessoas_enderecos.recebe_correspondencia,
-                              pessoas_enderecos.status,
-                              cidades.nome,
-                              cidades.uf_cidade
-                              FROM pessoas_enderecos
-                              RIGHT JOIN cidades ON pessoas_enderecos.id_cidade=cidades.id
-                              WHERE id_pessoa=${req.query.id_pessoa}
-                              ORDER BY recebe_correspondencia DESC`
-
-          client.query(sqlEnderecos).then(res => {
-            resolve(res.rows);
-          }).catch(err => {
-            client.end();
-            reject(err)
-          })
-        })
-      }
-
-      function getTelefones() {
-        return new Promise((resolve, reject) => {
-          let sqlTelefones = `SELECT * FROM pessoas_telefones
-                              WHERE id_pessoa=${req.query.id_pessoa}
-                              ORDER BY principal DESC`
-
-          client.query(sqlTelefones).then(res => {
-            resolve(res.rows);
-          }).catch(err => {
-            client.end();
-            reject(err)
-          })
-        })
-      }
-    }).catch(e => {
-      reject(e)
-    })
   })
 }
+
+function getTelefones(req) {
+  return new Promise((resolve, reject) => {
+    let credenciais = {
+      token: req.query.token,
+      idUsuario: req.query.id_usuario
+    };
+    let sqlTelefones = `SELECT * FROM pessoas_telefones
+                        WHERE id_pessoa=${req.query.id_pessoa}
+                        ORDER BY principal DESC`
+executaSQL(credenciais, sqlTelefones).then(res => {
+  resolve(res);
+}).catch(err => {
+  reject(err)
+  })
+})
+}
+
 
 function salvarPessoa(req, res) {
   return new Promise(function (resolve, reject) {
@@ -97,30 +100,27 @@ function salvarPessoa(req, res) {
 
       client.connect()
 
-      let update;
+      // trata as variaveis que tem combro que vem com null
+      req.query.id_atividade = req.query.id_atividade == 'null' ?  'null':  req.query.id_atividade; 
+      req.query.id_pronome_tratamento = req.query.id_pronome_tratamento == 'null' ?  'null':  req.query.id_pronome_tratamento; 
+
+
+      let update = String;
       client.query('BEGIN').then((res1) => {
-        if (req.query.tipo == 'F') {
-          let pessoaFisica = montaCamposUpdatePessoaFisica()
+
+
 
           update = `UPDATE pessoas SET
-            ${pessoaFisica},
-            dtalteracao=now(),
-            
+            ${montaCamposUpdatePessoa()},
+            dtalteracao=now()
             WHERE pessoas.id=${req.query.id};
             `;
-        }
-        else if (req.query.tipo == 'J') {
-          let pessoaJuridica = montaCamposUpdatePessoaJuridica()
-          update = `UPDATE pessoas SET
-          ${pessoaJuridica},
-          dtalteracao=now()
-          
-          WHERE pessoas.id=${req.query.id};
-          `;
-        }
-       // console.log(update)
 
-        client.query(update).then((res) => {
+        
+        update = update.replace(/'null'/g, null)
+        update = update.replace(/'`'/g, ' ')
+
+       client.query(update).then((res) => {
           client.query('COMMIT').then((resposta) => {
             client.end();
             resolve(resposta)
@@ -138,39 +138,24 @@ function salvarPessoa(req, res) {
           })
         })
 
-        function montaCamposUpdatePessoaFisica() {
+        function montaCamposUpdatePessoa() {
           let ret = [];
           ret.push("nome='" + req.query.nome + "'")
           ret.push("tipo='" + req.query.tipo + "'")
-          ret.push('id_pronome_tratamento=' + (req.query.id_pronome_tratamento != 'null' ? "'" + req.query.id_pronome_tratamento + "'" : 'NULL'))
-          ret.push('apelido_fantasia=' + (req.query.apelido_fantasia != 'null' ? "'" + req.query.apelido_fantasia + "'" : 'NULL'))
-          ret.push('sexo=' + (req.query.sexo != 'null' ? "'" + req.query.sexo + "'" : 'NULL'))
-          ret.push('rg_ie=' + (req.query.rg_ie != 'null' ? "'" + req.query.rg_ie + "'" : 'NULL'))
-          ret.push('orgaoemissor=' + (req.query.orgaoemissor != 'null' ? "'" + req.query.orgaoemissor + "'" : 'NULL'))
-          ret.push('cpf_cnpj=' + (req.query.cpf_cnpj != 'null' ? "'" + req.query.cpf_cnpj + "'" : 'NULL'))
-          ret.push('email=' + (req.query.email != 'null' ? "'" + req.query.email + "'" : 'NULL'))
-          ret.push('website=' + (req.query.website != 'null' ? "'" + req.query.website + "'" : 'NULL'))
-          ret.push('id_atividade=' + (req.query.id_atividade != 'null' ? "'" + req.query.id_atividade + "'" : 'NULL'))
-          ret.push('observacoes=' + (req.query.observacoes != 'null' ? "'" + req.query.observacoes + "'" : 'NULL'))
+          ret.push('id_pronome_tratamento=' + (req.query.id_pronome_tratamento != 'null' || req.query.id_pronome_tratamento != '' ? "'" + req.query.id_pronome_tratamento + "'" : null))
+          ret.push('apelido_fantasia=' + (req.query.apelido_fantasia != 'null' || req.query.apelido_fantasia != '' ? "'" + req.query.apelido_fantasia + "'" : null))
+          ret.push('sexo=' + (req.query.sexo != 'null' || req.query.sexo != ''  ? "'" + req.query.sexo + "'" : null))
+          ret.push('rg_ie=' + (req.query.rg_ie != 'null' || req.query.rg_ie != '' ? "'" + req.query.rg_ie + "'" : null))
+          ret.push('orgaoemissor=' + (req.query.orgaoemissor != 'null' || req.query.orgaoemissor != '' ? "'" + req.query.orgaoemissor + "'" : null))
+          ret.push('cpf_cnpj=' + (req.query.cpf_cnpj != 'null' || req.query.cpf_cnpj != ''  ? "'" + req.query.cpf_cnpj + "'" : null))
+          ret.push('email=' + (req.query.email != 'null' || req.query.email != '' ? "'" + req.query.email + "'" : null))
+          ret.push('website=' + (req.query.website != 'null' || req.query.website != '' ? "'" + req.query.website + "'" : null))
+          ret.push('id_atividade=' + (req.query.id_atividade != 'null' || req.query.id_atividade != '' ? "'" + req.query.id_atividade + "'" : null))
+          ret.push('observacoes=' + (req.query.observacoes != 'null' || req.query.observacoes != '' ? "'" + req.query.observacoes + "'" : null))
           return ret.join(', ');
         }
 
-        function montaCamposUpdatePessoaJuridica() {
-          let ret = [];
-          ret.push("nome='" + req.query.nome + "'")
-          ret.push("tipo='" + req.query.tipo + "'")
-          ret.push('id_pronome_tratamento=' + (req.query.id_pronome_tratamento != 'null' ? "'" + req.query.id_pronome_tratamento + "'" : 'NULL'))
-          ret.push('apelido_fantasia=' + (req.query.apelido_fantasia != 'null' ? "'" + req.query.apelido_fantasia + "'" : 'NULL'))
-          ret.push('sexo=' + (req.query.sexo != 'null' ? "'" + req.query.sexo + "'" : 'NULL'))
-          ret.push('rg_ie=' + (req.query.rg_ie != 'null' ? "'" + req.query.rg_ie + "'" : 'NULL'))
-          ret.push('orgaoemissor=' + (req.query.orgaoemissor != 'null' ? "'" + req.query.orgaoemissor + "'" : 'NULL'))
-          ret.push('cpf_cnpj=' + (req.query.cpf_cnpj != 'null' ? "'" + req.query.cpf_cnpj + "'" : 'NULL'))
-          ret.push('email=' + (req.query.email != 'null' ? "'" + req.query.email + "'" : 'NULL'))
-          ret.push('website=' + (req.query.website != 'null' ? "'" + req.query.website + "'" : 'NULL'))
-          ret.push('id_atividade=' + (req.query.id_atividade != 'null' ? "'" + req.query.id_atividade + "'" : 'NULL'))
-          ret.push('observacoes=' + (req.query.observacoes != 'null' ? "'" + req.query.observacoes + "'" : 'NULL'))
-          return ret.join(', ');
-        }
+
       }).catch(err => {
         client.end();
         reject(err)
@@ -192,6 +177,11 @@ function adicionarPessoa(req, res) {
       const client = new Client(dbconnection)
 
       client.connect()
+      // trata as variaveis que tem combro que vem com null
+      req.query.id_atividade = req.query.id_atividade == 'null' ?  '':  req.query.id_atividade; 
+      req.query.id_pronome_tratamento = req.query.id_pronome_tratamento == 'null' ?  '':  req.query.id_pronome_tratamento; 
+
+      
 
       let update;
       if (req.query.tipo == 'F') {
@@ -202,16 +192,16 @@ function adicionarPessoa(req, res) {
         let pessoaJuridica = montaCamposUpdatePessoaJuridica()
         update = `INSERT INTO pessoas ${pessoaJuridica} RETURNING id`
       }
+     
+      update = update.replace(/'null'/g, null)
+      update = update.replace(/'`'/g, ' ')
 
       client.query(update).then((res) => {
         client.end();
         resolve(res.rows[0])
-
       }).catch(e => {
-
         client.end();
         reject(e)
-
       })
 
       function montaCamposUpdatePessoaFisica() {
@@ -244,7 +234,7 @@ function adicionarPessoa(req, res) {
         ret.push((req.query.email != '' ? "'" + req.query.email + "'" : 'NULL') + ",")
         ret.push((req.query.website != '' ? "'" + req.query.website + "'" : 'NULL') + ",")
         ret.push((req.query.observacoes != '' ? "'" + req.query.observacoes + "'" : 'NULL') + ",")
-        ret.push((req.query.apelido_fantasia != 'null' ? "'" + req.query.apelido_fantasia + "'" : 'NULL') + ",")
+        ret.push((req.query.apelido_fantasia != null ? "'" + req.query.apelido_fantasia + "'" : 'NULL') + ",")
         ret.push('now(),')
         ret.push('now()')
         ret.push(')')
@@ -587,7 +577,6 @@ function salvarEnderecoPessoa(req, res) {
                     TRUE
                     ) RETURNING id`;
 
-            //console.log('insert', insert)
             client.query(insert).then((res) => {
               req.query.id_cidade = res.rows[0].id
               salvaEndereco()
@@ -708,6 +697,25 @@ function pesquisaPessoas(req, res) {
   return new Promise(function (resolve, reject) {
 
     checkTokenAccess(req).then(historico => {
+
+
+      // busca se o usuario possui cateira 
+      
+      let credenciais = {
+        token: req.query.token,
+        idUsuario: req.query.id_usuario
+      };
+      
+      let sql = `select possui_carteira_cli from usuarios where id = ${req.query.id_usuario} `
+      var possui_carteira_cli = false;
+      executaSQL(credenciais, sql).then(res => {
+          possui_carteira_cli = res 
+      })
+      .catch(e => {
+        possui_carteira_cli = false;
+      });
+
+
       const dbconnection = require('../config/dbConnection')
       const { Client } = require('pg')
 
@@ -723,13 +731,23 @@ function pesquisaPessoas(req, res) {
             WHERE lower(nome) LIKE '%${pesquisaTexto}%' OR
             lower(apelido_fantasia)
             LIKE '%${pesquisaTexto}%' OR
-            lower(cpf_cnpj) LIKE '%${pesquisaTexto}%' limit 100`
+            lower(cpf_cnpj) LIKE '%${pesquisaTexto}%' `
       }
       else {
         pesquisa = `SELECT * FROM pessoas
             WHERE id=${pesquisaTexto}
-            limit 100`
+            `
       }
+
+      // carteira do usuario 
+      if (possui_carteira_cli) {
+
+          pesquisa = pesquisa +  ` and id_usuario_carteira = ${req.query.id_usuario} `
+      }
+
+
+
+      pesquisa = pesquisa + ` limit 100`
       
       client.query(pesquisa).then((res) => {
         if (res.rowCount > 0) {
