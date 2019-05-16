@@ -1,6 +1,6 @@
 const { checkTokenAccess } = require('./checkTokenAccess');
-const { executaSQL } = require('./executaSQL')
-
+const { executaSQL } = require('./executaSQL');
+const { buscaValorDoAtributo } = require( './shared');
 
 function getPessoa(req, res) {
   return new Promise(function (resolve, reject) {
@@ -196,6 +196,7 @@ function adicionarPessoa(req, res) {
       update = update.replace(/'null'/g, null)
       update = update.replace(/'`'/g, ' ')
 
+
       client.query(update).then((res) => {
         client.end();
         resolve(res.rows[0])
@@ -219,7 +220,8 @@ function adicionarPessoa(req, res) {
         ret.push('observacoes,')
         ret.push('apelido_fantasia,')
         ret.push('dtinclusao,')
-        ret.push('dtalteracao')
+        ret.push('dtalteracao,')
+        ret.push('id_usuario_incluiu')
         ret.push(')')
 
         ret.push('VALUES(')
@@ -236,7 +238,8 @@ function adicionarPessoa(req, res) {
         ret.push((req.query.observacoes != '' ? "'" + req.query.observacoes + "'" : 'NULL') + ",")
         ret.push((req.query.apelido_fantasia != null ? "'" + req.query.apelido_fantasia + "'" : 'NULL') + ",")
         ret.push('now(),')
-        ret.push('now()')
+        ret.push('now(),')
+        ret.push(req.query.id_usuario)
         ret.push(')')
         return ret.join(' ');
       }
@@ -257,6 +260,7 @@ function adicionarPessoa(req, res) {
         ret.push('apelido_fantasia,')
         ret.push('dtinclusao,')
         ret.push('dtalteracao')
+        ret.push('id_usuario_incluiu,')
         ret.push(')')
 
         ret.push('VALUES(')
@@ -273,7 +277,8 @@ function adicionarPessoa(req, res) {
         ret.push((req.query.observacoes != '' ? "'" + req.query.observacoes + "'" : 'NULL') + ",")
         ret.push((req.query.apelido_fantasia != '' ? "'" + req.query.apelido_fantasia + "'" : 'NULL') + ",")
         ret.push('now(),')
-        ret.push('now()')
+        ret.push('now(),')
+        ret.push(req.query.id_usuario)
         ret.push(')')
         return ret.join(' ');
       }
@@ -693,28 +698,17 @@ function excluirEnderecoPessoa(req, res) {
   })
 }
 
-function pesquisaPessoas(req, res) {
+async function pesquisaPessoas(req, res) {
+  let credenciais = {
+    token: req.query.token,
+    idUsuario: req.query.id_usuario
+  };
+  var possui_carteira_cli = await buscaValorDoAtributo(credenciais, 'possui_carteira_cli', 'usuarios', `id = ${req.query.id_usuario}` )
+  possui_carteira_cli = Object.values( possui_carteira_cli[0])[0];
+
   return new Promise(function (resolve, reject) {
 
     checkTokenAccess(req).then(historico => {
-
-
-      // busca se o usuario possui cateira 
-      
-      let credenciais = {
-        token: req.query.token,
-        idUsuario: req.query.id_usuario
-      };
-      
-      let sql = `select possui_carteira_cli from usuarios where id = ${req.query.id_usuario} `
-      var possui_carteira_cli = false;
-      executaSQL(credenciais, sql).then(res => {
-          possui_carteira_cli = res 
-      })
-      .catch(e => {
-        possui_carteira_cli = false;
-      });
-
 
       const dbconnection = require('../config/dbConnection')
       const { Client } = require('pg')
@@ -728,10 +722,10 @@ function pesquisaPessoas(req, res) {
 
       if (isNaN(parseInt(req.query.searchText))) {
         pesquisa = `SELECT * FROM pessoas
-            WHERE lower(nome) LIKE '%${pesquisaTexto}%' OR
+            WHERE (lower(nome) LIKE '%${pesquisaTexto}%' OR
             lower(apelido_fantasia)
             LIKE '%${pesquisaTexto}%' OR
-            lower(cpf_cnpj) LIKE '%${pesquisaTexto}%' `
+            lower(cpf_cnpj) LIKE '%${pesquisaTexto}%'  )`
       }
       else {
         pesquisa = `SELECT * FROM pessoas
@@ -741,14 +735,12 @@ function pesquisaPessoas(req, res) {
 
       // carteira do usuario 
       if (possui_carteira_cli) {
-
-          pesquisa = pesquisa +  ` and id_usuario_carteira = ${req.query.id_usuario} `
+          pesquisa = pesquisa +  ` and id_usuario_incluiu = ${req.query.id_usuario} `
       }
-
-
 
       pesquisa = pesquisa + ` limit 100`
       
+
       client.query(pesquisa).then((res) => {
         if (res.rowCount > 0) {
           client.end()

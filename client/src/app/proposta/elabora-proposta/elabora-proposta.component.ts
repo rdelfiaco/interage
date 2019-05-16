@@ -206,7 +206,6 @@ export class ElaboraPropostaComponent implements OnInit {
 
   atualizaTabelas() {
 
-    debugger
 
     let nVlrBusca = 0;
 
@@ -377,7 +376,6 @@ export class ElaboraPropostaComponent implements OnInit {
   }
 
   calculaValores(){
-    debugger;
     this.proposta.mensalidade = this.mensalidadeSemParcelamento;
     this.adesaoParcelada =this.adesao / this.parcelasAdesao;
     this.entrada = this.rastreadorInstalacao + this.adesao ;
@@ -400,7 +398,6 @@ export class ElaboraPropostaComponent implements OnInit {
   }
 
   mudouMensalidade(){
-    debugger;
     this.proposta.mensalidadeAlterada = false;
     this.mensalidadeSemParcelamento = Number(this.mensalidadeSemParcelamento_.replace(',','.')) ; 
     if (this.mensalidadeSemParcelamento < this.vlrProposta){
@@ -511,7 +508,6 @@ export class ElaboraPropostaComponent implements OnInit {
   }
 
   validaAdesao(){
-    debugger;
     this.adesao = Number(this.adesao_.replace(',','.'));
     if (this.adesao > Number(this.valores[0].adesao_maxima) ){
         this.toastrService.error(`Adesão não pode ser maior que ${Number(this.valores[0].adesao_maxima)}`);

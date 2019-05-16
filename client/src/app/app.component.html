@@ -15,8 +15,7 @@
                         </div>
                     </li>
                     <!--/. Logo -->
-                </mdb-navbar-brand>
-    
+                </mdb-navbar-brand>    
                 <li>
                     <ul class="collapsible collapsible-accordion">
                         <mdb-squeezebox [multiple]="false" aria-multiselectable="false">
@@ -91,13 +90,6 @@
                                                 </span>
                                             </a>
                                         </li>
-                                        <li><a class="waves-effect" mdbRippleRadius>
-                                                <i class="fa fa-trophy"></i> 
-                                                <span class="h6 font-weight" 
-                                                    (click)="openPage('ranks'); sidenav.hide()">Ranks
-                                                </span>
-                                            </a>
-                                        </li>
                                     </ul>
                                 </mdb-item-body>
                             </mdb-item>
@@ -119,6 +111,13 @@
                                                 <i class="fa  fa-cloud-upload "></i>
                                                 <span class="h6 font-weight" 
                                                     (click)="openPage('importaLead'); sidenav.hide()">Importar mailing/lead
+                                                </span>
+                                            </a>
+                                        </li>
+                                        <li><a class="waves-effect" mdbRippleRadius>
+                                                <i class="fa fa-trophy"></i> 
+                                                <span class="h6 font-weight" 
+                                                    (click)="openPage('ranks'); sidenav.hide()">Ranks
                                                 </span>
                                             </a>
                                         </li>

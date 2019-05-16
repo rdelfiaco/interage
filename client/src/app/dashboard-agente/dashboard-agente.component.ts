@@ -294,7 +294,6 @@ graficoEventos(){
     }) as any;
 
     this.eventos = eventos_.resposta;   
-    debugger
     this.eventoTodos = this.eventos.filter ( evento => {
                           if (evento.id_pessoa_organograma ==  '9999999')
                             return evento

@@ -1,3 +1,4 @@
+const { executaSQL } = require('./executaSQL');
 
 
 function zeroEsquerda(str, length) {
@@ -6,6 +7,20 @@ function zeroEsquerda(str, length) {
   }
 
 
-  function isNumber(n) { return /^-?[\d.]+(?:e-?\d+)?$/.test(n); } 
+function isNumber(n) { return /^-?[\d.]+(?:e-?\d+)?$/.test(n); } 
 
-  module.exports = {zeroEsquerda, isNumber}
+
+async function buscaValorDoAtributo(credenciais, atributo, tabela, condicao ){
+  return new Promise(resolve => {
+  let sql = `select ${atributo} from ${tabela} where ${condicao} `
+  
+  resultado =  executaSQL(credenciais, sql)
+
+  resolve( resultado )
+  });
+
+}
+
+
+
+  module.exports = {zeroEsquerda, isNumber, buscaValorDoAtributo}

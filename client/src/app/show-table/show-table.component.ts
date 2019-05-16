@@ -196,7 +196,6 @@ export class ShowTableComponent implements OnInit {
 
 
   async abreDetalhe(id: any){
-    debugger
   
     if (this.rotaDetalhe == 'evento'){
       this.router.navigate([`/evento/${id}`]);

@@ -1,3 +1,4 @@
+import { DetalheDeCampanhaComponent } from './analisar-campanha-telemarketing/detalhe-de-campanha/detalhe-de-campanha.component';
 import { RanksComponent } from './ranks/ranks.component';
 import { ShowTableComponent } from './show-table/show-table.component';
 import { AnalisarCampanhaTelemarketingComponent } from './analisar-campanha-telemarketing/analisar-campanha-telemarketing.component';
@@ -162,6 +163,11 @@ const routes: Routes = [
   {
     path: 'ranks',
     component: RanksComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'detalheDeCampanha/:parametros',
+    component: DetalheDeCampanhaComponent,
     canActivate: [AuthGuard]
   },
   {

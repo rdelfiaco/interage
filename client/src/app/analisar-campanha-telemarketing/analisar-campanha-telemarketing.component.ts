@@ -4,6 +4,7 @@ import { Usuario } from '../login/usuario';
 import { ConnectHTTP } from '../shared/services/connectHTTP';
 import { LocalStorage } from '../shared/services/localStorage';
 import {  ToastService } from '../../lib/ng-uikit-pro-standard';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -33,8 +34,12 @@ export class AnalisarCampanhaTelemarketingComponent implements OnInit {
   maxVisibleItems: number = 10;
 
 
-    constructor(private http: Http, private connectHTTP: ConnectHTTP, private localStorage: LocalStorage,
-    private toastrService: ToastService) {
+    constructor(private http: Http, 
+      private connectHTTP: ConnectHTTP, 
+      private localStorage: LocalStorage,
+      private toastrService: ToastService,
+      private router: Router, 
+      ) {
     this.usuarioLogado = this.localStorage.getLocalStorage('usuarioLogado') as Usuario;
   }
 
@@ -55,12 +60,15 @@ export class AnalisarCampanhaTelemarketingComponent implements OnInit {
           { nome: aux.nome,
             inseridos: Number(aux.inseridos),
             pendentes: Number(aux.pendentes),
+            contatando: Number(aux.contatando),
             concluidos : Number(aux.concluidos ),
             propostas_solicitadas : Number(aux.propostas_solicitadas ),
             ligacoes_realizadas : Number(aux.ligacoes_realizadas ),
             media_ligacoes_por_cliente_concluidos : Number(aux.media_ligacoes_por_cliente_concluidos ),
             dt_primeira_ligacao : Date.parse(aux.dt_primeira_ligacao ),
             dt_ultima_ligacao : Date.parse(aux.dt_ultima_ligacao ),
+            dtInicial: aux.dt_primeira_ligacao,
+            dtFinal: aux.dt_ultima_ligacao ,
             id_campanha : Number(aux.id ),
           }
       )
@@ -71,7 +79,13 @@ export class AnalisarCampanhaTelemarketingComponent implements OnInit {
   }
 
 
-  analiticamente(column: any, rowSelected: any){
+  abreDetalheCampanha(evento){
+
+    let nomeCampanha = evento.nome.split('/').join(' ');
+    let dataInicial = evento.dtInicial.split('/').join('-');
+    let dataFinal = evento.dtFinal.split('/').join('-');
+
+    this.router.navigate([`/detalheDeCampanha/{"idCampanha":${evento.id_campanha}, "nome":"${nomeCampanha}", "dataInicial":"${dataInicial}", "dataFinal":"${dataFinal}" }`]);
   }
 
 

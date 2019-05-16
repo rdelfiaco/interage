@@ -373,50 +373,62 @@ function getCampanhaTelemarketing(req, res){
     //           order by ca.nome, date(e.dt_criou)`
 
     let sql = `
-                select camp.id, camp.nome, inseridos
-                , COALESCE(pendentes, 0) as pendentes 
-                , COALESCE(conc.concluidos, 0) as concluidos
-            , COALESCE(propostas, 0 ) as propostas_solicitadas
-                , COALESCE(lig.ligacoes_realizadas, 0) as ligacoes_realizadas 
-                , iif( COALESCE(conc.concluidos, 0) <> 0 , round( cast(COALESCE(lig.ligacoes_realizadas, 0)as Numeric(10,2)) / cast(conc.concluidos as Numeric(10,2)),2)  , 0)  as media_ligacoes_por_cliente_concluidos
-                , dt_primeira_ligacao
-                , dt_ultima_ligacao
-                from campanhas camp
-                inner join	(select e.id_campanha, count(*) as inseridos
+    select camp.id, camp.nome, inseridos
+    , COALESCE(pendentes, 0) as pendentes
+, COALESCE(contatando, 0) as contatando
+    , COALESCE(conc.concluidos, 0) as concluidos
+, COALESCE(propostas, 0 ) as propostas_solicitadas
+    , COALESCE(lig.ligacoes_realizadas, 0) as ligacoes_realizadas 
+    , iif( COALESCE(conc.concluidos, 0) <> 0 , round( cast(COALESCE(lig.ligacoes_realizadas, 0)as Numeric(10,2)) / cast(conc.concluidos as Numeric(10,2)),2)  , 0)  as media_ligacoes_por_cliente_concluidos
+    , dt_primeira_ligacao
+    , dt_ultima_ligacao
+    from campanhas camp
+    inner join	(select e.id_campanha, count(*) as inseridos
+    from eventos e
+    inner join (select id_campanha, id_pessoa_receptor, max(id) as id_evento
+                  from eventos where id_campanha is not null 
+          group by id_campanha, id_pessoa_receptor) ult_e on e.id = ult_e. id_evento 
+      group by e.id_campanha ) inser on camp.id = inser.id_campanha				
+  
+left join ( select e.id_campanha,  count(*) as pendentes 
+  from eventos e
+  inner join  (select id_campanha, id_pessoa_receptor, max(id) as id_evento
+                  from eventos where id_campanha is not null 
+          group by id_campanha, id_pessoa_receptor) ult_e on e.id = ult_e. id_evento 
+  where id_status_evento in (1, 4, 5, 6) and id_evento_pai is null 
+  group by e.id_campanha ) pend on camp.id = pend.id_campanha
+
+left join ( select e.id_campanha,  count(*) as contatando 
+  from eventos e
+  inner join  (select id_campanha, id_pessoa_receptor, max(id) as id_evento
+                  from eventos where id_campanha is not null 
+          group by id_campanha, id_pessoa_receptor) ult_e on e.id = ult_e. id_evento 
+  where id_status_evento in (1, 4, 5, 6) and id_evento_pai is not null 
+  group by e.id_campanha ) contat on camp.id = contat.id_campanha
+
+
+    left join ( select e.id_campanha, count(*) as concluidos 
                 from eventos e
-                inner join (select id_campanha, id_pessoa_receptor, max(id) as id_evento
-                              from eventos where id_campanha is not null 
-                      group by id_campanha, id_pessoa_receptor) ult_e on e.id = ult_e. id_evento 
-                  group by e.id_campanha ) inser on camp.id = inser.id_campanha				
-                left join ( select e.id_campanha,  count(*) as pendentes 
-              from eventos e
-              inner join  (select id_campanha, id_pessoa_receptor, max(id) as id_evento
-                              from eventos where id_campanha is not null 
-                      group by id_campanha, id_pessoa_receptor) ult_e on e.id = ult_e. id_evento 
-              where id_status_evento in (1, 4, 5, 6)
-              group by e.id_campanha ) pend on camp.id = pend.id_campanha
-                left join ( select e.id_campanha, count(*) as concluidos 
-                            from eventos e
-                        inner join (select id_campanha, id_pessoa_receptor, max(id) as id_evento
-                                from eventos 
-                                where id_campanha is not null
-                                  group by id_campanha, id_pessoa_receptor
-                              ) ult_ev on e.id = ult_ev.id_evento
-                          where e.id_status_evento in (3, 7)
-                          group by e.id_campanha) conc on camp.id = conc.id_campanha 
-                left join ( select id_campanha, count(*) as ligacoes_realizadas
-                            , min(date(dt_resolvido)) as dt_primeira_ligacao
-                            , max(date(dt_resolvido)) as dt_ultima_ligacao
-                        from eventos e
-                        where id_status_evento in (3,7)
-                        and id_campanha is not null
-            and id_canal in (3)
-                        group by id_campanha) lig on camp.id = lig.id_campanha	
-            left join ( select id_campanha, count(*) as propostas 
-                from eventos e 
-                  where id_resp_motivo = 8
-                  group by id_campanha) prop on camp.id = prop.id_campanha  
-                order by camp.nome		
+            inner join (select id_campanha, id_pessoa_receptor, max(id) as id_evento
+                    from eventos 
+                    where id_campanha is not null
+                      group by id_campanha, id_pessoa_receptor
+                  ) ult_ev on e.id = ult_ev.id_evento
+              where e.id_status_evento in (3, 7)
+              group by e.id_campanha) conc on camp.id = conc.id_campanha 
+    left join ( select id_campanha, count(*) as ligacoes_realizadas
+                , min(date(dt_resolvido)) as dt_primeira_ligacao
+                , max(date(dt_resolvido)) as dt_ultima_ligacao
+            from eventos e
+            where id_status_evento in (3,7)
+            and id_campanha is not null
+and id_canal in (3)
+            group by id_campanha) lig on camp.id = lig.id_campanha	
+left join ( select id_campanha, count(*) as propostas 
+    from eventos e 
+      where id_resp_motivo = 8
+      group by id_campanha) prop on camp.id = prop.id_campanha  
+    order by camp.nome		
                 `
 
     executaSQL(credenciais, sql)
@@ -580,5 +592,142 @@ function getCampanhaFollowDoUsuario(req, res){
 
 }
 
+
+function getDetalheCampanha(req, res){
+  return new Promise(function (resolve, reject) {
+   
+    getDetalheCampanhaStatus(req).then(detalheCampanhaStatus => {
+      getDetalheCampanhaConsultor(req).then(detalheCampanhaConsultor => {
+        getDetalheCampanhaStatusConsultor(req).then(detalheCampanhaStatusConsultor => {
+          getDetalheCampanhaConsultorStatus(req).then(detalheCampanhaConsultorStatus => {
+            if (!detalheCampanhaStatus || !detalheCampanhaConsultor || !detalheCampanhaStatusConsultor 
+                || !detalheCampanhaConsultorStatus
+                ) reject('Campanha de telemarketing sem retorno');
+
+            resolve({ detalheCampanhaStatus, detalheCampanhaStatusConsultor, 
+              detalheCampanhaConsultor, detalheCampanhaConsultorStatus });
+          }).catch(e => {
+            reject(e);
+          });
+          }).catch(e => {
+            reject(e);
+          });
+        }).catch(e => {
+          reject(e);
+        });
+      }).catch(e => {
+        reject(e);
+      });
+  });
+};
+
+
+function getDetalheCampanhaStatus(req, res){
+  return new Promise(function (resolve, reject) {
+    let credenciais = {
+      token: req.query.token,
+      idUsuario: req.query.id_usuario
+    };
+                                         
+    let sql = `
+        select id_campanha, id_resp_motivo , resposta_motivo as status_ligacao, count(*) as total
+          from view_eventos 
+          where id_campanha = ${req.query.idCampanha}
+          and id_resp_motivo is not null
+          and date(dt_resolvido) between date('${req.query.dtInicial}') and date('${req.query.dtFinal}')
+          group by id_campanha, id_resp_motivo , resposta_motivo
+          order by resposta_motivo
+    `
+    executaSQL(credenciais, sql)
+      .then(res => {
+          resolve(res);
+      })
+      .catch(err => {
+        reject(err)
+      })
+  })
+}
+
+
+function getDetalheCampanhaConsultor(req, res){
+  return new Promise(function (resolve, reject) {
+    let credenciais = {
+      token: req.query.token,
+      idUsuario: req.query.id_usuario
+    };
+                                            
+    let sql = `
+      select id_campanha, id_pessoa_resolveu, pessoa_resolveu, count(*) as total
+        from view_eventos 
+        where id_campanha = ${req.query.idCampanha}
+        and id_resp_motivo is not null
+        and date(dt_resolvido) between date('${req.query.dtInicial}') and date('${req.query.dtFinal}')
+        group by id_campanha, id_pessoa_resolveu, pessoa_resolveu
+        order by pessoa_resolveu
+    `
+    executaSQL(credenciais, sql)
+      .then(res => {
+          resolve(res);
+      })
+      .catch(err => {
+        reject(err)
+      })
+  })
+}
+
+function getDetalheCampanhaConsultorStatus(req, res){
+  return new Promise(function (resolve, reject) {
+    let credenciais = {
+      token: req.query.token,
+      idUsuario: req.query.id_usuario
+    };
+                                            
+    let sql = `
+      select id_campanha, id_pessoa_resolveu, pessoa_resolveu, id_resp_motivo , resposta_motivo as status_ligacao, count(*) as total
+        from view_eventos 
+        where id_campanha = ${req.query.idCampanha}
+        and id_resp_motivo is not null
+        and date(dt_resolvido) between date('${req.query.dtInicial}') and date('${req.query.dtFinal}')
+        group by id_campanha, id_pessoa_resolveu, pessoa_resolveu, id_resp_motivo , resposta_motivo 
+        order by pessoa_resolveu,resposta_motivo
+    `
+    executaSQL(credenciais, sql)
+      .then(res => {
+          resolve(res);
+      })
+      .catch(err => {
+        reject(err)
+      })
+  })
+}
+
+function getDetalheCampanhaStatusConsultor(req, res){
+  return new Promise(function (resolve, reject) {
+    let credenciais = {
+      token: req.query.token,
+      idUsuario: req.query.id_usuario
+    };
+                                            
+    let sql = `
+      select id_campanha, id_resp_motivo , resposta_motivo as status_ligacao, id_pessoa_resolveu, pessoa_resolveu,  count(*) as total
+        from view_eventos 
+        where id_campanha = ${req.query.idCampanha}
+        and id_resp_motivo is not null
+        and date(dt_resolvido) between date('${req.query.dtInicial}') and date('${req.query.dtFinal}')
+        group by id_campanha, id_resp_motivo , resposta_motivo, id_pessoa_resolveu, pessoa_resolveu 
+        order by resposta_motivo,  pessoa_resolveu
+    `
+    executaSQL(credenciais, sql)
+      .then(res => {
+          resolve(res);
+      })
+      .catch(err => {
+        reject(err)
+      })
+  })
+}
+
+
 module.exports = { getCampanhasDoUsuario, getCampanhas, getCampanhaAnalisar, getCampanhaResultado, getCampanhaFollowDoUsuario,
-  getEventosRelatorioCampanha, getClientesPendentes, getCampanhaTelemarketingAnalisar, getCampanhaTelemarketing }
+  getEventosRelatorioCampanha, getClientesPendentes, getCampanhaTelemarketingAnalisar, getCampanhaTelemarketing,
+  getDetalheCampanha }

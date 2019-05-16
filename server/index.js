@@ -51,6 +51,7 @@ declaraServico('getLigacaoTelemarketing', telemarketing.getLigacaoTelemarketing)
 declaraServico('getCampanhaFollowDoUsuario', campanha.getCampanhaFollowDoUsuario);
 declaraServico('getRanks', ranks.getRanks);
 declaraServicoPost('importaLead', importar.importaLead )
+declaraServico('getDetalheCampanha', campanha.getDetalheCampanha )
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({

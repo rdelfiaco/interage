@@ -6,7 +6,7 @@
       <a class="white-text font-weight-bold text-uppercase ">Camapnhas de telemarketing</a>
     </div>
     <br>
-    <a class= "" >Obs. Para visualizar analiticamente click no que está em negrito </a>
+    <a style="margin-left: 10px" >Para visualizar analiticamente click no nome da campanha </a>
 
     <!--Table-->
     <table class="table table-hover table-responsive-md mb-0">
@@ -20,8 +20,11 @@
           <th class="th-sm">Clientes inseridos
             <mdb-icon icon="sort" (click)="sortBy('inseridos')"></mdb-icon>
           </th>
-          <th class="th-sm">Clientes pendentes
+          <th class="th-sm">Clientes sem ligações
             <mdb-icon icon="sort" (click)="sortBy('pendentes')"></mdb-icon>
+          </th>
+          <th class="th-sm">Clientes em andamento
+            <mdb-icon icon="sort" (click)="sortBy('contatando')"></mdb-icon>
           </th>
           <th class="th-sm">Clientes concluidos
             <mdb-icon icon="sort" (click)="sortBy('concluidos')"></mdb-icon>
@@ -32,7 +35,7 @@
           <th class="th-sm">Ligações realizadas
             <mdb-icon icon="sort" (click)="sortBy('ligacoes_realizadas')"></mdb-icon>
           </th>
-          <th class="th-sm">Média de ligações por cliente
+          <th class="th-sm">Média de ligações por clientes concluidos
             <mdb-icon icon="sort" (click)="sortBy('media_ligacoes_por_cliente_concluidos')"></mdb-icon>
           </th>
           <th class="th-sm">Dt primeira ligação
@@ -46,17 +49,18 @@
       <!--Table head-->
     
       <tbody>
-          <tr #list *ngFor="let evento of tableData; let i = index">
-            <td *ngIf="i+1 >= firstVisibleIndex && i+1 <= lastVisibleIndex" (click)="analiticamente('campanha',evento)" class="font-weight-bold" >{{evento.nome}}</td>
-            <td *ngIf="i+1 >= firstVisibleIndex && i+1 <= lastVisibleIndex" >{{evento.inseridos}}</td>
-            <td *ngIf="i+1 >= firstVisibleIndex && i+1 <= lastVisibleIndex" >{{evento.pendentes}}</td>
-            <td *ngIf="i+1 >= firstVisibleIndex && i+1 <= lastVisibleIndex" >{{evento.concluidos}}</td>
-            <td *ngIf="i+1 >= firstVisibleIndex && i+1 <= lastVisibleIndex" >{{evento.propostas_solicitadas}}</td>
-            <td *ngIf="i+1 >= firstVisibleIndex && i+1 <= lastVisibleIndex" >{{evento.ligacoes_realizadas}}</td>
-            <td *ngIf="i+1 >= firstVisibleIndex && i+1 <= lastVisibleIndex" >{{evento.media_ligacoes_por_cliente_concluidos}}</td>
-            <td *ngIf="i+1 >= firstVisibleIndex && i+1 <= lastVisibleIndex" >{{evento.dt_primeira_ligacao
+          <tr #list *ngFor="let evento of tableData; let i = index"  >
+            <td *ngIf="i+1 >= firstVisibleIndex && i+1 <= lastVisibleIndex" (click)="abreDetalheCampanha(evento)" class="font-weight-bold" >{{evento.nome}}</td>
+            <td *ngIf="i+1 >= firstVisibleIndex && i+1 <= lastVisibleIndex" class="text-center" >{{evento.inseridos}}</td>
+            <td *ngIf="i+1 >= firstVisibleIndex && i+1 <= lastVisibleIndex" class="text-center" >{{evento.pendentes}}</td>
+            <td *ngIf="i+1 >= firstVisibleIndex && i+1 <= lastVisibleIndex" class="text-center" >{{evento.contatando}}</td>
+            <td *ngIf="i+1 >= firstVisibleIndex && i+1 <= lastVisibleIndex" class="text-center" >{{evento.concluidos}}</td>
+            <td *ngIf="i+1 >= firstVisibleIndex && i+1 <= lastVisibleIndex" class="text-center" >{{evento.propostas_solicitadas}}</td>
+            <td *ngIf="i+1 >= firstVisibleIndex && i+1 <= lastVisibleIndex" class="text-center" >{{evento.ligacoes_realizadas}}</td>
+            <td *ngIf="i+1 >= firstVisibleIndex && i+1 <= lastVisibleIndex"  class="text-center" >{{evento.media_ligacoes_por_cliente_concluidos}}</td>
+            <td *ngIf="i+1 >= firstVisibleIndex && i+1 <= lastVisibleIndex" class="text-center" >{{evento.dt_primeira_ligacao
               | date:'dd/MM/yyyy' }}</td>
-            <td *ngIf="i+1 >= firstVisibleIndex && i+1 <= lastVisibleIndex" >{{evento.dt_ultima_ligacao
+            <td *ngIf="i+1 >= firstVisibleIndex && i+1 <= lastVisibleIndex" class="text-center" >{{evento.dt_ultima_ligacao
               | date:'dd/MM/yyyy' }}</td>
           </tr>
         </tbody>

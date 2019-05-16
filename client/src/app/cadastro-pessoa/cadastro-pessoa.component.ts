@@ -52,7 +52,6 @@ export class CadastroPessoaComponent implements OnInit {
         id_pessoa: pessoaId
       }
     }) as any;
-    debugger
     this.pessoaObject = pessoa.resposta;
     this.pessoa = new Observable(o => o.next(pessoa.resposta));
   }

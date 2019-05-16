@@ -92,7 +92,7 @@ tabelaLimpa: boolean;
       this.mudaAba();
 
   } else{
-    this.toastrService.error('Dados incorretos! Favor clique no botão limpar e cole a tabela Fipe novamente');
+    this.toastrService.error('Dados incorretos! Favor click no botão limpar e cole a tabela Fipe novamente');
     this.limparTabelaFipe();
     let i = 0;
     for (i = 1; i < 9; i++){
