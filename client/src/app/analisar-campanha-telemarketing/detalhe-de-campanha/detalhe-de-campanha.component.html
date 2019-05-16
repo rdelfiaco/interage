@@ -17,14 +17,14 @@
             <div class="col-6 col-sm-6">
               <div class="md-form datas">
                 <mdb-date-picker #dataEventos name="mydate" [options]="myDatePickerOptions" required [(ngModel)]="dataInicial"
-                  class="datas" (ngModelChange)="getDetalheCampanha();  validaData('dtInicial')"  ></mdb-date-picker>
+                  class="datas" (ngModelChange)="getDetalheCampanha()"  ></mdb-date-picker>
                 <label class="datas" style="height: 10px">Data inicial</label>
               </div>
             </div>
             <div class="col-6 col-sm-6">
               <div class="md-form datas">
                 <mdb-date-picker #dataEventos name="mydate" [options]="myDatePickerOptions" required [(ngModel)]="dataFinal"
-                  class="datas" (ngModelChange)="getDetalheCampanha(); validaData('dtFinal')" ></mdb-date-picker>
+                  class="datas" (ngModelChange)="getDetalheCampanha()" ></mdb-date-picker>
                 <label class="datas" style="height: 10px">Data final</label>
               </div>
             </div>
