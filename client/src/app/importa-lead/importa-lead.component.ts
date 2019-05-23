@@ -73,7 +73,7 @@ export class ImportaLeadComponent implements OnInit {
     "id_campanha"   // 27        number
      ];
      indexCorrepondente = new Array(28);
-     colunasNumber = [2,3,5,6,15,16,17,18,19,20,21,22,23,24,27];
+     colunasNumber = [2,3,5,6,15,17,18,19,20,21,22,23,24,27];
      colunasString = [0,1,4,7,8,9,10,11,12,13,14,16,25,26]; 
 
   constructor(private connectHTTP: ConnectHTTP, 
@@ -236,8 +236,9 @@ export class ImportaLeadComponent implements OnInit {
         
         // valida as colunas 
         let index = this.indexCorrepondente.findIndex(file => file === i)
-
+        
         if (index == -1) {
+          
           this.toastrService.error(`A coluna ${this.headersRow[i]} não é compatível ` )
           return [];
 

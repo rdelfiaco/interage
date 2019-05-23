@@ -73,8 +73,6 @@ export class AnalisarCampanhaTelemarketingComponent implements OnInit {
           }
       )
     })
-
-
     this.defineNumeroPagina();    
   }
 
@@ -84,7 +82,6 @@ export class AnalisarCampanhaTelemarketingComponent implements OnInit {
     let nomeCampanha = evento.nome.split('/').join(' ');
     let dataInicial = evento.dtInicial.split('/').join('-');
     let dataFinal = evento.dtFinal.split('/').join('-');
-
     this.router.navigate([`/detalheDeCampanha/{"idCampanha":${evento.id_campanha}, "nome":"${nomeCampanha}", "dataInicial":"${dataInicial}", "dataFinal":"${dataFinal}" }`]);
   }
 

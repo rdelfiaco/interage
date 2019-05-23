@@ -1,3 +1,5 @@
+import { DepartamentoComponent } from './departamento/departamento.component';
+import { UsuarioComponent } from './usuario/usuario.component';
 import { DetalheDeCampanhaComponent } from './analisar-campanha-telemarketing/detalhe-de-campanha/detalhe-de-campanha.component';
 import { RanksComponent } from './ranks/ranks.component';
 import { ShowTableComponent } from './show-table/show-table.component';
@@ -168,6 +170,16 @@ const routes: Routes = [
   {
     path: 'detalheDeCampanha/:parametros',
     component: DetalheDeCampanhaComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'usuario',
+    component: UsuarioComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'departamento',
+    component: DepartamentoComponent,
     canActivate: [AuthGuard]
   },
   {

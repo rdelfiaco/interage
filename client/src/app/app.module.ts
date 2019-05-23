@@ -1,3 +1,5 @@
+import { DepartamentoModule } from './departamento/departamento.module';
+import { UsuarioModule } from './usuario/usuario.module';
 import { WorkflowModule } from './workflow/workflow.module';
 import { DashboardModule } from './dashboard/dashboard.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -17,9 +19,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { EventoModule } from './evento/evento.module';
 import { AnalisaCampanhaComponent } from './analisa-campanha/analisa-campanha.component';
 import { ProdutividadeCallCenterComponent } from './produtividade-call-center/produtividade-call-center.component';
-import { TrocarSenhaComponent } from './usuario/trocar-senha/trocar-senha.component';
 import { ImportaLeadComponent } from './importa-lead/importa-lead.component';
-
 import { CarregandoModule } from './shared/carregando/carregando.module';
 import { SemPermissaoModule } from './sem-permissao/sem-permissao.module';
 import { TelemarketingModule } from './telemarketing/telemarketing.module';
@@ -43,9 +43,7 @@ import { AnalisarCampanhaTelemarketingModule } from './analisar-campanha-telemar
     PageNotFoundComponent,
     AnalisaCampanhaComponent,
     ProdutividadeCallCenterComponent,
-    TrocarSenhaComponent,
     ImportaLeadComponent,
-    TrocarSenhaComponent,
     ExportarComponent,
     DashboardPropostaComponent,
     DashboardAgenteComponent,
@@ -74,7 +72,9 @@ import { AnalisarCampanhaTelemarketingModule } from './analisar-campanha-telemar
     WorkflowModule,
     NavbarModule,
     SidenavModule,
-    AnalisarCampanhaTelemarketingModule
+    AnalisarCampanhaTelemarketingModule,
+    UsuarioModule,
+    DepartamentoModule,
   ],
   providers: [MDBSpinningPreloader
 

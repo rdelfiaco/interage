@@ -52,7 +52,7 @@
                             <!-- Cadastrar Pessoa link -->
                             <mdb-item class="no-collase">
                                     <mdb-item-head mdbRippleRadius>
-                                        <i class="fa fa-user font-weight "></i>
+                                        <i class="fa fa-address-book font-weight "></i>
                                         <span class="h6 font-weight " (click)="openPage('pessoasAdd'); sidenav.hide()">Cadastrar
                                             Pessoa</span>
                                     </mdb-item-head> 
@@ -117,7 +117,7 @@
                                         <li><a class="waves-effect" mdbRippleRadius>
                                                 <i class="fa fa-trophy"></i> 
                                                 <span class="h6 font-weight" 
-                                                    (click)="openPage('ranks'); sidenav.hide()">Ranks
+                                                    (click)="openPage('ranks'); sidenav.hide()">Ranking
                                                 </span>
                                             </a>
                                         </li>
@@ -147,6 +147,29 @@
                                     </ul>
                                 </mdb-item-body>
                             </mdb-item>
+                            <mdb-item>
+                                    <mdb-item-head mdbRippleRadius><i class="fa fa-chevron-right font-weight "></i>
+                                        <span class="h6 font-weight ">Cadastros</span>
+                                    </mdb-item-head>
+                                    <mdb-item-body>
+                                        <ul>
+                                            <li><a class="waves-effect" mdbRippleRadius>
+                                                    <i class="fa fa fa-cubes "></i>
+                                                    <span class="h6 font-weight" 
+                                                        (click)="openPage('departamento'); sidenav.hide()">Departamentos
+                                                    </span>
+                                                </a>
+                                            </li>
+                                            <li><a class="waves-effect" mdbRippleRadius>
+                                                    <i class="fa fa-user font-weight"></i>
+                                                    <span class="h6 font-weight" 
+                                                        (click)="openPage('usuario'); sidenav.hide()">Usuários
+                                                    </span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </mdb-item-body>
+                                </mdb-item>
                         </mdb-squeezebox>
                     </ul>
                 </li>
@@ -178,7 +201,7 @@
                         <img src="/assets/imagens/logos/logo_altis.jpg" />
     
                         <!-- TROCA DADOS SERVIDOR -->
-                        <!-- <button mdbBtn type="button" color="danger" size="sm" mdbWavesEffect disabled>SERVIDOR DE TESTE</button> -->
+                        <button mdbBtn type="button" color="danger" size="sm" mdbWavesEffect disabled>SERVIDOR DE TESTE</button>
                     </div>
                     <!--/. Breadcrumb-->
                 </mdb-navbar-brand>

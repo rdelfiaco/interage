@@ -201,11 +201,8 @@ function getUsuarios(req, res) {
 
     executaSQL(credenciais, sql)
       .then(res => {
-        if (res.length > 0) {
           let usuarios = res;
           resolve(usuarios)
-        }
-        else reject('Usuários não encontrado!')
       })
       .catch(err => {
         console.log(err)

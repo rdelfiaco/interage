@@ -18,6 +18,7 @@ const config = require('./src/api/config');
 const exportaSQL = require('./src/api/exportaSQL');
 const tarefa = require('./src/api/tarefa');
 const ranks =  require('./src/api/ranks');
+const departamentos = require('./src/api/departamento');
 
 const consultaPlaca = require('./src/api/consultaPlaca');
 
@@ -52,6 +53,8 @@ declaraServico('getCampanhaFollowDoUsuario', campanha.getCampanhaFollowDoUsuario
 declaraServico('getRanks', ranks.getRanks);
 declaraServicoPost('importaLead', importar.importaLead )
 declaraServico('getDetalheCampanha', campanha.getDetalheCampanha )
+declaraServico('getDepartamentos', departamentos.getDepartamentos )
+
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({

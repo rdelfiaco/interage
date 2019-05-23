@@ -1,0 +1,77 @@
+<!-- Nav tabs -->
+<mdb-tabset [buttonClass]="'classic-tabs tabs-cyan'" [contentClass]="'card'" class="classic-tabs">
+  
+    <table class="table">
+      <thead>
+        <tr>
+          <th class="th-sm" >Id
+          <mdb-icon icon="sort" (click)="sortBy('id')"></mdb-icon>
+          </th>
+          <th class="th-sm" >Nome
+              <mdb-icon icon="sort" (click)="sortBy('nome')"></mdb-icon>
+          </th>
+          <th class="th-sm" >Usuários </th>
+          <th class="th-sm">Status
+              <mdb-icon icon="sort" (click)="sortBy('status')"></mdb-icon>
+          </th>
+          
+          <th class="th-sm">Departamento superior
+              <mdb-icon icon="sort" (click)="sortBy('superior')"></mdb-icon>
+          </th>
+        </tr>
+      </thead>
+      <tbody *ngFor="let departamento of departamentos; let i = index">
+        <tr>
+          <th>{{departamento.id}}</th>
+          <td>{{departamento.nome}}</td>
+          <td>
+            <mdb-icon style="margin: 0px 5px;" icon="users" (click)="abirUsuariosdoDepartamento(departamento.id, departamento.nome); usuariosDepartamentoModal.show()" 
+            size="lg" mdbWavesEffect title="Usuários do departamento" ></mdb-icon>
+        </td>
+          <td> <mdb-checkbox  [checked]="departamento.status" [default]="departamento.status" [disabled]="true" [inline]="departamento.status" ></mdb-checkbox> </td>
+          <td>{{departamento.superior}}</td>
+        </tr>
+      </tbody>
+    </table>
+</mdb-tabset>
+
+
+
+
+
+<div mdbModal #usuariosDepartamentoModal="mdbModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myBasicModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <!-- <br>
+        <h4>Usuários do departamento: {{departamentoNome}} </h4>
+        <br>       -->
+        <div class="modal-header">
+          <p class="heading lead">Usuários do departamento: {{departamentoNome}} </p>
+  
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true" class="white-text">&times;</span>
+          </button>
+        </div>
+        <mdb-tabset [buttonClass]="'classic-tabs tabs-cyan'" [contentClass]="'card'" class="classic-tabs">
+  
+          <table class="table">
+            <thead>
+              <tr>
+
+                <th class="th-sm" >Nome
+                    <mdb-icon icon="sort" (click)="sortBy('nome')"></mdb-icon>
+                </th>
+              </tr>
+            </thead>
+            <tbody *ngFor="let usuariosDepartamento_ of usuariosDepartamento; let i = index">
+              <tr>
+                <td>{{usuariosDepartamento_.nome}}</td>
+              </tr>
+            </tbody>
+          </table>
+      </mdb-tabset>
+
+            
+      </div>
+    </div>
+</div>

@@ -22,13 +22,14 @@ function importaLead(req, res){
     //inicio da transação 
    client.query('BEGIN').then((res1) => {
     // deleta a tabela lead_a_importar
-    deletaTabLeadAImportar (credenciais, client).then((resp) => {
+     deletaTabLeadAImportar (credenciais, client).then((resp) => {
       // inseri o lead recebido na tabela lead_a_importar
       insertTabLeadAImportar(credenciais, client, arquivoCSV).then((resp) => {
        // Verificar se o lead existente com cpf_cnpj na tabela de pessoas 
        existeCpfCnpjEmPessoas(credenciais, client).then((resp) => {
         // Incluir os lead não encontrados na tabela de pessoas 
         insertLeadEmPessoas(credenciais, client).then((resp) => {
+          console.log('insertLeadEmPessoas', resp)
         // Incluir o nome do lead na tabela de leads_mailing 
           insertLeadsMailing(credenciais, client, arquivoCSV).then((resp) => {
           let id_leads_mailing = Number(resp[0].id)
@@ -53,7 +54,7 @@ function importaLead(req, res){
                           // commit da transação 
 
                             client.query('COMMIT')
-                              .then((resp) => { 'Dados importados ' })
+                              .then((resp) => { resolve('Dados importados ') })
                               .catch(err => {  reject(err) });
                             });
                           });
@@ -370,7 +371,7 @@ function insertTabLeadAImportar(credenciais, client, arquivoCSV) {
     sql = sql.substr(0, sql.length - 2) 
 
     executaSQLComTransacao (credenciais, client, sql)
-    .then(res => { resolve( res ) })
+    .then(res => {  resolve( res ) })
     .catch(err => { reject( err ) })
 });
 }

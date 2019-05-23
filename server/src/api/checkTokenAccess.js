@@ -22,6 +22,7 @@ exports.checkTokenAccess = function checkTokenAccess(req) {
             resolve(historico)
           else reject('Token não compativel');
         }
+        client.end();
         reject('Token não é válido')
       }
       )
