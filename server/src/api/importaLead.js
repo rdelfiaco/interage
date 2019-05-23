@@ -29,7 +29,6 @@ function importaLead(req, res){
        existeCpfCnpjEmPessoas(credenciais, client).then((resp) => {
         // Incluir os lead não encontrados na tabela de pessoas 
         insertLeadEmPessoas(credenciais, client).then((resp) => {
-          console.log('insertLeadEmPessoas', resp)
         // Incluir o nome do lead na tabela de leads_mailing 
           insertLeadsMailing(credenciais, client, arquivoCSV).then((resp) => {
           let id_leads_mailing = Number(resp[0].id)

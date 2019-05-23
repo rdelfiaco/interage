@@ -225,7 +225,7 @@ export class TelemarketingQuestionarioComponent implements OnInit {
     function getHora(data: Date) {
       let h = data.getHours();
       if (h == 23) h = -1;
-      let hora = trataTempo(h + 1)
+      let hora = trataTempo(h + 4)
       let minutos = trataTempo(data.getMinutes())
       return `${hora}:${minutos}`
     }
