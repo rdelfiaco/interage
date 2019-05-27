@@ -22,6 +22,11 @@ const departamentos = require('./src/api/departamento');
 
 const consultaPlaca = require('./src/api/consultaPlaca');
 
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({
+  extended: true
+}));
+
 declaraServico('getEventoPorId', evento.getEventoPorId);
 declaraServico('visualizarEvento', evento.visualizarEvento);
 declaraServico('informacoesParaCriarEvento', evento.informacoesParaCriarEvento);
@@ -51,341 +56,41 @@ declaraServico('getCampanhaTelemarketingAnalisar',campanha.getCampanhaTelemarket
 declaraServico('getLigacaoTelemarketing', telemarketing.getLigacaoTelemarketing);
 declaraServico('getCampanhaFollowDoUsuario', campanha.getCampanhaFollowDoUsuario);
 declaraServico('getRanks', ranks.getRanks);
-declaraServicoPost('importaLead', importar.importaLead )
-declaraServico('getDetalheCampanha', campanha.getDetalheCampanha )
-declaraServico('getDepartamentos', departamentos.getDepartamentos )
+declaraServicoPost('importaLead', importar.importaLead );
+declaraServico('getDetalheCampanha', campanha.getDetalheCampanha );
+declaraServico('getDepartamentos', departamentos.getDepartamentos );
+declaraServico('getDepartamentosUsuarios', departamentos.getDepartamentosUsuarios );
+declaraServico('login', usuario.login );
+declaraServico('getUsuarios', usuario.getUsuarios );
+declaraServico('salvarUsuario', usuario.salvarUsuario );
+declaraServico('excluirUsuario', usuario.excluirUsuario );
+declaraServico('getAtividades', atividade.getAtividades );
+declaraServico('getTabelaPrecos', tabelaPrecos.getTabelaPrecos );
+declaraServico('logout', usuario.logout );
+declaraServico('getCampanhasDoUsuario',campanha.getCampanhasDoUsuario  );
+declaraServico('getCampanhas', campanha.getCampanhas );
+declaraServico('salvarEvento', evento.salvarEvento );
+declaraServico('salvarPessoa', pessoa.salvarPessoa  );
+declaraServico('getTipoTelefone', pessoa.getTipoTelefone );
+declaraServico('getTratamentoPessoaFisica', pessoa.getTratamentoPessoaFisica );
+declaraServico('salvarTelefonePessoa', pessoa.salvarTelefonePessoa );
+declaraServico('excluirTelefonePessoa', pessoa.excluirTelefonePessoa );
+declaraServico('salvarEnderecoPessoa',  pessoa.salvarEnderecoPessoa);
+declaraServico('excluirEnderecoPessoa', pessoa.excluirEnderecoPessoa);
+declaraServico('pesquisaPessoas', pessoa.pesquisaPessoas  );
+declaraServico('editaTelefonePrincipal', pessoa.editaTelefonePrincipal);
+declaraServico('editaEnderecoDeCorrespondencia', pessoa.editaEnderecoDeCorrespondencia  );
+declaraServico('adicionarPessoa',  pessoa.adicionarPessoa );
+declaraServico('getEventosPendentes', evento.getEventosPendentes );
+declaraServico('getEventosLinhaDoTempo', evento.getEventosLinhaDoTempo );
+declaraServico('getEventosRelatorioUsuario', evento.getEventosRelatorioUsuario );
+declaraServico('getCampanhaAnalisar', campanha.getCampanhaAnalisar );
+declaraServico('getEventosRelatorioCampanha', campanha.getEventosRelatorioCampanha );
+declaraServico('getProdutividadeCallCenter', produtividade.getProdutividadeCallCenter );
+declaraServico('trocarSenhaUsuarioLogado',  usuario.trocarSenhaUsuarioLogado);
+declaraServico('getPessoaPorCPFCNPJ',  pessoa.getPessoaPorCPFCNPJ);
+declaraServico('adicionarUsuario',  usuario.adicionarUsuario);
 
-
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({
-  extended: true
-}));
-
-
-app.get('/getAtividades', (req, res) => {
-  atividade.getAtividades(req)
-    .then(linhas => {
-      headerResponse(res)
-      res.status(200).send(linhas)
-    })
-    .catch(error => {
-      headerResponse(res)
-      console.log(error)
-      res.status(401).send(error)
-    })
-});
-
-app.get('/getTabelaPrecos', (req, res) => {
-  tabelaPrecos.getTabelaPrecos(req)
-    .then(linhas => {
-      headerResponse(res)
-      res.status(200).send(linhas)
-    })
-    .catch(error => {
-      headerResponse(res)
-      console.log(error)
-      res.status(401).send(error)
-    })
-});
-
-
-app.get('/login', (req, res) => {
-  usuario.login(req)
-    .then(linhas => {
-      headerResponse(res)
-      res.status(200).send(linhas)
-    })
-    .catch(error => {
-      headerResponse(res)
-      console.log(error)
-      res.status(401).send(error)
-    })
-});
-app.get('/logout', (req, res) => {
-  usuario.logout(req)
-    .then(linhas => {
-      headerResponse(res)
-      res.status(200).send(linhas)
-    })
-    .catch(error => {
-      headerResponse(res)
-      console.log(error)
-      res.status(401).send(error)
-    })
-});
-
-app.get('/getCampanhasDoUsuario', (req, res) => {
-  campanha.getCampanhasDoUsuario(req)
-    .then(linhas => {
-      headerResponse(res)
-      res.status(200).send(linhas)
-    })
-    .catch(error => {
-      headerResponse(res)
-      console.log(error)
-      res.status(401).send(error)
-    })
-});
-
-app.get('/getCampanhas', (req, res) => {
-  campanha.getCampanhas(req)
-    .then(linhas => {
-      headerResponse(res)
-      res.status(200).send(linhas)
-    })
-    .catch(error => {
-      headerResponse(res)
-      console.log(error)
-      res.status(401).send(error)
-    })
-});
-
-app.get('/salvarEvento', (req, res) => {
-  evento.salvarEvento(req)
-    .then(linhas => {
-      headerResponse(res)
-      res.status(200).send(linhas)
-    })
-    .catch(error => {
-      headerResponse(res)
-      console.log(error)
-      res.status(401).send(error)
-    })
-});
-
-
-app.get('/salvarPessoa', (req, res) => {
-  pessoa.salvarPessoa(req)
-    .then(linhas => {
-      headerResponse(res)
-      res.status(200).send(linhas)
-    })
-    .catch(error => {
-      headerResponse(res)
-      console.log(error)
-      res.status(401).send(error)
-    })
-});
-
-app.get('/getTipoTelefone', (req, res) => {
-  pessoa.getTipoTelefone(req)
-    .then(linhas => {
-      headerResponse(res)
-      res.status(200).send(linhas)
-    })
-    .catch(error => {
-      headerResponse(res)
-      console.log(error)
-      res.status(401).send(error)
-    })
-});
-
-app.get('/getTratamentoPessoaFisica', (req, res) => {
-  pessoa.getTratamentoPessoaFisica(req)
-    .then(linhas => {
-      headerResponse(res)
-      res.status(200).send(linhas)
-    })
-    .catch(error => {
-      headerResponse(res)
-      console.log(error)
-      res.status(401).send(error)
-    })
-});
-
-app.get('/salvarTelefonePessoa', (req, res) => {
-  pessoa.salvarTelefonePessoa(req)
-    .then(linhas => {
-      headerResponse(res)
-      res.status(200).send(linhas)
-    })
-    .catch(error => {
-      headerResponse(res)
-      console.log(error)
-      res.status(401).send(error)
-    })
-});
-
-app.get('/excluirTelefonePessoa', (req, res) => {
-  pessoa.excluirTelefonePessoa(req)
-    .then(linhas => {
-      headerResponse(res)
-      res.status(200).send(linhas)
-    })
-    .catch(error => {
-      headerResponse(res)
-      console.log(error)
-      res.status(401).send(error)
-    })
-});
-
-app.get('/salvarEnderecoPessoa', (req, res) => {
-  pessoa.salvarEnderecoPessoa(req)
-    .then(linhas => {
-      headerResponse(res)
-      res.status(200).send(linhas)
-    })
-    .catch(error => {
-      headerResponse(res)
-      console.log(error)
-      res.status(401).send(error)
-    })
-});
-
-app.get('/excluirEnderecoPessoa', (req, res) => {
-  pessoa.excluirEnderecoPessoa(req)
-    .then(linhas => {
-      headerResponse(res)
-      res.status(200).send(linhas)
-    })
-    .catch(error => {
-      headerResponse(res)
-      console.log(error)
-      res.status(401).send(error)
-    })
-});
-
-app.get('/pesquisaPessoas', (req, res) => {
-  pessoa.pesquisaPessoas(req)
-    .then(linhas => {
-      headerResponse(res)
-      res.status(200).send(linhas)
-    })
-    .catch(error => {
-      headerResponse(res)
-      console.log(error)
-      res.status(401).send(error)
-    })
-});
-app.get('/editaTelefonePrincipal', (req, res) => {
-  pessoa.editaTelefonePrincipal(req)
-    .then(linhas => {
-      headerResponse(res)
-      res.status(200).send(linhas)
-    })
-    .catch(error => {
-      headerResponse(res)
-      console.log(error)
-      res.status(401).send(error)
-    })
-});
-
-app.get('/editaEnderecoDeCorrespondencia', (req, res) => {
-  pessoa.editaEnderecoDeCorrespondencia(req)
-    .then(linhas => {
-      headerResponse(res)
-      res.status(200).send(linhas)
-    })
-    .catch(error => {
-      headerResponse(res)
-      console.log(error)
-      res.status(401).send(error)
-    })
-});
-
-app.get('/adicionarPessoa', (req, res) => {
-  pessoa.adicionarPessoa(req)
-    .then(linhas => {
-      headerResponse(res)
-      res.status(200).send(linhas)
-    })
-    .catch(error => {
-      headerResponse(res)
-      console.log(error)
-      res.status(401).send(error)
-    })
-});
-
-app.get('/getEventosPendentes', (req, res) => {
-  evento.getEventosPendentes(req)
-    .then(linhas => {
-      headerResponse(res)
-      res.status(200).send(linhas)
-    })
-    .catch(error => {
-      headerResponse(res)
-      console.log(error)
-      res.status(401).send(error)
-    })
-});
-
-app.get('/getEventosLinhaDoTempo', (req, res) => {
-  evento.getEventosLinhaDoTempo(req)
-    .then(linhas => {
-      headerResponse(res)
-      res.status(200).send(linhas)
-    })
-    .catch(error => {
-      headerResponse(res)
-      console.log(error)
-      res.status(401).send(error)
-    })
-});
-
-app.get('/getEventosRelatorioUsuario', (req, res) => {
-  evento.getEventosRelatorioUsuario(req)
-    .then(linhas => {
-      headerResponse(res)
-      res.status(200).send(linhas)
-    })
-    .catch(error => {
-      headerResponse(res)
-      console.log(error)
-      res.status(401).send(error)
-    })
-});
-
-app.get('/getCampanhaAnalisar', (req, res) => {
-  campanha.getCampanhaAnalisar(req)
-    .then(linhas => {
-      headerResponse(res)
-      res.status(200).send(linhas)
-    })
-    .catch(error => {
-      headerResponse(res)
-      console.log(error)
-      res.status(401).send(error)
-    })
-});
-
-app.get('/getEventosRelatorioCampanha', (req, res) => {
-  campanha.getEventosRelatorioCampanha(req)
-    .then(linhas => {
-      headerResponse(res)
-      res.status(200).send(linhas)
-    })
-    .catch(error => {
-      headerResponse(res)
-      console.log(error)
-      res.status(401).send(error)
-    })
-});
-
-app.get('/getProdutividadeCallCenter', (req, res) => {
-  produtividade.getProdutividadeCallCenter(req)
-    .then(linhas => {
-      headerResponse(res)
-      res.status(200).send(linhas)
-    })
-    .catch(error => {
-      headerResponse(res)
-      console.log(error)
-      res.status(401).send(error)
-    })
-});
-
-app.get('/trocarSenhaUsuarioLogado', (req, res) => {
-  usuario.trocarSenhaUsuarioLogado(req)
-    .then(linhas => {
-      headerResponse(res)
-      res.status(200).send(linhas)
-    })
-    .catch(error => {
-      headerResponse(res)
-      console.log(error)
-      res.status(401).send(error)
-    })
-});
 
 
 app.listen(nodeStart.port, "0.0.0.0");
@@ -393,38 +98,40 @@ console.log(`Servidor iniciado na em http://localhost:${nodeStart.port}`)
 
 
 function declaraServico(nomeServico, funcao) {
+  
   app.get(`/${nomeServico}`, (req, res) => {
     funcao(req)
       .then(linhas => {
         headerResponse(res)
+        //console.log(`Serviço: ${nomeServico}; Resultado: ` , linhas)
         res.status(200).send(linhas)
       })
       .catch(error => {
         headerResponse(res)
-        console.log(`Serviço: ${nomeServico}; Situação: ` , error)
+        console.log(`Serviço: ${nomeServico}; Resultado: ` , error)
         res.status(401).send(error)
-      })
+      });
   });
   console.log(`Serviço GET ${nomeServico}, declarado com sucesso!`)
 }
 
 function declaraServicoPost(nomeServico, funcao) {
   app.post(`/${nomeServico}`, (req, res) => {
+    console.log(req.query)
     funcao(req)
       .then(linhas => {
         headerResponse(res)
+        //console.log(`Serviço: ${nomeServico}; Resultado: ` , linhas)
         res.status(200).send(linhas)
       })
       .catch(error => {
         headerResponse(res)
-        console.log(`Serviço: ${nomeServico}; Situação: ` , error)
+        console.log(`Serviço: ${nomeServico}; Resultado: ` , error)
         res.status(401).send(error)
       })
   });
   console.log(`Serviço POST ${nomeServico}, declarado com sucesso!`)
 }
-
-
 
 function headerResponse(res) {
   res.set('Access-Control-Allow-Origin', '*');

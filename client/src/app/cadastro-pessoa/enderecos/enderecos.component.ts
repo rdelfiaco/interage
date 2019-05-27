@@ -108,11 +108,17 @@ export class EnderecosComponent implements OnInit {
   async salvar() {
     this.enderecoForm.value.cep = this.enderecoForm.value.cep.replace(/\D/g, '')
     try {
-      await this.connectHTTP.callService({
+      let resp = await this.connectHTTP.callService({
         service: 'salvarEnderecoPessoa',
         paramsService: this.enderecoForm.value
       });
-      this.toastrService.success('Salvo com sucesso');
+
+      if (resp.error) {
+          this.toastrService.error('Erro ao salvar endereco');
+      }else
+      {
+        this.toastrService.success('Salvo com sucesso');
+      }
     }
     catch (e) {
       this.toastrService.error('Erro ao salvar endereco');

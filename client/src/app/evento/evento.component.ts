@@ -253,7 +253,6 @@ export class EventoComponent implements OnInit {
         }
         
       }) as any;
-      console.log('kkkk')
       if (eventos.error) this.tableData = [];
       else this.tableData = eventos.resposta as Array<object>;
     }

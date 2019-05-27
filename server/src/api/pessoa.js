@@ -2,6 +2,25 @@ const { checkTokenAccess } = require('./checkTokenAccess');
 const { executaSQL } = require('./executaSQL');
 const { buscaValorDoAtributo } = require( './shared');
 
+
+
+function getPessoaPorCPFCNPJ(req, res) {
+  return new Promise(function (resolve, reject) {
+    let credenciais = {
+      token: req.query.token,
+      idUsuario: req.query.id_usuario
+    };
+    let sql = `SELECT * FROM pessoas WHERE cpf_cnpj = '${req.query.cpf_cnpj}'`
+    executaSQL(credenciais, sql).then(res => {
+        resolve(res)
+    })
+    .catch(err => {
+      reject(err)
+    });
+  });
+};
+
+
 function getPessoa(req, res) {
   return new Promise(function (resolve, reject) {
     let credenciais = {
@@ -167,7 +186,7 @@ function salvarPessoa(req, res) {
 
 }
 
-function adicionarPessoa(req, res) {
+async function  adicionarPessoa(req, res) {
   return new Promise(function (resolve, reject) {
 
     checkTokenAccess(req).then(historico => {
@@ -181,8 +200,6 @@ function adicionarPessoa(req, res) {
       req.query.id_atividade = req.query.id_atividade == 'null' ?  '':  req.query.id_atividade; 
       req.query.id_pronome_tratamento = req.query.id_pronome_tratamento == 'null' ?  '':  req.query.id_pronome_tratamento; 
 
-      
-
       let update;
       if (req.query.tipo == 'F') {
         let pessoaFisica = montaCamposUpdatePessoaFisica()
@@ -195,7 +212,6 @@ function adicionarPessoa(req, res) {
      
       update = update.replace(/'null'/g, null)
       update = update.replace(/'`'/g, ' ')
-
 
       client.query(update).then((res) => {
         client.end();
@@ -362,7 +378,6 @@ function salvarTelefonePessoa(req, res) {
                   ${req.query.id_tipo_telefone},
                   '${req.query.contato}',
                   '55', now())`;
-
           client.query(update).then((res) => {
             client.query('COMMIT').then((resposta) => {
               client.end();
@@ -800,5 +815,6 @@ module.exports = {
   adicionarPessoa,
   editaTelefonePrincipal,
   editaEnderecoDeCorrespondencia,
-  getTratamentoPessoaFisica
+  getTratamentoPessoaFisica,
+  getPessoaPorCPFCNPJ,
 }

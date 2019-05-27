@@ -33,7 +33,7 @@ export class DepartamentoComponent implements OnInit {
 
   async ngOnInit() {
     let getDepartamentos = await this.connectHTTP.callService({
-      service: 'getDepartamentos',
+      service: 'getDepartamentosUsuarios',
       paramsService: {
       }
     }) as any;
@@ -72,6 +72,21 @@ export class DepartamentoComponent implements OnInit {
     this.departamentoNome = departamentoNome;
     
   }
-
+  sortByU(by: string | any): void {
+    // if (by == 'dt_criou') {
+    //   this.search().reverse();
+    // } else {
+      this.usuariosDepartamento.sort((a: any, b: any) => {
+      if (a[by] < b[by]) {
+        return this.sorted ? 1 : -1;
+      }
+      if (a[by] > b[by]) {
+        return this.sorted ? -1 : 1;
+      }
+      return 0;
+    });
+    //}
+    this.sorted = !this.sorted;
+  }
 
 }

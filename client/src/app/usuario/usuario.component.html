@@ -1,3 +1,32 @@
-<p>
-  usuario works!
-</p>
+<!-- Nav tabs -->
+<mdb-tabset [buttonClass]="'classic-tabs tabs-cyan'" [contentClass]="'card'" class="classic-tabs">
+  <!--Panel 1-->
+  <mdb-tab heading="Usuários">
+    <div class="row">
+      <div class="col-12">
+        <br>
+        <p>
+          <app-listar-usuarios ></app-listar-usuarios>
+        </p>
+      </div>
+    </div>
+  </mdb-tab>
+  <!--Panel 2-->
+  <mdb-tab heading="Campanhas">
+    <div class="row">
+      <div class="col-12">
+        <br>
+        <app-usuario-campanhas [usuarioID]="usuarioID"></app-usuario-campanhas>
+      </div>
+    </div>
+  </mdb-tab>
+  <!--Panel 3-->
+  <mdb-tab heading="Permições">
+    <div class="row">
+      <div class="col-12">
+        <br>
+        <app-usuario-permissoes [usuarioID]="usuarioID"></app-usuario-permissoes>
+      </div>
+    </div>
+  </mdb-tab>
+</mdb-tabset>

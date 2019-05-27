@@ -1,3 +1,5 @@
+import { UsuarioCampanhasComponent } from './usuario/usuario-campanhas/usuario-campanhas.component';
+import { AdicionarUsuarioComponent } from './usuario/adicionar-usuario/adicionar-usuario.component';
 import { DepartamentoComponent } from './departamento/departamento.component';
 import { UsuarioComponent } from './usuario/usuario.component';
 import { DetalheDeCampanhaComponent } from './analisar-campanha-telemarketing/detalhe-de-campanha/detalhe-de-campanha.component';
@@ -33,6 +35,8 @@ import { AnalisaCampanhaComponent } from './analisa-campanha/analisa-campanha.co
 import { ProdutividadeCallCenterComponent } from './produtividade-call-center/produtividade-call-center.component';
 import { TrocarSenhaComponent } from './usuario/trocar-senha/trocar-senha.component';
 import { DetalheEventoComponent } from './evento/detalhe-evento/detalhe-evento.component';
+import { ListarUsuariosComponent } from './usuario/listar-usuarios/listar-usuarios.component';
+import { UsuarioPermissoesComponent } from './usuario/usuario-permissoes/usuario-permissoes.component';
 
 
 
@@ -175,6 +179,26 @@ const routes: Routes = [
   {
     path: 'usuario',
     component: UsuarioComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'listarUsuarios',
+    component: ListarUsuariosComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'adicionarUsuario',
+    component: AdicionarUsuarioComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'usuarioCampanhas/:id',
+    component: UsuarioCampanhasComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'usuarioPermissoes/:id',
+    component: UsuarioPermissoesComponent,
     canActivate: [AuthGuard]
   },
   {

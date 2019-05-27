@@ -9,25 +9,45 @@ function getDepartamentos(req, res) {
         token: req.query.token,
         idUsuario: req.query.id_usuario
       };
-      
       let sql = `
             select o.*, s.nome as superior
             from organograma o
-            left join organograma s on o.id_pai = s.id 
+            left join organograma s on o.id_pai = s.id
             order by s.nome, o.nome 
       `
       executaSQL(credenciais, sql).then(departamentos => {
-        getUsuarios(req, res).then(usuarios => {
-          resolve({departamentos, usuarios} )
+          resolve(departamentos )
         }).catch(e => {
-        reject('Usuários não encontrado',e);
+        reject('getDepartamentos',e);
       });
-      }).catch(e => {
-        reject('Departamento não encontrado',e);
-      });
-    })
+
+    });
   };
+
+
+function getDepartamentosUsuarios(req, res) {
+  return new Promise(function (resolve, reject) {
+
+    let credenciais = {
+      token: req.query.token,
+      idUsuario: req.query.id_usuario
+    };
+
+    getDepartamentos(req, res).then(departamentos => {
+      getUsuarios(req, res).then(usuarios => {
+        resolve({departamentos, usuarios} )
+      }).catch(e => {
+      reject('getDepartamentosUsuarios',e);
+    });
+    }).catch(e => {
+      reject('getDepartamentosUsuarios',e);
+    });
+  })
+};
+
+
+
   
   
   
-  module.exports = { getDepartamentos }
+  module.exports = { getDepartamentos, getDepartamentosUsuarios }

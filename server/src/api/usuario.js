@@ -1,6 +1,6 @@
 const { checkTokenAccess } = require('./checkTokenAccess');
 const { executaSQL } = require('./executaSQL');
-
+const { adicionarPessoa } = require( './pessoa')
 function login(req, res) {
 
   return new Promise(function (resolve, reject) {
@@ -151,7 +151,6 @@ function trocarSenhaUsuarioLogado(req, res) {
             let usuario = res.rows;
             if (senhaCriptografadaNova == senhaCriptografadaNovaRepete) {
               let atualizaSenha = `UPDATE usuarios SET senha='${senhaCriptografadaNova}' WHERE id=${req.query.id_usuario} RETURNING id`
-              console.log(atualizaSenha)
               client.query(atualizaSenha)
                 .then(res => {
                   if (res.rowCount > 0) {
@@ -193,11 +192,12 @@ function getUsuarios(req, res) {
       idUsuario: req.query.id_usuario
     };
 
-    let sql = `select u.id, p.nome, u.id_organograma, u.id_pessoa, u.id as id_usuario, 
-                      iif( p.apelido_fantasia is null, nome , p.apelido_fantasia) as apelido   
-                      from usuarios u
-                      inner join pessoas p on u.id_pessoa = p.id and u.status
-                      order by p.nome`
+    let sql = `select u.*, p.nome, p.cpf_cnpj, o.nome as departamento,  u.id as id_usuario, 
+                iif( p.apelido_fantasia is null, p.nome , p.apelido_fantasia) as apelido   
+                from usuarios u
+                inner join pessoas p on u.id_pessoa = p.id
+                inner join organograma o on u.id_organograma = o.id
+                order by p.nome`
 
     executaSQL(credenciais, sql)
       .then(res => {
@@ -205,10 +205,178 @@ function getUsuarios(req, res) {
           resolve(usuarios)
       })
       .catch(err => {
-        console.log(err)
         reject(`Erro no getUsuarios :  ${err}`)
       })
   })
 }
 
-module.exports = { login, logout, getAgentesVendas, trocarSenhaUsuarioLogado, getUsuarios }  
+function salvarUsuario(req, res) {
+  return new Promise(function (resolve, reject) {
+
+    let credenciais = {
+      token: req.query.token,
+      idUsuario: req.query.id_usuario
+    };
+
+    let sql = ` UPDATE public.usuarios  SET  
+                  login='${req.query.login}',  
+                  id_organograma=${req.query.id_organograma} , 
+                  status=${req.query.status} ,  
+                  responsavel_membro= '${req.query.responsavel_membro}' ,  
+                  hora_entrada='${req.query.hora_entrada}' , 
+                  hora_saida='${req.query.hora_saida}' , 
+                  hora_entrada_lanche='${req.query.hora_entrada_lanche}' , 
+                  hora_saida_lanche='${req.query.hora_saida_lanche}' , 
+                  possui_carteira_cli=${req.query.possui_carteira_cli} 
+                WHERE  id = ${req.query.id} `
+    executaSQL(credenciais, sql)
+      .then(res => {
+          let usuarios = res;
+          resolve(usuarios)
+      })
+      .catch(err => {
+        reject(`Erro no salvarUsuario :  ${err}`)
+      })
+  })
+}
+
+function excluirUsuario(req, res) {
+  return new Promise(function (resolve, reject) {
+
+    let credenciais = {
+      token: req.query.token,
+      idUsuario: req.query.id_usuario
+    };
+
+    let sql = ` delete from public.usuarios  
+                WHERE  id = ${req.query.id} `
+    executaSQL(credenciais, sql)
+      .then(res => {
+          let usuarios = res;
+          resolve(usuarios)
+      })
+      .catch(err => {
+        reject(`Erro no excluirUsuario :  ${err}`)
+      })
+  })
+}
+
+function adicionarUsuario(req, res){
+  return new Promise(function (resolve, reject) {
+    let id_pessoa = req.query.id_pessoa; 
+    let credenciais = {
+      token: req.query.token,
+      idUsuario: req.query.id_usuario
+    };
+    if (id_pessoa == ''){
+
+      let ret = [];
+      ret.push("(")
+      ret.push("nome,")
+      ret.push("tipo,")
+      ret.push('cpf_cnpj,')
+      ret.push('apelido_fantasia,')
+      ret.push('dtinclusao,')
+      ret.push('dtalteracao,')
+      ret.push('id_usuario_incluiu')
+      ret.push(')')
+
+      ret.push('VALUES(')
+
+      ret.push("'" + req.query.nome + "',")
+      ret.push("'F',")
+      ret.push((req.query.cpf_cnpj != '' ? "'" + req.query.cpf_cnpj + "'" : 'NULL') + ",")
+      ret.push("'" + req.query.nome + "',")
+      ret.push('now(),')
+      ret.push('now(),')
+      ret.push(req.query.id_usuario)
+      ret.push(')')
+      ret = ret.join(' ');
+
+      let sql = `INSERT INTO pessoas ${ret} RETURNING id`;
+      console.log(sql)
+      executaSQL(credenciais, sql)
+      .then(res => {
+          id_pessoa = res.id;
+          req.query.id_pessoa = id_pessoa;
+          inserirUsuario(req, id_pessoa);
+          resolve( res )
+      })
+      .catch(err => {
+      reject(`Erro no adicionar usuário :  ${err}`)
+      })  
+    } else {
+      inserirUsuario(req, id_pessoa)
+      resolve( )
+
+    }
+
+    function inserirUsuario(req, id_pessoa ){
+
+      let ret = [];
+      ret.push("(")
+      ret.push("login,")
+      ret.push("senha,")
+      ret.push('data_senha,')
+      ret.push('id_organograma,')
+      ret.push('status,')
+      ret.push('dashboard,')
+      ret.push('responsavel_membro,')
+      ret.push('id_pessoa,')
+      ret.push('hora_entrada,')
+      ret.push('hora_saida,')
+      ret.push('hora_entrada_lanche,')
+      ret.push('hora_saida_lanche,')
+      ret.push('color_r,')
+      ret.push('color_g,')
+      ret.push('color_b,')
+      ret.push('possui_carteira_cli')
+      ret.push(')')
+
+      ret.push('VALUES(')
+
+      ret.push("'" + req.query.login + "',")
+      ret.push("'40bd001563085fc35165329ea1ff5c5ecbdbbeef',")
+      ret.push(" now() ,")
+      ret.push(req.query.id_organograma + ",")
+      ret.push(req.query.status + ",")
+      ret.push("'" + req.query.dashboard + "',")
+      ret.push("'" + req.query.responsavel_membro + "',")
+      ret.push(id_pessoa + ",")
+      ret.push("'" + req.query.hora_entrada + "',")
+      ret.push("'" + req.query.hora_saida + "',")
+      ret.push("'" + req.query.hora_entrada_lanche + "',")
+      ret.push("'" + req.query.hora_saida_lanche + "',")
+      ret.push(req.query.color_r + ",")
+      ret.push(req.query.color_g + ",")
+      ret.push(req.query.color_b + ",")
+      ret.push(req.query.possui_carteira_cli)
+      ret.push(')')
+      ret = ret.join(' ');
+
+      let sql = `INSERT INTO usuarios ${ret} RETURNING id`;
+      executaSQL(credenciais, sql)
+      .then(res => {
+          resolve( res )
+      })
+      .catch(err => {
+      reject(`Erro no adicionar usuário :  ${err}`)
+      }) 
+
+      return
+
+    }
+
+
+  });
+}
+
+
+module.exports = { login, 
+                  logout, 
+                  getAgentesVendas, 
+                  trocarSenhaUsuarioLogado, 
+                  getUsuarios, 
+                  salvarUsuario,
+                  excluirUsuario,
+                  adicionarUsuario }  
