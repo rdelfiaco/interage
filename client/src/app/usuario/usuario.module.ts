@@ -13,6 +13,8 @@ import { TrocarSenhaComponent } from './trocar-senha/trocar-senha.component';
 import { UsuarioCampanhasComponent } from './usuario-campanhas/usuario-campanhas.component';
 import { ListarUsuariosComponent } from './listar-usuarios/listar-usuarios.component';
 import { UsuarioPermissoesComponent } from './usuario-permissoes/usuario-permissoes.component';
+import { AngularDualListBoxModule } from 'angular-dual-listbox';
+
 
 @NgModule({
   imports: [
@@ -25,6 +27,7 @@ import { UsuarioPermissoesComponent } from './usuario-permissoes/usuario-permiss
     SharedModule,
     PesquisaClienteModule,
     CarregandoModule,
+    AngularDualListBoxModule,
   ],
   declarations: [
     UsuarioComponent,

@@ -13,6 +13,14 @@ export class Usuario {
     private _telefone: string;
     private _ddd: number;
     private _carteira: boolean;
+    private _nome: string;
+    
+    public get nome(): string {
+        return this._nome;
+    }
+    public set nome(value: string) {
+        this._nome = value;
+    }
 
     public get carteira(): boolean {
         return this._carteira;

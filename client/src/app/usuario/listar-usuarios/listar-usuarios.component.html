@@ -44,10 +44,11 @@
           <mdb-icon style="margin: 0px 5px;" icon="pencil" (click)="editar(usuario.id)" (click)="editarModal.show()"  
           size="lg" title="Editar usuários" ></mdb-icon>
           <mdb-icon style="margin: 0px 5px;" icon="trash" (click)="excluir(usuario.id)" (click)="excluirModal.show()"
-            size="lg"></mdb-icon>
+            size="lg" title="Excluir usuários"></mdb-icon>
+          <mdb-icon style="margin: 0px 5px;" icon="database" (click)="campanhasUsuario(usuario.id)"
+          size="lg" title="Campanhas do usuários" ></mdb-icon>
         </td>
       </tr>
-
     </tbody>
   </table>
 </div>

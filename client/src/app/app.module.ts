@@ -31,6 +31,7 @@ import { DashboardAgenteComponent } from './dashboard-agente/dashboard-agente.co
 import { ShowTableComponent } from './show-table/show-table.component';
 import { RanksComponent } from './ranks/ranks.component';
 import { AnalisarCampanhaTelemarketingModule } from './analisar-campanha-telemarketing/analisar-campanha-telemarketing.module';
+import { AngularDualListBoxModule } from 'angular-dual-listbox';
 
 
 
@@ -75,6 +76,7 @@ import { AnalisarCampanhaTelemarketingModule } from './analisar-campanha-telemar
     AnalisarCampanhaTelemarketingModule,
     UsuarioModule,
     DepartamentoModule,
+    AngularDualListBoxModule,
   ],
   providers: [MDBSpinningPreloader
 

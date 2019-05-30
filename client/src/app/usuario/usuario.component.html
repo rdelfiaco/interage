@@ -1,5 +1,5 @@
 <!-- Nav tabs -->
-<mdb-tabset [buttonClass]="'classic-tabs tabs-cyan'" [contentClass]="'card'" class="classic-tabs">
+<mdb-tabset #abasTabs [buttonClass]="'classic-tabs tabs-cyan'" [contentClass]="'card'" class="classic-tabs">
   <!--Panel 1-->
   <mdb-tab heading="Usuários">
     <div class="row">
@@ -12,20 +12,20 @@
     </div>
   </mdb-tab>
   <!--Panel 2-->
-  <mdb-tab heading="Campanhas">
+  <mdb-tab heading="Campanhas" [disabled]="abaAtual != 2" >
     <div class="row">
       <div class="col-12">
         <br>
-        <app-usuario-campanhas [usuarioID]="usuarioID"></app-usuario-campanhas>
+        <app-usuario-campanhas  ></app-usuario-campanhas>
       </div>
     </div>
   </mdb-tab>
   <!--Panel 3-->
-  <mdb-tab heading="Permições">
+  <mdb-tab heading="Permissões" [disabled]="abaAtual != 3" >
     <div class="row">
       <div class="col-12">
         <br>
-        <app-usuario-permissoes [usuarioID]="usuarioID"></app-usuario-permissoes>
+        <app-usuario-permissoes [usuarioID]="usuarioID"  ></app-usuario-permissoes>
       </div>
     </div>
   </mdb-tab>

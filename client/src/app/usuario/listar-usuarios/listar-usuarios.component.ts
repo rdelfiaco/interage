@@ -6,6 +6,7 @@ import { ToastService } from '../../../lib/ng-uikit-pro-standard';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { TabHeadingDirective } from 'ng-uikit-pro-standard';
 import { controlNameBinding } from '@angular/forms/src/directives/reactive_directives/form_control_name';
+import { UsuarioService } from '../usuario.service';
 
 @Component({
   selector: 'app-listar-usuarios',
@@ -14,6 +15,12 @@ import { controlNameBinding } from '@angular/forms/src/directives/reactive_direc
 })
 export class ListarUsuariosComponent implements OnInit {
 
+
+  Usuario: {
+    id: number;
+    nomeSelec: string
+  }
+  usuario: Usuario;
   usuarioLogado: any;
   departamentos: Array<any>;
   departamentoSelect: Array<any>;
@@ -24,6 +31,7 @@ export class ListarUsuariosComponent implements OnInit {
   usuarioIdSelecionado: number;
   sorted: boolean = false;
   departamentoNome: any;
+
 
     niveisHierarquicoSelect: Array<object> = [
     {
@@ -44,7 +52,8 @@ export class ListarUsuariosComponent implements OnInit {
     private connectHTTP: ConnectHTTP,
     private localStorage: LocalStorage,
     private formBuilder: FormBuilder,
-    private toastrService: ToastService ) {
+    private toastrService: ToastService,
+    private usuarioService : UsuarioService ) {
     this.usuarioLogado = this.localStorage.getLocalStorage('usuarioLogado') as Usuario;
     this.inicializaForm()
   }
@@ -227,7 +236,11 @@ export class ListarUsuariosComponent implements OnInit {
 
   }
 
-  
+  campanhasUsuario(usuarioId){
+    let usuarioSelecionado = this.usuarios.filter(t => t.id == usuarioId)[0];
+    this.usuarioService.setUsuario( usuarioSelecionado );
+    this.usuarioService.setAba(2);
+  }
 
   
 

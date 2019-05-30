@@ -1,7 +1,8 @@
 const { checkTokenAccess } = require('./checkTokenAccess');
 const { getPredicoesCampanha } = require('./predicao');
 const { getMetaPessoa } = require('./metaLigacoes');
-const { executaSQL } = require('./executaSQL')
+const { executaSQL } = require('./executaSQL');
+const { executaSQLComTransacao } = require('./executaSQL');
 
 function sqlEventosPaiDaCampanha(req){
   
@@ -58,38 +59,23 @@ function getCampanhasDoUsuario(req, res) {
 
 function getCampanhas(req, res) {
   return new Promise(function (resolve, reject) {
+    
+    let credenciais = {
+      token: req.query.token,
+      idUsuario: req.query.id_usuario
+    };
+    let sql = `SELECT * FROM public.campanhas where status`
 
-    checkTokenAccess(req).then(historico => {
-      const dbconnection = require('../config/dbConnection')
-      const { Client } = require('pg')
-
-      const client = new Client(dbconnection)
-
-      client.connect()
-
-      let sql = `SELECT id, nome, to_char(dt_inicio, 'dd/mm/yyyy') as dt_inicio 
-	        , to_char(dt_fim , 'dd/mm/yyyy') as dt_fim FROM public.campanhas`
-
-      client.query(sql)
-        .then(res => {
-          if (res.rowCount > 0) {
-            let campanhas = res.rows;
-
-            client.end();
-            resolve(campanhas)
-          }
-          reject('Campanha não encontrada')
-        }
-        )
-        .catch(err => {
-          client.end();
-          console.log(err)
-        })
-    }).catch(e => {
-      reject(e)
+    executaSQL(credenciais, sql)
+    .then(res => {
+      resolve(res);
+      })
+    .catch(err => {
+      reject(err)
     })
   })
 }
+
 
 function getCampanhaAnalisar(req, res) {
   return new Promise(function (resolve, reject) {
@@ -727,7 +713,72 @@ function getDetalheCampanhaStatusConsultor(req, res){
   })
 }
 
+function getCampanhasUsuarioSeleconado(req, res){
+  return new Promise(function (resolve, reject) {
+    let credenciais = {
+      token: req.query.token,
+      idUsuario: req.query.id_usuario
+    };
+                                            
+    let sql = `SELECT * FROM campanhas_usuarios
+    INNER JOIN campanhas ON campanhas_usuarios.id_campanha=campanhas.id
+    WHERE campanhas_usuarios.id_usuario=  ${req.query.id} ` 
+        
+    executaSQL(credenciais, sql)
+      .then(resCampanhasUsuario => {
+        getCampanhas(req, res) .then(campanhas => {
+          resolve({campanhasUsuario: resCampanhasUsuario, campanhas: campanhas});
+      })
+      .catch(err => {
+        reject(err)
+      })
+      .catch(err => {
+        reject(err)
+      })
+    })
+  })
+}
+
+function salvarCampanhasDoUsuario(req, res){
+  return new Promise(function (resolve, reject) {
+    let credenciais = {
+      token: req.query.token,
+      idUsuario: req.query.id_usuario
+    };
+
+    let usuarioSelecionado = JSON.parse (req.query.usuarioSelecionado);
+    let campanhasDoUsuario = JSON.parse( req.query.campanhasDoUsuario );
+
+    let sqlDelet = `DELETE FROM campanhas_usuarios
+    WHERE campanhas_usuarios.id_usuario=  ${usuarioSelecionado.id} ` 
+
+    let sqlInsert = ` INSERT INTO public.campanhas_usuarios(
+                    id_usuario, id_campanha)
+            VALUES  `
+    for (i = 0; i <= campanhasDoUsuario.length -1 ;  i++ ){
+      sqlInsert =  sqlInsert  + `(${usuarioSelecionado.id}, ${campanhasDoUsuario[i]._id}),`
+    }
+    sqlInsert = sqlInsert.substr(0,  sqlInsert.length -1 ) 
+    if (!campanhasDoUsuario.length) { sqlInsert = "Select now()" }
+
+
+    const dbconnection = require('../config/dbConnection');
+    const { Client } = require('pg');
+    const client = new Client(dbconnection);
+    client.connect();
+
+    client.query('BEGIN').then((res1) => {
+        executaSQLComTransacao(credenciais, client, sqlDelet ).then(resDel => {
+          executaSQLComTransacao(credenciais, client, sqlInsert). then( resInsert => {
+            client.query('COMMIT')
+            .then((resp) => { resolve('Campanhas dos usuário atualizadas ') })
+            .catch(err => {  reject(err) });
+          });
+          });
+        });
+    })
+  }
 
 module.exports = { getCampanhasDoUsuario, getCampanhas, getCampanhaAnalisar, getCampanhaResultado, getCampanhaFollowDoUsuario,
   getEventosRelatorioCampanha, getClientesPendentes, getCampanhaTelemarketingAnalisar, getCampanhaTelemarketing,
-  getDetalheCampanha }
+  getDetalheCampanha, getCampanhasUsuarioSeleconado, salvarCampanhasDoUsuario }

@@ -46,7 +46,7 @@ function importaLead(req, res){
                       // inserir telefone
                       insertTelefone(credenciais, client).then((resp) => {
                         // inserir os usuarios do call center na campanha 
-                        inserirUsuariosCampanha(credenciais, client, id_campanha).then((resp) => {
+                        //inserirUsuariosCampanha(credenciais, client, id_campanha).then((resp) => {
                           // inserir destinatarios na campanha 
                           inserirDestinatariosCampanha(credenciais, client,id_leads_mailing, id_campanha).then((resp) => {
 
@@ -56,7 +56,7 @@ function importaLead(req, res){
                               .then((resp) => { resolve('Dados importados ') })
                               .catch(err => {  reject(err) });
                             });
-                          });
+                          //});
                         });
                       });
                     });

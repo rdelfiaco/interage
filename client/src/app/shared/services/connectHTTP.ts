@@ -23,8 +23,8 @@ export class ConnectHTTP {
       // const host = options.host || "http://159.69.205.116:3010/" //treinamento
       // const host = options.host || "http://159.69.205.116:3000/" //Producao
       // const host = options.host || "http://localhost:3000/" //Local_producao
-      //  const host = options.host || "http://localhost:3010/" //Local
-      const host = options.host || "http://192.168.100.163:3010/" //MCPRO
+       const host = options.host || "http://localhost:3010/" //Local
+      // const host = options.host || "http://192.168.100.163:3010/" //MCPRO
        //const host = options.host || "http://192.168.0.95:3010/" //altis
       const service = options.service
 
@@ -76,9 +76,9 @@ export class ConnectHTTP {
       //TROCA DADOS SERVIDOR
       // const host = options.host || "http://159.69.205.116:3010/" //treinamento
       // const host = options.host || "http://159.69.205.116:3000/" //Producao
-      // const host = options.host || "http://localhost:3010/" //Local
+      const host = options.host || "http://localhost:3010/" //Local
       // const host = options.host || "http://localhost:3000/" //Local_producao
-      const host = options.host || "http://192.168.100.163:3010/" //MACPRO
+      // const host = options.host || "http://192.168.100.163:3010/" //MACPRO
       //const host = options.host || "http://192.168.0.95:3010/" //altis
       const service = options.service
 
