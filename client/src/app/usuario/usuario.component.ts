@@ -23,7 +23,7 @@ export class UsuarioComponent implements OnInit {
     this.staticTabs.setActiveTab(1)
 
     this.usuarioService.emitiAba.subscribe(
-      abaA => { debugger;
+      abaA => { 
                 this.staticTabs.setActiveTab(abaA);
                 this.abaAtual = abaA}
     )

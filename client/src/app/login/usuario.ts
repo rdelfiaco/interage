@@ -12,7 +12,7 @@ export class Usuario {
     private _apelido: string;
     private _telefone: string;
     private _ddd: number;
-    private _carteira: boolean;
+    private _possui_carteira_cli: boolean;
     private _nome: string;
     
     public get nome(): string {
@@ -22,11 +22,11 @@ export class Usuario {
         this._nome = value;
     }
 
-    public get carteira(): boolean {
-        return this._carteira;
+    public get possui_carteira_cli(): boolean {
+        return this._possui_carteira_cli;
     }
-    public set carteira(value: boolean) {
-        this._carteira = value;
+    public set possui_carteira_cli(value: boolean) {
+        this._possui_carteira_cli = value;
     }
 
     public get ddd(): number {

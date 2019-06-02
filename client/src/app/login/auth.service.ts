@@ -34,14 +34,17 @@ export class AuthService {
 
   async initConfig() {
     // ler paramentros de configuração 
-    let config = await this.connectHTTP.callService({
-      service: 'getConfiguracao',
-      paramsService: {
-        nomeConfiguracao: 'tempoDealertaDeEventos'
-      }
-    }) as any;
-    this.config = config.resposta[0].valor;
-    this.ativaGetEventos(parseInt(this.config));
+    // let config = await this.connectHTTP.callService({
+    //   service: 'getConfiguracao',
+    //   paramsService: {
+    //     nomeConfiguracao: 'tempoDealertaDeEventos'
+    //   }
+    // }) as any;
+    // this.config = config.resposta[0].valor;
+    this.config = 30000;
+    if (this.usuarioLogadoObject ){
+      this.ativaGetEventos(parseInt(this.config));
+    }
   }
 
   async ativaGetEventos(timer: number) {
@@ -82,6 +85,7 @@ export class AuthService {
           senha: usuario.senha
         }
       })
+      debugger
       this.usuarioLogadoObject = usuarioLogado.resposta;
       this.localStorage.postLocalStorage('usuarioLogado', usuarioLogado.resposta)
       this._setValidadeToken();
@@ -99,11 +103,13 @@ export class AuthService {
   }
 
   validaAutenticacao() {
-    if (this._getDataExpiracao().getTime() > new Date().getTime()) {
-      this._setValidadeToken();
-    }
-    else {
-      this.logout();
+      if (this.usuarioLogadoObject){
+      if (this._getDataExpiracao().getTime() > new Date().getTime()) {
+        this._setValidadeToken();
+      }
+      else {
+        this.logout();
+      }
     }
   }
 

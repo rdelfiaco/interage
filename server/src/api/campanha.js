@@ -771,7 +771,7 @@ function salvarCampanhasDoUsuario(req, res){
         executaSQLComTransacao(credenciais, client, sqlDelet ).then(resDel => {
           executaSQLComTransacao(credenciais, client, sqlInsert). then( resInsert => {
             client.query('COMMIT')
-            .then((resp) => { resolve('Campanhas dos usuário atualizadas ') })
+            .then((resp) => { resolve('Campanhas do usuário atualizadas ') })
             .catch(err => {  reject(err) });
           });
           });

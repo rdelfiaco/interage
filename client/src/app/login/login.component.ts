@@ -40,6 +40,7 @@ export class LoginComponent implements OnInit {
   };
 
   ngOnInit() {
+      
     if (this.auth.checkAutenticacao()) {
       let usuarioLogado = this.localStorage.getLocalStorage('usuarioLogado') as Usuario;
       this.router.navigate(['eventos']);
@@ -51,10 +52,11 @@ export class LoginComponent implements OnInit {
     this.usuario.login = this.loginForm.value.login;
     this.usuario.senha = SHA1(this.loginForm.value.senha);
    
-    const res = await this.auth.autenticacao(this.usuario)
+    const res = await this.auth.autenticacao(this.usuario);
     
     if (res.error) {
       this.toastrService.error(res.error);
+      this.router.navigate(['login']);
     }
     else {
       let usuarioLogado = res.resposta

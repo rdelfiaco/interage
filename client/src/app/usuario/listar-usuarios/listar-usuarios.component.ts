@@ -96,7 +96,7 @@ export class ListarUsuariosComponent implements OnInit {
       status: [true],
       nome: [{value:'', disabled: false } ],
       id_organograma: [''], 
-      responsavel_membro: [''],
+      responsavel_membro: ['M'],
       hora_entrada: ['08:00'], 
       hora_saida: ['18:00'],      
       hora_entrada_lanche: ['12:00'],
@@ -242,6 +242,10 @@ export class ListarUsuariosComponent implements OnInit {
     this.usuarioService.setAba(2);
   }
 
-  
+  permissoesUsuario(usuarioId){
+    let usuarioSelecionado = this.usuarios.filter(t => t.id == usuarioId)[0];
+    this.usuarioService.setUsuario( usuarioSelecionado );
+    this.usuarioService.setAba(3);
+  }
 
 }

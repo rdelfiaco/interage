@@ -8,7 +8,7 @@ import { NgModule, NO_ERRORS_SCHEMA } from '@angular/core';
 import { MDBBootstrapModulesPro, MDBSpinningPreloader, ToastModule, AccordionModule, WavesModule, SidenavModule, NavbarModule } from './../lib/ng-uikit-pro-standard';
 
 import { AppComponent } from './app.component';
-import { AppRoutingModule } from './/app-routing.module';
+import { AppRoutingModule } from './app-routing.module';
 import { DashboardAdminComponent } from './dashboard-admin/dashboard-admin.component';
 import { DashboardOperadorComponent } from './dashboard-operador/dashboard-operador.component';
 import { DashboardSupervisorComponent } from './dashboard-supervisor/dashboard-supervisor.component';
@@ -82,6 +82,7 @@ import { AngularDualListBoxModule } from 'angular-dual-listbox';
 
   ],
   bootstrap: [AppComponent],
+  
   schemas: [NO_ERRORS_SCHEMA]
 })
 export class AppModule { }

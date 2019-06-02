@@ -1,6 +1,8 @@
 const { checkTokenAccess } = require('./checkTokenAccess');
 const { executaSQL } = require('./executaSQL');
+const { executaSQLComTransacao }  = require('./executaSQL');
 const { adicionarPessoa } = require( './pessoa')
+
 function login(req, res) {
 
   return new Promise(function (resolve, reject) {
@@ -16,30 +18,36 @@ function login(req, res) {
                 from usuarios u
                 inner join pessoas pe on u.id_pessoa = pe.id
                 left join pessoas_telefones tel on pe.id = tel.id_pessoa and principal 
-                where login = '${req.query.login}' AND senha='${senhaCriptografada}'`
+                where login = '${req.query.login}' `
     client.query(sql)
       .then(res => {
         if (res.rowCount > 0) {
           let token_access = generateTokenUserAcess()
           let usuario = res.rows[0];
 
-          client.query(`insert into historico_login(id_usuario, ip, datahora, token_access, ativo)
-            VALUES ( ${res.rows[0].id} , '${req.ip}', now(), '${token_access}', true ) `)
-            .then(res => {
+          if(usuario.senha == senhaCriptografada) {
+
+            client.query(`insert into historico_login(id_usuario, ip, datahora, token_access, ativo)
+              VALUES ( ${res.rows[0].id} , '${req.ip}', now(), '${token_access}', true ) `)
+              .then(res => {
 
 
-              delete usuario.senha;
-              delete usuario.login;
-              usuario.token = token_access;
+                delete usuario.senha;
+                delete usuario.login;
+                usuario.token = token_access;
 
-              resolve(usuario)
+                resolve(usuario)
+                client.end();
+              })
+              .catch(err => {
+                client.end();
+                reject('Historio de login não criado : ', err)
+              })
+            }
+            else {
               client.end();
-            })
-            .catch(err => {
-              client.end();
-              reject('Historio de login não criado : ', err)
-            })
-
+              reject('Senha errada!')              
+            }
         }
         else {
           client.end();
@@ -52,6 +60,8 @@ function login(req, res) {
       })
   })
 }
+
+
 
 function logout(req, res) {
   return new Promise(function (resolve, reject) {
@@ -372,6 +382,94 @@ function adicionarUsuario(req, res){
 }
 
 
+function getPermissoesUsuarioSeleconado(req, res){
+  return new Promise(function (resolve, reject) {
+    let credenciais = {
+      token: req.query.token,
+      idUsuario: req.query.id_usuario
+    };
+       
+    let sql = `select id_permissoes_recurso::integer, pr.nome
+    from permissoes_usuarios pu
+    inner join permissoes_recursos pr on pu.id_permissoes_recurso = id  
+    where pu.id_usuario = ${req.query.id} ` 
+        
+    executaSQL(credenciais, sql)
+      .then(resPermissoesUsuario => {
+        getPermissoes(req, res) .then(permissoes => {
+          resolve({permissoesUsuario: resPermissoesUsuario, permissoes: permissoes});
+      })
+      .catch(err => {
+        reject(err)
+      })
+      .catch(err => {
+        reject(err)
+      })
+    })
+  })
+}
+
+function getPermissoes(req, res){
+  return new Promise(function (resolve, reject) {
+    let credenciais = {
+      token: req.query.token,
+      idUsuario: req.query.id_usuario
+    };
+    let sql = `select *
+                from permissoes_recursos
+                where status ` 
+    executaSQL(credenciais, sql)
+      .then(res => {
+          resolve(res);
+      })
+      .catch(err => {
+        reject(err)
+      })
+  })
+}
+
+
+function salvarPermissoesDoUsuario(req, res){
+  return new Promise(function (resolve, reject) {
+    let credenciais = {
+      token: req.query.token,
+      idUsuario: req.query.id_usuario
+    };
+
+    let usuarioSelecionado = JSON.parse (req.query.usuarioSelecionado);
+    let permissoesDoUsuario = JSON.parse( req.query.permissoesDoUsuario );
+
+    let sqlDelet = `DELETE FROM permissoes_usuarios
+    WHERE permissoes_usuarios.id_usuario=  ${usuarioSelecionado.id} ` 
+
+    let sqlInsert = ` INSERT INTO public.permissoes_usuarios(
+                    id_usuario, id_permissoes_recurso)
+            VALUES  `
+    for (i = 0; i <= permissoesDoUsuario.length -1 ;  i++ ){
+      sqlInsert =  sqlInsert  + `(${usuarioSelecionado.id}, ${permissoesDoUsuario[i]._id}),`
+    }
+    sqlInsert = sqlInsert.substr(0,  sqlInsert.length -1 ) 
+    if (!permissoesDoUsuario.length) { sqlInsert = "Select now()" }
+
+
+    const dbconnection = require('../config/dbConnection');
+    const { Client } = require('pg');
+    const client = new Client(dbconnection);
+    client.connect();
+
+    client.query('BEGIN').then((res1) => {
+        executaSQLComTransacao(credenciais, client, sqlDelet ).then(resDel => {
+          executaSQLComTransacao(credenciais, client, sqlInsert). then( resInsert => {
+            client.query('COMMIT')
+            .then((resp) => { resolve('Permissões do usuário atualizadas ') })
+            .catch(err => {  reject(err) });
+          });
+          });
+        });
+    })
+  }
+
+
 module.exports = { login, 
                   logout, 
                   getAgentesVendas, 
@@ -379,4 +477,6 @@ module.exports = { login,
                   getUsuarios, 
                   salvarUsuario,
                   excluirUsuario,
-                  adicionarUsuario }  
+                  adicionarUsuario,
+                  salvarPermissoesDoUsuario,
+                  getPermissoesUsuarioSeleconado }  

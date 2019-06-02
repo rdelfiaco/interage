@@ -1,6 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { UsuarioService } from '../usuario.service';
-import { Observable } from 'rxjs';
 import { ConnectHTTP } from '../../shared/services/connectHTTP';
 import { ToastService } from '../../../lib/ng-uikit-pro-standard';
 

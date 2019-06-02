@@ -45,8 +45,12 @@
           size="lg" title="Editar usuários" ></mdb-icon>
           <mdb-icon style="margin: 0px 5px;" icon="trash" (click)="excluir(usuario.id)" (click)="excluirModal.show()"
             size="lg" title="Excluir usuários"></mdb-icon>
-          <mdb-icon style="margin: 0px 5px;" icon="database" (click)="campanhasUsuario(usuario.id)"
+          <mdb-icon style="margin: 0px 5px;" icon="contao" (click)="campanhasUsuario(usuario.id)"
           size="lg" title="Campanhas do usuários" ></mdb-icon>
+          <mdb-icon style="margin: 0px 5px;" icon="unlock-alt" (click)="permissoesUsuario(usuario.id)"
+          size="lg" title="Permissões do usuários" ></mdb-icon>
+
+          
         </td>
       </tr>
     </tbody>
@@ -207,11 +211,11 @@
             <mdb-select formControlName="id_organograma"  [options]="departamentoSelect"
               [multiple]="false" placeholder="Departamento"></mdb-select>
           </div>
-          <div class="col mdb-select-form">
+          <!-- <div class="col mdb-select-form">
               <mdb-select formControlName="responsavel_membro"  [options]="niveisHierarquicoSelect"
                 [multiple]="false" placeholder="Nível hierárquico" ></mdb-select>
                 <label for="Nível hierárquico">Nível hierárquico</label>
-          </div>
+          </div> -->
         </div>
         <div class="form-row" style="margin-left: 5px; margin-right: 5px" >
           <div class="md-form col-2">

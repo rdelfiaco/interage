@@ -187,8 +187,15 @@ function salvarPessoa(req, res) {
 }
 
 async function  adicionarPessoa(req, res) {
-  return new Promise(function (resolve, reject) {
 
+  let credenciais = {
+    token: req.query.token,
+    idUsuario: req.query.id_usuario
+  };
+  var possui_carteira_cli = await buscaValorDoAtributo(credenciais, 'possui_carteira_cli', 'usuarios', `id = ${req.query.id_usuario}` )
+  possui_carteira_cli = Object.values( possui_carteira_cli[0])[0];
+
+  return new Promise(function (resolve, reject) {    
     checkTokenAccess(req).then(historico => {
       const dbconnection = require('../config/dbConnection')
       const { Client } = require('pg')
@@ -237,7 +244,8 @@ async function  adicionarPessoa(req, res) {
         ret.push('apelido_fantasia,')
         ret.push('dtinclusao,')
         ret.push('dtalteracao,')
-        ret.push('id_usuario_incluiu')
+        ret.push('id_usuario_incluiu,')
+        ret.push('id_usuario_carteira')
         ret.push(')')
 
         ret.push('VALUES(')
@@ -255,7 +263,8 @@ async function  adicionarPessoa(req, res) {
         ret.push((req.query.apelido_fantasia != null ? "'" + req.query.apelido_fantasia + "'" : 'NULL') + ",")
         ret.push('now(),')
         ret.push('now(),')
-        ret.push(req.query.id_usuario)
+        ret.push(req.query.id_usuario + ",")
+        ret.push(possui_carteira_cli ? req.query.id_usuario: 'NULL')
         ret.push(')')
         return ret.join(' ');
       }
@@ -275,8 +284,9 @@ async function  adicionarPessoa(req, res) {
         ret.push('observacoes,')
         ret.push('apelido_fantasia,')
         ret.push('dtinclusao,')
-        ret.push('dtalteracao')
+        ret.push('dtalteracao,')
         ret.push('id_usuario_incluiu,')
+        ret.push('id_usuario_carteira')
         ret.push(')')
 
         ret.push('VALUES(')
@@ -294,7 +304,8 @@ async function  adicionarPessoa(req, res) {
         ret.push((req.query.apelido_fantasia != '' ? "'" + req.query.apelido_fantasia + "'" : 'NULL') + ",")
         ret.push('now(),')
         ret.push('now(),')
-        ret.push(req.query.id_usuario)
+        ret.push(req.query.id_usuario + ",")
+        ret.push(possui_carteira_cli ? req.query.id_usuario: 'NULL')
         ret.push(')')
         return ret.join(' ');
       }
@@ -732,40 +743,46 @@ async function pesquisaPessoas(req, res) {
 
       client.connect()
 
-      const pesquisaTexto = req.query.searchText.toLowerCase()
-      let pesquisa;
+      const pesquisaTexto = req.query.searchText.toLowerCase();
+      const pesquisaId = pesquisaTexto.substring(3);
+      let pesquisa = '';
 
-      if (isNaN(parseInt(req.query.searchText))) {
-        pesquisa = `SELECT * FROM pessoas
-            WHERE (lower(nome) LIKE '%${pesquisaTexto}%' OR
-            lower(apelido_fantasia)
+      if (pesquisaTexto.substring(0,3) == 'id=' ) {
+          pesquisa = 'id';
+      }
+
+      if (pesquisa != 'id') {
+        pesquisa = `SELECT p.*, up.apelido_fantasia as carteira FROM pessoas p
+            left join usuarios u on p.id_usuario_carteira = u.id
+            left join pessoas up on u.id_pessoa = up.id 
+            WHERE (lower(p.nome) LIKE '%${pesquisaTexto}%' OR
+            lower(p.apelido_fantasia)
             LIKE '%${pesquisaTexto}%' OR
-            lower(cpf_cnpj) LIKE '%${pesquisaTexto}%'  )`
+            lower(p.cpf_cnpj) LIKE '%${pesquisaTexto}%'  )`
       }
       else {
-        pesquisa = `SELECT * FROM pessoas
-            WHERE id=${pesquisaTexto}
+        pesquisa = `SELECT p.*, up.apelido_fantasia as carteira FROM pessoas p
+            left join usuarios u on p.id_usuario_carteira = u.id
+            left join pessoas up on u.id_pessoa = up.id 
+            WHERE p.id=${pesquisaId}
             `
       }
-
       // carteira do usuario 
-      if (possui_carteira_cli) {
-          pesquisa = pesquisa +  ` and id_usuario_incluiu = ${req.query.id_usuario} `
-      }
+      // if (possui_carteira_cli) {
+      //     pesquisa = pesquisa +  ` and p.id_usuario_carteira = ${req.query.id_usuario} `
+      // }
 
       pesquisa = pesquisa + ` limit 100`
       
-
       client.query(pesquisa).then((res) => {
+        client.end()
         if (res.rowCount > 0) {
-          client.end()
           resolve(res.rows);
         }
         else reject(`Não há pessoas com o texto: ${req.query.searchText}`)
-
       }).catch(err => {
         client.end();
-        reject(err)
+        reject(`Não há pessoas com o texto: ${req.query.searchText}`)
       })
     }).catch(e => {
       reject(e);

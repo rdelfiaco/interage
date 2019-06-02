@@ -1,9 +1,9 @@
-import { AppComponent } from './../app.component';
 import { Component, OnInit, ElementRef, ViewChildren, QueryList, ViewChild } from '@angular/core';
 import { ConnectHTTP } from '../shared/services/connectHTTP';
 import { LocalStorage } from '../shared/services/localStorage';
 import { ToastService, ModalDirective } from '../../lib/ng-uikit-pro-standard';
 import { Observable } from 'rxjs';
+import { Usuario } from '../login/usuario';
 
 
 @Component({
@@ -12,7 +12,7 @@ import { Observable } from 'rxjs';
   styleUrls: ['./pesquisa-pessoa.component.scss']
 })
 export class PesquisaPessoaComponent implements OnInit {
-  private usuarioLogado: any;
+  private usuarioLogado: Usuario;
   textoPesquisaPessoa: string;
   pessoasEncontradas: any = [];
   firstPageNumber: number = 1;
@@ -30,7 +30,7 @@ export class PesquisaPessoaComponent implements OnInit {
   constructor(private connectHTTP: ConnectHTTP,
     private localStorage: LocalStorage,
     private toastrService: ToastService) {
-    this.usuarioLogado = this.localStorage.getLocalStorage('usuarioLogado') as any;
+    this.usuarioLogado = this.localStorage.getLocalStorage('usuarioLogado') as Usuario;
   }
 
   ngOnInit() {
@@ -98,7 +98,10 @@ export class PesquisaPessoaComponent implements OnInit {
         }
       }) as any;
       this.pessoasEncontradas = pessoasEncontradas.resposta;
-
+      if (!this.pessoasEncontradas.length) {
+        this.pessoasEncontradas = [];
+        this.toastrService.error(pessoasEncontradas.error);
+      }
       setTimeout(() => {
         this.paginators = []
         for (let i = 1; i <= this.pessoasEncontradas.length; i++) {
@@ -116,9 +119,13 @@ export class PesquisaPessoaComponent implements OnInit {
     catch (e) {
       console.log('error ', e )
       this.toastrService.error(e.error);
+      this.pessoasEncontradas = [];
     }
   }
+
+
   async editarPessoa(pessoa: any) {
+
     this.editandoPessoaObject = pessoa;
     let pessoaId = pessoa.id
     let p = await this.connectHTTP.callService({
@@ -127,10 +134,27 @@ export class PesquisaPessoaComponent implements OnInit {
         id_pessoa: pessoaId
       }
     }) as any;
-    this.pessoa = new Observable(o => o.next(p.resposta));
     
-    this.pessoaEditando.show()
+    //  - se o cliente não estiver vinculado a nenhuma carteira o usuário logado pode ter acesso; 
+    //  - se o cliente esteja vinculado a uma carteria e se o usuário logado possui carteira o
+    //           o acesso aos dados do cliente somente se ele pertence a carteira do usuário logado  
+    if (this.usuarioLogado.possui_carteira_cli  && p.resposta.principal.id_usuario_carteira ){
+      if(this.usuarioLogado.id == p.resposta.principal.id_usuario_carteira){
+
+        this.pessoa = new Observable(o => o.next(p.resposta));
+        this.pessoaEditando.show();
+      } else {
+        this.toastrService.error('O cliente não faz parte de sua carteira');
+      }
+      }
+      else {
+        // verifica se o usuário logado possui acesso aos clientes sem carteira 
+      this.pessoa = new Observable(o => o.next(p.resposta));
+      this.pessoaEditando.show()
+      }
+
   }
+
   async refresh() {
     let pessoaId = this.editandoPessoaObject.id
     let pessoa = await this.connectHTTP.callService({

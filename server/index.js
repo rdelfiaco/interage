@@ -92,6 +92,8 @@ declaraServico('getProdutividadeCallCenter', produtividade.getProdutividadeCallC
 declaraServico('trocarSenhaUsuarioLogado',  usuario.trocarSenhaUsuarioLogado);
 declaraServico('getPessoaPorCPFCNPJ',  pessoa.getPessoaPorCPFCNPJ);
 declaraServico('adicionarUsuario',  usuario.adicionarUsuario);
+declaraServico('getPermissoesUsuarioSeleconado',  usuario.getPermissoesUsuarioSeleconado);
+declaraServico('salvarPermissoesDoUsuario',  usuario.salvarPermissoesDoUsuario);
 
 
 

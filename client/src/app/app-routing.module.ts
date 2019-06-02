@@ -1,5 +1,4 @@
 import { UsuarioCampanhasComponent } from './usuario/usuario-campanhas/usuario-campanhas.component';
-import { AdicionarUsuarioComponent } from './usuario/adicionar-usuario/adicionar-usuario.component';
 import { DepartamentoComponent } from './departamento/departamento.component';
 import { UsuarioComponent } from './usuario/usuario.component';
 import { DetalheDeCampanhaComponent } from './analisar-campanha-telemarketing/detalhe-de-campanha/detalhe-de-campanha.component';
@@ -184,11 +183,6 @@ const routes: Routes = [
   {
     path: 'listarUsuarios',
     component: ListarUsuariosComponent,
-    canActivate: [AuthGuard]
-  },
-  {
-    path: 'adicionarUsuario',
-    component: AdicionarUsuarioComponent,
     canActivate: [AuthGuard]
   },
   {

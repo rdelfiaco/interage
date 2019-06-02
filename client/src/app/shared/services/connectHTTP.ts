@@ -32,10 +32,12 @@ export class ConnectHTTP {
 
       if (!options.naoExigeToken) {
         let usuarioLogado = this.localStorage.getLocalStorage('usuarioLogado') as Usuario;
-        options.paramsService = {
-          ...options.paramsService,
-          id_usuario: usuarioLogado.id.toString(),
-          token: usuarioLogado.token
+        if (usuarioLogado){
+          options.paramsService = {
+            ...options.paramsService,
+            id_usuario: usuarioLogado.id.toString(),
+            token: usuarioLogado.token
+          }
         }
       }
 
@@ -86,10 +88,12 @@ export class ConnectHTTP {
 
       if (!options.naoExigeToken) {
         let usuarioLogado = this.localStorage.getLocalStorage('usuarioLogado') as Usuario;
-        options.paramsService = {
-          ...options.paramsService,
-          id_usuario: usuarioLogado.id.toString(),
-          token: usuarioLogado.token
+        if (usuarioLogado){
+          options.paramsService = {
+            ...options.paramsService,
+            id_usuario: usuarioLogado.id.toString(),
+            token: usuarioLogado.token
+          }
         }
       }
 

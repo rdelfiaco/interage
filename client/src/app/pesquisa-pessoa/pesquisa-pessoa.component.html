@@ -2,7 +2,7 @@
   <div class="col md-form">
     <input type="search" [(ngModel)]="textoPesquisaPessoa" id="search" class="form-control" mdbInputDirective
       [mdbValidate]="false" (keyup)="$event.keyCode == 13 && pesquisar()">
-    <label for="search">Inserir ID ou Nome da Pessoa</label>
+    <label for="search">Inserir CPF ou CNPJ ou Nome da Pessoa ou id=???(onde ??? é o número do ID da pessoa)</label>
   </div>
   <div class="col-1">
     <a mdbBtn floating=" true" size="lg" (click)="pesquisar()" gradient="blue" mdbWavesEffect>
@@ -25,7 +25,7 @@
       <th class="th-sm">CPF/CNPJ
         <mdb-icon icon="sort" (click)="sortBy('cpf_cnpj')"></mdb-icon>
       </th>
-      <th class="th-sm">Inclusão
+      <th class="th-sm">Carteira
         <mdb-icon icon="sort" (click)="sortBy('dtinclusao')"></mdb-icon>
       </th>
       <th class="th-sm">Ativo
@@ -42,7 +42,8 @@
       <td *ngIf="i+1 >= firstVisibleIndex && i+1 <= lastVisibleIndex">{{pessoa.nome}}</td>
       <td *ngIf="i+1 >= firstVisibleIndex && i+1 <= lastVisibleIndex">{{pessoa.apelido_fantasia}}</td>
       <td *ngIf="i+1 >= firstVisibleIndex && i+1 <= lastVisibleIndex">{{pessoa.cpf_cnpj}}</td>
-      <td *ngIf="i+1 >= firstVisibleIndex && i+1 <= lastVisibleIndex">{{pessoa.dtinclusao | date:'dd/MM/yyyy' }}</td>
+      <td *ngIf="i+1 >= firstVisibleIndex && i+1 <= lastVisibleIndex">{{pessoa.carteira}}</td>
+      <!-- <td *ngIf="i+1 >= firstVisibleIndex && i+1 <= lastVisibleIndex">{{pessoa.dtinclusao | date:'dd/MM/yyyy' }}</td> -->
       <td *ngIf="i+1 >= firstVisibleIndex && i+1 <= lastVisibleIndex">
         <mdb-checkbox [checked]="pessoa.status" [disabled]=true></mdb-checkbox>
       </td>

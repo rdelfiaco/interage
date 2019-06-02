@@ -213,7 +213,9 @@ export class ElaboraPropostaComponent implements OnInit {
       this.nVlrVeiculo = Number(this.sVlrVeiculo.substr(2, 12).trim().replace('.', '').replace(',', '.'));
       nVlrBusca = this.nVlrVeiculo;
     }else{
-      nVlrBusca = this.sccMoto }
+      nVlrBusca = this.sccMoto;
+      this.chckApp = "0";
+    }
 
 
     if (this.tabelaCombos.length > 0) {

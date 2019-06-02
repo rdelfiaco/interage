@@ -1,4 +1,3 @@
-import { AdicionarUsuarioComponent } from './adicionar-usuario/adicionar-usuario.component';
 import { UsuarioComponent } from './usuario.component';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -32,7 +31,6 @@ import { AngularDualListBoxModule } from 'angular-dual-listbox';
   declarations: [
     UsuarioComponent,
     TrocarSenhaComponent,
-    AdicionarUsuarioComponent,
     UsuarioCampanhasComponent,
     ListarUsuariosComponent,
     UsuarioPermissoesComponent,
