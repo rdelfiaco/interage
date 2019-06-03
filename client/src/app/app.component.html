@@ -70,7 +70,7 @@
                             </mdb-item>
 
                 <!-- Collapsible link -->
-                            <mdb-item>
+                            <mdb-item *ngIf="temPermissao(6)" >
                                 <mdb-item-head mdbRippleRadius><i class="fa fa-eye font-weight "></i>
                                     <span class="h6 font-weight ">Informações</span>
                                 </mdb-item-head>
@@ -94,7 +94,7 @@
                                 </mdb-item-body>
                             </mdb-item>
                 <!-- Collapsible link -->
-                            <mdb-item>
+                            <mdb-item *ngIf="temPermissao(1)" >
                                 <mdb-item-head mdbRippleRadius><i class="fa fa-chevron-right font-weight "></i>
                                     <span class="h6 font-weight ">Telemarketing</span>
                                 </mdb-item-head>
@@ -124,7 +124,7 @@
                                     </ul>
                                 </mdb-item-body>
                             </mdb-item>
-                            <mdb-item>
+                            <mdb-item *ngIf="temPermissao(2)" >
                                 <mdb-item-head mdbRippleRadius><i class="fa fa-chevron-right font-weight "></i>
                                     <span class="h6 font-weight ">Administrativo</span>
                                 </mdb-item-head>
@@ -147,7 +147,7 @@
                                     </ul>
                                 </mdb-item-body>
                             </mdb-item>
-                            <mdb-item>
+                            <mdb-item *ngIf="temPermissao(3)" >
                                     <mdb-item-head mdbRippleRadius><i class="fa fa-chevron-right font-weight "></i>
                                         <span class="h6 font-weight ">Cadastros</span>
                                     </mdb-item-head>

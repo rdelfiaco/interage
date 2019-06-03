@@ -14,6 +14,14 @@ export class Usuario {
     private _ddd: number;
     private _possui_carteira_cli: boolean;
     private _nome: string;
+    private _permissoes: Array<any>;
+
+    public get permissoes(): Array<any> {
+        return this._permissoes;
+    }
+    public set permissoes(value: Array<any>) {
+        this._permissoes = value;
+    }
     
     public get nome(): string {
         return this._nome;

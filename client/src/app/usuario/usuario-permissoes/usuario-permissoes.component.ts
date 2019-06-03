@@ -79,7 +79,7 @@ export class UsuarioPermissoesComponent implements OnInit {
     this.permissoesUsuario.forEach(element => {
       let registro = 
               {
-                _id: element.id_permissoes_recurso ,
+                _id: element.id_recursos ,
                 _name: element.nome,
               }
      this.targe.push( registro );

@@ -14,7 +14,7 @@ function login(req, res) {
     client.connect()
 
     const senhaCriptografada = req.query.senha
-    let sql = `SELECT u.*, pe.apelido_fantasia as apelido, ddd, telefone 
+    let sql = `SELECT u.*, pe.apelido_fantasia as apelido, ddd, telefone, '' as  permissoes  
                 from usuarios u
                 inner join pessoas pe on u.id_pessoa = pe.id
                 left join pessoas_telefones tel on pe.id = tel.id_pessoa and principal 
@@ -31,13 +31,30 @@ function login(req, res) {
               VALUES ( ${res.rows[0].id} , '${req.ip}', now(), '${token_access}', true ) `)
               .then(res => {
 
-
                 delete usuario.senha;
                 delete usuario.login;
                 usuario.token = token_access;
 
-                resolve(usuario)
-                client.end();
+                sql = `select id_recursos::integer
+                from permissoes_organograma
+                where id_organograma = ${usuario.id_organograma}
+                union 
+                select id_recursos::integer
+                from permissoes_usuarios
+                where id_usuario = ${usuario.id} `
+
+                client.query(sql)
+                .then(res => {
+
+                  usuario.permissoes = res.rows
+                
+                  resolve(usuario)
+                  client.end();
+                })
+                .catch(err => {
+                  client.end();
+                  reject('Erro ao ler permissões do usuário no login  : ', err)
+                })                
               })
               .catch(err => {
                 client.end();
@@ -389,9 +406,9 @@ function getPermissoesUsuarioSeleconado(req, res){
       idUsuario: req.query.id_usuario
     };
        
-    let sql = `select id_permissoes_recurso::integer, pr.nome
+    let sql = `select id_recursos::integer, pr.nome
     from permissoes_usuarios pu
-    inner join permissoes_recursos pr on pu.id_permissoes_recurso = id  
+    inner join permissoes_recursos pr on pu.id_recursos = id  
     where pu.id_usuario = ${req.query.id} ` 
         
     executaSQL(credenciais, sql)
@@ -443,7 +460,7 @@ function salvarPermissoesDoUsuario(req, res){
     WHERE permissoes_usuarios.id_usuario=  ${usuarioSelecionado.id} ` 
 
     let sqlInsert = ` INSERT INTO public.permissoes_usuarios(
-                    id_usuario, id_permissoes_recurso)
+                    id_usuario, id_recursos)
             VALUES  `
     for (i = 0; i <= permissoesDoUsuario.length -1 ;  i++ ){
       sqlInsert =  sqlInsert  + `(${usuarioSelecionado.id}, ${permissoesDoUsuario[i]._id}),`

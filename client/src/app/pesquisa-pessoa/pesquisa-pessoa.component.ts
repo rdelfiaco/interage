@@ -1,3 +1,4 @@
+import { CheckPermissaoRecurso } from './../shared/services/checkPemissaoRecurso';
 import { Component, OnInit, ElementRef, ViewChildren, QueryList, ViewChild } from '@angular/core';
 import { ConnectHTTP } from '../shared/services/connectHTTP';
 import { LocalStorage } from '../shared/services/localStorage';
@@ -29,7 +30,8 @@ export class PesquisaPessoaComponent implements OnInit {
   editandoPessoaObject: any;
   constructor(private connectHTTP: ConnectHTTP,
     private localStorage: LocalStorage,
-    private toastrService: ToastService) {
+    private toastrService: ToastService,
+    private checkPermissaoRecurso: CheckPermissaoRecurso ) {
     this.usuarioLogado = this.localStorage.getLocalStorage('usuarioLogado') as Usuario;
   }
 
@@ -149,9 +151,13 @@ export class PesquisaPessoaComponent implements OnInit {
       }
       else {
         // verifica se o usuário logado possui acesso aos clientes sem carteira 
-      this.pessoa = new Observable(o => o.next(p.resposta));
-      this.pessoaEditando.show()
-      }
+        if ( this.checkPermissaoRecurso.usuarioLocadoAcessaRecurso(4) ){
+          this.pessoa = new Observable(o => o.next(p.resposta));
+          this.pessoaEditando.show()
+        }else {
+          this.toastrService.error('Você não tem acesso aos clientes sem carteira');
+        }
+    }
 
   }
 

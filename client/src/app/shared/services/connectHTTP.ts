@@ -32,7 +32,7 @@ export class ConnectHTTP {
 
       if (!options.naoExigeToken) {
         let usuarioLogado = this.localStorage.getLocalStorage('usuarioLogado') as Usuario;
-        if (usuarioLogado){
+        if (usuarioLogado != undefined ){
           options.paramsService = {
             ...options.paramsService,
             id_usuario: usuarioLogado.id.toString(),
@@ -88,7 +88,7 @@ export class ConnectHTTP {
 
       if (!options.naoExigeToken) {
         let usuarioLogado = this.localStorage.getLocalStorage('usuarioLogado') as Usuario;
-        if (usuarioLogado){
+        if (usuarioLogado != undefined ){
           options.paramsService = {
             ...options.paramsService,
             id_usuario: usuarioLogado.id.toString(),

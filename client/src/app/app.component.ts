@@ -1,3 +1,4 @@
+import { CheckPermissaoRecurso } from './shared/services/checkPemissaoRecurso';
 import { Component } from '@angular/core';
 import { AuthService } from './login/auth.service';
 import { Router } from '@angular/router';
@@ -5,6 +6,7 @@ import { Observable } from 'rxjs';
 import { ConnectHTTP } from './shared/services/connectHTTP';
 import { Usuario } from './login/usuario';
 import { LocalStorage } from './shared/services/localStorage';
+
 
 @Component({
   selector: 'app-root',
@@ -18,11 +20,15 @@ export class AppComponent {
   versaoSistema: string = 'V.1.0.43';
   counterEvents: number;
   sub: any;
-  constructor(private router: Router, private auth: AuthService, private connectHTTP: ConnectHTTP,
-    private localStorage: LocalStorage) {
+  constructor(private router: Router, 
+    private auth: AuthService, 
+    private connectHTTP: ConnectHTTP,
+    private localStorage: LocalStorage,
+    private checkPermissaoRecurso: CheckPermissaoRecurso) {
     this.hasLogado = this.auth.estaLogado();
     this.usuarioLogado = this.localStorage.getLocalStorage('usuarioLogado') as Usuario;
     this.getCounterEvents();
+    
   }
 
   async getCounterEvents() {
@@ -46,6 +52,12 @@ export class AppComponent {
 
   abrirCadastroPessoa() {
     window.open(`/pessoas/${this.usuarioLogado.id_pessoa }`, '_blank')
+  }
+
+  temPermissao(recurso) {
+
+    return this.checkPermissaoRecurso.usuarioLocadoAcessaRecurso(recurso)
+
   }
 
 }

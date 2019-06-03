@@ -3,6 +3,7 @@ import { ConnectHTTP } from './services/connectHTTP';
 import { LocalStorage } from './services/localStorage';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { CheckPermissaoRecurso } from './services/checkPemissaoRecurso';
 
 
 @NgModule({
@@ -16,7 +17,8 @@ import { CommonModule } from '@angular/common';
   providers: [
     LocalStorage,
     ConnectHTTP,
-    Valida
+    Valida,
+    CheckPermissaoRecurso
 
   ]
 })
