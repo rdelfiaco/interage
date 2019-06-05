@@ -22,6 +22,20 @@ export class DepartamentoComponent implements OnInit {
   usuariosDepartamento: Array<any>;
   departamentoNome: any;
 
+  permissoes: any;
+  permissoesDepart: any; 
+  departSelecionado: object;
+  source: Array<any>;
+  targe:  Array<any>;
+  disabledVoltar: boolean = true;
+
+  novoFormato =  { add: 'Adicionar', 
+                  remove: 'Remover', 
+                  all: 'Selecionar todos', 
+                  none: 'Desfazer a seleção', 
+                  direction: 'left-to-right', 
+                  draggable: true, 
+                  locale: undefined }
 
   constructor(
     private connectHTTP: ConnectHTTP,
@@ -88,5 +102,12 @@ export class DepartamentoComponent implements OnInit {
     //}
     this.sorted = !this.sorted;
   }
+
+  permissoesDepartamento(departamentoId){
+
+    console.log(departamentoId)
+
+  }
+
 
 }

@@ -8,6 +8,8 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { SharedModule } from '../shared/shared.module';
 import { PesquisaClienteModule } from '../pesquisa-cliente/pesquisa-cliente.module';
 import { CarregandoModule } from '../shared/carregando/carregando.module';
+import { AngularDualListBoxModule } from 'angular-dual-listbox';
+
 
 @NgModule({
   imports: [
@@ -20,6 +22,7 @@ import { CarregandoModule } from '../shared/carregando/carregando.module';
     SharedModule,
     PesquisaClienteModule,
     CarregandoModule,  
+    AngularDualListBoxModule,
   ],
   declarations: [
                 DepartamentoComponent

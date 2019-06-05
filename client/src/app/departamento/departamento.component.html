@@ -19,10 +19,10 @@
                 <mdb-icon icon="sort" (click)="sortBy('nome')"></mdb-icon>
             </th>
             <th class="th-sm" >Usuários </th>
+            <th class="th-sm" >Permissões </th>
             <th class="th-sm">Status
                 <mdb-icon icon="sort" (click)="sortBy('status')"></mdb-icon>
             </th>
-            
             <th class="th-sm">Departamento superior
                 <mdb-icon icon="sort" (click)="sortBy('superior')"></mdb-icon>
             </th>
@@ -35,8 +35,15 @@
             <td>
               <mdb-icon style="margin: 0px 5px;" icon="users" (click)="abirUsuariosdoDepartamento(departamento.id, departamento.nome); usuariosDepartamentoModal.show()" 
               size="lg" mdbWavesEffect title="Usuários do departamento" ></mdb-icon>
-          </td>
-            <td> <mdb-checkbox  [checked]="departamento.status" [default]="departamento.status" [disabled]="true" [inline]="departamento.status" ></mdb-checkbox> </td>
+            </td>
+            <td>
+            <mdb-icon class="center" style="margin-left: 30px" icon="unlock-alt" (click)="permissoesDepartamento(departamento.id); PermissoesDepartamentoModal.show()"
+            size="lg" title="Permissões do usuários" ></mdb-icon>
+            <!-- <td> <mdb-checkbox  [checked]="departamento.status" [default]="departamento.status" [disabled]="true" [inline]="departamento.status" ></mdb-checkbox> </td> -->
+            </td>
+            <td>
+              <mdb-checkbox [checked]="departamento.status" [disabled]="true" ></mdb-checkbox>
+            </td>
             <td>{{departamento.superior}}</td>
           </tr>
         </tbody>
@@ -51,13 +58,10 @@
 <div mdbModal #usuariosDepartamentoModal="mdbModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myBasicModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
       <div class="modal-content">
-        <!-- <br>
-        <h4>Usuários do departamento: {{departamentoNome}} </h4>
-        <br>       -->
-        <div class="modal-header">
+        <div class="modal-header light-blue darken-3 white-text">
           <p class="heading lead">Usuários do departamento: {{departamentoNome}} </p>
   
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="usuariosDepartamentoModal.hide()" >
             <span aria-hidden="true" class="white-text">&times;</span>
           </button>
         </div>
@@ -83,4 +87,43 @@
             
       </div>
     </div>
+</div>
+
+
+
+<div mdbModal #PermissoesDepartamentoModal="mdbModal" class="modal " tabindex="-1" role="dialog" 
+      aria-labelledby="myModalLabel"  aria-hidden="true" >
+  <div  style="width: 1200px;" role="document">
+    <div class="modal-content"  >
+      <div class="modal-header light-blue darken-3 white-text">
+        <p class="heading lead">Permissões do departamento: {{departamentoNome}} </p>
+
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="PermissoesDepartamentoModal.hide()" >
+          <span aria-hidden="true" class="white-text">&times;</span>
+        </button>
+      </div>
+
+      <dual-list [source]="source" 
+        [(destination)]="targe" 
+        height="200px"
+        filter="true"
+        [format]="novoFormato"
+        sort="true">
+
+      </dual-list>
+      <div class="row col" >
+        <div class="col-6">
+                <button type="button" mdbBtn color="danger" block="true" [disabled]="disabledVoltar" 
+                (click)="voltar()" mdbWavesEffect>Voltar</button>
+        </div>
+        <div class="col-6">
+                <button type="button" mdbBtn color="primary" (click)="salvar()"  block="true" mdbWavesEffect style="margin-left: 20px">Salvar</button>
+        </div>
+      </div>
+
+      <br>
+      <br>
+          
+    </div>
+  </div>
 </div>
