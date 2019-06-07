@@ -29,6 +29,7 @@ const { checkToken} = require('./checkToken');
                     resolve(registros);
                 }).catch(err => {
                     client.end();
+                    console.log(err)
                     reject(err);
                 });
         }).catch(e => {

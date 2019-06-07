@@ -60,7 +60,8 @@ export class LoginComponent implements OnInit {
     }
     else {
       let usuarioLogado = res.resposta
-      this.router.navigate(['eventos']);
+      window.location.reload();
+      //this.router.navigate(['eventos']);
     }
   }
 

@@ -1,3 +1,4 @@
+import { BancoDados } from './services/bancoDados';
 import { Valida } from './services/valida';
 import { ConnectHTTP } from './services/connectHTTP';
 import { LocalStorage } from './services/localStorage';
@@ -18,7 +19,8 @@ import { CheckPermissaoRecurso } from './services/checkPemissaoRecurso';
     LocalStorage,
     ConnectHTTP,
     Valida,
-    CheckPermissaoRecurso
+    CheckPermissaoRecurso,
+    BancoDados,
 
   ]
 })

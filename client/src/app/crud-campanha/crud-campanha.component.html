@@ -1,0 +1,77 @@
+<!-- Nav tabs -->
+<mdb-tabset #abasTabs [buttonClass]="'classic-tabs tabs-cyan'" [contentClass]="'card'" class="classic-tabs">
+    <!--Panel 1-->
+    <mdb-tab heading="Campanhas" >
+      <div class="row">
+        <div class="col-12">
+          <br>
+          <div class="row">
+              <div style="margin-left: 1080px" class="row d-flex justify-content-end">
+                <button type="button"  mdbBtn color="primary" (click)="inicializaForm();  adicionarModal.show()" class="relative waves-light"
+                  mdbWavesEffect>Adicionar</button>
+              </div>
+              <br>
+              <br>
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th class="th-sm" >Id
+                    <mdb-icon icon="sort" (click)="sortBy('id')"></mdb-icon>
+                    </th>
+                    <th class="th-sm" >Nome
+                      <mdb-icon icon="sort" (click)="sortBy('nome')"></mdb-icon>
+                    </th>
+                    <th class="th-sm" >Descrição
+                        <mdb-icon icon="sort" (click)="sortBy('descricao')"></mdb-icon>
+                    </th>
+                    <th class="th-sm" >Canal 
+                      <mdb-icon icon="sort" (click)="sortBy('canal')"></mdb-icon>
+                    </th>
+                    <th class="th-sm" >Motivo
+                      <mdb-icon icon="sort" (click)="sortBy('motivo')"></mdb-icon>
+                    </th>
+                    <th class="th-sm" >Status
+                      <mdb-icon icon="sort" (click)="sortBy('status')"></mdb-icon>
+                    </th>
+                    <th class="th-sm" >Ações
+                    </th>
+                  </tr>
+                </thead>
+                <tbody *ngFor="let campanha of campanhas">
+                  <tr>
+                    <td>{{campanha.id}}</td>
+                    <td>{{campanha.nome}}</td>
+                    <td>{{campanha.descricao}}</td>
+                    <td>{{campanha.canal}}</td>
+                    <td>{{campanha.motivo}}</td>
+                    <td>
+                      <mdb-checkbox [checked]="campanha.status" [disabled]="true" ></mdb-checkbox>
+                    </td>
+                    <td>
+                      <mdb-icon style="margin: 0px 5px;" icon="pencil" (click)="editar(campanha.id)" (click)="editarModal.show()"  
+                      size="lg" title="Editar usuários" ></mdb-icon>
+                      <mdb-icon style="margin: 0px 5px;" icon="trash" (click)="excluir(campanha.id)" (click)="excluirModal.show()"
+                        size="lg" title="Excluir usuários"></mdb-icon>
+                      <mdb-icon style="margin: 0px 5px;" icon="users" (click)="usuariosCampanha(campanha.id)"
+                      size="lg" title="Usuários da campanha" ></mdb-icon>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <br />
+            <br />
+        </div>
+      </div>
+    </mdb-tab>
+    <!--Panel 2-->
+    <mdb-tab heading="Usuários" [disabled]="this.service.abaAtual != 2" >
+      <div class="row">
+        <div class="col-12">
+          <br>
+          <app-usuarios-campanha></app-usuarios-campanha>
+        </div>
+      </div>
+    </mdb-tab>
+  </mdb-tabset>
+

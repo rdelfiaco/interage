@@ -123,7 +123,6 @@ function getPropostasDoUsuario(req, res) {
                and date(dtsalvou) between date('${req.query.dataInicial}') and date('${req.query.dataFinal}') 
               order by id desc `
 
-    //console.log('getPropostasDoUsuario',sql )
     executaSQL(credenciais, sql)
       .then(res => {
         if (res) {

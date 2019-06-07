@@ -89,20 +89,25 @@ function logout(req, res) {
 
     client.connect()
 
+    if (req.query.id_usuario) {
+
     let sql = `UPDATE historico_login SET ativo=false
                     WHERE token_access = '${req.query.token}' OR id_usuario = ${req.query.id_usuario}`
-
 
     client.query(sql)
       .then(res => {
         client.end();
-        resolve(true)
+        resolve(true);
       })
       .catch(err => {
         client.end();
-        console.log(err)
-        reject('Token não encontrado')
+        reject('Token não encontrado');
       })
+    }else
+    {
+      client.end();
+      resolve(true);
+    }
   })
 }
 
@@ -321,7 +326,6 @@ function adicionarUsuario(req, res){
       ret = ret.join(' ');
 
       let sql = `INSERT INTO pessoas ${ret} RETURNING id`;
-      console.log(sql)
       executaSQL(credenciais, sql)
       .then(res => {
           id_pessoa = res.id;

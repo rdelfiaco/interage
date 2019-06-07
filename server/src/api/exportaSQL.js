@@ -39,7 +39,6 @@ function getSQLs(req, res) {
       if (req.query.filtros) sql = sql.replace('${filtros}', `${req.query.filtros}`)
       sql = sql.replace('${idUsuario}',`${req.query.idUsuarioLogado}`)
 
-      console.log(sql)
       executaSQL(credenciais, sql)
         .then(res => {
           if (res) {

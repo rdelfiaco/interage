@@ -59,6 +59,8 @@ export class AuthGuard implements CanActivate {
       "detalheDeCampanha/:parametros": ['admin', 'supervisor'],
       usuario: ['admin', 'supervisor'],
       departamento: ['admin', 'supervisor'],
+      campanha: ['admin', 'supervisor'],
+      usuariosCampanha: ['admin', 'supervisor'],
 
     }
     if (rotas[route.routeConfig.path].indexOf(usuarioLogado.dashboard) != -1) return true;
