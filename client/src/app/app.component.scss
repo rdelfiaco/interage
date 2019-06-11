@@ -1,6 +1,7 @@
 //TROCA DADOS SERVIDOR
 .logomarcaCliente {
   height: 50px;
+
   & img {
     // margin-left: 30%; //treinamento
     margin-left: 100%; //produção
@@ -15,6 +16,48 @@
   text-align: center;
 }
 
+.menu-bg {
+  .menu-container-avatar {
+    height: auto !important;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+
+    img {
+      width: 6rem;
+      height: 6rem;
+      border-radius: 50%;
+      object-fit: contain;
+      background-color: white;
+      margin-top: 1rem;
+      margin-bottom: 1rem;
+      padding: 5% !important;
+    }
+
+    small {
+      margin-bottom: 1rem;
+      font-weight: 900;
+      font-size: 1rem;
+    }
+  }
+}
+
+.menu-navbar {
+  .menu-item {
+    padding-top: .5rem;
+
+    i {
+      font-size: 1.2rem;
+    }
+
+    span {
+      font-size: 1.1rem;
+    }
+  }
+}
+
 i.fa-sign-out,
 i.fa-bell {
   font-size: 1.7em;
@@ -22,6 +65,7 @@ i.fa-bell {
 
 i.fa-bell {
   position: relative;
+
   & .counterEvents {
     background-color: red;
     border-radius: 3px;
@@ -38,4 +82,3 @@ i.fa-bell {
     text-align: center;
   }
 }
-
