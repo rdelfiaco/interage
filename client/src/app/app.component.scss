@@ -10,21 +10,40 @@
 }
 
 .versaoSistema {
+  font-size: .9rem;
   position: absolute;
-  bottom: 5px;
   width: 100%;
-  text-align: center;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  align-items: center;
+  background-color: white;
+  border-bottom-left-radius: 20px;
+  border-bottom-right-radius: 20px;
+  color: black;
+  padding: 3px;
+  img {
+    width: 30%;
+    margin-left: -10px;
+  }
+  label {
+    letter-spacing: 1px;
+    opacity: .6;
+    font-weight: bold;
+    margin-bottom: -1px;
+  }
 }
 
 .menu-bg {
   .menu-container-avatar {
-    height: auto !important;
+    height: auto;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     width: 100%;
     position: relative;
+    margin-top: 2.4rem;
     img {
       width: 6rem;
       height: 6rem;
@@ -32,25 +51,23 @@
       object-fit: contain;
       background-color: white;
       margin-top: 1rem;
-      margin-bottom: 1rem;
+      margin-bottom: .8rem;
       padding: 5% !important;
     }
 
     small {
       margin-bottom: 1rem;
       font-weight: 900;
-      font-size: 1rem;
+      font-size: 1.2rem;
     }
   }
 }
 
-.cyan-skin .side-nav .collapsible .card.active .card-header a h5 {
-  height: 3rem;
-  line-height: 3rem;
-}
-
-.side-nav .collapsible .card.active .card-header a {
-  height: 3rem;
+.main-container-content {
+  height: 100%;
+  overflow-x: hidden;
+  padding-top: 3.6rem !important;
+  margin: 5px;
 }
 
 .menu-navbar {
@@ -71,15 +88,28 @@
     }
   }
 }
-.navbar-header {
-  .icon-sair {
-    font-size: 1.7rem;
+
+.btn-menu-bars {
+  display: flex;
+  align-items: center;
+  a {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    i.fa-bars {
+      font-size: 2.6rem;
+    }
   }
 }
 
-i.fa-sign-out,
-i.fa-bell {
-  font-size: 1.7em;
+i.fa-sign-out {
+  font-size: 2rem;
+}
+.icon-notificacao {
+  align-self: flex-end;
+  i.fa-bell {
+    font-size: 1.7em;
+  }
 }
 
 i.fa-bell {

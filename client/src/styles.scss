@@ -4,9 +4,10 @@
 .cyan-skin .side-nav .collapsible .card.active .card-header {
   a {
     height: 3rem !important;
+
     h5 {
       height: 3rem !important;
-      line-height: 3rem !important;
+      line-height: 3.2rem !important;
     }
   }
 }
@@ -17,11 +18,11 @@
 .cyan-skin .side-nav .collapsible .card .card-header a h5,
 .cyan-skin .side-nav .collapsible .card .card-header a:hover {
   height: 3rem !important;
-  line-height: 3rem !important;
+  line-height: 3.2rem !important;
 }
 
 .cyan-skin .side-nav .collapsible .card .card-header a h5 {
-  line-height: 3rem !important;
+  line-height: 3.2rem !important;
 }
 
 .side-nav .collapsible .card .card-header a .fa {
@@ -38,26 +39,61 @@
   }
 }
 
-@media (max-height: 992px) {
-  .menu-container-avatar {
-    .nav-item {
-      position: absolute;
-      right: 20px;
-      text-align: right;
-      top: 20px;
-      .dropdown .dropdown-menu {
-        height: 7rem;
-        width: 10rem;
-        display: flex;
-        flex-direction: column;
-        align-items: end;
-        margin-left: -23px;
-        justify-content: flex-start;
-      }
-      .side-nav .logo-wrapper a {
-        line-height: 31px;
-        width: 9rem;
-      }
+.menu-container-avatar {
+  div.dropdown {
+    position: absolute !important;
+    right: 35px !important;
+    text-align: right !important;
+    top: 10px !important;
+    width: 10rem !important;
+
+    .side-nav .logo-wrapper a {
+      width: 10rem !important;
     }
+
+    .dropdown-toggle:empty::after {
+      font-size: 2rem !important;
+    }
+
+    .dropdown-toggle::after {
+      font-size: 2rem !important;
+    }
+  }
+}
+
+.dropdown .dropdown-menu .dropdown-item {
+  height: 45px !important;
+  width: 9rem !important;
+  line-height: 29px !important;
+}
+
+.side-nav .logo-wrapper a {
+  width: 11rem !important;
+}
+
+.navbar.scrolling-navbar {
+  position: fixed;
+  width: 100%;
+  z-index: 100;
+  top: 0;
+  padding-top: 2px !important;
+  padding-bottom: 2px !important;
+}
+
+.cyan-skin .side-nav {
+  display: flex;
+  flex-direction: column;
+}
+
+@media (max-width: 1440px) {
+  .double-nav .button-collapse-non-fixed {
+    left: -18px !important;
+    top: 0px !important;
+  }
+}
+
+@media (max-width: 599px) {
+  .double-nav .button-collapse-non-fixed {
+    margin-top: -1px !important;
   }
 }
