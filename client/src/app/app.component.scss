@@ -24,7 +24,7 @@
     align-items: center;
     justify-content: center;
     width: 100%;
-
+    position: relative;
     img {
       width: 6rem;
       height: 6rem;
@@ -44,10 +44,24 @@
   }
 }
 
+.cyan-skin .side-nav .collapsible .card.active .card-header a h5 {
+  height: 3rem;
+  line-height: 3rem;
+}
+
+.side-nav .collapsible .card.active .card-header a {
+  height: 3rem;
+}
+
 .menu-navbar {
   .menu-item {
-    padding-top: .5rem;
-
+    height: 3rem;
+    line-height: 3rem;
+    .card-header {
+      a {
+        height: 3rem !important;
+      }
+    }
     i {
       font-size: 1.2rem;
     }
@@ -55,6 +69,11 @@
     span {
       font-size: 1.1rem;
     }
+  }
+}
+.navbar-header {
+  .icon-sair {
+    font-size: 1.7rem;
   }
 }
 

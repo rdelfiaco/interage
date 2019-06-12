@@ -206,7 +206,6 @@ export class ListarUsuariosComponent implements OnInit {
       }
     }) as any;
     if (getPessoaPorCPFCNPJ.resposta[0].id){
-      debugger
       this.usuarioForm.controls['id_pessoa'].setValue(getPessoaPorCPFCNPJ.resposta[0].id);
       this.usuarioForm.controls['nome'].reset({ value: getPessoaPorCPFCNPJ.resposta[0].nome , disabled: true });      
     // verifica se a pessoa já é usuário 

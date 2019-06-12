@@ -214,7 +214,7 @@
   // SideNav logo
   .logo-wrapper {
     border-bottom: 1px solid $sidenav-light-border-bottom-color;
-    height: 8.75rem !important;
+    height: $sidenav-logo-wrapper-height
     a {
       height: $sidenav-logo-wrapper-height;
       width: $sidenav-logo-wrapper-width;

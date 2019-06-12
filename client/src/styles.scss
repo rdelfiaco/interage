@@ -1,1 +1,63 @@
 /* You can add global styles to this file, and also import other style files */
+
+
+.cyan-skin .side-nav .collapsible .card.active .card-header {
+  a {
+    height: 3rem !important;
+    h5 {
+      height: 3rem !important;
+      line-height: 3rem !important;
+    }
+  }
+}
+
+
+.side-nav .collapsible .card .card-header a,
+.cyan-skin .side-nav .collapsible .card-body li a,
+.cyan-skin .side-nav .collapsible .card .card-header a h5,
+.cyan-skin .side-nav .collapsible .card .card-header a:hover {
+  height: 3rem !important;
+  line-height: 3rem !important;
+}
+
+.cyan-skin .side-nav .collapsible .card .card-header a h5 {
+  line-height: 3rem !important;
+}
+
+.side-nav .collapsible .card .card-header a .fa {
+  font-size: 1.4rem !important;
+}
+
+.side-nav .collapsible .card-body li a {
+  padding-left: 35px !important;
+}
+
+.menu-container-avatar {
+  .dropdown-toggle:empty::after {
+    font-size: 2rem;
+  }
+}
+
+@media (max-height: 992px) {
+  .menu-container-avatar {
+    .nav-item {
+      position: absolute;
+      right: 20px;
+      text-align: right;
+      top: 20px;
+      .dropdown .dropdown-menu {
+        height: 7rem;
+        width: 10rem;
+        display: flex;
+        flex-direction: column;
+        align-items: end;
+        margin-left: -23px;
+        justify-content: flex-start;
+      }
+      .side-nav .logo-wrapper a {
+        line-height: 31px;
+        width: 9rem;
+      }
+    }
+  }
+}

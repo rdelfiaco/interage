@@ -9,6 +9,19 @@
                     <div class="logo-wrapper menu-container-avatar waves-light">
                         <img src="/assets/imagens/logos/logo_altis.jpg" class="img-fluid flex-center">
                         <small>Ramon Henrique</small>
+                        <div class="dropdown" mdbDropdown>
+                        <button mdbDropdownToggle mdbBtn color="primary" class="dropdown-toggle waves-light" type="button"
+                            mdbWavesEffect>
+                            Dropdown primary
+                        </button>
+                        
+                        <div class="dropdown-menu dropdown-primary">
+                            <a class="dropdown-item" href="#">Action</a>
+                            <a class="dropdown-item" href="#">Another action</a>
+                            <a class="dropdown-item" href="#">Something else here</a>
+                            <a class="dropdown-item" href="#">Something else here</a>
+                        </div>
+                        </div>
                     </div>
                 </li>
             </mdb-navbar-brand>
@@ -183,7 +196,7 @@
         <!--/. Sidebar navigation -->
 
         <!-- Navbar -->
-        <mdb-navbar SideClass="navbar navbar-toggleable-md navbar-expand-lg scrolling-navbar double-nav"
+        <mdb-navbar SideClass="navbar navbar-header navbar-toggleable-md navbar-expand-lg scrolling-navbar double-nav"
             [containerInside]="false">
 
             <navlinks class="navbar-container">
@@ -200,8 +213,6 @@
             <mdb-navbar-brand>
                 <!-- Breadcrumb-->
                 <div class="breadcrumbs breadcrumb-dn mr-auto logomarcaCliente">
-                    <img src="/assets/imagens/logos/logo_altis.jpg" />
-
                     <!-- TROCA DADOS SERVIDOR -->
                     <button mdbBtn type="button" color="danger" size="sm" mdbWavesEffect disabled>SERVIDOR DE
                         TESTE</button>
@@ -236,18 +247,15 @@
                             <a class="dropdown-item" (click)="openPage('trocarSenha')">Trocar Senha</a>
                         </div>
                     </li>
-                    <li class="nav-item" (click)="logout()">
-                        <a class="nav-link waves-light" mdbWavesEffect>
+                    <li class="nav-item icon-sair" (click)="logout()">
+                        <a class="nav-link waves-light" title="Sair" mdbWavesEffect>
                             <i class="fa fa-sign-out"></i>
-                            <span class="clearfix d-none d-sm-inline-block">Sair</span>
                         </a>
                     </li>
-
                 </ul>
             </navlinks>
         </mdb-navbar>
         <!--/. Navbar -->
-
     </header>
     <!--/.Double navigation-->
     <!--Main Layout-->
