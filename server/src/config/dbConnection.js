@@ -29,7 +29,7 @@ module.exports = ({ //localhost
     port: 5432,
     database: 'altis',
     user: 'postgres',
-    password: ''
+    password: 'postgres'
 });
 
 // module.exports = ({ //treinamento
