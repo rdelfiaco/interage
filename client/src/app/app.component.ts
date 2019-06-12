@@ -16,6 +16,7 @@ import { LocalStorage } from './shared/services/localStorage';
 export class AppComponent {
   hasLogado: Observable<boolean>;
   usuarioLogado: Usuario;
+  nomeUsuario: string = 'Usuário';
   // TROCA DADOS SERVIDOR TROCAR NUMERO DA VERSÃO
   versaoSistema: string = 'V.1.0.43';
   counterEvents: number;
@@ -43,6 +44,7 @@ export class AppComponent {
   logout() {
     this.usuarioLogado = null;
     this.auth.logout();
+    window.location.reload();
   }
 
 

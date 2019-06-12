@@ -39,8 +39,12 @@ export class LoginComponent implements OnInit {
     )
   };
 
+  ngAfterViewChecked() {
+    // document.querySelector('.form-content').classList.remove('animation-login');
+    document.querySelector('.form-content').classList.add('animation-login');
+  }
+
   ngOnInit() {
-      
     if (this.auth.checkAutenticacao()) {
       let usuarioLogado = this.localStorage.getLocalStorage('usuarioLogado') as Usuario;
       this.router.navigate(['eventos']);
@@ -59,7 +63,7 @@ export class LoginComponent implements OnInit {
       this.router.navigate(['login']);
     }
     else {
-      let usuarioLogado = res.resposta
+      let usuarioLogado = res.resposta;
       window.location.reload();
       //this.router.navigate(['eventos']);
     }
