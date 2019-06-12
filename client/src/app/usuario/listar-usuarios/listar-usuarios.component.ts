@@ -46,8 +46,7 @@ export class ListarUsuariosComponent implements OnInit {
     },
   ]
 
-
-  private usuarioForm: FormGroup;
+  usuarioForm: FormGroup;
 
 
   constructor(

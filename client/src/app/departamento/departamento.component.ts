@@ -109,5 +109,7 @@ export class DepartamentoComponent implements OnInit {
 
   }
 
+  salvar(){
 
+  }
 }

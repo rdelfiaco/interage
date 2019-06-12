@@ -22,6 +22,8 @@ export class CrudCampanhaComponent implements OnInit {
   questionarios: any;
   campanhas: any;
   campanhaUsuarios: any;
+  sorted: boolean = false;
+
   
 
    constructor(  
@@ -58,12 +60,30 @@ export class CrudCampanhaComponent implements OnInit {
     )
   }
 
-
-  
   async usuariosCampanha(campanhaId ){
     this.service.campanhaSelecionadoAtual = this.campanhas.filter(t => t.id == campanhaId)[0];
     this.service.abaAtual = 2;
   }
+
+
+  sortBy(by: string | any): void {
+    // if (by == 'dt_criou') {
+    //   this.search().reverse();
+    // } else {
+      this.campanhas.sort((a: any, b: any) => {
+      if (a[by] < b[by]) {
+        return this.sorted ? 1 : -1;
+      }
+      if (a[by] > b[by]) {
+        return this.sorted ? -1 : 1;
+      }
+      return 0;
+    });
+    //}
+    this.sorted = !this.sorted;
+  }
+
+
 
 
 

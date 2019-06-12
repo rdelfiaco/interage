@@ -7,8 +7,10 @@
           <br>
           <div class="row">
               <div style="margin-left: 1080px" class="row d-flex justify-content-end">
-                <button type="button"  mdbBtn color="primary" (click)="inicializaForm();  adicionarModal.show()" class="relative waves-light"
+                <button type="button"  mdbBtn color="primary"  class="relative waves-light"
                   mdbWavesEffect>Adicionar</button>
+                  <!-- <button type="button"  mdbBtn color="primary" (click)="inicializaForm();  adicionarModal.show()" class="relative waves-light"
+                  mdbWavesEffect>Adicionar</button> -->
               </div>
               <br>
               <br>
@@ -65,7 +67,7 @@
       </div>
     </mdb-tab>
     <!--Panel 2-->
-    <mdb-tab heading="Usuários" [disabled]="this.service.abaAtual != 2" >
+    <mdb-tab heading="Usuários" [disabled]="abaAtual != 2" >
       <div class="row">
         <div class="col-12">
           <br>
