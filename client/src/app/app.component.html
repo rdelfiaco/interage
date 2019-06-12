@@ -27,7 +27,7 @@
                         <mdb-item class="no-collase">
                             <mdb-item-head mdbRippleRadius class="menu-item">
                                 <i class="fa fa-calendar font-weight"></i>
-                                <span class="h6 font-weight " (click)="openPage('eventos'); sidenav.hide()">Tarefas/
+                                <span class="h6 font-weight " (click)="openPage('eventos');">Tarefas/
                                     Eventos
                                 </span>
                             </mdb-item-head>
@@ -38,7 +38,7 @@
                             <mdb-item-head mdbRippleRadius class="menu-item">
                                 <i class="fa fa-volume-control-phone font-weight "></i>
                                 <span class="h6 font-weight "
-                                    (click)="openPage('vendasInternas'); sidenav.hide()">Vendas
+                                    (click)="openPage('vendasInternas'); ">Vendas
                                     Internas</span>
                             </mdb-item-head>
                             <mdb-item-body></mdb-item-body>
@@ -48,7 +48,7 @@
                         <mdb-item class="no-collase">
                             <mdb-item-head mdbRippleRadius class="menu-item">
                                 <i class="fa fa-search font-weight "></i>
-                                <span class="h6 font-weight " (click)="openPage('pessoas'); sidenav.hide()">Pesquisar
+                                <span class="h6 font-weight " (click)="openPage('pessoas');">Pesquisar
                                     Pessoa</span>
                             </mdb-item-head>
                             <mdb-item-body></mdb-item-body>
@@ -58,7 +58,7 @@
                         <mdb-item class="no-collase">
                             <mdb-item-head mdbRippleRadius class="menu-item">
                                 <i class="fa fa-address-book font-weight "></i>
-                                <span class="h6 font-weight " (click)="openPage('pessoasAdd'); sidenav.hide()">Cadastrar
+                                <span class="h6 font-weight " (click)="openPage('pessoasAdd');">Cadastrar
                                     Pessoa</span>
                             </mdb-item-head>
                             <mdb-item-body></mdb-item-body>
@@ -68,7 +68,7 @@
                         <mdb-item class="no-collase">
                             <mdb-item-head mdbRippleRadius class="menu-item">
                                 <i class="fa fa-diamond font-weight "></i>
-                                <span class="h6 font-weight " (click)="openPage('propostas'); sidenav.hide()">Propostas
+                                <span class="h6 font-weight " (click)="openPage('propostas');">Propostas
                                 </span>
                             </mdb-item-head>
                             <mdb-item-body></mdb-item-body>
@@ -85,14 +85,14 @@
                                     <li><a class="waves-effect" mdbRippleRadius>
                                             <i class="fa fa-line-chart "></i>
                                             <span class="h6 font-weight"
-                                                (click)="openPage('produtividadeCallCenter'); sidenav.hide()">Produtividade
+                                                (click)="openPage('produtividadeCallCenter');">Produtividade
                                             </span>
                                         </a>
                                     </li>
                                     <li><a class="waves-effect" mdbRippleRadius>
                                             <i class="fa fa-dashboard "></i>
                                             <span class="h6 font-weight"
-                                                (click)="openPage('dashboardAgente'); sidenav.hide()">Desempenho
+                                                (click)="openPage('dashboardAgente');">Desempenho
                                             </span>
                                         </a>
                                     </li>
@@ -110,7 +110,7 @@
                                     <li><a class="waves-effect" mdbRippleRadius>
                                             <i class="fa fa-area-chart "></i>
                                             <span class="h6 font-weight"
-                                                (click)="openPage('analisarCampanhaTelemarketing'); sidenav.hide()">Analisar
+                                                (click)="openPage('analisarCampanhaTelemarketing');">Analisar
                                                 Campanhas
                                             </span>
                                         </a>
@@ -118,14 +118,14 @@
                                     <li><a class="waves-effect" mdbRippleRadius>
                                             <i class="fa  fa-cloud-upload "></i>
                                             <span class="h6 font-weight"
-                                                (click)="openPage('importaLead'); sidenav.hide()">Importar mailing/lead
+                                                (click)="openPage('importaLead');">Importar mailing/lead
                                             </span>
                                         </a>
                                     </li>
                                     <li><a class="waves-effect" mdbRippleRadius>
                                             <i class="fa fa-trophy"></i>
                                             <span class="h6 font-weight"
-                                                (click)="openPage('ranks'); sidenav.hide()">Ranking
+                                                (click)="openPage('ranks');">Ranking
                                             </span>
                                         </a>
                                     </li>
@@ -142,14 +142,14 @@
                                     <li><a class="waves-effect" mdbRippleRadius>
                                             <i class="fa fa-cubes "></i>
                                             <span class="h6 font-weight"
-                                                (click)="openPage('workflow'); sidenav.hide()">Workflow
+                                                (click)="openPage('workflow');">Workflow
                                             </span>
                                         </a>
                                     </li>
                                     <li><a class="waves-effect" mdbRippleRadius>
                                             <i class="fa fa-cloud-download "></i>
                                             <span class="h6 font-weight"
-                                                (click)="openPage('exportar'); sidenav.hide()">Exporta
+                                                (click)="openPage('exportar');">Exporta
                                             </span>
                                         </a>
                                     </li>
@@ -166,15 +166,16 @@
                                     <li><a class="waves-effect" mdbRippleRadius>
                                             <i class="fa fa fa-cubes "></i>
                                             <span class="h6 font-weight"
-                                                (click)="openPage('departamento'); sidenav.hide()">Departamentos
+                                                (click)="openPage('departamento');">Departamentos
                                             </span>
                                         </a>
                                     </li>
                                     <li><a class="waves-effect" mdbRippleRadius>
                                             <i class="fa fa-user font-weight"></i>
                                             <span class="h6 font-weight"
-                                                (click)="openPage('usuario'); sidenav.hide()">Usuários
+                                                (click)="openPage('usuario');">Usuários
                                             </span>
+                                            <!-- sidenav.hide() -->
                                         </a>
                                     </li>
                                 </ul>
