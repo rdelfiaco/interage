@@ -1,3 +1,4 @@
+import { TrocarSenhaComponent } from './../trocar-senha/trocar-senha.component';
 import { Usuario } from './../../login/usuario';
 import { Component, OnInit } from '@angular/core';
 import { ConnectHTTP } from '../../shared/services/connectHTTP';
@@ -7,6 +8,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { TabHeadingDirective } from 'ng-uikit-pro-standard';
 import { controlNameBinding } from '@angular/forms/src/directives/reactive_directives/form_control_name';
 import { UsuarioService } from '../usuario.service';
+import SHA1 from  '../../shared/sha1';
 
 @Component({
   selector: 'app-listar-usuarios',
@@ -108,6 +110,7 @@ export class ListarUsuariosComponent implements OnInit {
       color_g:[162],
       color_b:[235],
       dashboard:[''],
+      senhaCriptogra:[SHA1('123')], 
     });
   }
 
@@ -128,6 +131,7 @@ export class ListarUsuariosComponent implements OnInit {
       hora_saida_lanche: [usuarioSelecionado.hora_saida_lanche], 
       possui_carteira_cli: [usuarioSelecionado.possui_carteira_cli],
       id_pessoa: [usuarioSelecionado.id_pessoa],
+      senhaCriptogra: [usuarioSelecionado.senha]
     })
 
     this.usuarioSelecionado = true;
@@ -140,7 +144,7 @@ export class ListarUsuariosComponent implements OnInit {
         service: 'salvarUsuario',
         paramsService: this.usuarioForm.value
       });
-      if (resposta.error){
+      if (resposta.error) {
         this.toastrService.error(resposta.error);
       }else {
         this.toastrService.success('Salvo com sucesso');
@@ -245,6 +249,12 @@ export class ListarUsuariosComponent implements OnInit {
     let usuarioSelecionado = this.usuarios.filter(t => t.id == usuarioId)[0];
     this.usuarioService.setUsuario( usuarioSelecionado );
     this.usuarioService.setAba(3);
+  }
+
+  inicializarSenha(){
+    console.log(2,  this.usuarioForm.value.senhaCriptogra )
+    this.usuarioForm.value.senhaCriptogra = SHA1('123');
+    console.log(3,  this.usuarioForm.value.senhaCriptogra )
   }
 
 }

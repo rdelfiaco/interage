@@ -1,3 +1,4 @@
+import { CrudCampanhaModule } from './crud-campanha/crud-campanha.module';
 import { DepartamentoModule } from './departamento/departamento.module';
 import { UsuarioModule } from './usuario/usuario.module';
 import { WorkflowModule } from './workflow/workflow.module';
@@ -77,6 +78,7 @@ import { AngularDualListBoxModule } from 'angular-dual-listbox';
     UsuarioModule,
     DepartamentoModule,
     AngularDualListBoxModule,
+    CrudCampanhaModule,
   ],
   providers: [MDBSpinningPreloader
 

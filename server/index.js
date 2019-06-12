@@ -19,8 +19,11 @@ const exportaSQL = require('./src/api/exportaSQL');
 const tarefa = require('./src/api/tarefa');
 const ranks =  require('./src/api/ranks');
 const departamentos = require('./src/api/departamento');
-
 const consultaPlaca = require('./src/api/consultaPlaca');
+const canais = require('./src/api/canais');
+const motivos = require('./src/api/motivos');
+const questionarios = require('./src/api/questionarios');
+
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
@@ -51,7 +54,7 @@ declaraServico('getPropostasPorPeriodoSintetico', proposta.getPropostasPorPeriod
 declaraServico('getEventosPorPeriodoSintetico', evento.getEventosPorPeriodoSintetico);
 declaraServico('getTarefaPorId', tarefa.getTarefaPorId);
 declaraServico('getTarefaPerformance',tarefa.getTarefaPerformance);
-declaraServico('getCampanhaTelemarketing',campanha.getCampanhaTelemarketing);
+declaraServico('getCampanhasTelemarketingAtivas',campanha.getCampanhasTelemarketingAtivas);
 declaraServico('getCampanhaTelemarketingAnalisar',campanha.getCampanhaTelemarketingAnalisar);
 declaraServico('getLigacaoTelemarketing', telemarketing.getLigacaoTelemarketing);
 declaraServico('getCampanhaFollowDoUsuario', campanha.getCampanhaFollowDoUsuario);
@@ -69,6 +72,8 @@ declaraServico('getTabelaPrecos', tabelaPrecos.getTabelaPrecos );
 declaraServico('logout', usuario.logout );
 declaraServico('getCampanhasDoUsuario',campanha.getCampanhasDoUsuario  );
 declaraServico('getCampanhasUsuarioSeleconado',campanha.getCampanhasUsuarioSeleconado  );
+declaraServico('getUsuariosCampanhaSelecionada',campanha.getUsuariosCampanhaSelecionada);
+declaraServico('salvarUsuariosDaCampanha', campanha.salvarUsuariosDaCampanha);
 declaraServico('getCampanhas', campanha.getCampanhas );
 declaraServico('salvarEvento', evento.salvarEvento );
 declaraServico('salvarPessoa', pessoa.salvarPessoa  );
@@ -94,6 +99,9 @@ declaraServico('getPessoaPorCPFCNPJ',  pessoa.getPessoaPorCPFCNPJ);
 declaraServico('adicionarUsuario',  usuario.adicionarUsuario);
 declaraServico('getPermissoesUsuarioSeleconado',  usuario.getPermissoesUsuarioSeleconado);
 declaraServico('salvarPermissoesDoUsuario',  usuario.salvarPermissoesDoUsuario);
+declaraServico('getCanais',  canais.getCanais);
+declaraServico('getMotivos',  motivos.getMotivos);
+declaraServico('getQuestionarios',  questionarios.getQuestionarios);
 
 
 

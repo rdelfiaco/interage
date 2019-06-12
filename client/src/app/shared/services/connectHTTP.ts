@@ -51,9 +51,9 @@ export class ConnectHTTP {
         const selfXhttp = this
         if (selfXhttp.status === 200) {
           if (!selfXhttp.responseText) return resolve({ resposta: {} })
-          else resolve({ resposta: JSON.parse(selfXhttp.responseText) })
+          else resolve( {resposta: JSON.parse(selfXhttp.responseText), error:''})
         } else if (selfXhttp.status === 401) {
-          resolve({ resposta: {}, error: selfXhttp.responseText })
+          resolve({ resposta: {}, error: JSON.parse(selfXhttp.responseText) })
         }
       }
 

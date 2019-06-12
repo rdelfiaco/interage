@@ -89,20 +89,25 @@ function logout(req, res) {
 
     client.connect()
 
+    if (req.query.id_usuario) {
+
     let sql = `UPDATE historico_login SET ativo=false
                     WHERE token_access = '${req.query.token}' OR id_usuario = ${req.query.id_usuario}`
-
 
     client.query(sql)
       .then(res => {
         client.end();
-        resolve(true)
+        resolve(true);
       })
       .catch(err => {
         client.end();
-        console.log(err)
-        reject('Token não encontrado')
+        reject('Token não encontrado');
       })
+    }else
+    {
+      client.end();
+      resolve(true);
+    }
   })
 }
 
@@ -254,7 +259,8 @@ function salvarUsuario(req, res) {
                   hora_saida='${req.query.hora_saida}' , 
                   hora_entrada_lanche='${req.query.hora_entrada_lanche}' , 
                   hora_saida_lanche='${req.query.hora_saida_lanche}' , 
-                  possui_carteira_cli=${req.query.possui_carteira_cli} 
+                  possui_carteira_cli=${req.query.possui_carteira_cli}, 
+                  senha='${req.query.senhaCriptogra}'
                 WHERE  id = ${req.query.id} `
     executaSQL(credenciais, sql)
       .then(res => {
@@ -297,6 +303,8 @@ function adicionarUsuario(req, res){
     };
     if (id_pessoa == ''){
 
+      req.query.cpf_cnpj = req.query.cpf_cnpj.replace('.','');
+      req.query.cpf_cnpj = req.query.cpf_cnpj.replace('-',''); 
       let ret = [];
       ret.push("(")
       ret.push("nome,")
@@ -321,11 +329,13 @@ function adicionarUsuario(req, res){
       ret = ret.join(' ');
 
       let sql = `INSERT INTO pessoas ${ret} RETURNING id`;
-      console.log(sql)
       executaSQL(credenciais, sql)
       .then(res => {
-          id_pessoa = res.id;
+          console.log(1, res)
+          id_pessoa = Number(res[0].id);
           req.query.id_pessoa = id_pessoa;
+          console.log(11,req.query )
+          console.log(12, id_pessoa)
           inserirUsuario(req, id_pessoa);
           resolve( res )
       })
@@ -363,7 +373,7 @@ function adicionarUsuario(req, res){
       ret.push('VALUES(')
 
       ret.push("'" + req.query.login + "',")
-      ret.push("'40bd001563085fc35165329ea1ff5c5ecbdbbeef',")
+      ret.push(",'" + req.query.senhaCriptogra + "',")
       ret.push(" now() ,")
       ret.push(req.query.id_organograma + ",")
       ret.push(req.query.status + ",")
@@ -382,6 +392,7 @@ function adicionarUsuario(req, res){
       ret = ret.join(' ');
 
       let sql = `INSERT INTO usuarios ${ret} RETURNING id`;
+      console.log(2,sql)
       executaSQL(credenciais, sql)
       .then(res => {
           resolve( res )

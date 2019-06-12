@@ -1,0 +1,32 @@
+
+<div class="row col" *ngIf="campanhaSelecionada" >
+    <div class="col-6">
+            <h4>Usuários ativas</h4>
+    </div>
+    <div class="col-6">
+            <h4>Usuários da campanha: {{campanhaSelecionada.nome}}</h4>
+    </div>
+</div>
+
+<dual-list [source]="source" 
+    [(destination)]="targe" 
+    height="200px"
+    filter="true"
+    [format]="novoFormato"
+    sort="true"
+
+></dual-list>
+<div class="row col" >
+    <div class="col-6">
+            <button type="button" mdbBtn color="danger" block="true" [disabled]="disabledVoltar" 
+            (click)="voltar()" mdbWavesEffect>Voltar</button>
+    </div>
+    <div class="col-6">
+            <button type="button" mdbBtn color="primary" (click)="salvarUsuariosDaCampanha()"  block="true" mdbWavesEffect style="margin-left: 20px">Salvar</button>
+    </div>
+</div>
+<br>
+
+
+
+

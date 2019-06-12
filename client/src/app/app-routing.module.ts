@@ -1,3 +1,5 @@
+import { UsuariosCampanhaComponent } from './crud-campanha/usuarios-campanha/usuarios-campanha.component';
+import { CrudCampanhaComponent } from './crud-campanha/crud-campanha.component';
 import { UsuarioCampanhasComponent } from './usuario/usuario-campanhas/usuario-campanhas.component';
 import { DepartamentoComponent } from './departamento/departamento.component';
 import { UsuarioComponent } from './usuario/usuario.component';
@@ -198,6 +200,16 @@ const routes: Routes = [
   {
     path: 'departamento',
     component: DepartamentoComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'campanha',
+    component: CrudCampanhaComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'usuariosCampanha',
+    component: UsuariosCampanhaComponent,
     canActivate: [AuthGuard]
   },
   {

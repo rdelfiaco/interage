@@ -33,6 +33,8 @@ export class AnalisarCampanhaTelemarketingComponent implements OnInit {
   lastPageNumber: number;
   maxVisibleItems: number = 10;
 
+  data = new Date();
+
 
     constructor(private http: Http, 
       private connectHTTP: ConnectHTTP, 
@@ -46,7 +48,7 @@ export class AnalisarCampanhaTelemarketingComponent implements OnInit {
   async ngOnInit() {
 
     let campanha = await this.connectHTTP.callService({
-      service: 'getCampanhaTelemarketing',
+      service: 'getCampanhasTelemarketingAtivas',
       paramsService: {
         token: this.usuarioLogado.token,
         idUsuarioLogado: this.usuarioLogado.id,
@@ -80,9 +82,14 @@ export class AnalisarCampanhaTelemarketingComponent implements OnInit {
   abreDetalheCampanha(evento){
 
     let nomeCampanha = evento.nome.split('/').join(' ');
-    let dataInicial = evento.dtInicial.split('/').join('-');
-    let dataFinal = evento.dtFinal.split('/').join('-');
-    this.router.navigate([`/detalheDeCampanha/{"idCampanha":${evento.id_campanha}, "nome":"${nomeCampanha}", "dataInicial":"${dataInicial}", "dataFinal":"${dataFinal}" }`]);
+    
+    if (evento.dtInicial) { 
+      let dataInicial = evento.dtInicial.split('/').join('-');
+      let dataFinal = evento.dtFinal.split('/').join('-');
+      this.router.navigate([`/detalheDeCampanha/{"idCampanha":${evento.id_campanha}, "nome":"${nomeCampanha}", "dataInicial":"${dataInicial}", "dataFinal":"${dataFinal}" }`]);
+    }else{
+      this.toastrService.warning('A campanha não possui ligações')
+    }
   }
 
 

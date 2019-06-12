@@ -87,11 +87,11 @@
               [multiple]="false" placeholder={{departamentoIdSelect}}></mdb-select>
               <label for="">Departamento</label>
           </div>
-          <div class="col mdb-select-form">
+          <!-- <div class="col mdb-select-form">
             <mdb-select formControlName="responsavel_membro"  [options]="niveisHierarquicoSelect"
               [multiple]="false" placeholder="Nível hierárquico" ></mdb-select>
               <label for="Nível hierárquico">Nível hierárquico</label>
-          </div>
+          </div> -->
         </div>
         <div class="form-row" style="margin-left: 5px; margin-right: 5px" >
           <div class="md-form col-2">
@@ -120,11 +120,9 @@
           <div class="md-form col">
             <mdb-checkbox formControlName="possui_carteira_cli">Trabalha com carteira de clientes</mdb-checkbox>
           </div>
-
-
-
+          <button type="button" mdbBtn color="primary" class="relative waves-light" (click)="inicializarSenha()" title="A nova senha será 123"
+          mdbWavesEffect>Inicializar senha </button>
         </div>
-
 
       </div>
 

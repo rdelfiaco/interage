@@ -64,7 +64,11 @@ function getCampanhas(req, res) {
       token: req.query.token,
       idUsuario: req.query.id_usuario
     };
-    let sql = `SELECT * FROM public.campanhas where status`
+    let sql = `select c.*, ca.nome as canal, q.nome as questionario, m.nome as motivo
+                from campanhas c
+                inner join canais ca on c.id_canal = ca.id
+                left  join questionarios q on c.id_questionario = q.id
+                inner join motivos m on c.id_motivo = m.id `
 
     executaSQL(credenciais, sql)
     .then(res => {
@@ -340,7 +344,7 @@ function getTotalLigacoesCampanha(req, res) {
   })
 }
 
-function getCampanhaTelemarketing(req, res){
+function getCampanhasTelemarketingAtivas(req, res){
   return new Promise(function (resolve, reject) {
     let credenciais = {
       token: req.query.token,
@@ -414,6 +418,7 @@ left join ( select id_campanha, count(*) as propostas
     from eventos e 
       where id_resp_motivo = 8
       group by id_campanha) prop on camp.id = prop.id_campanha  
+      where camp.status 
     order by camp.nome		
                 `
 
@@ -713,6 +718,7 @@ function getDetalheCampanhaStatusConsultor(req, res){
   })
 }
 
+
 function getCampanhasUsuarioSeleconado(req, res){
   return new Promise(function (resolve, reject) {
     let credenciais = {
@@ -739,6 +745,7 @@ function getCampanhasUsuarioSeleconado(req, res){
   })
 }
 
+
 function salvarCampanhasDoUsuario(req, res){
   return new Promise(function (resolve, reject) {
     let credenciais = {
@@ -750,10 +757,10 @@ function salvarCampanhasDoUsuario(req, res){
     let campanhasDoUsuario = JSON.parse( req.query.campanhasDoUsuario );
 
     let sqlDelet = `DELETE FROM campanhas_usuarios
-    WHERE campanhas_usuarios.id_usuario=  ${usuarioSelecionado.id} ` 
+    WHERE campanhas_usuarios.id_usuario  =  ${usuarioSelecionado.id} ` 
 
     let sqlInsert = ` INSERT INTO public.campanhas_usuarios(
-                    id_usuario, id_campanha)
+                      id_usuario, id_campanha)
             VALUES  `
     for (i = 0; i <= campanhasDoUsuario.length -1 ;  i++ ){
       sqlInsert =  sqlInsert  + `(${usuarioSelecionado.id}, ${campanhasDoUsuario[i]._id}),`
@@ -779,6 +786,84 @@ function salvarCampanhasDoUsuario(req, res){
     })
   }
 
+  function salvarUsuariosDaCampanha(req, res){
+    return new Promise(function (resolve, reject) {
+      let credenciais = {
+        token: req.query.token,
+        idUsuario: req.query.id_usuario
+      };
+  
+      let campanhaSelecionada = JSON.parse (req.query.campanhaSelecionada);
+      let usuariosDaCampanha = JSON.parse( req.query.usuariosDaCampanha );
+
+
+      let sqlDelet = `DELETE FROM campanhas_usuarios
+      WHERE campanhas_usuarios.id_campanha =  ${campanhaSelecionada.id} ` 
+  
+      let sqlInsert = ` INSERT INTO public.campanhas_usuarios(
+                       id_campanha, id_usuario)
+              VALUES  `
+      for (i = 0; i <= usuariosDaCampanha.length -1 ;  i++ ){
+        sqlInsert =  sqlInsert  + `(${campanhaSelecionada.id}, ${usuariosDaCampanha[i]._id}),`
+      }
+      sqlInsert = sqlInsert.substr(0,  sqlInsert.length -1 ) 
+      if (!usuariosDaCampanha.length) { sqlInsert = "Select now()" }
+  
+      
+      const dbconnection = require('../config/dbConnection');
+      const { Client } = require('pg');
+      const client = new Client(dbconnection);
+      client.connect();
+  
+      client.query('BEGIN').then((res1) => {
+          executaSQLComTransacao(credenciais, client, sqlDelet ).then(resDel => {
+            executaSQLComTransacao(credenciais, client, sqlInsert). then( resInsert => {
+              client.query('COMMIT')
+              .then((resp) => { resolve('Campanhas do usuário atualizadas ') })
+              .catch(err => {  reject(err) });
+            });
+            });
+          });
+      })
+    }
+  
+
+
+
+
+
+
+
+  function getUsuariosCampanhaSelecionada(req, res){
+    return new Promise(function (resolve, reject) {
+      let credenciais = {
+        token: req.query.token,
+        idUsuario: req.query.id_usuario
+      };
+      let campanhaSelecionada = JSON.parse (req.query.campanhaSelecionada);
+       
+      let sql = `SELECT * FROM campanhas_usuarios cu
+                INNER JOIN usuarios u ON cu.id_usuario = u.id
+                INNER JOIN pessoas pe on u.id_pessoa = pe.id 
+      WHERE cu.id_campanha =  ${campanhaSelecionada.id} ` 
+          
+      executaSQL(credenciais, sql)
+        .then(res => {
+            resolve(res);
+        })
+        .catch(err => {
+          reject(err)
+        })
+        .catch(err => {
+          reject(err)
+        })
+      })
+  }
+  
+
+
+
+
 module.exports = { getCampanhasDoUsuario, getCampanhas, getCampanhaAnalisar, getCampanhaResultado, getCampanhaFollowDoUsuario,
-  getEventosRelatorioCampanha, getClientesPendentes, getCampanhaTelemarketingAnalisar, getCampanhaTelemarketing,
-  getDetalheCampanha, getCampanhasUsuarioSeleconado, salvarCampanhasDoUsuario }
+  getEventosRelatorioCampanha, getClientesPendentes, getCampanhaTelemarketingAnalisar, getCampanhasTelemarketingAtivas,
+  getDetalheCampanha, getCampanhasUsuarioSeleconado, salvarCampanhasDoUsuario, getUsuariosCampanhaSelecionada, salvarUsuariosDaCampanha }
