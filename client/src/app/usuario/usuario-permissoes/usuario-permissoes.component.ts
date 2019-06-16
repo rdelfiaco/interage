@@ -17,6 +17,7 @@ export class UsuarioPermissoesComponent implements OnInit {
   source: Array<any>;
   targe:  Array<any>;
   disabledVoltar: boolean = true;
+  sorted: boolean = false;
 
 
   novoFormato =  { add: 'Adicionar', 
@@ -85,16 +86,31 @@ export class UsuarioPermissoesComponent implements OnInit {
      this.targe.push( registro );
     });
 
-    this.source.sort();
-    this.targe.sort();
+    let by = '_name'
+    this.source.sort((a: any, b: any) => {
+                  if (a[by] < b[by]) {
+                    return this.sorted ? 1 : -1;
+                  }
+                  if (a[by] > b[by]) {
+                    return this.sorted ? -1 : 1;
+                  }
+                  return 0;
+                });
+    this.targe.sort((a: any, b: any) => {
+      if (a[by] < b[by]) {
+        return this.sorted ? 1 : -1;
+      }
+      if (a[by] > b[by]) {
+        return this.sorted ? -1 : 1;
+      }
+      return 0;
+    });
+
 
 
     if ( this.permissoesUsuario[0].nome == null ) this.targe = [];
     if ( this.permissoes[0].nome == null ) this.source = []; 
     
-    console.log('source ', this.source);
-    console.log('targe ', this.targe)
-
   }
 
   async salvar(){

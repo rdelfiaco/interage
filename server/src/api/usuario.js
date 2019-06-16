@@ -1,7 +1,8 @@
 const { checkTokenAccess } = require('./checkTokenAccess');
 const { executaSQL } = require('./executaSQL');
 const { executaSQLComTransacao }  = require('./executaSQL');
-const { adicionarPessoa } = require( './pessoa')
+const { getPermissoes } = require('./permissao');
+const { adicionarPessoa } = require( './pessoa');
 
 function login(req, res) {
 
@@ -35,12 +36,14 @@ function login(req, res) {
                 delete usuario.login;
                 usuario.token = token_access;
 
-                sql = `select id_recursos::integer
-                from permissoes_organograma
+                sql = `select id_recursos::integer, rota
+                from permissoes_organograma po 
+                inner join permissoes_recursos pr on po.id_recursos = pr.id 
                 where id_organograma = ${usuario.id_organograma}
                 union 
-                select id_recursos::integer
-                from permissoes_usuarios
+                select id_recursos::integer, rota
+                from permissoes_usuarios pu
+                inner join permissoes_recursos pr on pu.id_recursos = pr.id 
                 where id_usuario = ${usuario.id} `
 
                 client.query(sql)
@@ -434,25 +437,6 @@ function getPermissoesUsuarioSeleconado(req, res){
         reject(err)
       })
     })
-  })
-}
-
-function getPermissoes(req, res){
-  return new Promise(function (resolve, reject) {
-    let credenciais = {
-      token: req.query.token,
-      idUsuario: req.query.id_usuario
-    };
-    let sql = `select *
-                from permissoes_recursos
-                where status ` 
-    executaSQL(credenciais, sql)
-      .then(res => {
-          resolve(res);
-      })
-      .catch(err => {
-        reject(err)
-      })
   })
 }
 

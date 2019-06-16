@@ -16,7 +16,7 @@ export class CheckPermissaoRecurso{
         let permissoesUsuarioLocado = [];
         (this.usuarioLogado.permissoes || []).forEach(elem =>{
             permissoesUsuarioLocado.push(elem.id_recursos)
-        })
+        });
 
         if (permissoesUsuarioLocado.indexOf(recurso) != -1) return true;
     }

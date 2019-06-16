@@ -33,12 +33,12 @@
             <th>{{departamento.id}}</th>
             <td>{{departamento.nome}}</td>
             <td>
-              <mdb-icon style="margin: 0px 5px;" icon="users" (click)="abirUsuariosdoDepartamento(departamento.id, departamento.nome); usuariosDepartamentoModal.show()" 
+              <mdb-icon style="margin: 0px 5px;" icon="users" (click)="getUsuariosdoDepartamento(departamento.id, departamento.nome); usuariosDepartamentoModal.show()" 
               size="lg" mdbWavesEffect title="Usuários do departamento" ></mdb-icon>
             </td>
             <td>
-            <mdb-icon class="center" style="margin-left: 30px" icon="unlock-alt" (click)="permissoesDepartamento(departamento.id); PermissoesDepartamentoModal.show()"
-            size="lg" title="Permissões do usuários" ></mdb-icon>
+            <mdb-icon class="center" style="margin-left: 30px" icon="unlock-alt" (click)="getPermissoesDepartamento(departamento.id, departamento.nome); PermissoesDepartamentoModal.show()"
+            size="lg" title="Permissões do departamento" ></mdb-icon>
             <!-- <td> <mdb-checkbox  [checked]="departamento.status" [default]="departamento.status" [disabled]="true" [inline]="departamento.status" ></mdb-checkbox> </td> -->
             </td>
             <td>
@@ -52,57 +52,68 @@
 </div>
 
 
+<div mdbModal #usuariosDepartamentoModal="mdbModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myBasicModalLabel"
+aria-hidden="true" [config]="{backdrop: true}">
+<div class="modal-dialog  modal-fluid" role="document">
+  <div class="modal-content">
+    <div class="modal-header light-blue darken-3 white-text">
+      <h4 class="title">Permissões</h4>
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="usuariosDepartamentoModal.hide()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
 
-
-
-<div mdbModal #usuariosDepartamentoModal="mdbModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myBasicModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-      <div class="modal-content">
-        <div class="modal-header light-blue darken-3 white-text">
-          <p class="heading lead">Usuários do departamento: {{departamentoNome}} </p>
-  
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="usuariosDepartamentoModal.hide()" >
-            <span aria-hidden="true" class="white-text">&times;</span>
-          </button>
-        </div>
-        <mdb-tabset [buttonClass]="'classic-tabs tabs-cyan'"  class="classic-tabs">
-  
-          <table class="table">
-            <thead>
-              <tr>
-
-                <th class="th-sm" >Nome
-                    <mdb-icon icon="sort" (click)="sortByU('nome')"></mdb-icon>
-                </th>
-              </tr>
-            </thead>
-            <tbody *ngFor="let usuariosDepartamento_ of usuariosDepartamento; let i = index">
-              <tr>
-                <td>{{usuariosDepartamento_.nome}}</td>
-              </tr>
-            </tbody>
-          </table>
-      </mdb-tabset>
-
-            
+    <div class="row">
+      <div class="col-6">
+        <h5>Usuários ativos</h5>
+      </div>
+      <div class="col-6">
+        <h5>Usuários do departamento: {{departamentoNome}}</h5>
       </div>
     </div>
+    <dual-list [source]="source" 
+      [(destination)]="targe" 
+      height="200px"
+      filter="true"
+      [format]="novoFormato"
+      sort="true">
+
+    </dual-list>
+    <div class="row" >
+      <div class="col-6" >
+              <button type="button" mdbBtn color="danger" block="true" [disabled]="disabledVoltar" 
+              (click)="usuariosDepartamentoModal.hide()" mdbWavesEffect>Voltar</button>
+      </div>
+      <div class="col-6">
+              <button type="button" mdbBtn color="primary" (click)="salvarUsuariosDoDepartamento()"  block="true" mdbWavesEffect>Salvar</button>
+      </div>
+    </div>
+    <br>
+  </div>
+</div>
 </div>
 
 
 
-<div mdbModal #PermissoesDepartamentoModal="mdbModal" class="modal " tabindex="-1" role="dialog" 
-      aria-labelledby="myModalLabel"  aria-hidden="true" >
-  <div  style="width: 1200px;" role="document">
-    <div class="modal-content"  >
+<div mdbModal #PermissoesDepartamentoModal="mdbModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myBasicModalLabel"
+  aria-hidden="true" [config]="{backdrop: true}">
+  <div class="modal-dialog  modal-fluid" role="document">
+    <div class="modal-content">
       <div class="modal-header light-blue darken-3 white-text">
-        <p class="heading lead">Permissões do departamento: {{departamentoNome}} </p>
-
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="PermissoesDepartamentoModal.hide()" >
-          <span aria-hidden="true" class="white-text">&times;</span>
+        <h4 class="title">Permissões</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="PermissoesDepartamentoModal.hide()">
+          <span aria-hidden="true">&times;</span>
         </button>
       </div>
 
+      <div class="row">
+        <div class="col-6">
+          <h5>Permissões ativas</h5>
+        </div>
+        <div class="col-6">
+          <h5>Permissões do departamento: {{departamentoNome}}</h5>
+        </div>
+      </div>
       <dual-list [source]="source" 
         [(destination)]="targe" 
         height="200px"
@@ -111,19 +122,16 @@
         sort="true">
 
       </dual-list>
-      <div class="row col" >
-        <div class="col-6">
+      <div class="row" >
+        <div class="col-6" >
                 <button type="button" mdbBtn color="danger" block="true" [disabled]="disabledVoltar" 
                 (click)="PermissoesDepartamentoModal.hide()" mdbWavesEffect>Voltar</button>
         </div>
         <div class="col-6">
-                <button type="button" mdbBtn color="primary" (click)="salvar()"  block="true" mdbWavesEffect style="margin-left: 20px">Salvar</button>
+                <button type="button" mdbBtn color="primary" (click)="salvarPermissoesDoDepartamento()"  block="true" mdbWavesEffect>Salvar</button>
         </div>
       </div>
-
       <br>
-      <br>
-          
     </div>
   </div>
 </div>

@@ -17,11 +17,11 @@ export class DepartamentoComponent implements OnInit {
   departamentos: Array<any>;
   usuarios: Array<any>;
   departamentosVaule: Array<any>
-  departamentoSelecionado: boolean = false;
   sorted: boolean = false;
   usuariosDepartamento: Array<any>;
   departamentoNome: any;
-
+  permissoesDepartamento: Array<any>;
+  departamentoIdSelecionado: number;
   permissoes: any;
   permissoesDepart: any; 
   departSelecionado: object;
@@ -47,18 +47,13 @@ export class DepartamentoComponent implements OnInit {
 
   async ngOnInit() {
     let getDepartamentos = await this.connectHTTP.callService({
-      service: 'getDepartamentosUsuarios',
+      service: 'getDepartamentos',
       paramsService: {
       }
     }) as any;
 
-    this.departamentos = getDepartamentos.resposta.departamentos;
-    this.usuarios = getDepartamentos.resposta.usuarios;
+    this.departamentos = getDepartamentos.resposta;
 
-    this.departamentosVaule =   this.departamentos.map((d: any) => {
-        if (d.status) return { value: d.id, label: d.nome }
-      })
-      this.departamentoSelecionado = false;
   }
 
 
@@ -79,13 +74,6 @@ export class DepartamentoComponent implements OnInit {
     this.sorted = !this.sorted;
   }
 
-  abirUsuariosdoDepartamento(idDepartamento, departamentoNome){
-
-    this.usuariosDepartamento = this.usuarios.filter( e => e.id_organograma == idDepartamento );
-
-    this.departamentoNome = departamentoNome;
-    
-  }
   sortByU(by: string | any): void {
     // if (by == 'dt_criou') {
     //   this.search().reverse();
@@ -103,13 +91,216 @@ export class DepartamentoComponent implements OnInit {
     this.sorted = !this.sorted;
   }
 
-  permissoesDepartamento(departamentoId){
+  async getPermissoesDepartamento(departamentoIdSelecionado, departamentoNome){
 
-    console.log(departamentoId)
+    this.departamentoNome = departamentoNome;
+    this.departamentoIdSelecionado = departamentoIdSelecionado
+
+      try {
+        let resp = await this.connectHTTP.callService({
+          service: 'getPermissoesDepartamentoSeleconado',
+          paramsService: {
+            id: departamentoIdSelecionado
+          }
+        }) as any;
+  
+        if (resp.error){
+          this.toastrService.error(resp.error);
+        }else {
+          this.permissoes = resp.resposta.permissoes; 
+          this.permissoesDepartamento = resp.resposta.permissoesDepartamento; 
+          this.povoaVetoresDepartamento()
+        }
+      }
+      catch (e) {
+        this.toastrService.error('Erro ao ler as permissoes do departamento', e);
+      }
+    }
+
+
+    povoaVetoresDepartamento(){
+      this.targe = [];
+      this.source = [];
+      this.permissoes.forEach( element => {
+        let registro = 
+                {
+                  _id: element.id ,
+                  _name: element.nome,
+                }
+       this.source.push( registro );
+      });
+      this.permissoesDepartamento.forEach(element => {
+        let registro = 
+                {
+                  _id: element.id_recursos ,
+                  _name: element.nome,
+                }
+       this.targe.push( registro );
+      });
+      // sort dos vetores 
+      let by = '_name'
+      this.source.sort((a: any, b: any) => {
+                    if (a[by] < b[by]) {
+                      return this.sorted ? 1 : -1;
+                    }
+                    if (a[by] > b[by]) {
+                      return this.sorted ? -1 : 1;
+                    }
+                    return 0;
+                  });
+      this.targe.sort((a: any, b: any) => {
+        if (a[by] < b[by]) {
+          return this.sorted ? 1 : -1;
+        }
+        if (a[by] > b[by]) {
+          return this.sorted ? -1 : 1;
+        }
+        return 0;
+      });
+  
+  
+      if ( this.permissoesDepartamento[0].nome == null ) this.targe = [];
+      if ( this.permissoes[0].nome == null ) this.source = []; 
+      
+    }
+
+    async salvarPermissoesDoDepartamento(){
+      this.disabledVoltar = false
+        try {
+          let resposta = await this.connectHTTP.callService({
+            service: 'salvarPermissoesDoDepartamento',
+            paramsService: {
+              departamentoIdSelecionado: this.departamentoIdSelecionado ,
+              permissoesDoDepartamento: JSON.stringify(this.targe)
+            }
+          }) 
+          if (resposta.error){
+            this.toastrService.error(resposta.error);
+          }else {
+            this.toastrService.success('Salvo com sucesso');
+          }
+        }
+        catch (e) {
+          this.toastrService.error('Erro ao salvar');
+        }
+        
+      }
+
+
+
+
+  async getUsuariosdoDepartamento(departamentoIdSelecionado, departamentoNome){
+
+    this.departamentoNome = departamentoNome;
+    this.departamentoIdSelecionado = departamentoIdSelecionado
+    debugger
+      try {
+        let resp = await this.connectHTTP.callService({
+          service: 'getUsuarios',
+          paramsService: {
+          }
+        }) as any;
+  
+        if (resp.error){
+          this.toastrService.error(resp.error);
+        }else {
+          this.usuarios = resp.resposta; 
+          this.usuarios = this.usuarios.filter( e => e.status);
+          this.usuariosDepartamento =  this.usuarios.filter( e => e.id_organograma == departamentoIdSelecionado );
+          this.povoaVetoresUsuarios()
+        }
+      }
+      catch (e) {
+        this.toastrService.error('Erro ao ler usuários', e);
+      }
+    }
+      
+      
+  povoaVetoresUsuarios(){
+    this.targe = [];
+    this.source = [];
+    this.usuarios.forEach( element => {
+      let registro = 
+              {
+                _id: element.id ,
+                _name: element.nome,
+              }
+      this.source.push( registro );
+    });
+
+    if (this.usuariosDepartamento.length > 0){
+      this.usuariosDepartamento.forEach(element => {
+        let registro = 
+                {
+                  _id: element.id ,
+                  _name: element.nome,
+                }
+        this.targe.push( registro );
+      });
+    };
+    // sort dos vetores 
+    let by = '_name'
+    this.source.sort((a: any, b: any) => {
+                  if (a[by] < b[by]) {
+                    return this.sorted ? 1 : -1;
+                  }
+                  if (a[by] > b[by]) {
+                    return this.sorted ? -1 : 1;
+                  }
+                  return 0;
+                });
+    this.targe.sort((a: any, b: any) => {
+      if (a[by] < b[by]) {
+        return this.sorted ? 1 : -1;
+      }
+      if (a[by] > b[by]) {
+        return this.sorted ? -1 : 1;
+      }
+      return 0;
+    });
+
+
+    if ( this.usuariosDepartamento.length < 1 ) this.targe = [];
+    if ( this.usuarios[0].nome == null ) this.source = []; 
+    
+
+  }
+      
+  async salvarUsuariosDoDepartamento(){
+    this.disabledVoltar = false
+      try {
+        let resposta = await this.connectHTTP.callService({
+          service: 'salvarUsuariosDoDepartamento',
+          paramsService: {
+            departamentoIdSelecionado: this.departamentoIdSelecionado ,
+            usuariosDoDepartamento: JSON.stringify(this.targe)
+          }
+        }) 
+        if (resposta.error){
+          this.toastrService.error(resposta.error);
+        }else {
+          this.toastrService.success('Salvo com sucesso');
+        }
+      }
+      catch (e) {
+        this.toastrService.error('Erro ao salvar');
+      }
+      
+    }
+      
+    
+      
+
+
+
+
+
 
   }
 
-  salvar(){
 
-  }
-}
+
+
+  
+ 
+
