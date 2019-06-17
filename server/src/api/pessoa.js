@@ -10,6 +10,7 @@ function getPessoaPorCPFCNPJ(req, res) {
       token: req.query.token,
       idUsuario: req.query.id_usuario
     };
+    req.query.cpf_cnpj = req.query.cpf_cnpj.replace(/\W/gi, '');
     let sql = `SELECT * FROM pessoas WHERE cpf_cnpj = '${req.query.cpf_cnpj}'`
     executaSQL(credenciais, sql).then(res => {
         resolve(res)

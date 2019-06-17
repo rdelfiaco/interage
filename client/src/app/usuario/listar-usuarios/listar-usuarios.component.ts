@@ -91,6 +91,7 @@ export class ListarUsuariosComponent implements OnInit {
   }
 
   inicializaForm(){
+    
     this.usuarioForm = this.formBuilder.group({
       id: [''],
       login: [''],
@@ -161,7 +162,6 @@ export class ListarUsuariosComponent implements OnInit {
     this.usuarioIdSelecionado = usuarioSelecionado.id;
   }
 
-
   async exclusaoConfirmada(){
     try {
       let resposta = await this.connectHTTP.callService({
@@ -202,7 +202,8 @@ export class ListarUsuariosComponent implements OnInit {
   }
 
   async getPessoaPorCPFCNPJ(){
-    let getPessoaPorCPFCNPJ = await this.connectHTTP.callService({
+    
+      let getPessoaPorCPFCNPJ = await this.connectHTTP.callService({
       service: 'getPessoaPorCPFCNPJ',
       paramsService: {
         cpf_cnpj:  this.usuarioForm.value.cpf_cnpj // this.cpfCnpjPessoa
@@ -213,7 +214,7 @@ export class ListarUsuariosComponent implements OnInit {
       this.usuarioForm.controls['nome'].reset({ value: getPessoaPorCPFCNPJ.resposta[0].nome , disabled: true });      
     // verifica se a pessoa já é usuário 
       const usuarioSelecionado = this.usuarios.filter(t => t.id_pessoa == getPessoaPorCPFCNPJ.resposta[0].id)[0];
-      if (usuarioSelecionado.id) this.editar(usuarioSelecionado.id);
+      if (usuarioSelecionado) this.editar(usuarioSelecionado.id);
     }
 
   }
@@ -229,13 +230,12 @@ export class ListarUsuariosComponent implements OnInit {
       }else {
         this.toastrService.success('Adicionado com sucesso');
         this.getUsuarios();
+        window.location.reload();
       }
     }
     catch (e) {
-      this.toastrService.error('Erro ao adicionar');
+      this.toastrService.error('Erro ao adicionar', e);
     }
-    this.getUsuarios();
-
   }
 
   campanhasUsuario(usuarioId){
@@ -254,6 +254,26 @@ export class ListarUsuariosComponent implements OnInit {
     console.log(2,  this.usuarioForm.value.senhaCriptogra )
     this.usuarioForm.value.senhaCriptogra = SHA1('123');
     console.log(3,  this.usuarioForm.value.senhaCriptogra )
+  }
+
+  async getLogin(){
+    try {
+      let resposta = await this.connectHTTP.callService({
+        service: 'getLogin',
+        paramsService: { login: this.usuarioForm.value.login }
+      });
+      if (resposta.resposta){
+          if (resposta.resposta[0].id){
+            this.toastrService.error('Login já existente')
+            this.toastrService.warning('Digite outro Login')
+           }
+
+      }
+  }
+  catch (e) {
+    this.toastrService.error('Erro ao ler login', e);
+  }
+
   }
 
 }

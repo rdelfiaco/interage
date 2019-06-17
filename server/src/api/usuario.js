@@ -299,15 +299,14 @@ function excluirUsuario(req, res) {
 
 function adicionarUsuario(req, res){
   return new Promise(function (resolve, reject) {
-    let id_pessoa = req.query.id_pessoa; 
+    let id_pessoa = req.query.id_pessoa;
     let credenciais = {
       token: req.query.token,
       idUsuario: req.query.id_usuario
     };
     if (id_pessoa == ''){
 
-      req.query.cpf_cnpj = req.query.cpf_cnpj.replace('.','');
-      req.query.cpf_cnpj = req.query.cpf_cnpj.replace('-',''); 
+      req.query.cpf_cnpj = req.query.cpf_cnpj.replace(/\W/gi, '');
       let ret = [];
       ret.push("(")
       ret.push("nome,")
@@ -332,25 +331,34 @@ function adicionarUsuario(req, res){
       ret = ret.join(' ');
 
       let sql = `INSERT INTO pessoas ${ret} RETURNING id`;
+      
       executaSQL(credenciais, sql)
       .then(res => {
-          console.log(1, res)
-          id_pessoa = Number(res[0].id);
-          req.query.id_pessoa = id_pessoa;
-          console.log(11,req.query )
-          console.log(12, id_pessoa)
-          inserirUsuario(req, id_pessoa);
-          resolve( res )
+          req.query.id_pessoa = Number(res[0].id);
+          let sqlInsertUser = inserirUsuario(req, Number(res[0].id));
+          executaSQL(credenciais, sqlInsertUser)
+          .then( res_ => {
+            resolve( res_ )
+          })
+          .catch(err => {
+            reject(`Erro no adicionar usuário :  ${err}`)
+            });          
+        })
+      .catch(err => {
+      reject(`Erro no adicionar pessoa :  ${err}`)
+      });
+    } else
+    { // inserir usuário quando já existeir pessoa 
+      let sqlInsertUser = inserirUsuario(req, id_pessoa);
+      executaSQL(credenciais, sqlInsertUser)
+      .then( res => {
+        resolve( res )
       })
       .catch(err => {
       reject(`Erro no adicionar usuário :  ${err}`)
-      })  
-    } else {
-      inserirUsuario(req, id_pessoa)
-      resolve( )
-
+      });
     }
-
+    
     function inserirUsuario(req, id_pessoa ){
 
       let ret = [];
@@ -375,8 +383,8 @@ function adicionarUsuario(req, res){
 
       ret.push('VALUES(')
 
-      ret.push("'" + req.query.login + "',")
-      ret.push(",'" + req.query.senhaCriptogra + "',")
+      ret.push("'" + req.query.login + "','")
+      ret.push(req.query.senhaCriptogra + "',")
       ret.push(" now() ,")
       ret.push(req.query.id_organograma + ",")
       ret.push(req.query.status + ",")
@@ -393,19 +401,8 @@ function adicionarUsuario(req, res){
       ret.push(req.query.possui_carteira_cli)
       ret.push(')')
       ret = ret.join(' ');
-
-      let sql = `INSERT INTO usuarios ${ret} RETURNING id`;
-      console.log(2,sql)
-      executaSQL(credenciais, sql)
-      .then(res => {
-          resolve( res )
-      })
-      .catch(err => {
-      reject(`Erro no adicionar usuário :  ${err}`)
-      }) 
-
-      return
-
+      
+      return `INSERT INTO usuarios ${ret} RETURNING id`; 
     }
 
 
@@ -482,7 +479,28 @@ function salvarPermissoesDoUsuario(req, res){
   }
 
 
+  function getLogin(req, res){
+    return new Promise(function (resolve, reject) {
+      let credenciais = {
+        token: req.query.token,
+        idUsuario: req.query.id_usuario
+      };
+      let sql = `select * from usuarios where login = '${req.query.login}'`
+      executaSQL(credenciais, sql)
+      .then(res => {
+          resolve(res)
+      })
+      .catch(err => {
+        reject(err)
+      })
+
+
+    })
+  }
+
+
 module.exports = { login, 
+                   getLogin,
                   logout, 
                   getAgentesVendas, 
                   trocarSenhaUsuarioLogado, 

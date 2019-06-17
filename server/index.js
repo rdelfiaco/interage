@@ -67,6 +67,7 @@ declaraServico('getPermissoesDepartamentoSeleconado', departamentos.getPermissoe
 declaraServico('salvarPermissoesDoDepartamento', departamentos.salvarPermissoesDoDepartamento );
 declaraServico('salvarUsuariosDoDepartamento', departamentos.salvarUsuariosDoDepartamento );
 declaraServico('login', usuario.login );
+declaraServico('getLogin', usuario.getLogin);
 declaraServico('getUsuarios', usuario.getUsuarios );
 declaraServico('salvarUsuario', usuario.salvarUsuario );
 declaraServico('excluirUsuario', usuario.excluirUsuario );

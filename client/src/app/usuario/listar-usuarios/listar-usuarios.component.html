@@ -197,7 +197,8 @@
         </div>
         <div class="form-row" style="margin-left: 5px; margin-right: 5px" >
           <div class="md-form col">
-            <input mdbInputDirective formControlName="login" max="4" min="3" type="text" id="login" class="form-control">
+            <input mdbInputDirective formControlName="login" max="4" min="3" type="text" id="login" 
+            (change)="getLogin()"  class="form-control">
             <label for="login">Login</label>
           </div>
           <div class="md-form col">
