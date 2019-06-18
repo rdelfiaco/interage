@@ -33,6 +33,7 @@ import { ShowTableComponent } from './show-table/show-table.component';
 import { RanksComponent } from './ranks/ranks.component';
 import { AnalisarCampanhaTelemarketingModule } from './analisar-campanha-telemarketing/analisar-campanha-telemarketing.module';
 import { AngularDualListBoxModule } from 'angular-dual-listbox';
+import { QuestionarioComponent } from './questionario/questionario.component';
 
 
 
@@ -51,6 +52,7 @@ import { AngularDualListBoxModule } from 'angular-dual-listbox';
     DashboardAgenteComponent,
     ShowTableComponent,
     RanksComponent,
+    QuestionarioComponent,
   ],
 
   imports: [

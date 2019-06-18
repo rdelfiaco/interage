@@ -38,6 +38,7 @@ import { TrocarSenhaComponent } from './usuario/trocar-senha/trocar-senha.compon
 import { DetalheEventoComponent } from './evento/detalhe-evento/detalhe-evento.component';
 import { ListarUsuariosComponent } from './usuario/listar-usuarios/listar-usuarios.component';
 import { UsuarioPermissoesComponent } from './usuario/usuario-permissoes/usuario-permissoes.component';
+import { QuestionarioComponent } from './questionario/questionario.component';
 
 
 
@@ -180,6 +181,11 @@ const routes: Routes = [
   {
     path: 'usuario',
     component: UsuarioComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'questionario',
+    component: QuestionarioComponent,
     canActivate: [AuthGuard]
   },
   {
