@@ -18,7 +18,7 @@ export class AppComponent {
   usuarioLogado: Usuario;
   nomeUsuario: string = 'Usuário';
   // TROCA DADOS SERVIDOR TROCAR NUMERO DA VERSÃO
-  versaoSistema: string = 'T.2.0.3';
+  versaoSistema: string = 'V.2.0.4';
   counterEvents: number;
   sub: any;
   constructor(private router: Router, 
