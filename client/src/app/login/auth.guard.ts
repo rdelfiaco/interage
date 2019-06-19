@@ -68,13 +68,13 @@ export class AuthGuard implements CanActivate {
 
       
       let rotas = [];
-      (usuarioLogado.permissoes || []).forEach(elem =>{
-          if (elem.rota != null) rotas.push(elem.rota)
+      debugger
+      var temPermissao: Boolean = false; 
+       (usuarioLogado.permissoes || []).forEach(elem =>{
+          if (elem.rota == route.routeConfig.path) temPermissao = true;
       });
-
-      if (rotas[route.routeConfig.path] != -1) return true;
   
-
+      return temPermissao
 
   }
 }
