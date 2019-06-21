@@ -1,4 +1,5 @@
 import { CrudCampanhaModule } from './crud-campanha/crud-campanha.module';
+import { QuestionarioModule } from './questionario/questionario.module';
 import { DepartamentoModule } from './departamento/departamento.module';
 import { UsuarioModule } from './usuario/usuario.module';
 import { WorkflowModule } from './workflow/workflow.module';
@@ -33,7 +34,6 @@ import { ShowTableComponent } from './show-table/show-table.component';
 import { RanksComponent } from './ranks/ranks.component';
 import { AnalisarCampanhaTelemarketingModule } from './analisar-campanha-telemarketing/analisar-campanha-telemarketing.module';
 import { AngularDualListBoxModule } from 'angular-dual-listbox';
-import { QuestionarioComponent } from './questionario/questionario.component';
 
 
 
@@ -51,8 +51,7 @@ import { QuestionarioComponent } from './questionario/questionario.component';
     DashboardPropostaComponent,
     DashboardAgenteComponent,
     ShowTableComponent,
-    RanksComponent,
-    QuestionarioComponent,
+    RanksComponent
   ],
 
   imports: [
@@ -81,6 +80,7 @@ import { QuestionarioComponent } from './questionario/questionario.component';
     DepartamentoModule,
     AngularDualListBoxModule,
     CrudCampanhaModule,
+    QuestionarioModule
   ],
   providers: [MDBSpinningPreloader
 
