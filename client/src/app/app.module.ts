@@ -7,7 +7,18 @@ import { DashboardModule } from './dashboard/dashboard.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule, NO_ERRORS_SCHEMA } from '@angular/core';
-import { MDBBootstrapModulesPro, MDBSpinningPreloader, ToastModule, AccordionModule, WavesModule, SidenavModule, NavbarModule } from './../lib/ng-uikit-pro-standard';
+import {
+  MDBBootstrapModulesPro,
+  MDBSpinningPreloader,
+  ToastModule,
+  AccordionModule,
+  WavesModule,
+  SidenavModule,
+  NavbarModule,
+  InputsModule,
+  CardsFreeModule,
+  IconsModule,
+ } from './../lib/ng-uikit-pro-standard';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
@@ -58,6 +69,8 @@ import { AngularDualListBoxModule } from 'angular-dual-listbox';
     BrowserModule,
     MDBBootstrapModulesPro.forRoot(),
     ToastModule.forRoot(),
+    CardsFreeModule,
+    IconsModule,
     BrowserAnimationsModule,
     AppRoutingModule,
     LoginModule,
@@ -75,6 +88,7 @@ import { AngularDualListBoxModule } from 'angular-dual-listbox';
     WorkflowModule,
     NavbarModule,
     SidenavModule,
+    InputsModule,
     AnalisarCampanhaTelemarketingModule,
     UsuarioModule,
     DepartamentoModule,

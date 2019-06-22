@@ -1,6 +1,6 @@
 .comp-margin-left {
-  font-size: 2.2rem;
-  margin-top: 5px;
+  font-size: 1.6rem;
+  margin-top: 7px;
 }
 
 .login-page {
@@ -13,8 +13,8 @@
     justify-content: center;
     .form-content {
       border-radius: 5px;
-      width: 400px;
-      max-width: 400px;
+      width: 350px;
+      max-width: 350px;
       padding: 30px;
       background-color: white;
       box-shadow: 0 8px 10px -5px rgba(0, 0, 0, 0.2), 0 16px 24px 2px rgba(0, 0, 0, 0.14), 0 6px 30px 5px rgba(0, 0, 0, 0.12) !important;
@@ -30,7 +30,8 @@
       }
       .logo {
         width: 50%;
-        margin-bottom: 1rem;
+        margin-bottom: .5rem;
+        margin-top: -10px;
           img {
             max-width: 100%;
             height: auto;
@@ -46,14 +47,14 @@
         margin-top: 0.5rem !important;
       }
       .btn-login {
-        margin-top: 2.5rem;
-        margin-bottom: 3rem;
+        margin-top: 1.5rem;
+        margin-bottom: 2rem;
         background-color: #039be5 !important;
         opacity: 1;
         font-weight: bold;
         font-size: .85rem;
-        padding: .6rem;
-        max-width: 200px;
+        padding: .5rem;
+        max-width: 170px;
       }
       small {
         color: rgba(0,0,0,0.55);

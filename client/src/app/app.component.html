@@ -1,4 +1,4 @@
-<body class="fixed-sn cyan-skin">
+<!-- <body class="fixed-sn cyan-skin"> -->
     <!--Double navigation-->
     <header *ngIf="(hasLogado | async)">
         <!-- Sidebar navigation -->
@@ -182,7 +182,7 @@
                                     </li>
                                     <li><a class="waves-effect" mdbRippleRadius>
                                             <i class="fa fa-clipboard font-weight"></i>
-                                            <span class="h6 font-weight" (click)="openPage('questionario');">Questionários
+                                            <span class="h6 font-weight" (click)="openPage('questionario'); sidenav.hide();">Questionários
                                             </span>
                                             <!-- sidenav.hide() -->
                                         </a>
@@ -260,4 +260,4 @@
         <router-outlet></router-outlet>
     </main>
     <router-outlet></router-outlet>
-</body>
+<!-- </body> -->

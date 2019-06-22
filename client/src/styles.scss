@@ -1,5 +1,14 @@
 /* You can add global styles to this file, and also import other style files */
 
+html,
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  background: #f1f4f6;
+  overflow: hidden;
+}
 
 .cyan-skin .side-nav .collapsible .card.active .card-header {
   a {
@@ -76,8 +85,8 @@
   width: 100%;
   z-index: 100;
   top: 0;
-  padding-top: 2px !important;
-  padding-bottom: 2px !important;
+  padding-top: 0px !important;
+  padding-bottom: 0px !important;
 }
 
 .cyan-skin .side-nav {
@@ -96,4 +105,19 @@
   .double-nav .button-collapse-non-fixed {
     margin-top: -1px !important;
   }
+}
+
+.blue-gradient {
+  background: #596e79 !important;
+}
+
+.cyan-skin .navbar {
+  background-color: #305f72 !important;
+}
+
+.modal-dialog {
+  width: 100%;
+  height: 100%;
+  padding: 1rem;
+  margin: 0;
 }
