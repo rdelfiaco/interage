@@ -9,14 +9,14 @@ import { Router } from '@angular/router';
 export class QuestionarioComponent implements OnInit {
 
   tableData: object[] = [
-    { id: 1,nome: "Quest. Avaliação de Pós Venda", qtde_perguntas: 5, status: 1},
-    { id: 2,nome: "Questionário De Teste 5", qtde_perguntas: 3, status: 0},
-    { id: 3,nome: "Questionário De Teste Pergunta abertas", qtde_perguntas: 5, status: 1},
-    { id: 4,nome: "questionário teste1", qtde_perguntas: 4, status: 0},
+    { id: 1, nome: "Quest. Avaliação de Pós Venda", qtde_perguntas: 5, status: 1 },
+    { id: 2, nome: "Questionário De Teste 5", qtde_perguntas: 3, status: 0 },
+    { id: 3, nome: "Questionário De Teste Pergunta abertas", qtde_perguntas: 5, status: 1 },
+    { id: 4, nome: "questionário teste1", qtde_perguntas: 4, status: 0 },
   ];
   private sorted = false;
 
-  constructor(private router: Router,) { }
+  constructor(private router: Router, ) { }
 
   ngOnInit() {
   }
@@ -35,7 +35,8 @@ export class QuestionarioComponent implements OnInit {
 
     this.sorted = !this.sorted;
   }
+  
   openQuestionario(id: string) {
-    this.router.navigate(['questionario/'+id]);
+    this.router.navigate(['questionario/' + id]);
   }
 }

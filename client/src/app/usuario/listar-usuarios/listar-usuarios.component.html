@@ -1,32 +1,32 @@
 <div class="row">
   <div style="margin-left: 950px" class="row d-flex justify-content-end">
-    <button type="button"  mdbBtn color="primary" (click)="inicializaForm();  adicionarModal.show()" class="relative waves-light"
-      mdbWavesEffect>Adicionar Novo Usuário</button>
+    <button type="button" mdbBtn color="primary" (click)="inicializaForm();  adicionarModal.show()"
+      class="relative waves-light" mdbWavesEffect>Adicionar Novo Usuário</button>
   </div>
   <br>
   <br>
   <table class="table">
     <thead>
       <tr>
-        <th class="th-sm" >Id
-        <mdb-icon icon="sort" (click)="sortBy('id')"></mdb-icon>
+        <th class="th-sm">Id
+          <mdb-icon icon="sort" (click)="sortBy('id')"></mdb-icon>
         </th>
-        <th class="th-sm" >CPF
+        <th class="th-sm">CPF
           <mdb-icon icon="sort" (click)="sortBy('cpf_cnpj')"></mdb-icon>
         </th>
-        <th class="th-sm" >Nome
-            <mdb-icon icon="sort" (click)="sortBy('nome')"></mdb-icon>
-        </th>
-        <th class="th-sm" >login
+        <th class="th-sm">Nome
           <mdb-icon icon="sort" (click)="sortBy('nome')"></mdb-icon>
         </th>
-        <th class="th-sm" >Status
+        <th class="th-sm">login
+          <mdb-icon icon="sort" (click)="sortBy('nome')"></mdb-icon>
+        </th>
+        <th class="th-sm">Status
           <mdb-icon icon="sort" (click)="sortBy('status')"></mdb-icon>
         </th>
-        <th class="th-sm" >Departamento
+        <th class="th-sm">Departamento
           <mdb-icon icon="sort" (click)="sortBy('departamento')"></mdb-icon>
         </th>
-        <th class="th-sm" >Ações
+        <th class="th-sm">Ações
         </th>
       </tr>
     </thead>
@@ -37,20 +37,20 @@
         <td>{{usuario.nome}}</td>
         <td>{{usuario.login}}</td>
         <td>
-          <mdb-checkbox [checked]="usuario.status" [disabled]="true" ></mdb-checkbox>
+          <mdb-checkbox [checked]="usuario.status" [disabled]="true"></mdb-checkbox>
         </td>
         <td>{{usuario.departamento}}</td>
         <td>
-          <mdb-icon style="margin: 0px 5px;" icon="pencil" (click)="editar(usuario.id)" (click)="editarModal.show()"  
-          size="lg" title="Editar usuários" ></mdb-icon>
+          <mdb-icon style="margin: 0px 5px;" icon="pencil" (click)="editar(usuario.id)" (click)="editarModal.show()"
+            size="lg" title="Editar usuários"></mdb-icon>
           <mdb-icon style="margin: 0px 5px;" icon="trash" (click)="excluir(usuario.id)" (click)="excluirModal.show()"
             size="lg" title="Excluir usuários"></mdb-icon>
-          <mdb-icon style="margin: 0px 5px;" icon="contao" (click)="campanhasUsuario(usuario.id)"
-          size="lg" title="Campanhas do usuários" ></mdb-icon>
-          <mdb-icon style="margin: 0px 5px;" icon="unlock-alt" (click)="permissoesUsuario(usuario.id)"
-          size="lg" title="Permissões do usuários" ></mdb-icon>
+          <mdb-icon style="margin: 0px 5px;" icon="contao" (click)="campanhasUsuario(usuario.id)" size="lg"
+            title="Campanhas do usuários"></mdb-icon>
+          <mdb-icon style="margin: 0px 5px;" icon="unlock-alt" (click)="permissoesUsuario(usuario.id)" size="lg"
+            title="Permissões do usuários"></mdb-icon>
 
-          
+
         </td>
       </tr>
     </tbody>
@@ -60,77 +60,74 @@
 <br />
 
 
-<div [formGroup]="usuarioForm" mdbModal #editarModal="mdbModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myBasicModalLabel"
-  aria-hidden="true" [config]="{backdrop: true}">
-  <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+<div [formGroup]="usuarioForm" mdbModal #editarModal="mdbModal" class="modal fade" tabindex="-1" role="dialog"
+  aria-labelledby="myBasicModalLabel" aria-hidden="true" [config]="{backdrop: true}">
+  <div class="modal-dialog modal-fluid" role="document">
+    <div class="modal-header light-blue darken-3 white-text">
+      <h4 class="title">Editando: {{usuarioNomeSelecionado}}</h4>
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="editarModal.hide()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
     <div class="modal-content">
-      <div class="modal-header light-blue darken-3 white-text">
-        <h4 class="title">Editando: {{usuarioNomeSelecionado}}</h4>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="editarModal.hide()">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-
-      <div >
-        <div class="form-row" style="margin-left: 5px; margin-right: 5px" >
-          <div class="md-form col">
-            <input mdbInputDirective formControlName="login" max="4" min="3" type="text" id="login" class="form-control">
-            <label for="login">Login</label>
-          </div>
-          <div class="md-form col">
-            <mdb-checkbox formControlName="status">Status</mdb-checkbox>
-          </div>
+      <div class="form-row" style="margin-left: 5px; margin-right: 5px">
+        <div class="md-form col">
+          <input mdbInputDirective formControlName="login" max="4" min="3" type="text" id="login" class="form-control">
+          <label for="login">Login</label>
         </div>
-        <div class="form-row" style="margin-left: 5px; margin-right: 5px" >
-          <div class="col mdb-select-form">
-            <mdb-select formControlName="id_organograma"  [options]="departamentoSelect"
-              [multiple]="false" placeholder={{departamentoIdSelect}}></mdb-select>
-              <label for="">Departamento</label>
-          </div>
-          <!-- <div class="col mdb-select-form">
+        <div class="md-form col">
+          <mdb-checkbox formControlName="status">Status</mdb-checkbox>
+        </div>
+      </div>
+      <div class="form-row" style="margin-left: 5px; margin-right: 5px">
+        <div class="col mdb-select-form">
+          <mdb-select formControlName="id_organograma" [options]="departamentoSelect" [multiple]="false"
+            placeholder={{departamentoIdSelect}}></mdb-select>
+          <label for="">Departamento</label>
+        </div>
+        <!-- <div class="col mdb-select-form">
             <mdb-select formControlName="responsavel_membro"  [options]="niveisHierarquicoSelect"
               [multiple]="false" placeholder="Nível hierárquico" ></mdb-select>
               <label for="Nível hierárquico">Nível hierárquico</label>
           </div> -->
+      </div>
+      <div class="form-row" style="margin-left: 5px; margin-right: 5px">
+        <div class="md-form col-2">
+          <mdb-time-picker [buttonLabel]="'Done'" [twelvehour]="false" [darktheme]="true"
+            [placeholder]="'Selecione a hora'" formControlName="hora_entrada"></mdb-time-picker>
+          <label class="">Hora entrada</label>
         </div>
-        <div class="form-row" style="margin-left: 5px; margin-right: 5px" >
-          <div class="md-form col-2">
-            <mdb-time-picker [buttonLabel]="'Done'" [twelvehour]="false" [darktheme]="true" [placeholder]="'Selecione a hora'"
-            formControlName="hora_entrada"></mdb-time-picker>
-           <label class="">Hora entrada</label>
-          </div>
-          <div class="md-form col-2">
-            <mdb-time-picker [buttonLabel]="'Done'" [twelvehour]="false" [darktheme]="true" [placeholder]="'Selecione a hora'"
-            formControlName="hora_saida"></mdb-time-picker>
-           <label class="">Hora saída</label>
-          </div>
-          <div class="md-form col">
-            <mdb-time-picker [buttonLabel]="'Done'" [twelvehour]="false" [darktheme]="true" [placeholder]="'Selecione a hora'"
-            formControlName="hora_entrada_lanche"></mdb-time-picker>
-           <label class="">Hora entrada para o lanche</label>
-          </div>
-          <div class="md-form col">
-            <mdb-time-picker [buttonLabel]="'Done'" [twelvehour]="false" [darktheme]="true" [placeholder]="'Selecione a hora'"
-            formControlName="hora_saida_lanche"></mdb-time-picker>
-           <label class="">Hora saída do lanche</label>
-          </div>
+        <div class="md-form col-2">
+          <mdb-time-picker [buttonLabel]="'Done'" [twelvehour]="false" [darktheme]="true"
+            [placeholder]="'Selecione a hora'" formControlName="hora_saida"></mdb-time-picker>
+          <label class="">Hora saída</label>
         </div>
-
-        <div class="form-row" style="margin-left: 5px; margin-right: 5px" >
-          <div class="md-form col">
-            <mdb-checkbox formControlName="possui_carteira_cli">Trabalha com carteira de clientes</mdb-checkbox>
-          </div>
-          <button type="button" mdbBtn color="primary" class="relative waves-light" (click)="inicializarSenha()" title="A nova senha será 123"
-          mdbWavesEffect>Inicializar senha </button>
+        <div class="md-form col">
+          <mdb-time-picker [buttonLabel]="'Done'" [twelvehour]="false" [darktheme]="true"
+            [placeholder]="'Selecione a hora'" formControlName="hora_entrada_lanche"></mdb-time-picker>
+          <label class="">Hora entrada para o lanche</label>
         </div>
-
+        <div class="md-form col">
+          <mdb-time-picker [buttonLabel]="'Done'" [twelvehour]="false" [darktheme]="true"
+            [placeholder]="'Selecione a hora'" formControlName="hora_saida_lanche"></mdb-time-picker>
+          <label class="">Hora saída do lanche</label>
+        </div>
       </div>
 
-      <div class="modal-footer">
-        <button type="button" mdbBtn color="danger" class="waves-light" aria-label="Cancelar" (click)="editarModal.hide()"
-          mdbWavesEffect>Cancelar</button>
-        <button type="button" mdbBtn color="primary" class="relative waves-light" (click)="editarModal.hide(); salvar()"
-          mdbWavesEffect>Salvar</button>
+      <div class="form-row" style="margin-left: 5px; margin-right: 5px">
+        <div class="md-form col">
+          <mdb-checkbox formControlName="possui_carteira_cli">Trabalha com carteira de clientes</mdb-checkbox>
+        </div>
+        <button type="button" mdbBtn color="primary" class="relative waves-light" (click)="inicializarSenha()"
+          title="A nova senha será 123" mdbWavesEffect>Inicializar senha </button>
+      </div>
+      <div class="row">
+        <div class="col-lg-12 text-right">
+          <button type="button" mdbBtn color="danger" class="waves-light" aria-label="Cancelar"
+            (click)="editarModal.hide()" mdbWavesEffect>Cancelar</button>
+          <button type="button" mdbBtn color="primary" class="relative waves-light"
+            (click)="editarModal.hide(); salvar()" mdbWavesEffect>Salvar</button>
+        </div>
       </div>
     </div>
   </div>
@@ -138,8 +135,8 @@
 
 
 
-<div [formGroup]="usuarioForm" mdbModal #excluirModal="mdbModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myBasicModalLabel"
-  aria-hidden="true" [config]="{backdrop: true}">
+<div [formGroup]="usuarioForm" mdbModal #excluirModal="mdbModal" class="modal fade" tabindex="-1" role="dialog"
+  aria-labelledby="myBasicModalLabel" aria-hidden="true" [config]="{backdrop: true}">
   <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-header light-blue darken-3 white-text">
@@ -149,15 +146,15 @@
         </button>
       </div>
 
-      <div >
-            <h4> {{usuarioNomeSelecionado}}</h4>
+      <div>
+        <h4> {{usuarioNomeSelecionado}}</h4>
       </div>
 
       <div class="modal-footer">
-        <button type="button" mdbBtn color="danger" class="waves-light" aria-label="Cancelar" (click)="excluirModal.hide()"
-          mdbWavesEffect>Cancelar</button>
-        <button type="button" mdbBtn color="primary" class="relative waves-light" (click)="excluirModal.hide(); exclusaoConfirmada()"
-          mdbWavesEffect>Excluir</button>
+        <button type="button" mdbBtn color="danger" class="waves-light" aria-label="Cancelar"
+          (click)="excluirModal.hide()" mdbWavesEffect>Cancelar</button>
+        <button type="button" mdbBtn color="primary" class="relative waves-light"
+          (click)="excluirModal.hide(); exclusaoConfirmada()" mdbWavesEffect>Excluir</button>
       </div>
     </div>
   </div>
@@ -167,8 +164,8 @@
 
 
 
-<div [formGroup]="usuarioForm" mdbModal #adicionarModal="mdbModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myBasicModalLabel"
-  aria-hidden="true" [config]="{backdrop: true}">
+<div [formGroup]="usuarioForm" mdbModal #adicionarModal="mdbModal" class="modal fade" tabindex="-1" role="dialog"
+  aria-labelledby="myBasicModalLabel" aria-hidden="true" [config]="{backdrop: true}">
   <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-header light-blue darken-3 white-text">
@@ -178,37 +175,36 @@
         </button>
       </div>
 
-      <div >
-        <div class="form-row" style="margin-left: 5px; margin-right: 5px" >
+      <div>
+        <div class="form-row" style="margin-left: 5px; margin-right: 5px">
 
-            <div class="md-form col-3">
-                <input mdbInputDirective formControlName="cpf_cnpj" type="text" id="cpf" 
-                (change)="getPessoaPorCPFCNPJ()" class="form-control" >
-                <label for="cpf">CPF</label>
-            </div>
-            <div class="md-form col-5">
-                <input mdbInputDirective formControlName="nome" type="text" id="nome" 
-                 class="form-control"  >
-                <label for="nome">nome</label>
-            </div>
+          <div class="md-form col-3">
+            <input mdbInputDirective formControlName="cpf_cnpj" type="text" id="cpf" (change)="getPessoaPorCPFCNPJ()"
+              class="form-control">
+            <label for="cpf">CPF</label>
+          </div>
+          <div class="md-form col-5">
+            <input mdbInputDirective formControlName="nome" type="text" id="nome" class="form-control">
+            <label for="nome">nome</label>
+          </div>
 
-              
+
 
         </div>
-        <div class="form-row" style="margin-left: 5px; margin-right: 5px" >
+        <div class="form-row" style="margin-left: 5px; margin-right: 5px">
           <div class="md-form col">
-            <input mdbInputDirective formControlName="login" max="4" min="3" type="text" id="login" 
-            (change)="getLogin()"  class="form-control">
+            <input mdbInputDirective formControlName="login" max="4" min="3" type="text" id="login"
+              (change)="getLogin()" class="form-control">
             <label for="login">Login</label>
           </div>
           <div class="md-form col">
             <mdb-checkbox formControlName="status">Status</mdb-checkbox>
           </div>
         </div>
-        <div class="form-row" style="margin-left: 5px; margin-right: 5px" >
+        <div class="form-row" style="margin-left: 5px; margin-right: 5px">
           <div class="col mdb-select-form">
-            <mdb-select formControlName="id_organograma"  [options]="departamentoSelect"
-              [multiple]="false" placeholder="Departamento"></mdb-select>
+            <mdb-select formControlName="id_organograma" [options]="departamentoSelect" [multiple]="false"
+              placeholder="Departamento"></mdb-select>
           </div>
           <!-- <div class="col mdb-select-form">
               <mdb-select formControlName="responsavel_membro"  [options]="niveisHierarquicoSelect"
@@ -216,30 +212,30 @@
                 <label for="Nível hierárquico">Nível hierárquico</label>
           </div> -->
         </div>
-        <div class="form-row" style="margin-left: 5px; margin-right: 5px" >
+        <div class="form-row" style="margin-left: 5px; margin-right: 5px">
           <div class="md-form col-2">
-            <mdb-time-picker [buttonLabel]="'Done'" [twelvehour]="false" [darktheme]="true" [placeholder]="'Selecione a hora'"
-            formControlName="hora_entrada"></mdb-time-picker>
-           <label class="">Hora entrada</label>
+            <mdb-time-picker [buttonLabel]="'Done'" [twelvehour]="false" [darktheme]="true"
+              [placeholder]="'Selecione a hora'" formControlName="hora_entrada"></mdb-time-picker>
+            <label class="">Hora entrada</label>
           </div>
           <div class="md-form col-2">
-            <mdb-time-picker [buttonLabel]="'Done'" [twelvehour]="false" [darktheme]="true" [placeholder]="'Selecione a hora'"
-            formControlName="hora_saida"></mdb-time-picker>
-           <label class="">Hora saída</label>
+            <mdb-time-picker [buttonLabel]="'Done'" [twelvehour]="false" [darktheme]="true"
+              [placeholder]="'Selecione a hora'" formControlName="hora_saida"></mdb-time-picker>
+            <label class="">Hora saída</label>
           </div>
           <div class="md-form col">
-            <mdb-time-picker [buttonLabel]="'Done'" [twelvehour]="false" [darktheme]="true" [placeholder]="'Selecione a hora'"
-            formControlName="hora_entrada_lanche"></mdb-time-picker>
-           <label class="">Hora entrada para o lanche</label>
+            <mdb-time-picker [buttonLabel]="'Done'" [twelvehour]="false" [darktheme]="true"
+              [placeholder]="'Selecione a hora'" formControlName="hora_entrada_lanche"></mdb-time-picker>
+            <label class="">Hora entrada para o lanche</label>
           </div>
           <div class="md-form col">
-            <mdb-time-picker [buttonLabel]="'Done'" [twelvehour]="false" [darktheme]="true" [placeholder]="'Selecione a hora'"
-            formControlName="hora_saida_lanche"></mdb-time-picker>
-           <label class="">Hora saída do lanche</label>
+            <mdb-time-picker [buttonLabel]="'Done'" [twelvehour]="false" [darktheme]="true"
+              [placeholder]="'Selecione a hora'" formControlName="hora_saida_lanche"></mdb-time-picker>
+            <label class="">Hora saída do lanche</label>
           </div>
         </div>
 
-        <div class="form-row" style="margin-left: 5px; margin-right: 5px" >
+        <div class="form-row" style="margin-left: 5px; margin-right: 5px">
           <div class="md-form col">
             <mdb-checkbox formControlName="possui_carteira_cli">Trabalha com carteira de clientes</mdb-checkbox>
           </div>
@@ -249,10 +245,10 @@
       </div>
 
       <div class="modal-footer">
-        <button type="button" mdbBtn color="danger" class="waves-light" aria-label="Cancelar" (click)="adicionarModal.hide()"
-          mdbWavesEffect>Cancelar</button>
-        <button type="button" mdbBtn color="primary" class="relative waves-light" (click)="adicionarModal.hide(); adicionar()"
-          mdbWavesEffect>Salvar</button>
+        <button type="button" mdbBtn color="danger" class="waves-light" aria-label="Cancelar"
+          (click)="adicionarModal.hide()" mdbWavesEffect>Cancelar</button>
+        <button type="button" mdbBtn color="primary" class="relative waves-light"
+          (click)="adicionarModal.hide(); adicionar()" mdbWavesEffect>Salvar</button>
       </div>
     </div>
   </div>
