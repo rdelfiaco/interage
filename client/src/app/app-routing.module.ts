@@ -39,6 +39,9 @@ import { DetalheEventoComponent } from './evento/detalhe-evento/detalhe-evento.c
 import { ListarUsuariosComponent } from './usuario/listar-usuarios/listar-usuarios.component';
 import { UsuarioPermissoesComponent } from './usuario/usuario-permissoes/usuario-permissoes.component';
 import { QuestionarioComponent } from './questionario/questionario.component';
+import { QuestionarioEditComponent } from './questionario/questionario-edit/questionario-edit.component';
+import { PerguntaEditComponent } from './questionario/components/pergunta/pergunta-edit/pergunta-edit.component';
+import { RespostaEditComponent } from './questionario/components/resposta/resposta-edit/resposta-edit.component';
 
 
 
@@ -187,6 +190,21 @@ const routes: Routes = [
     path: 'questionario',
     component: QuestionarioComponent,
     canActivate: [AuthGuard]
+  },
+  {
+    path: 'questionario/:id',
+    component: QuestionarioEditComponent,
+    // canActivate: [AuthGuard]
+  },
+  {
+    path: 'questionario/:id/pergunta/:id',
+    component: PerguntaEditComponent,
+    // canActivate: [AuthGuard]
+  },
+  {
+    path: 'questionario/:id/pergunta/:id/resposta/:id',
+    component: RespostaEditComponent,
+    // canActivate: [AuthGuard]
   },
   {
     path: 'listarUsuarios',

@@ -9,15 +9,13 @@ import { AngularDualListBoxModule } from 'angular-dual-listbox';
 import { QuestionarioComponent } from './questionario.component';
 import { QuestionarioAddComponent } from './questionario-add/questionario-add.component';
 import { QuestionarioEditComponent } from './questionario-edit/questionario-edit.component';
-import { PerguntaComponent } from './components/pergunta/pergunta.component';
 import { PerguntaAddComponent } from './components/pergunta/pergunta-add/pergunta-add.component';
 import { PerguntaEditComponent } from './components/pergunta/pergunta-edit/pergunta-edit.component';
-import { RespostaComponent } from './components/resposta/resposta.component';
 import { RespostaAddComponent } from './components/resposta/resposta-add/resposta-add.component';
 import { RespostaEditComponent } from './components/resposta/resposta-edit/resposta-edit.component';
 
  // MDB Angular Pro
-import { MDBBootstrapModulesPro, WavesModule, IconsModule, ButtonsModule, CheckboxModule, CardsFreeModule } from 'ng-uikit-pro-standard';
+import { MDBBootstrapModulesPro, WavesModule, IconsModule, ButtonsModule, CheckboxModule, CardsFreeModule, InputsModule } from 'ng-uikit-pro-standard';
 
 @NgModule({
   imports: [
@@ -33,16 +31,15 @@ import { MDBBootstrapModulesPro, WavesModule, IconsModule, ButtonsModule, Checkb
     IconsModule,
     CheckboxModule,
     CardsFreeModule,
-    AngularDualListBoxModule
+    AngularDualListBoxModule,
+    InputsModule.forRoot(),
   ],
   declarations: [
     QuestionarioComponent,
     QuestionarioAddComponent,
     QuestionarioEditComponent,
-    PerguntaComponent,
     PerguntaAddComponent,
     PerguntaEditComponent,
-    RespostaComponent,
     RespostaAddComponent,
     RespostaEditComponent
   ]

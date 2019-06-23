@@ -51,7 +51,7 @@
             <td class="text-center"><mdb-checkbox [checked]="row.status"></mdb-checkbox></td>
             <td class="text-center">
                 <div>
-                  <button type="button" mdbBtn color="blue" outline="true" rounded="true" size="sm" class="px-2" mdbWavesEffect>
+                  <button (click)="openQuestionario(row.id)" type="button" mdbBtn color="blue" outline="true" rounded="true" size="sm" class="px-2" mdbWavesEffect>
                     <mdb-icon fas icon="pencil" class="mt-0"></mdb-icon>
                   </button>
                   <button type="button" mdbBtn color="red" outline="true" rounded="true" size="sm" class="px-2" mdbWavesEffect>

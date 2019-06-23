@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-resposta-edit',
@@ -7,9 +8,12 @@ import { Component, OnInit } from '@angular/core';
 })
 export class RespostaEditComponent implements OnInit {
 
-  constructor() { }
+  constructor(private _location: Location,) { }
 
   ngOnInit() {
   }
 
+  goBack() {
+    this._location.back();
+  }
 }

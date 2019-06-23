@@ -3,6 +3,8 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ConnectHTTP } from '../../shared/services/connectHTTP';
 import { LocalStorage } from '../../shared/services/localStorage';
 import { ToastService } from '../../../lib/ng-uikit-pro-standard';
+import { Router } from '@angular/router';
+import {Location} from '@angular/common';
 
 @Component({
   selector: 'app-questionario-add',
@@ -10,9 +12,12 @@ import { ToastService } from '../../../lib/ng-uikit-pro-standard';
   styleUrls: ['./questionario-add.component.scss']
 })
 export class QuestionarioAddComponent implements OnInit {
-  private questionarioForm: FormGroup;
+  // private questionarioForm: FormGroup;
   usuarioLogado: any;
-  constructor(private connectHTTP: ConnectHTTP, private formBuilder: FormBuilder,
+  constructor(private router: Router,
+    private _location: Location,
+    private connectHTTP: ConnectHTTP,
+    private formBuilder: FormBuilder,
     private localStorage: LocalStorage,
     private toastrService: ToastService) {
     this.usuarioLogado = this.localStorage.getLocalStorage('usuarioLogado') as any;
@@ -22,10 +27,14 @@ export class QuestionarioAddComponent implements OnInit {
   }
 
   novoQuestionario() {
-    this.questionarioForm = this.formBuilder.group({
-      nome: [''],
-      status: [''],
-    });
+    // this.questionarioForm = this.formBuilder.group({
+    //   nome: [''],
+    //   status: [''],
+    // });
+  }
+
+  back(id: string) {
+    this._location.back();
   }
 
   async salvar() {

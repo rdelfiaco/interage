@@ -1,3 +1,37 @@
-<p>
-  resposta-add works!
-</p>
+<form [formGroup]="questionarioPerguntaRespostaAddForm" class="p-4">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="md-form">
+          <input mdbInputDirective formControlName="nome" min="5" type="text" id="nome" class="form-control">
+          <label for="nome">Nome</label>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-8">
+        <div class="md-form">
+          <input mdbInputDirective formControlName="sequencia" min="1" type="number" id="sequencia" class="form-control">
+          <label for="sequencia">Sequencia</label>
+        </div>
+      </div>
+      <div class="col-lg-2">
+        <div class="md-form">
+          <mdb-checkbox>Ativo</mdb-checkbox>
+        </div>
+      </div>
+      <div class="col-lg-2">
+        <div class="md-form">
+          <mdb-checkbox>Multipla Escolha</mdb-checkbox>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-12 text-right">
+        <div class="md-form">
+          <button type="button" mdbBtn color="light" mdbWavesEffect>Voltar</button>
+          <button type="button" mdbBtn color="dark-green" mdbWavesEffect>Criar</button>
+          <!-- <button type="button" mdbBtn color="danger" mdbWavesEffect>Apagar</button> -->
+        </div>
+      </div>
+    </div>
+  </form>
