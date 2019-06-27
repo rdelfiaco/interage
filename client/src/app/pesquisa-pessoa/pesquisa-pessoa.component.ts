@@ -125,6 +125,10 @@ export class PesquisaPessoaComponent implements OnInit {
     }
   }
 
+  closeModal() {
+    this.pessoaEditando.hide();
+  }
+
 
   async editarPessoa(pessoa: any) {
 

@@ -1,123 +1,135 @@
-<div class="row mx-auto">
-  <div class="col md-form">
-    <input type="search" [(ngModel)]="textoPesquisaPessoa" id="search" class="form-control" mdbInputDirective
-      [mdbValidate]="false" (keyup)="$event.keyCode == 13 && pesquisar()">
-    <label for="search">Inserir CPF ou CNPJ ou Nome da Pessoa ou id=???(onde ??? é o número do ID da pessoa)</label>
-  </div>
-  <div class="col-1">
-    <a mdbBtn floating=" true" size="lg" (click)="pesquisar()" gradient="blue" mdbWavesEffect>
-      <mdb-icon icon="bolt"></mdb-icon>
-    </a>
-  </div>
-</div>
-
-<table class="table table-hover table-responsive-md mb-0">
-  <!--Table head-->
-  <thead>
-    <tr>
-      <th scope="row" class="th-sm idPessoaTable">Id</th>
-      <th class="th-lg">Nome
-        <mdb-icon icon="sort" (click)="sortBy('nome')"></mdb-icon>
-      </th>
-      <th class="th-sm">Fantasia
-        <mdb-icon icon="sort" (click)="sortBy('apelido_fantasia')"></mdb-icon>
-      </th>
-      <th class="th-sm">CPF/CNPJ
-        <mdb-icon icon="sort" (click)="sortBy('cpf_cnpj')"></mdb-icon>
-      </th>
-      <th class="th-sm">Carteira
-        <mdb-icon icon="sort" (click)="sortBy('dtinclusao')"></mdb-icon>
-      </th>
-      <th class="th-sm">Ativo
-        <mdb-icon icon="sort" (click)="sortBy('status')"></mdb-icon>
-      </th>
-    </tr>
-  </thead>
-  <!--Table head-->
-
-  <!--Table body-->
-  <tbody>
-    <tr (click)="editarPessoa(pessoa)" #list *ngFor="let pessoa of pessoasEncontradas; let i = index">
-      <td *ngIf="i+1 >= firstVisibleIndex && i+1 <= lastVisibleIndex">{{pessoa.id}}</td>
-      <td *ngIf="i+1 >= firstVisibleIndex && i+1 <= lastVisibleIndex">{{pessoa.nome}}</td>
-      <td *ngIf="i+1 >= firstVisibleIndex && i+1 <= lastVisibleIndex">{{pessoa.apelido_fantasia}}</td>
-      <td *ngIf="i+1 >= firstVisibleIndex && i+1 <= lastVisibleIndex">{{pessoa.cpf_cnpj}}</td>
-      <td *ngIf="i+1 >= firstVisibleIndex && i+1 <= lastVisibleIndex">{{pessoa.carteira}}</td>
-      <!-- <td *ngIf="i+1 >= firstVisibleIndex && i+1 <= lastVisibleIndex">{{pessoa.dtinclusao | date:'dd/MM/yyyy' }}</td> -->
-      <td *ngIf="i+1 >= firstVisibleIndex && i+1 <= lastVisibleIndex">
-        <mdb-checkbox [checked]="pessoa.status" [disabled]=true></mdb-checkbox>
-      </td>
-    </tr>
-  </tbody>
-  <!--Table body-->
-</table>
-
-<hr class="my-0">
-<div class="paginacao">
-
-  <!--Bottom Table UI-->
-  <div class="justify-content-center align-items-center">
-
-    <!--Pagination -->
-    <nav class="my-4 pt-2">
-      <ul class="pagination pagination-circle pg-purple mb-0">
-
-        <!--First-->
-        <li class="page-item clearfix d-none d-md-block" (click)="firstPage()"
-          [ngClass]="{disabled: activePage == firstPageNumber}">
-          <a class="page-link">First</a>
-        </li>
-
-        <!--Arrow left-->
-        <li class="page-item" (click)="previousPage()" [ngClass]="{disabled: activePage == firstPageNumber}">
-          <a class="page-link" aria-label="Previous">
-            <span aria-hidden="true">&laquo;</span>
-            <span class="sr-only">Previous</span>
-          </a>
-        </li>
-
-        <!--Numbers-->
-        <li *ngFor="let page of paginators; let i = index" class="page-item" [ngClass]="{active: i+1 == activePage}">
-          <a class="page-link waves-light" (click)="changePage($event)" mdbWavesEffect>{{page}}</a>
-        </li>
-
-
-
-        <!--Arrow right-->
-        <li class="page-item" (click)="nextPage()" [ngClass]="{disabled: activePage == lastPageNumber}">
-          <a class="page-link" aria-label="Next">
-            <span aria-hidden="true">&raquo;</span>
-            <span class="sr-only">Next</span>
-          </a>
-        </li>
-
-        <!--First-->
-        <li class="page-item clearfix d-none d-md-block" (click)="lastPage()"
-          [ngClass]="{disabled: activePage == lastPageNumber}">
-          <a class="page-link">Last</a>
-        </li>
-
-      </ul>
-    </nav>
-    <!--/Pagination -->
-  </div>
-</div>
-
-
-<div mdbModal #pessoaEditando="mdbModal" [config]="{backdrop: true, ignoreBackdropClick: true}" class="modal fade right"
-  role="dialog" aria-labelledby="myBasicModalLabel" aria-hidden="true">
-  <div *ngIf="pessoa | async" class="modal-dialog modal-fluid" role="document">
-    <div class="modal-header light-blue darken-3 white-text">
-      <h4 class="modal-title w-100" id="myModalLabel">Editando Pessoa</h4>
-      <button type="button" class="close pull-right" aria-label="Close" (click)="pessoaEditando.hide()">
-        <span aria-hidden="true">×</span>
+<div class="card card-cascade narrower">
+  <div
+    class="view view-cascade gradient-card-header blue-gradient narrower py-2 mx-4 mb-3 d-flex justify-content-center align-items-center">
+    <div>
+      <button type="button" mdbBtn color="white" outline="true" rounded="true" size="sm" class="px-2" mdbWavesEffect>
+        <mdb-icon fas fas icon="info" class="mt-0"></mdb-icon>
       </button>
     </div>
-    <div class="modal-content">
-      <div class="modal-body" style="overflow: auto; height: 80vh;">
-        <div class="row">
-          <div *ngIf="pessoa | async" class="col">
-            <app-cadastro-pessoa [pessoa]="pessoa" (refresh)="refresh()"></app-cadastro-pessoa>
+    <h4 class="white-text mx-3 mt-2 font-weight-bold text-uppercase">Pesquisar pessoa</h4>
+  </div>
+  <div class="px-4 p-4">
+    <div class="row p-2">
+      <div class="col-11">
+        <div class="md-form">
+          <input type="search" [(ngModel)]="textoPesquisaPessoa" id="search" class="form-control" mdbInputDirective
+            [mdbValidate]="false" (keyup)="$event.keyCode == 13 && pesquisar()">
+          <label for="search">Inserir CPF ou CNPJ ou Nome da Pessoa ou Código</label>
+        </div>
+      </div>
+      <div class="col-1">
+        <button type="button" style="margin-left: -10px;" mdbBtn color="primary" class="relative waves-light"
+          (click)="pesquisar()" mdbWavesEffect>
+          Pesquisar</button>
+      </div>
+    </div>
+    <div class="row p-2">
+      <div class="col-12 text-center">
+        <h4 class="mx-3 mt-2 mb-3 font-weight-bold text-uppercase" style="color: gray;">Resultado</h4>
+        <table class="table table-hover table-responsive-md mb-0">
+          <!--Table head-->
+          <thead>
+            <tr>
+              <th scope="row" class="th-sm idPessoaTable">Id</th>
+              <th class="th-lg">Nome
+                <mdb-icon icon="sort" (click)="sortBy('nome')"></mdb-icon>
+              </th>
+              <th class="th-sm">Fantasia
+                <mdb-icon icon="sort" (click)="sortBy('apelido_fantasia')"></mdb-icon>
+              </th>
+              <th class="th-sm">CPF/CNPJ
+                <mdb-icon icon="sort" (click)="sortBy('cpf_cnpj')"></mdb-icon>
+              </th>
+              <th class="th-sm">Carteira
+                <mdb-icon icon="sort" (click)="sortBy('dtinclusao')"></mdb-icon>
+              </th>
+              <th class="th-sm">Ativo
+                <mdb-icon icon="sort" (click)="sortBy('status')"></mdb-icon>
+              </th>
+            </tr>
+          </thead>
+          <!--Table head-->
+
+          <!--Table body-->
+          <tbody>
+            <tr (click)="editarPessoa(pessoa)" #list *ngFor="let pessoa of pessoasEncontradas; let i = index">
+              <td *ngIf="i+1 >= firstVisibleIndex && i+1 <= lastVisibleIndex">{{pessoa.id}}</td>
+              <td *ngIf="i+1 >= firstVisibleIndex && i+1 <= lastVisibleIndex">{{pessoa.nome}}</td>
+              <td *ngIf="i+1 >= firstVisibleIndex && i+1 <= lastVisibleIndex">{{pessoa.apelido_fantasia}}</td>
+              <td *ngIf="i+1 >= firstVisibleIndex && i+1 <= lastVisibleIndex">{{pessoa.cpf_cnpj}}</td>
+              <td *ngIf="i+1 >= firstVisibleIndex && i+1 <= lastVisibleIndex">{{pessoa.carteira}}</td>
+              <!-- <td *ngIf="i+1 >= firstVisibleIndex && i+1 <= lastVisibleIndex">{{pessoa.dtinclusao | date:'dd/MM/yyyy' }}</td> -->
+              <td *ngIf="i+1 >= firstVisibleIndex && i+1 <= lastVisibleIndex">
+                <mdb-checkbox [checked]="pessoa.status" [disabled]=true></mdb-checkbox>
+              </td>
+            </tr>
+          </tbody>
+          <!--Table body-->
+        </table>
+        <hr class="my-0">
+        <div class="paginacao">
+
+          <!--Bottom Table UI-->
+          <div class="justify-content-center align-items-center">
+
+            <!--Pagination -->
+            <nav class="my-4 pt-2">
+              <ul class="pagination pagination-circle pg-purple mb-0">
+
+                <!--First-->
+                <li class="page-item clearfix d-none d-md-block" (click)="firstPage()"
+                  [ngClass]="{disabled: activePage == firstPageNumber}">
+                  <a class="page-link">First</a>
+                </li>
+
+                <!--Arrow left-->
+                <li class="page-item" (click)="previousPage()" [ngClass]="{disabled: activePage == firstPageNumber}">
+                  <a class="page-link" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                    <span class="sr-only">Previous</span>
+                  </a>
+                </li>
+
+                <!--Numbers-->
+                <li *ngFor="let page of paginators; let i = index" class="page-item"
+                  [ngClass]="{active: i+1 == activePage}">
+                  <a class="page-link waves-light" (click)="changePage($event)" mdbWavesEffect>{{page}}</a>
+                </li>
+
+
+
+                <!--Arrow right-->
+                <li class="page-item" (click)="nextPage()" [ngClass]="{disabled: activePage == lastPageNumber}">
+                  <a class="page-link" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                    <span class="sr-only">Next</span>
+                  </a>
+                </li>
+
+                <!--First-->
+                <li class="page-item clearfix d-none d-md-block" (click)="lastPage()"
+                  [ngClass]="{disabled: activePage == lastPageNumber}">
+                  <a class="page-link">Last</a>
+                </li>
+
+              </ul>
+            </nav>
+            <!--/Pagination -->
+          </div>
+        </div>
+        <div mdbModal #pessoaEditando="mdbModal" [config]="{backdrop: true, ignoreBackdropClick: true}"
+          class="modal fade right" role="dialog" aria-labelledby="myBasicModalLabel" aria-hidden="true">
+          <div *ngIf="pessoa | async" class="modal-dialog modal-fluid" role="document">
+            <div class="modal-header light-blue darken-3 white-text">
+              <h4 class="modal-title" id="myModalLabel">Editando Pessoa</h4>
+              <button type="button" style="cursor:pointer;" class="close" data-dismiss="modal" aria-label="Close"
+                (click)="closeModal()">
+                <span aria-hidden="true" style="color:white; cursor:pointer;">&times;</span>
+              </button>
+            </div>
+            <div class="modal-content p-1" style="overflow: auto;">
+              <app-cadastro-pessoa [pessoa]="pessoa" (refresh)="refresh()"></app-cadastro-pessoa>
+            </div>
           </div>
         </div>
       </div>
