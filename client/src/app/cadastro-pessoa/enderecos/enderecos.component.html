@@ -22,12 +22,13 @@
         <td>{{endereco.logradouro}}</td>
         <td>{{endereco.complemento}}</td>
         <td>
-          <mdb-checkbox (change)="setEnderecoDeCorrespondencia(endereco)" [checked]="endereco.recebe_correspondencia"></mdb-checkbox>
+          <mdb-checkbox (change)="setEnderecoDeCorrespondencia(endereco)" [checked]="endereco.recebe_correspondencia">
+          </mdb-checkbox>
         </td>
         <td>
           <mdb-icon style="margin: 0px 5px;" icon="pencil" (click)="editarEndereco(endereco.id)" size="lg"></mdb-icon>
-          <mdb-icon style="margin: 0px 5px;" icon="trash" (click)="excluirEndereco(endereco.id)" (click)="confirmExcluirEndereco.show()"
-            size="lg"></mdb-icon>
+          <mdb-icon style="margin: 0px 5px;" icon="trash" (click)="excluirEndereco(endereco.id)"
+            (click)="confirmExcluirEndereco.show()" size="lg"></mdb-icon>
         </td>
       </tr>
 
@@ -36,8 +37,8 @@
   <span *ngIf="_pessoaObject && !_pessoaObject.enderecos.length">Nenhum endereço cadastrado!</span>
 </div>
 <div class="row d-flex justify-content-end">
-  <button type="button" [disabled]="enderecoSelecionado" mdbBtn color="primary" (click)="adicionarNovoEndereco();" class="relative waves-light"
-    mdbWavesEffect>Adicionar Novo Endereço</button>
+  <button type="button" [disabled]="enderecoSelecionado" mdbBtn color="primary" (click)="adicionarNovoEndereco();"
+    class="relative waves-light" mdbWavesEffect>Adicionar Novo Endereço</button>
 </div>
 <br />
 <br />
@@ -85,30 +86,35 @@
     <div class="row d-flex justify-content-end">
       <button type="button" mdbBtn color="primary" (click)="salvar();" class="relative waves-light" mdbWavesEffect
         [disabled]="!enderecoForm.valid">Salvar Endereço</button>
-      <button type="button" mdbBtn color="danger" (click)="cancelarAdd();" class="relative waves-light" mdbWavesEffect>Cancelar</button>
+      <button type="button" mdbBtn color="danger" (click)="cancelarAdd();" class="relative waves-light"
+        mdbWavesEffect>Cancelar</button>
     </div>
   </form>
 </div>
 
-<div mdbModal #confirmExcluirEndereco="mdbModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myBasicModalLabel"
-  aria-hidden="true" [config]="{backdrop: true}">
-  <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+<div mdbModal #confirmExcluirEndereco="mdbModal" class="modal fade" tabindex="-1" role="dialog"
+  aria-labelledby="myBasicModalLabel" aria-hidden="true" [config]="{backdrop: true}">
+  <div class="modal-dialog modal-fluid" role="document">
+    <div class="modal-header light-blue darken-3 white-text">
+      <h4 class="modal-title w-100" id="myModalLabel">Excluir Endereço</h4>
+      <button type="button" class="close pull-right" aria-label="Close" (click)="confirmExcluirEndereco.hide()">
+        <span aria-hidden="true">×</span>
+      </button>
+    </div>
     <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close pull-right" aria-label="Close" (click)="confirmExcluirEndereco.hide()">
-          <span aria-hidden="true">×</span>
-        </button>
-        <h4 class="modal-title w-100" id="myModalLabel">Excluir Endereço</h4>
-      </div>
       <div *ngIf="enderecoExclusao" class="modal-body">
         {{enderecoExclusao.cep}} {{enderecoExclusao.cidade}} {{enderecoExclusao.bairro}}
         {{enderecoExclusao.logradouro}} {{enderecoExclusao.complemento}}
       </div>
-      <div class="modal-footer">
-        <button type="button" mdbBtn color="danger" class="waves-light" aria-label="Cancelar" (click)="confirmExcluirEndereco.hide(); cancelaExclusaoEndereco()"
-          mdbWavesEffect>Cancelar</button>
-        <button type="button" mdbBtn color="primary" class="relative waves-light" (click)="confirmExcluirEndereco.hide(); confirmaExclusaoEndereco();"
-          mdbWavesEffect>Confirma</button>
+      <div class="row justify-content-end">
+        <div class="md-form">
+          <button type="button" mdbBtn color="danger" class="waves-light" aria-label="Cancelar"
+            (click)="confirmExcluirEndereco.hide(); cancelaExclusaoEndereco()" mdbWavesEffect>Cancelar</button>
+        </div>
+        <div class="md-form">
+          <button type="button" mdbBtn color="primary" class="relative waves-light"
+            (click)="confirmExcluirEndereco.hide(); confirmaExclusaoEndereco();" mdbWavesEffect>Confirma</button>
+        </div>
       </div>
     </div>
   </div>

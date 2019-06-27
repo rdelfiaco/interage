@@ -63,7 +63,8 @@
       <ul class="pagination pagination-circle pg-purple mb-0">
 
         <!--First-->
-        <li class="page-item clearfix d-none d-md-block" (click)="firstPage()" [ngClass]="{disabled: activePage == firstPageNumber}">
+        <li class="page-item clearfix d-none d-md-block" (click)="firstPage()"
+          [ngClass]="{disabled: activePage == firstPageNumber}">
           <a class="page-link">First</a>
         </li>
 
@@ -91,7 +92,8 @@
         </li>
 
         <!--First-->
-        <li class="page-item clearfix d-none d-md-block" (click)="lastPage()" [ngClass]="{disabled: activePage == lastPageNumber}">
+        <li class="page-item clearfix d-none d-md-block" (click)="lastPage()"
+          [ngClass]="{disabled: activePage == lastPageNumber}">
           <a class="page-link">Last</a>
         </li>
 
@@ -104,14 +106,14 @@
 
 <div mdbModal #pessoaEditando="mdbModal" [config]="{backdrop: true, ignoreBackdropClick: true}" class="modal fade right"
   role="dialog" aria-labelledby="myBasicModalLabel" aria-hidden="true">
-  <div *ngIf="pessoa | async" class="modal-dialog modal-full-height modal-fluid" role="document">
+  <div *ngIf="pessoa | async" class="modal-dialog modal-fluid" role="document">
+    <div class="modal-header light-blue darken-3 white-text">
+      <h4 class="modal-title w-100" id="myModalLabel">Editando Pessoa</h4>
+      <button type="button" class="close pull-right" aria-label="Close" (click)="pessoaEditando.hide()">
+        <span aria-hidden="true">×</span>
+      </button>
+    </div>
     <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close pull-right" aria-label="Close" (click)="pessoaEditando.hide()">
-          <span aria-hidden="true">×</span>
-        </button>
-        <h4 class="modal-title w-100" id="myModalLabel">Editando Pessoa</h4>
-      </div>
       <div class="modal-body" style="overflow: auto; height: 80vh;">
         <div class="row">
           <div *ngIf="pessoa | async" class="col">

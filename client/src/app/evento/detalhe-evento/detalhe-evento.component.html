@@ -1,59 +1,77 @@
-<div *ngIf="carregando" style="height: 100%; width: 100%">
-  <app-carregando></app-carregando>
-</div>
-
-<div *ngIf="!carregando">
-  <!-- Nav tabs -->
-  <div>
-    <mdb-tabset [buttonClass]="'classic-tabs tabs-cyan'" [contentClass]="'card'" class="classic-tabs">
-      <!--Panel 1-->
-      <mdb-tab heading="Evento">
-        <div class="row">
-          <div class="col-12">
-            <div class="row" style="padding: 0px 15px;">
-              <div class="md-form col-12">
-                <div class="row justify-content-start">
-                  <button type="button" [disabled]="!podeConcluir" style="white-space: nowrap;" mdbBtn color="primary"
-                    class="waves-light" aria-label="Somente Visualizar" (click)="concluirEvento()" mdbWavesEffect>Concluir</button>
-                  <button type="button" [disabled]="!podeEncaminhar" (click)="encaminharEvento()" style="white-space: nowrap;"
-                    mdbBtn color="warning" class="relative waves-light" mdbWavesEffect>Encaminhar</button>
-                </div>
+<mdb-card cascade="true" narrower="true">
+  <!--Card image-->
+  <div
+    class="view view-cascade gradient-card-header blue-gradient narrower py-2 mx-4 mb-3 d-flex justify-content-center align-items-center">
+    <h4 href="" class="white-text mt-2 mx-3 font-weight-bold text-uppercase">Evento</h4>
+  </div>
+  <!--/Card image-->
+  <div class="px-4">
+    <div *ngIf="carregando" style="height: 100%; width: 100%">
+      <app-carregando></app-carregando>
+    </div>
+    <div *ngIf="!carregando">
+      <mdb-tabset [buttonClass]="'classic-tabs tabs-cyan'" class="classic-tabs">
+        <!--Panel 1-->
+        <mdb-tab heading="Evento">
+          <div class="row">
+            <div class="col-12">
+              <div class="md-form">
                 <app-formulario-evento [evento]="evento | async"></app-formulario-evento>
+                <div class="row justify-content-end">
+                  <button type="button" style="white-space: nowrap;" (click)="voltar()" mdbBtn color="danger"
+                    class="waves-light" aria-label="Voltar" mdbWavesEffect>Voltar</button>
+                  <button type="button" [disabled]="!podeConcluir" style="white-space: nowrap;" mdbBtn color="primary"
+                    class="waves-light" aria-label="Somente Visualizar" (click)="concluirEvento()"
+                    mdbWavesEffect>Concluir evento</button>
+                  <button type="button" [disabled]="!podeEncaminhar" (click)="encaminharEvento()"
+                    style="white-space: nowrap;" mdbBtn color="warning" class="relative waves-light"
+                    mdbWavesEffect>Encaminhar evento</button>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      </mdb-tab>
-      <!--Panel 2-->
-      <mdb-tab heading="Histórico Evento">
-        <div class="row">
-          <div class="col-12">
-            <br>
-            <app-linha-do-tempo-evento [pessoa]="pessoa | async"></app-linha-do-tempo-evento>
+        </mdb-tab>
+        <!--Panel 2-->
+        <mdb-tab heading="Histórico Evento">
+          <div class="row">
+            <div class="col-12">
+              <div class="md-form">
+                <app-linha-do-tempo-evento [pessoa]="pessoa | async"></app-linha-do-tempo-evento>
+                <div class="row justify-content-end">
+                  <div class="md-form">
+                    <button type="button" style="white-space: nowrap;" (click)="voltar()" mdbBtn color="danger"
+                    class="waves-light" aria-label="Voltar" mdbWavesEffect>Voltar</button>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
-        </div>
-      </mdb-tab>
-    </mdb-tabset>
+        </mdb-tab>
+      </mdb-tabset>
+    </div>
   </div>
-  <div class="row justify-content-end">
-    <button type="button" style="white-space: nowrap;" (click)="voltar()" mdbBtn color="danger" class="waves-light"
-      aria-label="Voltar" mdbWavesEffect>Voltar</button>
-  </div>
+</mdb-card>
 
-  <div mdbModal #modalConcluirEvento="mdbModal" [config]="{backdrop: true}" class="modal fade right" role="dialog"
-    aria-labelledby="myBasicModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div *ngIf="pessoaObject" class="modal-header">
-          <h4 class="modal-title w-100" id="myModalLabel">{{concluirOuEncaminhar}} Evento -
-            {{pessoaObject.principal.nome}}</h4>
-        </div>
-        <div *ngIf="pessoaObject" class="modal-body" style="overflow: auto; height: 80vh;">
-          <app-concluir-evento *ngIf="concluir" [evento]="evento" [pessoa]="pessoa" [motivos_respostas]="motivos_respostas"
-            [predicoes]="predicoes" [objecoes]="objecoes" (fechaModal)="fechaModal()"></app-concluir-evento>
 
-          <app-encaminhar-evento *ngIf="encaminhar" [evento]="evento" [pessoa]="pessoa" (fechaModal)="fechaModal()"></app-encaminhar-evento>
-        </div>
+<div mdbModal #modalConcluirEvento="mdbModal" [config]="{backdrop: true}" class="modal fade right" role="dialog"
+  aria-labelledby="myBasicModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-fluid" role="document">
+    <div *ngIf="pessoaObject" class="modal-header light-blue darken-3 white-text">
+      <h4 class="modal-title w-100" id="myModalLabel">{{concluirOuEncaminhar}} Evento -
+        {{pessoaObject.principal.nome}}</h4>
+      <button type="button" style="cursor:pointer;" class="close" data-dismiss="modal" aria-label="Close"
+        (click)="modalConcluirEvento.hide()">
+        <span aria-hidden="true" style="color:white; cursor:pointer;">&times;</span>
+      </button>
+    </div>
+    <div class="modal-content">
+      <div *ngIf="pessoaObject" class="modal-body" style="overflow: auto; height: 80vh;">
+        <app-concluir-evento *ngIf="concluir" [evento]="evento" [pessoa]="pessoa"
+          [motivos_respostas]="motivos_respostas" [predicoes]="predicoes" [objecoes]="objecoes"
+          (fechaModal)="fechaModal()"></app-concluir-evento>
+
+        <app-encaminhar-evento *ngIf="encaminhar" [evento]="evento" [pessoa]="pessoa" (fechaModal)="fechaModal()">
+        </app-encaminhar-evento>
       </div>
     </div>
   </div>

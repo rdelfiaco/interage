@@ -6,26 +6,31 @@
 
       <div *ngIf="quantEventosDaPessoa == 1" class="btn-group" mdbDropdown>
 
-        <button type="button" mdbBtn color="danger" class="waves-light" mdbWavesEffect (click)="discar()">Discar</button>
-        <button type="button" mdbDropdownToggle mdbBtn color="danger" class="dropdown-toggle dropdown-toggle-split px-3 waves-light"
-          mdbWavesEffect></button>
+        <button type="button" mdbBtn color="danger" class="waves-light" mdbWavesEffect
+          (click)="discar()">Discar</button>
+        <button type="button" mdbDropdownToggle mdbBtn color="danger"
+          class="dropdown-toggle dropdown-toggle-split px-3 waves-light" mdbWavesEffect></button>
         <div class="dropdown-menu">
-          <a *ngFor="let telefone of _pessoaObject.telefones" class="dropdown-item" (click)="trocaTelefonePrincipal(telefone.id)">
+          <a *ngFor="let telefone of _pessoaObject.telefones" class="dropdown-item"
+            (click)="trocaTelefonePrincipal(telefone.id)">
             {{telefone.telefoneCompleto | mascaraTelefone}}</a>
         </div>
       </div>
 
       <div *ngIf="quantEventosDaPessoa > 1" class="btn-group" mdbDropdown>
-        <button type="button" mdbBtn color="dark-green" class="waves-light" mdbWavesEffect (click)="discar()">Discar</button>
-        <button type="button" mdbDropdownToggle mdbBtn color="dark-green" class="dropdown-toggle dropdown-toggle-split px-3 waves-light"
-          mdbWavesEffect></button>
+        <button type="button" mdbBtn color="dark-green" class="waves-light" mdbWavesEffect
+          (click)="discar()">Discar</button>
+        <button type="button" mdbDropdownToggle mdbBtn color="dark-green"
+          class="dropdown-toggle dropdown-toggle-split px-3 waves-light" mdbWavesEffect></button>
         <div class="dropdown-menu">
-          <a *ngFor="let telefone of _pessoaObject.telefones" class="dropdown-item" (click)="trocaTelefonePrincipal(telefone.id)">
+          <a *ngFor="let telefone of _pessoaObject.telefones" class="dropdown-item"
+            (click)="trocaTelefonePrincipal(telefone.id)">
             {{telefone.telefoneCompleto | mascaraTelefone}}</a>
         </div>
       </div>
 
-      <input type="text" formControlName="telefonePrincipal" class="form-control" aria-label="Text input with segmented dropdown button">
+      <input type="text" formControlName="telefonePrincipal" class="form-control"
+        aria-label="Text input with segmented dropdown button">
     </div>
   </div>
 
@@ -40,19 +45,21 @@
     <button type="button" mdbBtn color="dark-green" class="relative waves-light" (click)="elaborarProposta.show();"
       mdbWavesEffect>Elaborar Proposta</button>
   </div>
-  <div *ngIf="_pessoaObject" mdbModal #elaborarProposta="mdbModal" [config]="{backdrop: true, ignoreBackdropClick: true}"
-    class="modal fade right" role="dialog" aria-labelledby="elaborarProposta" aria-hidden="true">
+  <div *ngIf="_pessoaObject" mdbModal #elaborarProposta="mdbModal"
+    [config]="{backdrop: true, ignoreBackdropClick: true}" class="modal fade right" role="dialog"
+    aria-labelledby="elaborarProposta" aria-hidden="true">
     <div class="modal-dialog modal-fluid" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h4 class="modal-title w-100" id="myModalLabel">Elaborando Proposta para - {{_pessoaObject.principal.nome}}</h4>
-          <button type="button" class="close pull-right" aria-label="Close" (click)="fecharElaborarProposta($event)">
-            <span aria-hidden="true">X</span>
-          </button>
+      <div class="modal-header light-blue darken-3 white-text">
+        <h4 class="modal-title w-100" id="myModalLabel">Elaborando Proposta para - {{_pessoaObject.principal.nome}}</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="fecharElaborarProposta($event)">
+          <span aria-hidden="true">X</span>
+        </button>
 
-        </div>
+      </div>
+      <div class="modal-content">
         <div class="modal-body" style="overflow: auto; height: 80vh;">
-          <app-proposta [returnProp]="returnProp" [abaSelecionada]="abaSelecionada" [pessoa]="_pessoaObject" (returnProposta)="recebeProposta($event)"></app-proposta>
+          <app-proposta [returnProp]="returnProp" [abaSelecionada]="abaSelecionada" [pessoa]="_pessoaObject"
+            (returnProposta)="recebeProposta($event)"></app-proposta>
         </div>
       </div>
     </div>
@@ -60,21 +67,24 @@
 
   <div *ngIf="discando" class="row">
     <div class="md-form col">
-      <textarea type="text" id="form7" formControlName="observacao" class="md-textarea form-control" mdbInputDirective></textarea>
+      <textarea type="text" id="form7" formControlName="observacao" class="md-textarea form-control"
+        mdbInputDirective></textarea>
       <label for="form7">Observação</label>
     </div>
   </div>
 
   <div *ngIf="exige_predicao" class="row">
     <div class="col">
-      <mdb-select formControlName="id_predicao" [options]="predicoesFormatado" [multiple]="false" placeholder="Selecione a previsão">
+      <mdb-select formControlName="id_predicao" [options]="predicoesFormatado" [multiple]="false"
+        placeholder="Selecione a previsão">
       </mdb-select>
     </div>
   </div>
 
   <div *ngIf="exige_objecao" class="row">
     <div class="col">
-      <mdb-select formControlName="id_objecao" [options]="objecoesFormatado" [multiple]="false" placeholder="Selecione a objeção">
+      <mdb-select formControlName="id_objecao" [options]="objecoesFormatado" [multiple]="false"
+        placeholder="Selecione a objeção">
       </mdb-select>
     </div>
   </div>
@@ -88,11 +98,11 @@
     <div class="md-form form-group col">
       <mdb-time-picker [buttonLabel]="'Done'" [twelvehour]="false" [darktheme]="true" [placeholder]="'Selecione a hora'"
         formControlName="hora"></mdb-time-picker>
-       <label class="">Hora Reagendamento</label>
+      <label class="">Hora Reagendamento</label>
     </div>
   </div>
-  <div class="row">
-    <div class="justify-content-center">
+  <div class="row justify-content-end">
+    <div class="md-form">
       <button type="button" mdbBtn color="primary" (click)=" gravarLigacao();" class="relative waves-light"
         mdbWavesEffect [disabled]="!questionarioForm.valid">Gravar</button>
     </div>

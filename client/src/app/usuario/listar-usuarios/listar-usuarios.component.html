@@ -121,10 +121,12 @@
         <button type="button" mdbBtn color="primary" class="relative waves-light" (click)="inicializarSenha()"
           title="A nova senha será 123" mdbWavesEffect>Inicializar senha </button>
       </div>
-      <div class="row">
-        <div class="col-lg-12 text-right">
+      <div class="row justify-content-end">
+        <div class="md-form">
           <button type="button" mdbBtn color="danger" class="waves-light" aria-label="Cancelar"
             (click)="editarModal.hide()" mdbWavesEffect>Cancelar</button>
+        </div>
+        <div class="md-form">
           <button type="button" mdbBtn color="primary" class="relative waves-light"
             (click)="editarModal.hide(); salvar()" mdbWavesEffect>Salvar</button>
         </div>
@@ -137,118 +139,109 @@
 
 <div [formGroup]="usuarioForm" mdbModal #excluirModal="mdbModal" class="modal fade" tabindex="-1" role="dialog"
   aria-labelledby="myBasicModalLabel" aria-hidden="true" [config]="{backdrop: true}">
-  <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+  <div class="modal-dialog modal-fluid" role="document">
+    <div class="modal-header light-blue darken-3 white-text">
+      <h4 class="title">Exluir o usuário</h4>
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="excluirModal.hide()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
     <div class="modal-content">
-      <div class="modal-header light-blue darken-3 white-text">
-        <h4 class="title">Exluir o usuário</h4>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="excluirModal.hide()">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-
-      <div>
-        <h4> {{usuarioNomeSelecionado}}</h4>
-      </div>
-
-      <div class="modal-footer">
-        <button type="button" mdbBtn color="danger" class="waves-light" aria-label="Cancelar"
-          (click)="excluirModal.hide()" mdbWavesEffect>Cancelar</button>
-        <button type="button" mdbBtn color="primary" class="relative waves-light"
-          (click)="excluirModal.hide(); exclusaoConfirmada()" mdbWavesEffect>Excluir</button>
+      <h4> {{usuarioNomeSelecionado}}</h4>
+      <div class="row justify-content-end">
+        <div class="md-form">
+          <button type="button" mdbBtn color="danger" class="waves-light" aria-label="Cancelar"
+            (click)="excluirModal.hide()" mdbWavesEffect>Cancelar</button>
+        </div>
+        <div class="md-form">
+          <button type="button" mdbBtn color="primary" class="relative waves-light"
+            (click)="excluirModal.hide(); exclusaoConfirmada()" mdbWavesEffect>Excluir</button>
+        </div>
       </div>
     </div>
   </div>
 </div>
 
-
-
-
-
 <div [formGroup]="usuarioForm" mdbModal #adicionarModal="mdbModal" class="modal fade" tabindex="-1" role="dialog"
   aria-labelledby="myBasicModalLabel" aria-hidden="true" [config]="{backdrop: true}">
-  <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+  <div class="modal-dialog modal-fluid" role="document">
+    <div class="modal-header light-blue darken-3 white-text">
+      <h4 class="title">Adicionar usuário</h4>
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="adicionarModal.hide()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
     <div class="modal-content">
-      <div class="modal-header light-blue darken-3 white-text">
-        <h4 class="title">Adicionar usuário</h4>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="adicionarModal.hide()">
-          <span aria-hidden="true">&times;</span>
-        </button>
+      <div class="form-row" style="margin-left: 5px; margin-right: 5px">
+        <div class="md-form col-3">
+          <input mdbInputDirective formControlName="cpf_cnpj" type="text" id="cpf" (change)="getPessoaPorCPFCNPJ()"
+            class="form-control">
+          <label for="cpf">CPF</label>
+        </div>
+        <div class="md-form col-5">
+          <input mdbInputDirective formControlName="nome" type="text" id="nome" class="form-control">
+          <label for="nome">nome</label>
+        </div>
       </div>
-
-      <div>
-        <div class="form-row" style="margin-left: 5px; margin-right: 5px">
-
-          <div class="md-form col-3">
-            <input mdbInputDirective formControlName="cpf_cnpj" type="text" id="cpf" (change)="getPessoaPorCPFCNPJ()"
-              class="form-control">
-            <label for="cpf">CPF</label>
-          </div>
-          <div class="md-form col-5">
-            <input mdbInputDirective formControlName="nome" type="text" id="nome" class="form-control">
-            <label for="nome">nome</label>
-          </div>
-
-
-
+      <div class="form-row" style="margin-left: 5px; margin-right: 5px">
+        <div class="md-form col">
+          <input mdbInputDirective formControlName="login" max="4" min="3" type="text" id="login" (change)="getLogin()"
+            class="form-control">
+          <label for="login">Login</label>
         </div>
-        <div class="form-row" style="margin-left: 5px; margin-right: 5px">
-          <div class="md-form col">
-            <input mdbInputDirective formControlName="login" max="4" min="3" type="text" id="login"
-              (change)="getLogin()" class="form-control">
-            <label for="login">Login</label>
-          </div>
-          <div class="md-form col">
-            <mdb-checkbox formControlName="status">Status</mdb-checkbox>
-          </div>
+        <div class="md-form col">
+          <mdb-checkbox formControlName="status">Status</mdb-checkbox>
         </div>
-        <div class="form-row" style="margin-left: 5px; margin-right: 5px">
-          <div class="col mdb-select-form">
-            <mdb-select formControlName="id_organograma" [options]="departamentoSelect" [multiple]="false"
-              placeholder="Departamento"></mdb-select>
-          </div>
-          <!-- <div class="col mdb-select-form">
+      </div>
+      <div class="form-row" style="margin-left: 5px; margin-right: 5px">
+        <div class="col mdb-select-form">
+          <mdb-select formControlName="id_organograma" [options]="departamentoSelect" [multiple]="false"
+            placeholder="Departamento"></mdb-select>
+        </div>
+        <!-- <div class="col mdb-select-form">
               <mdb-select formControlName="responsavel_membro"  [options]="niveisHierarquicoSelect"
                 [multiple]="false" placeholder="Nível hierárquico" ></mdb-select>
                 <label for="Nível hierárquico">Nível hierárquico</label>
           </div> -->
+      </div>
+      <div class="form-row" style="margin-left: 5px; margin-right: 5px">
+        <div class="md-form col-2">
+          <mdb-time-picker [buttonLabel]="'Done'" [twelvehour]="false" [darktheme]="true"
+            [placeholder]="'Selecione a hora'" formControlName="hora_entrada"></mdb-time-picker>
+          <label class="">Hora entrada</label>
         </div>
-        <div class="form-row" style="margin-left: 5px; margin-right: 5px">
-          <div class="md-form col-2">
-            <mdb-time-picker [buttonLabel]="'Done'" [twelvehour]="false" [darktheme]="true"
-              [placeholder]="'Selecione a hora'" formControlName="hora_entrada"></mdb-time-picker>
-            <label class="">Hora entrada</label>
-          </div>
-          <div class="md-form col-2">
-            <mdb-time-picker [buttonLabel]="'Done'" [twelvehour]="false" [darktheme]="true"
-              [placeholder]="'Selecione a hora'" formControlName="hora_saida"></mdb-time-picker>
-            <label class="">Hora saída</label>
-          </div>
-          <div class="md-form col">
-            <mdb-time-picker [buttonLabel]="'Done'" [twelvehour]="false" [darktheme]="true"
-              [placeholder]="'Selecione a hora'" formControlName="hora_entrada_lanche"></mdb-time-picker>
-            <label class="">Hora entrada para o lanche</label>
-          </div>
-          <div class="md-form col">
-            <mdb-time-picker [buttonLabel]="'Done'" [twelvehour]="false" [darktheme]="true"
-              [placeholder]="'Selecione a hora'" formControlName="hora_saida_lanche"></mdb-time-picker>
-            <label class="">Hora saída do lanche</label>
-          </div>
+        <div class="md-form col-2">
+          <mdb-time-picker [buttonLabel]="'Done'" [twelvehour]="false" [darktheme]="true"
+            [placeholder]="'Selecione a hora'" formControlName="hora_saida"></mdb-time-picker>
+          <label class="">Hora saída</label>
         </div>
+        <div class="md-form col">
+          <mdb-time-picker [buttonLabel]="'Done'" [twelvehour]="false" [darktheme]="true"
+            [placeholder]="'Selecione a hora'" formControlName="hora_entrada_lanche"></mdb-time-picker>
+          <label class="">Hora entrada para o lanche</label>
+        </div>
+        <div class="md-form col">
+          <mdb-time-picker [buttonLabel]="'Done'" [twelvehour]="false" [darktheme]="true"
+            [placeholder]="'Selecione a hora'" formControlName="hora_saida_lanche"></mdb-time-picker>
+          <label class="">Hora saída do lanche</label>
+        </div>
+      </div>
 
-        <div class="form-row" style="margin-left: 5px; margin-right: 5px">
-          <div class="md-form col">
-            <mdb-checkbox formControlName="possui_carteira_cli">Trabalha com carteira de clientes</mdb-checkbox>
-          </div>
-
+      <div class="form-row" style="margin-left: 5px; margin-right: 5px">
+        <div class="md-form col">
+          <mdb-checkbox formControlName="possui_carteira_cli">Trabalha com carteira de clientes</mdb-checkbox>
         </div>
 
       </div>
-
-      <div class="modal-footer">
-        <button type="button" mdbBtn color="danger" class="waves-light" aria-label="Cancelar"
-          (click)="adicionarModal.hide()" mdbWavesEffect>Cancelar</button>
-        <button type="button" mdbBtn color="primary" class="relative waves-light"
-          (click)="adicionarModal.hide(); adicionar()" mdbWavesEffect>Salvar</button>
+      <div class="row justify-content-end">
+        <div class="md-form">
+          <button type="button" mdbBtn color="danger" class="waves-light" aria-label="Cancelar"
+            (click)="adicionarModal.hide()" mdbWavesEffect>Cancelar</button>
+        </div>
+        <div class="md-form">
+          <button type="button" mdbBtn color="primary" class="relative waves-light"
+            (click)="adicionarModal.hide(); adicionar()" mdbWavesEffect>Salvar</button>
+        </div>
       </div>
     </div>
   </div>

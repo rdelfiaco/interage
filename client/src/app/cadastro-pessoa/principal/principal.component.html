@@ -15,7 +15,8 @@
     </div>
     <div class="row">
       <div class="md-form col">
-        <input mdbInputDirective formControlName="nome" type="text" id="nome" (blur)="nomeMaiusculo()" class="form-control">
+        <input mdbInputDirective formControlName="nome" type="text" id="nome" (blur)="nomeMaiusculo()"
+          class="form-control">
         <label for="nome">Nome</label>
       </div>
     </div>
@@ -27,11 +28,13 @@
     </div>
     <div class="row">
       <div class="md-form form-group col mdb-date-form">
-        <mdb-date-picker name="mydate" [options]="myDatePickerOptions" [placeholder]="'Selecione a data'" required></mdb-date-picker>
+        <mdb-date-picker name="mydate" [options]="myDatePickerOptions" [placeholder]="'Selecione a data'" required>
+        </mdb-date-picker>
         <label class="">Data Nascimento</label>
       </div>
       <div class="col mdb-select-form">
-        <mdb-select formControlName="sexo" [placeholder]="'Selecione o Sexo'" [options]="enumSexo" [multiple]="false"></mdb-select>
+        <mdb-select formControlName="sexo" [placeholder]="'Selecione o Sexo'" [options]="enumSexo" [multiple]="false">
+        </mdb-select>
         <label>Sexo</label>
       </div>
     </div>
@@ -72,7 +75,8 @@
 
     <div class="row">
       <div class="md-form col">
-        <textarea type="text" formControlName="observacoes" id="obs" class="md-textarea form-control" mdbInputDirective></textarea>
+        <textarea type="text" formControlName="observacoes" id="obs" class="md-textarea form-control"
+          mdbInputDirective></textarea>
         <label for="obs">Observação</label>
       </div>
     </div>
@@ -97,7 +101,8 @@
     </div>
     <div class="row">
       <div class="md-form col">
-        <input mdbInputDirective formControlName="nome" type="text" id="nome" (blur)="nomeMaiusculo()" class="form-control">
+        <input mdbInputDirective formControlName="nome" type="text" id="nome" (blur)="nomeMaiusculo()"
+          class="form-control">
         <label for="nome">Razaão Social</label>
       </div>
     </div>
@@ -109,7 +114,8 @@
     </div>
     <div class="row">
       <div class="md-form form-group col mdb-date-form">
-        <mdb-date-picker name="mydate" [options]="myDatePickerOptions" [placeholder]="'Selecione a data'" required></mdb-date-picker>
+        <mdb-date-picker name="mydate" [options]="myDatePickerOptions" [placeholder]="'Selecione a data'" required>
+        </mdb-date-picker>
         <label class="">Data Fundação</label>
       </div>
       <div class="md-form col-4">
@@ -144,7 +150,8 @@
 
     <div class="row">
       <div class="md-form col">
-        <textarea type="text" formControlName="observacoes" id="obs" class="md-textarea form-control" mdbInputDirective></textarea>
+        <textarea type="text" formControlName="observacoes" id="obs" class="md-textarea form-control"
+          mdbInputDirective></textarea>
         <label for="obs">Observação</label>
       </div>
     </div>
@@ -157,8 +164,10 @@
     </div>
   </div>
 
-  <div class="row">
-    <button type="button" mdbBtn color="primary" (click)="salvarPessoa();" class="relative waves-light" mdbWavesEffect
-      [disabled]="!principalForm.valid">Salvar Pessoa</button>
+  <div class="row justify-content-end">
+    <div class="md-form">
+      <button type="button" mdbBtn color="primary" (click)="salvarPessoa();" class="relative waves-light" mdbWavesEffect
+        [disabled]="!principalForm.valid">Salvar Pessoa</button>
+    </div>
   </div>
 </form>
