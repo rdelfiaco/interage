@@ -1,5 +1,5 @@
-<div class="row">
-  <h4>Telefones Cadastrados</h4>
+<div class="row pt-4 p-3">
+  <h4 style="font-weight: bold;color: gray;">Telefones Cadastrados</h4>
   <table class="table">
     <thead>
       <tr>
@@ -31,7 +31,7 @@
   </table>
   <span *ngIf="_pessoaObject && !_pessoaObject.telefones.length">Nenhum telefone cadastrado!</span>
 </div>
-<div class="row d-flex justify-content-end">
+<div class="row d-flex justify-content-end mt-3">
   <button type="button" [disabled]="telefoneSelecionado" mdbBtn color="primary" (click)="adicionarNovoTelefone();"
     class="relative waves-light" mdbWavesEffect>Adicionar Novo Telefone</button>
 </div>

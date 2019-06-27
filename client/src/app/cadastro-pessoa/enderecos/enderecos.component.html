@@ -1,93 +1,107 @@
-<div class="row">
-  <h4>Endereços Cadastrados</h4>
-  <table class="table">
-    <thead>
-      <tr>
-        <th>Id</th>
-        <th>CEP</th>
-        <th>Cidade</th>
-        <th>Bairro</th>
-        <th>Logra.</th>
-        <th>Comp.</th>
-        <th>Recebe Corres.</th>
-        <th>Ações</th>
-      </tr>
-    </thead>
-    <tbody *ngFor="let endereco of (pessoa | async)?.enderecos">
-      <tr>
-        <th>{{endereco.id}}</th>
-        <td>{{endereco.cep}}</td>
-        <td>{{endereco.nome}}</td>
-        <td>{{endereco.bairro}}</td>
-        <td>{{endereco.logradouro}}</td>
-        <td>{{endereco.complemento}}</td>
-        <td>
-          <mdb-checkbox (change)="setEnderecoDeCorrespondencia(endereco)" [checked]="endereco.recebe_correspondencia">
-          </mdb-checkbox>
-        </td>
-        <td>
-          <mdb-icon style="margin: 0px 5px;" icon="pencil" (click)="editarEndereco(endereco.id)" size="lg"></mdb-icon>
-          <mdb-icon style="margin: 0px 5px;" icon="trash" (click)="excluirEndereco(endereco.id)"
-            (click)="confirmExcluirEndereco.show()" size="lg"></mdb-icon>
-        </td>
-      </tr>
-
-    </tbody>
-  </table>
-  <span *ngIf="_pessoaObject && !_pessoaObject.enderecos.length">Nenhum endereço cadastrado!</span>
+<div class="row pt-4 p-3">
+  <div class="col-lg-12">
+    <h4 style="font-weight: bold;color: gray;">Endereços Cadastrados</h4>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Id</th>
+          <th>CEP</th>
+          <th>Cidade</th>
+          <th>Bairro</th>
+          <th>Logra.</th>
+          <th>Comp.</th>
+          <th>Recebe Corres.</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody *ngFor="let endereco of (pessoa | async)?.enderecos">
+        <tr>
+          <th>{{endereco.id}}</th>
+          <td>{{endereco.cep}}</td>
+          <td>{{endereco.nome}}</td>
+          <td>{{endereco.bairro}}</td>
+          <td>{{endereco.logradouro}}</td>
+          <td>{{endereco.complemento}}</td>
+          <td>
+            <mdb-checkbox (change)="setEnderecoDeCorrespondencia(endereco)" [checked]="endereco.recebe_correspondencia">
+            </mdb-checkbox>
+          </td>
+          <td>
+            <mdb-icon style="margin: 0px 5px;" icon="pencil" (click)="editarEndereco(endereco.id)" size="lg"></mdb-icon>
+            <mdb-icon style="margin: 0px 5px;" icon="trash" (click)="excluirEndereco(endereco.id)"
+              (click)="confirmExcluirEndereco.show()" size="lg"></mdb-icon>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <span *ngIf="_pessoaObject && !_pessoaObject.enderecos.length">Nenhum endereço cadastrado!</span>
+  </div>
 </div>
-<div class="row d-flex justify-content-end">
+<div class="row d-flex justify-content-end mt-3">
   <button type="button" [disabled]="enderecoSelecionado" mdbBtn color="primary" (click)="adicionarNovoEndereco();"
     class="relative waves-light" mdbWavesEffect>Adicionar Novo Endereço</button>
 </div>
-<br />
-<br />
-<div *ngIf="enderecoSelecionado">
+<div *ngIf="enderecoSelecionado" class="mt-3">
   <form [formGroup]="enderecoForm" class="formQuestionario">
     <div class="row">
-      <div class="md-form col">
-        <input mdbInputDirective formControlName="cep" max="11" min="8" type="text" id="cep" class="form-control">
-        <label for="cep">CEP</label>
+      <div class="col">
+        <div class="md-form">
+          <input mdbInputDirective formControlName="cep" max="11" min="8" type="text" id="cep" class="form-control">
+          <label for="cep">CEP</label>
+        </div>
       </div>
-      <div class="md-form col-3">
-        <button type="button" mdbBtn color="primary" (click)="consultarCEP();" class="relative waves-light"
-          mdbWavesEffect>Buscar</button>
+      <div class="col-3">
+        <div class="md-form">
+          <button type="button" mdbBtn color="primary" (click)="consultarCEP();" class="relative waves-light"
+            mdbWavesEffect>Buscar</button>
+        </div>
       </div>
     </div>
-
     <div class="row">
-      <div class="md-form col-6">
-        <input mdbInputDirective formControlName="bairro" type="text" id="bairro" class="form-control">
-        <label for="bairro">Bairro</label>
+      <div class="col-6">
+        <div class="md-form">
+          <input mdbInputDirective formControlName="bairro" type="text" id="bairro" class="form-control">
+          <label for="bairro">Bairro</label>
+        </div>
       </div>
-      <div class="md-form col-4">
-        <input mdbInputDirective formControlName="cidade" type="text" id="cidade" class="form-control">
-        <label for="cidade">Cidade</label>
+      <div class="col-4">
+        <div class="md-form">
+          <input mdbInputDirective formControlName="cidade" type="text" id="cidade" class="form-control">
+          <label for="cidade">Cidade</label>
+        </div>
       </div>
-      <div class="md-form col-2">
-        <input mdbInputDirective formControlName="uf_cidade" type="text" id="estado" class="form-control">
-        <label for="estado">Estado</label>
+      <div class="col-2">
+        <div class="md-form">
+          <input mdbInputDirective formControlName="uf_cidade" type="text" id="estado" class="form-control">
+          <label for="estado">Estado</label>
+        </div>
       </div>
     </div>
-
     <div class="row">
-      <div class="md-form col">
-        <input mdbInputDirective formControlName="logradouro" type="text" id="logradouro" class="form-control">
-        <label for="logradouro">Logradouro</label>
+      <div class="col-12">
+        <div class="md-form">
+          <input mdbInputDirective formControlName="logradouro" type="text" id="logradouro" class="form-control">
+          <label for="logradouro">Logradouro</label>
+        </div>
       </div>
     </div>
-
     <div class="row">
-      <div class="md-form col">
-        <input mdbInputDirective formControlName="complemento" type="text" id="complemento" class="form-control">
-        <label for="complemento">Complemento</label>
+      <div class="col-12">
+        <div class="md-form">
+          <input mdbInputDirective formControlName="complemento" type="text" id="complemento" class="form-control">
+          <label for="complemento">Complemento</label>
+        </div>
       </div>
     </div>
-    <div class="row d-flex justify-content-end">
-      <button type="button" mdbBtn color="primary" (click)="salvar();" class="relative waves-light" mdbWavesEffect
-        [disabled]="!enderecoForm.valid">Salvar Endereço</button>
-      <button type="button" mdbBtn color="danger" (click)="cancelarAdd();" class="relative waves-light"
-        mdbWavesEffect>Cancelar</button>
+    <div class="row justify-content-end">
+      <div class="md-form">
+        <button type="button" mdbBtn color="danger" (click)="cancelarAdd();" class="relative waves-light"
+          mdbWavesEffect>Cancelar</button>
+      </div>
+      <div class="md-form">
+        <button type="button" mdbBtn color="primary" (click)="salvar();" class="relative waves-light" mdbWavesEffect
+          [disabled]="!enderecoForm.valid">Salvar Endereço</button>
+      </div>
     </div>
   </form>
 </div>

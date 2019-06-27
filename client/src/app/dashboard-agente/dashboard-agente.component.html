@@ -1,67 +1,58 @@
 <div class="card card-cascade narrower">
-
   <!--Card image-->
-  <div class="view view-cascade gradient-card-header blue-gradient narrower py-1 mx-2  d-flex justify-content-center align-items-center">
-
-      <h4 class="white-text font-weight-bold text-uppercase ">Desempenho do Consultor de Vendas Internas</h4>
-  
+  <div
+    class="view view-cascade gradient-card-header blue-gradient narrower py-1 mx-2  d-flex justify-content-center align-items-center">
+    <h4 class="white-text font-weight-bold text-uppercase mt-2">Desempenho do Consultor de Vendas Internas</h4>
   </div>
-    <!-- Card Filtros -->
-    <div style="z-index: 2; margin-left: 10px">
-      <div class="row">
-        <div class="col-6 col-sm-3">
-          <div class="row justify-content-around">
-            <div class="col-6 col-sm-6">
-              <div class="md-form datas">
-                <mdb-date-picker #dataEventos name="mydate" [options]="myDatePickerOptions" required [(ngModel)]="dataInicial"
-                  class="datas" (ngModelChange)="validaData('dtInicial')"  ></mdb-date-picker>
-                <label class="datas" style="height: 10px">Data inicial</label>
-              </div>
-            </div>
-            <div class="col-6 col-sm-6">
-              <div class="md-form datas">
-                <mdb-date-picker #dataEventos name="mydate" [options]="myDatePickerOptions" required [(ngModel)]="dataFinal"
-                  class="datas" (ngModelChange)="validaData('dtFinal')" ></mdb-date-picker>
-                <label class="datas" style="height: 10px">Data final</label>
-              </div>
-            </div>
-          </div>
-  
+  <!-- Card Filtros -->
+  <div class="ml-2 px-4 mt-2" style="z-index: 2;">
+    <div class="row">
+      <div class="col-lg-3 col-sm-6">
+        <div class="md-form datas">
+          <mdb-date-picker #dataEventos name="mydate" [options]="myDatePickerOptions" required [(ngModel)]="dataInicial"
+            class="datas" (ngModelChange)="validaData('dtInicial')"></mdb-date-picker>
+          <label class="datas" style="height: 10px">Data inicial</label>
         </div>
-
-        <div class="col-6 col-sm-4" style="z-index: 0">
-          <div class="row" style="margin-top: 50px">            
-            <div class="col-md-12">
-              <mdb-select [disabled]="usuarioLogado.responsavel_membro == 'M'" [(ngModel)]="agentesVendasSelectValue"
-              (selected)="setNomeAtendente($event)" [options]="agentesVendasSelect" placeholder="Escolha os Agentes de vendas"
-              style="font-size: 0.5rem;"></mdb-select>
-              <label>Consultores de vendas interno</label>
-            </div>
+      </div>
+      <div class="col-lg-3 col-sm-6">
+        <div class="md-form datas">
+          <mdb-date-picker #dataEventos name="mydate" [options]="myDatePickerOptions" required [(ngModel)]="dataFinal"
+            class="datas" (ngModelChange)="validaData('dtFinal')"></mdb-date-picker>
+          <label class="datas" style="height: 10px">Data final</label>
+        </div>
+      </div>
+      <div class="col-lg-6 col-sm-12" style="z-index: 0">
+        <div class="row" style="margin-top: 50px">
+          <div class="col-md-12">
+            <mdb-select [disabled]="usuarioLogado.responsavel_membro == 'M'" [(ngModel)]="agentesVendasSelectValue"
+              (selected)="setNomeAtendente($event)" [options]="agentesVendasSelect"
+              placeholder="Escolha os Agentes de vendas" style="font-size: 0.5rem;"></mdb-select>
+            <label>Consultores de vendas interno</label>
           </div>
         </div>
       </div>
     </div>
-    <br>
-    <div class="row">
-        <div class="col-6 col-sm-6">
-            <div class="view view-cascade gradient-card-header blue-gradient narrower py-1 mx-2  d-flex justify-content-center align-items-center">
-                <h6 class="white-text font-weight-bold text-uppercase ">Propostas</h6>            
-            </div>
-            <div style="display: block">
-                <canvas id="propostaChart" ></canvas>
-            </div>
-        </div>
-        <div class="col-6 col-sm-6">
-            <div class="view view-cascade gradient-card-header blue-gradient narrower py-1 mx-2  d-flex justify-content-center align-items-center">
-                <h6 class="white-text font-weight-bold text-uppercase ">Eventos/Tarefas</h6>            
-            </div>
-            <div style="display: block">
-                <canvas id="eventosChart" ></canvas>
-            </div>
-        </div>
+  </div>
+  <br>
+  <div class="row">
+    <div class="col-lg-6 col-sm-12">
+      <div
+        class="view view-cascade gradient-card-header blue-gradient narrower py-1 mx-2  d-flex justify-content-center align-items-center">
+        <h6 class="white-text font-weight-bold text-uppercase mt-2">Propostas</h6>
+      </div>
+      <div style="display: block">
+        <canvas id="propostaChart"></canvas>
+      </div>
     </div>
+    <div class="col-lg-6 col-sm-12">
+      <div
+        class="view view-cascade gradient-card-header blue-gradient narrower py-1 mx-2  d-flex justify-content-center align-items-center">
+        <h6 class="white-text font-weight-bold text-uppercase mt-2">Eventos/Tarefas</h6>
+      </div>
+      <div style="display: block">
+        <canvas id="eventosChart"></canvas>
+      </div>
+    </div>
+  </div>
 
 </div>
-
-
-  
