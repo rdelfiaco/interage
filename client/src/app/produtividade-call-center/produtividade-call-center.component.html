@@ -1,35 +1,30 @@
 <div class="card card-cascade narrower">
-
-  <!--Card image-->
-  <div class="view view-cascade gradient-card-header blue-gradient narrower py-1 mx-2  d-flex justify-content-center align-items-center">
-
-    <h4 class="white-text font-weight-bold text-uppercase ">Produtividade</h4>
-
+  <div *ngIf="!pessoa"
+    class="view view-cascade gradient-card-header blue-gradient narrower py-2 mx-4 mb-3 d-flex justify-content-center align-items-center">
+    <div>
+      <button type="button" mdbBtn color="white" outline="true" rounded="true" size="sm" class="px-2" mdbWavesEffect>
+        <mdb-icon fas fas icon="info" class="mt-0"></mdb-icon>
+      </button>
+    </div>
+    <h4 class="white-text mx-3 mt-2 font-weight-bold text-uppercase">Produtividade</h4>
   </div>
-  <!-- Card Filtros -->
-  <div style="z-index: 2;">
-    <div class="row">
-      <div class="col-6 col-sm-3">
-        <div class="row justify-content-around">
-          <div class="col-6 col-sm-6">
-            <div class="md-form datas">
-              <mdb-date-picker #dataEventos name="mydate" [options]="myDatePickerOptions" required [(ngModel)]="dataInicial"
-                class="datas"></mdb-date-picker>
-              <label class="datas" style="height: 10px">Data inicial</label>
-            </div>
-          </div>
-          <div class="col-6 col-sm-6">
-            <div class="md-form datas">
-              <mdb-date-picker #dataEventos name="mydate" [options]="myDatePickerOptions" required [(ngModel)]="dataFinal"
-                class="datas"></mdb-date-picker>
-              <label class="datas" style="height: 10px">Data final</label>
-            </div>
-          </div>
+  <div class="px-3">
+    <div class="row mt-1" style="z-index: 2;">
+      <div class="col-lg-2 col-sm-6">
+        <div class="md-form datas">
+          <mdb-date-picker #dataEventos name="mydate" [options]="myDatePickerOptions" required [(ngModel)]="dataInicial"
+            class="datas"></mdb-date-picker>
+          <label class="datas" style="height: 10px">Data inicial</label>
         </div>
-
+      </div>
+      <div class="col-lg-2 col-sm-6">
+        <div class="md-form datas">
+          <mdb-date-picker #dataEventos name="mydate" [options]="myDatePickerOptions" required [(ngModel)]="dataFinal"
+            class="datas"></mdb-date-picker>
+          <label class="datas" style="height: 10px">Data final</label>
+        </div>
       </div>
       <!-- <div class="col-6 col-sm-4 " style="z-index: 0">
-  
           <div class="row" style="margin-top: 30px">
             <div class="col-md-12">
               <mdb-select [(ngModel)]="campanhaSelectValue" [options]="campanhaSelect" placeholder="Escolha a campanha"
@@ -38,165 +33,152 @@
             </div>
           </div>
         </div> -->
-      <div class="col-6 col-sm-4" style="z-index: 0">
-        <div class="row" style="margin-top: 30px">
-          <div class="col-md-12">
-            <mdb-select [disabled]="usuarioLogado.responsavel_membro == 'M'" [(ngModel)]="agentesVendasSelectValue"
-              (selected)="setNomeAtendente($event)" [options]="agentesVendasSelect" placeholder="Escolha os Agentes de vendas"
-              style="font-size: 0.5rem;"></mdb-select>
-            <label>Consultor de venda interna</label>
-          </div>
-        </div>
+      <div class="col-lg-5 col-sm-12" style="padding-top: 1.7rem;">
+        <mdb-select [disabled]="usuarioLogado.responsavel_membro == 'M'" [(ngModel)]="agentesVendasSelectValue"
+          (selected)="setNomeAtendente($event)" [options]="agentesVendasSelect"
+          placeholder="Escolha os Agentes de vendas" style="font-size: 0.5rem;"></mdb-select>
+        <label style="top: 12px !important;">Consultor de venda interna</label>
       </div>
-      <div class="col-6 col-sm-1 " style="z-index: 0">
-        <div class="row justify-content-around">
-          <a mdbBtn floating="true" size="lg" gradient="blue" (click)="produtividadeCallCenter()" mdbWavesEffect>
-            <mdb-icon icon="bolt"></mdb-icon>
-          </a>
+      <div class="row justify-content-end pt-0" style="margin-left: 2rem;">
+        <div class="md-form">
+          <button type="button" mdbBtn color="info" class="waves-light" aria-label="Cancelar"
+            (click)="produtividadeCallCenter()" mdbWavesEffect>Visualizar</button>
         </div>
-
-      </div>
-      <div class="col-6 col-sm-1 " style="z-index: 0" *ngIf="usuarioLogado.dashboard === 'supervisor' || usuarioLogado.dashboard === 'admin'">
-        <div class="row justify-content-around">
-          <a mdbBtn floating="true" size="lg" (click)="salvaProdutividadeCSV()" gradient="aqua" mdbWavesEffect>
-            <mdb-icon icon="cloud-download"></mdb-icon>
-          </a>
+        <div class="md-form" *ngIf="usuarioLogado.dashboard === 'supervisor' || usuarioLogado.dashboard === 'admin'">
+          <button type="button" mdbBtn color="primary" class="relative waves-light" (click)="salvaProdutividadeCSV()"
+            mdbWavesEffect>Baixar Relatório</button>
         </div>
-
       </div>
     </div>
-  </div>
-
-  <br>
-  <br>
-  <div class="row no-gutters justify-content-center">
-    <!-- Funil do Departamento -->
-    <div class="relatorioFunil col-md-6 justify-content-center align-items-center">
-      <h3>Produtividade Departamento</h3>
-      <div class="bocaFunil">
-      </div>
-      <div class="propect">
-        <span *ngIf="eventosPendentesDepartamento && eventosPendentesDepartamento[0]" title="Eventos pendentes departamento">
-          {{eventosPendentesDepartamento[0].eventos_depatamentos}}</span>
-      </div>
-      <div class="tentando" title="Tentando">
-        <div class="table_scroll">
-          <table *ngIf="eventosTentandoDepartamento.length" class="table table-bordered table-striped">
-            <!--Table head-->
-            <thead>
-              <tr>
-                <th class="justify-content-center">Tentativas</th>
-                <th class="justify-content-center">Ligações</th>
-                <th class="justify-content-center">Clientes</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let t of eventosTentandoDepartamento">
-                <td class="justify-content-center">{{t.tentativas}}</td>
-                <td class="justify-content-center">{{t.ligacoes}}</td>
-                <td class="justify-content-center">{{t.clientes}}</td>
-              </tr>
-            </tbody>
-          </table>
+    <div class="row no-gutters justify-content-center mt-3">
+      <!-- Funil do Departamento -->
+      <div class="relatorioFunil col-md-6 justify-content-center align-items-center">
+        <h3 class="titleMetrica">Produtividade Departamento</h3>
+        <div class="bocaFunil">
         </div>
-      </div>
-      <div class="quantidadeDeLigacoes">
-        <span *ngIf="totalLigacoesDepartamento" title="Quantidade de ligações">{{totalLigacoesDepartamento}}</span>
-      </div>
-      <div class="fundoFunil">
-        <span *ngIf="eventosPredicaoDepartamento" title="Frio">{{eventosPredicaoDepartamento[0] ?
+        <div class="propect">
+          <span *ngIf="eventosPendentesDepartamento && eventosPendentesDepartamento[0]"
+            title="Eventos pendentes departamento">
+            {{eventosPendentesDepartamento[0].eventos_depatamentos}}</span>
+        </div>
+        <div class="tentando" title="Tentando">
+          <div class="table_scroll">
+            <table *ngIf="eventosTentandoDepartamento.length" class="table table-bordered table-striped">
+              <!--Table head-->
+              <thead>
+                <tr>
+                  <th class="justify-content-center">Tentativas</th>
+                  <th class="justify-content-center">Ligações</th>
+                  <th class="justify-content-center">Clientes</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let t of eventosTentandoDepartamento">
+                  <td class="justify-content-center">{{t.tentativas}}</td>
+                  <td class="justify-content-center">{{t.ligacoes}}</td>
+                  <td class="justify-content-center">{{t.clientes}}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="quantidadeDeLigacoes">
+          <span *ngIf="totalLigacoesDepartamento" title="Quantidade de ligações">{{totalLigacoesDepartamento}}</span>
+        </div>
+        <div class="fundoFunil">
+          <span *ngIf="eventosPredicaoDepartamento" title="Frio">{{eventosPredicaoDepartamento[0] ?
           eventosPredicaoDepartamento[0].count : 0}}</span>
-        <span *ngIf="eventosPredicaoDepartamento" title="Morno">{{eventosPredicaoDepartamento[1] ?
+          <span *ngIf="eventosPredicaoDepartamento" title="Morno">{{eventosPredicaoDepartamento[1] ?
           eventosPredicaoDepartamento[1].count : 0}}</span>
-        <span *ngIf="eventosPredicaoDepartamento" title="Quente">{{eventosPredicaoDepartamento[2] ?
+          <span *ngIf="eventosPredicaoDepartamento" title="Quente">{{eventosPredicaoDepartamento[2] ?
           eventosPredicaoDepartamento[2].count : 0}}</span>
+        </div>
+        <div class="row resultado mt-3">
+          <div *ngIf="eventosResultadoDepartamento && eventosResultadoDepartamento[0]" class="col-4 acerto"
+            [title]="eventosResultadoDepartamento[0].descricao">
+            <div>
+              <span>{{eventosResultadoDepartamento[0].qdte}}</span>
+            </div>
+          </div>
+          <div *ngIf="eventosResultadoDepartamento && eventosResultadoDepartamento[1]" class="col-4 alvoErro"
+            [title]="eventosResultadoDepartamento[1].descricao">
+            <div>
+              <span>{{eventosResultadoDepartamento[1].qdte}}</span>
+            </div>
+          </div>
+          <div *ngIf="eventosResultadoDepartamento && eventosResultadoDepartamento[2]" class="col-4 excedeu"
+            [title]="eventosResultadoDepartamento[2].descricao">
+            <div>
+              <span>{{eventosResultadoDepartamento[2].qdte}}</span>
+            </div>
+          </div>
+        </div>
       </div>
-      <div class="row resultado">
-        <div *ngIf="eventosResultadoDepartamento && eventosResultadoDepartamento[0]" class="col-4 acerto" [title]="eventosResultadoDepartamento[0].descricao">
-          <div>
-            <span>{{eventosResultadoDepartamento[0].qdte}}</span>
-          </div>
-        </div>
-        <div *ngIf="eventosResultadoDepartamento && eventosResultadoDepartamento[1]" class="col-4 alvoErro" [title]="eventosResultadoDepartamento[1].descricao">
-          <div>
-            <span>{{eventosResultadoDepartamento[1].qdte}}</span>
-          </div>
-        </div>
-        <div *ngIf="eventosResultadoDepartamento && eventosResultadoDepartamento[2]" class="col-4 excedeu" [title]="eventosResultadoDepartamento[2].descricao">
-          <div>
-            <span>{{eventosResultadoDepartamento[2].qdte}}</span>
-          </div>
-        </div>
-      </div>
-    </div>
 
-    <!-- Funil do usuário selecionado   -->
-    <div class="relatorioFunil col-md-6 justify-content-center align-items-center">
-      <h3>Produtividade {{agentesVendasSelectNome}}</h3>
-      <div class="bocaFunil">
-      </div>
-      <div class="propect">
-        <span *ngIf="eventosPendentesUsuario && eventosPendentesUsuario[0]" 
-              title="Eventos pendentes do usuário" 
-              (click)="showTable(3,agentesVendasSelectValue,'Eventos pendentes do(a) ' + agentesVendasSelectNome )"  >
-          {{eventosPendentesUsuario[0].eventos_usuarios}}</span>
-      </div>
-      <div class="tentando" title="Tentando">
-        <div class="table_scroll">
-          <table *ngIf="eventosTentandoUsuario.length" class="table table-bordered table-striped">
-            <!--Table head-->
-            <thead> 
-              <tr>
-                <th class="justify-content-center">Tentativas</th>
-                <th class="justify-content-center">Ligações</th>
-                <th class="justify-content-center">Clientes</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let t of eventosTentandoUsuario">
-                <td class="justify-content-center">{{t.tentativas}}</td>
-                <td class="justify-content-center">{{t.ligacoes}}</td>
-                <td class="justify-content-center">{{t.clientes}}</td>
-              </tr>
-            </tbody>
-          </table>
+      <!-- Funil do usuário selecionado   -->
+      <div class="relatorioFunil col-md-6 justify-content-center align-items-center">
+        <h3 class="titleMetrica">Produtividade {{agentesVendasSelectNome}}</h3>
+        <div class="bocaFunil">
         </div>
-      </div>
-      <div class="quantidadeDeLigacoes">
-        <span *ngIf="totalLigacoesUsuario" title="Quantidade de ligações"
-        (click)="showTable(9,agentesVendasSelectValue,'Ligações realizadas do consultor de vendas internas ' + agentesVendasSelectNome )"
-         >{{totalLigacoesUsuario}}</span>
-      </div>
-      <div class="fundoFunil">
-        <span *ngIf="eventosPredicaoUsuario" title="Frio">{{eventosPredicaoUsuario[0] ?
+        <div class="propect">
+          <span *ngIf="eventosPendentesUsuario && eventosPendentesUsuario[0]" title="Eventos pendentes do usuário"
+            (click)="showTable(3,agentesVendasSelectValue,'Eventos pendentes do(a) ' + agentesVendasSelectNome )">
+            {{eventosPendentesUsuario[0].eventos_usuarios}}</span>
+        </div>
+        <div class="tentando" title="Tentando">
+          <div class="table_scroll">
+            <table *ngIf="eventosTentandoUsuario.length" class="table table-bordered table-striped">
+              <!--Table head-->
+              <thead>
+                <tr>
+                  <th class="justify-content-center">Tentativas</th>
+                  <th class="justify-content-center">Ligações</th>
+                  <th class="justify-content-center">Clientes</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let t of eventosTentandoUsuario">
+                  <td class="justify-content-center">{{t.tentativas}}</td>
+                  <td class="justify-content-center">{{t.ligacoes}}</td>
+                  <td class="justify-content-center">{{t.clientes}}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="quantidadeDeLigacoes">
+          <span *ngIf="totalLigacoesUsuario" title="Quantidade de ligações"
+            (click)="showTable(9,agentesVendasSelectValue,'Ligações realizadas do consultor de vendas internas ' + agentesVendasSelectNome )">{{totalLigacoesUsuario}}</span>
+        </div>
+        <div class="fundoFunil">
+          <span *ngIf="eventosPredicaoUsuario" title="Frio">{{eventosPredicaoUsuario[0] ?
           eventosPredicaoUsuario[0].count : 0}}</span>
-        <span *ngIf="eventosPredicaoUsuario" title="Morno">{{eventosPredicaoUsuario[1] ?
+          <span *ngIf="eventosPredicaoUsuario" title="Morno">{{eventosPredicaoUsuario[1] ?
           eventosPredicaoUsuario[1].count : 0}}</span>
-        <span *ngIf="eventosPredicaoUsuario" title="Quente">{{eventosPredicaoUsuario[2] ?
+          <span *ngIf="eventosPredicaoUsuario" title="Quente">{{eventosPredicaoUsuario[2] ?
           eventosPredicaoUsuario[2].count : 0}}</span>
-      </div>
-      <div class="row resultado">
-        <div *ngIf="eventosResultadoUsuario && eventosResultadoUsuario[0]" class="col-4 acerto" [title]="eventosResultadoUsuario[0].descricao">
-          <div>
-            <span>{{eventosResultadoUsuario[0].qdte}}</span>
-          </div>
         </div>
-        <div *ngIf="eventosResultadoUsuario && eventosResultadoUsuario[1]" class="col-4 alvoErro" [title]="eventosResultadoUsuario[1].descricao">
-          <div>
-            <span>{{eventosResultadoUsuario[1].qdte}}</span>
+        <div class="row resultado mt-3">
+          <div *ngIf="eventosResultadoUsuario && eventosResultadoUsuario[0]" class="col-4 acerto"
+            [title]="eventosResultadoUsuario[0].descricao">
+            <div>
+              <span>{{eventosResultadoUsuario[0].qdte}}</span>
+            </div>
           </div>
-        </div>
-        <div *ngIf="eventosResultadoUsuario && eventosResultadoUsuario[2]" class="col-4 excedeu" [title]="eventosResultadoUsuario[2].descricao">
-          <div>
-            <span>{{eventosResultadoUsuario[2].qdte}}</span>
+          <div *ngIf="eventosResultadoUsuario && eventosResultadoUsuario[1]" class="col-4 alvoErro"
+            [title]="eventosResultadoUsuario[1].descricao">
+            <div>
+              <span>{{eventosResultadoUsuario[1].qdte}}</span>
+            </div>
+          </div>
+          <div *ngIf="eventosResultadoUsuario && eventosResultadoUsuario[2]" class="col-4 excedeu"
+            [title]="eventosResultadoUsuario[2].descricao">
+            <div>
+              <span>{{eventosResultadoUsuario[2].qdte}}</span>
+            </div>
           </div>
         </div>
       </div>
     </div>
-
   </div>
-
-
-
-
 </div>
