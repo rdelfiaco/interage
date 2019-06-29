@@ -1,63 +1,71 @@
-<div class="row">
-  <div style="margin-left: 950px" class="row d-flex justify-content-end">
-    <button type="button" mdbBtn color="primary" (click)="inicializaForm();  adicionarModal.show()"
-      class="relative waves-light" mdbWavesEffect>Adicionar Novo Usuário</button>
+<form class="mt-2">
+  <div class="row">
+    <div class="col-lg-12 text-right">
+      <button type="button" mdbBtn color="primary" (click)="inicializaForm();  adicionarModal.show()"
+        class="relative waves-light" mdbWavesEffect>Adicionar Novo Usuário</button>
+    </div>
   </div>
-  <br>
-  <br>
-  <table class="table">
-    <thead>
-      <tr>
-        <th class="th-sm">Id
-          <mdb-icon icon="sort" (click)="sortBy('id')"></mdb-icon>
-        </th>
-        <th class="th-sm">CPF
-          <mdb-icon icon="sort" (click)="sortBy('cpf_cnpj')"></mdb-icon>
-        </th>
-        <th class="th-sm">Nome
-          <mdb-icon icon="sort" (click)="sortBy('nome')"></mdb-icon>
-        </th>
-        <th class="th-sm">login
-          <mdb-icon icon="sort" (click)="sortBy('nome')"></mdb-icon>
-        </th>
-        <th class="th-sm">Status
-          <mdb-icon icon="sort" (click)="sortBy('status')"></mdb-icon>
-        </th>
-        <th class="th-sm">Departamento
-          <mdb-icon icon="sort" (click)="sortBy('departamento')"></mdb-icon>
-        </th>
-        <th class="th-sm">Ações
-        </th>
-      </tr>
-    </thead>
-    <tbody *ngFor="let usuario of usuarios">
-      <tr>
-        <td>{{usuario.id}}</td>
-        <td>{{usuario.cpf_cnpj}}</td>
-        <td>{{usuario.nome}}</td>
-        <td>{{usuario.login}}</td>
-        <td>
-          <mdb-checkbox [checked]="usuario.status" [disabled]="true"></mdb-checkbox>
-        </td>
-        <td>{{usuario.departamento}}</td>
-        <td>
-          <mdb-icon style="margin: 0px 5px;" icon="pencil" (click)="editar(usuario.id)" (click)="editarModal.show()"
-            size="lg" title="Editar usuários"></mdb-icon>
-          <mdb-icon style="margin: 0px 5px;" icon="trash" (click)="excluir(usuario.id)" (click)="excluirModal.show()"
-            size="lg" title="Excluir usuários"></mdb-icon>
-          <mdb-icon style="margin: 0px 5px;" icon="contao" (click)="campanhasUsuario(usuario.id)" size="lg"
-            title="Campanhas do usuários"></mdb-icon>
-          <mdb-icon style="margin: 0px 5px;" icon="unlock-alt" (click)="permissoesUsuario(usuario.id)" size="lg"
-            title="Permissões do usuários"></mdb-icon>
-
-
-        </td>
-      </tr>
-    </tbody>
-  </table>
-</div>
-<br />
-<br />
+  <div class="row mt-3">
+    <div class="col-lg-12">
+      <table class="table">
+        <thead>
+          <tr>
+            <th class="th-sm">Id
+              <mdb-icon icon="sort" (click)="sortBy('id')"></mdb-icon>
+            </th>
+            <th class="th-sm">CPF
+              <mdb-icon icon="sort" (click)="sortBy('cpf_cnpj')"></mdb-icon>
+            </th>
+            <th class="th-sm">Nome
+              <mdb-icon icon="sort" (click)="sortBy('nome')"></mdb-icon>
+            </th>
+            <th class="th-sm">login
+              <mdb-icon icon="sort" (click)="sortBy('nome')"></mdb-icon>
+            </th>
+            <th class="th-sm">Status
+              <mdb-icon icon="sort" (click)="sortBy('status')"></mdb-icon>
+            </th>
+            <th class="th-sm">Departamento
+              <mdb-icon icon="sort" (click)="sortBy('departamento')"></mdb-icon>
+            </th>
+            <th class="th-sm">Ações
+            </th>
+          </tr>
+        </thead>
+        <tbody *ngFor="let usuario of usuarios">
+          <tr>
+            <td>{{usuario.id}}</td>
+            <td>{{usuario.cpf_cnpj}}</td>
+            <td>{{usuario.nome}}</td>
+            <td>{{usuario.login}}</td>
+            <td>
+              <mdb-checkbox [checked]="usuario.status" [disabled]="true"></mdb-checkbox>
+            </td>
+            <td>{{usuario.departamento}}</td>
+            <td>
+              <button title="Editar usuários" (click)="editar(usuario.id); editarModal.show();" type="button" mdbBtn color="blue" outline="true"
+                rounded="true" size="sm" class="px-2" mdbWavesEffect>
+                <mdb-icon fas icon="pencil" class="mt-0"></mdb-icon>
+              </button>
+              <button title="Excluir usuários" (click)="excluir(usuario.id); excluirModal.show();" type="button" mdbBtn color="red" outline="true"
+                rounded="true" size="sm" class="px-2" mdbWavesEffect>
+                <mdb-icon fas icon="trash" class="mt-0"></mdb-icon>
+              </button>
+              <button title="Campanhas do usuários" (click)="campanhasUsuario(usuario.id)" type="button" mdbBtn color="green" outline="true"
+                rounded="true" size="sm" class="px-2" mdbWavesEffect>
+                <mdb-icon fas icon="clone" class="mt-0"></mdb-icon>
+              </button>
+              <button style="width:31px;" title="Permissões do usuários" (click)="permissoesUsuario(usuario.id)" type="button" mdbBtn color="yellow" outline="true"
+                rounded="true" size="sm" class="px-2" mdbWavesEffect>
+                <mdb-icon fas icon="unlock-alt" class="mt-0"></mdb-icon>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</form>
 
 
 <div [formGroup]="usuarioForm" mdbModal #editarModal="mdbModal" class="modal fade" tabindex="-1" role="dialog"
@@ -134,8 +142,6 @@
     </div>
   </div>
 </div>
-
-
 
 <div [formGroup]="usuarioForm" mdbModal #excluirModal="mdbModal" class="modal fade" tabindex="-1" role="dialog"
   aria-labelledby="myBasicModalLabel" aria-hidden="true" [config]="{backdrop: true}">
