@@ -10,15 +10,15 @@
   </div>
   <div class="px-4 p-4">
     <div class="row p-2">
-      <div class="col-11">
+      <div class="col-10">
         <div class="md-form">
           <input type="search" [(ngModel)]="textoPesquisaPessoa" id="search" class="form-control" mdbInputDirective
             [mdbValidate]="false" (keyup)="$event.keyCode == 13 && pesquisar()">
           <label for="search">Inserir CPF ou CNPJ ou Nome da Pessoa ou Código</label>
         </div>
       </div>
-      <div class="col-1">
-        <button type="button" style="margin-left: -10px;" mdbBtn color="primary" class="relative waves-light"
+      <div class="col-2">
+        <button type="button" mdbBtn color="primary" class="relative waves-light"
           (click)="pesquisar()" mdbWavesEffect>
           Pesquisar</button>
       </div>

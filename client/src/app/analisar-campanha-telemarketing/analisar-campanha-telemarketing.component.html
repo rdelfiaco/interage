@@ -54,7 +54,7 @@
       <!--Table head-->
 
       <tbody>
-        <tr #list *ngFor="let evento of tableData; let i = index">
+        <tr style="cursor:pointer;" #list *ngFor="let evento of tableData; let i = index">
           <td *ngIf="i+1 >= firstVisibleIndex && i+1 <= lastVisibleIndex" (click)="abreDetalheCampanha(evento)"
             class="font-weight-bold">{{evento.nome}}</td>
           <td *ngIf="i+1 >= firstVisibleIndex && i+1 <= lastVisibleIndex" class="text-center">{{evento.inseridos}}</td>

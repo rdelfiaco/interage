@@ -23,13 +23,13 @@
       [disabled]="!usuarioLogadoSupervisor" style="font-size: 0.5rem;"></mdb-select>
     <label>Usuário</label>
   </div>
-  <div class="col-5" style="margin-top: 20px">
+  <div class="col-4" style="margin-top: 20px">
     <mdb-select [(ngModel)]="statusPropostaSelectValue" [options]="statusPropostaSelect" placeholder="Escolha o status"
       style="font-size: 0.5rem;"></mdb-select>
     <label>Status</label>
   </div>
-  <div class="col-1" style="margin-top: 5px">
-    <button type="button" style="margin-left: -13px;" mdbBtn color="primary" class="relative waves-light" (click)="lerPropostas()"
+  <div class="col-2" style="margin-top: 5px">
+    <button type="button" mdbBtn color="primary" class="relative waves-light" (click)="lerPropostas()"
       mdbWavesEffect>Carregar</button>
     <!-- </div>
       <div class="col" style="margin-left: 10px; margin-top: 5px">
