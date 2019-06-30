@@ -114,7 +114,6 @@ console.log(`Servidor iniciado na em http://localhost:${nodeStart.port}`)
 
 
 function declaraServico(nomeServico, funcao) {
-  
   app.get(`/${nomeServico}`, (req, res) => {
     funcao(req)
       .then(linhas => {

@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { ConnectHTTP } from '../shared/services/connectHTTP';
+import { ToastService } from '../../lib/ng-uikit-pro-standard';
+import { LocalStorage } from '../shared/services/localStorage';
 
 @Component({
   selector: 'app-questionario',
@@ -8,17 +11,18 @@ import { Router } from '@angular/router';
 })
 export class QuestionarioComponent implements OnInit {
 
-  tableData: object[] = [
-    { id: 1, nome: "Quest. Avaliação de Pós Venda", qtde_perguntas: 5, status: 1 },
-    { id: 2, nome: "Questionário De Teste 5", qtde_perguntas: 3, status: 0 },
-    { id: 3, nome: "Questionário De Teste Pergunta abertas", qtde_perguntas: 5, status: 1 },
-    { id: 4, nome: "questionário teste1", qtde_perguntas: 4, status: 0 },
-  ];
+  tableData: object[] = [];
+
   private sorted = false;
 
-  constructor(private router: Router, ) { }
+  constructor(
+    private router: Router,
+    private connectHTTP: ConnectHTTP,
+    private toastrService: ToastService,
+    private localStorage: LocalStorage) { }
 
   ngOnInit() {
+    this.getQuestionarios();
   }
 
   sortBy(by: string | any): void {
@@ -35,8 +39,26 @@ export class QuestionarioComponent implements OnInit {
 
     this.sorted = !this.sorted;
   }
-  
+
   openQuestionario(id: string) {
     this.router.navigate(['questionario/' + id]);
+  }
+
+
+  async getQuestionarios() {
+    try {
+      let resp = await this.connectHTTP.callService({
+        service: 'getQuestionarios',
+        paramsService: {}
+      }) as any;
+      if (resp.error) {
+        this.toastrService.error(resp.error);
+      } else {
+        this.tableData = resp.resposta;
+      }
+    }
+    catch (e) {
+      this.toastrService.error('Erro ao ler as permissoes do departamento', e);
+    }
   }
 }
