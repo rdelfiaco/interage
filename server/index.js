@@ -23,6 +23,7 @@ const consultaPlaca = require('./src/api/consultaPlaca');
 const canais = require('./src/api/canais');
 const motivos = require('./src/api/motivos');
 const questionarios = require('./src/api/questionarios');
+const questionariosAlternativas = require('./src/api/questionariosAlternativas');
 
 
 app.use(bodyParser.json());
@@ -110,6 +111,8 @@ declaraServicoPost('addQuestionario',  questionarios.addQuestionario);
 declaraServicoPost('updateQuestionario',  updateQuestionario);
 declaraServicoPost('delteQuestionario',  delteQuestionario);
 declaraServicoPost('updateStatusQuestionario',  updateStatusQuestionario);
+declaraServico('getAlternativas',  questionariosAlternativas.getAlternativas);
+declaraServicoPost('addAlternativas',  questionariosAlternativas.addAlternativas);
 
 app.listen(nodeStart.port, "0.0.0.0");
 console.log(`Servidor iniciado na em http://localhost:${nodeStart.port}`)
