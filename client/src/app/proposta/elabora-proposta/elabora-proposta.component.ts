@@ -44,10 +44,12 @@ export class ElaboraPropostaComponent implements OnInit {
   set pessoa(pessoa: any) {
     this.pessoaObject = pessoa;
     this.initValueId = new Observable((observer) => {
-      observer.next(pessoa.principal.id);
+       if(pessoa) observer.next(pessoa.principal.id);
     });
+    if(pessoa){
     this.idPessoaCliente = pessoa.principal.id;
     this.Cliente = pessoa.principal.nome;
+    }
   }
   get pessoa() {
     return this.pessoaObject;
@@ -831,7 +833,6 @@ export class ElaboraPropostaComponent implements OnInit {
         this.proposta.idPessoaDestinatario = 5 // buscar supervisor das vendas internas 
     }
 
-    console.log(this.proposta)
 
       //this.propostaComuc.setProposta(this.proposta);
 
