@@ -106,8 +106,10 @@ declaraServico('salvarPermissoesDoUsuario',  usuario.salvarPermissoesDoUsuario);
 declaraServico('getCanais',  canais.getCanais);
 declaraServico('getMotivos',  motivos.getMotivos);
 declaraServico('getQuestionarios',  questionarios.getQuestionarios);
-
-
+declaraServicoPost('addQuestionario',  questionarios.addQuestionario);
+declaraServicoPost('updateQuestionario',  updateQuestionario);
+declaraServicoPost('delteQuestionario',  delteQuestionario);
+declaraServicoPost('updateStatusQuestionario',  updateStatusQuestionario);
 
 app.listen(nodeStart.port, "0.0.0.0");
 console.log(`Servidor iniciado na em http://localhost:${nodeStart.port}`)

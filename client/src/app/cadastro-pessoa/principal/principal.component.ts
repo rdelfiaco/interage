@@ -4,6 +4,8 @@ import { IMyOptions, ToastService } from '../../../lib/ng-uikit-pro-standard';
 import { ConnectHTTP } from '../../shared/services/connectHTTP';
 import { Usuario } from '../../login/usuario';
 import { LocalStorage } from '../../shared/services/localStorage';
+import validaCpf from '../../shared/validaCpf';
+import validaCnpj from '../../shared/validaCnpj';
 
 
 interface selectValues {
@@ -162,6 +164,14 @@ export class PrincipalComponent implements OnInit {
 
   async salvarPessoa() {
     this.principalForm.value.cpf_cnpj = this.principalForm.value.cpf_cnpj && this.principalForm.value.cpf_cnpj.replace(/\W/gi, '')
+
+    if (this.tipoPessoaSelecionada == 'F' && !validaCpf.isValid(this.principalForm.value.cpf_cnpj)) {
+       return this.toastrService.error('Informe um CPF válido');
+    }
+
+    if (this.tipoPessoaSelecionada == 'J' && validaCnpj.isValid(this.principalForm.value.cpf_cnpj)) {
+       return this.toastrService.error('Informe um CNPJ válido');
+    }
 
     this.checkAtividadePessoa()
 

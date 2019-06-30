@@ -61,4 +61,41 @@ export class QuestionarioComponent implements OnInit {
       this.toastrService.error('Erro ao ler as permissoes do departamento', e);
     }
   }
+
+  async deleteQuestionario(id) {
+    try {
+      let resp = await this.connectHTTP.callService({
+        service: 'deleteQuestionario',
+        paramsService: {id}
+      }) as any;
+      debugger;
+      if (resp.error) {
+        this.toastrService.error(resp.error);
+      } else {
+        this.toastrService.success('Quationário apagado com sucesso');
+        this.getQuestionarios();
+      }
+    }
+    catch (e) {
+      this.toastrService.error('Erro ao ler as permissoes do departamento', e);
+    }
+  }
+  
+  async updateStatusQuestionario(id) {
+    try {
+      let resp = await this.connectHTTP.callService({
+        service: 'updateStatusQuestionario',
+        paramsService: {id}
+      }) as any;
+      debugger;
+      if (resp.error) {
+        this.toastrService.error(resp.error);
+      } else {
+        this.toastrService.success('Status alterado com sucesso');
+      }
+    }
+    catch (e) {
+      this.toastrService.error('Erro ao ler as permissoes do departamento', e);
+    }
+  }
 }

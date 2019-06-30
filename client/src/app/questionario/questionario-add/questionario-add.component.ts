@@ -1,10 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ConnectHTTP } from '../../shared/services/connectHTTP';
 import { LocalStorage } from '../../shared/services/localStorage';
-import { ToastService } from '../../../lib/ng-uikit-pro-standard';
+import { ToastService, ModalDirective } from '../../../lib/ng-uikit-pro-standard';
 import { Router } from '@angular/router';
-import {Location} from '@angular/common';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-questionario-add',
@@ -12,8 +12,9 @@ import {Location} from '@angular/common';
   styleUrls: ['./questionario-add.component.scss']
 })
 export class QuestionarioAddComponent implements OnInit {
-  // private questionarioForm: FormGroup;
+  private questionarioForm: FormGroup;
   usuarioLogado: any;
+  @ViewChild('questionarioadd') questionarioadd: ModalDirective;
   constructor(private router: Router,
     private _location: Location,
     private connectHTTP: ConnectHTTP,
@@ -26,11 +27,30 @@ export class QuestionarioAddComponent implements OnInit {
   ngOnInit() {
   }
 
-  novoQuestionario() {
-    // this.questionarioForm = this.formBuilder.group({
-    //   nome: [''],
-    //   status: [''],
-    // });
+  async salvarQuestionario() {
+    this.questionarioForm = this.formBuilder.group({
+      nome: [''],
+      status: [''],
+    });
+    debugger
+    try {
+      let resp = await this.connectHTTP.callService({
+        service: 'addQuestionarios',
+        paramsService: {
+          questionario : this.questionarioForm.value
+        }
+      }) as any;
+      if (resp.error) {
+        this.toastrService.error(resp.error);
+      }
+      else {
+        debugger
+        this.questionarioadd.hide();
+      }
+    }
+    catch (e) {
+      this.toastrService.error('Erro ao salvar novo questionário', e);
+    }
   }
 
   back(id: string) {
