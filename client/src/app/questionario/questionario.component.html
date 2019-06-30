@@ -47,7 +47,7 @@
         <tbody>
           <tr *ngFor="let row of tableData;let i = index">
             <td>{{row.nome}}</td>
-            <!-- <td class="text-center">{{row.qtde_perguntas}}</td> -->
+            <td class="text-center">{{row.qtde_perguntas}}</td>
             <td class="text-center"><mdb-checkbox (change)="updateStatusQuestionario(row.id)" [checked]="row.status"></mdb-checkbox></td>
             <td class="text-center">
                 <div>

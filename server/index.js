@@ -108,9 +108,9 @@ declaraServico('getCanais',  canais.getCanais);
 declaraServico('getMotivos',  motivos.getMotivos);
 declaraServico('getQuestionarios',  questionarios.getQuestionarios);
 declaraServicoPost('addQuestionario',  questionarios.addQuestionario);
-declaraServicoPost('updateQuestionario',  updateQuestionario);
-declaraServicoPost('delteQuestionario',  delteQuestionario);
-declaraServicoPost('updateStatusQuestionario',  updateStatusQuestionario);
+declaraServicoPost('updateQuestionario',  questionarios.updateQuestionario);
+declaraServicoPost('delteQuestionario',  questionarios.delteQuestionario);
+declaraServicoPost('updateStatusQuestionario',  questionarios.updateStatusQuestionario);
 declaraServico('getAlternativas',  questionariosAlternativas.getAlternativas);
 declaraServicoPost('addAlternativas',  questionariosAlternativas.addAlternativas);
 
