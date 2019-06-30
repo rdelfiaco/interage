@@ -9,15 +9,22 @@ function getLigacaoTelemarketing(req, res) {
 
     checkTokenAccess(req).then(historico => {
       getUmEvento(req).then(evento => {
-        req.query.id_pessoa = evento.id_pessoa_receptor;
-        req.query.id_motivo = evento.id_motivo;
-        getPessoa(req).then(pessoa => {
-          motivosRespostas(req).then(motivos_respostas => {
-            getPredicao(req).then(predicoes => {
-              getObjecoes(req).then(objecoes => {
-                if (!evento || !pessoa || !motivos_respostas || !predicoes) reject('Ligação com erro!');
+        if (evento == 'Não há eventos!')
+        { reject(evento);
+        }
+        else{ 
+          req.query.id_pessoa = evento.id_pessoa_receptor;
+          req.query.id_motivo = evento.id_motivo;
+          getPessoa(req).then(pessoa => {
+            motivosRespostas(req).then(motivos_respostas => {
+              getPredicao(req).then(predicoes => {
+                getObjecoes(req).then(objecoes => {
+                  if (!evento || !pessoa || !motivos_respostas || !predicoes) reject('Ligação com erro!');
 
-                resolve({ pessoa, evento, motivos_respostas, predicoes, objecoes });
+                  resolve({ pessoa, evento, motivos_respostas, predicoes, objecoes });
+                }).catch(e => {
+                  reject(e);
+                });
               }).catch(e => {
                 reject(e);
               });
@@ -27,9 +34,7 @@ function getLigacaoTelemarketing(req, res) {
           }).catch(e => {
             reject(e);
           });
-        }).catch(e => {
-          reject(e);
-        });
+      }
       }).catch(e => {
         reject(e);
       });

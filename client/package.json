@@ -45,6 +45,7 @@
     "pdfmake": "^0.1.39",
     "rxjs": "^6.0.0-rc.0",
     "screenfull": "^3.3.0",
+    "sinesp-nodejs": "^2.1.1",
     "twilio": "^3.30.0",
     "zone.js": "^0.8.24"
   },
