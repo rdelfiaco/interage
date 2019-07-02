@@ -5,9 +5,8 @@
 
   </div>
   <div class="col-lg-6 text-right">
-      <button type="button" mdbBtn color="danger" mdbWavesEffect>Apagar</button>
-      <button type="button" mdbBtn color="dark-green" mdbWavesEffect>Salvar</button>
-
+      <button type="button" mdbBtn color="danger" (click)="apagarQuestionario()" mdbWavesEffect>Apagar</button>
+      <button type="button"  mdbBtn color="dark-green" (click)="updateQuestionario()" mdbWavesEffect>Salvar</button>
   </div>
 </div>
 <mdb-card cascade="true" narrower="true">
@@ -15,7 +14,7 @@
     <div class="row">
       <div class="col-lg-12">
         <div class="md-form">
-          <input mdbInputDirective formControlName="nome" min="5" type="text" id="nome" class="form-control" [value]="tableData.nome">
+          <input mdbInputDirective formControlName="nome" min="5" type="text" id="nome" class="form-control" (ngModel)='tableData.nome' [value]="tableData.nome">
           <label for="nome">Nome do questionário</label>
         </div>
       </div>
@@ -23,7 +22,7 @@
     <div class="row">
       <div class="col-lg-12">
         <label>Status</label>
-        <mdb-checkbox [checked]="tableData.status">Ativo</mdb-checkbox>
+        <mdb-checkbox [checked]="tableData.status" (change)="updateStatusQuestionario(tableData.id, tableData.status)">Ativo</mdb-checkbox>
       </div>
     </div>
   </form>
@@ -42,11 +41,11 @@
                 <mdb-icon fas icon="sort" class="ml-1"></mdb-icon>
               </a>
             </th>
-            <th class="th-lg text-center" width="20%">
-              <a (click)="sortBy('qtde_perguntas')">Qtde Perguntas
+            <!-- <th class="th-lg text-center" width="20%">
+              <a (click)="sortBy('qtde_perguntas')">Qtde Alternativas
                 <mdb-icon fas icon="sort" class="ml-1"></mdb-icon>
               </a>
-            </th>
+            </th> -->
             <th class="th-lg text-center" width="20%">
               <a (click)="sortBy('sequencia')">Sequência
                 <mdb-icon fas icon="sort" class="ml-1"></mdb-icon>
@@ -57,6 +56,11 @@
                 <mdb-icon fas icon="sort" class="ml-1"></mdb-icon>
               </a>
             </th>
+            <th class="th-lg text-center" width="20%">
+              <a (click)="sortBy('status')">Multipla Escolha
+                <mdb-icon fas icon="sort" class="ml-1"></mdb-icon>
+              </a>
+            </th>
             <th class="th-lg text-center" width="10%">Ações
             </th>
           </tr>
@@ -64,10 +68,13 @@
         <tbody>
           <tr *ngFor="let row of tableData.perguntas;let i = index">
             <td>{{row.nome}}</td>
-            <td class="text-center">{{row.qtde_respostas}}</td>
-            <td class="text-center">{{row.sequencia}}</td>
+            <!-- <td class="text-center">{{row.qtde_alternativas}}</td> -->
+            <td class="text-center">{{row.sequencia_pergunta}}</td>
             <td class="text-center">
-              <mdb-checkbox [checked]="row.status"></mdb-checkbox>
+              <mdb-checkbox [checked]="row.status" (change)="updateStatusPergunta(row.id, row.status)"></mdb-checkbox>
+            </td>
+            <td class="text-center">
+              <mdb-checkbox [checked]="row.multipla_escolha" (change)="updateMultiEscolhaPergunta(row.id, row.multipla_escolha)"></mdb-checkbox>
             </td>
             <td class="text-center">
               <div>

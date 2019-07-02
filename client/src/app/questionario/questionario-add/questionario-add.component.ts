@@ -28,29 +28,29 @@ export class QuestionarioAddComponent implements OnInit {
   }
 
   async salvarQuestionario() {
-    this.questionarioForm = this.formBuilder.group({
-      nome: [''],
-      status: [''],
-    });
-    debugger
-    try {
-      let resp = await this.connectHTTP.callService({
-        service: 'addQuestionarios',
-        paramsService: {
-          questionario : this.questionarioForm.value
-        }
-      }) as any;
-      if (resp.error) {
-        this.toastrService.error(resp.error);
-      }
-      else {
-        debugger
-        this.questionarioadd.hide();
-      }
-    }
-    catch (e) {
-      this.toastrService.error('Erro ao salvar novo questionário', e);
-    }
+    // this.questionarioForm = this.formBuilder.group({
+    //   nome: [''],
+    //   status: [''],
+    // });
+    // debugger
+    // try {
+    //   let resp = await this.connectHTTP.callService({
+    //     service: 'addQuestionarios',
+    //     paramsService: {
+    //       questionario : this.questionarioForm.value
+    //     }
+    //   }) as any;
+    //   if (resp.error) {
+    //     this.toastrService.error(resp.error);
+    //   }
+    //   else {
+    //     debugger
+    //     this.questionarioadd.hide();
+    //   }
+    // }
+    // catch (e) {
+    //   this.toastrService.error('Erro ao salvar novo questionário', e);
+    // }
   }
 
   back(id: string) {

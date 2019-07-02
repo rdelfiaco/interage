@@ -41,6 +41,7 @@ export class QuestionarioComponent implements OnInit {
   }
 
   openQuestionario(id: string) {
+    debugger
     this.router.navigate(['questionario/' + id]);
   }
 
@@ -58,7 +59,8 @@ export class QuestionarioComponent implements OnInit {
       }
     }
     catch (e) {
-      this.toastrService.error('Erro ao ler as permissoes do departamento', e);
+      debugger
+      this.toastrService.error('Erro ao ler as permissoes de questionário', e);
     }
   }
 
@@ -66,7 +68,7 @@ export class QuestionarioComponent implements OnInit {
     try {
       let resp = await this.connectHTTP.callService({
         service: 'deleteQuestionario',
-        paramsService: {id}
+        paramsService: { id }
       }) as any;
       debugger;
       if (resp.error) {
@@ -80,14 +82,13 @@ export class QuestionarioComponent implements OnInit {
       this.toastrService.error('Erro ao ler as permissoes do departamento', e);
     }
   }
-  
-  async updateStatusQuestionario(id) {
+
+  async updateStatusQuestionario(id, status) {
     try {
       let resp = await this.connectHTTP.callService({
         service: 'updateStatusQuestionario',
-        paramsService: {id}
+        paramsService: { data: JSON.stringify({ id, status: !status })}
       }) as any;
-      debugger;
       if (resp.error) {
         this.toastrService.error(resp.error);
       } else {
@@ -95,7 +96,7 @@ export class QuestionarioComponent implements OnInit {
       }
     }
     catch (e) {
-      this.toastrService.error('Erro ao ler as permissoes do departamento', e);
+      this.toastrService.error('Erro ao ler as permissoes', e);
     }
   }
 }

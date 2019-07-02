@@ -23,7 +23,8 @@ const consultaPlaca = require('./src/api/consultaPlaca');
 const canais = require('./src/api/canais');
 const motivos = require('./src/api/motivos');
 const questionarios = require('./src/api/questionarios');
-const questionariosAlternativas = require('./src/api/questionariosAlternativas');
+const questPerguntas = require('./src/api/questionariosPerguntas');
+const questAlternativas = require('./src/api/questionariosAlternativas');
 
 
 app.use(bodyParser.json());
@@ -106,13 +107,27 @@ declaraServico('getPermissoesUsuarioSeleconado',  usuario.getPermissoesUsuarioSe
 declaraServico('salvarPermissoesDoUsuario',  usuario.salvarPermissoesDoUsuario);
 declaraServico('getCanais',  canais.getCanais);
 declaraServico('getMotivos',  motivos.getMotivos);
+// questionario
 declaraServico('getQuestionarios',  questionarios.getQuestionarios);
-declaraServicoPost('addQuestionario',  questionarios.addQuestionario);
-declaraServicoPost('updateQuestionario',  questionarios.updateQuestionario);
-declaraServicoPost('delteQuestionario',  questionarios.delteQuestionario);
-declaraServicoPost('updateStatusQuestionario',  questionarios.updateStatusQuestionario);
-declaraServico('getAlternativas',  questionariosAlternativas.getAlternativas);
-declaraServicoPost('addAlternativas',  questionariosAlternativas.addAlternativas);
+declaraServico('addQuestionario',  questionarios.addQuestionario);
+declaraServico('updateQuestionario',  questionarios.updateQuestionario);
+declaraServico('delteQuestionario',  questionarios.delteQuestionario);
+declaraServico('updateStatusQuestionario',  questionarios.updateStatusQuestionario);
+declaraServico('getQuestionarioById',  questionarios.getQuestionarioById);
+declaraServico('getPerguntasByIdUqestionario',  questionarios.getPerguntasByIdUqestionario);
+// questtionario alternativas
+declaraServico('getAlternativas',  questAlternativas.getAlternativas);
+declaraServico('addAlternativas',  questAlternativas.addAlternativas);
+declaraServico('updateStatusAlternativa',  questAlternativas.updateStatusAlternativa);
+declaraServico('deleteAlternativa',  questAlternativas.deleteAlternativa);
+declaraServico('updateAlternativa',  questAlternativas.updateAlternativa);
+// questtionario perguntas
+declaraServico('getPerguntas',  questPerguntas.getPerguntas);
+declaraServico('addPergunta',  questPerguntas.addPergunta);
+declaraServico('updateStatusPergunta',  questPerguntas.updateStatusPergunta);
+declaraServico('deletePergunta',  questPerguntas.deletePergunta);
+declaraServico('updateStatusPergunta',  questPerguntas.updateStatusPergunta);
+declaraServico('updateMultiEscolhaPergunta',  questPerguntas.updateMultiEscolhaPergunta);
 
 app.listen(nodeStart.port, "0.0.0.0");
 console.log(`Servidor iniciado na em http://localhost:${nodeStart.port}`)
@@ -123,7 +138,9 @@ function declaraServico(nomeServico, funcao) {
     funcao(req)
       .then(linhas => {
         headerResponse(res)
-        //console.log(`Serviço: ${nomeServico}; Resultado: ` , linhas)
+        // console.log(`Serviço: ${nomeServico}; Resultado linhas: ` , linhas)
+        // console.dir(linhas)
+        // console.dir(res)
         res.status(200).send(linhas)
       })
       .catch(error => {

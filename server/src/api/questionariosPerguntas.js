@@ -10,7 +10,10 @@ function getPerguntas(req, res) {
       idUsuario: req.query.id_usuario
     };
 
-    let sql = `SELECT * from perguntas `
+    let sql = `select p.id, p.nome, p.sequencia_pergunta, p.sequencia_pergunta, p.status, count(a.*) as qtde_alternativas
+              from quest_perguntas p
+              left join quest_alternativas a on p.id = a.id_pergunta
+              group by p.id, p.nome, p.sequencia_pergunta, p.sequencia_pergunta, p.status`
 
     executaSQL(credenciais, sql)
       .then(res => {
@@ -22,16 +25,30 @@ function getPerguntas(req, res) {
   });
 };
 
-function addQuestionario(req, res) {
+function addPergunta(req, res) {
   return new Promise(function (resolve, reject) {
     let credenciais = {
       token: req.query.token,
       idUsuario: req.query.id_usuario
     };
 
-    req.query.questinario = JSON.parse(req.query.questinario);
+    req.query.p = JSON.parse(req.query.data);
 
-    let sql = `INSERT INSTO questionarios(nome, status) VALUES(${req.query.nome}, ${req.query.status}) RETURNING id;`
+    let sql = `INSERT INSTO quest_perguntas(
+      nome,
+      status,
+      id_questionario,
+      sequencia_perguntas,
+      descricao_pergunta,
+      multipla_escolha
+      ) VALUES(
+        ${req.query.p.nome},
+        ${req.query.p.status},
+        ${req.query.p.questionarioId},
+        ${req.query.p.sequencia},
+        ${req.query.p.descricao},
+        ${req.query.p.multipla_escolha}
+        ) RETURNING id;`
 
     executaSQL(credenciais, sql)
       .then(res => {
@@ -43,19 +60,15 @@ function addQuestionario(req, res) {
   });
 };
 
-function updateStatusQuestionario(req, res) {
+function updateStatusPergunta(req, res) {
   return new Promise(function (resolve, reject) {
     let credenciais = {
       token: req.query.token,
       idUsuario: req.query.id_usuario
     };
+    req.query.p = JSON.parse(req.query.data);
 
-    console.log('------------------------QUESTIONARIOA');
-    console.log(req.query.questinario);
-    console.dir(JSON.parse(req.query.questinario));
-    req.query.questinario = JSON.parse(req.query.questinario);
-
-    let sql = `UPDATE questionarios SET status=${req.query.status},WHERE questionarios.id=${req.query.id}`;
+    let sql = `UPDATE quest_perguntas SET status=${req.query.p.status} WHERE quest_perguntas.id=${req.query.p.id}`;
 
     executaSQL(credenciais, sql)
       .then(res => {
@@ -67,16 +80,15 @@ function updateStatusQuestionario(req, res) {
   });
 };
 
-function updateQuestionario(req, res) {
+function updateMultiEscolhaPergunta(req, res) {
   return new Promise(function (resolve, reject) {
     let credenciais = {
       token: req.query.token,
       idUsuario: req.query.id_usuario
     };
+    req.query.p = JSON.parse(req.query.data);
 
-    req.query.questinario = JSON.parse(req.query.questinario);
-
-    let sql = `UPDATE questionarios SET nome=${req.query.nome},status=${req.query.status},WHERE questionarios.id=${req.query.id}`;
+    let sql = `UPDATE quest_perguntas SET multipla_escolha=${req.query.p.multi_escolha} WHERE quest_perguntas.id=${req.query.p.id}`;
 
     executaSQL(credenciais, sql)
       .then(res => {
@@ -88,17 +100,42 @@ function updateQuestionario(req, res) {
   });
 };
 
-function delteQuestionario(req, res) {
+function updatePergunta(req, res) {
   return new Promise(function (resolve, reject) {
     let credenciais = {
       token: req.query.token,
       idUsuario: req.query.id_usuario
     };
 
-    req.query.questinario = JSON.parse(req.query.questinario);
+    req.query.p = JSON.parse(req.query.data);
 
-    let sql = `DELETE FROM questionarios
-      WHERE questionarios.id=${req.query.id}`;
+    let sql = `UPDATE quest_perguntas SET 
+      nome=${req.query.p.nome},
+      status=${req.query.p.status},
+      id_questionario=${req.query.p.id_questionario},
+      sequencia_perguntas=${req.query.p.sequencia_perguntas},
+      descricao_pergunta=${req.query.p.descricao_pergunta},
+      multipla_escolha=${req.query.p.multipla_escolha}
+      WHERE quest_perguntas.id=${req.query.p.id}`;
+
+    executaSQL(credenciais, sql)
+      .then(res => {
+        resolve(res)
+      })
+      .catch(err => {
+        reject(err)
+      })
+  });
+};
+
+function deletePergunta(req, res) {
+  return new Promise(function (resolve, reject) {
+    let credenciais = {
+      token: req.query.token,
+      idUsuario: req.query.id_usuario
+    };
+    let sql = `DELETE FROM quest_perguntas
+      WHERE quest_perguntas.id=${JSON.parse(req.query.id)}`;
 
     executaSQL(credenciais, sql)
       .then(res => {
@@ -112,9 +149,10 @@ function delteQuestionario(req, res) {
 
 
 module.exports = {
-  getQuestionarios,
-  addQuestionario,
-  updateQuestionario,
-  delteQuestionario,
-  updateStatusQuestionario
+  getPerguntas,
+  addPergunta,
+  updateStatusPergunta,
+  updatePergunta,
+  deletePergunta,
+  updateMultiEscolhaPergunta
 };

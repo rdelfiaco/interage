@@ -30,11 +30,11 @@
                 <mdb-icon fas icon="sort" class="ml-1"></mdb-icon>
               </a>
             </th>
-            <!-- <th class="th-lg text-center" width="20%">
+            <th class="th-lg text-center" width="20%">
               <a (click)="sortBy('qtde_perguntas')">Qtde Perguntas
                 <mdb-icon fas icon="sort" class="ml-1"></mdb-icon>
               </a>
-            </th> -->
+            </th>
             <th class="th-lg text-center" width="20%">
               <a (click)="sortBy('status')">Ativo
                 <mdb-icon fas icon="sort" class="ml-1"></mdb-icon>
@@ -48,7 +48,7 @@
           <tr *ngFor="let row of tableData;let i = index">
             <td>{{row.nome}}</td>
             <td class="text-center">{{row.qtde_perguntas}}</td>
-            <td class="text-center"><mdb-checkbox (change)="updateStatusQuestionario(row.id)" [checked]="row.status"></mdb-checkbox></td>
+            <td class="text-center"><mdb-checkbox (change)="updateStatusQuestionario(row.id, row.status)" [checked]="row.status"></mdb-checkbox></td>
             <td class="text-center">
                 <div>
                   <button (click)="openQuestionario(row.id)" type="button" mdbBtn color="blue" outline="true" rounded="true" size="sm" class="px-2" mdbWavesEffect>
