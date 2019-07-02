@@ -2,13 +2,13 @@
   <div class="row">
     <div class="col-lg-11">
       <div class="md-form">
-        <input mdbInputDirective formControlName="nome" min="5" type="text" id="nome" class="form-control">
+        <input (ngModel)="tableData.nome" mdbInputDirective formControlName="nome" min="5" type="text" id="nome" class="form-control">
         <label for="nome">Nome</label>
       </div>
     </div>
     <div class="col-lg-1">
       <div class="md-form">
-        <mdb-checkbox>Ativo</mdb-checkbox>
+        <mdb-checkbox (ngModel)="tableData.status" [checked]="tableData.status">Ativo</mdb-checkbox>
       </div>
     </div>
   </div>

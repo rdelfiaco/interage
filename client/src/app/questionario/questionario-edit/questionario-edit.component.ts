@@ -81,7 +81,6 @@ export class QuestionarioEditComponent implements OnInit {
   }
 
   async updateQuestionario() {
-    debugger
     try {
       let resp = await this.connectHTTP.callService({
         service: 'updateQuestionario',
@@ -156,7 +155,6 @@ export class QuestionarioEditComponent implements OnInit {
         service: 'deleteQuestionario',
         paramsService: { id: this.tableData.id }
       }) as any;
-      debugger;
       if (resp.error) {
         this.toastrService.error(resp.error);
       } else {
