@@ -12,7 +12,7 @@ import { Location } from '@angular/common';
   styleUrls: ['./questionario-add.component.scss']
 })
 export class QuestionarioAddComponent implements OnInit {
-  private questionarioForm: FormGroup;
+  // private questionarioForm: FormGroup;
   usuarioLogado: any;
   @Input() tableData = {
     nome: '',
@@ -22,7 +22,6 @@ export class QuestionarioAddComponent implements OnInit {
   constructor(private router: Router,
     private _location: Location,
     private connectHTTP: ConnectHTTP,
-    private formBuilder: FormBuilder,
     private localStorage: LocalStorage,
     private toastrService: ToastService) {
     this.usuarioLogado = this.localStorage.getLocalStorage('usuarioLogado') as any;
@@ -33,16 +32,18 @@ export class QuestionarioAddComponent implements OnInit {
 
   async salvarQuestionario() {
     try {
+      let nome = document.querySelector('#nome')['value'];
+      let status = document.querySelector('#status input')['checked']
       debugger
       let resp = await this.connectHTTP.callService({
         service: 'addQuestionario',
-        paramsService: { data: JSON.stringify({...this.tableData})}
+        paramsService: { data: JSON.stringify({nome, status})}
       }) as any;
       if (resp.error) {
         this.toastrService.error(resp.error);
       } else {
         this.toastrService.success('Quationário salvo com sucesso');
-        this.back();
+        this.questionarioadd.hide();
       }
     }
     catch (e) {

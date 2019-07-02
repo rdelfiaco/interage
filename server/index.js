@@ -128,6 +128,8 @@ declaraServico('updateStatusPergunta',  questPerguntas.updateStatusPergunta);
 declaraServico('deletePergunta',  questPerguntas.deletePergunta);
 declaraServico('updateStatusPergunta',  questPerguntas.updateStatusPergunta);
 declaraServico('updateMultiEscolhaPergunta',  questPerguntas.updateMultiEscolhaPergunta);
+declaraServico('getPerguntaById',  questPerguntas.getPerguntaById);
+declaraServico('getAlternativasByIdPerguntas',  questPerguntas.getAlternativasByIdPerguntas);
 
 app.listen(nodeStart.port, "0.0.0.0");
 console.log(`Servidor iniciado na em http://localhost:${nodeStart.port}`)

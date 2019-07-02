@@ -10,11 +10,11 @@
   </div>
 </div>
 <mdb-card cascade="true" narrower="true">
-  <form [formGroup]="questionarioEditForm" class="p-4">
+  <form class="p-4">
     <div class="row">
       <div class="col-lg-12">
         <div class="md-form">
-          <input mdbInputDirective formControlName="nome" min="5" type="text" id="nome" class="form-control" (ngModel)='tableData.nome' [value]="tableData.nome">
+          <input mdbInputDirective formControlName="nome" min="5" type="text" id="nome" class="form-control" [(ngModel)]='tableData.nome' [value]="tableData.nome">
           <label for="nome">Nome do questionário</label>
         </div>
       </div>

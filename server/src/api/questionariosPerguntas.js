@@ -25,6 +25,44 @@ function getPerguntas(req, res) {
   });
 };
 
+
+function getPerguntaById(req, res) {
+  return new Promise(function (resolve, reject) {
+    let credenciais = {
+      token: req.query.token,
+      idUsuario: req.query.id_usuario
+    };
+
+    let sql = `SELECT * FROM quest_perguntas where quest_perguntas.id=${req.query.id}`
+    executaSQL(credenciais, sql)
+      .then(res => {
+        resolve(res);
+      })
+      .catch(err => {
+        reject(err)
+      })
+  });
+};
+
+function getAlternativasByIdPerguntas(req, res) {
+  return new Promise(function (resolve, reject) {
+    let credenciais = {
+      token: req.query.token,
+      idUsuario: req.query.id_usuario
+    };
+
+    let sql = `select * from quest_alternativas where quest_alternativas.id_pergunta=${req.query.id}`;
+    // let resultado = null;
+    executaSQL(credenciais, sql)
+      .then(res => {
+        resolve(res);
+      })
+      .catch(err => {
+        reject(err)
+      })
+  });
+};
+
 function addPergunta(req, res) {
   return new Promise(function (resolve, reject) {
     let credenciais = {
@@ -47,7 +85,7 @@ function addPergunta(req, res) {
         ${req.query.p.questionarioId},
         ${req.query.p.sequencia},
         ${req.query.p.descricao},
-        ${req.query.p.multipla_escolha}
+        ${req.query.p.multi_escolha}
         ) RETURNING id;`
 
     executaSQL(credenciais, sql)
@@ -154,5 +192,7 @@ module.exports = {
   updateStatusPergunta,
   updatePergunta,
   deletePergunta,
-  updateMultiEscolhaPergunta
+  updateMultiEscolhaPergunta,
+  getPerguntaById,
+  getAlternativasByIdPerguntas
 };

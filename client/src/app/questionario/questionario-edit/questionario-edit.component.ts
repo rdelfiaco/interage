@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { ConnectHTTP } from '../../shared/services/connectHTTP';
 import { LocalStorage } from '../../shared/services/localStorage';
@@ -12,9 +12,9 @@ import { ToastService } from '../../../lib/ng-uikit-pro-standard';
   styleUrls: ['./questionario-edit.component.scss']
 })
 export class QuestionarioEditComponent implements OnInit {
-  private questionarioForm: FormGroup;
+  // private questionarioForm: FormGroup;
   idQuest= "";
-  tableData: any = {};
+  @Input() tableData: any = {};
   //   nome: "Quest. Avaliação de Pós Venda", 
   //   perguntas: [
   //     {
@@ -33,7 +33,6 @@ export class QuestionarioEditComponent implements OnInit {
     private _location: Location,
     private router: Router,
     private connectHTTP: ConnectHTTP,
-    private formBuilder: FormBuilder,
     private toastrService: ToastService,
     private route: ActivatedRoute,
     private localStorage: LocalStorage) {
@@ -82,14 +81,16 @@ export class QuestionarioEditComponent implements OnInit {
 
   async updateQuestionario() {
     try {
+      let nome = document.querySelector('#nome')['value'];
       let resp = await this.connectHTTP.callService({
         service: 'updateQuestionario',
-        paramsService: { data: JSON.stringify({ id:this.tableData.id, nome: this.tableData.nome })}
+        paramsService: { data: JSON.stringify({ id:this.tableData.id, nome })}
       }) as any;
       if (resp.error) {
         this.toastrService.error(resp.error);
       } else {
         this.toastrService.success('Status alterado com sucesso');
+        this.goBack();
       }
     }
     catch (e) {

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { ConnectHTTP } from '../shared/services/connectHTTP';
 import { ToastService } from '../../lib/ng-uikit-pro-standard';
 import { LocalStorage } from '../shared/services/localStorage';
