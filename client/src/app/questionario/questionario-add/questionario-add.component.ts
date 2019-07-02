@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, Input } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ConnectHTTP } from '../../shared/services/connectHTTP';
 import { LocalStorage } from '../../shared/services/localStorage';
@@ -14,7 +14,7 @@ import { Location } from '@angular/common';
 export class QuestionarioAddComponent implements OnInit {
   private questionarioForm: FormGroup;
   usuarioLogado: any;
-  private tableData = {
+  @Input() tableData = {
     nome: '',
     status: true
   };

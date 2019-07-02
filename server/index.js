@@ -111,7 +111,7 @@ declaraServico('getMotivos',  motivos.getMotivos);
 declaraServico('getQuestionarios',  questionarios.getQuestionarios);
 declaraServico('addQuestionario',  questionarios.addQuestionario);
 declaraServico('updateQuestionario',  questionarios.updateQuestionario);
-declaraServico('delteQuestionario',  questionarios.delteQuestionario);
+declaraServico('deleteQuestionario',  questionarios.deleteQuestionario);
 declaraServico('updateStatusQuestionario',  questionarios.updateStatusQuestionario);
 declaraServico('getQuestionarioById',  questionarios.getQuestionarioById);
 declaraServico('getPerguntasByIdUqestionario',  questionarios.getPerguntasByIdUqestionario);

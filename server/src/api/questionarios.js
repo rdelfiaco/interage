@@ -10,9 +10,10 @@ function getQuestionarios(req, res) {
       idUsuario: req.query.id_usuario
     };
 
-    let sql = `SELECT q.id, q.nome, q.status, count(perg.*) as qtde_perguntas FROM questionarios q
-               inner join quest_perguntas perg on q.id = perg.id_questionario
-               group by q.id, q.nome, q.status`
+    // let sql = `SELECT q.id, q.nome, q.status, count(perg.*) as qtde_perguntas FROM questionarios q
+    //            inner join quest_perguntas perg on q.id = perg.id_questionario
+    //            group by q.id, q.nome, q.status`
+    let sql = `SELECT * from questionarios`
 
     executaSQL(credenciais, sql)
       .then(res => {
@@ -139,7 +140,7 @@ function updateQuestionario(req, res) {
   });
 };
 
-function delteQuestionario(req, res) {
+function deleteQuestionario(req, res) {
   return new Promise(function (resolve, reject) {
     let credenciais = {
       token: req.query.token,
@@ -164,7 +165,7 @@ module.exports = {
   getQuestionarios,
   addQuestionario,
   updateQuestionario,
-  delteQuestionario,
+  deleteQuestionario,
   updateStatusQuestionario,
   getQuestionarioById,
   getPerguntasByIdUqestionario
