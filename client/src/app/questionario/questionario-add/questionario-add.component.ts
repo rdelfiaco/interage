@@ -33,12 +33,12 @@ export class QuestionarioAddComponent implements OnInit {
   async salvarQuestionario() {
     try {
       let nome = document.querySelector('#nome')['value'];
-      let status = document.querySelector('#status input')['checked']
-      debugger
+      // let status = document.querySelector('#status input')['checked']
       let resp = await this.connectHTTP.callService({
         service: 'addQuestionario',
-        paramsService: { data: JSON.stringify({nome, status})}
+        paramsService: { data: JSON.stringify({nome, status:true})}
       }) as any;
+      debugger;
       if (resp.error) {
         this.toastrService.error(resp.error);
       } else {

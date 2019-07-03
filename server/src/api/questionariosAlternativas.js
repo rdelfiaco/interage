@@ -30,7 +30,7 @@ function addAlternativa(req, res) {
 
     req.query.a = JSON.parse(req.query.data);
 
-    let sql = `INSERT INSTO quest_alternativas(
+    let sql = `INSERT INTO quest_alternativas(
       nome,
       status,
       id_pergunta,

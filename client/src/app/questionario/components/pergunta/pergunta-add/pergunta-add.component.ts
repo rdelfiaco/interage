@@ -50,8 +50,4 @@ export class PerguntaAddComponent implements OnInit {
       this.toastrService.error('Erro ao ler as permissoes do departamento', e);
     }
   }
-
-  back() {
-
-  } 
 }

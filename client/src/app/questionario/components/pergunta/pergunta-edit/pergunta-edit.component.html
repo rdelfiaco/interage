@@ -6,8 +6,8 @@
 
   </div>
   <div class="col-lg-6 text-right">
-    <button type="button" mdbBtn color="danger" mdbWavesEffect>Apagar</button>
-    <button type="button" mdbBtn color="dark-green" mdbWavesEffect>Salvar</button>
+    <button type="button" mdbBtn color="danger" (click)="apagarPergunta()" mdbWavesEffect>Apagar</button>
+    <button type="button" mdbBtn color="dark-green" (click)="updatePergunta()" mdbWavesEffect>Salvar</button>
   </div>
 </div>
 <mdb-card cascade="true" narrower="true">
@@ -15,16 +15,28 @@
     <div class="row">
       <div class="col-lg-12">
         <div class="md-form">
-          <input mdbInputDirective formControlName="nome" min="5" type="text" id="nome" class="form-control"
+          <input (input)="tableData.nome = $event.target.value" mdbInputDirective formControlName="nome" min="5" type="text" id="nome" class="form-control"
             [value]="tableData.nome">
           <label for="nome">Título da pergunta</label>
         </div>
       </div>
     </div>
     <div class="row">
-      <div class="col-lg-12">
+      <div class="col-lg-8">
+        <div class="md-form">
+          <input (input)="tableData.sequencia_pergunta = $event.target.value" mdbInputDirective formControlName="sequencia" min="1" type="number" id="sequencia"
+            class="form-control">
+          <label for="sequencia">Sequencia</label>
+        </div>
+      </div>
+      <div class="col-lg-2">
         <label>Status</label>
-        <mdb-checkbox [checked]="tableData.status">Ativo</mdb-checkbox>
+        <mdb-checkbox (change)="updateStatusPergunta()" [checked]="tableData.status">Ativo</mdb-checkbox>
+      </div>
+      <div class="col-lg-2">
+        <label>Multipla Escolha</label>
+        <mdb-checkbox (change)="updateMultiEscolhaPergunta()" [checked]="tableData.multipla_escolha">Multipla escolha
+        </mdb-checkbox>
       </div>
     </div>
   </form>
@@ -62,15 +74,16 @@
             <td>{{row.titulo}}</td>
             <td class="text-center">{{row.sequencia}}</td>
             <td class="text-center">
-              <mdb-checkbox [checked]="row.status"></mdb-checkbox>
+              <mdb-checkbox (change)="updateStatusAlternativa(row.id, row.status)" [checked]="row.status">
+              </mdb-checkbox>
             </td>
             <td class="text-center">
               <div>
-                <button type="button" (click)="openResposta(row.id)" mdbBtn color="blue" outline="true" rounded="true" size="sm" class="px-2"
-                  mdbWavesEffect>
+                <button type="button" (click)="openResposta(row.id)" mdbBtn color="blue" outline="true" rounded="true"
+                  size="sm" class="px-2" mdbWavesEffect>
                   <mdb-icon fas icon="pencil" class="mt-0"></mdb-icon>
                 </button>
-                <button type="button" mdbBtn color="red" outline="true" rounded="true" size="sm" class="px-2"
+                <button type="button" (click)="apagarAlternativa(row.id)" mdbBtn color="red" outline="true" rounded="true" size="sm" class="px-2"
                   mdbWavesEffect>
                   <mdb-icon fas icon="trash" class="mt-0"></mdb-icon>
                 </button>

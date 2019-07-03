@@ -167,4 +167,22 @@ export class QuestionarioEditComponent implements OnInit {
       this.toastrService.error('Erro ao ler as permissoes do departamento', e);
     }
   }
+
+  async apagarPergunta(id) {
+    try {
+      let resp = await this.connectHTTP.callService({
+        service: 'deletePergunta',
+        paramsService: { id }
+      }) as any;
+      if (resp.error) {
+        this.toastrService.error(resp.error);
+      } else {
+        this.toastrService.success('Quationário apagado com sucesso');
+        this.goBack();
+      }
+    }
+    catch (e) {
+      this.toastrService.error('Erro ao ler as permissoes do departamento', e);
+    }
+  }
 }
