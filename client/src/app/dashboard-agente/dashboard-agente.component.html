@@ -5,8 +5,8 @@
     <h4 class="white-text font-weight-bold text-uppercase mt-2">Desempenho do Consultor de Vendas Internas</h4>
   </div>
   <!-- Card Filtros -->
-  <div class="px-4" style="z-index: 2;">
-    <div class="row">
+  <div class="px-4">
+    <div class="row" style="z-index: 5;">
       <div class="col-lg-3 col-sm-6">
         <div class="md-form datas">
           <mdb-date-picker #dataEventos name="mydate" [options]="myDatePickerOptions" required [(ngModel)]="dataInicial"
@@ -14,14 +14,14 @@
           <label class="datas" style="height: 10px">Data inicial</label>
         </div>
       </div>
-      <div class="col-lg-3 col-sm-6">
+      <div class="col-lg-3 col-sm-6" style="z-index: 5;">
         <div class="md-form datas">
           <mdb-date-picker #dataEventos name="mydate" [options]="myDatePickerOptions" required [(ngModel)]="dataFinal"
             class="datas" (ngModelChange)="validaData('dtFinal')"></mdb-date-picker>
           <label class="datas" style="height: 10px">Data final</label>
         </div>
       </div>
-      <div class="col-lg-6 col-sm-12" style="z-index: 0">
+      <div class="col-lg-6 col-sm-12" >
         <div class="row" style="margin-top: 50px">
           <div class="col-md-12">
             <mdb-select [disabled]="usuarioLogado.responsavel_membro == 'M'" [(ngModel)]="agentesVendasSelectValue"
