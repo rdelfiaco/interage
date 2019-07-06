@@ -126,10 +126,12 @@
         <div class="md-form col">
           <mdb-checkbox formControlName="possui_carteira_cli">Trabalha com carteira de clientes</mdb-checkbox>
         </div>
-        <button type="button" mdbBtn color="primary" class="relative waves-light" (click)="inicializarSenha()"
-          title="A nova senha será 123" mdbWavesEffect>Inicializar senha </button>
       </div>
       <div class="row justify-content-end">
+        <div class="md-form">
+          <button type="button" mdbBtn title="A nova senha será 123" color="blue" class="waves-light" aria-label="Cancelar"
+            (click)="inicializarSenha()" mdbWavesEffect>Inicializar senha</button>
+        </div>
         <div class="md-form">
           <button type="button" mdbBtn color="danger" class="waves-light" aria-label="Cancelar"
             (click)="editarModal.hide()" mdbWavesEffect>Cancelar</button>
