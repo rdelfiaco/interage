@@ -148,13 +148,8 @@ function updatePergunta(req, res) {
 
     let sql = `UPDATE quest_perguntas SET 
       nome='${req.query.p.nome}',
-      status='${req.query.p.status}',
-      id_questionario='${req.query.p.id_questionario}',
-      sequencia_perguntas='${req.query.p.sequencia_perguntas}',
-      descricao_pergunta='${req.query.p.descricao_pergunta}',
-      multipla_escolha='${req.query.p.multipla_escolha}'
-      WHERE quest_perguntas.id=${req.query.p.id}`;
-
+      sequencia_pergunta=${req.query.p.sequencia_pergunta},
+      descricao_pergunta='${req.query.p.descricao_pergunta}' WHERE quest_perguntas.id=${req.query.p.id}`;
     executaSQL(credenciais, sql)
       .then(res => {
         resolve(res)

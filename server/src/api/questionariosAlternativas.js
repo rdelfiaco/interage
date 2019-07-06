@@ -85,11 +85,8 @@ function updateAlternativa(req, res) {
 
     let sql = `UPDATE quest_alternativas SET 
       nome='${req.query.a.nome}',
-      status='${req.query.a.status}',
-      id_pergunta='${req.query.a.perguntaId}',
-      id_proxima_pergunta='${req.query.a.perguntaProximaId}',
-      sequencia_alternativa='${req.query.a.sequencia}',
-      WHERE quest_alternativas.id=${req.query.a.id}`;
+      id_proxima_pergunta=${req.query.a.perguntaProximaId},
+      sequencia_alternativa=${req.query.a.sequencia} WHERE quest_alternativas.id=${req.query.a.id}`;
 
     executaSQL(credenciais, sql)
       .then(res => {

@@ -124,6 +124,7 @@ declaraServico('updateAlternativa',  questAlternativas.updateAlternativa);
 // questtionario perguntas
 declaraServico('getPerguntas',  questPerguntas.getPerguntas);
 declaraServico('addPergunta',  questPerguntas.addPergunta);
+declaraServico('updatePergunta',  questPerguntas.updatePergunta);
 declaraServico('updateStatusPergunta',  questPerguntas.updateStatusPergunta);
 declaraServico('deletePergunta',  questPerguntas.deletePergunta);
 declaraServico('updateStatusPergunta',  questPerguntas.updateStatusPergunta);

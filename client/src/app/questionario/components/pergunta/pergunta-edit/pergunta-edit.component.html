@@ -3,10 +3,10 @@
     <button type="button" mdbBtn color="danger" (click)="apagarPergunta()" mdbWavesEffect>Apagar</button>
     <button type="button" mdbBtn color="blue-grey" (click)="respostaadd.show();" mdbWavesEffect>Adiconar
       alternativa</button>
-      
-    </div>
-    <div class="col-lg-6 text-right">
-        <button type="button" (click)="goBack()" mdbBtn color="light" mdbWavesEffect>Voltar</button>
+
+  </div>
+  <div class="col-lg-6 text-right">
+    <button type="button" (click)="goBack()" mdbBtn color="light" mdbWavesEffect>Voltar</button>
     <button type="button" mdbBtn color="dark-green" (click)="updatePergunta()" mdbWavesEffect>Salvar</button>
   </div>
 </div>
@@ -15,8 +15,8 @@
     <div class="row">
       <div class="col-lg-12">
         <div class="md-form">
-          <input (input)="tableData.nome = $event.target.value" mdbInputDirective formControlName="nome" min="5" type="text" id="nome" class="form-control"
-            [value]="tableData.nome">
+          <input (input)="tableData.nome = $event.target.value" mdbInputDirective formControlName="nome" min="5"
+            type="text" id="nome" class="form-control" [value]="tableData.nome">
           <label for="nome">Título da pergunta</label>
         </div>
       </div>
@@ -24,19 +24,29 @@
     <div class="row">
       <div class="col-lg-8">
         <div class="md-form">
-          <input (input)="tableData.sequencia_pergunta = $event.target.value" mdbInputDirective formControlName="sequencia" min="1" type="number" id="sequencia"
-            class="form-control">
+          <input (input)="tableData.sequencia_pergunta = $event.target.value" [value]='tableData.sequencia_pergunta'
+            mdbInputDirective formControlName="sequencia" min="1" type="number" id="sequencia" class="form-control">
           <label for="sequencia">Sequencia</label>
         </div>
       </div>
       <div class="col-lg-2">
         <label>Status</label>
-        <mdb-checkbox (change)="updateStatusPergunta()" [checked]="tableData.status">Ativo</mdb-checkbox>
+        <mdb-checkbox (change)="updateStatusPergunta(tableData.id)" [checked]="tableData.status">Ativo</mdb-checkbox>
       </div>
       <div class="col-lg-2">
         <label>Multipla Escolha</label>
-        <mdb-checkbox (change)="updateMultiEscolhaPergunta()" [checked]="tableData.multipla_escolha">Multipla escolha
+        <mdb-checkbox (change)="updateMultiEscolhaPergunta(tableData.id)" [checked]="tableData.multipla_escolha">
+          Multipla escolha
         </mdb-checkbox>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-12 text-left">
+        <div class="md-form">
+          <textarea (input)="tableData.descricao_pergunta = $event.target.value" type="text" id="descricao"
+            class="md-textarea form-control" [value]='tableData.descricao_pergunta' mdbInputDirective></textarea>
+          <label for="form7">Descrição</label>
+        </div>
       </div>
     </div>
   </form>
@@ -79,12 +89,12 @@
             </td>
             <td class="text-center">
               <div>
-                <button type="button" (click)="openAlternativa(row.id)" mdbBtn color="blue" outline="true" rounded="true"
-                  size="sm" class="px-2" mdbWavesEffect>
+                <button type="button" (click)="openAlternativa(row.id)" mdbBtn color="blue" outline="true"
+                  rounded="true" size="sm" class="px-2" mdbWavesEffect>
                   <mdb-icon fas icon="pencil" class="mt-0"></mdb-icon>
                 </button>
-                <button type="button" (click)="apagarAlternativa(row.id)" mdbBtn color="red" outline="true" rounded="true" size="sm" class="px-2"
-                  mdbWavesEffect>
+                <button type="button" (click)="apagarAlternativa(row.id)" mdbBtn color="red" outline="true"
+                  rounded="true" size="sm" class="px-2" mdbWavesEffect>
                   <mdb-icon fas icon="trash" class="mt-0"></mdb-icon>
                 </button>
               </div>
@@ -107,44 +117,47 @@
       </button>
     </div>
     <div class="modal-content">
-        <form class="p-4">
-            <div class="row">
-              <div class="col-lg-12">
-                <div class="md-form">
-                  <input (input)="tableData.nome = $event.target.value;" mdbInputDirective formControlName="nome" min="5" type="text" id="nome" class="form-control">
-                  <label for="nome">Nome</label>
-                </div>
-              </div>
+      <form class="p-4">
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="md-form">
+              <input (input)="tableData.nome = $event.target.value;" mdbInputDirective formControlName="nome" min="5"
+                type="text" id="nome" class="form-control">
+              <label for="nome">Nome</label>
             </div>
-            <div class="row">
-              <div class="col-lg-8">
-                <div class="md-form">
-                  <input (input)="tableData.sequencia = $event.target.value;" mdbInputDirective formControlName="sequencia" min="1" type="number" id="sequencia" class="form-control">
-                  <label for="sequencia">Sequencia</label>
-                </div>
-              </div>
-              <div class="col-lg-4">
-                <div class="md-form">
-                  <mdb-checkbox (change)="tableData.status = $event.target.value;">Ativo</mdb-checkbox>
-                </div>
-              </div>
-              <div class="col-lg-12">
-                  <div class="md-form">
-                    <input (input)="tableData.id_proxima_pergunta = $event.target.value;" mdbInputDirective formControlName="prox_pergunta" min="1" type="number" id="prox_pergunta"
-                      class="form-control">
-                    <label for="prox_pergunta">Próxima Pergunta</label>
-                  </div>
-                </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-8">
+            <div class="md-form">
+              <input (input)="tableData.sequencia = $event.target.value;" mdbInputDirective formControlName="sequencia"
+                min="1" type="number" id="sequencia" class="form-control">
+              <label for="sequencia">Sequencia</label>
             </div>
-            <div class="row">
-              <div class="col-lg-12 text-right">
-                <div class="md-form">
-                  <button type="button" mdbBtn color="dark-green" (click)="salvarAlternativa()" mdbWavesEffect>Criar</button>
-                  <!-- <button type="button" mdbBtn color="danger" mdbWavesEffect>Apagar</button> -->
-                </div>
-              </div>
+          </div>
+          <div class="col-lg-4">
+            <div class="md-form">
+              <mdb-checkbox (change)="tableData.status = $event.target.value;">Ativo</mdb-checkbox>
             </div>
-          </form>
+          </div>
+          <div class="col-lg-12">
+            <div class="md-form">
+              <input (input)="tableData.id_proxima_pergunta = $event.target.value;" mdbInputDirective
+                formControlName="prox_pergunta" min="1" type="number" id="prox_pergunta" class="form-control">
+              <label for="prox_pergunta">Próxima Pergunta</label>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-12 text-right">
+            <div class="md-form">
+              <button type="button" mdbBtn color="dark-green" (click)="salvarAlternativa()"
+                mdbWavesEffect>Criar</button>
+              <!-- <button type="button" mdbBtn color="danger" mdbWavesEffect>Apagar</button> -->
+            </div>
+          </div>
+        </div>
+      </form>
     </div>
   </div>
 </div>

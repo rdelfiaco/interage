@@ -12,12 +12,21 @@ import { ToastService } from '../../../../../lib/ng-uikit-pro-standard';
   styleUrls: ['./pergunta-edit.component.scss']
 })
 export class PerguntaEditComponent implements OnInit {
-  private questionarioForm: FormGroup;
   novaAlternativa = {
     nome: '',
     status: true,
     sequencia: '',
     proximaPerguntaId: ''
+  };
+
+  tableData : {
+    id: '',
+    id_questionario: '',
+    nome:'',
+    status: '',
+    sequencia_pergunta: '',
+    descricao_pergunta: '',
+    multipla_escolha: ''
   };
   pergId = null;
 
@@ -81,8 +90,9 @@ export class PerguntaEditComponent implements OnInit {
         paramsService: {
           data: JSON.stringify({
             id: this.pergId,
-            nome: this.tableData['nome'],
-            sequencia: this.tableData['sequencia_pergunta'],
+            nome: this.tableData.nome,
+            sequencia_pergunta: this.tableData.sequencia_pergunta,
+            descricao_pergunta: this.tableData.descricao_pergunta,
           })
         }
       }) as any;
@@ -151,11 +161,12 @@ export class PerguntaEditComponent implements OnInit {
     }
   }
 
-  async updateStatusPergunta(id, status) {
+  async updateStatusPergunta(id) {
+    debugger
     try {
       let resp = await this.connectHTTP.callService({
         service: 'updateStatusPergunta',
-        paramsService: { data: JSON.stringify({ id, status: !status }) }
+        paramsService: { data: JSON.stringify({ id, status: !this.tableData.status }) }
       }) as any;
       if (resp.error) {
         this.toastrService.error(resp.error);
@@ -168,11 +179,12 @@ export class PerguntaEditComponent implements OnInit {
     }
   }
 
-  async updateMultiEscolhaPergunta(id, multi_escolha) {
+  async updateMultiEscolhaPergunta(id) {
+    debugger
     try {
       let resp = await this.connectHTTP.callService({
         service: 'updateMultiEscolhaPergunta',
-        paramsService: { data: JSON.stringify({ id, multi_escolha: !multi_escolha }) }
+        paramsService: { data: JSON.stringify({ id, multi_escolha: !this.tableData.multipla_escolha }) }
       }) as any;
       if (resp.error) {
         this.toastrService.error(resp.error);
