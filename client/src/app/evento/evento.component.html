@@ -26,7 +26,7 @@
           <label class="datas" style="height: 10px">Data inicial</label>
         </div>
       </div>
-      <div class="col-4">
+      <div class="col-3">
         <div class="md-form datas">
           <mdb-date-picker #dataReagendamento name="mydate" [options]="myDatePickerOptions" required
             [(ngModel)]="dataFinal" class="datas" (ngModelChange)="listaEventos()"></mdb-date-picker>
@@ -51,6 +51,12 @@
           <label class="form-check-label" for="dtCricaoRadio" style="font-size: 0.8rem; ">Data de criação</label>
         </div>
       </div>
+      <div class="col-1 text-right">
+        <div class="md-form">
+          <button type="button" mdbBtn color="dark-green" mdbWavesEffect
+            (click)="filtrosEventos.show()">Filtros</button>
+        </div>
+      </div>
     </div>
     <!-- <div class="row" style="margin-left: 50px; margin-top: 10px"> -->
 
@@ -69,33 +75,6 @@
             <label class="form-check-label" for="recebidoPorRadio" style="font-size: 0.8rem; ">Recebidos por</label>
           </div> -->
     <!-- </div> -->
-    <div class="row mt-4 p-2">
-      <div class="col-4">
-        <mdb-select [(ngModel)]="departamentoSelectValue" [options]="departamentoSelect" [multiple]="false"
-          [disabled]="!usuarioLogadoSupervisor" (selected)="onChangeDepartamento()" placeholder="Escolha o departamento"
-          style="font-size: 0.5rem;"></mdb-select>
-        <label>Departamento</label>
-      </div>
-      <div class="col-4">
-        <mdb-select [(ngModel)]="usuarioSelectValue" [options]="usuarioSelect" (selected)="listaEventos()"
-          placeholder="Escolha o usuário" [disabled]="!usuarioLogadoSupervisor" style="font-size: 0.5rem;">
-        </mdb-select>
-        <label>Usuário</label>
-      </div>
-      <div class="col-4">
-        <mdb-select [(ngModel)]="motivoSelectValue" [options]="motivoSelect" [multiple]="true" (click)="listaEventos()"
-          [highlightFirst]="false" placeholder="Escolha o motivo" style="font-size: 0.5rem;">
-        </mdb-select>
-        <label>Motivo</label>
-      </div>
-    </div>
-    <div class="row mt-4 p-2">
-      <div class="col-lg-12">
-          <mdb-select [(ngModel)]="statusSelectValue" [options]="statusSelect" [multiple]="true"
-            (click)="listaEventos()" placeholder="Escolha o status" style="font-size: 0.5rem;"></mdb-select>
-          <label>Status</label>
-      </div>
-    </div>
     <div class="row mt-2">
       <div class="col-lg-3 col-sm-12">
         <div class="md-form">
@@ -306,6 +285,49 @@
           <div class="modal-body" style="overflow: auto; height: 80vh;">
             <app-criar-evento (fechaModal)="fechaModal()"></app-criar-evento>
           </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div mdbModal #filtrosEventos="mdbModal" class="modal fade" tabindex="-1" role="dialog"
+  aria-labelledby="myBasicModalLabel" aria-hidden="true" [config]="{backdrop: true}">
+  <div class="modal-dialog  modal-fluid" role="document">
+    <div class="modal-header light-blue darken-3 white-text">
+      <h4 class="modal-title">Filtros</h4>
+      <button type="button" style="cursor:pointer;" class="close" data-dismiss="modal" aria-label="Close"
+        (click)="filtrosEventos.hide()">
+        <span aria-hidden="true" style="color:white; cursor:pointer;">&times;</span>
+      </button>
+    </div>
+    <div class="modal-content">
+      <div class="row mt-4 p-2">
+        <div class="col-4">
+          <mdb-select [(ngModel)]="departamentoSelectValue" [options]="departamentoSelect" [multiple]="false"
+            [disabled]="!usuarioLogadoSupervisor" (selected)="onChangeDepartamento()"
+            placeholder="Escolha o departamento" style="font-size: 0.5rem;"></mdb-select>
+          <label>Departamento</label>
+        </div>
+        <div class="col-4">
+          <mdb-select [(ngModel)]="usuarioSelectValue" [options]="usuarioSelect" (selected)="listaEventos()"
+            placeholder="Escolha o usuário" [disabled]="!usuarioLogadoSupervisor" style="font-size: 0.5rem;">
+          </mdb-select>
+          <label>Usuário</label>
+        </div>
+        <div class="col-4">
+          <mdb-select [(ngModel)]="motivoSelectValue" [options]="motivoSelect" [multiple]="true"
+            (click)="listaEventos()" [highlightFirst]="false" placeholder="Escolha o motivo" style="font-size: 0.5rem;">
+          </mdb-select>
+          <label>Motivo</label>
+        </div>
+      </div>
+      <div class="row mt-4 p-2">
+        <div class="col-lg-12">
+          <mdb-select [(ngModel)]="statusSelectValue" [options]="statusSelect" [multiple]="true"
+            (click)="listaEventos()" placeholder="Escolha o status" style="font-size: 0.5rem;"></mdb-select>
+          <label>Status</label>
         </div>
       </div>
     </div>
