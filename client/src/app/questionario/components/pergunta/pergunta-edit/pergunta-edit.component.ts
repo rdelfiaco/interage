@@ -1,10 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
 import { ConnectHTTP } from '../../../../shared/services/connectHTTP';
 import { LocalStorage } from '../../../../shared/services/localStorage';
-import { ToastService } from '../../../../../lib/ng-uikit-pro-standard';
+import { ToastService, ModalDirective } from '../../../../../lib/ng-uikit-pro-standard';
 
 @Component({
   selector: 'app-pergunta-edit',
@@ -14,7 +14,7 @@ import { ToastService } from '../../../../../lib/ng-uikit-pro-standard';
 export class PerguntaEditComponent implements OnInit {
   novaAlternativa = {
     nome: '',
-    status: true,
+    status: false,
     sequencia: '',
     proximaPerguntaId: ''
   };
@@ -29,6 +29,7 @@ export class PerguntaEditComponent implements OnInit {
     multipla_escolha: ''
   };
   pergId = null;
+  @ViewChild('alternativaadd') alternativaadd: ModalDirective;
 
   constructor(
     private router: Router,
@@ -66,7 +67,8 @@ export class PerguntaEditComponent implements OnInit {
       }
       ;
       let data = respQuest.resposta[0];
-      data.alternativas = respPergQuest.alternativas;
+      if (respPergQuest.resposta[0] && respPergQuest.resposta[0].id)
+        data.alternativas = respPergQuest.resposta;
       this.tableData = data;
     }
     catch (e) {
@@ -99,7 +101,7 @@ export class PerguntaEditComponent implements OnInit {
       if (resp.error) {
         this.toastrService.error(resp.error);
       } else {
-        this.toastrService.success('Status alterado com sucesso');
+        this.toastrService.success('Alterado com sucesso');
         this.goBack();
       }
     }
@@ -117,7 +119,7 @@ export class PerguntaEditComponent implements OnInit {
       if (resp.error) {
         this.toastrService.error(resp.error);
       } else {
-        this.toastrService.success('Quationário apagado com sucesso');
+        this.toastrService.success('Apagado com sucesso');
         this.goBack();
       }
     }
@@ -135,8 +137,8 @@ export class PerguntaEditComponent implements OnInit {
       if (resp.error) {
         this.toastrService.error(resp.error);
       } else {
-        this.toastrService.success('Quationário apagado com sucesso');
-        this.goBack();
+        this.toastrService.success('Apagado com sucesso');
+        this.getDataPergunta();
       }
     }
     catch (e) {
@@ -162,7 +164,6 @@ export class PerguntaEditComponent implements OnInit {
   }
 
   async updateStatusPergunta(id) {
-    debugger
     try {
       let resp = await this.connectHTTP.callService({
         service: 'updateStatusPergunta',
@@ -180,7 +181,6 @@ export class PerguntaEditComponent implements OnInit {
   }
 
   async updateMultiEscolhaPergunta(id) {
-    debugger
     try {
       let resp = await this.connectHTTP.callService({
         service: 'updateMultiEscolhaPergunta',
@@ -199,9 +199,6 @@ export class PerguntaEditComponent implements OnInit {
 
   async salvarAlternativa() {
     try {
-      // let nome = document.querySelector('#nome')['value'];
-      // let status = document.querySelector('#status input')['checked'];
-      // let sequencia = document.querySelector('#sequencia')['value'];
       let perguntaId = this.pergId;
 
       let resp = await this.connectHTTP.callService({
@@ -217,6 +214,8 @@ export class PerguntaEditComponent implements OnInit {
         this.toastrService.error(resp.error);
       } else {
         this.toastrService.success('Salvo com sucesso');
+        this.getDataPergunta();
+        this.alternativaadd.hide();
       }
     }
     catch (e) {

@@ -1,7 +1,7 @@
 <div class="row">
   <div class="col-lg-6 text-left">
     <button type="button" mdbBtn color="danger" (click)="apagarPergunta()" mdbWavesEffect>Apagar</button>
-    <button type="button" mdbBtn color="blue-grey" (click)="respostaadd.show();" mdbWavesEffect>Adiconar
+    <button type="button" mdbBtn color="blue-grey" (click)="alternativaadd.show();" mdbWavesEffect>Adiconar
       alternativa</button>
 
   </div>
@@ -81,8 +81,8 @@
         </thead>
         <tbody>
           <tr *ngFor="let row of tableData.alternativas;let i = index">
-            <td>{{row.titulo}}</td>
-            <td class="text-center">{{row.sequencia}}</td>
+            <td>{{row.nome}}</td>
+            <td class="text-center">{{row.sequencia_alternativa}}</td>
             <td class="text-center">
               <mdb-checkbox (change)="updateStatusAlternativa(row.id, row.status)" [checked]="row.status">
               </mdb-checkbox>
@@ -106,13 +106,13 @@
   </div>
 </mdb-card>
 
-<div mdbModal #respostaadd="mdbModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myBasicModalLabel"
+<div mdbModal #alternativaadd="mdbModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myBasicModalLabel"
   aria-hidden="true" [config]="{backdrop: true}">
   <div class="modal-dialog  modal-fluid" role="document">
     <div class="modal-header light-blue darken-3 white-text">
       <h4 class="modal-title">Nova Alternativa</h4>
       <button type="button" style="cursor:pointer;" class="close" data-dismiss="modal" aria-label="Close"
-        (click)="respostaadd.hide()">
+        (click)="alternativaadd.hide()">
         <span aria-hidden="true" style="color:white; cursor:pointer;">&times;</span>
       </button>
     </div>
@@ -121,7 +121,7 @@
         <div class="row">
           <div class="col-lg-12">
             <div class="md-form">
-              <input (input)="tableData.nome = $event.target.value;" mdbInputDirective formControlName="nome" min="5"
+              <input (input)="novaAlternativa.nome = $event.target.value;" mdbInputDirective formControlName="nome" min="5"
                 type="text" id="nome" class="form-control">
               <label for="nome">Nome</label>
             </div>
@@ -130,19 +130,19 @@
         <div class="row">
           <div class="col-lg-8">
             <div class="md-form">
-              <input (input)="tableData.sequencia = $event.target.value;" mdbInputDirective formControlName="sequencia"
+              <input (input)="novaAlternativa.sequencia = $event.target.value;" mdbInputDirective formControlName="sequencia"
                 min="1" type="number" id="sequencia" class="form-control">
               <label for="sequencia">Sequencia</label>
             </div>
           </div>
           <div class="col-lg-4">
             <div class="md-form">
-              <mdb-checkbox (change)="tableData.status = $event.target.value;">Ativo</mdb-checkbox>
+              <mdb-checkbox (change)="novaAlternativa.status = $event.checked;">Ativo</mdb-checkbox>
             </div>
           </div>
           <div class="col-lg-12">
             <div class="md-form">
-              <input (input)="tableData.id_proxima_pergunta = $event.target.value;" mdbInputDirective
+              <input (input)="novaAlternativa.proximaPerguntaId = $event.target.value;" mdbInputDirective
                 formControlName="prox_pergunta" min="1" type="number" id="prox_pergunta" class="form-control">
               <label for="prox_pergunta">Próxima Pergunta</label>
             </div>
@@ -151,6 +151,7 @@
         <div class="row">
           <div class="col-lg-12 text-right">
             <div class="md-form">
+              <button type="button" mdbBtn color="light" (click)="alternativaadd.hide()" mdbWavesEffect>Voltar</button>
               <button type="button" mdbBtn color="dark-green" (click)="salvarAlternativa()"
                 mdbWavesEffect>Criar</button>
               <!-- <button type="button" mdbBtn color="danger" mdbWavesEffect>Apagar</button> -->

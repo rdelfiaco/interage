@@ -23,8 +23,8 @@ export class QuestionarioEditComponent implements OnInit {
     descricao: ''
   };
 
-  
   @ViewChild('perguntaadd') modalperguntaadd: ModalDirective;
+
   constructor(
     private _location: Location,
     private router: Router,
@@ -85,7 +85,7 @@ export class QuestionarioEditComponent implements OnInit {
       if (resp.error) {
         this.toastrService.error(resp.error);
       } else {
-        this.toastrService.success('Status alterado com sucesso');
+        this.toastrService.success('Alterado com sucesso');
         this.goBack();
       }
     }

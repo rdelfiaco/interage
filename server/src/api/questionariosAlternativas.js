@@ -41,8 +41,7 @@ function addAlternativa(req, res) {
         '${req.query.a.status}',
         '${req.query.a.perguntaId}',
         '${req.query.a.sequencia}',
-        '${req.query.a.proximaPerguntaId}',
-        ) RETURNING id;`
+        '${req.query.a.proximaPerguntaId}') RETURNING id;`
 
     executaSQL(credenciais, sql)
       .then(res => {
@@ -62,7 +61,7 @@ function updateStatusAlternativa(req, res) {
     };
     req.query.a = JSON.parse(req.query.data);
 
-    let sql = `UPDATE quest_alternativas SET status=${req.query.a.status} WHERE quest_alternativa.id=${req.query.a.id}`;
+    let sql = `UPDATE quest_alternativas SET status=${req.query.a.status} WHERE quest_alternativas.id=${req.query.a.id}`;
 
     executaSQL(credenciais, sql)
       .then(res => {
