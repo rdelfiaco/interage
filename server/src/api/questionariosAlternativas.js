@@ -37,11 +37,11 @@ function addAlternativa(req, res) {
       sequencia_alternativa,
       id_proxima_pergunta
       ) VALUES(
-        ${req.query.a.nome},
-        ${req.query.a.status},
-        ${req.query.a.perguntaId},
-        ${req.query.a.sequencia},
-        ${req.query.a.proximaPerguntaId},
+        '${req.query.a.nome}',
+        '${req.query.a.status}',
+        '${req.query.a.perguntaId}',
+        '${req.query.a.sequencia}',
+        '${req.query.a.proximaPerguntaId}',
         ) RETURNING id;`
 
     executaSQL(credenciais, sql)
@@ -84,11 +84,11 @@ function updateAlternativa(req, res) {
     req.query.a = JSON.parse(req.query.data);
 
     let sql = `UPDATE quest_alternativas SET 
-      nome=${req.query.a.nome},
-      status=${req.query.a.status},
-      id_pergunta=${req.query.a.perguntaId},
-      id_proxima_pergunta=${req.query.a.perguntaProximaId},
-      sequencia_alternativa=${req.query.a.sequencia},
+      nome='${req.query.a.nome}',
+      status='${req.query.a.status}',
+      id_pergunta='${req.query.a.perguntaId}',
+      id_proxima_pergunta='${req.query.a.perguntaProximaId}',
+      sequencia_alternativa='${req.query.a.sequencia}',
       WHERE quest_alternativas.id=${req.query.a.id}`;
 
     executaSQL(credenciais, sql)

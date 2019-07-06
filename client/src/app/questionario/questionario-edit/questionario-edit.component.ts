@@ -1,10 +1,10 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { ConnectHTTP } from '../../shared/services/connectHTTP';
 import { LocalStorage } from '../../shared/services/localStorage';
 import { Router, ActivatedRouteSnapshot, ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
-import { ToastService } from '../../../lib/ng-uikit-pro-standard';
+import { ToastService, ModalDirective } from '../../../lib/ng-uikit-pro-standard';
 
 @Component({
   selector: 'app-questionario-edit',
@@ -22,6 +22,9 @@ export class QuestionarioEditComponent implements OnInit {
     multipla_escolha: false,
     descricao: ''
   };
+
+  
+  @ViewChild('perguntaadd') modalperguntaadd: ModalDirective;
   constructor(
     private _location: Location,
     private router: Router,
@@ -170,8 +173,8 @@ export class QuestionarioEditComponent implements OnInit {
       if (resp.error) {
         this.toastrService.error(resp.error);
       } else {
-        this.toastrService.success('Quationário apagado com sucesso');
-        this.goBack();
+        this.toastrService.success('Apagado com sucesso');
+        this.getDataQuestionario();
       }
     }
     catch (e) {
@@ -191,7 +194,9 @@ export class QuestionarioEditComponent implements OnInit {
       if (resp.error) {
         this.toastrService.error(resp.error);
       } else {
-        this.toastrService.success('Quationário salvo com sucesso');
+        this.toastrService.success('Salvo com sucesso');
+        this.modalperguntaadd.hide();
+        this.getDataQuestionario();
       }
     }
     catch (e) {

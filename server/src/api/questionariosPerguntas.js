@@ -72,11 +72,11 @@ function addPergunta(req, res) {
 
     req.query.p = JSON.parse(req.query.data);
 
-    let sql = `INSERT INSTO quest_perguntas(
+    let sql = `INSERT INTO quest_perguntas(
       nome,
       status,
       id_questionario,
-      sequencia_perguntas,
+      sequencia_pergunta,
       descricao_pergunta,
       multipla_escolha
       ) VALUES(

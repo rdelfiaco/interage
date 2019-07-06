@@ -124,28 +124,27 @@
         <div class="row">
           <div class="col-lg-8">
             <div class="md-form">
-              <input (input)="novaPergunta.sequencia = $event.target.sequencia" mdbInputDirective
+              <input (input)="novaPergunta.sequencia = $event.target.value" mdbInputDirective
                 formControlName="sequencia" min="1" type="number" id="sequencia" class="form-control">
               <label for="sequencia">Sequencia</label>
             </div>
           </div>
           <div class="col-lg-2">
             <div class="md-form">
-              <mdb-checkbox (change)="novaPergunta.status = $event.checked" id="status" [checked]='novaPergunta.status'>
+              <mdb-checkbox (change)="novaPergunta.status = $event.checked">
                 Ativo</mdb-checkbox>
             </div>
           </div>
           <div class="col-lg-2">
             <div class="md-form">
-              <mdb-checkbox (change)="novaPergunta.multipla_escolha = $event.checked" id="multi_escolha"
-                [checked]='novaPergunta.multipla_escolha'>Multipla Escolha</mdb-checkbox>
+              <mdb-checkbox (change)="novaPergunta.multipla_escolha = $event.checked" >Multipla Escolha</mdb-checkbox>
             </div>
           </div>
         </div>
         <div class="row">
           <div class="col-lg-12 text-left">
             <div class="md-form">
-              <textarea (input)="novaPergunta.descricao = $event.target.descricao" type="text" id="descricao"
+              <textarea (input)="novaPergunta.descricao = $event.target.value" type="text" id="descricao"
                 class="md-textarea form-control" mdbInputDirective></textarea>
               <label for="form7">Descrição</label>
             </div>
@@ -156,7 +155,6 @@
             <div class="md-form">
               <button type="button" mdbBtn color="light" (click)="perguntaadd.hide()" mdbWavesEffect>Voltar</button>
               <button type="button" mdbBtn color="dark-green" (click)="salvarPergunta()" mdbWavesEffect>Criar</button>
-              <!-- <button type="button" mdbBtn color="danger" mdbWavesEffect>Apagar</button> -->
             </div>
           </div>
         </div>
