@@ -41,7 +41,7 @@ import { UsuarioPermissoesComponent } from './usuario/usuario-permissoes/usuario
 import { QuestionarioComponent } from './questionario/questionario.component';
 import { QuestionarioEditComponent } from './questionario/questionario-edit/questionario-edit.component';
 import { PerguntaEditComponent } from './questionario/components/pergunta/pergunta-edit/pergunta-edit.component';
-import { RespostaEditComponent } from './questionario/components/resposta/resposta-edit/resposta-edit.component';
+import { AlternativaEditComponent } from './questionario/components/alternativa/alternativa-edit/alternativa-edit.component';
 
 
 
@@ -202,8 +202,8 @@ const routes: Routes = [
     // canActivate: [AuthGuard]
   },
   {
-    path: 'questionario/:id/pergunta/:id/resposta/:id',
-    component: RespostaEditComponent,
+    path: 'questionario/:id/pergunta/:id/alternativa/:id',
+    component: AlternativaEditComponent,
     // canActivate: [AuthGuard]
   },
   {

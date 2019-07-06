@@ -87,8 +87,8 @@ function addQuestionario(req, res) {
 
     req.query.q = JSON.parse(req.query.data);
 
-    let sql = `INSERT INTO questionarios(nome, status) VALUES(${req.query.q.nome}, ${req.query.q.status}) RETURNING id;`
-
+    let sql = `INSERT INTO questionarios(nome, status) VALUES('${req.query.q.nome}', '${req.query.q.status}') RETURNING id;`
+    console.log(sql);
     executaSQL(credenciais, sql)
       .then(res => {
         resolve(res)
@@ -127,9 +127,8 @@ function updateQuestionario(req, res) {
     };
 
     req.query.q = JSON.parse(req.query.data);
-
-    let sql = `UPDATE questionarios SET nome=${req.query.q.nome} WHERE questionarios.id=${req.query.q.id}`;
-
+    console.log(req.query.q);
+    let sql = `UPDATE questionarios SET nome='${req.query.q.nome}' WHERE questionarios.id=${req.query.q.id}`;
     executaSQL(credenciais, sql)
       .then(res => {
         resolve(res)

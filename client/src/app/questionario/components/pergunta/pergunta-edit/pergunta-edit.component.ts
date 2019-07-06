@@ -13,7 +13,11 @@ import { ToastService } from '../../../../../lib/ng-uikit-pro-standard';
 })
 export class PerguntaEditComponent implements OnInit {
   private questionarioForm: FormGroup;
-  tableData: object = {
+  novaAlternativa = {
+    nome: '',
+    status: true,
+    sequencia: '',
+    proximaPerguntaId: ''
   };
   pergId = null;
 
@@ -26,7 +30,7 @@ export class PerguntaEditComponent implements OnInit {
     private localStorage: LocalStorage,
   ) {
     this.route.params.subscribe(res => {
-      debugger
+
       this.pergId = res.id;
     });
   }
@@ -51,7 +55,7 @@ export class PerguntaEditComponent implements OnInit {
       if (respPergQuest.error) {
         return this.toastrService.error(respPergQuest.error);
       }
-      debugger;
+      ;
       let data = respQuest.resposta[0];
       data.alternativas = respPergQuest.alternativas;
       this.tableData = data;
@@ -65,8 +69,8 @@ export class PerguntaEditComponent implements OnInit {
     this._location.back();
   }
 
-  openResposta(id: string) {
-    this.router.navigate(['questionario/1/pergunta/11/resposta/' + id]);
+  openAlternativa(id: string) {
+    this.router.navigate(['questionario/1/pergunta/11/alternativa/' + id]);
   }
 
 
@@ -74,11 +78,13 @@ export class PerguntaEditComponent implements OnInit {
     try {
       let resp = await this.connectHTTP.callService({
         service: 'updatePergunta',
-        paramsService: { data: JSON.stringify({ 
-          id:this.pergId,
-          nome: this.tableData['nome'],
-          sequencia: this.tableData['sequencia_pergunta'],
-        })}
+        paramsService: {
+          data: JSON.stringify({
+            id: this.pergId,
+            nome: this.tableData['nome'],
+            sequencia: this.tableData['sequencia_pergunta'],
+          })
+        }
       }) as any;
       if (resp.error) {
         this.toastrService.error(resp.error);
@@ -108,8 +114,8 @@ export class PerguntaEditComponent implements OnInit {
     catch (e) {
       this.toastrService.error('Erro ao ler as permissoes do departamento', e);
     }
-  } 
-  
+  }
+
   async apagarAlternativa(id) {
     try {
       let resp = await this.connectHTTP.callService({
@@ -132,7 +138,7 @@ export class PerguntaEditComponent implements OnInit {
     try {
       let resp = await this.connectHTTP.callService({
         service: 'updateStatusAlternativa',
-        paramsService: { data: JSON.stringify({ id, status: !status })}
+        paramsService: { data: JSON.stringify({ id, status: !status }) }
       }) as any;
       if (resp.error) {
         this.toastrService.error(resp.error);
@@ -149,7 +155,7 @@ export class PerguntaEditComponent implements OnInit {
     try {
       let resp = await this.connectHTTP.callService({
         service: 'updateStatusPergunta',
-        paramsService: { data: JSON.stringify({ id, status: !status })}
+        paramsService: { data: JSON.stringify({ id, status: !status }) }
       }) as any;
       if (resp.error) {
         this.toastrService.error(resp.error);
@@ -166,7 +172,7 @@ export class PerguntaEditComponent implements OnInit {
     try {
       let resp = await this.connectHTTP.callService({
         service: 'updateMultiEscolhaPergunta',
-        paramsService: { data: JSON.stringify({ id, multi_escolha: !multi_escolha })}
+        paramsService: { data: JSON.stringify({ id, multi_escolha: !multi_escolha }) }
       }) as any;
       if (resp.error) {
         this.toastrService.error(resp.error);
@@ -176,6 +182,33 @@ export class PerguntaEditComponent implements OnInit {
     }
     catch (e) {
       this.toastrService.error('Erro ao ler as permissoes', e);
+    }
+  }
+
+  async salvarAlternativa() {
+    try {
+      // let nome = document.querySelector('#nome')['value'];
+      // let status = document.querySelector('#status input')['checked'];
+      // let sequencia = document.querySelector('#sequencia')['value'];
+      let perguntaId = this.pergId;
+
+      let resp = await this.connectHTTP.callService({
+        service: 'addAlternativa',
+        paramsService: {
+          data: JSON.stringify({
+            ...this.novaAlternativa,
+            perguntaId,
+          })
+        }
+      }) as any;
+      if (resp.error) {
+        this.toastrService.error(resp.error);
+      } else {
+        this.toastrService.success('Salvo com sucesso');
+      }
+    }
+    catch (e) {
+      this.toastrService.error('Erro ao ler as permissoes do departamento', e);
     }
   }
 }

@@ -1,6 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { RespostaEditComponent } from './resposta-edit.component';
+import { RespostaEditComponent } from './alternativa-edit.component';
 
 describe('RespostaEditComponent', () => {
   let component: RespostaEditComponent;

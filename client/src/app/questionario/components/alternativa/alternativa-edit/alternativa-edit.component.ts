@@ -6,11 +6,11 @@ import { ToastService } from '../../../../../lib/ng-uikit-pro-standard';
 import { LocalStorage } from '../../../../shared/services/localStorage';
 
 @Component({
-  selector: 'app-resposta-edit',
-  templateUrl: './resposta-edit.component.html',
-  styleUrls: ['./resposta-edit.component.scss']
+  selector: 'app-alternativa-edit',
+  templateUrl: './alternativa-edit.component.html',
+  styleUrls: ['./alternativa-edit.component.scss']
 })
-export class RespostaEditComponent implements OnInit {
+export class AlternativaEditComponent implements OnInit {
 
   tableData: object = {
   };
@@ -25,7 +25,7 @@ export class RespostaEditComponent implements OnInit {
     private localStorage: LocalStorage,
   ) {
     this.route.params.subscribe(res => {
-      debugger
+      
       this.alterId = res.id;
     });
   }
@@ -43,7 +43,7 @@ export class RespostaEditComponent implements OnInit {
       if (respQuest.error) {
         return this.toastrService.error(respQuest.error);
       }
-      debugger;
+      ;
       let data = respQuest.resposta[0];
       this.tableData = data;
     }

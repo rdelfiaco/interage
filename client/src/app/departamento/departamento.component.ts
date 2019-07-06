@@ -193,7 +193,7 @@ export class DepartamentoComponent implements OnInit {
 
     this.departamentoNome = departamentoNome;
     this.departamentoIdSelecionado = departamentoIdSelecionado
-    debugger
+    
       try {
         let resp = await this.connectHTTP.callService({
           service: 'getUsuarios',

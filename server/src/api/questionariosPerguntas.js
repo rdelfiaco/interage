@@ -80,14 +80,13 @@ function addPergunta(req, res) {
       descricao_pergunta,
       multipla_escolha
       ) VALUES(
-        ${req.query.p.nome},
-        ${req.query.p.status},
-        ${req.query.p.questionarioId},
-        ${req.query.p.sequencia},
-        ${req.query.p.descricao},
-        ${req.query.p.multi_escolha}
+        '${req.query.p.nome}',
+        '${req.query.p.status}',
+        '${req.query.p.questionarioId}',
+        '${req.query.p.sequencia}',
+        '${req.query.p.descricao}',
+        '${req.query.p.multipla_escolha}'
         ) RETURNING id;`
-
     executaSQL(credenciais, sql)
       .then(res => {
         resolve(res)
@@ -148,12 +147,12 @@ function updatePergunta(req, res) {
     req.query.p = JSON.parse(req.query.data);
 
     let sql = `UPDATE quest_perguntas SET 
-      nome=${req.query.p.nome},
-      status=${req.query.p.status},
-      id_questionario=${req.query.p.id_questionario},
-      sequencia_perguntas=${req.query.p.sequencia_perguntas},
-      descricao_pergunta=${req.query.p.descricao_pergunta},
-      multipla_escolha=${req.query.p.multipla_escolha}
+      nome='${req.query.p.nome}',
+      status='${req.query.p.status}',
+      id_questionario='${req.query.p.id_questionario}',
+      sequencia_perguntas='${req.query.p.sequencia_perguntas}',
+      descricao_pergunta='${req.query.p.descricao_pergunta}',
+      multipla_escolha='${req.query.p.multipla_escolha}'
       WHERE quest_perguntas.id=${req.query.p.id}`;
 
     executaSQL(credenciais, sql)

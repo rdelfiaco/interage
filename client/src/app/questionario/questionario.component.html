@@ -9,7 +9,8 @@
     </div>
     <a href="" class="white-text mx-3">Questionários</a>
     <div>
-      <button mdbBtn color="white" outline="true" rounded="true" size="sm" type="button" (click)="questionarioadd.show();" class="px-2" mdbWavesEffect>
+      <button mdbBtn color="white" outline="true" rounded="true" size="sm" type="button"
+        (click)="questionarioadd.show();" class="px-2" mdbWavesEffect>
         Adicionar Questionário
       </button>
     </div>
@@ -48,16 +49,21 @@
           <tr *ngFor="let row of tableData;let i = index">
             <td>{{row.nome}}</td>
             <td class="text-center">{{row.qtde_perguntas}}</td>
-            <td class="text-center"><mdb-checkbox (change)="updateStatusQuestionario(row.id, row.status)" [checked]="row.status"></mdb-checkbox></td>
             <td class="text-center">
-                <div>
-                  <button (click)="openQuestionario(row.id)" type="button" mdbBtn color="blue" outline="true" rounded="true" size="sm" class="px-2" mdbWavesEffect>
-                    <mdb-icon fas icon="pencil" class="mt-0"></mdb-icon>
-                  </button>
-                  <button type="button" mdbBtn color="red" (click)="deleteQuestionario(row.id)" outline="true" rounded="true" size="sm" class="px-2" mdbWavesEffect>
-                    <mdb-icon fas icon="trash" class="mt-0"></mdb-icon>
-                  </button>
-                </div>
+              <mdb-checkbox (change)="updateStatusQuestionario(row.id, row.status)" [checked]="row.status">
+              </mdb-checkbox>
+            </td>
+            <td class="text-center">
+              <div>
+                <button (click)="openQuestionario(row.id)" type="button" mdbBtn color="blue" outline="true"
+                  rounded="true" size="sm" class="px-2" mdbWavesEffect>
+                  <mdb-icon fas icon="pencil" class="mt-0"></mdb-icon>
+                </button>
+                <button type="button" mdbBtn color="red" (click)="deleteQuestionario(row.id)" outline="true"
+                  rounded="true" size="sm" class="px-2" mdbWavesEffect>
+                  <mdb-icon fas icon="trash" class="mt-0"></mdb-icon>
+                </button>
+              </div>
             </td>
           </tr>
         </tbody>
@@ -66,8 +72,8 @@
   </div>
 </mdb-card>
 
-<div mdbModal #questionarioadd="mdbModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myBasicModalLabel"
-  aria-hidden="true" [config]="{backdrop: true}">
+<div mdbModal #questionarioadd="mdbModal" class="modal fade" tabindex="-1" role="dialog"
+  aria-labelledby="myBasicModalLabel" aria-hidden="true" [config]="{backdrop: true}">
   <div class="modal-dialog  modal-fluid" role="document">
     <div class="modal-header light-blue darken-3 white-text">
       <h4 class="modal-title">Novo Questionário</h4>
@@ -77,7 +83,31 @@
       </button>
     </div>
     <div class="modal-content">
-      <app-questionario-add></app-questionario-add>
+      <form class="questionarioForm">
+        <div class="row">
+          <div class="col-lg-11">
+            <div class="md-form">
+              <input (input)="data.nome=$event.target.value" mdbInputDirective formControlName="nome" min="5"
+                type="text" id="nome" class="form-control">
+              <label for="nome">Nome</label>
+            </div>
+          </div>
+          <div class="col-lg-1">
+            <div class="md-form">
+              <mdb-checkbox (change)="data.status = $event.checked" [checked]='data.status'>Ativo</mdb-checkbox>
+            </div>
+          </div>
+        </div>
+      </form>
+      <div class="row">
+        <div class="col-lg-12 text-right">
+          <div class="md-form">
+            <button type="button" mdbBtn color="light" mdbWavesEffect (click)="questionarioadd.hide()">Voltar</button>
+            <button type="button" mdbBtn color="dark-green" mdbWavesEffect
+              (click)="salvarQuestionario();">Salvar</button>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
