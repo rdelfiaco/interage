@@ -12,7 +12,13 @@ import { LocalStorage } from '../../../../shared/services/localStorage';
 })
 export class AlternativaEditComponent implements OnInit {
 
-  tableData: object = {
+  tableData = {
+    id: '',
+    id_pergunta: '',
+    id_proxima_pergunta: '',
+    nome: '',
+    sequencia_alternativa: '',
+    status: false,
   };
   alterId = null;
 
@@ -25,7 +31,6 @@ export class AlternativaEditComponent implements OnInit {
     private localStorage: LocalStorage,
   ) {
     this.route.params.subscribe(res => {
-      
       this.alterId = res.id;
     });
   }
@@ -40,10 +45,10 @@ export class AlternativaEditComponent implements OnInit {
         service: 'getAlternativaById',
         paramsService: { id: this.alterId }
       }) as any;
+      debugger
       if (respQuest.error) {
         return this.toastrService.error(respQuest.error);
-      }
-      ;
+      };
       let data = respQuest.resposta[0];
       this.tableData = data;
     }
@@ -60,12 +65,14 @@ export class AlternativaEditComponent implements OnInit {
     try {
       let resp = await this.connectHTTP.callService({
         service: 'updateAlternativa',
-        paramsService: { data: JSON.stringify({ 
-          id:this.alterId,
-          nome: this.tableData['nome'],
-          sequencia: this.tableData['sequencia_alternativa'],
-          proximaPerguntaId: this.tableData['id_proxima_pergunta'],
-        })}
+        paramsService: {
+          data: JSON.stringify({
+            id: this.alterId,
+            nome: this.tableData.nome,
+            sequencia: this.tableData.sequencia_alternativa,
+            proximaPerguntaId: this.tableData.id_proxima_pergunta,
+          })
+        }
       }) as any;
       if (resp.error) {
         this.toastrService.error(resp.error);
@@ -101,7 +108,7 @@ export class AlternativaEditComponent implements OnInit {
     try {
       let resp = await this.connectHTTP.callService({
         service: 'updateStatusAlternativa',
-        paramsService: { data: JSON.stringify({ id, status: !status })}
+        paramsService: { data: JSON.stringify({ id, status: !status }) }
       }) as any;
       if (resp.error) {
         this.toastrService.error(resp.error);

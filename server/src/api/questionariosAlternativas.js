@@ -53,6 +53,25 @@ function addAlternativa(req, res) {
   });
 };
 
+
+function getAlternativaById(req, res) {
+  return new Promise(function (resolve, reject) {
+    let credenciais = {
+      token: req.query.token,
+      idUsuario: req.query.id_usuario
+    };
+
+    let sql = `SELECT * FROM quest_alternativas where quest_alternativas.id=${req.query.id}`
+    executaSQL(credenciais, sql)
+      .then(res => {
+        resolve(res);
+      })
+      .catch(err => {
+        reject(err)
+      })
+  });
+};
+
 function updateStatusAlternativa(req, res) {
   return new Promise(function (resolve, reject) {
     let credenciais = {
@@ -84,8 +103,9 @@ function updateAlternativa(req, res) {
 
     let sql = `UPDATE quest_alternativas SET 
       nome='${req.query.a.nome}',
-      id_proxima_pergunta=${req.query.a.perguntaProximaId},
-      sequencia_alternativa=${req.query.a.sequencia} WHERE quest_alternativas.id=${req.query.a.id}`;
+      id_proxima_pergunta=${req.query.a.proximaPerguntaId},
+      sequencia_alternativa=${req.query.a.sequencia}
+      WHERE quest_alternativas.id=${req.query.a.id}`;
 
     executaSQL(credenciais, sql)
       .then(res => {
@@ -119,6 +139,7 @@ function deleteAlternativa(req, res) {
 
 module.exports = {
   getAlternativas,
+  getAlternativaById,
   addAlternativa,
   updateStatusAlternativa,
   updateAlternativa,

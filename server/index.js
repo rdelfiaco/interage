@@ -117,6 +117,7 @@ declaraServico('getQuestionarioById',  questionarios.getQuestionarioById);
 declaraServico('getPerguntasByIdUqestionario',  questionarios.getPerguntasByIdUqestionario);
 // questtionario alternativas
 declaraServico('getAlternativas',  questAlternativas.getAlternativas);
+declaraServico('getAlternativaById',  questAlternativas.getAlternativaById);
 declaraServico('addAlternativa',  questAlternativas.addAlternativa);
 declaraServico('updateStatusAlternativa',  questAlternativas.updateStatusAlternativa);
 declaraServico('deleteAlternativa',  questAlternativas.deleteAlternativa);

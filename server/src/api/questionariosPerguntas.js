@@ -25,7 +25,6 @@ function getPerguntas(req, res) {
   });
 };
 
-
 function getPerguntaById(req, res) {
   return new Promise(function (resolve, reject) {
     let credenciais = {
