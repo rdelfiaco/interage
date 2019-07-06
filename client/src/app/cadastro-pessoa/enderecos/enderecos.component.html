@@ -27,9 +27,15 @@
             </mdb-checkbox>
           </td>
           <td>
-            <mdb-icon style="margin: 0px 5px;" icon="pencil" (click)="editarEndereco(endereco.id)" size="lg"></mdb-icon>
-            <mdb-icon style="margin: 0px 5px;" icon="trash" (click)="excluirEndereco(endereco.id)"
-              (click)="confirmExcluirEndereco.show()" size="lg"></mdb-icon>
+            <button (click)="editarEndereco(endereco.id)" type="button" mdbBtn color="blue" outline="true"
+              rounded="true" size="sm" class="px-2" mdbWavesEffect>
+              <mdb-icon fas icon="pencil" class="mt-0"></mdb-icon>
+            </button>
+            <button type="button" mdbBtn color="red"
+              (click)="excluirEndereco(endereco.id); confirmExcluirEndereco.show();" outline="true" rounded="true"
+              size="sm" class="px-2" mdbWavesEffect>
+              <mdb-icon fas icon="trash" class="mt-0"></mdb-icon>
+            </button>
           </td>
         </tr>
       </tbody>

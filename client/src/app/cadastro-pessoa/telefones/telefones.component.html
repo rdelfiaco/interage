@@ -21,9 +21,15 @@
           <mdb-checkbox (change)="setTelefonePrincipal(telefone)" [checked]="telefone.principal"></mdb-checkbox>
         </td>
         <td>
-          <mdb-icon style="margin: 0px 5px;" icon="pencil" (click)="editarTelefone(telefone.id)" size="lg"></mdb-icon>
-          <mdb-icon style="margin: 0px 5px;" icon="trash" (click)="excluirTelefone(telefone.id)"
-            (click)="confirmExcluirTelefone.show()" size="lg"></mdb-icon>
+          <button (click)="editarTelefone(telefone.id)" type="button" mdbBtn color="blue" outline="true" rounded="true"
+            size="sm" class="px-2" mdbWavesEffect>
+            <mdb-icon fas icon="pencil" class="mt-0"></mdb-icon>
+          </button>
+          <button type="button" mdbBtn color="red"
+            (click)="excluirTelefone(telefone.id); confirmExcluirTelefone.show()();" outline="true" rounded="true"
+            size="sm" class="px-2" mdbWavesEffect>
+            <mdb-icon fas icon="trash" class="mt-0"></mdb-icon>
+          </button>
         </td>
       </tr>
 
