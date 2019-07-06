@@ -1,7 +1,13 @@
 <form [formGroup]="questionarioForm" class="formQuestionario">
   <div class="row">
-    <button mdbBtn type="button" color="danger" size="sm" mdbWavesEffect>Primeira Ligação</button>
-    <button mdbBtn type="button" color="dark-green" size="sm" mdbWavesEffect>Ligações Anteriores</button>
+    <div class="row">
+        <div class="col-lg-12 text-right">
+          <div class="md-form">
+            <button type="button" mdbBtn color="light" mdbWavesEffect >Primeira Ligação</button>
+            <button type="button" mdbBtn color="blue" mdbWavesEffect >Ligações Anteriores</button>
+          </div>
+        </div>
+      </div>
     <div class="md-form input-group">
 
       <div *ngIf="quantEventosDaPessoa == 1" class="btn-group" mdbDropdown>
