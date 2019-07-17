@@ -11,6 +11,7 @@ const { checkToken} = require('./checkToken');
                     let registros 
                     if (res.rowCount > 0) {
                         registros = res.rows;
+                        
                     } else {
                         registros = res.fields
                         if (res.fields) {
@@ -26,7 +27,12 @@ const { checkToken} = require('./checkToken');
                         };
                     };
                     client.end();
-                    resolve(registros);
+                    const ret = [
+                        registros,
+                        {'count':res.rowCount }
+                    ];
+                    console.log(ret)
+                    resolve(ret);
                 }).catch(err => {
                     client.end();
                     console.log(err)

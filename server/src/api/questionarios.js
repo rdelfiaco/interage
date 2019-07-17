@@ -10,10 +10,10 @@ function getQuestionarios(req, res) {
       idUsuario: req.query.id_usuario
     };
 
-    // let sql = `SELECT q.id, q.nome, q.status, count(perg.*) as qtde_perguntas FROM questionarios q
-    //            inner join quest_perguntas perg on q.id = perg.id_questionario
-    //            group by q.id, q.nome, q.status`
-    let sql = `SELECT * from questionarios`
+    let sql = `SELECT q.id, q.nome, q.status, count(perg.*) as qtde_perguntas FROM questionarios q
+               left join quest_perguntas perg on q.id = perg.id_questionario
+               group by q.id, q.nome, q.status`
+    // let sql = `SELECT * from questionarios`
 
     executaSQL(credenciais, sql)
       .then(res => {

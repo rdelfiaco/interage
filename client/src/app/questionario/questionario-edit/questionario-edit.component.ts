@@ -189,7 +189,7 @@ export class QuestionarioEditComponent implements OnInit {
       let resp = await this.connectHTTP.callService({
         service: 'addPergunta',
         paramsService: {
-          data: JSON.stringify({ ...this.novaPergunta, questionarioId })
+          data: JSON.stringify({ ...this.novaPergunta, questionarioId })}
         }) as any;
       if (resp.error) {
         this.toastrService.error(resp.error);
