@@ -27,15 +27,13 @@ const { checkToken} = require('./checkToken');
                         };
                     };
                     client.end();
-                    const ret = [
-                        registros,
-                        {'count':res.rowCount }
-                    ];
-                    console.log(ret)
-                    resolve(ret);
+                    // const ret = [
+                    //     registros,
+                    //     {'count':res.rowCount }
+                    // ];
+                    resolve(registros);
                 }).catch(err => {
                     client.end();
-                    console.log(err)
                     reject(err);
                 });
         }).catch(e => {

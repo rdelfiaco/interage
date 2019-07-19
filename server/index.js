@@ -142,9 +142,6 @@ function declaraServico(nomeServico, funcao) {
     funcao(req)
       .then(linhas => {
         headerResponse(res)
-        // console.log(`Serviço: ${nomeServico}; Resultado linhas: ` , linhas)
-        // console.dir(linhas)
-        // console.dir(res)
         res.status(200).send(linhas)
       })
       .catch(error => {
@@ -158,11 +155,9 @@ function declaraServico(nomeServico, funcao) {
 
 function declaraServicoPost(nomeServico, funcao) {
   app.post(`/${nomeServico}`, (req, res) => {
-    console.log(req.query)
     funcao(req)
       .then(linhas => {
         headerResponse(res)
-        //console.log(`Serviço: ${nomeServico}; Resultado: ` , linhas)
         res.status(200).send(linhas)
       })
       .catch(error => {
