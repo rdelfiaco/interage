@@ -28,6 +28,8 @@ export class PesquisaPessoaComponent implements OnInit {
   lastVisibleIndex: number = 10;
   pessoa: Observable<object>;
   editandoPessoaObject: any;
+  nomePessoa: string;
+
   constructor(private connectHTTP: ConnectHTTP,
     private localStorage: LocalStorage,
     private toastrService: ToastService,
@@ -99,6 +101,7 @@ export class PesquisaPessoaComponent implements OnInit {
           searchText: this.textoPesquisaPessoa
         }
       }) as any;
+      console.log('***** ', pessoasEncontradas.resposta)
       this.pessoasEncontradas = pessoasEncontradas.resposta;
       if (!this.pessoasEncontradas.length) {
         this.pessoasEncontradas = [];
@@ -126,8 +129,12 @@ export class PesquisaPessoaComponent implements OnInit {
   }
 
   closeModal() {
+    console.log('11111')
     this.pessoaEditando.hide();
+
   }
+  
+
 
 
   async editarPessoa(pessoa: any) {
@@ -144,6 +151,7 @@ export class PesquisaPessoaComponent implements OnInit {
     //  - se o cliente não estiver vinculado a nenhuma carteira o usuário logado pode ter acesso; 
     //  - se o cliente esteja vinculado a uma carteria e se o usuário logado possui carteira o
     //           o acesso aos dados do cliente somente se ele pertence a carteira do usuário logado  
+    
     if (this.usuarioLogado.possui_carteira_cli  && p.resposta.principal.id_usuario_carteira ){
       if(this.usuarioLogado.id == p.resposta.principal.id_usuario_carteira){
 
@@ -162,6 +170,7 @@ export class PesquisaPessoaComponent implements OnInit {
           this.toastrService.error('Você não tem acesso aos clientes sem carteira');
         }
     }
+    this.nomePessoa = pessoa.nome;
 
   }
 

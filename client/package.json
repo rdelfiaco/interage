@@ -27,7 +27,6 @@
     "@angular/platform-browser-dynamic": "^6.0.0-rc.1",
     "@angular/router": "^6.0.0-rc.1",
     "@fortawesome/fontawesome-svg-core": "^1.2.19",
-    "@types/jquery": "^3.3.22",
     "angular-dual-listbox": "^4.7.0",
     "angular5-csv": "^0.2.10",
     "bootstrap": "^4.1.3",

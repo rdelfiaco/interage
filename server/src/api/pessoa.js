@@ -1,6 +1,9 @@
 const { checkTokenAccess } = require('./checkTokenAccess');
 const { executaSQL } = require('./executaSQL');
 const { buscaValorDoAtributo } = require( './shared');
+const { auditoria } = require('./auditoria');
+
+
 
 
 
@@ -21,6 +24,49 @@ function getPessoaPorCPFCNPJ(req, res) {
   });
 };
 
+function getTipoRelacionamentos(req, res){
+  return new Promise(function (resolve, reject) {
+    let credenciais = {
+      token: req.query.token,
+      idUsuario: req.query.id_usuario
+    };
+    let sql = `select * from  view_tipo_relacionamentos`
+    executaSQL(credenciais, sql).then(res => {
+        resolve(res)
+    })
+    .catch(err => {
+      reject(err)
+    });
+  });
+};
+
+function salvarRelacionamento(req, res){
+  return new Promise(function (resolve, reject) {
+    let credenciais = {
+      token: req.query.token,
+      idUsuario: req.query.id_usuario
+    };
+
+    // divide o objeto em atuais e anteriores 
+    const dadosAtuais = JSON.parse(req.query.dadosAtuais);
+    const dadosAnteriores =  JSON.parse(req.query.dadosAnteriores);
+
+    req.query = dadosAtuais;
+    req.query.id_usuario = credenciais.idUsuario;
+
+    let sql = `INSERT INTO public.pessoas_relacionamentos(
+      id_pessoa_referencia, id_tipo_relacionamentos_referencia, 
+      id_pessoa_referenciada, id_tipo_relacionamentos_referenciada )
+      VALUES (${req.query.pessoaReferenciaId} , ${req.query.tipoRelacionamentos}
+        , ${req.query.pessoaReferenciadaId} , ${req.query.tipoRelacionamentosVolta});`;
+    executaSQL(credenciais, sql).then(res => {
+        resolve(res)
+    })
+    .catch(err => {
+      reject(err)
+    });
+  });
+};
 
 function getPessoa(req, res) {
   return new Promise(function (resolve, reject) {
@@ -37,11 +83,18 @@ function getPessoa(req, res) {
           var pessoa = res[0];
           getTelefones(req).then(resTelefones => {
             getEnderecos(req).then(resEndereco => {
-              if (!resTelefones) { telefones = {} ;
-              }else telefones = resTelefones;
-              if (!resEndereco) {enderecos = {}
-              }else enderecos = resEndereco;
-              resolve({ principal: pessoa, enderecos, telefones })
+              getRelacionamentos(req).then(resRelacionamento => {
+                if (!resRelacionamento) { relacionamento = {} ;
+                }else relacionamentos = resRelacionamento;
+                if (!resTelefones) { telefones = {} ;
+                }else telefones = resTelefones;
+                if (!resEndereco) {enderecos = {}
+                }else enderecos = resEndereco;
+                resolve({ principal: pessoa, enderecos, telefones, relacionamentos })
+              })
+              .catch(err => {
+                reject(err)
+              });
             })
             .catch(err => {
               reject(err)
@@ -108,6 +161,23 @@ executaSQL(credenciais, sqlTelefones).then(res => {
 })
 }
 
+function getRelacionamentos(req) {
+  return new Promise((resolve, reject) => {
+    let credenciais = {
+      token: req.query.token,
+      idUsuario: req.query.id_usuario
+    };
+    let sql = `select * 
+                        from view_pessoa_relacionamentos
+                        where id_pessoa_referencia = ${req.query.id_pessoa}
+                        order by id`
+executaSQL(credenciais, sql).then(res => {
+  resolve(res);
+}).catch(err => {
+  reject(err)
+  })
+})
+}
 
 function salvarPessoa(req, res) {
   return new Promise(function (resolve, reject) {
@@ -119,6 +189,17 @@ function salvarPessoa(req, res) {
       const client = new Client(dbconnection)
 
       client.connect()
+      let credenciais = {
+        token: req.query.token,
+        idUsuario: req.query.id_usuario
+      };
+
+      // divide o objeto em atuais e anteriores 
+      const dadosAtuais = JSON.parse(req.query.dadosAtuais);
+      const dadosAnteriores =  JSON.parse(req.query.dadosAnteriores);
+
+      req.query = dadosAtuais;
+      req.query.id_usuario = credenciais.idUsuario;
 
       // trata as variaveis que tem combro que vem com null
       req.query.id_atividade = req.query.id_atividade == 'null' ?  'null':  req.query.id_atividade; 
@@ -127,15 +208,13 @@ function salvarPessoa(req, res) {
 
       let update = String;
       client.query('BEGIN').then((res1) => {
-
-
-
           update = `UPDATE pessoas SET
             ${montaCamposUpdatePessoa()},
             dtalteracao=now()
             WHERE pessoas.id=${req.query.id};
             `;
-
+        const tabela = 'pessoas'
+        const idTabela = req.query.id
         
         update = update.replace(/'null'/g, null)
         update = update.replace(/'`'/g, ' ')
@@ -143,7 +222,9 @@ function salvarPessoa(req, res) {
        client.query(update).then((res) => {
           client.query('COMMIT').then((resposta) => {
             client.end();
-            resolve(resposta)
+            // auditoria 
+            auditoria(credenciais, tabela, 'U', idTabela, dadosAnteriores, dadosAtuais );
+            resolve(resposta);
           }).catch(err => {
             client.end();
             reject(err)
@@ -165,6 +246,7 @@ function salvarPessoa(req, res) {
           ret.push('id_pronome_tratamento=' + (req.query.id_pronome_tratamento != 'null' || req.query.id_pronome_tratamento != '' ? "'" + req.query.id_pronome_tratamento + "'" : null))
           ret.push('apelido_fantasia=' + (req.query.apelido_fantasia != 'null' || req.query.apelido_fantasia != '' ? "'" + req.query.apelido_fantasia + "'" : null))
           ret.push('sexo=' + (req.query.sexo != 'null' || req.query.sexo != ''  ? "'" + req.query.sexo + "'" : null))
+          ret.push('datanascimento=' + (req.query.datanascimento != 'null' || req.query.datanascimento != ''  ? " date('" + req.query.datanascimento + "')" : null))
           ret.push('rg_ie=' + (req.query.rg_ie != 'null' || req.query.rg_ie != '' ? "'" + req.query.rg_ie + "'" : null))
           ret.push('orgaoemissor=' + (req.query.orgaoemissor != 'null' || req.query.orgaoemissor != '' ? "'" + req.query.orgaoemissor + "'" : null))
           ret.push('cpf_cnpj=' + (req.query.cpf_cnpj != 'null' || req.query.cpf_cnpj != ''  ? "'" + req.query.cpf_cnpj + "'" : null))
@@ -172,6 +254,7 @@ function salvarPessoa(req, res) {
           ret.push('website=' + (req.query.website != 'null' || req.query.website != '' ? "'" + req.query.website + "'" : null))
           ret.push('id_atividade=' + (req.query.id_atividade != 'null' || req.query.id_atividade != '' ? "'" + req.query.id_atividade + "'" : null))
           ret.push('observacoes=' + (req.query.observacoes != 'null' || req.query.observacoes != '' ? "'" + req.query.observacoes + "'" : null))
+         
           return ret.join(', ');
         }
 
@@ -202,6 +285,18 @@ async function  adicionarPessoa(req, res) {
       const { Client } = require('pg')
 
       const client = new Client(dbconnection)
+      
+      let credenciais = {
+        token: req.query.token,
+        idUsuario: req.query.id_usuario
+      };
+      // divide o objeto em atuais e anteriores 
+      const dadosAtuais = JSON.parse(req.query.dadosAtuais);
+      const dadosAnteriores =  JSON.parse(req.query.dadosAnteriores);
+
+      req.query = dadosAtuais ;
+      req.query.id_usuario = credenciais.idUsuario;
+      console.log(req.query)
 
       client.connect()
       // trata as variaveis que tem combro que vem com null
@@ -223,6 +318,7 @@ async function  adicionarPessoa(req, res) {
 
       client.query(update).then((res) => {
         client.end();
+        auditoria(credenciais, 'pessoas', 'I', res.rows[0].id, dadosAnteriores, dadosAtuais );
         resolve(res.rows[0])
       }).catch(e => {
         client.end();
@@ -236,6 +332,7 @@ async function  adicionarPessoa(req, res) {
         ret.push("tipo,")
         ret.push('id_pronome_tratamento,')
         ret.push('sexo,')
+        ret.push('datanascimento,')
         ret.push('rg_ie,')
         ret.push('orgaoemissor,')
         ret.push('cpf_cnpj,')
@@ -255,6 +352,7 @@ async function  adicionarPessoa(req, res) {
         ret.push("'" + req.query.tipo + "',")
         ret.push((req.query.id_pronome_tratamento != '' ? "'" + req.query.id_pronome_tratamento + "'" : 'NULL') + ",")
         ret.push((req.query.sexo != '' ? "'" + req.query.sexo + "'" : 'NULL') + ",")
+        ret.push((req.query.datanascimento != 'null' || req.query.datanascimento != ''  ? " date('" + req.query.datanascimento + "')" :'NULL') + ",")
         ret.push((req.query.rg_ie != '' ? "'" + req.query.rg_ie + "'" : 'NULL') + ",")
         ret.push((req.query.orgaoemissor != '' ? "'" + req.query.orgaoemissor + "'" : 'NULL') + ",")
         ret.push((req.query.cpf_cnpj != '' ? "'" + req.query.cpf_cnpj + "'" : 'NULL') + ",")
@@ -493,7 +591,7 @@ function editaEnderecoDeCorrespondencia(req, res) {
       client.query('BEGIN').then(() => {
         todosOsOutrosEnderecosFalse = `UPDATE pessoas_enderecos SET
                       recebe_correspondencia=false
-                      WHERE pessoas_enderecos.id_pessoa=${req.query.id_pessoa}`;
+                      WHERE pessoas_enderecos.id_pessoa=${req.query.id_pessoa} `;
 
         client.query(todosOsOutrosEnderecosFalse).then(() => {
           setaNovoEnderecoCorrespondencia = `UPDATE pessoas_enderecos SET
@@ -588,6 +686,17 @@ function salvarEnderecoPessoa(req, res) {
       const client = new Client(dbconnection)
 
       client.connect()
+      let credenciais = {
+        token: req.query.token,
+        idUsuario: req.query.id_usuario
+      };      
+      let operacao ='I';
+      let idTabela = 0;
+      // divide o objeto em atuais e anteriores 
+      const dadosAtuais = JSON.parse(req.query.dadosAtuais);
+      const dadosAnteriores =  JSON.parse(req.query.dadosAnteriores);
+
+      req.query = dadosAtuais       
 
       let update;
       client.query('BEGIN').then((res1) => {
@@ -611,6 +720,16 @@ function salvarEnderecoPessoa(req, res) {
 
             client.query(insert).then((res) => {
               req.query.id_cidade = res.rows[0].id
+              // para auditoria 
+              let atuais = {
+                cidade: req.query.cidade,
+                uf: req.query.uf_cidade
+              };
+              let anteriores = {
+                cidade: '',
+                uf: ''
+              }
+              auditoria(credenciais,'cidades','I',req.query.id_cidade,anteriores,atuais)
               salvaEndereco()
             }).catch(e => {
               reject(e);
@@ -622,8 +741,10 @@ function salvarEnderecoPessoa(req, res) {
             client.query(selectEnderecos).then((enderecosPessoas) => {
               let recebe_correspondencia = false;
               if (!enderecosPessoas.rowCount) recebe_correspondencia = true;
-
               if (req.query.id)
+                {
+                operacao = 'U';
+                idTabela = req.query.id
                 update = `UPDATE pessoas_enderecos SET
                       id_cidade=${req.query.id_cidade},
                       cep=${req.query.cep},
@@ -633,8 +754,9 @@ function salvarEnderecoPessoa(req, res) {
                       recebe_correspondencia=${req.query.recebe_correspondencia},
                       dtalteracao=now()
                       WHERE pessoas_enderecos.id=${req.query.id}`;
+                }
               else
-                update = `INSERT INTO pessoas_enderecos(
+                {update = `INSERT INTO pessoas_enderecos(
                       id_pessoa, id_cidade, cep, logradouro, bairro, complemento, recebe_correspondencia,dtalteracao)
                       VALUES(${req.query.id_pessoa},
                             ${req.query.id_cidade},
@@ -644,11 +766,12 @@ function salvarEnderecoPessoa(req, res) {
                             '${req.query.complemento}',
                             '${recebe_correspondencia}',
                             now()
-                            )`;
-
+                            ) RETURNING id`;}
               client.query(update).then((res) => {
+                if (operacao == 'I') idTabela = res.rows[0].id;
                 client.query('COMMIT').then((resposta) => {
                   client.end();
+                  auditoria(credenciais,'pessoas_enderecos',operacao,idTabela,dadosAnteriores,dadosAtuais)
                   resolve(resposta)
                 }).catch(err => {
                   client.end();
@@ -835,4 +958,6 @@ module.exports = {
   editaEnderecoDeCorrespondencia,
   getTratamentoPessoaFisica,
   getPessoaPorCPFCNPJ,
+  getTipoRelacionamentos,
+  salvarRelacionamento,
 }

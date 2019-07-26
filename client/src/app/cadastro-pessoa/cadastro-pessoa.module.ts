@@ -8,6 +8,8 @@ import { MDBBootstrapModulesPro, ToastModule } from '../../lib/ng-uikit-pro-stan
 import { LinhaDoTempoModule } from '../linha-do-tempo/linha-do-tempo.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { PipesModule } from '../shared/pipes/pipesModule';
+import { NetworkingComponent } from './networking/networking.component';
+import { PesquisaClienteModule } from './../pesquisa-cliente/pesquisa-cliente.module';
 
 @NgModule({
   imports: [
@@ -17,13 +19,15 @@ import { PipesModule } from '../shared/pipes/pipesModule';
     LinhaDoTempoModule,
     FormsModule,
     ReactiveFormsModule,
-    PipesModule
+    PipesModule,
+    PesquisaClienteModule
   ],
   declarations: [
     CadastroPessoaComponent,
     PrincipalComponent,
     TelefonesComponent,
-    EnderecosComponent,],
+    EnderecosComponent,
+    NetworkingComponent,],
   exports: [
     CadastroPessoaComponent,
     PrincipalComponent,
