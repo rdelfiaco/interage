@@ -1,5 +1,4 @@
 <div class="row pt-4 p-3">
-  <!-- <h4 style="font-weight: bold;color: gray;">NETWORKING</h4> -->
   <table class="table">
     <thead>
       <tr>
@@ -27,17 +26,17 @@
   <span *ngIf="_pessoaObject && !_pessoaObject.relacionamentos.length">Nenhum relacionamento cadastrado!</span>
 </div>
 <div class="row d-flex justify-content-end mt-3">
-  <button type="button" [disabled]="relacionamentoSelecionado" mdbBtn color="primary" (click)="adicionarNovoRelacionamento();"
-    class="relative waves-light"  mdbWavesEffect>Adicionar Novo Relacionamento</button>
+  <button type="button" [disabled]="relacionamentoSelecionado" mdbBtn color="primary" (click)="adicionarNovoRelacionamento()"
+    class="relative waves-light" href="#formRelacionamento" mdbWavesEffect>Adicionar Novo Relacionamento</button>
 </div>
 <br />
 <br />
 
-<div *ngIf="relacionamentoSelecionado">
+<div *ngIf="relacionamentoSelecionado" id="formRelacionamento">
   <form [formGroup]="relacionamentoForm" >
     <div class="row">
         <div class="md-form col-4" style="margin-left: 10px; margin-top: -1px" >
-            <input mdbInputDirective formControlName="pessoaReferenciaNome" disabled type="text" id="pessoaReferenciaNome" class="form-control">
+            <input mdbInputDirective formControlName="pessoaReferenciaNome"  type="text" id="pessoaReferenciaNome" class="form-control">
             <label for="pessoaReferenciaNome">Pessoa referência</label>
         </div>
 
@@ -47,16 +46,18 @@
         <label>Tipo de relacionamento</label>
       </div>
 
-      <div class="md-form col-4" style="margin-left: 20px; margin-top: 0px">
-          <app-pesquisa-cliente [disabled]="disabled" [initValueId]="pessoaId"
+      <div class="col-4">
+          <app-pesquisa-cliente  [initValueId]="pessoaId"
           (onSelectCliente)="onSelectCliente($event)">
         </app-pesquisa-cliente>
-        </div>
+      </div>
+
     </div>
+
     <br>
     <div class="row">
         <div class="md-form col-4" style="margin-left: 10px; margin-top: 0px">
-            <input mdbInputDirective formControlName="pessoaReferenciadaNome" disabled type="text" id="pessoaReferenciadaNome" class="form-control">
+            <input mdbInputDirective formControlName="pessoaReferenciadaNome"  type="text" id="pessoaReferenciadaNome" class="form-control">
             <label for="pessoaReferenciadaNome">pessoa referenciada</label>
         </div>
       
@@ -68,16 +69,16 @@
         </div>
 
         <div class="md-form col-4" style="margin-left: 20px; margin-top: 0px">
-          <input mdbInputDirective formControlName="pessoaReferenciaNome" disabled type="text" id="pessoaReferenciaNome" class="form-control">
+          <input mdbInputDirective formControlName="pessoaReferenciaNome"  type="text" id="pessoaReferenciaNome" class="form-control">
           <label for="pessoaReferenciaNome">Pessoa referência</label>
         </div>
     </div>
 
       
     <div class="row d-flex justify-content-end">
-      <button type="button" mdbBtn color="primary" (click)="salvar();" class="relative waves-light" mdbWavesEffect
-        [disabled]="!relacionamentoForm.valid">Salvar relacionamento</button>
-      <button type="button" mdbBtn color="danger" (click)="cancelarAdd();" class="relative waves-light" id="btCancelar"
+      <button type="button" mdbBtn [color]="bntEnviarColor" (click)="salvar();" class="relative waves-light" 
+      mdbWavesEffect>{{bntEnviar}}</button>
+      <button type="button" mdbBtn [color]="btnCancelarColor" (click)="cancelarAdd();" class="relative waves-light" id="btCancelar"
         mdbWavesEffect>Cancelar</button>
     </div>
   </form>

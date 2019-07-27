@@ -1,3 +1,4 @@
+import { element } from 'protractor';
 import { performance } from './../../../lib/ng-uikit-pro-standard/free/utils/facade/browser';
 import { Component, OnInit, Input, SimpleChanges, Output, EventEmitter, isDevMode } from '@angular/core';
 import { Observable } from 'rxjs';
@@ -24,10 +25,14 @@ export class NetworkingComponent implements OnInit {
   tipoTratamento: any;
   tipoTratamentoCombo: Array<object> = [];
   tipoTratamentoSelecionada: number = 1;
+  crud: string;
+  bntEnviar: string;
+  bntEnviarColor: string;
+  btnCancelarColor: string;
 
   tipoTratamentoVoltaCombo: Array<object> = [];
   tipoTratamentoVoltaSelecionada: number = 3;
-  
+  pessoaId: any;
 
   constructor(private connectHTTP: ConnectHTTP, private formBuilder: FormBuilder,
     private localStorage: LocalStorage,
@@ -36,10 +41,11 @@ export class NetworkingComponent implements OnInit {
      
     
     this.relacionamentoForm = this.formBuilder.group({
-      pessoaReferenciaNome: [''],
+      relacionamentoId:  [''],
+      pessoaReferenciaNome: [{value: '',disabled: true}],
       pessoaReferenciaId: [''],
       tipoRelacionamentos:  [this.tipoTratamentoSelecionada, [Validators.required]],
-      pessoaReferenciadaNome: [''],
+      pessoaReferenciadaNome: [{value: '',disabled: true}],
       pessoaReferenciadaId: [''],
       tipoRelacionamentosVolta: [this.tipoTratamentoVoltaSelecionada, [Validators.required]],
     });
@@ -78,6 +84,10 @@ export class NetworkingComponent implements OnInit {
 
   adicionarNovoRelacionamento(){
     this.relacionamentoSelecionado = true;
+    this.crud = 'C'; // create  
+    this.bntEnviar = 'Adicionar relacionamento';
+    this.bntEnviarColor = 'primary';
+    this.btnCancelarColor = 'danger';
     this.relacionamentoForm.controls['pessoaReferenciadaId'].setValue('');
     this.relacionamentoForm.controls['pessoaReferenciadaNome'].setValue('');
     this.relacionamentoFormAud= [];
@@ -85,11 +95,36 @@ export class NetworkingComponent implements OnInit {
 
   excluirRelacionamentos(id){
     this.relacionamentoSelecionado = true;
+    this.crud = 'D' // delete  
+    this.bntEnviar = 'Excluir relacionamento';
+    this.bntEnviarColor = 'danger';
+    this.btnCancelarColor = 'primary';
+    this.povoaCampos(id);
   };
 
   editarRelacionamentos(id){
     this.relacionamentoSelecionado = true;
-  }
+    this.crud = 'U' // update  
+    this.bntEnviar = 'Alterar relacionamento'
+    this.bntEnviarColor = 'primary';
+    this.btnCancelarColor = 'danger';
+    this.povoaCampos(id)
+  };
+
+
+  povoaCampos(id){
+    this.pessoaId = this._pessoaObject.relacionamentos.find(element => {
+      if (element.id == id) return element;
+    })
+    this.relacionamentoForm.controls['pessoaReferenciadaId'].setValue(this.pessoaId.id_pessoa_referenciada);
+    this.relacionamentoForm.controls['pessoaReferenciadaNome'].setValue(this.pessoaId.nome_pessoa_referenciada);
+    this.relacionamentoForm.controls['tipoRelacionamentos'].setValue(this.pessoaId.id_relacionamento);
+    this.relacionamentoForm.controls['tipoRelacionamentosVolta'].setValue(this.pessoaId.id_relacionamento_volta);
+    this.relacionamentoForm.controls['relacionamentoId'].setValue(this.pessoaId.id);
+    this.pessoaId = Number(this.pessoaId.id_pessoa_referenciada);
+    this.relacionamentoFormAud = this.relacionamentoForm.value;
+  };
+
   getSelectedValueRelacionamento(tipoRelacionamento){
     this.tipoTratamentoSelecionada = tipoRelacionamento.value;
     // coloca no combo somente os tipo de relacionamento referenciado na tabela tipo_relacionamento_volta
@@ -120,24 +155,24 @@ export class NetworkingComponent implements OnInit {
   }
 
   async salvar() {
-
     try {
       let resp = await this.connectHTTP.callService({
-        service: 'salvarRelacionamento',
+        service: 'crudRelacionamento',
         paramsService: ({
           dadosAtuais: JSON.stringify(this.relacionamentoForm.value),
-          dadosAnteriores: JSON.stringify(this.relacionamentoFormAud)
+          dadosAnteriores: JSON.stringify(this.relacionamentoFormAud),
+          crud: this.crud
         }) 
       });
-
       if (resp.error) {
-          this.toastrService.error('Erro ao salvar relacionamento');
+          this.toastrService.error('Erro ao salvar relacionamento', resp.error );
       }else
       {
         this.toastrService.success('Salvo com sucesso');
       }
     }
     catch (e) {
+      console.log(e)
       this.toastrService.error('Erro ao salvar relacionamento');
     }
     this.ngOnInit();

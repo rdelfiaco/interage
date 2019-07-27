@@ -40,7 +40,7 @@ function getTipoRelacionamentos(req, res){
   });
 };
 
-function salvarRelacionamento(req, res){
+function crudRelacionamento(req, res){
   return new Promise(function (resolve, reject) {
     let credenciais = {
       token: req.query.token,
@@ -50,21 +50,54 @@ function salvarRelacionamento(req, res){
     // divide o objeto em atuais e anteriores 
     const dadosAtuais = JSON.parse(req.query.dadosAtuais);
     const dadosAnteriores =  JSON.parse(req.query.dadosAnteriores);
-
+    const crud = req.query.crud;
     req.query = dadosAtuais;
     req.query.id_usuario = credenciais.idUsuario;
+    let sql = ''
+    if (crud == 'C') {
+       sql = sqlCreate(); 
+       executaSQL(credenciais, sql).then(res => {
+            resolve(res)
+        })
+        .catch(err => {
+          reject(err)
+        });
+    }
+    if (crud != 'C'){
+        sql = `delete from pessoas_relacionamentos where id = ${dadosAnteriores.relacionamentoId}`
+          // excluir o existente e incluir um novo 
+            executaSQL(credenciais, sql).then(res => {
+            sql = sqlCreate();
+            if (crud == 'U'){
+                executaSQL(credenciais, sql).then(res => {
+                  resolve(res)
+                  })
+                  .catch(err => {
+                    reject(err)
+                  });
+            }
+            resolve(res);
+          })
+          .catch(err => {
+            reject(err)
+          });
+        };
+    
 
-    let sql = `INSERT INTO public.pessoas_relacionamentos(
-      id_pessoa_referencia, id_tipo_relacionamentos_referencia, 
-      id_pessoa_referenciada, id_tipo_relacionamentos_referenciada )
-      VALUES (${req.query.pessoaReferenciaId} , ${req.query.tipoRelacionamentos}
-        , ${req.query.pessoaReferenciadaId} , ${req.query.tipoRelacionamentosVolta});`;
-    executaSQL(credenciais, sql).then(res => {
-        resolve(res)
-    })
-    .catch(err => {
-      reject(err)
-    });
+
+
+
+
+    function sqlCreate(){
+      let sql = `INSERT INTO public.pessoas_relacionamentos(
+        id_pessoa_referencia, id_tipo_relacionamentos_referencia, 
+        id_pessoa_referenciada, id_tipo_relacionamentos_referenciada )
+        VALUES (${req.query.pessoaReferenciaId} , ${req.query.tipoRelacionamentos}
+          , ${req.query.pessoaReferenciadaId} , ${req.query.tipoRelacionamentosVolta});`;
+      return sql
+      }
+
+
   });
 };
 
@@ -959,5 +992,5 @@ module.exports = {
   getTratamentoPessoaFisica,
   getPessoaPorCPFCNPJ,
   getTipoRelacionamentos,
-  salvarRelacionamento,
+  crudRelacionamento,
 }

@@ -123,7 +123,7 @@ declaraServico('getTipoRelacionamentos', pessoa.getTipoRelacionamentos);
 declaraServico('getPessoaPorCPFCNPJ',  pessoa.getPessoaPorCPFCNPJ);
 declaraServico('getPessoaPorCPFCNPJ',  pessoa.getPessoaPorCPFCNPJ);
 declaraServico('getPessoa', pessoa.getPessoa);
-declaraServico('salvarRelacionamento', pessoa.salvarRelacionamento);
+declaraServico('crudRelacionamento', pessoa.crudRelacionamento);
 
 // questionario
 declaraServico('getQuestionarios',  questionarios.getQuestionarios);

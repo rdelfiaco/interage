@@ -5,6 +5,7 @@ import { LocalStorage } from '../shared/services/localStorage';
 import { ToastService, ModalDirective } from '../../lib/ng-uikit-pro-standard';
 import { Observable } from 'rxjs';
 import { Usuario } from '../login/usuario';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -30,7 +31,9 @@ export class PesquisaPessoaComponent implements OnInit {
   editandoPessoaObject: any;
   nomePessoa: string;
 
-  constructor(private connectHTTP: ConnectHTTP,
+  constructor(
+    private router: Router,
+    private connectHTTP: ConnectHTTP,
     private localStorage: LocalStorage,
     private toastrService: ToastService,
     private checkPermissaoRecurso: CheckPermissaoRecurso ) {
@@ -138,7 +141,8 @@ export class PesquisaPessoaComponent implements OnInit {
 
 
   async editarPessoa(pessoa: any) {
-
+    return this.router.navigate(['pessoas/'+pessoa.id]);
+    /*
     this.editandoPessoaObject = pessoa;
     let pessoaId = pessoa.id
     let p = await this.connectHTTP.callService({
@@ -171,7 +175,7 @@ export class PesquisaPessoaComponent implements OnInit {
         }
     }
     this.nomePessoa = pessoa.nome;
-
+    */
   }
 
   async refresh() {
