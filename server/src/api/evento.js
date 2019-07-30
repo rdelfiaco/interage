@@ -21,7 +21,7 @@ function getUmEvento(req, res) {
       let sql = `select *
             from view_eventos
             where id_status_evento in (1,4,5,6)
-            and ( (tipodestino = 'O' and id_pessoa_visualizou is null and id_pessoa_organograma = ${req.query.id_organograma} )
+            and ( (tipodestino = 'O' and id_pessoa_visualizou is null)
             or (tipodestino = 'P' and id_usuario = ${req.query.id_usuario} )
             or (id_pessoa_visualizou = ${req.query.id_pessoa} and id_status_evento in(5,6) ))
             and dt_para_exibir <= now()

@@ -23,6 +23,9 @@ const consultaPlaca = require('./src/api/consultaPlaca');
 const canais = require('./src/api/canais');
 const motivos = require('./src/api/motivos');
 const questionarios = require('./src/api/questionarios');
+const questPerguntas = require('./src/api/questionariosPerguntas');
+const questAlternativas = require('./src/api/questionariosAlternativas');
+const pausa = require('./src/api/pausa');
 
 
 app.use(bodyParser.json());
@@ -30,56 +33,82 @@ app.use(bodyParser.urlencoded({
   extended: true
 }));
 
-declaraServico('getEventoPorId', evento.getEventoPorId);
-declaraServico('visualizarEvento', evento.visualizarEvento);
-declaraServico('informacoesParaCriarEvento', evento.informacoesParaCriarEvento);
+
+//proposta
 declaraServico('salvarProposta', proposta.salvarProposta);
-declaraServico('encaminhaEvento', evento.encaminhaEvento);
-declaraServico('criarEvento', evento.criarEvento);
 declaraServico('consultarPlaca', consultaPlaca.consultarPlaca);
 declaraServico('getPropostasDoUsuario', proposta.getPropostasDoUsuario);
 declaraServico('getPropostaPorId', proposta.getPropostaPorId);
 declaraServico('getPropostaFiltros', proposta.getPropostaFiltros);
 declaraServico('salvarPlacaDaProposta', proposta.salvarPlacaDaProposta);
+declaraServico('getPropostasPorPeriodoSintetico', proposta.getPropostasPorPeriodoSintetico);
+declaraServico('getTabelaPrecos', tabelaPrecos.getTabelaPrecos );
+
+//evento
 declaraServico('getEventoFiltros', evento.getEventoFiltros);
 declaraServico('getEventosFiltrados', evento.getEventosFiltrados);
-declaraServico('getAgentesVendas', usuario.getAgentesVendas);
-declaraServico('getPessoa', pessoa.getPessoa);
 declaraServico('getCountEventosPendentes', evento.getCountEventosPendentes);
+declaraServico('getEventosPorPeriodoSintetico', evento.getEventosPorPeriodoSintetico);
+declaraServico('getEventoPorId', evento.getEventoPorId);
+declaraServico('visualizarEvento', evento.visualizarEvento);
+declaraServico('informacoesParaCriarEvento', evento.informacoesParaCriarEvento);
+declaraServico('encaminhaEvento', evento.encaminhaEvento);
+declaraServico('criarEvento', evento.criarEvento);
+declaraServico('getTarefaPorId', tarefa.getTarefaPorId);
+declaraServico('getTarefaPerformance',tarefa.getTarefaPerformance);
+declaraServico('salvarEvento', evento.salvarEvento );
+declaraServico('getEventosPendentes', evento.getEventosPendentes );
+declaraServico('getEventosLinhaDoTempo', evento.getEventosLinhaDoTempo );
+declaraServico('getEventosRelatorioUsuario', evento.getEventosRelatorioUsuario );
+declaraServico('getCanais',  canais.getCanais);
+declaraServico('getMotivos',  motivos.getMotivos);
+
+
 declaraServico('getConfiguracao', config.getConfiguracao);
 declaraServico('getSQLs', exportaSQL.getSQLs);
 declaraServico('getResultadoSQLs', exportaSQL.getResultadoSQLs);
 declaraServico('getSQL', exportaSQL.getSQL);
-declaraServico('getPropostasPorPeriodoSintetico', proposta.getPropostasPorPeriodoSintetico);
-declaraServico('getEventosPorPeriodoSintetico', evento.getEventosPorPeriodoSintetico);
-declaraServico('getTarefaPorId', tarefa.getTarefaPorId);
-declaraServico('getTarefaPerformance',tarefa.getTarefaPerformance);
+declaraServico('getRanks', ranks.getRanks);
+declaraServicoPost('importaLead', importar.importaLead );
+
+// campanha telemarketing
 declaraServico('getCampanhasTelemarketingAtivas',campanha.getCampanhasTelemarketingAtivas);
 declaraServico('getCampanhaTelemarketingAnalisar',campanha.getCampanhaTelemarketingAnalisar);
 declaraServico('getLigacaoTelemarketing', telemarketing.getLigacaoTelemarketing);
 declaraServico('getCampanhaFollowDoUsuario', campanha.getCampanhaFollowDoUsuario);
-declaraServico('getRanks', ranks.getRanks);
-declaraServicoPost('importaLead', importar.importaLead );
 declaraServico('getDetalheCampanha', campanha.getDetalheCampanha );
+declaraServico('getCampanhasDoUsuario',campanha.getCampanhasDoUsuario  );
+declaraServico('getCampanhasUsuarioSeleconado',campanha.getCampanhasUsuarioSeleconado  );
+declaraServico('getUsuariosCampanhaSelecionada',campanha.getUsuariosCampanhaSelecionada);
+declaraServico('salvarUsuariosDaCampanha', campanha.salvarUsuariosDaCampanha);
+declaraServico('getCampanhas', campanha.getCampanhas );
+declaraServico('getCampanhaAnalisar', campanha.getCampanhaAnalisar );
+declaraServico('salvarCampanhasDoUsuario', campanha.salvarCampanhasDoUsuario );
+declaraServico('getEventosRelatorioCampanha', campanha.getEventosRelatorioCampanha );
+declaraServico('getProdutividadeCallCenter', produtividade.getProdutividadeCallCenter );
+
+//Departamento
 declaraServico('getDepartamentos', departamentos.getDepartamentos );
 declaraServico('getDepartamentosUsuarios', departamentos.getDepartamentosUsuarios );
 declaraServico('getPermissoesDepartamentoSeleconado', departamentos.getPermissoesDepartamentoSeleconado );
 declaraServico('salvarPermissoesDoDepartamento', departamentos.salvarPermissoesDoDepartamento );
 declaraServico('salvarUsuariosDoDepartamento', departamentos.salvarUsuariosDoDepartamento );
+
+// usuários
 declaraServico('login', usuario.login );
 declaraServico('getLogin', usuario.getLogin);
 declaraServico('getUsuarios', usuario.getUsuarios );
 declaraServico('salvarUsuario', usuario.salvarUsuario );
 declaraServico('excluirUsuario', usuario.excluirUsuario );
 declaraServico('getAtividades', atividade.getAtividades );
-declaraServico('getTabelaPrecos', tabelaPrecos.getTabelaPrecos );
 declaraServico('logout', usuario.logout );
-declaraServico('getCampanhasDoUsuario',campanha.getCampanhasDoUsuario  );
-declaraServico('getCampanhasUsuarioSeleconado',campanha.getCampanhasUsuarioSeleconado  );
-declaraServico('getUsuariosCampanhaSelecionada',campanha.getUsuariosCampanhaSelecionada);
-declaraServico('salvarUsuariosDaCampanha', campanha.salvarUsuariosDaCampanha);
-declaraServico('getCampanhas', campanha.getCampanhas );
-declaraServico('salvarEvento', evento.salvarEvento );
+declaraServico('trocarSenhaUsuarioLogado',  usuario.trocarSenhaUsuarioLogado);
+declaraServico('adicionarUsuario',  usuario.adicionarUsuario);
+declaraServico('getPermissoesUsuarioSeleconado',  usuario.getPermissoesUsuarioSeleconado);
+declaraServico('salvarPermissoesDoUsuario',  usuario.salvarPermissoesDoUsuario);
+declaraServico('getAgentesVendas', usuario.getAgentesVendas);
+
+// pessoa
 declaraServico('salvarPessoa', pessoa.salvarPessoa  );
 declaraServico('getTipoTelefone', pessoa.getTipoTelefone );
 declaraServico('getTratamentoPessoaFisica', pessoa.getTratamentoPessoaFisica );
@@ -91,21 +120,40 @@ declaraServico('pesquisaPessoas', pessoa.pesquisaPessoas  );
 declaraServico('editaTelefonePrincipal', pessoa.editaTelefonePrincipal);
 declaraServico('editaEnderecoDeCorrespondencia', pessoa.editaEnderecoDeCorrespondencia  );
 declaraServico('adicionarPessoa',  pessoa.adicionarPessoa );
-declaraServico('getEventosPendentes', evento.getEventosPendentes );
-declaraServico('getEventosLinhaDoTempo', evento.getEventosLinhaDoTempo );
-declaraServico('getEventosRelatorioUsuario', evento.getEventosRelatorioUsuario );
-declaraServico('getCampanhaAnalisar', campanha.getCampanhaAnalisar );
-declaraServico('salvarCampanhasDoUsuario', campanha.salvarCampanhasDoUsuario );
-declaraServico('getEventosRelatorioCampanha', campanha.getEventosRelatorioCampanha );
-declaraServico('getProdutividadeCallCenter', produtividade.getProdutividadeCallCenter );
-declaraServico('trocarSenhaUsuarioLogado',  usuario.trocarSenhaUsuarioLogado);
+declaraServico('getTipoRelacionamentos', pessoa.getTipoRelacionamentos);
 declaraServico('getPessoaPorCPFCNPJ',  pessoa.getPessoaPorCPFCNPJ);
-declaraServico('adicionarUsuario',  usuario.adicionarUsuario);
-declaraServico('getPermissoesUsuarioSeleconado',  usuario.getPermissoesUsuarioSeleconado);
-declaraServico('salvarPermissoesDoUsuario',  usuario.salvarPermissoesDoUsuario);
-declaraServico('getCanais',  canais.getCanais);
-declaraServico('getMotivos',  motivos.getMotivos);
+declaraServico('getPessoaPorCPFCNPJ',  pessoa.getPessoaPorCPFCNPJ);
+declaraServico('getPessoa', pessoa.getPessoa);
+declaraServico('crudRelacionamento', pessoa.crudRelacionamento);
+
+// questionario
 declaraServico('getQuestionarios',  questionarios.getQuestionarios);
+declaraServico('addQuestionario',  questionarios.addQuestionario);
+declaraServico('updateQuestionario',  questionarios.updateQuestionario);
+declaraServico('deleteQuestionario',  questionarios.deleteQuestionario);
+declaraServico('updateStatusQuestionario',  questionarios.updateStatusQuestionario);
+declaraServico('getQuestionarioById',  questionarios.getQuestionarioById);
+declaraServico('getPerguntasByIdUqestionario',  questionarios.getPerguntasByIdUqestionario);
+// questtionario alternativas
+declaraServico('getAlternativas',  questAlternativas.getAlternativas);
+declaraServico('getAlternativaById',  questAlternativas.getAlternativaById);
+declaraServico('addAlternativa',  questAlternativas.addAlternativa);
+declaraServico('updateStatusAlternativa',  questAlternativas.updateStatusAlternativa);
+declaraServico('deleteAlternativa',  questAlternativas.deleteAlternativa);
+declaraServico('updateAlternativa',  questAlternativas.updateAlternativa);
+// questtionario perguntas
+declaraServico('getPerguntas',  questPerguntas.getPerguntas);
+declaraServico('addPergunta',  questPerguntas.addPergunta);
+declaraServico('updatePergunta',  questPerguntas.updatePergunta);
+declaraServico('updateStatusPergunta',  questPerguntas.updateStatusPergunta);
+declaraServico('deletePergunta',  questPerguntas.deletePergunta);
+declaraServico('updateStatusPergunta',  questPerguntas.updateStatusPergunta);
+declaraServico('updateMultiEscolhaPergunta',  questPerguntas.updateMultiEscolhaPergunta);
+declaraServico('getPerguntaById',  questPerguntas.getPerguntaById);
+declaraServico('getAlternativasByIdPerguntas',  questPerguntas.getAlternativasByIdPerguntas);
+// pausa
+declaraServico('getPausas', pausa.getPausas);
+declaraServico('crudPausa', pausa.crudPausa);
 
 
 
@@ -114,12 +162,10 @@ console.log(`Servidor iniciado na em http://localhost:${nodeStart.port}`)
 
 
 function declaraServico(nomeServico, funcao) {
-  
   app.get(`/${nomeServico}`, (req, res) => {
     funcao(req)
       .then(linhas => {
         headerResponse(res)
-        //console.log(`Serviço: ${nomeServico}; Resultado: ` , linhas)
         res.status(200).send(linhas)
       })
       .catch(error => {
@@ -133,11 +179,9 @@ function declaraServico(nomeServico, funcao) {
 
 function declaraServicoPost(nomeServico, funcao) {
   app.post(`/${nomeServico}`, (req, res) => {
-    console.log(req.query)
     funcao(req)
       .then(linhas => {
         headerResponse(res)
-        //console.log(`Serviço: ${nomeServico}; Resultado: ` , linhas)
         res.status(200).send(linhas)
       })
       .catch(error => {

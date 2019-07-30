@@ -1,3 +1,5 @@
+import { PausaDoUsuarioComponent } from './pausa/pausa-do-usuario/pausa-do-usuario.component';
+import { PausaComponent } from './pausa/pausa.component';
 import { UsuariosCampanhaComponent } from './crud-campanha/usuarios-campanha/usuarios-campanha.component';
 import { CrudCampanhaComponent } from './crud-campanha/crud-campanha.component';
 import { UsuarioCampanhasComponent } from './usuario/usuario-campanhas/usuario-campanhas.component';
@@ -38,6 +40,11 @@ import { TrocarSenhaComponent } from './usuario/trocar-senha/trocar-senha.compon
 import { DetalheEventoComponent } from './evento/detalhe-evento/detalhe-evento.component';
 import { ListarUsuariosComponent } from './usuario/listar-usuarios/listar-usuarios.component';
 import { UsuarioPermissoesComponent } from './usuario/usuario-permissoes/usuario-permissoes.component';
+import { QuestionarioComponent } from './questionario/questionario.component';
+import { QuestionarioEditComponent } from './questionario/questionario-edit/questionario-edit.component';
+import { PerguntaEditComponent } from './questionario/components/pergunta/pergunta-edit/pergunta-edit.component';
+import { AlternativaEditComponent } from './questionario/components/alternativa/alternativa-edit/alternativa-edit.component';
+import { NetworkingComponent } from './cadastro-pessoa/networking/networking.component';
 
 
 
@@ -183,6 +190,26 @@ const routes: Routes = [
     canActivate: [AuthGuard]
   },
   {
+    path: 'questionario',
+    component: QuestionarioComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'questionario/:id',
+    component: QuestionarioEditComponent,
+    // canActivate: [AuthGuard]
+  },
+  {
+    path: 'questionario/:id/pergunta/:id',
+    component: PerguntaEditComponent,
+    // canActivate: [AuthGuard]
+  },
+  {
+    path: 'questionario/:id/pergunta/:id/alternativa/:id',
+    component: AlternativaEditComponent,
+    // canActivate: [AuthGuard]
+  },
+  {
     path: 'listarUsuarios',
     component: ListarUsuariosComponent,
     canActivate: [AuthGuard]
@@ -210,6 +237,21 @@ const routes: Routes = [
   {
     path: 'usuariosCampanha',
     component: UsuariosCampanhaComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'pesssoasNetworking',
+    component: NetworkingComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'pausa',
+    component: PausaComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'pausaDoUsuario/:id',
+    component: PausaDoUsuarioComponent,
     canActivate: [AuthGuard]
   },
   {

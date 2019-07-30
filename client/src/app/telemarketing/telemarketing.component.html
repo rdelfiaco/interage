@@ -1,113 +1,153 @@
-<div class="h5 text-center">Campanha de Vendas Internas</div>
-<div class="row">
-  <br>
-  <div class="col-md-5">
-    <div class="h6 text-left">Total de ligações realizadas: {{metaPessoa.ligacoes_realizadas | number}}</div>
+<div class="card card-cascade narrower">
+  <!-- <div
+      class="view view-cascade gradient-card-header blue-gradient narrower py-1 mx-2  d-flex justify-content-center align-items-center">
+    </div> -->
+  <div
+    class="view view-cascade gradient-card-header blue-gradient narrower py-2 mx-4 mb-3 d-flex justify-content-center align-items-center">
+    <div>
+      <button type="button" mdbBtn color="white" outline="true" rounded="true" size="sm" class="px-2" mdbWavesEffect>
+        <mdb-icon fas fas icon="info" class="mt-0"></mdb-icon>
+      </button>
+    </div>
+    <h4 class="white-text mx-3 mt-2 font-weight-bold text-uppercase">Campanha de Vendas Internas</h4>
   </div>
-  <div class="col-md-6">
-    <div class="h6 text-left">Meta diária: {{metaPessoa.meta | number}}</div>
-  </div>
-</div>
-
-<br>
-<div class="row">
-  <div class="col-md-6">
-    <mdb-select (selected)="getSelectedValue($event)" [disabled]="campanhaIniciada" [options]="campanhas | async"
-      [multiple]="false" placeholder="Escolha sua campanha"></mdb-select>
-    <label>Campanha</label>
-  </div>
-
-  <div *ngIf="!campanhaIniciada" class="col-md-6">
-    <a *ngIf="campanhaSelecionada" class="btn btn-success btn-rounded" (click)="iniciarCampanha()" ripple-radius>Iniciar</a>
-    <a *ngIf="!campanhaSelecionada" class="btn btn-elegant btn-rounded" disabled ripple-radius>Iniciar</a>
-  </div>
-
-  <div *ngIf="campanhaIniciada" class="col-md-6">
-    <a *ngIf="campanhaSelecionada" class="btn btn-elegant btn-rounded" disabled ripple-radius>Iniciar</a>
-    <a *ngIf="campanhaSelecionada" class="btn btn-danger btn-rounded" (click)="pararCampanha()" ripple-radius>Parar</a>
-  </div>
-</div>
-
-<br />
-<br />
-<div class="row" *ngIf="campanhaIniciada">
-  <button type="button" mdbBtn color="primary" class="relative waves-light" (click)="solicitarLigacao(); basicModal.show();"
-    mdbWavesEffect> Próximo cliente</button>
-  <div mdbModal #basicModal="mdbModal" [config]="{backdrop: true, ignoreBackdropClick: true}" class="modal fade right"
-    role="dialog" aria-labelledby="myBasicModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-fluid" role="document">
-      <div class="modal-content">
-        <div *ngIf="carregouPessoa" class="modal-header">
-          <h4 class="modal-title w-100" id="myModalLabel">Vendas Internas -
-            {{pessoaObject.principal.nome}}</h4>
-        </div>
-        <div *ngIf="formAberto" class="modal-body" style="overflow: auto; height: 80vh;">
-          <div *ngIf="eventoObject">
-            <div class="row">
-              <div class="col-md-5">
-                <app-telemarketing-questionario [modal]="basicModal" [evento]="evento" [pessoa]="pessoa"
-                  [motivos_respostas]="motivos_respostas" [predicoes]="predicoes" [objecoes]="objecoes"
-                  [campanhaSelecionada]="campanhaSelecionada.value" (clear)="_limpar()" (atualizaMeta)="atualizaMeta($event)"></app-telemarketing-questionario>
-              </div>
-              <div class="col-md-7">
-                <app-cadastro-pessoa [pessoa]="pessoa" (refresh)="refresh()"></app-cadastro-pessoa>
-              </div>
-            </div>
-          </div>
-          <div *ngIf="!eventoObject" style="height: 100%;">
-            <div *ngIf="!carregouEvento" class="justify-content-center align-items-center flex-column row" style="height: 100%;">
-              <h1>Carregando!</h1>
-              <mdb-spinner spinnerType="big" spinnerColor="blue"></mdb-spinner>
-              <button mdbBtn (click)="basicModal.hide();" type="button" gradient="peach" rounded="true" class="waves-light"
-                mdbWavesEffect>Fechar</button>
-            </div>
-            <div *ngIf="carregouEvento" class="justify-content-center align-items-center flex-column row" style="height: 100%;">
-              <h1>Não há ligações no momento!</h1>
-              <button mdbBtn (click)="basicModal.hide();" type="button" gradient="peach" rounded="true" class="waves-light"
-                mdbWavesEffect>Fechar</button>
-            </div>
-          </div>
-        </div>
+  <div class="px-4 p-3">
+    <div class="row p-3 mt-2 justify-content-center">
+      <div class="col-lg-12">
+        <mdb-select (selected)="getSelectedValue($event)" [disabled]="campanhaIniciada" [options]="campanhas | async"
+          [multiple]="false" placeholder="Escolha sua campanha"></mdb-select>
+        <label>Campanha</label>
       </div>
     </div>
-  </div>
-</div>
-<div class="row">
-  <div class="col-md-5 text-center">
-    <img *ngIf="velocimetro" [src]="velocimetro" />
-  </div>
-</div>
-<div class="row">
-  <div class="col-md-5 text-center">
-    <span *ngIf="velocimetro" class="h6 text-left">Tendência para alcançar a meta das ligações diárias.</span>
-  </div>
-  <div class="col-md-7 text-center">
-    <div class="card card-cascade narrower">
-      <div class="view view-cascade gradient-card-header blue-gradient narrower py-1 mx-2  d-flex justify-content-center align-items-center">
-          <h6 class="white-text font-weight-bold text-uppercase ">Follow</h6>
-      </div>
-      <table class="table">
-          <!--Table head-->
-          <thead>
-            <tr>
-              <th class="th-sm">Campanha</th>
-              <th class="th-sm">Quatidade de ligações</th>
-            </tr>
-          </thead>
-          <!--Table head-->
-
-          <!--Table body-->
-          <tbody>
-            <tr (click)="showEventosCampanha(follow.id_campanha, follow.campanha )" *ngFor="let follow of tableData">
-              <td>{{follow.campanha}}</td>
-              <td>{{follow.qtde}}</td>
-            </tr>
-          </tbody>
-          <!--Table body-->
-        </table>
+    <!-- <div class="row">
+      <div class="col-md-12 text-center">
         
+      </div>
+    </div> -->
+    <div class="row text-center align-items-end">
+      <div class="col-lg-3">
+        <div class="md-form">
+          <div class="h4">Total de ligações realizadas: {{metaPessoa.ligacoes_realizadas | number}}</div>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <div class="md-form mt-0 mb-3 d-flex flex-column align-items-center">
+          <img *ngIf="velocimetro" [src]="velocimetro" />
+          <span *ngIf="velocimetro" class="h4">Tendência para alcançar a meta das ligações diárias.</span>
+        </div>
+      </div>
+      <div class="col-lg-3">
+        <div class="md-form">
+          <div class="h4">Meta diária: {{metaPessoa.meta | number}}</div>
+        </div>
+      </div>
     </div>
-    <br>
-    <br>
+    <div class="row mt-5">
+      <div class="col-lg-12 text-center">
+        <div class="card card-cascade narrower">
+          <div
+            class="view view-cascade gradient-card-header blue-gradient narrower py-1 mx-2  d-flex justify-content-center align-items-center">
+            <h6 class="white-text font-weight-bold text-uppercase mt-2">Follow</h6>
+          </div>
+          <table class="table">
+            <!--Table head-->
+            <thead>
+              <tr>
+                <th class="th-sm">Campanha</th>
+                <th class="th-sm">Quatidade de ligações</th>
+              </tr>
+            </thead>
+            <!--Table head-->
+
+            <!--Table body-->
+            <tbody>
+              <tr (click)="showEventosCampanha(follow.id_campanha, follow.campanha )" *ngFor="let follow of tableData">
+                <td>{{follow.campanha}}</td>
+                <td>{{follow.qtde}}</td>
+              </tr>
+            </tbody>
+            <!--Table body-->
+          </table>
+
+        </div>
+        <br>
+        <br>
+      </div>
+    </div>
+    <div class="row justify-content-end">
+      <div class="md-form">
+        <div *ngIf="!campanhaIniciada" class="col-lg-2">
+          <a *ngIf="campanhaSelecionada" class="btn btn-success" (click)="iniciarCampanha()" ripple-radius>Iniciar</a>
+          <a *ngIf="!campanhaSelecionada" class="btn btn-elegant" disabled ripple-radius>Iniciar</a>
+        </div>
+      </div>
+      <div class="md-form">
+        <div *ngIf="campanhaIniciada" class="col-lg-12">
+          <a *ngIf="campanhaSelecionada" class="btn btn-danger" (click)="pararCampanha()" ripple-radius>Parar</a>
+          <a *ngIf="campanhaSelecionada" class="btn btn-elegant" disabled ripple-radius>Iniciar</a>
+          <button type="button" mdbBtn color="primary" class="relative waves-light"
+            (click)="solicitarLigacao(); basicModal.show();" mdbWavesEffect> Próximo cliente</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div mdbModal #basicModal="mdbModal" [config]="{backdrop: true, ignoreBackdropClick: true}" class="modal fade right"
+  role="dialog" aria-labelledby="myBasicModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-fluid" role="document">
+    <div *ngIf="carregouPessoa" class="modal-header light-blue darken-3 white-text">
+      <h4 class="modal-title w-100" id="myModalLabel">Vendas Internas -
+        {{pessoaObject.principal.nome}}</h4>
+      <button type="button" class="close pull-right" aria-label="Close" (click)="basicModal.hide()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div *ngIf="!carregouPessoa" class="modal-header light-blue darken-3 white-text">
+      <h4 class="modal-title w-100" id="myModalLabel">Vendas Internas</h4>
+      <button type="button" class="close pull-right" aria-label="Close" (click)="basicModal.hide()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-content">
+      <div *ngIf="formAberto" class="modal-body" style="overflow: auto; height: 80vh;">
+        <div *ngIf="eventoObject">
+          <div class="row">
+            <div class="col-md-5">
+              <app-telemarketing-questionario [modal]="basicModal" [evento]="evento" [pessoa]="pessoa"
+                [motivos_respostas]="motivos_respostas" [predicoes]="predicoes" [objecoes]="objecoes"
+                [campanhaSelecionada]="campanhaSelecionada.value" (clear)="_limpar()"
+                (atualizaMeta)="atualizaMeta($event)"></app-telemarketing-questionario>
+            </div>
+            <div class="col-md-7">
+              <app-cadastro-pessoa [pessoa]="pessoa" (refresh)="refresh()"></app-cadastro-pessoa>
+            </div>
+          </div>
+        </div>
+        <div *ngIf="!eventoObject" style="height: 100%;">
+          <div *ngIf="!carregouEvento" class="justify-content-center align-items-center flex-column row"
+            style="height: 100%;">
+            <h1>Carregando!</h1>
+            <mdb-spinner spinnerType="big" spinnerColor="blue"></mdb-spinner>
+            <div class="row">
+              <div class="col-lg-12 text-right">
+                <button mdbBtn (click)="basicModal.hide();" type="button" color="light"
+                  class="waves-light" mdbWavesEffect>Fechar</button>
+              </div>
+            </div>
+          </div>
+          <div *ngIf="carregouEvento" class="justify-content-center align-items-center flex-column row"
+            style="height: 100%;">
+            <h1>Não há ligações no momento!</h1>
+            <div class="row mt-2">
+              <div class="col-lg-1">
+                <button mdbBtn (click)="basicModal.hide();" type="button" color="light"
+                  class="waves-light" mdbWavesEffect>Fechar</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>

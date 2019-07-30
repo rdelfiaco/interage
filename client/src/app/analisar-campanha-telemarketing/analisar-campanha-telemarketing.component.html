@@ -1,21 +1,26 @@
 <div class="card card-cascade narrower">
-
-    <!--Card image-->
-    <div class="view view-cascade gradient-card-header blue-gradient narrower py-1 mx-0  d-flex justify-content-center align-items-center">
-  
-      <a class="white-text font-weight-bold text-uppercase ">Camapnhas de telemarketing</a>
+  <div
+    class="view view-cascade gradient-card-header blue-gradient narrower py-2 mx-4 mb-3 d-flex justify-content-center align-items-center">
+    <div>
+      <button type="button" mdbBtn color="white" outline="true" rounded="true" size="sm" class="px-2" mdbWavesEffect>
+        <mdb-icon fas fas icon="info" class="mt-0"></mdb-icon>
+      </button>
     </div>
-    <br>
-    <a style="margin-left: 10px" >Para visualizar analiticamente click no nome da campanha </a>
-
-    <!--Table-->
+    <h4 class="white-text mx-3 mt-2 font-weight-bold text-uppercase">Campanhas de Telemarketing</h4>
+  </div>
+  <div class="px-4">
+    <div class="row mt-2">
+      <div class="col-lg-12 text-center">
+        <div class="md-form">
+          <h4 style="font-weight: bold;color: dimgray;">Para visualizar analiticamente clique no nome da campanha </h4>
+        </div>
+      </div>
+    </div>
     <table class="table table-hover table-responsive-md mb-0">
-
-      <!--Table head-->
       <thead>
-        <tr> 
+        <tr>
           <th class="status">Campanha
-              <mdb-icon icon="sort" (click)="sortBy('nome')"></mdb-icon>
+            <mdb-icon icon="sort" (click)="sortBy('nome')"></mdb-icon>
           </th>
           <th class="th-sm">Clientes inseridos
             <mdb-icon icon="sort" (click)="sortBy('inseridos')"></mdb-icon>
@@ -29,7 +34,7 @@
           <th class="th-sm">Clientes concluidos
             <mdb-icon icon="sort" (click)="sortBy('concluidos')"></mdb-icon>
           </th>
-          <th class="th-sm">Propostas solicitadas 
+          <th class="th-sm">Propostas solicitadas
             <mdb-icon icon="sort" (click)="sortBy('propostas_solicitadas')"></mdb-icon>
           </th>
           <th class="th-sm">Ligações realizadas
@@ -41,29 +46,33 @@
           <th class="th-sm">Dt primeira ligação
             <mdb-icon icon="sort" (click)="sortBy('dt_primeira_ligacao')"></mdb-icon>
           </th>
-          <th class="th-sm">Dt última ligação 
+          <th class="th-sm">Dt última ligação
             <mdb-icon icon="sort" (click)="sortBy('dt_ultima_ligacao')"></mdb-icon>
           </th>
         </tr>
       </thead>
       <!--Table head-->
-    
+
       <tbody>
-          <tr #list *ngFor="let evento of tableData; let i = index"  >
-            <td *ngIf="i+1 >= firstVisibleIndex && i+1 <= lastVisibleIndex" (click)="abreDetalheCampanha(evento)" class="font-weight-bold" >{{evento.nome}}</td>
-            <td *ngIf="i+1 >= firstVisibleIndex && i+1 <= lastVisibleIndex" class="text-center" >{{evento.inseridos}}</td>
-            <td *ngIf="i+1 >= firstVisibleIndex && i+1 <= lastVisibleIndex" class="text-center" >{{evento.pendentes}}</td>
-            <td *ngIf="i+1 >= firstVisibleIndex && i+1 <= lastVisibleIndex" class="text-center" >{{evento.contatando}}</td>
-            <td *ngIf="i+1 >= firstVisibleIndex && i+1 <= lastVisibleIndex" class="text-center" >{{evento.concluidos}}</td>
-            <td *ngIf="i+1 >= firstVisibleIndex && i+1 <= lastVisibleIndex" class="text-center" >{{evento.propostas_solicitadas}}</td>
-            <td *ngIf="i+1 >= firstVisibleIndex && i+1 <= lastVisibleIndex" class="text-center" >{{evento.ligacoes_realizadas}}</td>
-            <td *ngIf="i+1 >= firstVisibleIndex && i+1 <= lastVisibleIndex"  class="text-center" >{{evento.media_ligacoes_por_cliente_concluidos}}</td>
-            <td *ngIf="i+1 >= firstVisibleIndex && i+1 <= lastVisibleIndex" class="text-center" >{{evento.dt_primeira_ligacao
+        <tr style="cursor:pointer;" #list *ngFor="let evento of tableData; let i = index">
+          <td *ngIf="i+1 >= firstVisibleIndex && i+1 <= lastVisibleIndex" (click)="abreDetalheCampanha(evento)"
+            class="font-weight-bold">{{evento.nome}}</td>
+          <td *ngIf="i+1 >= firstVisibleIndex && i+1 <= lastVisibleIndex" class="text-center">{{evento.inseridos}}</td>
+          <td *ngIf="i+1 >= firstVisibleIndex && i+1 <= lastVisibleIndex" class="text-center">{{evento.pendentes}}</td>
+          <td *ngIf="i+1 >= firstVisibleIndex && i+1 <= lastVisibleIndex" class="text-center">{{evento.contatando}}</td>
+          <td *ngIf="i+1 >= firstVisibleIndex && i+1 <= lastVisibleIndex" class="text-center">{{evento.concluidos}}</td>
+          <td *ngIf="i+1 >= firstVisibleIndex && i+1 <= lastVisibleIndex" class="text-center">
+            {{evento.propostas_solicitadas}}</td>
+          <td *ngIf="i+1 >= firstVisibleIndex && i+1 <= lastVisibleIndex" class="text-center">
+            {{evento.ligacoes_realizadas}}</td>
+          <td *ngIf="i+1 >= firstVisibleIndex && i+1 <= lastVisibleIndex" class="text-center">
+            {{evento.media_ligacoes_por_cliente_concluidos}}</td>
+          <td *ngIf="i+1 >= firstVisibleIndex && i+1 <= lastVisibleIndex" class="text-center">{{evento.dt_primeira_ligacao
               | date:'dd/MM/yyyy' }}</td>
-            <td *ngIf="i+1 >= firstVisibleIndex && i+1 <= lastVisibleIndex" class="text-center" >{{evento.dt_ultima_ligacao
+          <td *ngIf="i+1 >= firstVisibleIndex && i+1 <= lastVisibleIndex" class="text-center">{{evento.dt_ultima_ligacao
               | date:'dd/MM/yyyy' }}</td>
-          </tr>
-        </tbody>
+        </tr>
+      </tbody>
 
     </table>
 
@@ -71,16 +80,17 @@
 
     <!--Bottom Table UI-->
     <div class="d-flex justify-content-center">
-  
+
       <!--Pagination -->
       <nav class="my-4 pt-2">
         <ul class="pagination pagination-circle pg-purple mb-0">
-  
+
           <!--First-->
-          <li class="page-item clearfix d-none d-md-block" (click)="firstPage()" [ngClass]="{disabled: activePage == firstPageNumber}">
+          <li class="page-item clearfix d-none d-md-block" (click)="firstPage()"
+            [ngClass]="{disabled: activePage == firstPageNumber}">
             <a class="page-link">First</a>
           </li>
-  
+
           <!--Arrow left-->
           <li class="page-item" (click)="previousPage()" [ngClass]="{disabled: activePage == firstPageNumber}">
             <a class="page-link" aria-label="Previous">
@@ -88,12 +98,12 @@
               <span class="sr-only">Previous</span>
             </a>
           </li>
-  
+
           <!--Numbers-->
           <li *ngFor="let page of paginators; let i = index" class="page-item" [ngClass]="{active: i+1 == activePage}">
             <a class="page-link waves-light" (click)="changePage($event)" mdbWavesEffect>{{page}}</a>
           </li>
-  
+
           <!--Arrow right-->
           <li class="page-item" (click)="nextPage()" [ngClass]="{disabled: activePage == lastPageNumber}">
             <a class="page-link" aria-label="Next">
@@ -101,23 +111,17 @@
               <span class="sr-only">Next</span>
             </a>
           </li>
-  
+
           <!--First-->
-          <li class="page-item clearfix d-none d-md-block" (click)="lastPage()" [ngClass]="{disabled: activePage == lastPageNumber}">
+          <li class="page-item clearfix d-none d-md-block" (click)="lastPage()"
+            [ngClass]="{disabled: activePage == lastPageNumber}">
             <a class="page-link">Last</a>
           </li>
-  
+
         </ul>
       </nav>
-      <!--/Pagination -->
-  
     </div>
-    <!--Bottom Table UI-->
-  
-
-
-
-
+  </div>
 </div>
 
 
@@ -133,7 +137,7 @@
 
 
 
-    <!-- Card Filtros -->
+<!-- Card Filtros -->
 <!-- 
       <div class="row ">
         <div class="col-12 col-sm-12 " style="z-index: 0">

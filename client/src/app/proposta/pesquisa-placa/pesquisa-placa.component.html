@@ -4,21 +4,22 @@
   </iframe> -->
 
 <form [formGroup]="formulario">
-
-
-  <div class="md-form  col-md-4">
-    <input mdbInputDirective type="text" formControlName="placa" id="placa" [mdbValidate]="false"
-    class="form-control" (keyup)="consultarPlaca($event)">
-    <label for="placa" class="">Digite o número da Placa e tecle ENTER para consultar</label>
-  </div>
-  <br>
-  <br>
   <div class="row">
-    <div class="md-form col">
-      <textarea type="text" id="placaConsultada" rows="20" formControlName="placaConsultada" class="md-textarea form-control"
-        mdbInputDirective></textarea>
-      <label for="placaConsultada">Resultado da consulta</label>
+    <div class="col-lg-12">
+      <div class="md-form">
+        <input mdbInputDirective type="text" formControlName="placa" id="placa" [mdbValidate]="false"
+          class="form-control" (keyup)="consultarPlaca($event)">
+        <label for="placa" class="">Digite o número da Placa e tecle ENTER para consultar</label>
+      </div>
     </div>
   </div>
-
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="md-form col">
+        <textarea type="text" id="placaConsultada" rows="20" formControlName="placaConsultada"
+          class="md-textarea form-control" mdbInputDirective></textarea>
+        <label for="placaConsultada">Resultado da consulta</label>
+      </div>
+    </div>
+  </div>
 </form>

@@ -48,8 +48,12 @@ export class AppComponent {
   }
 
 
-  openPage(page: string) {
-    this.router.navigate([page]);
+  openPage(page: string, event: any) {
+    event.preventDefault();
+    event.stopPropagation();
+    setTimeout(_ => {
+      this.router.navigate([page]);
+    }, 100);
   }
 
   abrirCadastroPessoa() {
@@ -57,7 +61,6 @@ export class AppComponent {
   }
 
   temPermissao(recurso) {
-
     return this.checkPermissaoRecurso.usuarioLocadoAcessaRecurso(recurso)
 
   }

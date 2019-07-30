@@ -1,0 +1,130 @@
+<mdb-card cascade="true" narrower="true">
+    <!--Card image-->
+    <div
+      class="view view-cascade gradient-card-header blue-gradient narrower py-2 mx-4 mb-3 d-flex justify-content-between align-items-center">
+      <div>
+        <button type="button" mdbBtn color="white" outline="true" rounded="true" size="sm" class="px-2" mdbWavesEffect>
+          <mdb-icon fas fas icon="info" class="mt-0"></mdb-icon>
+        </button>
+      </div>
+      <a href="" class="white-text mx-3">Pausa</a>
+      <div>
+        <button mdbBtn color="white" outline="true" rounded="true" size="sm" type="button"
+          (click)=" adicionar(); formulario.show()" class="px-2" mdbWavesEffect>
+          Adicionar Pausa
+        </button>
+      </div>
+    </div>
+    <!--/Card image-->
+  
+    <div class="px-4">
+  
+      <div class="table-wrapper">
+        <!--Table-->
+        <table class="mb-0 table" mdbTable hover="true">
+  
+          <!--Table head-->
+          <thead>
+            <tr>
+              <th class="th-lg" >
+                <a (click)="sortBy('id')">ID
+                  <mdb-icon fas icon="sort" class="ml-1"></mdb-icon>
+                </a>
+              </th>
+              <th class="th-lg" >
+                <a (click)="sortBy('nome')">Nome
+                  <mdb-icon fas icon="sort" class="ml-1"></mdb-icon>
+                </a>
+              </th>
+              <th class="th-lg" >
+                  <a (click)="sortBy('tempo')">Tempo da pausa 
+                    <mdb-icon fas icon="sort" class="ml-1"></mdb-icon>
+                  </a>
+                </th>
+              <th class="th-lg" >
+                <a (click)="sortBy('status')">Ativo
+                  <mdb-icon fas icon="sort" class="ml-1"></mdb-icon>
+                </a>
+              </th>
+              <th class="th-lg text-center" >Ações
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let row of tableData;let i = index">
+              <td>{{row.id}}</td>
+              <td>{{row.nome}}</td>
+              <td>{{row.tempo}}</td>
+              <td >
+                <mdb-checkbox  [checked]="row.status" [disabled]="true"> </mdb-checkbox>
+              </td>
+              <td class="text-center">
+                <div>
+                  <button title="Editar" (click)="editar(row.id); formulario.show()" type="button" mdbBtn color="blue" outline="true"
+                    rounded="true" size="sm" class="px-2" mdbWavesEffect>
+                    <mdb-icon fas icon="pencil" class="mt-0"></mdb-icon>
+                  </button>
+                  <button title="Excluir" type="button" mdbBtn color="red" (click)="excluir(row.id); formulario.show()" outline="true"
+                    rounded="true" size="sm" class="px-2" mdbWavesEffect>
+                    <mdb-icon fas icon="trash" class="mt-0"></mdb-icon>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+</mdb-card>
+  
+
+<div mdbModal #formulario="mdbModal" class="modal fade top"  tabindex="-1"  role="dialog" 
+        aria-labelledby="myBasicModalLabel" aria-hidden="true" >
+  <div class="modal-dialog  modal-lg" role="document">
+          <div class="modal-header light-blue darken-3 white-text">
+              <button type="button" style="cursor:pointer;" class="close" data-dismiss="modal" aria-label="Close"
+                (click)="getPausas(); formulario.hide()">
+                <span aria-hidden="true" style="color:white; cursor:pointer;">&times;</span>
+              </button>
+              
+              <h4 class="modal-title">{{formularioTitulo}}</h4>
+              
+          </div>
+          <div class="modal-content">
+          <div class="modal-body">
+            <form [formGroup]="formularioForm">
+              <div class="row">
+                <div class="md-form col" style="margin-left: 20px">
+                    <input  mdbInputDirective formControlName="id" 
+                      type="text" id="id" class="form-control">
+                    <label for="id">Id</label>
+                </div>
+                <div class="md-form col-7">
+                  <input  mdbInputDirective formControlName="nome" 
+                    type="text" id="nome" class="form-control">
+                  <label for="nome">Nome</label>
+                </div>
+                <div class="md-form col-7" style="margin-left: 20px">
+                    <input  mdbInputDirective formControlName="tempo" 
+                      type="text" id="tempo" class="form-control">
+                    <label for="tempo">Tempo</label>
+                  </div>
+                <div class="md-form col">
+                  <mdb-checkbox  formControlName="status"  >Ativo</mdb-checkbox>
+                </div>
+              </div>
+            </form>
+          </div>
+        <div class="modal-footer">
+          <div class="col-lg-12 text-right">
+            <div class="md-form">
+            <button type="button" mdbBtn color="light" mdbWavesEffect (click)="formulario.hide()">Voltar</button>
+            <button type="button" mdbBtn color="dark-green" mdbWavesEffect
+              (click)="salvar(); formulario.hide()">{{titleBntEnviar}}</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+  

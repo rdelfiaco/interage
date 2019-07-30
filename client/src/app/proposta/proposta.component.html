@@ -1,54 +1,58 @@
-<!-- Nav tabs -->
-<mdb-tabset #propostaTabs [buttonClass]="'classic-tabs tabs-cyan'" [contentClass]="'card'" class="classic-tabs tabHead">
-  <!--Panel 1-->
-  <mdb-tab heading="Pesquisar placa">
-    <div class="row">
-      <div class="col-12">
-        <br>
-        <p>
-          <app-pesquisa-placa></app-pesquisa-placa>
-        </p>
-      </div>
+<div class="card card-cascade narrower">
+  <div
+    class="view view-cascade gradient-card-header blue-gradient narrower py-2 mx-4 mb-3 d-flex justify-content-center align-items-center">
+    <div>
+      <button type="button" mdbBtn color="white" outline="true" rounded="true" size="sm" class="px-2" mdbWavesEffect>
+        <mdb-icon fas fas icon="info" class="mt-0"></mdb-icon>
+      </button>
     </div>
-  </mdb-tab>
-  <!--Panel 2-->
-  <mdb-tab  heading="Pesquisar Tabela Fipe">
-    <div class="row">
-      <div class="col-12">
-        <br>
-        <app-pesquisa-tabela-fipe></app-pesquisa-tabela-fipe>
-      </div>
-    </div>
-  </mdb-tab>
-  <!--Panel 3-->
-  <mdb-tab heading="Ler Tabela Fipe">
-    <div class="row">
-      <div class="col-12">
-        <br>
-        <!-- <app-ler-tabela-fipe  (refresh)="refreshDad($event)" ></app-ler-tabela-fipe> -->
-        <app-ler-tabela-fipe></app-ler-tabela-fipe>
-      </div>
-    </div>
-  </mdb-tab>
-  <!--Panel 4-->
-  <mdb-tab heading="Elaborar Proposta">
-    <div class="row">
-      <div class="col-12">
-        <br>
-        <!-- <app-elabora-proposta [refreshtabelaFipe]="refreshtabelaFipe" ></app-elabora-proposta> -->
-        <app-elabora-proposta [pessoa]="pessoa" [returnProp]="returnProp" (returnProposta)="returnPropostaPai($event)"></app-elabora-proposta>
-      </div>
-    </div>
-  </mdb-tab>
-  <!-- Panel 5 -->
-  <mdb-tab heading="Propostas elaboradas">
-    <div class="row">
-      <div class="col-12">
-        <br>
-        <p>
-          <app-propostas-enviadas></app-propostas-enviadas>
-        </p>
-      </div>
-    </div>
-  </mdb-tab>
-</mdb-tabset>
+    <h4 class="white-text mx-3 mt-2 font-weight-bold text-uppercase">Proposta</h4>
+  </div>
+  <div class="px-0">
+    <mdb-tabset #propostaTabs [buttonClass]="'classic-tabs tabs-cyan'" class="classic-tabs tabHead">
+      <!--Panel 1-->
+      <mdb-tab heading="Pesquisar placa">
+        <div class="row">
+          <div class="col-12 mt-2">
+            <app-pesquisa-placa></app-pesquisa-placa>
+          </div>
+        </div>
+      </mdb-tab>
+      <!--Panel 2-->
+      <mdb-tab heading="Pesquisar Tabela Fipe">
+        <div class="row">
+          <div class="col-12 mt-2">
+            <app-pesquisa-tabela-fipe></app-pesquisa-tabela-fipe>
+          </div>
+        </div>
+      </mdb-tab>
+      <!--Panel 3-->
+      <mdb-tab heading="Ler Tabela Fipe">
+        <div class="row">
+          <div class="col-12 mt-2">
+            <!-- <app-ler-tabela-fipe  (refresh)="refreshDad($event)" ></app-ler-tabela-fipe> -->
+            <app-ler-tabela-fipe></app-ler-tabela-fipe>
+          </div>
+        </div>
+      </mdb-tab>
+      <!--Panel 4-->
+      <mdb-tab heading="Elaborar Proposta">
+        <div class="row">
+          <div class="col-12 mt-3">
+            <!-- <app-elabora-proposta [refreshtabelaFipe]="refreshtabelaFipe" ></app-elabora-proposta> -->
+            <app-elabora-proposta [pessoa]="pessoa" [returnProp]="returnProp"
+              (returnProposta)="returnPropostaPai($event)"></app-elabora-proposta>
+          </div>
+        </div>
+      </mdb-tab>
+      <!-- Panel 5 -->
+      <mdb-tab heading="Propostas elaboradas">
+        <div class="row">
+          <div class="col-12 mt-3">
+            <app-propostas-enviadas></app-propostas-enviadas>
+          </div>
+        </div>
+      </mdb-tab>
+    </mdb-tabset>
+  </div>
+</div>

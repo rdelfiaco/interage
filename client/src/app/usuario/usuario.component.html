@@ -1,32 +1,36 @@
-<!-- Nav tabs -->
-<mdb-tabset #abasTabs [buttonClass]="'classic-tabs tabs-cyan'" [contentClass]="'card'" class="classic-tabs">
-  <!--Panel 1-->
-  <mdb-tab heading="Usuários" >
-    <div class="row">
-      <div class="col-12">
-        <br>
-        <p>
-          <app-listar-usuarios ></app-listar-usuarios>
-        </p>
-      </div>
+<div class="card card-cascade narrower">
+  <div
+    class="view view-cascade gradient-card-header blue-gradient narrower py-2 mx-4 mb-3 d-flex justify-content-center align-items-center">
+    <div>
+      <button type="button" mdbBtn color="white" outline="true" rounded="true" size="sm" class="px-2" mdbWavesEffect>
+        <mdb-icon fas fas icon="info" class="mt-0"></mdb-icon>
+      </button>
     </div>
-  </mdb-tab>
-  <!--Panel 2-->
-  <mdb-tab heading="Campanhas" [disabled]="abaAtual != 2" >
-    <div class="row">
-      <div class="col-12">
-        <br>
-        <app-usuario-campanhas  ></app-usuario-campanhas>
-      </div>
-    </div>
-  </mdb-tab>
-  <!--Panel 3-->
-  <mdb-tab heading="Permissões" [disabled]="abaAtual != 3" >
-    <div class="row">
-      <div class="col-12">
-        <br>
-        <app-usuario-permissoes  ></app-usuario-permissoes>
-      </div>
-    </div>
-  </mdb-tab>
-</mdb-tabset>
+    <h4 class="white-text mx-3 mt-2 font-weight-bold text-uppercase">Usuários</h4>
+  </div>
+  <div class="px-0">
+    <mdb-tabset #abasTabs [buttonClass]="'classic-tabs tabs-cyan'" class="classic-tabs">
+      <mdb-tab heading="Usuários">
+        <div class="row">
+          <div class="col-lg-12">
+            <app-listar-usuarios></app-listar-usuarios>
+          </div>
+        </div>
+      </mdb-tab>
+      <mdb-tab heading="Campanhas" [disabled]="abaAtual != 2">
+        <div class="row">
+          <div class="col-lg-12">
+            <app-usuario-campanhas></app-usuario-campanhas>
+          </div>
+        </div>
+      </mdb-tab>
+      <mdb-tab heading="Permissões" [disabled]="abaAtual != 3">
+        <div class="row">
+          <div class="col-lg-12">
+            <app-usuario-permissoes></app-usuario-permissoes>
+          </div>
+        </div>
+      </mdb-tab>
+    </mdb-tabset>
+  </div>
+</div>

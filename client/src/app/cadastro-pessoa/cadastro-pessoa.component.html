@@ -1,43 +1,71 @@
-<!-- Nav tabs -->
-<mdb-tabset [buttonClass]="'classic-tabs tabs-cyan'" [contentClass]="'card'" class="classic-tabs">
-  <!--Panel 1-->
-  <mdb-tab heading="Principal">
-    <div class="row">
-      <div class="col-12">
-        <br>
-        <p>
-          <app-principal [pessoa]="pessoa | async" (refreshPessoaAdd)="refreshPessoaAdd($event)"></app-principal>
-        </p>
-      </div>
+<div class="card card-cascade narrower">
+  <div *ngIf="!pessoa"
+    class="view view-cascade gradient-card-header blue-gradient narrower py-2 mx-4 mb-3 d-flex justify-content-center align-items-center">
+    <div>
+      <button type="button" mdbBtn color="white" outline="true" rounded="true" size="sm" class="px-2" mdbWavesEffect>
+        <mdb-icon fas fas icon="info" class="mt-0"></mdb-icon>
+      </button>
     </div>
-  </mdb-tab>
-  <!--Panel 2-->
-  <mdb-tab heading="Telefones" [disabled]="!(pessoa | async)">
-    <div class="row">
-      <div class="col-12">
-        <br>
-        <app-telefones [pessoa]="pessoa" (refresh)="refreshDad()"></app-telefones>
-      </div>
-    </div>
-  </mdb-tab>
-  <!--Panel 3-->
-  <mdb-tab heading="Endereços" [disabled]="!(pessoa | async)">
-    <div class="row">
-      <div class="col-12">
-        <br>
-        <app-enderecos [pessoa]="pessoa" (refresh)="refreshDad()"></app-enderecos>
-      </div>
-    </div>
-  </mdb-tab>
-  <!-- Panel 4 -->
-  <mdb-tab heading="Histórico de Contato" [disabled]="!(pessoa | async)">
-    <div class="row">
-      <div class="col-12">
-        <br>
-        <p>
-          <app-linha-do-tempo [pessoa]="pessoa | async"></app-linha-do-tempo>
-        </p>
-      </div>
-    </div>
-  </mdb-tab>
-</mdb-tabset>
+    <h4 class="white-text mx-3 mt-2 font-weight-bold text-uppercase">Cadastro de pessoas</h4>
+  </div>
+  <div class="px-0">
+    <mdb-tabset [buttonClass]="'classic-tabs tabs-cyan'" class="classic-tabs">
+      <!--Panel 1-->
+      <mdb-tab heading="Principal">
+        <div class="row">
+          <div class="col-12">
+            <app-principal [pessoa]="pessoa | async" (refreshPessoaAdd)="refreshPessoaAdd($event)"></app-principal>
+          </div>
+        </div>
+      </mdb-tab>
+      <!--Panel 2-->
+      <mdb-tab heading="Telefones" [disabled]="!(pessoa | async)">
+        <div class="row">
+          <div class="col-12">
+            <app-telefones [pessoa]="pessoa" (refresh)="refreshDad()"></app-telefones>
+          </div>
+        </div>
+      </mdb-tab>
+      <!--Panel 3-->
+      <mdb-tab heading="Endereços" [disabled]="!(pessoa | async)">
+        <div class="row">
+          <div class="col-12">
+            <app-enderecos [pessoa]="pessoa" (refresh)="refreshDad()"></app-enderecos>
+          </div>
+        </div>
+      </mdb-tab>
+      <!-- Panel 4 -->
+      <mdb-tab heading="Histórico de Contato" [disabled]="!(pessoa | async)">
+        <div class="row">
+          <div class="col-12">
+            <app-linha-do-tempo [pessoa]="pessoa | async"></app-linha-do-tempo>
+          </div>
+        </div>
+      </mdb-tab>
+      <!-- Panel 5 -->
+      <mdb-tab heading="NETWORKING" [disabled]="!(pessoa | async)">
+        <div class="row">
+          <div class="col-12">
+            <app-networking [pessoa]="pessoa" (refresh)="refreshDad()" ></app-networking>
+          </div>
+        </div>
+      </mdb-tab>
+      <!-- Panel 6 -->
+      <mdb-tab heading="MARKETING" [disabled]="!(pessoa | async)">
+        <div class="row">
+          <div class="col-12">
+            <app-linha-do-tempo [pessoa]="pessoa | async"></app-linha-do-tempo>
+          </div>
+        </div>
+      </mdb-tab>
+      <!-- Panel 7 -->
+      <mdb-tab heading="SERVIÇOS" [disabled]="!(pessoa | async)">
+        <div class="row">
+          <div class="col-12">
+            <app-linha-do-tempo [pessoa]="pessoa | async"></app-linha-do-tempo>
+          </div>
+        </div>
+      </mdb-tab>
+    </mdb-tabset>
+  </div>
+</div>

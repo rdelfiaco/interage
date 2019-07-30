@@ -1,0 +1,164 @@
+<div class="row">
+  <div class="col-lg-6 text-left">
+    <button type="button" mdbBtn color="danger" (click)="apagarQuestionario()" mdbWavesEffect>Apagar</button>
+    <button type="button" mdbBtn color="blue-grey" (click)="perguntaadd.show();" mdbWavesEffect>Adiconar
+      pergunta</button>
+
+  </div>
+  <div class="col-lg-6 text-right">
+    <button type="button" (click)="goBack()" mdbBtn color="light" mdbWavesEffect>Voltar</button>
+    <button type="button" mdbBtn color="dark-green" (click)="updateQuestionario(tableData.id)"
+      mdbWavesEffect>Salvar</button>
+  </div>
+</div>
+<mdb-card cascade="true" narrower="true">
+  <form class="p-4">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="md-form">
+          <input mdbInputDirective formControlName="nome" min="5" type="text" id="nome" class="form-control"
+            [(ngModel)]='tableData.nome' [value]="tableData.nome">
+          <label for="nome">Nome do questionário</label>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-12">
+        <label>Status</label>
+        <mdb-checkbox [checked]="tableData.status" (change)="updateStatusQuestionario(tableData.id, tableData.status)">
+          Ativo</mdb-checkbox>
+      </div>
+    </div>
+  </form>
+  <div class="row p-4">
+    <div class="col-lg-12">
+      <label>Perguntas</label>
+    </div>
+  </div>
+  <div class="px-4">
+    <div class="table-wrapper">
+      <table class="mb-0 table" mdbTable hover="true">
+        <thead>
+          <tr>
+            <th class="th-lg" width="50%">
+              <a (click)="sortBy('nome')">Nome
+                <mdb-icon fas icon="sort" class="ml-1"></mdb-icon>
+              </a>
+            </th>
+            <!-- <th class="th-lg text-center" width="20%">
+              <a (click)="sortBy('qtde_perguntas')">Qtde Alternativas
+                <mdb-icon fas icon="sort" class="ml-1"></mdb-icon>
+              </a>
+            </th> -->
+            <th class="th-lg text-center" width="20%">
+              <a (click)="sortBy('sequencia')">Sequência
+                <mdb-icon fas icon="sort" class="ml-1"></mdb-icon>
+              </a>
+            </th>
+            <th class="th-lg text-center" width="20%">
+              <a (click)="sortBy('status')">Ativo
+                <mdb-icon fas icon="sort" class="ml-1"></mdb-icon>
+              </a>
+            </th>
+            <th class="th-lg text-center" width="20%">
+              <a (click)="sortBy('status')">Multipla Escolha
+                <mdb-icon fas icon="sort" class="ml-1"></mdb-icon>
+              </a>
+            </th>
+            <th class="th-lg text-center" width="10%">Ações
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let row of tableData.perguntas;let i = index">
+            <td>{{row.nome}}</td>
+            <!-- <td class="text-center">{{row.qtde_alternativas}}</td> -->
+            <td class="text-center">{{row.sequencia_pergunta}}</td>
+            <td class="text-center">
+              <mdb-checkbox [checked]="row.status" (change)="updateStatusPergunta(row.id, row.status)"></mdb-checkbox>
+            </td>
+            <td class="text-center">
+              <mdb-checkbox [checked]="row.multipla_escolha"
+                (change)="updateMultiEscolhaPergunta(row.id, row.multipla_escolha)"></mdb-checkbox>
+            </td>
+            <td class="text-center">
+              <div>
+                <button type="button" (click)="openPergunta(row.id)" mdbBtn color="blue" outline="true" rounded="true"
+                  size="sm" class="px-2" mdbWavesEffect>
+                  <mdb-icon fas icon="pencil" class="mt-0"></mdb-icon>
+                </button>
+                <button type="button" (click)="apagarPergunta(row.id)" mdbBtn color="red" outline="true" rounded="true"
+                  size="sm" class="px-2" mdbWavesEffect>
+                  <mdb-icon fas icon="trash" class="mt-0"></mdb-icon>
+                </button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</mdb-card>
+
+<div mdbModal #perguntaadd="mdbModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myBasicModalLabel"
+  aria-hidden="true" [config]="{backdrop: true}">
+  <div class="modal-dialog  modal-fluid" role="document">
+    <div class="modal-header light-blue darken-3 white-text">
+      <h4 class="modal-title">Nova Pergunta</h4>
+      <button type="button" style="cursor:pointer;" class="close" data-dismiss="modal" aria-label="Close"
+        (click)="perguntaadd.hide()">
+        <span aria-hidden="true" style="color:white; cursor:pointer;">&times;</span>
+      </button>
+    </div>
+    <div class="modal-content">
+      <form class="p-4">
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="md-form">
+              <input (input)="novaPergunta.nome = $event.target.value" mdbInputDirective formControlName="nome" min="5"
+                type="text" id="nome" class="form-control">
+              <label for="nome">Nome</label>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-8">
+            <div class="md-form">
+              <input (input)="novaPergunta.sequencia = $event.target.value" mdbInputDirective
+                formControlName="sequencia" min="1" type="number" id="sequencia" class="form-control">
+              <label for="sequencia">Sequencia</label>
+            </div>
+          </div>
+          <div class="col-lg-2">
+            <div class="md-form">
+              <mdb-checkbox (change)="novaPergunta.status = $event.checked">
+                Ativo</mdb-checkbox>
+            </div>
+          </div>
+          <div class="col-lg-2">
+            <div class="md-form">
+              <mdb-checkbox (change)="novaPergunta.multipla_escolha = $event.checked" >Multipla Escolha</mdb-checkbox>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-12 text-left">
+            <div class="md-form">
+              <textarea (input)="novaPergunta.descricao = $event.target.value" type="text" id="descricao"
+                class="md-textarea form-control" mdbInputDirective></textarea>
+              <label for="form7">Descrição</label>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-12 text-right">
+            <div class="md-form">
+              <button type="button" mdbBtn color="light" (click)="perguntaadd.hide()" mdbWavesEffect>Voltar</button>
+              <button type="button" mdbBtn color="dark-green" (click)="salvarPergunta()" mdbWavesEffect>Criar</button>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

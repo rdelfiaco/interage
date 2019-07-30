@@ -1,48 +1,59 @@
 <form [formGroup]="eventoForm" class="formQuestionario">
   <div class="row">
-    <div class="md-form col-1" [hidden]="!evento.id">
-      <input mdbInputDirective formControlName="id" type="text" id="id" class="form-control" disabled>
-      <label for="id">ID</label>
+    <div class="col-2" [hidden]="!evento.id">
+      <div class="md-form">
+        <input mdbInputDirective formControlName="id" type="text" id="id" class="form-control" disabled>
+        <label for="id">ID</label>
+      </div>
     </div>
-    <div class="md-form col" [hidden]="!evento.status">
-      <input mdbInputDirective formControlName="status" type="text" id="status" class="form-control" disabled>
-      <label for="status">Status</label>
+    <div class="col-5" [hidden]="!evento.status">
+      <div class="md-form">
+        <input mdbInputDirective formControlName="status" type="text" id="status" class="form-control" disabled>
+        <label for="status">Status</label>
+      </div>
     </div>
-    <div class="md-form col" [hidden]="!evento.motivo">
-      <input mdbInputDirective formControlName="motivo" type="text" id="motivo" class="form-control" disabled>
-      <label for="motivo">Motivo</label>
-    </div>
-  </div>
-
-
-  <div class="row">
-    <div class="md-form col-6" [hidden]="!evento.dt_criou">
-      <input mdbInputDirective formControlName="dt_criou" type="text" id="dt_criou" class="form-control" disabled>
-      <label for="dt_criou">Criado em</label>
-    </div>
-    <div class="md-form col-6" [hidden]="!evento.dt_para_exibir">
-      <input mdbInputDirective formControlName="dt_para_exibir" type="text" id="dt_para_exibir" class="form-control"
-        disabled>
-      <label for="dt_para_exibir">Agendado para</label>
+    <div class="col-5" [hidden]="!evento.motivo">
+      <div class="md-form">
+        <input mdbInputDirective formControlName="motivo" type="text" id="motivo" class="form-control" disabled>
+        <label for="motivo">Motivo</label>
+      </div>
     </div>
   </div>
-
-
   <div class="row">
-    <div class="md-form col-6" [hidden]="!evento.dt_prevista_resolucao">
-      <input mdbInputDirective formControlName="dt_prevista_resolucao" type="text" id="dt_prevista_resolucao" class="form-control"
-        disabled>
-      <label for="dt_prevista_resolucao">Resolver até</label>
+    <div class="col-6" [hidden]="!evento.dt_criou">
+      <div class="md-form">
+        <input mdbInputDirective formControlName="dt_criou" type="text" id="dt_criou" class="form-control" disabled>
+        <label for="dt_criou">Criado em</label>
+      </div>
     </div>
-    <div class="md-form col-6" [hidden]="!evento.pessoa_criou">
-      <input mdbInputDirective formControlName="pessoa_criou" type="text" id="pessoa_criou" class="form-control"
-        disabled>
-      <label for="pessoa_criou">Registrado por</label>
+    <div class="col-6" [hidden]="!evento.dt_para_exibir">
+      <div class="md-form">
+        <input mdbInputDirective formControlName="dt_para_exibir" type="text" id="dt_para_exibir" class="form-control"
+          disabled>
+        <label for="dt_para_exibir">Agendado para</label>
+      </div>
     </div>
-
-    <div class="md-form col-6" [hidden]="!evento.destino">
-      <input mdbInputDirective formControlName="destino" type="text" id="destino" class="form-control" disabled>
-      <label for="destino">Destinatário</label>
+  </div>
+  <div class="row">
+    <div class="col-6" [hidden]="!evento.dt_prevista_resolucao">
+      <div class="md-form">
+        <input mdbInputDirective formControlName="dt_prevista_resolucao" type="text" id="dt_prevista_resolucao"
+          class="form-control" disabled>
+        <label for="dt_prevista_resolucao">Resolver até</label>
+      </div>
+    </div>
+    <div class="col-6" [hidden]="!evento.pessoa_criou">
+      <div class="md-form">
+        <input mdbInputDirective formControlName="pessoa_criou" type="text" id="pessoa_criou" class="form-control"
+          disabled>
+        <label for="pessoa_criou">Registrado por</label>
+      </div>
+    </div>
+    <div class="col-6" [hidden]="!evento.destino">
+      <div class="md-form">
+        <input mdbInputDirective formControlName="destino" type="text" id="destino" class="form-control" disabled>
+        <label for="destino">Destinatário</label>
+      </div>
     </div>
     <div class="md-form col-6 input-group" [hidden]="!evento.cliente">
       <input mdbInputDirective formControlName="cliente" type="text" id="cliente" class="form-control" disabled>
@@ -52,77 +63,92 @@
           (click)="abrirCadastroPessoa()">Ver cadastro</button>
       </div>
     </div>
-
-    <div class="md-form col-12" [hidden]="!evento.observacao_origem">
-      <textarea type="text" formControlName="observacao_origem" id="observacao_origem" class="md-textarea form-control"
-        mdbInputDirective disabled ></textarea>
-      <label for="observacao_origem">Observação de Origem</label>
-    </div>
-
-    <div class="md-form col-6" [hidden]="!evento.campanha">
-      <input mdbInputDirective formControlName="campanha" type="text" id="campanha" class="form-control" disabled>
-      <label for="campanha">Campanha</label>
-    </div>
-
-    <div class="md-form col-6" [hidden]="!evento.dt_visualizou">
-      <input mdbInputDirective formControlName="dt_visualizou" type="text" id="dt_visualizou" class="form-control"
-        disabled>
-      <label for="dt_visualizou">Aberto em</label>
-    </div>
-    <div class="md-form col-6" [hidden]="!evento.dt_resolvido">
-      <input mdbInputDirective formControlName="dt_resolvido" type="text" id="dt_resolvido" class="form-control"
-        disabled>
-      <label for="dt_resolvido">Resolvido em </label>
-    </div>
-
-    <div class="md-form col-6" [hidden]="!evento.pessoa_visualizou">
-      <input mdbInputDirective formControlName="pessoa_visualizou" type="text" id="pessoa_visualizou" class="form-control"
-        disabled>
-      <label for="pessoa_visualizou">Visualizado por</label>
-    </div>
-    <div class="md-form col-6" [hidden]="!evento.pessoa_resolveu">
-      <input mdbInputDirective formControlName="pessoa_resolveu" type="text" id="pessoa_resolveu" class="form-control"
-        disabled>
-      <label for="pessoa_resolveu">Resolvido por</label>
-    </div>
-
-
-
-    <div class="md-form col-6" [hidden]="!evento.telefone">
-      <input mdbInputDirective formControlName="telefone" type="text" id="telefone" class="form-control" disabled>
-      <label for="telefone">Telefone Discado</label>
-    </div>
-    <div class="md-form col-6" [hidden]="!evento.objecao">
-      <input mdbInputDirective formControlName="objecao" type="text" id="objecao" class="form-control" disabled>
-      <label for="objecao">Objeção</label>
-    </div>
-
-    <div class="md-form col" [hidden]="!evento.resposta_motivo">
-      <input mdbInputDirective formControlName="resposta_motivo" type="text" id="resposta_motivo" class="form-control"
-        disabled>
-      <label for="resposta_motivo">Resposta Motivo</label>
-    </div>
-    <div class="md-form col" [hidden]="!evento.predicao">
-      <input mdbInputDirective formControlName="predicao" type="text" id="predicao" class="form-control" disabled>
-      <label for="predicao">Predição</label>
-    </div>
-    <div class="md-form col input-group" [hidden]="!evento.id_proposta">
-      <input mdbInputDirective formControlName="id_proposta" type="text" id="id_proposta" class="form-control" disabled>
-      <label for="id_proposta">Proposta</label>
-      <div class="input-group-append">
-        <button mdbBtn color="default" size="md" class="m-0 px-3 py-2" type="button" id="button-addon2" mdbWavesEffect
-          (click)="abrirProposta()">Ver proposta</button>
+    <div class="col-12" [hidden]="!evento.observacao_origem">
+      <div class="md-form">
+        <textarea type="text" formControlName="observacao_origem" id="observacao_origem"
+          class="md-textarea form-control" mdbInputDirective disabled></textarea>
+        <label for="observacao_origem">Observação de Origem</label>
       </div>
     </div>
-    <div class="md-form col-12" [hidden]="!evento.observacao_retorno">
-      <textarea type="text" formControlName="observacao_retorno" id="observacao_retorno" class="md-textarea form-control"
-        mdbInputDirective disabled></textarea>
-      <label for="observacao_retorno">Observação de Retorno</label>
+    <div class="col-6" [hidden]="!evento.campanha">
+      <div class="md-form">
+        <input mdbInputDirective formControlName="campanha" type="text" id="campanha" class="form-control" disabled>
+        <label for="campanha">Campanha</label>
+      </div>
+    </div>
+    <div class="col-6" [hidden]="!evento.dt_visualizou">
+      <div class="md-form">
+        <input mdbInputDirective formControlName="dt_visualizou" type="text" id="dt_visualizou" class="form-control"
+          disabled>
+        <label for="dt_visualizou">Aberto em</label>
+      </div>
+    </div>
+    <div class="col-6" [hidden]="!evento.dt_resolvido">
+      <div class="md-form">
+        <input mdbInputDirective formControlName="dt_resolvido" type="text" id="dt_resolvido" class="form-control"
+          disabled>
+        <label for="dt_resolvido">Resolvido em </label>
+      </div>
+    </div>
+    <div class="col-6" [hidden]="!evento.pessoa_visualizou">
+      <div class="md-form">
+        <input mdbInputDirective formControlName="pessoa_visualizou" type="text" id="pessoa_visualizou"
+          class="form-control" disabled>
+        <label for="pessoa_visualizou">Visualizado por</label>
+      </div>
+    </div>
+    <div class="col-6" [hidden]="!evento.pessoa_resolveu">
+      <div class="md-form">
+        <input mdbInputDirective formControlName="pessoa_resolveu" type="text" id="pessoa_resolveu" class="form-control"
+          disabled>
+        <label for="pessoa_resolveu">Resolvido por</label>
+      </div>
+    </div>
+    <div class="col-6" [hidden]="!evento.telefone">
+      <div class="md-form">
+        <input mdbInputDirective formControlName="telefone" type="text" id="telefone" class="form-control" disabled>
+        <label for="telefone">Telefone Discado</label>
+      </div>
+    </div>
+    <div class="col-6" [hidden]="!evento.objecao">
+      <div class="md-form">
+        <input mdbInputDirective formControlName="objecao" type="text" id="objecao" class="form-control" disabled>
+        <label for="objecao">Objeção</label>
+      </div>
+    </div>
+
+    <div class="col-12" [hidden]="!evento.resposta_motivo">
+      <div class="md-form">
+        <input mdbInputDirective formControlName="resposta_motivo" type="text" id="resposta_motivo" class="form-control"
+          disabled>
+        <label for="resposta_motivo">Resposta Motivo</label>
+      </div>
+    </div>
+    <div class="col-12" [hidden]="!evento.predicao">
+      <div class="md-form">
+        <input mdbInputDirective formControlName="predicao" type="text" id="predicao" class="form-control" disabled>
+        <label for="predicao">Predição</label>
+      </div>
+    </div>
+    <div class="col-12 input-group" [hidden]="!evento.id_proposta">
+      <div class="md-form">
+        <input mdbInputDirective formControlName="id_proposta" type="text" id="id_proposta" class="form-control"
+          disabled>
+        <label for="id_proposta">Proposta</label>
+        <div class="input-group-append">
+          <button mdbBtn color="default" size="md" class="m-0 px-3 py-2" type="button" id="button-addon2" mdbWavesEffect
+            (click)="abrirProposta()">Ver proposta</button>
+        </div>
+      </div>
+    </div>
+    <div class="col-12" [hidden]="!evento.observacao_retorno">
+      <div class="md-form">
+        <textarea type="text" formControlName="observacao_retorno" id="observacao_retorno"
+          class="md-textarea form-control" mdbInputDirective disabled></textarea>
+        <label for="observacao_retorno">Observação de Retorno</label>
+      </div>
     </div>
   </div>
-
-
-
   <!-- <div mdbModal #pessoaEditando="mdbModal" [config]="{backdrop: true, ignoreBackdropClick: true}" class="modal fade right"
     role="dialog" aria-labelledby="myBasicModalLabel" aria-hidden="true">
     <div *ngIf="pessoa | async" class="modal-dialog modal-full-height modal-fluid" role="document">

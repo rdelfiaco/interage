@@ -11,6 +11,7 @@ const { checkToken} = require('./checkToken');
                     let registros 
                     if (res.rowCount > 0) {
                         registros = res.rows;
+                        
                     } else {
                         registros = res.fields
                         if (res.fields) {
@@ -26,10 +27,14 @@ const { checkToken} = require('./checkToken');
                         };
                     };
                     client.end();
+                    // const ret = [
+                    //     registros,
+                    //     {'count':res.rowCount }
+                    // ];
                     resolve(registros);
                 }).catch(err => {
                     client.end();
-                    console.log(err)
+                    if (JSON.stringify(err).indexOf('duplicate key')) err = 'Registro já existe';
                     reject(err);
                 });
         }).catch(e => {
@@ -63,6 +68,7 @@ async function executaSQLComTransacao(credenciais, client,  sql) {
                     };
                     resolve(registros);
                 }).catch(err => {
+                    if (JSON.stringify(err).indexOf('duplicate key')) err = 'Registro já existe';
                     reject(err);
                 });
         }).catch(e => {
