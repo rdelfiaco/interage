@@ -1,5 +1,6 @@
-import { PausaDoUsuarioComponent } from './pausa/pausa-do-usuario/pausa-do-usuario.component';
-import { PausaComponent } from './pausa/pausa.component';
+
+import { BaseLayoutComponent } from './layout/base-layout/base-layout.component';
+import { PagesLayoutComponent } from './layout/pages-layout/pages-layout.component';
 import { UsuariosCampanhaComponent } from './crud-campanha/usuarios-campanha/usuarios-campanha.component';
 import { CrudCampanhaComponent } from './crud-campanha/crud-campanha.component';
 import { UsuarioCampanhasComponent } from './usuario/usuario-campanhas/usuario-campanhas.component';
@@ -45,231 +46,244 @@ import { QuestionarioEditComponent } from './questionario/questionario-edit/ques
 import { PerguntaEditComponent } from './questionario/components/pergunta/pergunta-edit/pergunta-edit.component';
 import { AlternativaEditComponent } from './questionario/components/alternativa/alternativa-edit/alternativa-edit.component';
 import { NetworkingComponent } from './cadastro-pessoa/networking/networking.component';
+import { PausaComponent } from './pausa/pausa.component';
+import { PausaDoUsuarioComponent } from './pausa/pausa-do-usuario/pausa-do-usuario.component';
 
 
 
 const routes: Routes = [
   {
-    path: '', component: LoginComponent
-  },
-  {
-    path: 'login', component: LoginComponent
-  },
-  {
-    path: 'semPermissao', component: SemPermissaoComponent
-  },
-  {
-    path: 'admin',
-    component: EventoComponent,
-    canActivate: [AuthGuard]
-  },
-  {
-    path: 'operador',
-    component: EventoComponent,
-    canActivate: [AuthGuard]
-  },
-  {
-    path: 'supervisor',
-    component: EventoComponent,
-    canActivate: [AuthGuard]
-  },
-  {
-    path: 'vendasInternas',
-    component: TelemarketingComponent,
-    canActivate: [AuthGuard]
-  },
-  {
-    path: 'eventos',
-    component: EventoComponent,
-    canActivate: [AuthGuard]
-  },
-  {
-    path: 'evento/:id',
-    component: DetalheEventoComponent,
-    canActivate: [AuthGuard]
-  },
-  {
-    path: 'pessoas',
-    component: PesquisaPessoaComponent,
-    canActivate: [AuthGuard]
-  },
-  {
-    path: 'pessoas/:id',
-    component: CadastroPessoaComponent,
-    canActivate: [AuthGuard]
-  },
-  {
-    path: 'pessoasAdd',
-    component: CadastroPessoaComponent,
-    canActivate: [AuthGuard]
-  },
-  {
-    path: 'analisaCampanha',
-    component: AnalisaCampanhaComponent,
-    canActivate: [AuthGuard]
-  },
-  {
-    path: 'analisarCampanhaTelemarketing',
-    component: AnalisarCampanhaTelemarketingComponent,
-    canActivate: [AuthGuard]
-  },
-  {
-    path: 'produtividadeCallCenter',
-    component: ProdutividadeCallCenterComponent,
-    canActivate: [AuthGuard]
-  },
-  {
-    path: 'trocarSenha',
-    component: TrocarSenhaComponent,
-    canActivate: [AuthGuard]
-  },
-  {
-    path: 'propostas',
-    component: PropostaComponent,
-    canActivate: [AuthGuard]
-  },
-  {
-    path: 'proposta/:id',
-    component: DetalhePropostaComponent,
-    canActivate: [AuthGuard]
-  },
+    path: '',
+    component: BaseLayoutComponent,
+    children: [
+      {
+        path: '',
+        component: DashboardComponent,
+      },
+      {
+        path: 'semPermissao', component: SemPermissaoComponent
+      },
+      {
+        path: 'admin',
+        component: EventoComponent,
+        canActivate: [AuthGuard]
+      },
+      {
+        path: 'operador',
+        component: EventoComponent,
+        canActivate: [AuthGuard]
+      },
+      {
+        path: 'supervisor',
+        component: EventoComponent,
+        canActivate: [AuthGuard]
+      },
+      {
+        path: 'vendasInternas',
+        component: TelemarketingComponent,
+        canActivate: [AuthGuard]
+      },
+      {
+        path: 'eventos',
+        component: EventoComponent,
+        canActivate: [AuthGuard]
+      },
+      {
+        path: 'evento/:id',
+        component: DetalheEventoComponent,
+        canActivate: [AuthGuard]
+      },
+      {
+        path: 'pessoas',
+        component: PesquisaPessoaComponent,
+        canActivate: [AuthGuard]
+      },
+      {
+        path: 'pessoas/:id',
+        component: CadastroPessoaComponent,
+        canActivate: [AuthGuard]
+      },
+      {
+        path: 'pessoasAdd',
+        component: CadastroPessoaComponent,
+        canActivate: [AuthGuard]
+      },
+      {
+        path: 'analisaCampanha',
+        component: AnalisaCampanhaComponent,
+        canActivate: [AuthGuard]
+      },
+      {
+        path: 'analisarCampanhaTelemarketing',
+        component: AnalisarCampanhaTelemarketingComponent,
+        canActivate: [AuthGuard]
+      },
+      {
+        path: 'produtividadeCallCenter',
+        component: ProdutividadeCallCenterComponent,
+        canActivate: [AuthGuard]
+      },
+      {
+        path: 'trocarSenha',
+        component: TrocarSenhaComponent,
+        canActivate: [AuthGuard]
+      },
+      {
+        path: 'propostas',
+        component: PropostaComponent,
+        canActivate: [AuthGuard]
+      },
+      {
+        path: 'proposta/:id',
+        component: DetalhePropostaComponent,
+        canActivate: [AuthGuard]
+      },
 
-  {
-    path: 'importaLead',
-    component: ImportaLeadComponent,
-    canActivate: [AuthGuard]
+      {
+        path: 'importaLead',
+        component: ImportaLeadComponent,
+        canActivate: [AuthGuard]
+      },
+      {
+        path: 'exportar',
+        component: ExportarComponent,
+        canActivate: [AuthGuard]
+      },
+      {
+        path: 'dashboard',
+        component: DashboardComponent,
+        canActivate: [AuthGuard]
+      },
+      {
+        path: 'dashboardProposta',
+        component: DashboardPropostaComponent,
+        canActivate: [AuthGuard]
+      },
+      {
+        path: 'dashboardAgente',
+        component: DashboardAgenteComponent,
+        canActivate: [AuthGuard]
+      },
+      {
+        path: 'workflow',
+        component: WorkflowComponent,
+        canActivate: [AuthGuard]
+      },
+      {
+        path: 'tarefa/:id',
+        component: TarefaComponent,
+        canActivate: [AuthGuard]
+      },
+      {
+        path: 'showTable/:parametros',
+        component: ShowTableComponent,
+        canActivate: [AuthGuard]
+      },
+      {
+        path: 'ranks',
+        component: RanksComponent,
+        canActivate: [AuthGuard]
+      },
+      {
+        path: 'detalheDeCampanha/:parametros',
+        component: DetalheDeCampanhaComponent,
+        canActivate: [AuthGuard]
+      },
+      {
+        path: 'usuario',
+        component: UsuarioComponent,
+        canActivate: [AuthGuard]
+      },
+      {
+        path: 'questionario',
+        component: QuestionarioComponent,
+        canActivate: [AuthGuard]
+      },
+      {
+        path: 'questionario/:id',
+        component: QuestionarioEditComponent,
+        // canActivate: [AuthGuard]
+      },
+      {
+        path: 'questionario/:id/pergunta/:id',
+        component: PerguntaEditComponent,
+        // canActivate: [AuthGuard]
+      },
+      {
+        path: 'questionario/:id/pergunta/:id/alternativa/:id',
+        component: AlternativaEditComponent,
+        // canActivate: [AuthGuard]
+      },
+      {
+        path: 'listarUsuarios',
+        component: ListarUsuariosComponent,
+        canActivate: [AuthGuard]
+      },
+      {
+        path: 'usuarioCampanhas/:id',
+        component: UsuarioCampanhasComponent,
+        canActivate: [AuthGuard]
+      },
+      {
+        path: 'usuarioPermissoes/:id',
+        component: UsuarioPermissoesComponent,
+        canActivate: [AuthGuard]
+      },
+      {
+        path: 'departamento',
+        component: DepartamentoComponent,
+        canActivate: [AuthGuard]
+      },
+      {
+        path: 'campanha',
+        component: CrudCampanhaComponent,
+        canActivate: [AuthGuard]
+      },
+      {
+        path: 'usuariosCampanha',
+        component: UsuariosCampanhaComponent,
+        canActivate: [AuthGuard]
+      },
+      {
+        path: 'pesssoasNetworking',
+        component: NetworkingComponent,
+        canActivate: [AuthGuard]
+      },
+      {
+        path: 'pausa',
+        component: PausaComponent,
+        canActivate: [AuthGuard]
+      },
+      {
+        path: 'pausaDoUsuario/:id',
+        component: PausaDoUsuarioComponent,
+        canActivate: [AuthGuard]
+      },
+    ]
   },
   {
-    path: 'exportar',
-    component: ExportarComponent,
-    canActivate: [AuthGuard]
-  },
-  {
-    path: 'dashboard',
-    component: DashboardComponent,
-    canActivate: [AuthGuard]
-  },
-  {
-    path: 'dashboardProposta',
-    component: DashboardPropostaComponent,
-    canActivate: [AuthGuard]
-  },
-  {
-    path: 'dashboardAgente',
-    component: DashboardAgenteComponent,
-    canActivate: [AuthGuard]
-  },
-  {
-    path: 'workflow',
-    component: WorkflowComponent,
-    canActivate: [AuthGuard]
-  },
-  {
-    path: 'tarefa/:id',
-    component: TarefaComponent,
-    canActivate: [AuthGuard]
-  },
-  {
-    path: 'showTable/:parametros',
-    component: ShowTableComponent,
-    canActivate: [AuthGuard]
-  },
-  {
-    path: 'ranks',
-    component: RanksComponent,
-    canActivate: [AuthGuard]
-  },
-  {
-    path: 'detalheDeCampanha/:parametros',
-    component: DetalheDeCampanhaComponent,
-    canActivate: [AuthGuard]
-  },
-  {
-    path: 'usuario',
-    component: UsuarioComponent,
-    canActivate: [AuthGuard]
-  },
-  {
-    path: 'questionario',
-    component: QuestionarioComponent,
-    canActivate: [AuthGuard]
-  },
-  {
-    path: 'questionario/:id',
-    component: QuestionarioEditComponent,
-    // canActivate: [AuthGuard]
-  },
-  {
-    path: 'questionario/:id/pergunta/:id',
-    component: PerguntaEditComponent,
-    // canActivate: [AuthGuard]
-  },
-  {
-    path: 'questionario/:id/pergunta/:id/alternativa/:id',
-    component: AlternativaEditComponent,
-    // canActivate: [AuthGuard]
-  },
-  {
-    path: 'listarUsuarios',
-    component: ListarUsuariosComponent,
-    canActivate: [AuthGuard]
-  },
-  {
-    path: 'usuarioCampanhas/:id',
-    component: UsuarioCampanhasComponent,
-    canActivate: [AuthGuard]
-  },
-  {
-    path: 'usuarioPermissoes/:id',
-    component: UsuarioPermissoesComponent,
-    canActivate: [AuthGuard]
-  },
-  {
-    path: 'departamento',
-    component: DepartamentoComponent,
-    canActivate: [AuthGuard]
-  },
-  {
-    path: 'campanha',
-    component: CrudCampanhaComponent,
-    canActivate: [AuthGuard]
-  },
-  {
-    path: 'usuariosCampanha',
-    component: UsuariosCampanhaComponent,
-    canActivate: [AuthGuard]
-  },
-  {
-    path: 'pesssoasNetworking',
-    component: NetworkingComponent,
-    canActivate: [AuthGuard]
-  },
-  {
-    path: 'pausa',
-    component: PausaComponent,
-    canActivate: [AuthGuard]
-  },
-  {
-    path: 'pausaDoUsuario/:id',
-    component: PausaDoUsuarioComponent,
-    canActivate: [AuthGuard]
+    path: '',
+    component: PagesLayoutComponent,
+    children: [
+      {
+        path: 'login',
+        component: LoginComponent
+      },
+    ]
   },
   {
     path: '**',
+    redirectTo: '',
     component: PageNotFoundComponent
   }
-
 ];
 
 @NgModule({
   imports: [
     CommonModule,
     RouterModule.forRoot(routes),
-
   ],
-
   exports: [RouterModule],
-
   declarations: []
 })
 export class AppRoutingModule { }

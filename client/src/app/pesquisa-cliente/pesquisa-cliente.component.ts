@@ -44,9 +44,9 @@ export class PesquisaClienteComponent implements OnInit {
       }
     }) as any;
 
-    this.clienteSelecionado = pessoa.resposta.principal.id;
+    this.clienteSelecionado = pessoa.resposta.principal ? pessoa.resposta.principal.id : '';
 
-    pessoa = pessoa.resposta.principal
+    pessoa = pessoa.resposta.principal || {};
     this.clienteSelecionadoObject = [{ label: pessoa.nome, value: pessoa.id }];
     this.clientes = this.clientes.concat(this.clienteSelecionadoObject)
   }

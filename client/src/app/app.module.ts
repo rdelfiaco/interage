@@ -46,6 +46,9 @@ import { ShowTableComponent } from './show-table/show-table.component';
 import { RanksComponent } from './ranks/ranks.component';
 import { AnalisarCampanhaTelemarketingModule } from './analisar-campanha-telemarketing/analisar-campanha-telemarketing.module';
 import { AngularDualListBoxModule } from 'angular-dual-listbox';
+import { BaseLayoutComponent } from './layout/base-layout/base-layout.component';
+import { AppsLayoutComponent } from './layout/apps-layout/apps-layout.component';
+import { PagesLayoutComponent } from './layout/pages-layout/pages-layout.component';
 
 
 
@@ -64,6 +67,9 @@ import { AngularDualListBoxModule } from 'angular-dual-listbox';
     DashboardAgenteComponent,
     ShowTableComponent,
     RanksComponent,
+    BaseLayoutComponent,
+    AppsLayoutComponent,
+    PagesLayoutComponent
   ],
 
   imports: [

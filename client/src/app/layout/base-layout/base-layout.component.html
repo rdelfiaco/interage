@@ -1,0 +1,270 @@
+<header *ngIf="(hasLogado | async)">
+  <!-- Sidebar navigation -->
+  <mdb-side-nav #sidenav class="sn-bg-4 menu-bg fixed" [fixed]="true">
+      <mdb-navbar-brand>
+          <li>
+              <div class="logo-wrapper menu-container-avatar waves-light">
+                  <img src="/assets/imagens/logos/logo_altis.jpg" class="img-fluid flex-center">
+                  <small>{{usuarioLogado.apelido || nomeUsuario}}</small>
+                  <div class="dropdown" mdbDropdown>
+                      <a dropdownToggle type="button" class="nav-link dropdown-toggle waves-light" mdbRippleRadius
+                          mdbWavesEffect>
+                      </a>
+                      <div class="dropdown-menu dropdown-primary dropdown-menu-right" role="menu">
+                            <a class="dropdown-item" (click)="openPage('pessoas/'+usuarioLogado.id_pessoa, $event)">Meu Cadastro </a>
+                            <a class="dropdown-item" (click)="openPage('trocarSenha', $event)">Trocar Senha</a>
+                            <a class="dropdown-item" (click)="openPage('pausaDoUsuario/'+usuarioLogado.id_pessoa, $event)">Pausar</a>
+                        </div>  
+                  </div>
+              </div>
+          </li>
+      </mdb-navbar-brand>
+      <li class="menu-navbar">
+          <ul class="collapsible collapsible-accordion">
+              <mdb-squeezebox [multiple]="false" aria-multiselectable="false">
+                  <!-- Tarefas/eventos link -->
+                  <mdb-item class="no-collase" (click)="openPage('eventos', $event);">
+                      <mdb-item-head mdbRippleRadius class="menu-item">
+                          <i class="fa fa-calendar font-weight"></i>
+                          <span class="h6 font-weight ">Tarefas/Eventos
+                          </span>
+                      </mdb-item-head>
+                      <mdb-item-body></mdb-item-body>
+                  </mdb-item>
+                  <!-- Vendas Internas link -->
+                  <mdb-item class="no-collase" (click)="openPage('vendasInternas', $event); ">
+                      <mdb-item-head mdbRippleRadius class="menu-item">
+                          <i class="fa fa-volume-control-phone font-weight "></i>
+                          <span class="h6 font-weight ">Vendas Internas</span>
+                      </mdb-item-head>
+                      <mdb-item-body></mdb-item-body>
+                  </mdb-item>
+
+                  <!-- Pesquisar Pessoa link -->
+                  <mdb-item class="no-collase" (click)="openPage('pessoas', $event);">
+                      <mdb-item-head mdbRippleRadius class="menu-item">
+                          <i class="fa fa-search font-weight "></i>
+                          <span class="h6 font-weight ">Pesquisar
+                              Pessoa</span>
+                      </mdb-item-head>
+                      <mdb-item-body></mdb-item-body>
+                  </mdb-item>
+
+                  <!-- Cadastrar Pessoa link -->
+                  <mdb-item class="no-collase" (click)="openPage('pessoasAdd', $event);">
+                      <mdb-item-head mdbRippleRadius class="menu-item">
+                          <i class="fa fa-address-book font-weight "></i>
+                          <span class="h6 font-weight ">Cadastrar
+                              Pessoa</span>
+                      </mdb-item-head>
+                      <mdb-item-body></mdb-item-body>
+                  </mdb-item>
+
+                  <!-- Proposta link -->
+                  <mdb-item class="no-collase" (click)="openPage('propostas', $event);">
+                      <mdb-item-head mdbRippleRadius class="menu-item">
+                          <i class="fa fa-diamond font-weight "></i>
+                          <span class="h6 font-weight ">Propostas
+                          </span>
+                      </mdb-item-head>
+                      <mdb-item-body></mdb-item-body>
+                  </mdb-item>
+
+                  <!-- Collapsible link -->
+                  <mdb-item >
+                      <mdb-item-head mdbRippleRadius class="menu-item">
+                          <i class="fa fa-eye font-weight "></i>
+                          <span class="h6 font-weight ">Informações</span>
+                      </mdb-item-head>
+                      <mdb-item-body>
+                          <ul>
+                              <li (click)="openPage('produtividadeCallCenter', $event);">
+                                  <a class="waves-effect" mdbRippleRadius>
+                                      <i class="fa fa-line-chart "></i>
+                                      <span class="h6 font-weight">Produtividade
+                                      </span>
+                                  </a>
+                              </li>
+                              <li (click)="openPage('dashboardAgente', $event);">
+                                  <a class="waves-effect" mdbRippleRadius>
+                                      <i class="fa fa-dashboard "></i>
+                                      <span class="h6 font-weight">Desempenho
+                                      </span>
+                                  </a>
+                              </li>
+                          </ul>
+                      </mdb-item-body>
+                  </mdb-item>
+                  <!-- Collapsible link -->
+                  <mdb-item >
+                      <mdb-item-head mdbRippleRadius class="menu-item">
+                          <i class="fa fa-chevron-right font-weight "></i>
+                          <span class="h6 font-weight ">Telemarketing</span>
+                      </mdb-item-head>
+                      <mdb-item-body>
+                          <ul>
+                              <li (click)="openPage('analisarCampanhaTelemarketing', $event);">
+                                  <a class="waves-effect" mdbRippleRadius>
+                                      <i class="fa fa-area-chart "></i>
+                                      <span class="h6 font-weight">Analisar Campanhas
+                                      </span>
+                                  </a>
+                              </li>
+                              <li (click)="openPage('importaLead', $event);">
+                                  <a class="waves-effect" mdbRippleRadius>
+                                      <i class="fa  fa-cloud-upload "></i>
+                                      <span class="h6 font-weight">Importar
+                                          mailing/lead
+                                      </span>
+                                  </a>
+                              </li>
+                              <li (click)="openPage('ranks', $event);">
+                                  <a class="waves-effect" mdbRippleRadius>
+                                      <i class="fa fa-trophy"></i>
+                                      <span class="h6 font-weight" >Ranking
+                                      </span>
+                                  </a>
+                              </li>
+                          </ul>
+                      </mdb-item-body>
+                  </mdb-item>
+                  <mdb-item>
+                      <mdb-item-head mdbRippleRadius class="menu-item">
+                          <i class="fa fa-chevron-right font-weight "></i>
+                          <span class="h6 font-weight ">Administrativo</span>
+                      </mdb-item-head>
+                      <mdb-item-body>
+                          <ul>
+                              <li (click)="openPage('workflow', $event);">
+                                  <a class="waves-effect" mdbRippleRadius>
+                                      <i class="fa fa-cubes "></i>
+                                      <span class="h6 font-weight">Workflow
+                                      </span>
+                                  </a>
+                              </li>
+                              <li (click)="openPage('exportar', $event);">
+                                  <a class="waves-effect" mdbRippleRadius>
+                                      <i class="fa fa-cloud-download "></i>
+                                      <span class="h6 font-weight">Exporta
+                                      </span>
+                                  </a>
+                              </li>
+                          </ul>
+                      </mdb-item-body>
+                  </mdb-item>
+                  <mdb-item >
+                      <mdb-item-head mdbRippleRadius class="menu-item">
+                          <i class="fa fa-chevron-right font-weight "></i>
+                          <span class="h6 font-weight ">Cadastros</span>
+                      </mdb-item-head>
+                      <mdb-item-body>
+                          <ul>
+                              <li (click)="openPage('campanha', $event);">
+                                  <a class="waves-effect" mdbRippleRadius>
+                                      <i class="fa fa-contao "></i>
+                                      <span class="h6 font-weight">Campanhas
+                                      </span>
+                                  </a>
+                              </li>
+                              <li (click)="openPage('departamento', $event);">
+                                  <a class="waves-effect" mdbRippleRadius>
+                                      <i class="fa fa fa-cubes "></i>
+                                      <span class="h6 font-weight" >Departamentos
+                                      </span>
+                                  </a>
+                              </li>
+                              <li (click)="openPage('pausa', $event);">
+                                    <a class="waves-effect" mdbRippleRadius>
+                                        <i class="fa fa-pause"></i>
+                                        <span class="h6 font-weight">Pausa
+                                        </span>
+                                    </a>
+                                </li>
+                              <li (click)="openPage('usuario', $event);">
+                                  <a class="waves-effect" mdbRippleRadius>
+                                      <i class="fa fa-user font-weight"></i>
+                                      <span class="h6 font-weight">Usuários
+                                      </span>
+                                      <!-- sidenav.hide() -->
+                                  </a>
+                              </li>
+                              <li (click)="openPage('questionario', $event);">
+                                  <a class="waves-effect" mdbRippleRadius>
+                                      <i class="fa fa-clipboard font-weight"></i>
+                                      <span class="h6 font-weight">Questionários
+                                      </span>
+                                      <!-- sidenav.hide() -->
+                                  </a>
+                              </li>
+                          </ul>
+                      </mdb-item-body>
+                  </mdb-item>
+              </mdb-squeezebox>
+          </ul>
+      </li>
+
+
+      <div class="sidenav-bg mask-strong"></div>
+      <div class="versaoSistema">
+          <img src="/assets/imagens/logos/rci.png" />
+          <label>{{versaoSistema}}</label>
+      </div>
+  </mdb-side-nav>
+  <mdb-navbar SideClass="navbar navbar-header navbar-toggleable-md navbar-expand-lg scrolling-navbar double-nav"
+      [containerInside]="false">
+
+      <navlinks class="navbar-container">
+          <div class="float-left btn-menu-bars">
+              <a (click)="sidenav.show()" class="button-collapse-non-fixed">
+                  <i class="fa fa-bars"></i>
+              </a>
+          </div>
+      </navlinks>
+
+
+      <mdb-navbar-brand>
+          <div class="breadcrumbs breadcrumb-dn mr-auto logomarcaCliente">
+              <button mdbBtn type="button" color="danger" size="sm" mdbWavesEffect disabled>SERVIDOR DE
+                  TESTE</button>
+          </div>
+      </mdb-navbar-brand>
+
+      <navlinks>
+          <ul class="nav navbar-nav nav-flex-icons ml-auto ie-double-nav">
+              <!-- <li class="nav-item">
+              <a class="nav-link waves-light" mdbWavesEffect>
+                  <i class="fa fa-envelope"></i>
+                  <span class="clearfix d-none d-sm-inline-block">Contact</span>
+              </a>
+          </li>-->
+              <li class="nav-item icon-notificacao">
+                  <a class="nav-link waves-light" mdbWavesEffect (click)="openPage('eventos', $event)">
+                      <i class="fa fa-bell">
+                          <div *ngIf="counterEvents" class="counterEvents">
+                              <span>{{counterEvents}}</span>
+                          </div>
+                      </i>
+                  </a>
+              </li>
+              <!-- <li class="nav-item dropdown btn-group" dropdown>
+                  <a dropdownToggle type="button" class="nav-link dropdown-toggle waves-light" mdbRippleRadius
+                      mdbWavesEffect>
+                      <i class="fa fa-user-circle"></i>
+                  </a>
+                  <div class="dropdown-menu dropdown-primary dropdown-menu-right" role="menu">
+                      <a class="dropdown-item" (click)="abrirCadastroPessoa()">Cadastro</a>
+                      <a class="dropdown-item" (click)="openPage('trocarSenha')">Trocar Senha</a>
+                  </div>
+              </li> -->
+              <li class="nav-item icon-sair" (click)="logout()">
+                  <a class="nav-link waves-light" title="Sair" mdbWavesEffect>
+                      <i class="fa fa-sign-out"></i>
+                  </a>
+              </li>
+          </ul>
+      </navlinks>
+  </mdb-navbar>
+</header>
+<main *ngIf="(hasLogado | async)" class="main-container-content">
+  <router-outlet #o="outlet"></router-outlet>
+</main>
