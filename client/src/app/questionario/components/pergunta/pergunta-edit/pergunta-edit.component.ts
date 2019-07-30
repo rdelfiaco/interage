@@ -24,12 +24,14 @@ export class PerguntaEditComponent implements OnInit {
     id_questionario: '',
     nome:'',
     status: '',
+    alternativas: '',
     sequencia_pergunta: '',
     descricao_pergunta: '',
     multipla_escolha: ''
   };
   pergId = null;
   @ViewChild('alternativaadd') alternativaadd: ModalDirective;
+  sorted: any;
 
   constructor(
     private router: Router,
@@ -195,6 +197,21 @@ export class PerguntaEditComponent implements OnInit {
     catch (e) {
       this.toastrService.error('Erro ao ler as permissoes', e);
     }
+  }
+
+  sortBy(by: string | any): void {
+    (this.tableData.alternativas|| []).sort((a: any, b: any) => {
+      if (a[by] < b[by]) {
+        return this.sorted ? 1 : -1;
+      }
+      if (a[by] > b[by]) {
+        return this.sorted ? -1 : 1;
+      }
+
+      return 0;
+    });
+
+    this.sorted = !this.sorted;
   }
 
   async salvarAlternativa() {

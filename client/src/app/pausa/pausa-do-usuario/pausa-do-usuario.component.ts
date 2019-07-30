@@ -63,4 +63,7 @@ export class PausaDoUsuarioComponent implements OnInit {
     }
   }
 
+  onChangePausa(){
+    
+  }
 }

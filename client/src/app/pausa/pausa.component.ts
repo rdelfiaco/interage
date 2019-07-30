@@ -20,7 +20,7 @@ export class PausaComponent implements OnInit {
   titleBntEnviar: string = 'Salvar';
   crud: string;
 
-  private formularioForm: FormGroup;
+  formularioForm: FormGroup;
   formularioFormAud: any;
 
   constructor(

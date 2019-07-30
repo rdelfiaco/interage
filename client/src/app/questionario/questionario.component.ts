@@ -14,9 +14,9 @@ export class QuestionarioComponent implements OnInit {
     nome: '',
     status: true
   }
-  tableData: object[] = [];
+  tableData: any = [];
 
-  private sorted = false;
+  sorted = false;
   @ViewChild('questionarioadd') modalquestionario: ModalDirective;
 
   constructor(
