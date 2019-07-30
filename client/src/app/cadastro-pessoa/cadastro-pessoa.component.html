@@ -42,6 +42,30 @@
           </div>
         </div>
       </mdb-tab>
+      <!-- Panel 5 -->
+      <mdb-tab heading="NETWORKING" [disabled]="!(pessoa | async)">
+        <div class="row">
+          <div class="col-12">
+            <app-networking [pessoa]="pessoa" (refresh)="refreshDad()" ></app-networking>
+          </div>
+        </div>
+      </mdb-tab>
+      <!-- Panel 6 -->
+      <mdb-tab heading="MARKETING" [disabled]="!(pessoa | async)">
+        <div class="row">
+          <div class="col-12">
+            <app-linha-do-tempo [pessoa]="pessoa | async"></app-linha-do-tempo>
+          </div>
+        </div>
+      </mdb-tab>
+      <!-- Panel 7 -->
+      <mdb-tab heading="SERVIÇOS" [disabled]="!(pessoa | async)">
+        <div class="row">
+          <div class="col-12">
+            <app-linha-do-tempo [pessoa]="pessoa | async"></app-linha-do-tempo>
+          </div>
+        </div>
+      </mdb-tab>
     </mdb-tabset>
   </div>
 </div>

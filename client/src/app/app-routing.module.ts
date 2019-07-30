@@ -1,6 +1,6 @@
+
 import { BaseLayoutComponent } from './layout/base-layout/base-layout.component';
 import { PagesLayoutComponent } from './layout/pages-layout/pages-layout.component';
-
 import { UsuariosCampanhaComponent } from './crud-campanha/usuarios-campanha/usuarios-campanha.component';
 import { CrudCampanhaComponent } from './crud-campanha/crud-campanha.component';
 import { UsuarioCampanhasComponent } from './usuario/usuario-campanhas/usuario-campanhas.component';
@@ -45,6 +45,9 @@ import { QuestionarioComponent } from './questionario/questionario.component';
 import { QuestionarioEditComponent } from './questionario/questionario-edit/questionario-edit.component';
 import { PerguntaEditComponent } from './questionario/components/pergunta/pergunta-edit/pergunta-edit.component';
 import { AlternativaEditComponent } from './questionario/components/alternativa/alternativa-edit/alternativa-edit.component';
+import { NetworkingComponent } from './cadastro-pessoa/networking/networking.component';
+import { PausaComponent } from './pausa/pausa.component';
+import { PausaDoUsuarioComponent } from './pausa/pausa-do-usuario/pausa-do-usuario.component';
 
 
 
@@ -241,6 +244,21 @@ const routes: Routes = [
         component: UsuariosCampanhaComponent,
         canActivate: [AuthGuard]
       },
+      {
+        path: 'pesssoasNetworking',
+        component: NetworkingComponent,
+        canActivate: [AuthGuard]
+      },
+      {
+        path: 'pausa',
+        component: PausaComponent,
+        canActivate: [AuthGuard]
+      },
+      {
+        path: 'pausaDoUsuario/:id',
+        component: PausaDoUsuarioComponent,
+        canActivate: [AuthGuard]
+      },
     ]
   },
   {
@@ -258,7 +276,6 @@ const routes: Routes = [
     redirectTo: '',
     component: PageNotFoundComponent
   }
-
 ];
 
 @NgModule({

@@ -1,3 +1,4 @@
+import { PausaModule } from './pausa/pausa.module';
 import { CrudCampanhaModule } from './crud-campanha/crud-campanha.module';
 import { QuestionarioModule } from './questionario/questionario.module';
 import { DepartamentoModule } from './departamento/departamento.module';
@@ -100,7 +101,8 @@ import { PagesLayoutComponent } from './layout/pages-layout/pages-layout.compone
     DepartamentoModule,
     AngularDualListBoxModule,
     CrudCampanhaModule,
-    QuestionarioModule
+    QuestionarioModule,
+    PausaModule
   ],
   providers: [MDBSpinningPreloader
 

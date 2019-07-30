@@ -11,9 +11,10 @@
                           mdbWavesEffect>
                       </a>
                       <div class="dropdown-menu dropdown-primary dropdown-menu-right" role="menu">
-                          <a class="dropdown-item" (click)="abrirCadastroPessoa()">Cadastro</a>
-                          <a class="dropdown-item" (click)="openPage('trocarSenha', $event)">Trocar Senha</a>
-                      </div>
+                            <a class="dropdown-item" (click)="openPage('pessoas/'+usuarioLogado.id_pessoa, $event)">Meu Cadastro </a>
+                            <a class="dropdown-item" (click)="openPage('trocarSenha', $event)">Trocar Senha</a>
+                            <a class="dropdown-item" (click)="openPage('pausaDoUsuario/'+usuarioLogado.id_pessoa, $event)">Pausar</a>
+                        </div>  
                   </div>
               </div>
           </li>
@@ -172,6 +173,13 @@
                                       </span>
                                   </a>
                               </li>
+                              <li (click)="openPage('pausa', $event);">
+                                    <a class="waves-effect" mdbRippleRadius>
+                                        <i class="fa fa-pause"></i>
+                                        <span class="h6 font-weight">Pausa
+                                        </span>
+                                    </a>
+                                </li>
                               <li (click)="openPage('usuario', $event);">
                                   <a class="waves-effect" mdbRippleRadius>
                                       <i class="fa fa-user font-weight"></i>

@@ -1,3 +1,4 @@
+import { format } from './../../shared/validaCpf';
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { IMyOptions, ToastService } from '../../../lib/ng-uikit-pro-standard';
@@ -6,6 +7,7 @@ import { Usuario } from '../../login/usuario';
 import { LocalStorage } from '../../shared/services/localStorage';
 import validaCpf from '../../shared/validaCpf';
 import validaCnpj from '../../shared/validaCnpj';
+import * as moment from 'moment';
 
 
 interface selectValues {
@@ -36,6 +38,8 @@ export class PrincipalComponent implements OnInit {
     return this._pessoa
   }
 
+
+
   tipoDePessoa: Array<object> = [
     {
       value: 'F',
@@ -54,6 +58,7 @@ export class PrincipalComponent implements OnInit {
 
   tipoPessoaSelecionada: string = 'F';
   principalForm: FormGroup
+  principalFormAud: any;
 
   public myDatePickerOptions: IMyOptions = {
     // Strings and translations
@@ -104,17 +109,18 @@ export class PrincipalComponent implements OnInit {
       apelido_fantasia: [''],
       id_atividade: [''],
     })
+    this.principalFormAud = this.principalForm.value;
   }
 
   _setQuestionarioForm() {
     this.tipoPessoaSelecionada = this.pessoa.principal.tipo;
-
+    console.log(this.pessoa)
     this.principalForm = this.formBuilder.group({
       id: [this.pessoa.principal.id],
       nome: [this.pessoa.principal.nome, [Validators.required]],
       tipo: [this.pessoa.principal.tipo, [Validators.required]],
       id_pronome_tratamento: [this.pessoa.principal.id_pronome_tratamento],
-      datanascimento: [''],
+      datanascimento: [this.pessoa.principal.datanascimento  ? moment(this.pessoa.principal.datanascimento ).format('DD/MM/YYYY') : this.pessoa.principal.datanascimento ],
       sexo: [this.pessoa.principal.sexo],
       rg_ie: [this.pessoa.principal.rg_ie],
       orgaoemissor: [this.pessoa.principal.orgaoemissor],
@@ -125,6 +131,8 @@ export class PrincipalComponent implements OnInit {
       apelido_fantasia: [this.pessoa.principal.apelido_fantasia],
       id_atividade: [this.pessoa.principal.id_atividade],
     })
+    this.principalFormAud = this.principalForm.value;
+    console.log(this.principalFormAud)
   }
 
   async ngOnInit() {
@@ -179,7 +187,10 @@ export class PrincipalComponent implements OnInit {
       try {
         await this.connectHTTP.callService({
           service: 'salvarPessoa',
-          paramsService: this.principalForm.value
+          paramsService: ({
+            dadosAtuais: JSON.stringify(this.principalForm.value),
+            dadosAnteriores: JSON.stringify(this.principalFormAud)
+          }) 
         });
         this.toastrService.success('Salvo com sucesso');
       }
@@ -191,7 +202,10 @@ export class PrincipalComponent implements OnInit {
       
         const res = await this.connectHTTP.callService({
           service: 'adicionarPessoa',
-          paramsService: this.principalForm.value
+          paramsService: ({
+            dadosAtuais: JSON.stringify(this.principalForm.value),
+            dadosAnteriores: JSON.stringify(this.principalFormAud)
+          }) 
         }) as any;
         
         this.principalForm.controls['id'].setValue(res.resposta.id);
