@@ -1,3 +1,4 @@
+import { PausaModule } from './pausa/pausa.module';
 import { CrudCampanhaModule } from './crud-campanha/crud-campanha.module';
 import { QuestionarioModule } from './questionario/questionario.module';
 import { DepartamentoModule } from './departamento/departamento.module';
@@ -62,7 +63,7 @@ import { AngularDualListBoxModule } from 'angular-dual-listbox';
     DashboardPropostaComponent,
     DashboardAgenteComponent,
     ShowTableComponent,
-    RanksComponent
+    RanksComponent,
   ],
 
   imports: [
@@ -94,7 +95,8 @@ import { AngularDualListBoxModule } from 'angular-dual-listbox';
     DepartamentoModule,
     AngularDualListBoxModule,
     CrudCampanhaModule,
-    QuestionarioModule
+    QuestionarioModule,
+    PausaModule
   ],
   providers: [MDBSpinningPreloader
 

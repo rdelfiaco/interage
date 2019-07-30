@@ -1,3 +1,5 @@
+import { PausaDoUsuarioComponent } from './pausa/pausa-do-usuario/pausa-do-usuario.component';
+import { PausaComponent } from './pausa/pausa.component';
 import { UsuariosCampanhaComponent } from './crud-campanha/usuarios-campanha/usuarios-campanha.component';
 import { CrudCampanhaComponent } from './crud-campanha/crud-campanha.component';
 import { UsuarioCampanhasComponent } from './usuario/usuario-campanhas/usuario-campanhas.component';
@@ -240,6 +242,16 @@ const routes: Routes = [
   {
     path: 'pesssoasNetworking',
     component: NetworkingComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'pausa',
+    component: PausaComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'pausaDoUsuario/:id',
+    component: PausaDoUsuarioComponent,
     canActivate: [AuthGuard]
   },
   {

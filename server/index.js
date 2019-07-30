@@ -25,6 +25,7 @@ const motivos = require('./src/api/motivos');
 const questionarios = require('./src/api/questionarios');
 const questPerguntas = require('./src/api/questionariosPerguntas');
 const questAlternativas = require('./src/api/questionariosAlternativas');
+const pausa = require('./src/api/pausa');
 
 
 app.use(bodyParser.json());
@@ -150,6 +151,11 @@ declaraServico('updateStatusPergunta',  questPerguntas.updateStatusPergunta);
 declaraServico('updateMultiEscolhaPergunta',  questPerguntas.updateMultiEscolhaPergunta);
 declaraServico('getPerguntaById',  questPerguntas.getPerguntaById);
 declaraServico('getAlternativasByIdPerguntas',  questPerguntas.getAlternativasByIdPerguntas);
+// pausa
+declaraServico('getPausas', pausa.getPausas);
+declaraServico('crudPausa', pausa.crudPausa);
+
+
 
 app.listen(nodeStart.port, "0.0.0.0");
 console.log(`Servidor iniciado na em http://localhost:${nodeStart.port}`)

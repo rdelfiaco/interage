@@ -351,7 +351,7 @@ async function  adicionarPessoa(req, res) {
 
       client.query(update).then((res) => {
         client.end();
-        auditoria(credenciais, 'pessoas', 'I', res.rows[0].id, dadosAnteriores, dadosAtuais );
+        auditoria(credenciais, 'pessoas', 'C', res.rows[0].id, dadosAnteriores, dadosAtuais );
         resolve(res.rows[0])
       }).catch(e => {
         client.end();
@@ -762,7 +762,7 @@ function salvarEnderecoPessoa(req, res) {
                 cidade: '',
                 uf: ''
               }
-              auditoria(credenciais,'cidades','I',req.query.id_cidade,anteriores,atuais)
+              auditoria(credenciais,'cidades','C',req.query.id_cidade,anteriores,atuais)
               salvaEndereco()
             }).catch(e => {
               reject(e);
