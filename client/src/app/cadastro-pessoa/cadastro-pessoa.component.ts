@@ -5,6 +5,8 @@ import { Usuario } from '../login/usuario';
 import { Observable, Observer, Subscriber } from 'rxjs';
 import { AuthService } from '../login/auth.service';
 import { ActivatedRoute } from '@angular/router';
+import { ToastService } from '../../lib/ng-uikit-pro-standard';
+import { CheckPermissaoRecurso } from '../shared/services/checkPemissaoRecurso';
 
 @Component({
   selector: 'app-cadastro-pessoa',
@@ -16,11 +18,20 @@ export class CadastroPessoaComponent implements OnInit {
   private _pessoa;
   pessoaObject: any;
   id_pessoa: string;
+  usuarioLogado: any;
   @Output() refresh = new EventEmitter();
   @Input() pessoa: Observable<string[]>;
 
-  constructor(private connectHTTP: ConnectHTTP, private localStorage: LocalStorage,
-    private auth: AuthService, private route: ActivatedRoute) {
+
+  constructor(private connectHTTP: ConnectHTTP, 
+    private localStorage: LocalStorage,
+    private auth: AuthService, 
+    private route: ActivatedRoute,
+    private toastrService: ToastService,
+    private checkPermissaoRecurso: CheckPermissaoRecurso ) {
+    
+      this.usuarioLogado = this.localStorage.getLocalStorage('usuarioLogado') as Usuario;
+
     this.route.params.subscribe(res => {
       this.id_pessoa = res.id
     });
@@ -52,10 +63,34 @@ export class CadastroPessoaComponent implements OnInit {
         id_pessoa: pessoaId
       }
     }) as any;
-    this.pessoaObject = pessoa.resposta;
-    this.pessoa = new Observable(o => o.next(pessoa.resposta));
+
+    //  - se o cliente não estiver vinculado a nenhuma carteira o usuário logado pode ter acesso; 
+    //  - se o cliente esteja vinculado a uma carteria e se o usuário logado possui carteira o
+    //           o acesso aos dados do cliente somente se ele pertence a carteira do usuário logado  
+    debugger
+    if ((this.usuarioLogado.possui_carteira_cli && pessoa.resposta.principal.id_usuario_carteira ) ||
+      (this.usuarioLogado.id_pessoa == pessoa.resposta.principal.id)) {
+      if ((this.usuarioLogado.id == pessoa.resposta.principal.id_usuario_carteira) || 
+        (this.usuarioLogado.id_pessoa == pessoa.resposta.principal.id)) {
+        this.pessoaObject = pessoa.resposta;
+        this.pessoa = new Observable(o => o.next(pessoa.resposta));
+      } else {
+        this.toastrService.error('O cliente não faz parte de sua carteira');
+        window.history.back();
+      }
+    }
+    else {
+      // verifica se o usuário logado possui acesso aos clientes sem carteira 
+      if ( this.checkPermissaoRecurso.usuarioLocadoAcessaRecurso(4) || 
+           this.usuarioLogado.id_pessoa == pessoa.resposta.principal.id) {
+
+          this.pessoaObject = pessoa.resposta;
+          this.pessoa = new Observable(o => o.next(pessoa.resposta));
+
+      }else {
+        this.toastrService.error('Você não tem acesso aos clientes sem carteira');
+        window.history.back();
+      }
+    }
   }
-
-
-  
 }
