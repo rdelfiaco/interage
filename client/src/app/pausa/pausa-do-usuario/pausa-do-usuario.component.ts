@@ -1,9 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
 import { ConnectHTTP } from '../../shared/services/connectHTTP';
-import { ToastService, PAUSE } from '../../../lib/ng-uikit-pro-standard';
-import { LocalStorage } from '../../shared/services/localStorage';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { ToastService } from '../../../lib/ng-uikit-pro-standard';
 
 @Component({
   selector: 'app-pausa-do-usuario',
@@ -12,23 +9,19 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 })
 export class PausaDoUsuarioComponent implements OnInit {
 
-  private formularioForm: FormGroup;
   pausaSelect: Array<any>;
-  pausaSelectValue: number;
+  pausaSelectValue: number = 1;
+  enableBtnInicio: boolean = false;
+  enableBtnFim: boolean = false;
+  enableBtnPausa: boolean = true;
+  id_pausa_usuario: number;
 
   constructor(
-    private router: Router,
     private connectHTTP: ConnectHTTP,
     private toastrService: ToastService,
-    private localStorage: LocalStorage,
-    private formBuilder: FormBuilder) {
+   ) {
 
-      this.formularioForm = this.formBuilder.group({
-        id:  [''],
-        nome: [''],
-        tempo: [''],
-        status: [''],
-      });
+
 
      }
 
@@ -51,7 +44,6 @@ export class PausaDoUsuarioComponent implements OnInit {
           return { value: pausa.id, label: pausa.nome, tempo: pausa.tempo }
         });
 
-        this.pausaSelectValue = 1; 
 
         console.log(this.pausaSelect)
 
@@ -64,6 +56,56 @@ export class PausaDoUsuarioComponent implements OnInit {
   }
 
   onChangePausa(){
-    
+    this.enableBtnInicio = true
   }
+
+  async registrarInicio(){
+      try {
+        let resp = await this.connectHTTP.callService({
+          service: 'registrarInicioPausa',
+          paramsService: ({
+            id_pausa: this.pausaSelectValue
+          }) 
+        });
+        if (resp.error) {
+            this.toastrService.error('Operação não realizada', resp.error );
+        }else
+        {
+          console.log(resp.resposta)
+          this.id_pausa_usuario = resp.resposta[0].id
+          this.toastrService.success('Operação realizada com sucesso');
+          this.enableBtnFim = true;
+          this.enableBtnPausa = false;
+          this.enableBtnInicio = false;
+        }
+      }
+      catch (e) {
+        this.toastrService.error('Operação não realizada');
+      }
+      this.ngOnInit();
+    }
+
+  async registrarFim(){
+    try {
+      let resp = await this.connectHTTP.callService({
+        service: 'registrarFimPausa',
+        paramsService: ({
+          id_pausa_usuario: this.id_pausa_usuario
+        }) 
+      });
+      if (resp.error) {
+          this.toastrService.error('Operação não realizada', resp.error );
+      }else
+      {
+        this.toastrService.success('Operação realizada com sucesso');
+      }
+    }
+    catch (e) {
+      this.toastrService.error('Operação não realizada');
+    }
+    this.ngOnInit();
+  
+  }
+
+
 }

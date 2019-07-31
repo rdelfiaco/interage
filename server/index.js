@@ -154,6 +154,9 @@ declaraServico('getAlternativasByIdPerguntas',  questPerguntas.getAlternativasBy
 // pausa
 declaraServico('getPausas', pausa.getPausas);
 declaraServico('crudPausa', pausa.crudPausa);
+declaraServico('registrarFimPausa', pausa.registrarFimPausa);
+declaraServico('registrarInicioPausa', pausa.registrarInicioPausa);
+
 
 
 

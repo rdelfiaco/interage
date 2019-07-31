@@ -85,6 +85,7 @@ export class PausaComponent implements OnInit {
     this.formularioForm.controls['nome'].setValue('');
     this.formularioForm.controls['tempo'].setValue('');
     this.formularioForm.controls['status'].setValue(true);
+    this.formularioForm.controls['id'].disable();
     this.formularioFormAud = this.formularioForm.value;
     this.titleBntEnviar = 'Salvar';
     this.crud = 'C'; // create  

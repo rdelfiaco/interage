@@ -81,6 +81,50 @@ function getPausas(req, res) {
   });
 };
 
-  
+function registrarInicioPausa(req, res) {
+  return new Promise(function (resolve, reject) {
+    let credenciais = {
+      token: req.query.token,
+      idUsuario: req.query.id_usuario
+    };
 
-module.exports = {getPausas, crudPausa}
+    let sql = `INSERT INTO public.pausas_usuarios(
+       id_usuario, inicio,  id_pausa)
+      VALUES (${req.query.id_usuario},
+              now(),  ${req.query.id_pausa}) RETURNING id;  `
+
+    executaSQL(credenciais, sql)
+      .then(res => {
+        if (res.length > 0) {
+          let propostas = res;
+          resolve(propostas)
+        }
+        else reject('Pausa não encontrada!')
+      })
+      .catch(err => {
+        reject(err)
+      })
+  })
+}
+ 
+function registrarFimPausa(req, res) {
+  return new Promise(function (resolve, reject) {
+    let credenciais = {
+      token: req.query.token,
+      idUsuario: req.query.id_usuario
+    };
+
+    let sql = `UPDATE public.pausas_usuarios
+    SET  fim = now()
+    WHERE id = ${req.query.id_pausa_usuario} ;  `
+    executaSQL(credenciais, sql)
+      .then(res => {
+          resolve(res)
+      })
+      .catch(err => {
+        reject(err)
+      })
+  })
+}
+
+module.exports = {getPausas, crudPausa, registrarInicioPausa, registrarFimPausa}
