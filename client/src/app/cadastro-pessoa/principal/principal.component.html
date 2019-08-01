@@ -28,9 +28,10 @@
     </div>
     <div class="row">
       <div class="md-form form-group col mdb-date-form mb-1">
-        <mdb-date-picker name="datanascimento" formControlName="datanascimento"  [options]="myDatePickerOptions" [placeholder]="'Selecione a data'" required>
-        </mdb-date-picker>
-        <label class="">Data Nascimento</label>
+        <!-- <mdb-date-picker name="datanascimento" formControlName="datanascimento"  [options]="myDatePickerOptions" [placeholder]="'Selecione a data'" required>
+        </mdb-date-picker> -->
+        <input style="margin-top: 40px"  name="datanascimento" formControlName="datanascimento"   id="datanascimento" type="text" >
+        <label for="datanascimento" >Data Nascimento DD/MM/YYYY </label>
       </div>
       <div class="col mdb-select-form">
         <mdb-select formControlName="sexo" [placeholder]="'Selecione o Sexo'" [options]="enumSexo" [multiple]="false">
@@ -83,7 +84,7 @@
 
     <div class="row">
       <div class="md-form col">
-        <input mdbInputDirective formControlName="id" type="text" id="id" class="form-control" disabled>
+        <input mdbInputDirective formControlName="id" type="text" id="id" class="form-control">
         <label for="id">Id</label>
       </div>
     </div>

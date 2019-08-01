@@ -137,45 +137,8 @@ export class PesquisaPessoaComponent implements OnInit {
 
   }
   
-
-
-
   async editarPessoa(pessoa: any) {
     return this.router.navigate(['pessoas/'+pessoa.id]);
-    /*
-    this.editandoPessoaObject = pessoa;
-    let pessoaId = pessoa.id
-    let p = await this.connectHTTP.callService({
-      service: 'getPessoa',
-      paramsService: {
-        id_pessoa: pessoaId
-      }
-    }) as any;
-    
-    //  - se o cliente não estiver vinculado a nenhuma carteira o usuário logado pode ter acesso; 
-    //  - se o cliente esteja vinculado a uma carteria e se o usuário logado possui carteira o
-    //           o acesso aos dados do cliente somente se ele pertence a carteira do usuário logado  
-    
-    if (this.usuarioLogado.possui_carteira_cli  && p.resposta.principal.id_usuario_carteira ){
-      if(this.usuarioLogado.id == p.resposta.principal.id_usuario_carteira){
-
-        this.pessoa = new Observable(o => o.next(p.resposta));
-        this.pessoaEditando.show();
-      } else {
-        this.toastrService.error('O cliente não faz parte de sua carteira');
-      }
-      }
-      else {
-        // verifica se o usuário logado possui acesso aos clientes sem carteira 
-        if ( this.checkPermissaoRecurso.usuarioLocadoAcessaRecurso(4) ){
-          this.pessoa = new Observable(o => o.next(p.resposta));
-          this.pessoaEditando.show()
-        }else {
-          this.toastrService.error('Você não tem acesso aos clientes sem carteira');
-        }
-    }
-    this.nomePessoa = pessoa.nome;
-    */
   }
 
   async refresh() {

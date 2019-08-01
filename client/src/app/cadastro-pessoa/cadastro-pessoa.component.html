@@ -54,7 +54,7 @@
       <mdb-tab heading="MARKETING" [disabled]="!(pessoa | async)">
         <div class="row">
           <div class="col-12">
-            <app-linha-do-tempo [pessoa]="pessoa | async"></app-linha-do-tempo>
+            <app-marketing [pessoa]="pessoa" (refresh)="refreshDad()" ></app-marketing>
           </div>
         </div>
       </mdb-tab>
@@ -66,6 +66,14 @@
           </div>
         </div>
       </mdb-tab>
+      <!-- Panel 8 -->
+      <mdb-tab heading="Auditoria" [disabled]="!(pessoa | async)">
+          <div class="row">
+            <div class="col-12">
+              <app-auditoria [pessoa]="pessoa" (refresh)="refreshDad()" ></app-auditoria>
+            </div>
+          </div>
+        </mdb-tab>
     </mdb-tabset>
   </div>
 </div>

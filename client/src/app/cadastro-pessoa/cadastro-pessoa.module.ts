@@ -10,6 +10,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { PipesModule } from '../shared/pipes/pipesModule';
 import { NetworkingComponent } from './networking/networking.component';
 import { PesquisaClienteModule } from './../pesquisa-cliente/pesquisa-cliente.module';
+import { MarketingComponent } from './marketing/marketing.component';
+import { AuditoriaComponent } from './auditoria/auditoria.component';
 
 @NgModule({
   imports: [
@@ -27,7 +29,9 @@ import { PesquisaClienteModule } from './../pesquisa-cliente/pesquisa-cliente.mo
     PrincipalComponent,
     TelefonesComponent,
     EnderecosComponent,
-    NetworkingComponent,],
+    NetworkingComponent,
+    MarketingComponent,
+    AuditoriaComponent,],
   exports: [
     CadastroPessoaComponent,
     PrincipalComponent,

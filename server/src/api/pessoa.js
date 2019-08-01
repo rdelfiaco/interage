@@ -51,7 +51,7 @@ function crudRelacionamento(req, res){
     const dadosAtuais = JSON.parse(req.query.dadosAtuais);
     const dadosAnteriores =  JSON.parse(req.query.dadosAnteriores);
     const crud = req.query.crud;
-    req.query = dadosAtuais;
+    req.query = {...dadosAtuais};
     req.query.id_usuario = credenciais.idUsuario;
     let sql = ''
     if (crud == 'C') {
@@ -117,13 +117,27 @@ function getPessoa(req, res) {
           getTelefones(req).then(resTelefones => {
             getEnderecos(req).then(resEndereco => {
               getRelacionamentos(req).then(resRelacionamento => {
-                if (!resRelacionamento) { relacionamento = {} ;
-                }else relacionamentos = resRelacionamento;
-                if (!resTelefones) { telefones = {} ;
-                }else telefones = resTelefones;
-                if (!resEndereco) {enderecos = {}
-                }else enderecos = resEndereco;
-                resolve({ principal: pessoa, enderecos, telefones, relacionamentos })
+                getLeadsMiling(req).then(resLeadsMiling => {
+                  getAuditoria(req).then(respAuditoria => {
+                    if (!respAuditoria) { auditoria_ = {} ;
+                    }else auditoria_ = respAuditoria;
+                    if (!resLeadsMiling) { leadsMilings = {} ;
+                    }else leadsMilings = resLeadsMiling;
+                    if (!resRelacionamento) { relacionamento = {} ;
+                    }else relacionamentos = resRelacionamento;
+                    if (!resTelefones) { telefones = {} ;
+                    }else telefones = resTelefones;
+                    if (!resEndereco) {enderecos = {}
+                    }else enderecos = resEndereco;
+                    resolve({ principal: pessoa, enderecos, telefones, relacionamentos, leadsMilings, auditoria_ })
+                  })
+                  .catch(err => {
+                    reject(err)
+                  });  
+                  })
+                .catch(err => {
+                  reject(err)
+                });                  
               })
               .catch(err => {
                 reject(err)
@@ -212,6 +226,47 @@ executaSQL(credenciais, sql).then(res => {
 })
 }
 
+function getLeadsMiling(req) {
+  return new Promise((resolve, reject) => {
+    let credenciais = {
+      token: req.query.token,
+      idUsuario: req.query.id_usuario
+    };
+    let sql = `select p.id as ip_pessoa, lm.*, plm.dtinclusao   
+        from pessoas p
+        inner join pessoas_leads_mailing plm on p.id = plm.id_pessoa
+        inner join leads_mailing lm on plm.id_leads_mailing = lm.id 
+        where p.id = ${req.query.id_pessoa} order by lm.nome`
+executaSQL(credenciais, sql).then(res => {
+  resolve(res);
+}).catch(err => {
+  reject(err)
+  })
+})
+}
+
+function getAuditoria(req) {
+  return new Promise((resolve, reject) => {
+    let credenciais = {
+      token: req.query.token,
+      idUsuario: req.query.id_usuario
+    };
+    let sql = `select data_hora, p.nome as usuario, campo, operacao, conteudo_anterior, conteudo_novo 
+              from auditoria au 
+              inner join auditoria_detalhe aud on au.id = aud.id_auditoria 
+              inner join usuarios u on au.id_usuario = u.id
+              inner join pessoas p on u.id_pessoa = p.id 
+              where au.id_pessoa = ${req.query.id_pessoa}
+              order by data_hora desc`
+executaSQL(credenciais, sql).then(res => {
+  resolve(res);
+}).catch(err => {
+  reject(err)
+  })
+})
+}
+
+
 function salvarPessoa(req, res) {
   return new Promise(function (resolve, reject) {
 
@@ -231,7 +286,7 @@ function salvarPessoa(req, res) {
       const dadosAtuais = JSON.parse(req.query.dadosAtuais);
       const dadosAnteriores =  JSON.parse(req.query.dadosAnteriores);
 
-      req.query = dadosAtuais;
+      req.query = {...dadosAtuais};
       req.query.id_usuario = credenciais.idUsuario;
 
       // trata as variaveis que tem combro que vem com null
@@ -248,6 +303,7 @@ function salvarPessoa(req, res) {
             `;
         const tabela = 'pessoas'
         const idTabela = req.query.id
+        const idPessoa = req.query.id
         
         update = update.replace(/'null'/g, null)
         update = update.replace(/'`'/g, ' ')
@@ -256,7 +312,7 @@ function salvarPessoa(req, res) {
           client.query('COMMIT').then((resposta) => {
             client.end();
             // auditoria 
-            auditoria(credenciais, tabela, 'U', idTabela, dadosAnteriores, dadosAtuais );
+            auditoria(credenciais, tabela, 'U', idTabela, idPessoa, dadosAnteriores, dadosAtuais );
             resolve(resposta);
           }).catch(err => {
             client.end();
@@ -327,7 +383,7 @@ async function  adicionarPessoa(req, res) {
       const dadosAtuais = JSON.parse(req.query.dadosAtuais);
       const dadosAnteriores =  JSON.parse(req.query.dadosAnteriores);
 
-      req.query = dadosAtuais ;
+      req.query = {...dadosAtuais} ;
       req.query.id_usuario = credenciais.idUsuario;
       console.log(req.query)
 
@@ -351,7 +407,7 @@ async function  adicionarPessoa(req, res) {
 
       client.query(update).then((res) => {
         client.end();
-        auditoria(credenciais, 'pessoas', 'C', res.rows[0].id, dadosAnteriores, dadosAtuais );
+        auditoria(credenciais, 'pessoas', 'C', res.rows[0].id, res.rows[0].id, dadosAnteriores, dadosAtuais );
         resolve(res.rows[0])
       }).catch(e => {
         client.end();
@@ -729,7 +785,7 @@ function salvarEnderecoPessoa(req, res) {
       const dadosAtuais = JSON.parse(req.query.dadosAtuais);
       const dadosAnteriores =  JSON.parse(req.query.dadosAnteriores);
 
-      req.query = dadosAtuais       
+      req.query = {...dadosAtuais}    
 
       let update;
       client.query('BEGIN').then((res1) => {
@@ -762,7 +818,7 @@ function salvarEnderecoPessoa(req, res) {
                 cidade: '',
                 uf: ''
               }
-              auditoria(credenciais,'cidades','C',req.query.id_cidade,anteriores,atuais)
+              auditoria(credenciais,'cidades','C',req.query.id_cidade, req.query.id_pessoa, anteriores,atuais)
               salvaEndereco()
             }).catch(e => {
               reject(e);
@@ -804,7 +860,7 @@ function salvarEnderecoPessoa(req, res) {
                 if (operacao == 'I') idTabela = res.rows[0].id;
                 client.query('COMMIT').then((resposta) => {
                   client.end();
-                  auditoria(credenciais,'pessoas_enderecos',operacao,idTabela,dadosAnteriores,dadosAtuais)
+                  auditoria(credenciais,'pessoas_enderecos',operacao,idTabela,req.query.id_pessoa,dadosAnteriores,dadosAtuais)
                   resolve(resposta)
                 }).catch(err => {
                   client.end();
@@ -993,4 +1049,5 @@ module.exports = {
   getPessoaPorCPFCNPJ,
   getTipoRelacionamentos,
   crudRelacionamento,
+  
 }

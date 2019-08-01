@@ -1,6 +1,6 @@
 import { format } from './../../shared/validaCpf';
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormControl, FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { IMyOptions, ToastService } from '../../../lib/ng-uikit-pro-standard';
 import { ConnectHTTP } from '../../shared/services/connectHTTP';
 import { Usuario } from '../../login/usuario';
@@ -94,11 +94,11 @@ export class PrincipalComponent implements OnInit {
     private localStorage: LocalStorage,
     private toastrService: ToastService) {
     this.principalForm = this.formBuilder.group({
-      id: [''],
+      id: [{value:'', disable: true}],
       nome: ['', [Validators.required]],
       tipo: [this.tipoPessoaSelecionada, [Validators.required]],
       id_pronome_tratamento: [''],
-      datanascimento: [''],
+      datanascimento: ['DD/MM/YYYY', [Validators.required]],
       sexo: [''],
       rg_ie: [''],
       orgaoemissor: [''],
@@ -112,15 +112,16 @@ export class PrincipalComponent implements OnInit {
     this.principalFormAud = this.principalForm.value;
   }
 
+
+
   _setQuestionarioForm() {
     this.tipoPessoaSelecionada = this.pessoa.principal.tipo;
-    console.log(this.pessoa)
     this.principalForm = this.formBuilder.group({
       id: [this.pessoa.principal.id],
       nome: [this.pessoa.principal.nome, [Validators.required]],
       tipo: [this.pessoa.principal.tipo, [Validators.required]],
       id_pronome_tratamento: [this.pessoa.principal.id_pronome_tratamento],
-      datanascimento: [this.pessoa.principal.datanascimento  ? moment(this.pessoa.principal.datanascimento ).format('DD/MM/YYYY') : this.pessoa.principal.datanascimento ],
+      datanascimento: [moment(this.pessoa.principal.datanascimento ).format('DD/MM/YYYY') ],
       sexo: [this.pessoa.principal.sexo],
       rg_ie: [this.pessoa.principal.rg_ie],
       orgaoemissor: [this.pessoa.principal.orgaoemissor],
@@ -132,7 +133,6 @@ export class PrincipalComponent implements OnInit {
       id_atividade: [this.pessoa.principal.id_atividade],
     })
     this.principalFormAud = this.principalForm.value;
-    console.log(this.principalFormAud)
   }
 
   async ngOnInit() {

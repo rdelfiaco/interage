@@ -1,3 +1,5 @@
+import { AuditoriaComponent } from './cadastro-pessoa/auditoria/auditoria.component';
+import { MarketingComponent } from './cadastro-pessoa/marketing/marketing.component';
 
 import { BaseLayoutComponent } from './layout/base-layout/base-layout.component';
 import { PagesLayoutComponent } from './layout/pages-layout/pages-layout.component';
@@ -257,6 +259,16 @@ const routes: Routes = [
       {
         path: 'pausaDoUsuario/:id',
         component: PausaDoUsuarioComponent,
+        canActivate: [AuthGuard]
+      },
+      {
+        path: 'pessoaMarketing',
+        component: MarketingComponent,
+        canActivate: [AuthGuard]
+      },
+      {
+        path: 'pessoaAuditoria',
+        component: AuditoriaComponent,
         canActivate: [AuthGuard]
       },
     ]
