@@ -67,8 +67,10 @@ export class NetworkingComponent implements OnInit {
         label: element.relacionamento_volta
       })           
     });
-    this.relacionamentoForm.controls['pessoaReferenciaNome'].setValue(this._pessoaObject.principal.nome);
-    this.relacionamentoForm.controls['pessoaReferenciaId'].setValue(this._pessoaObject.principal.id);
+    if (this._pessoaObject.principal.id){
+      this.relacionamentoForm.controls['pessoaReferenciaNome'].setValue(this._pessoaObject.principal.nome);
+      this.relacionamentoForm.controls['pessoaReferenciaId'].setValue(this._pessoaObject.principal.id);
+    }
   };
   
 

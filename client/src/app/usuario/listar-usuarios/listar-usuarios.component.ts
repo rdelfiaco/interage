@@ -251,9 +251,7 @@ export class ListarUsuariosComponent implements OnInit {
   }
 
   inicializarSenha(){
-    console.log(2,  this.usuarioForm.value.senhaCriptogra )
     this.usuarioForm.value.senhaCriptogra = SHA1('123');
-    console.log(3,  this.usuarioForm.value.senhaCriptogra )
   }
 
   async getLogin(){

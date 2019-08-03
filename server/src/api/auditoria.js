@@ -8,7 +8,7 @@ function  auditoria(credenciais, tabela, operacao, idTabela, idPessoa, dadosAnte
             , now()
             , '${operacao}' 
             , '${tabela}'
-            , ${idTabela}
+            , ${idTabela ? idTabela: null}
             , ${idPessoa} ) RETURNING id;`
     executaSQL(credenciais, sql).then(res => {
         let id_auditoria = res[0].id;

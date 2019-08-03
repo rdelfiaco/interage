@@ -251,7 +251,10 @@ function getAuditoria(req) {
       token: req.query.token,
       idUsuario: req.query.id_usuario
     };
-    let sql = `select data_hora, p.nome as usuario, campo, operacao, conteudo_anterior, conteudo_novo 
+    let sql = `select data_hora, p.nome as usuario, campo, 
+              iif(operacao = 'U', 'Alterou',  
+              iif(operacao = 'C', 'Inseriu', 'Excluiu')) as operacao
+              , conteudo_anterior, conteudo_novo 
               from auditoria au 
               inner join auditoria_detalhe aud on au.id = aud.id_auditoria 
               inner join usuarios u on au.id_usuario = u.id
@@ -546,6 +549,18 @@ function salvarTelefonePessoa(req, res) {
 
       const client = new Client(dbconnection)
 
+      let credenciais = {
+        token: req.query.token,
+        idUsuario: req.query.id_usuario
+      };
+
+      // divide o objeto em atuais e anteriores 
+      const dadosAtuais = JSON.parse(req.query.dadosAtuais);
+      const dadosAnteriores =  JSON.parse(req.query.dadosAnteriores);
+      let operacao = 'U';
+
+      req.query = {...dadosAtuais} 
+
       client.connect()
 
       let update;
@@ -553,20 +568,21 @@ function salvarTelefonePessoa(req, res) {
         const buscaTelefone = `SELECT * FROM pessoas_telefones WHERE pessoas_telefones.id_pessoa = ${req.query.id_pessoa}`
 
         client.query(buscaTelefone).then((telefonesPessoa) => {
-          let principal = false;
+          let principal = req.query.principal;
           if (!telefonesPessoa.rowCount) principal = true
-          if (req.query.id)
+          if (req.query.id){
             update = `UPDATE pessoas_telefones SET
                       ddd='${req.query.ddd}',
                       telefone='${req.query.telefone}',
                       ramal=${req.query.ramal || null},
-                      principal=${req.query.telefone},
+                      principal=${principal},
                       id_tipo_telefone=${req.query.id_tipo_telefone},
                       contato='${req.query.contato}',
                       ddi=55,
                       dtalteracao=now()
-                      WHERE pessoas_telefones.id=${req.query.id}`;
-          else
+                      WHERE pessoas_telefones.id=${req.query.id}`;}
+          else{
+            operacao = 'C'
             update = `INSERT INTO pessoas_telefones(
             id_pessoa, ddd, telefone, ramal, principal, id_tipo_telefone, contato, ddi,dtalteracao)
             VALUES('${req.query.id_pessoa}',
@@ -576,10 +592,11 @@ function salvarTelefonePessoa(req, res) {
                   ${principal},
                   ${req.query.id_tipo_telefone},
                   '${req.query.contato}',
-                  '55', now())`;
+                  '55', now())`;}
           client.query(update).then((res) => {
             client.query('COMMIT').then((resposta) => {
               client.end();
+              auditoria(credenciais,'telefones',operacao,req.query.id, req.query.id_pessoa, dadosAnteriores, dadosAtuais);
               resolve(resposta)
             }).catch(err => {
               client.end();
