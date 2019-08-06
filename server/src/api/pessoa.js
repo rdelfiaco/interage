@@ -1038,14 +1038,20 @@ async function pesquisaPessoas(req, res) {
       client.connect()
 
       const pesquisaTexto = req.query.searchText.toLowerCase();
-      const pesquisaId = pesquisaTexto.substring(3);
+      let pesquisaId = pesquisaTexto.substring(3);
       let pesquisa = '';
-
       if (pesquisaTexto.substring(0,3) == 'id=' ) {
           pesquisa = 'id';
       }
-
-      if (pesquisa != 'id') {
+      if (pesquisaTexto.substring(0,4) == 'tel=' ) {
+        pesquisaId = pesquisaTexto.substring(4)
+        pesquisa = 'tel';
+      }
+      if (pesquisaTexto.substring(0,4).toUpperCase() == 'DTN=' ) {
+        pesquisaId = pesquisaTexto.substring(4)
+        pesquisa = 'dtN';
+      }
+      if (pesquisa == '') {
         pesquisa = `SELECT p.*, up.apelido_fantasia as carteira FROM pessoas p
             left join usuarios u on p.id_usuario_carteira = u.id
             left join pessoas up on u.id_pessoa = up.id 
@@ -1053,21 +1059,29 @@ async function pesquisaPessoas(req, res) {
             lower(p.apelido_fantasia)
             LIKE '%${pesquisaTexto}%' OR
             lower(p.cpf_cnpj) LIKE '%${pesquisaTexto}%'  )`
-      }
-      else {
+      } else if  (pesquisa == 'id') {
         pesquisa = `SELECT p.*, up.apelido_fantasia as carteira FROM pessoas p
             left join usuarios u on p.id_usuario_carteira = u.id
             left join pessoas up on u.id_pessoa = up.id 
             WHERE p.id=${pesquisaId}
             `
+      } else if  (pesquisa == 'tel') {
+        pesquisa = `SELECT p.*, up.apelido_fantasia as carteira FROM pessoas p
+            inner join pessoas_telefones pt on p.id = pt.id_pessoa
+            left join usuarios u on p.id_usuario_carteira = u.id
+            left join pessoas up on u.id_pessoa = up.id 
+            WHERE cast(pt.telefone as text ) like  '%${pesquisaId}%'
+          `
+      } else if  (pesquisa == 'dtN') {
+        pesquisa = `SELECT p.*, up.apelido_fantasia as carteira FROM pessoas p
+            left join usuarios u on p.id_usuario_carteira = u.id
+            left join pessoas up on u.id_pessoa = up.id 
+            WHERE p.datanascimento = date('${pesquisaId}')
+            `
       }
-      // carteira do usuario 
-      // if (possui_carteira_cli) {
-      //     pesquisa = pesquisa +  ` and p.id_usuario_carteira = ${req.query.id_usuario} `
-      // }
 
-      pesquisa = pesquisa + ` limit 100`
-      
+          pesquisa = pesquisa + ` limit 100`
+          console.log(pesquisa)
       client.query(pesquisa).then((res) => {
         client.end()
         if (res.rowCount > 0) {
