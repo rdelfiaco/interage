@@ -14,7 +14,7 @@ import { CheckPermissaoRecurso } from '../../shared/services/checkPemissaoRecurs
 })
 export class TelefonesComponent implements OnInit {
 
-  telefoneSelecionado: boolean;
+  telefoneSelecionado: boolean = false;
   _pessoa: any
   _pessoaObject: any;
   telefoneExclusao: any;
@@ -115,7 +115,8 @@ export class TelefonesComponent implements OnInit {
         await this.connectHTTP.callService({
           service: 'excluirTelefonePessoa',
           paramsService: {
-            id_telefone: this.telefoneExclusao.id
+            id_telefone: this.telefoneExclusao.id,
+            id_pessoa: this.telefoneExclusao.id_pessoa
           }
         });
         this.toastrService.success('Excluido com sucesso');
@@ -134,16 +135,17 @@ export class TelefonesComponent implements OnInit {
   }
 
   editarTelefone(telefoneId) {
-    const telefoneSelecionado = this._pessoaObject.telefones.filter(t => t.id == telefoneId)[0];
+    debugger
+    const telefoneSelecionado_ = this._pessoaObject.telefones.filter(t => t.id == telefoneId)[0];
     this.telefoneForm = this.formBuilder.group({
-      id: [telefoneSelecionado.id],
+      id: [telefoneSelecionado_.id],
       id_pessoa: [this._pessoaObject.principal.id, [Validators.required]],
-      ddd: [telefoneSelecionado.ddd, [Validators.required]],
-      telefone: [telefoneSelecionado.telefone, [Validators.required]],
-      ramal: [telefoneSelecionado.ramal],
-      principal: [telefoneSelecionado.principal],
-      id_tipo_telefone: [telefoneSelecionado.id_tipo_telefone, [Validators.required]],
-      contato: [telefoneSelecionado.contato],
+      ddd: [telefoneSelecionado_.ddd, [Validators.required]],
+      telefone: [telefoneSelecionado_.telefone, [Validators.required]],
+      ramal: [telefoneSelecionado_.ramal],
+      principal: [telefoneSelecionado_.principal],
+      id_tipo_telefone: [telefoneSelecionado_.id_tipo_telefone, [Validators.required]],
+      contato: [telefoneSelecionado_.contato],
     })
     this.telefoneSelecionado = true;
     this.telefoneFormAud = this.telefoneForm.value;

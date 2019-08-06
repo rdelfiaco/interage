@@ -368,7 +368,7 @@ async function  adicionarPessoa(req, res) {
     token: req.query.token,
     idUsuario: req.query.id_usuario
   };
-  var possui_carteira_cli = await buscaValorDoAtributo(credenciais, 'possui_carteira_cli', 'usuarios', `id = ${req.query.id_usuario}` )
+  var possui_carteira_cli = await buscaValorDoAtributo(credenciais, 'possui_carteira_cli', 'usuarios', `id = ${req.query.id_usuario}` );
   possui_carteira_cli = Object.values( possui_carteira_cli[0])[0];
 
   return new Promise(function (resolve, reject) {    
@@ -627,7 +627,48 @@ function salvarTelefonePessoa(req, res) {
   })
 }
 
-function editaTelefonePrincipal(req, res) {
+async function editaTelefonePrincipal(req, res) {
+  let credenciais = {
+    token: req.query.token,
+    idUsuario: req.query.id_usuario
+  };
+      // busca o telefone que era principal e o que será 
+      var idTelefoneAnt = await buscaValorDoAtributo(credenciais, 'id', 'pessoas_telefones', `id_pessoa=${req.query.id_pessoa} and  principal` );
+       idTelefoneAnt = Object.values( idTelefoneAnt[0])[0];
+      var telefoneAnt = await buscaValorDoAtributo(credenciais, 'telefone', 'pessoas_telefones', `id = ${idTelefoneAnt}`);
+      telefoneAnt = Object.values( telefoneAnt[0])[0];
+      var dddAnt = await buscaValorDoAtributo(credenciais, 'ddd', 'pessoas_telefones', `id = ${idTelefoneAnt}`);
+      dddAnt = Object.values( dddAnt[0])[0];
+      var telefoneAlterado = await buscaValorDoAtributo(credenciais, 'telefone', 'pessoas_telefones', `id=${req.query.id_telefone}`);
+      telefoneAlterado = Object.values( telefoneAlterado[0])[0];
+      var dddAlterado = await buscaValorDoAtributo(credenciais, 'ddd', 'pessoas_telefones', `id=${req.query.id_telefone}`);
+      dddAlterado = Object.values( dddAlterado[0])[0];
+
+      var dadosAnteriores = {
+        telefone: telefoneAnt,
+        ddd: dddAnt,
+        principal: true
+      };
+      var dadosAtuais = {
+        telefone: '',
+        ddd: '',
+        principal: false
+      };
+
+      auditoria(credenciais,'pessoas_telefones','U',idTelefoneAnt,req.query.id_pessoa,dadosAnteriores,dadosAtuais)
+      var dadosAnteriores = {
+        telefone: '',
+        ddd: '',
+        principal: false
+      };
+      var dadosAtuais = {
+        telefone: telefoneAlterado,
+        ddd: dddAlterado,
+        principal: true
+      };
+      auditoria(credenciais,'pessoas_telefones','U',req.query.id_telefone,req.query.id_pessoa,dadosAnteriores,dadosAtuais)
+
+
   return new Promise(function (resolve, reject) {
 
     checkTokenAccess(req).then(historico => {
@@ -737,7 +778,30 @@ function editaEnderecoDeCorrespondencia(req, res) {
   })
 }
 
-function excluirTelefonePessoa(req, res) {
+async function excluirTelefonePessoa(req, res) {
+
+  let credenciais = {
+    token: req.query.token,
+    idUsuario: req.query.id_usuario
+  };
+      // busca o telefone que era ecluido 
+      var telefoneAlterado = await buscaValorDoAtributo(credenciais, 'telefone', 'pessoas_telefones', `id=${req.query.id_telefone}`);
+      telefoneAlterado = Object.values( telefoneAlterado[0])[0];
+      var dddAlterado = await buscaValorDoAtributo(credenciais, 'ddd', 'pessoas_telefones', `id=${req.query.id_telefone}`);
+      dddAlterado = Object.values( dddAlterado[0])[0];
+
+      var dadosAtuais = {
+        telefone: '',
+        ddd: '',
+        principal: ''
+      };
+      var dadosAnteriores  = {
+        telefone: telefoneAlterado,
+        ddd: dddAlterado,
+        principal: true
+      };
+      auditoria(credenciais,'pessoas_telefones','D',req.query.id_telefone,req.query.id_pessoa,dadosAnteriores,dadosAtuais)
+
   return new Promise(function (resolve, reject) {
 
     checkTokenAccess(req).then(historico => {

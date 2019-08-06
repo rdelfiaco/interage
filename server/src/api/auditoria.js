@@ -10,6 +10,7 @@ function  auditoria(credenciais, tabela, operacao, idTabela, idPessoa, dadosAnte
             , '${tabela}'
             , ${idTabela ? idTabela: null}
             , ${idPessoa} ) RETURNING id;`
+            // console.log(1, sql)
     executaSQL(credenciais, sql).then(res => {
         let id_auditoria = res[0].id;
         for (var [key, value] of Object.entries(dadosAtuais)) {
@@ -20,6 +21,7 @@ function  auditoria(credenciais, tabela, operacao, idTabela, idPessoa, dadosAnte
                         , '${key}'
                         , '${dadosAnteriores[key]}'
                         , '${ key == 'id' ? idTabela: value}');`
+                // console.log(2, sql)
                 executaSQL(credenciais, sql).then(res1 => {
                 }).catch(e => {client.end(); reject(e)})
             }
