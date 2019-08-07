@@ -28,7 +28,7 @@ export class CadastroPessoaComponent implements OnInit {
     private auth: AuthService, 
     private route: ActivatedRoute,
     private toastrService: ToastService,
-    private checkPermissaoRecurso: CheckPermissaoRecurso ) {
+    public checkPermissaoRecurso: CheckPermissaoRecurso ) {
     
       this.usuarioLogado = this.localStorage.getLocalStorage('usuarioLogado') as Usuario;
 
