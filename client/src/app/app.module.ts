@@ -50,6 +50,7 @@ import { BaseLayoutComponent } from './layout/base-layout/base-layout.component'
 import { AppsLayoutComponent } from './layout/apps-layout/apps-layout.component';
 import { PagesLayoutComponent } from './layout/pages-layout/pages-layout.component';
 import { TipoDeClienteComponent } from './tipo-de-cliente/tipo-de-cliente.component';
+import { ObjecaoComponent } from './objecao/objecao.component';
 
 
 
@@ -71,7 +72,8 @@ import { TipoDeClienteComponent } from './tipo-de-cliente/tipo-de-cliente.compon
     BaseLayoutComponent,
     AppsLayoutComponent,
     PagesLayoutComponent,
-    TipoDeClienteComponent
+    TipoDeClienteComponent,
+    ObjecaoComponent
   ],
 
   imports: [

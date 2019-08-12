@@ -2,21 +2,21 @@ const { executaSQL } = require('./executaSQL');
 const { auditoria } = require('./auditoria');
 
 
-function getTipoClientes(req, res) {
+function getObjecao(req, res) {
     return new Promise(function (resolve, reject) {
       let credenciais = {
         token: req.query.token,
         idUsuario: req.query.id_usuario
       };
   
-      let sql = `select * from tipo_clientes  `
+      let sql = `select * from objecoes  `
       executaSQL(credenciais, sql)
         .then(res => {
           if (res.length > 0) {
             let propostas = res;
             resolve(propostas)
           }
-          else reject('tipo_clientes não encontrada!')
+          else reject('objecao não encontrada!')
         })
         .catch(err => {
           reject(err)
@@ -24,7 +24,7 @@ function getTipoClientes(req, res) {
     })
   }
 
-  function crudTipoClientes(req, res){
+  function crudObjecao(req, res){
     return new Promise(function (resolve, reject) {
       let credenciais = {
         token: req.query.token,
@@ -37,7 +37,7 @@ function getTipoClientes(req, res) {
     const crud = req.query.crud;
     req.query = dadosAtuais;
     //req.query.id_usuario = credenciais.idUsuario;
-    let tabela = 'tipo_clientes';
+    let tabela = 'objecoes';
     let idTabela = req.query.id;
     let sql = ''
     if (crud == 'C') sql = sqlCreate(); 
@@ -45,8 +45,8 @@ function getTipoClientes(req, res) {
     if (crud == 'U') sql = sqlUpdate();
     executaSQL(credenciais, sql).then(res => {
       // auditoria 
-      // if (crud == 'C') idTabela = res[0].id;
-      // auditoria(credenciais, tabela, crud , idTabela, dadosAnteriores, dadosAtuais );
+    //   if (crud == 'C') idTabela = res[0].id;
+    //   auditoria(credenciais, tabela, crud , idTabela, dadosAnteriores, dadosAtuais );
       resolve(res)
 
     })
@@ -55,18 +55,18 @@ function getTipoClientes(req, res) {
     });
 
     function sqlCreate(){
-      let sql = `INSERT INTO tipo_clientes(
+      let sql = `INSERT INTO objecoes(
                  status,  nome)
                 VALUES ( ${req.query.status},  '${req.query.nome}') RETURNING id;`;
       return sql;
     };
     function sqlDelete(){
-      let sql = `DELETE FROM tipo_clientes
+      let sql = `DELETE FROM objecoes
                   WHERE id= ${req.query.id};`;
       return sql;
     };
     function sqlUpdate(){
-      let sql = `UPDATE tipo_clientes
+      let sql = `UPDATE objecoes
                  SET  status=${req.query.status}, 
                       nome='${req.query.nome}'
                 WHERE id= ${req.query.id};`;
@@ -77,4 +77,4 @@ function getTipoClientes(req, res) {
   });
 };
 
-module.exports = {getTipoClientes, crudTipoClientes}
+module.exports = {getObjecao, crudObjecao}

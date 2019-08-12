@@ -27,6 +27,7 @@ const questPerguntas = require('./src/api/questionariosPerguntas');
 const questAlternativas = require('./src/api/questionariosAlternativas');
 const pausa = require('./src/api/pausa');
 const tipoDeClientes = require('./src/api/tipoDeClientes');
+const objecao = require('./src/api/objecao');
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
@@ -159,7 +160,9 @@ declaraServico('registrarInicioPausa', pausa.registrarInicioPausa);
 // tipo de clientes
 declaraServico('getTipoClientes', tipoDeClientes.getTipoClientes);
 declaraServico('crudTipoClientes', tipoDeClientes.crudTipoClientes);
-
+// Objeções
+declaraServico('getObjecao', objecao.getObjecao);
+declaraServico('crudObjecao', objecao.crudObjecao);
 app.listen(nodeStart.port, "0.0.0.0");
 console.log(`Servidor iniciado na em http://localhost:${nodeStart.port}`)
 

@@ -5,11 +5,12 @@ import { Component, OnInit } from '@angular/core';
 
 
 @Component({
-  selector: 'app-tipo-de-cliente',
-  templateUrl: './tipo-de-cliente.component.html',
-  styleUrls: ['./tipo-de-cliente.component.scss']
+  selector: 'app-objecao',
+  templateUrl: './objecao.component.html',
+  styleUrls: ['./objecao.component.scss']
 })
-export class TipoDeClienteComponent implements OnInit {
+export class ObjecaoComponent implements OnInit {
+
 
 
   tableData: any;
@@ -60,7 +61,7 @@ export class TipoDeClienteComponent implements OnInit {
   async getTipoClientes() {
     try {
       let resp = await this.connectHTTP.callService({
-        service: 'getTipoClientes',
+        service: 'getObjecao',
         paramsService: {}
       }) as any;
       if (resp.error) {
@@ -71,12 +72,12 @@ export class TipoDeClienteComponent implements OnInit {
     }
     catch (e) {
       
-      this.toastrService.error('Erro ao ler tipo de clientes', e);
+      this.toastrService.error('Erro ao ler Objeção', e);
     }
   }
 
   adicionar(){
-    this.formularioTitulo = 'Adicionando Tipo de Clientes';
+    this.formularioTitulo = 'Adicionando Objeção';
     this.formularioForm.controls['id'].setValue('');
     this.formularioForm.controls['nome'].setValue('');
     this.formularioForm.controls['status'].setValue(true);
@@ -87,7 +88,7 @@ export class TipoDeClienteComponent implements OnInit {
   }
 
   editar(id){
-    this.formularioTitulo = 'Editando Tipo de Clientes';
+    this.formularioTitulo = 'Editando Objeção';
     this.titleBntEnviar = 'Salvar';
     this.crud = 'U'; // update 
     this.povoarCampos(id);
@@ -98,7 +99,7 @@ export class TipoDeClienteComponent implements OnInit {
   }
 
   excluir(id){
-    this.formularioTitulo = 'Excluindo Tipo de Clientes';
+    this.formularioTitulo = 'Excluindo Objeção';
     this.titleBntEnviar = 'Excluir';
     this.crud = 'D'; // delete 
     this.povoarCampos(id);
@@ -125,7 +126,7 @@ export class TipoDeClienteComponent implements OnInit {
       this.formularioForm.controls['nome'].enable();
       this.formularioForm.controls['status'].enable();
       let resp = await this.connectHTTP.callService({
-        service: 'crudTipoClientes',
+        service: 'crudObjecao',
         paramsService: {
           dadosAtuais: JSON.stringify(this.formularioForm.value),
           dadosAnteriores: JSON.stringify(this.formularioFormAud),
@@ -146,4 +147,5 @@ export class TipoDeClienteComponent implements OnInit {
   }
 
 }
+
 

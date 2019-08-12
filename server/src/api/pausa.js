@@ -48,8 +48,8 @@ function getPausas(req, res) {
 
     executaSQL(credenciais, sql).then(res => {
       // auditoria 
-      if (crud == 'C') idTabela = res[0].id;
-      auditoria(credenciais, tabela, crud , idTabela, dadosAnteriores, dadosAtuais );
+      // if (crud == 'C') idTabela = res[0].id;
+      // auditoria(credenciais, tabela, crud , idTabela, dadosAnteriores, dadosAtuais );
       resolve(res)
 
     })
