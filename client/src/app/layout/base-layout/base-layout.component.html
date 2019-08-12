@@ -179,15 +179,8 @@
                                         <span class="h6 font-weight">Pausa
                                         </span>
                                     </a>
-                                </li>
-                              <li (click)="openPage('usuario', $event);">
-                                  <a class="waves-effect" mdbRippleRadius>
-                                      <i class="fa fa-user font-weight"></i>
-                                      <span class="h6 font-weight">Usuários
-                                      </span>
-                                      <!-- sidenav.hide() -->
-                                  </a>
                               </li>
+
                               <li (click)="openPage('questionario', $event);">
                                   <a class="waves-effect" mdbRippleRadius>
                                       <i class="fa fa-clipboard font-weight"></i>
@@ -195,6 +188,22 @@
                                       </span>
                                       <!-- sidenav.hide() -->
                                   </a>
+                              </li>
+                              <li (click)="openPage('tipoDecliente', $event);">
+                                    <a class="waves-effect" mdbRippleRadius>
+                                        <i class="fa fa-user font-weight"></i>
+                                        <span class="h6 font-weight">Tipo de clientes
+                                        </span>
+                                        <!-- sidenav.hide() -->
+                                    </a>
+                              </li>
+                              <li (click)="openPage('usuario', $event);">
+                                    <a class="waves-effect" mdbRippleRadius>
+                                        <i class="fa fa-user font-weight"></i>
+                                        <span class="h6 font-weight">Usuários
+                                        </span>
+                                        <!-- sidenav.hide() -->
+                                    </a>
                               </li>
                           </ul>
                       </mdb-item-body>
@@ -222,12 +231,12 @@
       </navlinks>
 
 
-      <!-- <mdb-navbar-brand>
+      <mdb-navbar-brand>
           <div class="breadcrumbs breadcrumb-dn mr-auto logomarcaCliente">
               <button mdbBtn type="button" color="danger" size="sm" mdbWavesEffect disabled>SERVIDOR DE
                   TESTE</button>
           </div>
-      </mdb-navbar-brand> -->
+      </mdb-navbar-brand>
 
       <navlinks>
           <ul class="nav navbar-nav nav-flex-icons ml-auto ie-double-nav">

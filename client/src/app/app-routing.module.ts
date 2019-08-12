@@ -1,3 +1,4 @@
+import { TipoDeClienteComponent } from './tipo-de-cliente/tipo-de-cliente.component';
 import { AuditoriaComponent } from './cadastro-pessoa/auditoria/auditoria.component';
 import { MarketingComponent } from './cadastro-pessoa/marketing/marketing.component';
 
@@ -269,6 +270,11 @@ const routes: Routes = [
       {
         path: 'pessoaAuditoria',
         component: AuditoriaComponent,
+        canActivate: [AuthGuard]
+      },
+      {
+        path: 'tipoDecliente',
+        component: TipoDeClienteComponent,
         canActivate: [AuthGuard]
       },
     ]

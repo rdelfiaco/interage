@@ -14,6 +14,7 @@ export class SemPermissaoComponent implements OnInit {
 
   voltar() {
     window.history.back();
+
   }
 
 }

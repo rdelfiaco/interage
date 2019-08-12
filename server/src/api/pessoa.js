@@ -342,6 +342,7 @@ function salvarPessoa(req, res) {
           ret.push('rg_ie=' + (req.query.rg_ie != 'null' || req.query.rg_ie != '' ? "'" + req.query.rg_ie + "'" : null))
           ret.push('orgaoemissor=' + (req.query.orgaoemissor != 'null' || req.query.orgaoemissor != '' ? "'" + req.query.orgaoemissor + "'" : null))
           ret.push('cpf_cnpj=' + (req.query.cpf_cnpj != 'null' || req.query.cpf_cnpj != ''  ? "'" + req.query.cpf_cnpj + "'" : null))
+          ret.push('cnh=' + (req.query.cnh != 'null' || req.query.cnh != ''  ? "'" + req.query.cnh + "'" : null))
           ret.push('email=' + (req.query.email != 'null' || req.query.email != '' ? "'" + req.query.email + "'" : null))
           ret.push('website=' + (req.query.website != 'null' || req.query.website != '' ? "'" + req.query.website + "'" : null))
           ret.push('id_atividade=' + (req.query.id_atividade != 'null' || req.query.id_atividade != '' ? "'" + req.query.id_atividade + "'" : null))
@@ -428,6 +429,7 @@ async function  adicionarPessoa(req, res) {
         ret.push('rg_ie,')
         ret.push('orgaoemissor,')
         ret.push('cpf_cnpj,')
+        ret.push('cnh,')
         ret.push('email,')
         ret.push('website,')
         ret.push('observacoes,')
@@ -448,6 +450,7 @@ async function  adicionarPessoa(req, res) {
         ret.push((req.query.rg_ie != '' ? "'" + req.query.rg_ie + "'" : 'NULL') + ",")
         ret.push((req.query.orgaoemissor != '' ? "'" + req.query.orgaoemissor + "'" : 'NULL') + ",")
         ret.push((req.query.cpf_cnpj != '' ? "'" + req.query.cpf_cnpj + "'" : 'NULL') + ",")
+        ret.push((req.query.cnh != '' ? "'" + req.query.cnh + "'" : 'NULL') + ",")
         ret.push((req.query.email != '' ? "'" + req.query.email + "'" : 'NULL') + ",")
         ret.push((req.query.website != '' ? "'" + req.query.website + "'" : 'NULL') + ",")
         ret.push((req.query.observacoes != '' ? "'" + req.query.observacoes + "'" : 'NULL') + ",")
@@ -470,6 +473,7 @@ async function  adicionarPessoa(req, res) {
         ret.push('rg_ie,')
         ret.push('orgaoemissor,')
         ret.push('cpf_cnpj,')
+        ret.push('cnh,')
         ret.push('email,')
         ret.push('website,')
         ret.push('observacoes,')
@@ -489,6 +493,7 @@ async function  adicionarPessoa(req, res) {
         ret.push((req.query.rg_ie != '' ? "'" + req.query.rg_ie + "'" : 'NULL') + ",")
         ret.push((req.query.orgaoemissor != '' ? "'" + req.query.orgaoemissor + "'" : 'NULL') + ",")
         ret.push((req.query.cpf_cnpj != '' ? "'" + req.query.cpf_cnpj + "'" : 'NULL') + ",")
+        ret.push((req.query.cnh != '' ? "'" + req.query.cnh + "'" : 'NULL') + ",")
         ret.push((req.query.email != '' ? "'" + req.query.email + "'" : 'NULL') + ",")
         ret.push((req.query.website != '' ? "'" + req.query.website + "'" : 'NULL') + ",")
         ret.push((req.query.observacoes != '' ? "'" + req.query.observacoes + "'" : 'NULL') + ",")
@@ -1037,7 +1042,7 @@ async function pesquisaPessoas(req, res) {
 
       client.connect()
 
-      const pesquisaTexto = req.query.searchText.toLowerCase();
+      var pesquisaTexto = req.query.searchText.toLowerCase();
       let pesquisaId = pesquisaTexto.substring(3);
       let pesquisa = '';
       if (pesquisaTexto.substring(0,3) == 'id=' ) {
@@ -1052,6 +1057,7 @@ async function pesquisaPessoas(req, res) {
         pesquisa = 'dtN';
       }
       if (pesquisa == '') {
+        pesquisaTexto = pesquisaTexto.replace(/\W/gi, '');
         pesquisa = `SELECT p.*, up.apelido_fantasia as carteira FROM pessoas p
             left join usuarios u on p.id_usuario_carteira = u.id
             left join pessoas up on u.id_pessoa = up.id 
@@ -1081,7 +1087,6 @@ async function pesquisaPessoas(req, res) {
       }
 
           pesquisa = pesquisa + ` limit 100`
-          console.log(pesquisa)
       client.query(pesquisa).then((res) => {
         client.end()
         if (res.rowCount > 0) {

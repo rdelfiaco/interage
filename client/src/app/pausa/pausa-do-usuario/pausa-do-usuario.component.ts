@@ -103,9 +103,11 @@ export class PausaDoUsuarioComponent implements OnInit {
     catch (e) {
       this.toastrService.error('Operação não realizada');
     }
-    this.ngOnInit();
-  
-  }
 
+    window.history.back();  
+
+    
+  }
+  
 
 }

@@ -49,6 +49,7 @@ import { AngularDualListBoxModule } from 'angular-dual-listbox';
 import { BaseLayoutComponent } from './layout/base-layout/base-layout.component';
 import { AppsLayoutComponent } from './layout/apps-layout/apps-layout.component';
 import { PagesLayoutComponent } from './layout/pages-layout/pages-layout.component';
+import { TipoDeClienteComponent } from './tipo-de-cliente/tipo-de-cliente.component';
 
 
 
@@ -69,7 +70,8 @@ import { PagesLayoutComponent } from './layout/pages-layout/pages-layout.compone
     RanksComponent,
     BaseLayoutComponent,
     AppsLayoutComponent,
-    PagesLayoutComponent
+    PagesLayoutComponent,
+    TipoDeClienteComponent
   ],
 
   imports: [

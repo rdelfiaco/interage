@@ -104,7 +104,6 @@ export class PesquisaPessoaComponent implements OnInit {
           searchText: this.textoPesquisaPessoa
         }
       }) as any;
-      console.log('***** ', pessoasEncontradas.resposta)
       this.pessoasEncontradas = pessoasEncontradas.resposta;
       if (!this.pessoasEncontradas.length) {
         this.pessoasEncontradas = [];
@@ -132,7 +131,6 @@ export class PesquisaPessoaComponent implements OnInit {
   }
 
   closeModal() {
-    console.log('11111')
     this.pessoaEditando.hide();
 
   }

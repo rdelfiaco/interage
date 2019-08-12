@@ -41,9 +41,11 @@ export class BaseLayoutComponent {
   }
 
   logout() {
-    this.usuarioLogado = null;
+    debugger
     this.auth.logout();
-    window.location.reload();
+    this.usuarioLogado = null;
+    // window.location.reload();
+    this.router.navigate(['/login']);
   }
 
 

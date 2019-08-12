@@ -91,5 +91,6 @@ export class CadastroPessoaComponent implements OnInit {
         window.history.back();
       }
     }
+
   }
 }

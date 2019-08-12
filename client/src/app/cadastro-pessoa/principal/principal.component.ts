@@ -108,6 +108,7 @@ export class PrincipalComponent implements OnInit {
       observacoes: [''],
       apelido_fantasia: [''],
       id_atividade: [''],
+      cnh:[''],
     })
     this.principalFormAud = this.principalForm.value;
   }
@@ -131,6 +132,7 @@ export class PrincipalComponent implements OnInit {
       observacoes: [this.pessoa.principal.observacoes],
       apelido_fantasia: [this.pessoa.principal.apelido_fantasia],
       id_atividade: [this.pessoa.principal.id_atividade],
+      cnh: [this.pessoa.principal.cnh],
     })
     this.principalFormAud = this.principalForm.value;
   }
@@ -212,9 +214,7 @@ export class PrincipalComponent implements OnInit {
 
         this.toastrService.success('Salvo com sucesso');
 
-        this.refreshPessoaAdd.emit({ idPessoa: res.resposta.id });
-
-    
+        this.refreshPessoaAdd.emit({ idPessoa: res.resposta.id });    
     }
   }
   checkAtividadePessoa() {
@@ -234,7 +234,4 @@ export class PrincipalComponent implements OnInit {
     this.principalForm.controls['apelido_fantasia'].setValue(this.principalForm.value.nome);
 
   }
-
-
-
 }
