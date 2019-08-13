@@ -51,6 +51,7 @@ import { AppsLayoutComponent } from './layout/apps-layout/apps-layout.component'
 import { PagesLayoutComponent } from './layout/pages-layout/pages-layout.component';
 import { TipoDeClienteComponent } from './tipo-de-cliente/tipo-de-cliente.component';
 import { ObjecaoComponent } from './objecao/objecao.component';
+import { ClassifcacaoDeClientesComponent } from './classifcacao-de-clientes/classifcacao-de-clientes.component';
 
 
 
@@ -73,7 +74,8 @@ import { ObjecaoComponent } from './objecao/objecao.component';
     AppsLayoutComponent,
     PagesLayoutComponent,
     TipoDeClienteComponent,
-    ObjecaoComponent
+    ObjecaoComponent,
+    ClassifcacaoDeClientesComponent
   ],
 
   imports: [

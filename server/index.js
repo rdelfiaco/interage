@@ -27,6 +27,7 @@ const questPerguntas = require('./src/api/questionariosPerguntas');
 const questAlternativas = require('./src/api/questionariosAlternativas');
 const pausa = require('./src/api/pausa');
 const tipoDeClientes = require('./src/api/tipoDeClientes');
+const classificacaoDeClientes = require('./src/api/classsificacaoClientes');
 const objecao = require('./src/api/objecao');
 
 app.use(bodyParser.json());
@@ -160,6 +161,9 @@ declaraServico('registrarInicioPausa', pausa.registrarInicioPausa);
 // tipo de clientes
 declaraServico('getTipoClientes', tipoDeClientes.getTipoClientes);
 declaraServico('crudTipoClientes', tipoDeClientes.crudTipoClientes);
+// classificação de clientes
+declaraServico('getClassificacaoClientes', classificacaoDeClientes.getClassificacaoClientes);
+declaraServico('crudClassificacaoClientes', classificacaoDeClientes.crudClassificacaoClientes);
 // Objeções
 declaraServico('getObjecao', objecao.getObjecao);
 declaraServico('crudObjecao', objecao.crudObjecao);

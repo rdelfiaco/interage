@@ -11,13 +11,18 @@
         <th scope="row"> <h5> {{relacionamento.relacionamento}} </h5> </th>
         <td>
           <button (click)="editarRelacionamentos(relacionamento.id)" type="button" mdbBtn color="blue" outline="true" rounded="true"
-            size="sm" class="px-2" mdbWavesEffect>
+            size="sm" class="px-2" mdbWavesEffect title="Alterar relacionamento" >
             <mdb-icon fas icon="pencil" class="mt-0"></mdb-icon>
           </button>
           <button type="button" mdbBtn color="red"
             (click)="excluirRelacionamentos(relacionamento.id)" outline="true" rounded="true"
-            size="sm" class="px-2" mdbWavesEffect>
+            size="sm" class="px-2" mdbWavesEffect title="Excluir relacionamento"  >
             <mdb-icon fas icon="trash" class="mt-0"></mdb-icon>
+          </button>
+          <button type="button" mdbBtn color="yellow"
+            (click)="abrirCadastro(relacionamento.id)" outline="true" rounded="true"
+            size="sm" class="px-2" mdbWavesEffect title="Abrir cadastro do relacionado"  >
+            <mdb-icon fas icon="address-book" class="mt-0"></mdb-icon>
           </button>
         </td>
       </tr>

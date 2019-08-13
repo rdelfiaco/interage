@@ -1,11 +1,12 @@
 import { element } from 'protractor';
-import { performance } from './../../../lib/ng-uikit-pro-standard/free/utils/facade/browser';
+import { performance, location } from './../../../lib/ng-uikit-pro-standard/free/utils/facade/browser';
 import { Component, OnInit, Input, SimpleChanges, Output, EventEmitter, isDevMode } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ConnectHTTP } from '../../shared/services/connectHTTP';
 import { LocalStorage } from '../../shared/services/localStorage';
 import { ToastService } from '../../../lib/ng-uikit-pro-standard';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {  Router } from '@angular/router';
  
 
 @Component({
@@ -34,7 +35,10 @@ export class NetworkingComponent implements OnInit {
   tipoTratamentoVoltaSelecionada: number = 3;
   pessoaId: any;
 
-  constructor(private connectHTTP: ConnectHTTP, private formBuilder: FormBuilder,
+  constructor(
+    private router: Router,
+    private connectHTTP: ConnectHTTP, 
+    private formBuilder: FormBuilder,
     private localStorage: LocalStorage,
     private toastrService: ToastService) {
     this.usuarioLogado = this.localStorage.getLocalStorage('usuarioLogado') as any;
@@ -112,6 +116,16 @@ export class NetworkingComponent implements OnInit {
     this.btnCancelarColor = 'danger';
     this.povoaCampos(id)
   };
+
+  async abrirCadastro(id){
+    this.pessoaId = this._pessoaObject.relacionamentos.find(element => {
+      if (element.id == id) return element;
+    })
+    await this.router.navigate(['pessoas/'+this.pessoaId.id_pessoa_referenciada]);
+    
+    location.reload();      
+  };
+  
 
 
   povoaCampos(id){

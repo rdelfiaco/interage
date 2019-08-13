@@ -1,3 +1,4 @@
+import { ClassifcacaoDeClientesComponent } from './classifcacao-de-clientes/classifcacao-de-clientes.component';
 import { ObjecaoComponent } from './objecao/objecao.component';
 import { TipoDeClienteComponent } from './tipo-de-cliente/tipo-de-cliente.component';
 import { AuditoriaComponent } from './cadastro-pessoa/auditoria/auditoria.component';
@@ -276,6 +277,11 @@ const routes: Routes = [
       {
         path: 'tipoDecliente',
         component: TipoDeClienteComponent,
+        canActivate: [AuthGuard]
+      },
+      {
+        path: 'classificacaoClietes',
+        component: ClassifcacaoDeClientesComponent,
         canActivate: [AuthGuard]
       },
       {
