@@ -48,6 +48,8 @@ import { AngularDualListBoxModule } from 'angular-dual-listbox';
 import { BaseLayoutComponent } from './layout/base-layout/base-layout.component';
 import { AppsLayoutComponent } from './layout/apps-layout/apps-layout.component';
 import { PagesLayoutComponent } from './layout/pages-layout/pages-layout.component';
+// import { ResponderQuestionario } from './responder-questionario/responder-questionario.module';
+import { ResponderQuestionarioComponent } from './responder-questionario/responder-questionario.component';
 
 
 
@@ -68,7 +70,8 @@ import { PagesLayoutComponent } from './layout/pages-layout/pages-layout.compone
     RanksComponent,
     BaseLayoutComponent,
     AppsLayoutComponent,
-    PagesLayoutComponent
+    PagesLayoutComponent,
+    ResponderQuestionarioComponent
   ],
 
   imports: [
@@ -100,7 +103,7 @@ import { PagesLayoutComponent } from './layout/pages-layout/pages-layout.compone
     DepartamentoModule,
     AngularDualListBoxModule,
     CrudCampanhaModule,
-    QuestionarioModule
+    QuestionarioModule,
   ],
   providers: [MDBSpinningPreloader
 

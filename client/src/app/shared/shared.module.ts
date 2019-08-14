@@ -8,7 +8,6 @@ import { CheckPermissaoRecurso } from './services/checkPemissaoRecurso';
 import { CnpjPipe } from './pipes/validaCnpj/cnpj.pipe';
 import { CpfPipe } from './pipes/validaCpf/cpf.pipe';
 
-
 @NgModule({
   imports: [
     CommonModule
@@ -17,7 +16,7 @@ import { CpfPipe } from './pipes/validaCpf/cpf.pipe';
     //LocalStorage, 
     //ConnectHTTP
     CnpjPipe,
-    CpfPipe,
+    CpfPipe
   ],
   providers: [
     LocalStorage,

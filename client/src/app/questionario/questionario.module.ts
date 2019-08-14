@@ -35,7 +35,7 @@ import { MDBBootstrapModulesPro, WavesModule, IconsModule, ButtonsModule, Checkb
     QuestionarioComponent,
     QuestionarioEditComponent,
     PerguntaEditComponent,
-    AlternativaEditComponent
+    AlternativaEditComponent,
   ]
 })
 export class QuestionarioModule { }

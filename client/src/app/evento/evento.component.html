@@ -18,8 +18,8 @@
     </div>
   </div>
   <div class="px-4 p-3">
-    <div class="row align-items-center">
-      <div class="col-4 mobile">
+    <div class="row align-items-center filters">
+      <div class="col-3 mobile">
         <div class="md-form datas">
           <mdb-date-picker #dataReagendamento name="mydate" [options]="myDatePickerOptions" required
             [(ngModel)]="dataInicial" class="datas" (ngModelChange)="listaEventos()"></mdb-date-picker>
@@ -51,7 +51,7 @@
           <label class="form-check-label" for="dtCricaoRadio" style="font-size: 0.8rem; ">Data de criação</label>
         </div>
       </div>
-      <div class="col-1 text-right">
+      <div class="col-2 text-center">
         <div class="md-form">
           <button type="button" mdbBtn color="dark-green" mdbWavesEffect
             (click)="filtrosEventos.show()">Filtros</button>

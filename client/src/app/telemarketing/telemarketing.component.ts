@@ -88,6 +88,10 @@ export class TelemarketingComponent implements OnInit {
     else this.tableData = follow.resposta as Array<object>;
   }
 
+  closemodal(modal) {
+    debugger;
+  }
+
 
   getSelectedValue(campanhaSelecionada: any) {
     this.campanhaSelecionada = campanhaSelecionada
