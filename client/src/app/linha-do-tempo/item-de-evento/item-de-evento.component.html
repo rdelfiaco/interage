@@ -8,17 +8,23 @@
             <div class="row">
               <button class="col-1" (click)="abreEvento($event, evento);" color="blue" style="white-space: pre;" mdbBtn type="button"  size="sm" mdbWavesEffect>Detalhe</button>
               <div class="col-2 font12" title="Motivo do evento" style="white-space: pre; margin-top: 15px">
-                {{evento.motivo}}</div>
-              <div class="col-2 font12" title="Status do evento" style="margin-top: 15px">{{evento.status}}</div>
+              <h6>  {{evento.motivo}} </h6>
+              </div>
+              <div class="col-2 font12" title="Status do evento" style="margin-top: 15px">
+              <h6>  {{evento.status}} </h6>
+              </div>
               <div class=" col-2 font12" title="Data resolvido ou data prevista para resolução"
-                style="white-space: nowrap; margin-top: 15px">{{(evento.dt_resolvido
-                ||
-                evento.dt_prevista_resolucao) |
-                date:'dd/MM/yyyy HH:mm:ss'}}</div>
+                style="white-space: nowrap; margin-top: 15px"> 
+                  <h6>{{(evento.dt_resolvido
+                  ||
+                  evento.dt_prevista_resolucao) |
+                  date:'dd/MM/yyyy HH:mm:ss'}}
+                  </h6> 
+              </div>
               <div class=" col-2 font12" title="Pessoa que visualizou o evento"
-                style="white-space: nowrap; margin-top: 15px">{{evento.pessoa_visualizou}}</div>
+                style="white-space: nowrap; margin-top: 15px"><h6>{{evento.pessoa_visualizou}}</h6></div>
               <div class=" col-2 font12" title="Pessoa que resolveu o evento"
-                style="white-space: nowrap; margin-top: 15px">{{evento.pessoa_resolveu}}</div>
+                style="white-space: nowrap; margin-top: 15px"><h6>{{evento.pessoa_resolveu}}</h6></div>
             </div>
           </div>
         </div>

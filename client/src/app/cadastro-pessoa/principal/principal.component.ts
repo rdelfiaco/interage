@@ -52,6 +52,8 @@ export class PrincipalComponent implements OnInit {
   ]
 
   tipoDeTratamentoFisica: any;
+  tiposDeCliente: any;
+  classificacoesDeCliente: any;
   atividadesPessoaFisica: any;
   atividadesPessoaJuridica: any;
   serchFilter: string;
@@ -109,6 +111,8 @@ export class PrincipalComponent implements OnInit {
       apelido_fantasia: [''],
       id_atividade: [''],
       cnh:[''],
+      id_tipo_cliente:[''],
+      id_classificacao_cliente:[''],
     })
     this.principalFormAud = this.principalForm.value;
   }
@@ -133,6 +137,8 @@ export class PrincipalComponent implements OnInit {
       apelido_fantasia: [this.pessoa.principal.apelido_fantasia],
       id_atividade: [this.pessoa.principal.id_atividade],
       cnh: [this.pessoa.principal.cnh],
+      id_tipo_cliente: [this.pessoa.principal.id_tipo_cliente],
+      id_classificacao_cliente: [this.pessoa.principal.id_classificacao_cliente]
     })
     this.principalFormAud = this.principalForm.value;
   }
@@ -148,6 +154,25 @@ export class PrincipalComponent implements OnInit {
     this.tipoDeTratamentoFisica = tratamento.resposta.map((t) => {
       return { label: t.descricao, value: t.id };
     })
+
+    let getTipoClientes = await this.connectHTTP.callService({
+      service: 'getTipoClientes',
+      paramsService: {}
+    }) as any;
+
+    this.tiposDeCliente = getTipoClientes.resposta.map((t) => {
+      if(t.status) return { label: t.nome, value: t.id };
+    })
+
+    let getClassificacaoClientes = await this.connectHTTP.callService({
+      service: 'getClassificacaoClientes',
+      paramsService: {}
+    }) as any;
+
+    this.classificacoesDeCliente = getClassificacaoClientes.resposta.map((t) => {
+      if(t.status) return { label: t.nome, value: t.id };
+    })
+
 
 
     let atividades = await this.connectHTTP.callService({
@@ -184,8 +209,7 @@ export class PrincipalComponent implements OnInit {
     }
 
     this.checkAtividadePessoa()
-
-    if (this.principalForm.value.id) {
+    if (this.principalForm.controls['id'].value.value != '') {
       try {
         await this.connectHTTP.callService({
           service: 'salvarPessoa',
@@ -201,7 +225,6 @@ export class PrincipalComponent implements OnInit {
       }
     }
     else {
-      
         const res = await this.connectHTTP.callService({
           service: 'adicionarPessoa',
           paramsService: ({

@@ -296,6 +296,10 @@ function salvarPessoa(req, res) {
       req.query.id_atividade = req.query.id_atividade == 'null' ?  'null':  req.query.id_atividade; 
       req.query.id_pronome_tratamento = req.query.id_pronome_tratamento == 'null' ?  'null':  req.query.id_pronome_tratamento; 
 
+      req.query.datanascimento = req.query.datanascimento == 'Invalid date' ? 'null': req.query.datanascimento;
+      req.query.datanascimento = req.query.datanascimento == 'DD/MM/YYYY' ? 'null': req.query.datanascimento;
+
+      console.log((req.query.datanascimento == 'null' || req.query.datanascimento == ''  ? null : " date('" + req.query.datanascimento + "')" ))
 
       let update = String;
       client.query('BEGIN').then((res1) => {
@@ -338,7 +342,7 @@ function salvarPessoa(req, res) {
           ret.push('id_pronome_tratamento=' + (req.query.id_pronome_tratamento != 'null' || req.query.id_pronome_tratamento != '' ? "'" + req.query.id_pronome_tratamento + "'" : null))
           ret.push('apelido_fantasia=' + (req.query.apelido_fantasia != 'null' || req.query.apelido_fantasia != '' ? "'" + req.query.apelido_fantasia + "'" : null))
           ret.push('sexo=' + (req.query.sexo != 'null' || req.query.sexo != ''  ? "'" + req.query.sexo + "'" : null))
-          ret.push('datanascimento=' + (req.query.datanascimento != 'null' || req.query.datanascimento != ''  ? " date('" + req.query.datanascimento + "')" : null))
+          ret.push('datanascimento=' + (req.query.datanascimento == 'null' || req.query.datanascimento == ''  ? null : " date('" + req.query.datanascimento + "')" ))
           ret.push('rg_ie=' + (req.query.rg_ie != 'null' || req.query.rg_ie != '' ? "'" + req.query.rg_ie + "'" : null))
           ret.push('orgaoemissor=' + (req.query.orgaoemissor != 'null' || req.query.orgaoemissor != '' ? "'" + req.query.orgaoemissor + "'" : null))
           ret.push('cpf_cnpj=' + (req.query.cpf_cnpj != 'null' || req.query.cpf_cnpj != ''  ? "'" + req.query.cpf_cnpj + "'" : null))
@@ -347,6 +351,8 @@ function salvarPessoa(req, res) {
           ret.push('website=' + (req.query.website != 'null' || req.query.website != '' ? "'" + req.query.website + "'" : null))
           ret.push('id_atividade=' + (req.query.id_atividade != 'null' || req.query.id_atividade != '' ? "'" + req.query.id_atividade + "'" : null))
           ret.push('observacoes=' + (req.query.observacoes != 'null' || req.query.observacoes != '' ? "'" + req.query.observacoes + "'" : null))
+          ret.push('id_tipo_cliente=' + (req.query.id_tipo_cliente != 'null' || req.query.id_tipo_cliente != '' ? "'" + req.query.id_tipo_cliente + "'" : null))
+          ret.push('id_classificacao_cliente=' + (req.query.id_classificacao_cliente != 'null' || req.query.id_classificacao_cliente != '' ? "'" + req.query.id_classificacao_cliente + "'" : null))
          
           return ret.join(', ');
         }
@@ -389,12 +395,14 @@ async function  adicionarPessoa(req, res) {
 
       req.query = {...dadosAtuais} ;
       req.query.id_usuario = credenciais.idUsuario;
-      console.log(req.query)
 
       client.connect()
       // trata as variaveis que tem combro que vem com null
       req.query.id_atividade = req.query.id_atividade == 'null' ?  '':  req.query.id_atividade; 
       req.query.id_pronome_tratamento = req.query.id_pronome_tratamento == 'null' ?  '':  req.query.id_pronome_tratamento; 
+
+      req.query.datanascimento = req.query.datanascimento == 'Invalid date' ? 'null': req.query.datanascimento;
+      req.query.datanascimento = req.query.datanascimento == 'DD/MM/YYYY' ? 'null': req.query.datanascimento;
 
       let update;
       if (req.query.tipo == 'F') {
@@ -408,7 +416,6 @@ async function  adicionarPessoa(req, res) {
      
       update = update.replace(/'null'/g, null)
       update = update.replace(/'`'/g, ' ')
-
       client.query(update).then((res) => {
         client.end();
         auditoria(credenciais, 'pessoas', 'C', res.rows[0].id, res.rows[0].id, dadosAnteriores, dadosAtuais );
@@ -437,7 +444,9 @@ async function  adicionarPessoa(req, res) {
         ret.push('dtinclusao,')
         ret.push('dtalteracao,')
         ret.push('id_usuario_incluiu,')
-        ret.push('id_usuario_carteira')
+        ret.push('id_usuario_carteira,')
+        ret.push('id_tipo_cliente,')
+        ret.push('id_classificacao_cliente')
         ret.push(')')
 
         ret.push('VALUES(')
@@ -446,7 +455,7 @@ async function  adicionarPessoa(req, res) {
         ret.push("'" + req.query.tipo + "',")
         ret.push((req.query.id_pronome_tratamento != '' ? "'" + req.query.id_pronome_tratamento + "'" : 'NULL') + ",")
         ret.push((req.query.sexo != '' ? "'" + req.query.sexo + "'" : 'NULL') + ",")
-        ret.push((req.query.datanascimento != 'null' || req.query.datanascimento != ''  ? " date('" + req.query.datanascimento + "')" :'NULL') + ",")
+        ret.push((req.query.datanascimento == 'null' || req.query.datanascimento == ''  ? 'NULL': " date('" + req.query.datanascimento + "')" ) + ",")
         ret.push((req.query.rg_ie != '' ? "'" + req.query.rg_ie + "'" : 'NULL') + ",")
         ret.push((req.query.orgaoemissor != '' ? "'" + req.query.orgaoemissor + "'" : 'NULL') + ",")
         ret.push((req.query.cpf_cnpj != '' ? "'" + req.query.cpf_cnpj + "'" : 'NULL') + ",")
@@ -458,7 +467,9 @@ async function  adicionarPessoa(req, res) {
         ret.push('now(),')
         ret.push('now(),')
         ret.push(req.query.id_usuario + ",")
-        ret.push(possui_carteira_cli ? req.query.id_usuario: 'NULL')
+        ret.push(possui_carteira_cli ? req.query.id_usuario: 'NULL'+ ",")
+        ret.push((req.query.id_tipo_cliente != '' ? "'" + req.query.id_tipo_cliente + "'" : 'NULL') + ",")
+        ret.push((req.query.id_classificacao_cliente != '' ? "'" + req.query.id_classificacao_cliente + "'" : 'NULL') )
         ret.push(')')
         return ret.join(' ');
       }
@@ -481,9 +492,10 @@ async function  adicionarPessoa(req, res) {
         ret.push('dtinclusao,')
         ret.push('dtalteracao,')
         ret.push('id_usuario_incluiu,')
-        ret.push('id_usuario_carteira')
+        ret.push('id_usuario_carteira,')
+        ret.push('id_tipo_cliente,')
+        ret.push('id_classificacao_cliente')
         ret.push(')')
-
         ret.push('VALUES(')
 
         ret.push("'" + req.query.nome + "',")
@@ -502,6 +514,8 @@ async function  adicionarPessoa(req, res) {
         ret.push('now(),')
         ret.push(req.query.id_usuario + ",")
         ret.push(possui_carteira_cli ? req.query.id_usuario: 'NULL')
+        ret.push((req.query.id_tipo_cliente != '' ? "'" + req.query.id_tipo_cliente + "'" : 'NULL') + ",")
+        ret.push((req.query.id_classificacao_cliente != '' ? "'" + req.query.id_classificacao_cliente + "'" : 'NULL') + ",")
         ret.push(')')
         return ret.join(' ');
       }
