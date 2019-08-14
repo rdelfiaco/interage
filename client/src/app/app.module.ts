@@ -52,6 +52,8 @@ import { PagesLayoutComponent } from './layout/pages-layout/pages-layout.compone
 import { TipoDeClienteComponent } from './tipo-de-cliente/tipo-de-cliente.component';
 import { ObjecaoComponent } from './objecao/objecao.component';
 import { ClassifcacaoDeClientesComponent } from './classifcacao-de-clientes/classifcacao-de-clientes.component';
+import { MotivosDosEventosComponent } from './motivos-dos-eventos/motivos-dos-eventos.component';
+import { CanaisComponent } from './canais/canais.component';
 
 
 
@@ -75,7 +77,9 @@ import { ClassifcacaoDeClientesComponent } from './classifcacao-de-clientes/clas
     PagesLayoutComponent,
     TipoDeClienteComponent,
     ObjecaoComponent,
-    ClassifcacaoDeClientesComponent
+    ClassifcacaoDeClientesComponent,
+    MotivosDosEventosComponent,
+    CanaisComponent
   ],
 
   imports: [

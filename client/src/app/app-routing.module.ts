@@ -1,3 +1,5 @@
+import { CanaisComponent } from './canais/canais.component';
+import { MotivosDosEventosComponent } from './motivos-dos-eventos/motivos-dos-eventos.component';
 import { ClassifcacaoDeClientesComponent } from './classifcacao-de-clientes/classifcacao-de-clientes.component';
 import { ObjecaoComponent } from './objecao/objecao.component';
 import { TipoDeClienteComponent } from './tipo-de-cliente/tipo-de-cliente.component';
@@ -287,6 +289,16 @@ const routes: Routes = [
       {
         path: 'objecao',
         component: ObjecaoComponent,
+        canActivate: [AuthGuard]
+      },
+      {
+        path: 'motivosDosEventos',
+        component: MotivosDosEventosComponent,
+        canActivate: [AuthGuard]
+      },
+      {
+        path: 'canais',
+        component: CanaisComponent,
         canActivate: [AuthGuard]
       },
     ]
