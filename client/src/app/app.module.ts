@@ -48,8 +48,9 @@ import { AngularDualListBoxModule } from 'angular-dual-listbox';
 import { BaseLayoutComponent } from './layout/base-layout/base-layout.component';
 import { AppsLayoutComponent } from './layout/apps-layout/apps-layout.component';
 import { PagesLayoutComponent } from './layout/pages-layout/pages-layout.component';
+import { SharedModule } from './shared/shared.module';
 // import { ResponderQuestionario } from './responder-questionario/responder-questionario.module';
-import { ResponderQuestionarioComponent } from './responder-questionario/responder-questionario.component';
+// import { ResponderQuestionarioComponent } from './responder-questionario/responder-questionario.component';
 
 
 
@@ -71,9 +72,8 @@ import { ResponderQuestionarioComponent } from './responder-questionario/respond
     BaseLayoutComponent,
     AppsLayoutComponent,
     PagesLayoutComponent,
-    ResponderQuestionarioComponent
+    // ResponderQuestionarioComponent
   ],
-
   imports: [
     BrowserModule,
     MDBBootstrapModulesPro.forRoot(),
@@ -104,12 +104,11 @@ import { ResponderQuestionarioComponent } from './responder-questionario/respond
     AngularDualListBoxModule,
     CrudCampanhaModule,
     QuestionarioModule,
+    SharedModule
   ],
   providers: [MDBSpinningPreloader
-
   ],
   bootstrap: [AppComponent],
-  
   schemas: [NO_ERRORS_SCHEMA]
 })
 export class AppModule { }

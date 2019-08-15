@@ -1,9 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
 import { ConnectHTTP } from '../shared/services/connectHTTP';
 import { ToastService } from '../../lib/ng-uikit-pro-standard';
-import { LocalStorage } from '../shared/services/localStorage';
-import { QuestionarioEditComponent } from '../questionario/questionario-edit/questionario-edit.component';
+
 
 @Component({
   selector: 'app-responder-questionario',
@@ -11,19 +9,12 @@ import { QuestionarioEditComponent } from '../questionario/questionario-edit/que
   styleUrls: ['./responder-questionario.component.scss']
 })
 export class ResponderQuestionarioComponent implements OnInit {
-  usuarioLogado: any;
   questionario: any = {};
   questId:any;
 
   constructor(
     private connectHTTP: ConnectHTTP,
-    private toastrService: ToastService,
-    private route: ActivatedRoute,
-    private localStorage: LocalStorage) {
-    this.usuarioLogado = this.localStorage.getLocalStorage('usuarioLogado') as any;
-    // this.route.params.subscribe(res => {
-    //   this.idQuest = res.id;
-    // });
+    private toastrService: ToastService) {
   }
 
   ngOnInit() {
