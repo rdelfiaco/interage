@@ -30,6 +30,7 @@ const tipoDeClientes = require('./src/api/tipoDeClientes');
 const classificacaoDeClientes = require('./src/api/classsificacaoClientes');
 const objecao = require('./src/api/objecao');
 
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
   extended: true
@@ -62,8 +63,10 @@ declaraServico('salvarEvento', evento.salvarEvento );
 declaraServico('getEventosPendentes', evento.getEventosPendentes );
 declaraServico('getEventosLinhaDoTempo', evento.getEventosLinhaDoTempo );
 declaraServico('getEventosRelatorioUsuario', evento.getEventosRelatorioUsuario );
-declaraServico('getCanais',  canais.getCanais);
+
+//motivos
 declaraServico('getMotivos',  motivos.getMotivos);
+declaraServico('crudMotivos',  motivos.crudMotivos);
 
 
 declaraServico('getConfiguracao', config.getConfiguracao);
@@ -167,6 +170,13 @@ declaraServico('crudClassificacaoClientes', classificacaoDeClientes.crudClassifi
 // Objeções
 declaraServico('getObjecao', objecao.getObjecao);
 declaraServico('crudObjecao', objecao.crudObjecao);
+//canais
+declaraServico('getCanais',  canais.getCanais);
+declaraServico('crudCanais',  canais.crudCanais);
+
+
+
+
 app.listen(nodeStart.port, "0.0.0.0");
 console.log(`Servidor iniciado na em http://localhost:${nodeStart.port}`)
 
