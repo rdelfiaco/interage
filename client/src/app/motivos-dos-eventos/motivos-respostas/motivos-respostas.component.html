@@ -7,12 +7,16 @@
         <mdb-icon fas fas icon="info" class="mt-0"></mdb-icon>
       </button>
     </div>
-    <a href="" class="white-text mx-3">Motivos de eventos</a>
+    <a href="" class="white-text mx-3">Respostas do motivo: {{nomeMotivoSelecionado}}</a>
     <div>
       <button mdbBtn color="white" outline="true" rounded="true" size="sm" type="button"
         (click)=" adicionar(); formulario.show()" class="px-2" mdbWavesEffect>
-        Adicionar Motivos de eventos
+        Adicionar Respostas
       </button>
+      <button mdbBtn color="white" outline="true" rounded="true" size="sm" type="button"
+        (click)="goBack()" class="px-2" mdbWavesEffect>
+        Voltar
+    </button>
     </div>
   </div>
   <!--/Card image-->
@@ -62,14 +66,6 @@
                   rounded="true" size="sm" class="px-2" mdbWavesEffect>
                   <mdb-icon fas icon="trash" class="mt-0"></mdb-icon>
                 </button>
-                <button style="width:31px;" title="Canais do motivo" (click)="canaisMotivos(row.id,row.nome )" type="button" mdbBtn color="yellow" outline="true"
-                  rounded="true" size="sm" class="px-2" mdbWavesEffect>
-                  <mdb-icon fas icon="comments" class="mt-0"></mdb-icon>
-                </button>
-                <button style="width:31px;" title="Respostas do motivo" (click)="RespostasMotivos(row.id,row.nome )" type="button" mdbBtn color="green" outline="true"
-                  rounded="true" size="sm" class="px-2" mdbWavesEffect>
-                  <mdb-icon fas icon="arrows-alt" class="mt-0"></mdb-icon>
-                </button>
               </div>
             </td>
           </tr>
@@ -82,7 +78,7 @@
 
 <div mdbModal #formulario="mdbModal" class="modal fade top"  tabindex="-1"  role="dialog" 
       aria-labelledby="myBasicModalLabel" aria-hidden="true" >
-  <div class="modal-dialog  modal-lg" role="document">
+<div class="modal-dialog  modal-lg" role="document">
     <div class="modal-header light-blue darken-3 white-text">
         <h4 class="modal-title">{{formularioTitulo}}</h4>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"
@@ -90,7 +86,7 @@
           <span aria-hidden="true" style="color:white; cursor:pointer;">&times;</span>
         </button>
     </div>
-    <div class="modal-content">
+        <div class="modal-content">
           <div class="modal-body">
           <form [formGroup]="formularioForm">
             <div class="row">
@@ -109,30 +105,43 @@
               </div>
             </div>
             <div class="row">
-              <div class="md-form col" style="margin-left: 20px">
-                  <input  mdbInputDirective formControlName="prazo_finalizacao" 
-                    type="text" prazo_finalizacao="prazo_finalizacao" class="form-control">
-                  <label for="prazo_finalizacao">Prazo para finalizar em minutos</label>
+              <div class="md-form col">
+                <mdb-checkbox  formControlName="exige_predicao"  >Exige predição</mdb-checkbox>
               </div>
               <div class="md-form col">
-                <mdb-checkbox  formControlName="gera_email"  >Gera e-mail</mdb-checkbox>
+                <mdb-checkbox  formControlName="exige_observacao"  >Exige Observação</mdb-checkbox>
               </div>
               <div class="md-form col">
-                <mdb-checkbox  formControlName="inicia_processo"  >Inicia processo</mdb-checkbox>
+                <mdb-checkbox  formControlName="exige_objecao"  >Exige objeção</mdb-checkbox>
+              </div>
+              <div class="md-form col">
+                <mdb-checkbox  formControlName="exige_proposta"  >Exige proposta</mdb-checkbox>
               </div>
             </div>
             <div class="row">
               <div class="md-form col" style="margin-left: 20px">
-                <input  mdbInputDirective formControlName="acao_sql" 
-                  type="text" id="acao_sql" class="form-control">
-                <label for="acao_sql">Ação SQL</label>
+                  <input  mdbInputDirective formControlName="ordem_listagem" 
+                    type="text" id="ordem_listagem" class="form-control">
+                  <label for="ordem_listagem">Ordem de Listagem</label>
+              </div>
+              <div class="md-form col" style="margin-left: 20px">
+                <input  mdbInputDirective formControlName="tentativas" 
+                  type="text" id="tentativas" class="form-control">
+                <label for="tentativas">Tentativas</label>
+              </div>
+            </div>            
+            <div class="row">
+              <div class="md-form col" style="margin-left: 20px">
+                  <input  mdbInputDirective formControlName="acao_sql" 
+                    type="text" id="acao_sql" class="form-control">
+                  <label for="acao_sql">Ação sql</label>
               </div>
             </div>
             <div class="row">
               <div class="md-form col" style="margin-left: 20px">
-                <input  mdbInputDirective formControlName="acao_js" 
-                  type="text" id="acao_js" class="form-control">
-                <label for="acao_js">Ação JS</label>
+                  <input  mdbInputDirective formControlName="acao_js" 
+                    type="text" id="acao_js" class="form-control">
+                  <label for="acao_js">Ação JS</label>
               </div>
             </div>
           </form>
@@ -146,7 +155,6 @@
         </div>
       </div>
     </div>
-    </div>
   </div>
 </div>
-
+</div>

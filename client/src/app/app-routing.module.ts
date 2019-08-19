@@ -1,3 +1,5 @@
+import { MotivosRespostasComponent } from './motivos-dos-eventos/motivos-respostas/motivos-respostas.component';
+import { MotivosCanaisComponent } from './motivos-dos-eventos/motivos-canais/motivos-canais.component';
 import { CanaisComponent } from './canais/canais.component';
 import { MotivosDosEventosComponent } from './motivos-dos-eventos/motivos-dos-eventos.component';
 import { ClassifcacaoDeClientesComponent } from './classifcacao-de-clientes/classifcacao-de-clientes.component';
@@ -299,6 +301,16 @@ const routes: Routes = [
       {
         path: 'canais',
         component: CanaisComponent,
+        canActivate: [AuthGuard]
+      },
+      {
+        path: 'motivosCanais/:id',
+        component: MotivosCanaisComponent,
+        canActivate: [AuthGuard]
+      },
+      {
+        path: 'motivosRespostas/:id',
+        component: MotivosRespostasComponent,
         canActivate: [AuthGuard]
       },
     ]

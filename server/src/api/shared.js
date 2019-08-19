@@ -14,6 +14,8 @@ async function buscaValorDoAtributo(credenciais, atributo, tabela, condicao ){
   return executaSQL(credenciais, `select ${atributo} from ${tabela} where ${condicao}`)
 }
 
+async function awaitSQL(credenciais, sql) {
+      return executaSQL(credenciais, sql)
+}
 
-
-  module.exports = {zeroEsquerda, isNumber, buscaValorDoAtributo}
+  module.exports = {zeroEsquerda, isNumber, buscaValorDoAtributo, awaitSQL}

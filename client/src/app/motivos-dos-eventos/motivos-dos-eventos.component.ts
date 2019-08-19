@@ -2,6 +2,7 @@ import { ConnectHTTP } from '../shared/services/connectHTTP';
 import { ToastService, MDBModalRef } from '../../lib/ng-uikit-pro-standard';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-motivos-dos-eventos',
@@ -22,6 +23,7 @@ export class MotivosDosEventosComponent implements OnInit {
   formularioFormAud: any;
 
   constructor(
+    private router: Router,
     private connectHTTP: ConnectHTTP,
     private toastrService: ToastService,
     private formBuilder: FormBuilder) {
@@ -170,6 +172,17 @@ export class MotivosDosEventosComponent implements OnInit {
       this.toastrService.error('Operação não realizada');
     }
     this.ngOnInit();
+  }
+
+  canaisMotivos(id, nome){
+    
+    this.router.navigate([`motivosCanais/{"idMotivo":${id},"nomeMotivo":"${nome}"}`]);
+
+  }
+  RespostasMotivos(id, nome){
+    
+    this.router.navigate([`motivosRespostas/{"idMotivo":${id},"nomeMotivo":"${nome}"}`]);
+
   }
 
 }

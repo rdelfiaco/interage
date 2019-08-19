@@ -67,6 +67,10 @@ declaraServico('getEventosRelatorioUsuario', evento.getEventosRelatorioUsuario )
 //motivos
 declaraServico('getMotivos',  motivos.getMotivos);
 declaraServico('crudMotivos',  motivos.crudMotivos);
+declaraServico('getCanaisMotivoSeleconado',  motivos.getCanaisMotivoSeleconado);
+declaraServico('salvarCanaisDoMotivo',  motivos.salvarCanaisDoMotivo);
+declaraServico('getRespostasMotivoSeleconado',  motivos.getRespostasMotivoSeleconado);
+declaraServico('crudRespostasMotivo',  motivos.crudRespostasMotivo);
 
 
 declaraServico('getConfiguracao', config.getConfiguracao);
