@@ -1,0 +1,54 @@
+<div class="card card-cascade narrower">
+
+
+  <br>
+  <table mdbTable mdbTableScroll scrollY="true" maxHeight="200" bordered="true" style="margin-left: 30px"  class="table table-striped w-auto" >
+    <thead>
+      <tr>
+          <th class="th-lg" >
+              <a (click)="sortBy('data_hora')">Data
+                <mdb-icon fas icon="sort" class="ml-1"></mdb-icon>
+              </a>
+          </th>
+          <th class="th-lg" >
+              <a (click)="sortBy('usuario')">Usúario
+                <mdb-icon fas icon="sort" class="ml-1"></mdb-icon>
+              </a>
+          </th>
+          <th class="th-lg" >
+              <a (click)="sortBy('campo')">Campo
+                <mdb-icon fas icon="sort" class="ml-1"></mdb-icon>
+              </a>
+          </th>
+          <th class="th-lg" >
+              <a (click)="sortBy('operacao')">Operação
+                <mdb-icon fas icon="sort" class="ml-1"></mdb-icon>
+              </a>
+          </th>
+          <th class="th-lg" >
+              <a (click)="sortBy('conteudo_anterior')">Conteúdo anterior
+                <mdb-icon fas icon="sort" class="ml-1"></mdb-icon>
+              </a>
+          </th>
+          <th class="th-lg" >
+              <a (click)="sortBy('conteudo_novo')">Conteúdo novo
+                <mdb-icon fas icon="sort" class="ml-1"></mdb-icon>
+              </a>
+          </th>
+      </tr>
+    </thead>
+    <tbody *ngFor="let auditoria of tableData ">
+      <tr>
+        <th scope="row">{{auditoria.data_hora | date:'dd/MM/yyyy HH:mm:ss'}}</th>
+        <td>  {{auditoria.usuario}}  </td>
+        <td>  {{auditoria.campo}}  </td>
+        <td>  {{auditoria.operacao}}  </td>
+        <td>  {{auditoria.conteudo_anterior}}  </td>
+        <td>  {{auditoria.conteudo_novo}}  </td>
+      </tr>
+    </tbody>
+    <br>
+  </table>
+</div>
+<br>
+<br>

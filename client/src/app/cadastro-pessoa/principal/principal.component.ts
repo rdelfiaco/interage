@@ -1,11 +1,13 @@
+import { format } from './../../shared/validaCpf';
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormControl, FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { IMyOptions, ToastService } from '../../../lib/ng-uikit-pro-standard';
 import { ConnectHTTP } from '../../shared/services/connectHTTP';
 import { Usuario } from '../../login/usuario';
 import { LocalStorage } from '../../shared/services/localStorage';
 import validaCpf from '../../shared/validaCpf';
 import validaCnpj from '../../shared/validaCnpj';
+import * as moment from 'moment';
 
 
 interface selectValues {
@@ -36,6 +38,8 @@ export class PrincipalComponent implements OnInit {
     return this._pessoa
   }
 
+
+
   tipoDePessoa: Array<object> = [
     {
       value: 'F',
@@ -48,12 +52,15 @@ export class PrincipalComponent implements OnInit {
   ]
 
   tipoDeTratamentoFisica: any;
+  tiposDeCliente: any;
+  classificacoesDeCliente: any;
   atividadesPessoaFisica: any;
   atividadesPessoaJuridica: any;
   serchFilter: string;
 
   tipoPessoaSelecionada: string = 'F';
   principalForm: FormGroup
+  principalFormAud: any;
 
   public myDatePickerOptions: IMyOptions = {
     // Strings and translations
@@ -89,11 +96,11 @@ export class PrincipalComponent implements OnInit {
     private localStorage: LocalStorage,
     private toastrService: ToastService) {
     this.principalForm = this.formBuilder.group({
-      id: [''],
+      id: [{value:'', disable: true}],
       nome: ['', [Validators.required]],
       tipo: [this.tipoPessoaSelecionada, [Validators.required]],
       id_pronome_tratamento: [''],
-      datanascimento: [''],
+      datanascimento: ['DD/MM/YYYY', [Validators.required]],
       sexo: [''],
       rg_ie: [''],
       orgaoemissor: [''],
@@ -103,18 +110,23 @@ export class PrincipalComponent implements OnInit {
       observacoes: [''],
       apelido_fantasia: [''],
       id_atividade: [''],
+      cnh:[''],
+      id_tipo_cliente:[''],
+      id_classificacao_cliente:[''],
     })
+    this.principalFormAud = this.principalForm.value;
   }
+
+
 
   _setQuestionarioForm() {
     this.tipoPessoaSelecionada = this.pessoa.principal.tipo;
-
     this.principalForm = this.formBuilder.group({
       id: [this.pessoa.principal.id],
       nome: [this.pessoa.principal.nome, [Validators.required]],
       tipo: [this.pessoa.principal.tipo, [Validators.required]],
       id_pronome_tratamento: [this.pessoa.principal.id_pronome_tratamento],
-      datanascimento: [''],
+      datanascimento: [moment(this.pessoa.principal.datanascimento ).format('DD/MM/YYYY') ],
       sexo: [this.pessoa.principal.sexo],
       rg_ie: [this.pessoa.principal.rg_ie],
       orgaoemissor: [this.pessoa.principal.orgaoemissor],
@@ -124,7 +136,11 @@ export class PrincipalComponent implements OnInit {
       observacoes: [this.pessoa.principal.observacoes],
       apelido_fantasia: [this.pessoa.principal.apelido_fantasia],
       id_atividade: [this.pessoa.principal.id_atividade],
+      cnh: [this.pessoa.principal.cnh],
+      id_tipo_cliente: [this.pessoa.principal.id_tipo_cliente],
+      id_classificacao_cliente: [this.pessoa.principal.id_classificacao_cliente]
     })
+    this.principalFormAud = this.principalForm.value;
   }
 
   async ngOnInit() {
@@ -138,6 +154,25 @@ export class PrincipalComponent implements OnInit {
     this.tipoDeTratamentoFisica = tratamento.resposta.map((t) => {
       return { label: t.descricao, value: t.id };
     })
+
+    let getTipoClientes = await this.connectHTTP.callService({
+      service: 'getTipoClientes',
+      paramsService: {}
+    }) as any;
+
+    this.tiposDeCliente = getTipoClientes.resposta.map((t) => {
+      if(t.status) return { label: t.nome, value: t.id };
+    })
+
+    let getClassificacaoClientes = await this.connectHTTP.callService({
+      service: 'getClassificacaoClientes',
+      paramsService: {}
+    }) as any;
+
+    this.classificacoesDeCliente = getClassificacaoClientes.resposta.map((t) => {
+      if(t.status) return { label: t.nome, value: t.id };
+    })
+
 
 
     let atividades = await this.connectHTTP.callService({
@@ -174,12 +209,14 @@ export class PrincipalComponent implements OnInit {
     }
 
     this.checkAtividadePessoa()
-
-    if (this.principalForm.value.id) {
+    if (this.principalForm.controls['id'].value.value != '') {
       try {
         await this.connectHTTP.callService({
           service: 'salvarPessoa',
-          paramsService: this.principalForm.value
+          paramsService: ({
+            dadosAtuais: JSON.stringify(this.principalForm.value),
+            dadosAnteriores: JSON.stringify(this.principalFormAud)
+          }) 
         });
         this.toastrService.success('Salvo com sucesso');
       }
@@ -188,19 +225,19 @@ export class PrincipalComponent implements OnInit {
       }
     }
     else {
-      
         const res = await this.connectHTTP.callService({
           service: 'adicionarPessoa',
-          paramsService: this.principalForm.value
+          paramsService: ({
+            dadosAtuais: JSON.stringify(this.principalForm.value),
+            dadosAnteriores: JSON.stringify(this.principalFormAud)
+          }) 
         }) as any;
         
         this.principalForm.controls['id'].setValue(res.resposta.id);
 
         this.toastrService.success('Salvo com sucesso');
 
-        this.refreshPessoaAdd.emit({ idPessoa: res.resposta.id });
-
-    
+        this.refreshPessoaAdd.emit({ idPessoa: res.resposta.id });    
     }
   }
   checkAtividadePessoa() {
@@ -220,7 +257,4 @@ export class PrincipalComponent implements OnInit {
     this.principalForm.controls['apelido_fantasia'].setValue(this.principalForm.value.nome);
 
   }
-
-
-
 }

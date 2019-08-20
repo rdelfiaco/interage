@@ -11,9 +11,10 @@
                           mdbWavesEffect>
                       </a>
                       <div class="dropdown-menu dropdown-primary dropdown-menu-right" role="menu">
-                          <a class="dropdown-item" (click)="abrirCadastroPessoa()">Cadastro</a>
-                          <a class="dropdown-item" (click)="openPage('trocarSenha', $event)">Trocar Senha</a>
-                      </div>
+                            <a class="dropdown-item" (click)="openPage('pessoas/'+usuarioLogado.id_pessoa, $event)">Meu Cadastro </a>
+                            <a class="dropdown-item" (click)="openPage('trocarSenha', $event)">Trocar Senha</a>
+                            <a class="dropdown-item" (click)="openPage('pausaDoUsuario/'+usuarioLogado.id_pessoa, $event)">Pausar</a>
+                        </div>  
                   </div>
               </div>
           </li>
@@ -77,16 +78,20 @@
                       </mdb-item-head>
                       <mdb-item-body>
                           <ul>
+                              <li (click)="openPage('exportar', $event);">
+                                        <a class="waves-effect" mdbRippleRadius>
+                                            <span class="h6 font-weight">Exportar
+                                            </span>
+                                        </a>
+                              </li>
                               <li (click)="openPage('produtividadeCallCenter', $event);">
                                   <a class="waves-effect" mdbRippleRadius>
-                                      <i class="fa fa-line-chart "></i>
                                       <span class="h6 font-weight">Produtividade
                                       </span>
                                   </a>
                               </li>
                               <li (click)="openPage('dashboardAgente', $event);">
                                   <a class="waves-effect" mdbRippleRadius>
-                                      <i class="fa fa-dashboard "></i>
                                       <span class="h6 font-weight">Desempenho
                                       </span>
                                   </a>
@@ -104,14 +109,12 @@
                           <ul>
                               <li (click)="openPage('analisarCampanhaTelemarketing', $event);">
                                   <a class="waves-effect" mdbRippleRadius>
-                                      <i class="fa fa-area-chart "></i>
                                       <span class="h6 font-weight">Analisar Campanhas
                                       </span>
                                   </a>
                               </li>
                               <li (click)="openPage('importaLead', $event);">
                                   <a class="waves-effect" mdbRippleRadius>
-                                      <i class="fa  fa-cloud-upload "></i>
                                       <span class="h6 font-weight">Importar
                                           mailing/lead
                                       </span>
@@ -119,7 +122,6 @@
                               </li>
                               <li (click)="openPage('ranks', $event);">
                                   <a class="waves-effect" mdbRippleRadius>
-                                      <i class="fa fa-trophy"></i>
                                       <span class="h6 font-weight" >Ranking
                                       </span>
                                   </a>
@@ -134,20 +136,25 @@
                       </mdb-item-head>
                       <mdb-item-body>
                           <ul>
-                              <li (click)="openPage('workflow', $event);">
-                                  <a class="waves-effect" mdbRippleRadius>
-                                      <i class="fa fa-cubes "></i>
-                                      <span class="h6 font-weight">Workflow
-                                      </span>
-                                  </a>
-                              </li>
-                              <li (click)="openPage('exportar', $event);">
-                                  <a class="waves-effect" mdbRippleRadius>
-                                      <i class="fa fa-cloud-download "></i>
-                                      <span class="h6 font-weight">Exporta
-                                      </span>
-                                  </a>
-                              </li>
+                                <li (click)="openPage('canais', $event);">
+                                        <a class="waves-effect" mdbRippleRadius>
+                                            <span class="h6 font-weight">Canais
+                                            </span>
+                                        </a>
+                                </li>
+                                <li (click)="openPage('motivosDosEventos', $event);">
+                                        <a class="waves-effect" mdbRippleRadius>
+                                            <span class="h6 font-weight">Motivos
+                                            </span>
+                                        </a>
+                                </li>
+                                <li (click)="openPage('workflow', $event);">
+                                    <a class="waves-effect" mdbRippleRadius>
+                                        <span class="h6 font-weight">Workflow
+                                        </span>
+                                    </a>
+                                </li>
+
                           </ul>
                       </mdb-item-body>
                   </mdb-item>
@@ -160,33 +167,55 @@
                           <ul>
                               <li (click)="openPage('campanha', $event);">
                                   <a class="waves-effect" mdbRippleRadius>
-                                      <i class="fa fa-contao "></i>
                                       <span class="h6 font-weight">Campanhas
                                       </span>
                                   </a>
                               </li>
+                              <li (click)="openPage('classificacaoClietes', $event);">
+                                <a class="waves-effect" mdbRippleRadius>
+                                    <span class="h6 font-weight" >Clas. de Clientes
+                                    </span>
+                                </a>
+                            </li>
                               <li (click)="openPage('departamento', $event);">
                                   <a class="waves-effect" mdbRippleRadius>
-                                      <i class="fa fa fa-cubes "></i>
                                       <span class="h6 font-weight" >Departamentos
                                       </span>
                                   </a>
                               </li>
-                              <li (click)="openPage('usuario', $event);">
-                                  <a class="waves-effect" mdbRippleRadius>
-                                      <i class="fa fa-user font-weight"></i>
-                                      <span class="h6 font-weight">Usuários
-                                      </span>
-                                      <!-- sidenav.hide() -->
-                                  </a>
+                              <li (click)="openPage('objecao', $event);">
+                                    <a class="waves-effect" mdbRippleRadius>
+                                        <span class="h6 font-weight">Objeção
+                                        </span>
+                                    </a>
                               </li>
+                              <li (click)="openPage('pausa', $event);">
+                                    <a class="waves-effect" mdbRippleRadius>
+                                        <span class="h6 font-weight">Pausa
+                                        </span>
+                                    </a>
+                              </li>
+
                               <li (click)="openPage('questionario', $event);">
                                   <a class="waves-effect" mdbRippleRadius>
-                                      <i class="fa fa-clipboard font-weight"></i>
                                       <span class="h6 font-weight">Questionários
                                       </span>
                                       <!-- sidenav.hide() -->
                                   </a>
+                              </li>
+                              <li (click)="openPage('tipoDecliente', $event);">
+                                    <a class="waves-effect" mdbRippleRadius>
+                                        <span class="h6 font-weight">Tipo de clientes
+                                        </span>
+                                        <!-- sidenav.hide() -->
+                                    </a>
+                              </li>
+                              <li (click)="openPage('usuario', $event);">
+                                    <a class="waves-effect" mdbRippleRadius>
+                                        <span class="h6 font-weight">Usuários
+                                        </span>
+                                        <!-- sidenav.hide() -->
+                                    </a>
                               </li>
                           </ul>
                       </mdb-item-body>
@@ -230,7 +259,7 @@
               </a>
           </li>-->
               <li class="nav-item icon-notificacao">
-                  <a class="nav-link waves-light" mdbWavesEffect (click)="openPage('eventos')">
+                  <a class="nav-link waves-light" mdbWavesEffect (click)="openPage('eventos', $event)">
                       <i class="fa fa-bell">
                           <div *ngIf="counterEvents" class="counterEvents">
                               <span>{{counterEvents}}</span>

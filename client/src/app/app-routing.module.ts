@@ -1,6 +1,15 @@
+import { MotivosRespostasComponent } from './motivos-dos-eventos/motivos-respostas/motivos-respostas.component';
+import { MotivosCanaisComponent } from './motivos-dos-eventos/motivos-canais/motivos-canais.component';
+import { CanaisComponent } from './canais/canais.component';
+import { MotivosDosEventosComponent } from './motivos-dos-eventos/motivos-dos-eventos.component';
+import { ClassifcacaoDeClientesComponent } from './classifcacao-de-clientes/classifcacao-de-clientes.component';
+import { ObjecaoComponent } from './objecao/objecao.component';
+import { TipoDeClienteComponent } from './tipo-de-cliente/tipo-de-cliente.component';
+import { AuditoriaComponent } from './cadastro-pessoa/auditoria/auditoria.component';
+import { MarketingComponent } from './cadastro-pessoa/marketing/marketing.component';
+
 import { BaseLayoutComponent } from './layout/base-layout/base-layout.component';
 import { PagesLayoutComponent } from './layout/pages-layout/pages-layout.component';
-
 import { UsuariosCampanhaComponent } from './crud-campanha/usuarios-campanha/usuarios-campanha.component';
 import { CrudCampanhaComponent } from './crud-campanha/crud-campanha.component';
 import { UsuarioCampanhasComponent } from './usuario/usuario-campanhas/usuario-campanhas.component';
@@ -45,6 +54,9 @@ import { QuestionarioComponent } from './questionario/questionario.component';
 import { QuestionarioEditComponent } from './questionario/questionario-edit/questionario-edit.component';
 import { PerguntaEditComponent } from './questionario/components/pergunta/pergunta-edit/pergunta-edit.component';
 import { AlternativaEditComponent } from './questionario/components/alternativa/alternativa-edit/alternativa-edit.component';
+import { NetworkingComponent } from './cadastro-pessoa/networking/networking.component';
+import { PausaComponent } from './pausa/pausa.component';
+import { PausaDoUsuarioComponent } from './pausa/pausa-do-usuario/pausa-do-usuario.component';
 
 
 
@@ -241,6 +253,66 @@ const routes: Routes = [
         component: UsuariosCampanhaComponent,
         canActivate: [AuthGuard]
       },
+      {
+        path: 'pesssoasNetworking',
+        component: NetworkingComponent,
+        canActivate: [AuthGuard]
+      },
+      {
+        path: 'pausa',
+        component: PausaComponent,
+        canActivate: [AuthGuard]
+      },
+      {
+        path: 'pausaDoUsuario/:id',
+        component: PausaDoUsuarioComponent,
+        canActivate: [AuthGuard]
+      },
+      {
+        path: 'pessoaMarketing',
+        component: MarketingComponent,
+        canActivate: [AuthGuard]
+      },
+      {
+        path: 'pessoaAuditoria',
+        component: AuditoriaComponent,
+        canActivate: [AuthGuard]
+      },
+      {
+        path: 'tipoDecliente',
+        component: TipoDeClienteComponent,
+        canActivate: [AuthGuard]
+      },
+      {
+        path: 'classificacaoClietes',
+        component: ClassifcacaoDeClientesComponent,
+        canActivate: [AuthGuard]
+      },
+      {
+        path: 'objecao',
+        component: ObjecaoComponent,
+        canActivate: [AuthGuard]
+      },
+      {
+        path: 'motivosDosEventos',
+        component: MotivosDosEventosComponent,
+        canActivate: [AuthGuard]
+      },
+      {
+        path: 'canais',
+        component: CanaisComponent,
+        canActivate: [AuthGuard]
+      },
+      {
+        path: 'motivosCanais/:id',
+        component: MotivosCanaisComponent,
+        canActivate: [AuthGuard]
+      },
+      {
+        path: 'motivosRespostas/:id',
+        component: MotivosRespostasComponent,
+        canActivate: [AuthGuard]
+      },
     ]
   },
   {
@@ -258,7 +330,6 @@ const routes: Routes = [
     redirectTo: '',
     component: PageNotFoundComponent
   }
-
 ];
 
 @NgModule({

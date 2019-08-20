@@ -21,7 +21,7 @@ export class PerguntaEditComponent implements OnInit {
 
   tableData : {
     id: '',
-    alternativas: [],
+    alternativas: [{}],
     id_questionario: '',
     nome:'',
     status: '',

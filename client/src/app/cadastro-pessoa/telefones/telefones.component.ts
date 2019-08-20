@@ -5,6 +5,7 @@ import { LocalStorage } from '../../shared/services/localStorage';
 import { ToastService } from '../../../lib/ng-uikit-pro-standard';
 import { Usuario } from '../../login/usuario';
 import { Observable } from 'rxjs';
+import { CheckPermissaoRecurso } from '../../shared/services/checkPemissaoRecurso';
 
 @Component({
   selector: 'app-telefones',
@@ -13,7 +14,7 @@ import { Observable } from 'rxjs';
 })
 export class TelefonesComponent implements OnInit {
 
-  telefoneSelecionado: boolean;
+  telefoneSelecionado: boolean = false;
   _pessoa: any
   _pessoaObject: any;
   telefoneExclusao: any;
@@ -24,9 +25,12 @@ export class TelefonesComponent implements OnInit {
   private tipoTelefone: Observable<Array<object>>;
   private usuarioLogado: any;
   private telefoneForm: FormGroup;
+  telefoneFormAud: any;
+
   constructor(private formBuilder: FormBuilder, private connectHTTP: ConnectHTTP,
     private localStorage: LocalStorage,
-    private toastrService: ToastService) {
+    private toastrService: ToastService,
+    private checkPermissaoRecurso: CheckPermissaoRecurso) {
     this.telefoneForm = this.formBuilder.group({
       id: [''],
       id_pessoa: [''],
@@ -94,6 +98,7 @@ export class TelefonesComponent implements OnInit {
         contato: [''],
       })
       this.telefoneSelecionado = true;
+      this.telefoneFormAud = this.telefoneForm.value;
     }
     else {
       this.toastrService.error('Necessário ter uma pessoa cadastrada!')
@@ -104,38 +109,47 @@ export class TelefonesComponent implements OnInit {
     this.telefoneExclusao = this._pessoaObject.telefones.filter(t => t.id == telefoneId)[0];
   }
   async confirmaExclusaoTelefone() {
-    try {
-      await this.connectHTTP.callService({
-        service: 'excluirTelefonePessoa',
-        paramsService: {
-          id_telefone: this.telefoneExclusao.id
-        }
-      });
-      this.toastrService.success('Excluido com sucesso');
+    if (this.checkPermissaoRecurso.usuarioLocadoAcessaRecurso(5)) 
+      {
+      try {
+        await this.connectHTTP.callService({
+          service: 'excluirTelefonePessoa',
+          paramsService: {
+            id_telefone: this.telefoneExclusao.id,
+            id_pessoa: this.telefoneExclusao.id_pessoa
+          }
+        });
+        this.toastrService.success('Excluido com sucesso');
+      }
+      catch (e) {
+        this.toastrService.error('Erro ao excluir telefone');
+      }
+      this.refresh.emit();
+      this.telefoneExclusao = undefined;
+    } else {
+      this.toastrService.error('Você não tem permissão para excluir telefone!');
     }
-    catch (e) {
-      this.toastrService.error('Erro ao excluir telefone');
-    }
-    this.refresh.emit();
-    this.telefoneExclusao = undefined;
   }
   cancelaExclusaoTelefone() {
     this.telefoneExclusao = undefined;
   }
 
   editarTelefone(telefoneId) {
-    const telefoneSelecionado = this._pessoaObject.telefones.filter(t => t.id == telefoneId)[0];
+    debugger
+    const telefoneSelecionado_ = this._pessoaObject.telefones.filter(t => t.id == telefoneId)[0];
     this.telefoneForm = this.formBuilder.group({
-      id: [telefoneSelecionado.id],
+      id: [telefoneSelecionado_.id],
       id_pessoa: [this._pessoaObject.principal.id, [Validators.required]],
-      ddd: [telefoneSelecionado.ddd, [Validators.required]],
-      telefone: [telefoneSelecionado.telefone, [Validators.required]],
-      ramal: [telefoneSelecionado.ramal],
-      principal: [telefoneSelecionado.principal],
-      id_tipo_telefone: [telefoneSelecionado.id_tipo_telefone, [Validators.required]],
-      contato: [telefoneSelecionado.contato],
+      ddd: [telefoneSelecionado_.ddd, [Validators.required]],
+      telefone: [telefoneSelecionado_.telefone, [Validators.required]],
+      ramal: [telefoneSelecionado_.ramal],
+      principal: [telefoneSelecionado_.principal],
+      id_tipo_telefone: [telefoneSelecionado_.id_tipo_telefone, [Validators.required]],
+      contato: [telefoneSelecionado_.contato],
     })
     this.telefoneSelecionado = true;
+    this.telefoneFormAud = this.telefoneForm.value;
+
   }
 
   cancelarAdd() {
@@ -146,7 +160,10 @@ export class TelefonesComponent implements OnInit {
     try {
       await this.connectHTTP.callService({
         service: 'salvarTelefonePessoa',
-        paramsService: this.telefoneForm.value
+        paramsService: {
+        dadosAtuais: JSON.stringify(this.telefoneForm.value),
+        dadosAnteriores: JSON.stringify(this.telefoneFormAud)
+        }
       });
       this.toastrService.success('Salvo com sucesso');
     }

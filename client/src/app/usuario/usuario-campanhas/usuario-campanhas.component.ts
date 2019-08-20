@@ -106,19 +106,13 @@ export class UsuarioCampanhasComponent implements OnInit {
       return 0;
     });
 
-
-
     if ( this.campanhasUsuario[0].nome == null ) this.targe = [];
     if ( this.campanhas[0].nome == null ) this.source = []; 
     
-    console.log('source ', this.source);
-    console.log('targe ', this.targe)
-
   }
 
   async salvarCampaanhasDoUsuario(){
       this.disabledVoltar = false
-
         try {
           let resposta = await this.connectHTTP.callService({
             service: 'salvarCampanhasDoUsuario',

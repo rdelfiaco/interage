@@ -14,7 +14,7 @@
         <div class="md-form">
           <input type="search" [(ngModel)]="textoPesquisaPessoa" id="search" class="form-control" mdbInputDirective
             [mdbValidate]="false" (keyup)="$event.keyCode == 13 && pesquisar()">
-          <label for="search">Inserir CPF ou CNPJ ou Nome da Pessoa ou Código</label>
+          <label for="search">Inserir CPF ou CNPJ ou Nome da Pessoa ou (id=;tel=;dtN=)</label>
         </div>
       </div>
       <div class="col-2">
@@ -121,10 +121,13 @@
           class="modal fade right" role="dialog" aria-labelledby="myBasicModalLabel" aria-hidden="true">
           <div *ngIf="pessoa | async" class="modal-dialog modal-fluid" role="document">
             <div class="modal-header light-blue darken-3 white-text">
-              <h4 class="modal-title" id="myModalLabel">Editando Pessoa</h4>
-              <button type="button" style="cursor:pointer;" class="close" data-dismiss="modal" aria-label="Close"
+              <h4 class="modal-title" id="myModalLabel">Editando: {{nomePessoa}} </h4>
+              <!-- <button type="button" style="cursor:pointer;" class="close" data-dismiss="modal" aria-label="Close"
                 (click)="closeModal()">
                 <span aria-hidden="true" style="color:white; cursor:pointer;">&times;</span>
+              </button> -->
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="pessoaEditando.hide()">
+                <span aria-hidden="true">&times;</span>
               </button>
             </div>
             <div class="modal-content p-1" style="overflow: auto;">

@@ -5,6 +5,7 @@ import { LocalStorage } from '../shared/services/localStorage';
 import { ToastService, ModalDirective } from '../../lib/ng-uikit-pro-standard';
 import { Observable } from 'rxjs';
 import { Usuario } from '../login/usuario';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -28,7 +29,11 @@ export class PesquisaPessoaComponent implements OnInit {
   lastVisibleIndex: number = 10;
   pessoa: Observable<object>;
   editandoPessoaObject: any;
-  constructor(private connectHTTP: ConnectHTTP,
+  nomePessoa: string;
+
+  constructor(
+    private router: Router,
+    private connectHTTP: ConnectHTTP,
     private localStorage: LocalStorage,
     private toastrService: ToastService,
     private checkPermissaoRecurso: CheckPermissaoRecurso ) {
@@ -127,42 +132,11 @@ export class PesquisaPessoaComponent implements OnInit {
 
   closeModal() {
     this.pessoaEditando.hide();
+
   }
-
-
+  
   async editarPessoa(pessoa: any) {
-
-    this.editandoPessoaObject = pessoa;
-    let pessoaId = pessoa.id
-    let p = await this.connectHTTP.callService({
-      service: 'getPessoa',
-      paramsService: {
-        id_pessoa: pessoaId
-      }
-    }) as any;
-    
-    //  - se o cliente não estiver vinculado a nenhuma carteira o usuário logado pode ter acesso; 
-    //  - se o cliente esteja vinculado a uma carteria e se o usuário logado possui carteira o
-    //           o acesso aos dados do cliente somente se ele pertence a carteira do usuário logado  
-    if (this.usuarioLogado.possui_carteira_cli  && p.resposta.principal.id_usuario_carteira ){
-      if(this.usuarioLogado.id == p.resposta.principal.id_usuario_carteira){
-
-        this.pessoa = new Observable(o => o.next(p.resposta));
-        this.pessoaEditando.show();
-      } else {
-        this.toastrService.error('O cliente não faz parte de sua carteira');
-      }
-      }
-      else {
-        // verifica se o usuário logado possui acesso aos clientes sem carteira 
-        if ( this.checkPermissaoRecurso.usuarioLocadoAcessaRecurso(4) ){
-          this.pessoa = new Observable(o => o.next(p.resposta));
-          this.pessoaEditando.show()
-        }else {
-          this.toastrService.error('Você não tem acesso aos clientes sem carteira');
-        }
-    }
-
+    return this.router.navigate(['pessoas/'+pessoa.id]);
   }
 
   async refresh() {

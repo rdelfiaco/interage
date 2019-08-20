@@ -177,7 +177,6 @@ export class QuestionarioEditComponent implements OnInit {
   }
 
   sortBy(by: string | any): void {
-    debugger
     this.tableData.perguntas.sort((a: any, b: any) => {
       if (a[by] < b[by]) {
         return this.sorted ? 1 : -1;

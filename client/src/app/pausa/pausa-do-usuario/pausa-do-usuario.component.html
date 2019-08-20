@@ -1,0 +1,27 @@
+<mdb-card cascade="true" narrower="true">
+
+    <div
+    class="view view-cascade gradient-card-header blue-gradient narrower py-2 mx-4 mb-3 d-flex justify-content-between align-items-center">
+    <a href="" class="white-text mx-3 ">Pausar</a>
+  </div>
+  <!--/Card image-->
+
+  <br>
+  <br>
+  <div class="row">
+    <div class="col-5" style="margin-left: 50px">
+      <mdb-select [(ngModel)]="pausaSelectValue" [options]="pausaSelect" [multiple]="false"
+      (selected)="onChangePausa()" [disabled] = "!enableBtnPausa"
+      placeholder="Escolha o tipo da pausa" style="font-size: 0.5rem;"></mdb-select>
+      <label>Tipo da pausa</label>
+    </div>
+    <div class="col">
+      <button type="button" mdbBtn color="dark-green" mdbWavesEffect [disabled] = "!enableBtnInicio"
+        (click)="registrarInicio()">Início</button>    
+        <button type="button" mdbBtn color="light" mdbWavesEffect [disabled] = "!enableBtnFim"
+        (click)=" registrarFim()">Fim</button>
+    </div>
+  </div>
+  
+
+</mdb-card>

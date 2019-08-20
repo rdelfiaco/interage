@@ -34,6 +34,7 @@ const { checkToken} = require('./checkToken');
                     resolve(registros);
                 }).catch(err => {
                     client.end();
+                    if (JSON.stringify(err).indexOf('duplicate key') != -1) err = 'Registro já existe';
                     reject(err);
                 });
         }).catch(e => {
@@ -67,6 +68,7 @@ async function executaSQLComTransacao(credenciais, client,  sql) {
                     };
                     resolve(registros);
                 }).catch(err => {
+                    if (JSON.stringify(err).indexOf('duplicate key') != -1) err = 'Registro já existe';
                     reject(err);
                 });
         }).catch(e => {

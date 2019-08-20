@@ -1,3 +1,5 @@
+import { MotivosDosEventosModule } from './motivos-dos-eventos/motivos-dos-eventos.module';
+import { PausaModule } from './pausa/pausa.module';
 import { CrudCampanhaModule } from './crud-campanha/crud-campanha.module';
 import { QuestionarioModule } from './questionario/questionario.module';
 import { DepartamentoModule } from './departamento/departamento.module';
@@ -48,6 +50,10 @@ import { AngularDualListBoxModule } from 'angular-dual-listbox';
 import { BaseLayoutComponent } from './layout/base-layout/base-layout.component';
 import { AppsLayoutComponent } from './layout/apps-layout/apps-layout.component';
 import { PagesLayoutComponent } from './layout/pages-layout/pages-layout.component';
+import { TipoDeClienteComponent } from './tipo-de-cliente/tipo-de-cliente.component';
+import { ObjecaoComponent } from './objecao/objecao.component';
+import { ClassifcacaoDeClientesComponent } from './classifcacao-de-clientes/classifcacao-de-clientes.component';
+import { CanaisComponent } from './canais/canais.component';
 import { SharedModule } from './shared/shared.module';
 
 
@@ -70,6 +76,10 @@ import { SharedModule } from './shared/shared.module';
     BaseLayoutComponent,
     AppsLayoutComponent,
     PagesLayoutComponent,
+    TipoDeClienteComponent,
+    ObjecaoComponent,
+    ClassifcacaoDeClientesComponent,
+    CanaisComponent
   ],
   imports: [
     BrowserModule,
@@ -101,7 +111,9 @@ import { SharedModule } from './shared/shared.module';
     AngularDualListBoxModule,
     CrudCampanhaModule,
     QuestionarioModule,
-    SharedModule,    
+    SharedModule,
+    PausaModule,
+    MotivosDosEventosModule
   ],
   providers: [MDBSpinningPreloader
   ],

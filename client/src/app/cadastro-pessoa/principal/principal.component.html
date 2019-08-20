@@ -22,15 +22,16 @@
     </div>
     <div class="row">
       <div class="md-form col">
-        <input mdbInputDirective formControlName="apelido_fantasia" type="text" id="rg" class="form-control">
-        <label for="rg">Apelido</label>
+        <input mdbInputDirective formControlName="apelido_fantasia" type="text" id="apelido" class="form-control">
+        <label for="apelido">Apelido</label>
       </div>
     </div>
     <div class="row">
       <div class="md-form form-group col mdb-date-form mb-1">
-        <mdb-date-picker name="mydate" [options]="myDatePickerOptions" [placeholder]="'Selecione a data'" required>
-        </mdb-date-picker>
-        <label class="">Data Nascimento</label>
+        <!-- <mdb-date-picker name="datanascimento" formControlName="datanascimento"  [options]="myDatePickerOptions" [placeholder]="'Selecione a data'" required>
+        </mdb-date-picker> -->
+        <input style="margin-top: 40px"  name="datanascimento" formControlName="datanascimento"   id="datanascimento" type="text" >
+        <label for="datanascimento" >Data Nascimento DD/MM/YYYY </label>
       </div>
       <div class="col mdb-select-form">
         <mdb-select formControlName="sexo" [placeholder]="'Selecione o Sexo'" [options]="enumSexo" [multiple]="false">
@@ -40,33 +41,47 @@
     </div>
 
     <div class="row">
-      <div class="md-form col-4">
+      <div class="md-form col-3">
         <input mdbInputDirective formControlName="rg_ie" type="text" id="rg" class="form-control">
         <label for="rg">RG</label>
       </div>
-      <div class="md-form col-4">
+      <div class="md-form col-3">
         <input mdbInputDirective formControlName="orgaoemissor" type="text" id="orgaoEmissor" class="form-control">
         <label for="orgaoEmissor">Orgão Emissor</label>
       </div>
-      <div class="md-form col-4">
+      <div class="md-form col-3">
         <input mdbInputDirective formControlName="cpf_cnpj" type="text" id="cpf" class="form-control">
         <label for="cpf">CPF</label>
+      </div>
+      <div class="md-form col-3">
+        <input mdbInputDirective formControlName="cnh" type="text" id="cnh" class="form-control">
+        <label for="cnh">CNH</label>
       </div>
     </div>
 
     <div class="row">
-      <div class="col-6 mdb-select-form">
+      <div class="col-4 mdb-select-form">
         <mdb-select [filterEnabled]="true" formControlName="id_atividade" [placeholder]="'Selecione a profissão'"
           [options]="atividadesPessoaFisica" [multiple]="false"></mdb-select>
         <label>Profissão</label>
       </div>
-      <div class="md-form col-6">
-        <input mdbInputDirective formControlName="email" type="text" id="email" class="form-control">
-        <label for="email">Email</label>
+      <div class="col-4 mdb-select-form">
+        <mdb-select [filterEnabled]="true" formControlName="id_tipo_cliente" [placeholder]="'Selecione o tipo do cliente'"
+          [options]="tiposDeCliente" [multiple]="false"></mdb-select>
+        <label>Tipo do cliente</label>
+      </div>
+      <div class="col-4 mdb-select-form">
+        <mdb-select [filterEnabled]="true" formControlName="id_classificacao_cliente" [placeholder]="'Selecione a classificação do cliente'"
+          [options]="classificacoesDeCliente" [multiple]="false"></mdb-select>
+        <label>Classificação do cliente</label>
       </div>
     </div>
 
     <div class="row">
+      <div class="md-form col">
+          <input mdbInputDirective formControlName="email" type="text" id="email" class="form-control">
+          <label for="email">Email</label>
+      </div>
       <div class="md-form col">
         <input mdbInputDirective formControlName="website" type="text" id="website" class="form-control">
         <label for="website">WebSite</label>
@@ -83,7 +98,7 @@
 
     <div class="row">
       <div class="md-form col">
-        <input mdbInputDirective formControlName="id" type="text" id="id" class="form-control" disabled>
+        <input mdbInputDirective formControlName="id" type="text" id="id" class="form-control">
         <label for="id">Id</label>
       </div>
     </div>
@@ -114,8 +129,9 @@
     </div>
     <div class="row">
       <div class="md-form form-group col mdb-date-form">
-        <mdb-date-picker name="mydate" [options]="myDatePickerOptions" [placeholder]="'Selecione a data'" required>
-        </mdb-date-picker>
+        <!-- <mdb-date-picker name="mydate" [options]="myDatePickerOptions" [placeholder]="'Selecione a data'" required>
+        </mdb-date-picker> -->
+        <input style="margin-top: 40px"  name="datanascimento" formControlName="datanascimento"   id="datanascimento" type="text" >
         <label class="">Data Fundação</label>
       </div>
       <div class="md-form col-4">

@@ -20,6 +20,8 @@ export class EnderecosComponent implements OnInit {
   enderecoSelecionadoObject: any;
   private usuarioLogado: any;
   private enderecoForm: FormGroup;
+  enderecoFormAud: any;
+
 
   constructor(private connectHTTP: ConnectHTTP, private formBuilder: FormBuilder,
     private localStorage: LocalStorage,
@@ -50,6 +52,7 @@ export class EnderecosComponent implements OnInit {
         complemento: ['', [Validators.required]],
         recebe_correspondencia: ['']
       });
+      this.enderecoFormAud = this.enderecoForm.value;
       this.enderecoSelecionado = true;
     }
     else {
@@ -110,7 +113,10 @@ export class EnderecosComponent implements OnInit {
     try {
       let resp = await this.connectHTTP.callService({
         service: 'salvarEnderecoPessoa',
-        paramsService: this.enderecoForm.value
+        paramsService: ({
+          dadosAtuais: JSON.stringify(this.enderecoForm.value),
+          dadosAnteriores: JSON.stringify(this.enderecoFormAud)
+        }) 
       });
 
       if (resp.error) {
@@ -167,6 +173,7 @@ export class EnderecosComponent implements OnInit {
       complemento: [this.enderecoSelecionadoObject.complemento],
       recebe_correspondencia: [this.enderecoSelecionadoObject.recebe_correspondencia]
     });
+    this.enderecoFormAud = this.enderecoForm.value;
     this.enderecoSelecionado = true;
   }
 }

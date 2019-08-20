@@ -1,0 +1,152 @@
+<mdb-card cascade="true" narrower="true">
+  <!--Card image-->
+  <div
+    class="view view-cascade gradient-card-header blue-gradient narrower py-2 mx-4 mb-3 d-flex justify-content-between align-items-center">
+    <div>
+      <button type="button" mdbBtn color="white" outline="true" rounded="true" size="sm" class="px-2" mdbWavesEffect>
+        <mdb-icon fas fas icon="info" class="mt-0"></mdb-icon>
+      </button>
+    </div>
+    <a href="" class="white-text mx-3">Motivos de eventos</a>
+    <div>
+      <button mdbBtn color="white" outline="true" rounded="true" size="sm" type="button"
+        (click)=" adicionar(); formulario.show()" class="px-2" mdbWavesEffect>
+        Adicionar Motivos de eventos
+      </button>
+    </div>
+  </div>
+  <!--/Card image-->
+
+  <div class="px-4">
+
+    <div class="table-wrapper">
+      <!--Table-->
+      <table class="mb-0 table" mdbTable hover="true">
+
+        <!--Table head-->
+        <thead>
+          <tr>
+            <th class="th-lg" >
+              <a (click)="sortBy('id')">ID
+                <mdb-icon fas icon="sort" class="ml-1"></mdb-icon>
+              </a>
+            </th>
+            <th class="th-lg" >
+              <a (click)="sortBy('nome')">Nome
+                <mdb-icon fas icon="sort" class="ml-1"></mdb-icon>
+              </a>
+            </th>
+            <th class="th-lg" >
+              <a (click)="sortBy('status')">Ativo
+                <mdb-icon fas icon="sort" class="ml-1"></mdb-icon>
+              </a>
+            </th>
+            <th class="th-lg text-center" >Ações
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let row of tableData;let i = index">
+            <td>{{row.id}}</td>
+            <td>{{row.nome}}</td>
+            <td >
+              <mdb-checkbox  [checked]="row.status" [disabled]="true"> </mdb-checkbox>
+            </td>
+            <td class="text-center">
+              <div>
+                <button title="Editar" (click)="editar(row.id); formulario.show()" type="button" mdbBtn color="blue" outline="true"
+                  rounded="true" size="sm" class="px-2" mdbWavesEffect>
+                  <mdb-icon fas icon="pencil" class="mt-0"></mdb-icon>
+                </button>
+                <button title="Excluir" type="button" mdbBtn color="red" (click)="excluir(row.id); formulario.show()" outline="true"
+                  rounded="true" size="sm" class="px-2" mdbWavesEffect>
+                  <mdb-icon fas icon="trash" class="mt-0"></mdb-icon>
+                </button>
+                <button style="width:31px;" title="Canais do motivo" (click)="canaisMotivos(row.id,row.nome )" type="button" mdbBtn color="yellow" outline="true"
+                  rounded="true" size="sm" class="px-2" mdbWavesEffect>
+                  <mdb-icon fas icon="comments" class="mt-0"></mdb-icon>
+                </button>
+                <button style="width:31px;" title="Respostas do motivo" (click)="RespostasMotivos(row.id,row.nome )" type="button" mdbBtn color="green" outline="true"
+                  rounded="true" size="sm" class="px-2" mdbWavesEffect>
+                  <mdb-icon fas icon="arrows-alt" class="mt-0"></mdb-icon>
+                </button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</mdb-card>
+
+
+<div mdbModal #formulario="mdbModal" class="modal fade top"  tabindex="-1"  role="dialog" 
+      aria-labelledby="myBasicModalLabel" aria-hidden="true" >
+  <div class="modal-dialog  modal-lg" role="document">
+    <div class="modal-header light-blue darken-3 white-text">
+        <h4 class="modal-title">{{formularioTitulo}}</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"
+          (click)="mdbModal.hide()">
+          <span aria-hidden="true" style="color:white; cursor:pointer;">&times;</span>
+        </button>
+    </div>
+    <div class="modal-content">
+          <div class="modal-body">
+          <form [formGroup]="formularioForm">
+            <div class="row">
+              <div class="md-form col" style="margin-left: 20px">
+                  <input  mdbInputDirective formControlName="id" 
+                    type="text" id="id" class="form-control">
+                  <label for="id">Id</label>
+              </div>
+              <div class="md-form col-7">
+                <input  mdbInputDirective formControlName="nome" 
+                  type="text" id="nome" class="form-control">
+                <label for="nome">Nome</label>
+              </div>
+              <div class="md-form col">
+                <mdb-checkbox  formControlName="status"  >Ativo</mdb-checkbox>
+              </div>
+            </div>
+            <div class="row">
+              <div class="md-form col" style="margin-left: 20px">
+                  <input  mdbInputDirective formControlName="prazo_finalizacao" 
+                    type="text" prazo_finalizacao="prazo_finalizacao" class="form-control">
+                  <label for="prazo_finalizacao">Prazo para finalizar em minutos</label>
+              </div>
+              <div class="md-form col">
+                <mdb-checkbox  formControlName="gera_email"  >Gera e-mail</mdb-checkbox>
+              </div>
+              <div class="md-form col">
+                <mdb-checkbox  formControlName="inicia_processo"  >Inicia processo</mdb-checkbox>
+              </div>
+            </div>
+            <div class="row">
+              <div class="md-form col" style="margin-left: 20px">
+                <input  mdbInputDirective formControlName="acao_sql" 
+                  type="text" id="acao_sql" class="form-control">
+                <label for="acao_sql">Ação SQL</label>
+              </div>
+            </div>
+            <div class="row">
+              <div class="md-form col" style="margin-left: 20px">
+                <input  mdbInputDirective formControlName="acao_js" 
+                  type="text" id="acao_js" class="form-control">
+                <label for="acao_js">Ação JS</label>
+              </div>
+            </div>
+          </form>
+        </div>
+      <div class="modal-footer">
+        <div class="col-lg-12 text-right">
+          <div class="md-form">
+          <button type="button" mdbBtn color="light" mdbWavesEffect (click)="formulario.hide()">Voltar</button>
+          <button type="button" mdbBtn color="dark-green" mdbWavesEffect
+            (click)="salvar(); formulario.hide()">{{titleBntEnviar}}</button>
+        </div>
+      </div>
+    </div>
+    </div>
+  </div>
+</div>
+

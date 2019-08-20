@@ -1,0 +1,90 @@
+<div class="row pt-4 p-3">
+  <table class="table">
+    <thead>
+      <tr>
+        <th> <h5 style="font-weight: bold">Relacionamentos </h5> </th>
+        <th> <h5 style="font-weight: bold">Ações</h5> </th>
+      </tr>
+    </thead>
+    <tbody *ngFor="let relacionamento of (pessoa | async)?.relacionamentos">
+      <tr>
+        <th scope="row"> <h5> {{relacionamento.relacionamento}} </h5> </th>
+        <td>
+          <button (click)="editarRelacionamentos(relacionamento.id)" type="button" mdbBtn color="blue" outline="true" rounded="true"
+            size="sm" class="px-2" mdbWavesEffect title="Alterar relacionamento" >
+            <mdb-icon fas icon="pencil" class="mt-0"></mdb-icon>
+          </button>
+          <button type="button" mdbBtn color="red"
+            (click)="excluirRelacionamentos(relacionamento.id)" outline="true" rounded="true"
+            size="sm" class="px-2" mdbWavesEffect title="Excluir relacionamento"  >
+            <mdb-icon fas icon="trash" class="mt-0"></mdb-icon>
+          </button>
+          <button type="button" mdbBtn color="yellow"
+            (click)="abrirCadastro(relacionamento.id)" outline="true" rounded="true"
+            size="sm" class="px-2" mdbWavesEffect title="Abrir cadastro do relacionado"  >
+            <mdb-icon fas icon="address-book" class="mt-0"></mdb-icon>
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <span *ngIf="_pessoaObject && !_pessoaObject.relacionamentos.length">Nenhum relacionamento cadastrado!</span>
+</div>
+<div class="row d-flex justify-content-end mt-3">
+  <button type="button" [disabled]="relacionamentoSelecionado" mdbBtn color="primary" (click)="adicionarNovoRelacionamento()"
+    class="relative waves-light" href="#formRelacionamento" mdbWavesEffect>Adicionar Novo Relacionamento</button>
+</div>
+<br />
+<br />
+
+<div *ngIf="relacionamentoSelecionado" id="formRelacionamento">
+  <form [formGroup]="relacionamentoForm" >
+    <div class="row">
+        <div class="md-form col-4" style="margin-left: 10px; margin-top: -1px" >
+            <input mdbInputDirective formControlName="pessoaReferenciaNome"  type="text" id="pessoaReferenciaNome" class="form-control">
+            <label for="pessoaReferenciaNome">Pessoa referência</label>
+        </div>
+
+      <div class="col-2 mdb-select-form">
+        <mdb-select formControlName="tipoRelacionamentos" (selected)="getSelectedValueRelacionamento($event)"
+          [options]="tipoTratamentoCombo" [multiple]="false" placeholder="Tipo de relacionamento"></mdb-select>
+        <label>Tipo de relacionamento</label>
+      </div>
+
+      <div class="col-4">
+          <app-pesquisa-cliente  [initValueId]="pessoaId"
+          (onSelectCliente)="onSelectCliente($event)">
+        </app-pesquisa-cliente>
+      </div>
+
+    </div>
+
+    <br>
+    <div class="row">
+        <div class="md-form col-4" style="margin-left: 10px; margin-top: 0px">
+            <input mdbInputDirective formControlName="pessoaReferenciadaNome"  type="text" id="pessoaReferenciadaNome" class="form-control">
+            <label for="pessoaReferenciadaNome">pessoa referenciada</label>
+        </div>
+      
+
+        <div class="col-2 mdb-select-form">
+          <mdb-select formControlName="tipoRelacionamentosVolta" (selected)="getSelectedValueRelacionamentoVolta($event)"
+            [options]="tipoTratamentoVoltaCombo" [multiple]="false" placeholder="Tipo de relacionamento"></mdb-select>
+          <label>Tipo de relacionamento</label>
+        </div>
+
+        <div class="md-form col-4" style="margin-left: 20px; margin-top: 0px">
+          <input mdbInputDirective formControlName="pessoaReferenciaNome"  type="text" id="pessoaReferenciaNome" class="form-control">
+          <label for="pessoaReferenciaNome">Pessoa referência</label>
+        </div>
+    </div>
+
+      
+    <div class="row d-flex justify-content-end">
+      <button type="button" mdbBtn [color]="bntEnviarColor" (click)="salvar();" class="relative waves-light" 
+      mdbWavesEffect>{{bntEnviar}}</button>
+      <button type="button" mdbBtn [color]="btnCancelarColor" (click)="cancelarAdd();" class="relative waves-light" id="btCancelar"
+        mdbWavesEffect>Cancelar</button>
+    </div>
+  </form>
+</div>

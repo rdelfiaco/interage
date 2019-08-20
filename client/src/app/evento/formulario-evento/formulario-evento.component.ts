@@ -4,6 +4,7 @@ import * as moment from 'moment';
 import { ModalDirective } from '../../../lib/ng-uikit-pro-standard';
 import { ConnectHTTP } from '../../shared/services/connectHTTP';
 import { Observable } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-formulario-evento',
@@ -17,7 +18,8 @@ export class FormularioEventoComponent implements OnInit {
   eventoForm: FormGroup;
   pessoa: Observable<object>;
   constructor(private formBuilder: FormBuilder,
-    private connectHTTP: ConnectHTTP) {
+    private connectHTTP: ConnectHTTP,
+    private router: Router) {
     this.eventoForm = this.formBuilder.group({
       id: [''],
       status: [''],
@@ -75,12 +77,14 @@ export class FormularioEventoComponent implements OnInit {
   }
 
   abrirCadastroPessoa() {
-    window.open(`/pessoas/${this.evento.id_pessoa_receptor}`, '_blank')
+    return this.router.navigate(['pessoas/'+this.evento.id_pessoa_receptor]);
   }
 
   abrirProposta() {
-    window.open(`/proposta/${this.evento.id_proposta}`, '_blank')
+    return this.router.navigate(['proposta/'+this.evento.id_proposta]);
   }
+
+  
   async cadastroPessoa() {
 
     let pessoaId = this.evento.id_pessoa_receptor;

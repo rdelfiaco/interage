@@ -60,7 +60,7 @@ export class LoginComponent implements OnInit {
     
     if (res.error) {
       this.toastrService.error(res.error);
-      this.router.navigate(['login']);
+      this.router.navigate(['/login']);
     }
     else {
       let usuarioLogado = res.resposta;
