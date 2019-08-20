@@ -22,6 +22,7 @@ export class QuestionarioEditComponent implements OnInit {
     multipla_escolha: false,
     descricao: ''
   };
+  private sorted = false;
 
   @ViewChild('perguntaadd') modalperguntaadd: ModalDirective;
 
@@ -56,18 +57,11 @@ export class QuestionarioEditComponent implements OnInit {
         service: 'getQuestionarioById',
         paramsService: { id: this.idQuest }
       }) as any;
-      let respPergQuest = await this.connectHTTP.callService({
-        service: 'getPerguntasByIdUqestionario',
-        paramsService: { id: this.idQuest }
-      }) as any;
       if (respQuest.error) {
         return this.toastrService.error(respQuest.error);
       }
-      if (respPergQuest.error) {
-        return this.toastrService.error(respPergQuest.error);
-      }
-      let data = respQuest.resposta[0];
-      data.perguntas = respPergQuest.resposta;
+      let data = respQuest.resposta.questionario;
+      data.perguntas = respQuest.resposta.perguntas;
       this.tableData = data;
     }
     catch (e) {
@@ -180,6 +174,22 @@ export class QuestionarioEditComponent implements OnInit {
     catch (e) {
       this.toastrService.error('Erro ao ler as permissoes do departamento', e);
     }
+  }
+
+  sortBy(by: string | any): void {
+    debugger
+    this.tableData.perguntas.sort((a: any, b: any) => {
+      if (a[by] < b[by]) {
+        return this.sorted ? 1 : -1;
+      }
+      if (a[by] > b[by]) {
+        return this.sorted ? -1 : 1;
+      }
+
+      return 0;
+    });
+
+    this.sorted = !this.sorted;
   }
 
 

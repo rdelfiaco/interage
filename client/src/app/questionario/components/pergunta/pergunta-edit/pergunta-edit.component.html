@@ -1,6 +1,6 @@
 <div class="row">
   <div class="col-lg-6 text-left">
-    <button type="button" mdbBtn color="danger" (click)="apagarPergunta()" mdbWavesEffect>Apagar</button>
+    <!-- <button type="button" mdbBtn color="danger" (click)="apagarPergunta()" mdbWavesEffect>Apagar</button> -->
     <button type="button" mdbBtn color="blue-grey" (click)="alternativaadd.show();" mdbWavesEffect>Adiconar
       alternativa</button>
 
@@ -66,7 +66,7 @@
               </a>
             </th>
             <th class="th-lg text-center" width="20%">
-              <a (click)="sortBy('sequencia')">Sequência
+              <a (click)="sortBy('sequencia_alternativa')">Sequência
                 <mdb-icon fas icon="sort" class="ml-1"></mdb-icon>
               </a>
             </th>
@@ -110,7 +110,7 @@
   aria-hidden="true" [config]="{backdrop: true}">
   <div class="modal-dialog  modal-fluid" role="document">
     <div class="modal-header light-blue darken-3 white-text">
-      <h4 class="modal-title">Nova Alternativa</h4>
+      <h4 class="modal-title">Pergunta - {{tableData.nome}}</h4>
       <button type="button" style="cursor:pointer;" class="close" data-dismiss="modal" aria-label="Close"
         (click)="alternativaadd.hide()">
         <span aria-hidden="true" style="color:white; cursor:pointer;">&times;</span>
@@ -118,6 +118,13 @@
     </div>
     <div class="modal-content">
       <form class="p-4">
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="md-form">
+              <h5>Nova Alternativa</h5>
+            </div>
+          </div>
+        </div>
         <div class="row">
           <div class="col-lg-12">
             <div class="md-form">
@@ -153,7 +160,7 @@
             <div class="md-form">
               <button type="button" mdbBtn color="light" (click)="alternativaadd.hide()" mdbWavesEffect>Voltar</button>
               <button type="button" mdbBtn color="dark-green" (click)="salvarAlternativa()"
-                mdbWavesEffect>Criar</button>
+                mdbWavesEffect>Salvar</button>
               <!-- <button type="button" mdbBtn color="danger" mdbWavesEffect>Apagar</button> -->
             </div>
           </div>

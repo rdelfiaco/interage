@@ -1,6 +1,6 @@
 <div class="row">
   <div class="col-lg-6 text-left">
-    <button type="button" mdbBtn color="danger" (click)="apagarQuestionario()" mdbWavesEffect>Apagar</button>
+    <!-- <button type="button" mdbBtn color="danger" (click)="apagarQuestionario()" mdbWavesEffect>Apagar</button> -->
     <button type="button" mdbBtn color="blue-grey" (click)="perguntaadd.show();" mdbWavesEffect>Adiconar
       pergunta</button>
 
@@ -51,7 +51,7 @@
               </a>
             </th> -->
             <th class="th-lg text-center" width="20%">
-              <a (click)="sortBy('sequencia')">Sequência
+              <a (click)="sortBy('sequencia_pergunta')">Sequência
                 <mdb-icon fas icon="sort" class="ml-1"></mdb-icon>
               </a>
             </th>
@@ -61,7 +61,7 @@
               </a>
             </th>
             <th class="th-lg text-center" width="20%">
-              <a (click)="sortBy('status')">Multipla Escolha
+              <a (click)="sortBy('multipla_escolha')">Multipla Escolha
                 <mdb-icon fas icon="sort" class="ml-1"></mdb-icon>
               </a>
             </th>
@@ -104,7 +104,7 @@
   aria-hidden="true" [config]="{backdrop: true}">
   <div class="modal-dialog  modal-fluid" role="document">
     <div class="modal-header light-blue darken-3 white-text">
-      <h4 class="modal-title">Nova Pergunta</h4>
+      <h4 class="modal-title">{{tableData.nome}} - Nova Pergunta</h4>
       <button type="button" style="cursor:pointer;" class="close" data-dismiss="modal" aria-label="Close"
         (click)="perguntaadd.hide()">
         <span aria-hidden="true" style="color:white; cursor:pointer;">&times;</span>
@@ -154,7 +154,7 @@
           <div class="col-lg-12 text-right">
             <div class="md-form">
               <button type="button" mdbBtn color="light" (click)="perguntaadd.hide()" mdbWavesEffect>Voltar</button>
-              <button type="button" mdbBtn color="dark-green" (click)="salvarPergunta()" mdbWavesEffect>Criar</button>
+              <button type="button" mdbBtn color="dark-green" (click)="salvarPergunta()" mdbWavesEffect>Salvar</button>
             </div>
           </div>
         </div>

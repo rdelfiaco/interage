@@ -21,6 +21,7 @@ export class PerguntaEditComponent implements OnInit {
 
   tableData : {
     id: '',
+    alternativas: [],
     id_questionario: '',
     nome:'',
     status: '',
@@ -30,6 +31,7 @@ export class PerguntaEditComponent implements OnInit {
   };
   pergId = null;
   @ViewChild('alternativaadd') alternativaadd: ModalDirective;
+  sorted = false;
 
   constructor(
     private router: Router,
@@ -221,5 +223,21 @@ export class PerguntaEditComponent implements OnInit {
     catch (e) {
       this.toastrService.error('Erro ao ler as permissoes do departamento', e);
     }
+  }
+
+  sortBy(by: string | any): void {
+    debugger
+    this.tableData.alternativas.sort((a: any, b: any) => {
+      if (a[by] < b[by]) {
+        return this.sorted ? 1 : -1;
+      }
+      if (a[by] > b[by]) {
+        return this.sorted ? -1 : 1;
+      }
+
+      return 0;
+    });
+
+    this.sorted = !this.sorted;
   }
 }

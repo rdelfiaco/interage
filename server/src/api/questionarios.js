@@ -32,26 +32,20 @@ function getQuestionarioById(req, res) {
       token: req.query.token,
       idUsuario: req.query.id_usuario
     };
-
     let sql = `SELECT * FROM questionarios where questionarios.id=${req.query.id}`
-    // let resultado = null;
     executaSQL(credenciais, sql)
-      .then(res => {
-        // resultado = res;
-        // console.log(' result questionarios' + res);
-        // sql = `select * from quest_perguntas where quest_perguntas.id_questionario=${req.query.id}`;
-        // executaSQL(credenciais, sql)
-        //   .then(_res => {
-        //     console.log(' result perguntas' + _res);
-        //     console.dir(resultado)
-        //     resultado.perguntas = _res
-        //     console.dir(resultado)
-        //     resolve(resultado);
-        //   })
-        //   .catch(_err => {
-          //     reject(_err)
-          //   })
-        resolve(res);
+      .then(questionario => {
+        sql = `select * from quest_perguntas where quest_perguntas.id_questionario=${req.query.id}`;
+        executaSQL(credenciais, sql)
+          .then(perguntas => {
+            resolve({
+              questionario,
+              perguntas
+            });
+          })
+          .catch(_err => {
+            reject(_err)
+          })
       })
       .catch(err => {
         reject(err)
@@ -108,7 +102,7 @@ function updateStatusQuestionario(req, res) {
     req.query.q = JSON.parse(req.query.data);
 
     let sql = `UPDATE questionarios SET status=${req.query.q.status} WHERE questionarios.id=${req.query.q.id}`;
-    
+
     executaSQL(credenciais, sql)
       .then(res => {
         resolve(res)

@@ -48,7 +48,7 @@ export class ResponderQuestionarioComponent implements OnInit, OnDestroy {
     this.getDataQuestionario();
   }
 
-  OnDestroy() {
+  ngOnDestroy() {
     this.reset();
   }
 
