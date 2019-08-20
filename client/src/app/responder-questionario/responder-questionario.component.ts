@@ -220,7 +220,7 @@ export class ResponderQuestionarioComponent implements OnInit, OnDestroy {
   }
 
   reset() {
-    this.questionario: any = {};
+    this.questionario = {};
     this.respondendo = false;
     this.msg = '';
     this.perguntaAtual = {
