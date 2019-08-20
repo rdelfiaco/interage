@@ -159,6 +159,33 @@ function deleteQuestionario(req, res) {
   });
 };
 
+function gravaRespostaQuestionario(req, res) {
+  return new Promise(function (resolve, reject) {
+    let credenciais = {
+      token: req.query.token,
+      idUsuario: req.query.id_usuario
+    };
+
+    req.query.q = JSON.parse(req.query.data);
+    console.dir(req.query.q);
+    let sql = `insert into quest_respostas(
+      id_alternativa,
+      id_usuario,
+      id_receptor,
+      dt_resposta,
+      observacao,
+      id_evento) VALUES('${req.query.q.id_alternativa}', '${req.query.q.id_usuario}', '${req.query.q.id_receptor}', '${req.query.q.dt_resposta}', '${req.query.q.observacao}', '${req.query.q.id_evento}') RETURNING id;`
+    console.log(sql);
+    executaSQL(credenciais, sql)
+      .then(res => {
+        resolve(res)
+      })
+      .catch(err => {
+        reject(err)
+      })
+  });
+};
+
 
 module.exports = {
   getQuestionarios,
@@ -167,5 +194,6 @@ module.exports = {
   deleteQuestionario,
   updateStatusQuestionario,
   getQuestionarioById,
-  getPerguntasByIdUqestionario
+  getPerguntasByIdUqestionario,
+  gravaRespostaQuestionario
 };

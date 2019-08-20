@@ -1,6 +1,8 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { ConnectHTTP } from '../shared/services/connectHTTP';
 import { ToastService, InputsModule } from '../../lib/ng-uikit-pro-standard';
+import { Usuario } from '../login/usuario';
+import { LocalStorage } from '../shared/services/localStorage';
 
 
 @Component({
@@ -34,9 +36,12 @@ export class ResponderQuestionarioComponent implements OnInit {
   alternativaEscolhida = null;
   respostaEscrita = '';
   concluiu = false;
+  usuarioLogado: Usuario;
   constructor(
     private connectHTTP: ConnectHTTP,
-    private toastrService: ToastService) {
+    private toastrService: ToastService,
+    private localStorage: LocalStorage) {
+      this.usuarioLogado = this.localStorage.getLocalStorage('usuarioLogado') as Usuario;
   }
 
   ngOnInit() {
@@ -52,7 +57,6 @@ export class ResponderQuestionarioComponent implements OnInit {
   }
 
   montaPergunta() {
-    debugger
     this.limpaPergunta();
     this.multiEscolha = this.perguntaAtual.multipla_escolha;
     this.setaPergunta(this.perguntaAtual.nome);
@@ -84,6 +88,7 @@ export class ResponderQuestionarioComponent implements OnInit {
   limpaPergunta() {
     this.respostaEscrita = null;
     this.alternativaEscolhida = null;
+    this.multiEscolha = null;
     let list = document.querySelector(".quest-container");
     while (list.hasChildNodes()) {
       list.removeChild(list.firstChild);
@@ -130,9 +135,17 @@ export class ResponderQuestionarioComponent implements OnInit {
       });
 
     try {
+      let objResp = {
+        id_alternativa: this.alternativaEscolhida.id,
+        id_usuario: this.usuarioLogado.id,
+        id_receptor: null,
+        dt_resposta: new Date(),
+        observacao:(this.multiEscolha ? '' : this.respostaEscrita), 
+        id_evento: this.perguntaAtual.id,
+      }
       let gravarResposta = await this.connectHTTP.callService({
-        service: 'getQuestionarioById',
-        paramsService: { id: this.questId }
+        service: 'gravaRespostaQuestionario',
+        paramsService: { data:objResp}
       }) as any;
       if (gravarResposta.error) {
         return this.toastrService.error(gravarResposta.error);
