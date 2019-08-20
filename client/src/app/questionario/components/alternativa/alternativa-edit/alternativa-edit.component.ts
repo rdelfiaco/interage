@@ -45,7 +45,6 @@ export class AlternativaEditComponent implements OnInit {
         service: 'getAlternativaById',
         paramsService: { id: this.alterId }
       }) as any;
-      debugger
       if (respQuest.error) {
         return this.toastrService.error(respQuest.error);
       };

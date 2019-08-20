@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy } from '@angular/core';
 import { ConnectHTTP } from '../shared/services/connectHTTP';
 import { ToastService, InputsModule } from '../../lib/ng-uikit-pro-standard';
 import { Usuario } from '../login/usuario';
@@ -10,11 +10,11 @@ import { LocalStorage } from '../shared/services/localStorage';
   templateUrl: './responder-questionario.component.html',
   styleUrls: ['./responder-questionario.component.scss']
 })
-export class ResponderQuestionarioComponent implements OnInit {
-  questionario: any = {};
+export class ResponderQuestionarioComponent implements OnInit, OnDestroy {
   @Input() questId = null;
-  perguntaIndex = 0;
+  questionario: any = {};
   respondendo = false;
+  msg = '';
   perguntaAtual = {
     alternativas: [{
       id: null,
@@ -48,11 +48,13 @@ export class ResponderQuestionarioComponent implements OnInit {
     this.getDataQuestionario();
   }
 
+  OnDestroy() {
+    this.reset();
+  }
+
   responder() {
-    debugger;
     this.respondendo = true;
     this.perguntaAtual = this.questionario.perguntas.find(p => p['sequencia_pergunta'] === 1);
-    debugger;
     this.montaPergunta();
   }
 
@@ -167,14 +169,20 @@ export class ResponderQuestionarioComponent implements OnInit {
     }
   }
 
-  terminou() {
+  terminou(msg = 'Questionário respondido com sucesso!') {
     this.respondendo = false;
     this.perguntaAtual = null;
     this.multiEscolha = null;
     this.alternativaEscolhida = null;
     this.respostaEscrita = null;
     this.concluiu = true;
-    this.toastrService.success('Questionário respondido com sucesso!');
+    this.msg = msg;
+    this.toastrService.success(msg);
+  }
+  
+  encerrar() {
+    this.terminou('Questionário encerrado, reponda novamente no futuro!');
+    this.toastrService.warning('Questionário encerrado, reponda novamente no futuro!');
   }
 
   async getDataQuestionario() {
@@ -209,5 +217,32 @@ export class ResponderQuestionarioComponent implements OnInit {
     catch (e) {
       this.toastrService.error('Erro ao ler as permissoes', e);
     }
+  }
+
+  reset() {
+    this.questionario: any = {};
+    this.respondendo = false;
+    this.msg = '';
+    this.perguntaAtual = {
+      alternativas: [{
+        id: null,
+        id_pergunta: null,
+        id_proxima_pergunta: null,
+        nome: null,
+        sequencia_alternativa: null,
+        status: null,
+      }],
+      descricao_pergunta: null,
+      id: null,
+      id_questionario: null,
+      multipla_escolha: null,
+      nome: null,
+      sequencia_pergunta: null,
+      status: null,
+    };
+    this.multiEscolha = false;
+    this.alternativaEscolhida = null;
+    this.respostaEscrita = '';
+    this.concluiu = false;
   }
 }

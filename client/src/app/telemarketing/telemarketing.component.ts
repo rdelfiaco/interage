@@ -89,7 +89,6 @@ export class TelemarketingComponent implements OnInit {
   }
 
   closemodal(modal) {
-    debugger;
   }
 
 

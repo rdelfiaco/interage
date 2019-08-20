@@ -28,7 +28,7 @@
   <div class="row">
     <div class="col-lg-12 text-right">
       <div class="md-form">
-        <button type="button" mdbBtn color="light" mdbWavesEffect (click)="perguntaAnterior()">Voltar</button>
+        <button type="button" mdbBtn color="light" mdbWavesEffect (click)="encerrar()">Encerrar</button>
         <button type="button" mdbBtn color="dark-green" mdbWavesEffect (click)="proxPergunta();">Avançar</button>
       </div>
     </div>
@@ -37,7 +37,7 @@
 <div *ngIf="!respondendo && concluiu">
   <div class="row">
     <div class="col-lg-11">
-      <label>Questionário respondido com sucesso!</label>
+      <label>{{msg}}</label>
     </div>
   </div>
 </div>
