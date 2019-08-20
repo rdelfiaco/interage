@@ -12,14 +12,17 @@ import { FormGroup, FormBuilder } from '@angular/forms';
   templateUrl: './motivos-respostas.component.html',
   styleUrls: ['./motivos-respostas.component.scss']
 })
-export class MotivosRespostasComponent implements OnInit {
 
+export class MotivosRespostasComponent implements OnInit {
 
   respostas: any;
   respostasMotivo: any; 
+  questionarios: any;
+  prioridades: any;
   idMotivoSelecionado: any;
   sorted: boolean = false;
   nomeMotivoSelecionado: any;
+
 
   tableData: any;
   tableData_: any;
@@ -101,7 +104,19 @@ ngOnInit() {
       if (resp.error) {
         this.toastrService.error(resp.error);
       } else {
-        this.tableData = resp.resposta;
+
+        this.tableData = resp.resposta.respostasMotivo;
+        this.questionarios = resp.resposta.questionarios as Array<object>;
+        this.prioridades = resp.resposta.prioridade as Array<object>;
+
+        this.questionarios =  this.questionarios.map((c: any) => {
+            return { value: c.id, label: c.nome }
+          })
+        this.questionarios.push( {value: null, label: 'não informar'});
+        this.prioridades =  this.prioridades.map((c: any) => {
+          return { value: c.id, label: c.nome }
+        })
+        this.prioridades.push( {value: null, label: 'não informar'});
       }
     }
     catch (e) {
@@ -130,6 +145,16 @@ ngOnInit() {
     this.formularioForm.controls['id'].disable();
     this.formularioForm.controls['nome'].enable();
     this.formularioForm.controls['status'].enable();
+    this.formularioForm.controls['exige_predicao'].enable();
+    this.formularioForm.controls['exige_observacao'].enable();
+    this.formularioForm.controls['exige_objecao'].enable();
+    this.formularioForm.controls['exige_proposta'].enable();
+    this.formularioForm.controls['id_questionaio'].enable();
+    this.formularioForm.controls['id_prioridade'].enable();
+    this.formularioForm.controls['ordem_listagem'].enable();
+    this.formularioForm.controls['tentativas'].enable();
+    this.formularioForm.controls['acao_sql'].enable();
+    this.formularioForm.controls['acao_js'].enable();
     this.formularioForm.controls['idMotivo'].setValue(this.idMotivoSelecionado);
 
 
@@ -144,6 +169,16 @@ ngOnInit() {
     this.formularioForm.controls['id'].disable();
     this.formularioForm.controls['nome'].disable();
     this.formularioForm.controls['status'].disable();
+    this.formularioForm.controls['exige_predicao'].disable();
+    this.formularioForm.controls['exige_observacao'].disable();
+    this.formularioForm.controls['exige_objecao'].disable();
+    this.formularioForm.controls['exige_proposta'].disable();
+    this.formularioForm.controls['id_questionaio'].disable();
+    this.formularioForm.controls['id_prioridade'].disable();
+    this.formularioForm.controls['ordem_listagem'].disable();
+    this.formularioForm.controls['tentativas'].disable();
+    this.formularioForm.controls['acao_sql'].disable();
+    this.formularioForm.controls['acao_js'].disable();
     this.formularioForm.controls['idMotivo'].setValue(this.idMotivoSelecionado);
 
   }
@@ -175,6 +210,16 @@ ngOnInit() {
       this.formularioForm.controls['id'].enable();
       this.formularioForm.controls['nome'].enable();
       this.formularioForm.controls['status'].enable();
+      this.formularioForm.controls['exige_predicao'].enable();
+      this.formularioForm.controls['exige_observacao'].enable();
+      this.formularioForm.controls['exige_objecao'].enable();
+      this.formularioForm.controls['exige_proposta'].enable();
+      this.formularioForm.controls['id_questionaio'].enable();
+      this.formularioForm.controls['id_prioridade'].enable();
+      this.formularioForm.controls['ordem_listagem'].enable();
+      this.formularioForm.controls['tentativas'].enable();
+      this.formularioForm.controls['acao_sql'].enable();
+      this.formularioForm.controls['acao_js'].enable();
       let resp = await this.connectHTTP.callService({
         service: 'crudRespostasMotivo',
         paramsService: {

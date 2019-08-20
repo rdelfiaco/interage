@@ -2,6 +2,8 @@ const { executaSQL } = require('./executaSQL');
 const { executaSQLComTransacao } = require('./executaSQL');
 const { getCanais } = require('./canais'); 
 const { awaitSQL } = require('./shared');
+const {getQuestionarios} = require('./questionarios');
+const {getPrioridade} = require('./prioridade')
 
 function getMotivos(req, res){
     return new Promise(function (resolve, reject) {
@@ -170,58 +172,77 @@ async function salvarCanaisDoMotivo(req, res){
           });
         });
     })
-  }
+}
 
-  function getRespostasMotivoSeleconado(req, res){
-    return new Promise(function (resolve, reject) {
-      let credenciais = {
-        token: req.query.token,
-        idUsuario: req.query.id_usuario
-      };
-        
-      let sql = `select *
-                from motivos_respostas
-                where id_motivo = ${req.query.idMotivoSelecionado} ` 
-      executaSQL(credenciais, sql)
-        .then(res => {
-            resolve(res);
+function getRespostasMotivoSeleconado(req, res){
+  return new Promise(function (resolve, reject) {
+    let credenciais = {
+      token: req.query.token,
+      idUsuario: req.query.id_usuario
+    };
+      
+    let sql = `select *
+              from motivos_respostas
+              where id_motivo = ${req.query.idMotivoSelecionado} ` 
+    executaSQL(credenciais, sql)
+      .then(respostasMotivo => {
+        getQuestionarios(req, res)
+          .then(questionarios => { 
+            getPrioridade(req, res)
+            .then(prioridade => {
+              resolve({respostasMotivo: respostasMotivo, questionarios: questionarios, prioridade: prioridade });
+              })
+            .catch(err => {
+              reject(err)
+            });
+          })
+          .catch(err => {
+            reject(err)
+          });
         })
         .catch(err => {
           reject(err)
-        })
+        });
   });
-  };
+};
 
-  function crudRespostasMotivo(req, res){
-    return new Promise(function (resolve, reject) {
-      let credenciais = {
-        token: req.query.token,
-        idUsuario: req.query.id_usuario
-      };
-  
-  // divide o objeto em atuais e anteriores 
+function crudRespostasMotivo(req, res){
+  return new Promise(function (resolve, reject) {
+    let credenciais = {
+      token: req.query.token,
+      idUsuario: req.query.id_usuario
+    };
+
+    // divide o objeto em atuais e anteriores 
     let dadosAtuais = JSON.parse(req.query.dadosAtuais);
     const dadosAnteriores =  JSON.parse(req.query.dadosAnteriores);
     const crud = req.query.crud;
     req.query = dadosAtuais;
-    let tabela = 'motivos';
+    let tabela = 'motivos_respostas';
     let idTabela = req.query.id;
+    console.log('req.query ',req.query )
     let sql = ''
     if (crud == 'C') sql = sqlCreate(); 
     if (crud == 'D') sql = sqlDelete();
     if (crud == 'U') sql = sqlUpdate();
+    console.log(sql)
     executaSQL(credenciais, sql).then(res => {
       resolve(res)
-  
+
     })
     .catch(err => {
       reject(err)
     });
-  
+    
     function sqlCreate(){
       let sql = `INSERT INTO motivos_respostas(
-        id_motivo, status,  nome)
-                VALUES ( ${req.query.id_motivo}, ${req.query.status},  '${req.query.nome}') RETURNING id;`;
+        id_motivo, status,  nome,   exige_predicao, exige_observacao,
+           exige_objecao, exige_proposta, id_questionaio, id_prioridade,
+          ordem_listagem, acao_sql, acao_js, tentativas)
+                VALUES ( ${req.query.id_motivo}, ${req.query.status},  '${req.query.nome}', ${req.query.exige_predicao}, 
+                ${req.query.exige_observacao}, ${req.query.exige_objecao}, ${req.query.exige_proposta}, ${req.query.id_questionaio}, ${req.query.id_prioridade},
+                ${req.query.ordem_listagem}, '${req.query.acao_sql}', '${req.query.acao_js}', ${req.query.tentativas}
+                ) RETURNING id;`;
       return sql;
     };
     function sqlDelete(){
@@ -231,20 +252,31 @@ async function salvarCanaisDoMotivo(req, res){
     };
     function sqlUpdate(){
       let sql = `UPDATE motivos_respostas
-                 SET  status=${req.query.status}, 
-                      nome='${req.query.nome}'
+                 SET  status =${req.query.status}, 
+                      nome ='${req.query.nome}',
+                      exige_predicao = ${req.query.exige_predicao},
+                      exige_observacao = ${req.query.exige_observacao},
+                      exige_objecao = ${req.query.exige_objecao},
+                      exige_proposta = ${req.query.exige_proposta},
+                      id_questionaio = ${req.query.id_questionaio},
+                      id_prioridade = ${req.query.id_prioridade},
+                      ordem_listagem = ${req.query.ordem_listagem},
+                      acao_sql = '${req.query.acao_sql}',
+                      acao_js = '${req.query.acao_js}',
+                      tentativas = ${req.query.tentativas}
+                      
                 WHERE id= ${req.query.id} ;`;
       return sql;
     };
   
   
   });
-  };
+};
 
-  module.exports = { 
-                      getMotivos, 
-                      crudMotivos, 
-                      getCanaisMotivoSeleconado, 
-                      salvarCanaisDoMotivo, 
-                      getRespostasMotivoSeleconado,
-                      crudRespostasMotivo }
+module.exports = { 
+                    getMotivos, 
+                    crudMotivos, 
+                    getCanaisMotivoSeleconado, 
+                    salvarCanaisDoMotivo, 
+                    getRespostasMotivoSeleconado,
+                    crudRespostasMotivo }

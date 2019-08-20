@@ -129,7 +129,19 @@
                   type="text" id="tentativas" class="form-control">
                 <label for="tentativas">Tentativas</label>
               </div>
-            </div>            
+            </div> 
+            <div class="row">
+              <div class="col mdb-select-form">
+                <mdb-select formControlName="id_questionaio" (selected)="getSelectedValueQuestionario($event)"
+                  [options]="questionarios" [multiple]="false" placeholder="Questionario"></mdb-select>
+                <label>Questionário</label>
+              </div>
+              <div class="col mdb-select-form">
+                <mdb-select formControlName="id_prioridade" (selected)="getSelectedValuePrioridade($event)"
+                  [options]="prioridades" [multiple]="false" placeholder="Prioridade"></mdb-select>
+                <label>Prioridade</label>
+              </div> 
+            </div>          
             <div class="row">
               <div class="md-form col" style="margin-left: 20px">
                   <input  mdbInputDirective formControlName="acao_sql" 
