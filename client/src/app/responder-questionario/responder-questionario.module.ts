@@ -21,10 +21,10 @@ import { ResponderQuestionarioComponent } from './responder-questionario.compone
     CheckboxModule,
     InputsModule.forRoot(),
   ],
-  exports: [ResponderQuestionarioComponent],
   declarations: [
     ResponderQuestionarioComponent
   ],
+  exports: [ResponderQuestionarioComponent],
   providers: [
   ]
 })

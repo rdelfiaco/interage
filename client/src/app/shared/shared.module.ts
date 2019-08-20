@@ -7,21 +7,22 @@ import { CommonModule } from '@angular/common';
 import { CheckPermissaoRecurso } from './services/checkPemissaoRecurso';
 import { CnpjPipe } from './pipes/validaCnpj/cnpj.pipe';
 import { CpfPipe } from './pipes/validaCpf/cpf.pipe';
-import { ResponderQuestionarioComponent } from '../responder-questionario/responder-questionario.component';
+import { ResponderQuestionario } from '../responder-questionario/responder-questionario.module';
 
 @NgModule({
   imports: [
-    CommonModule
+    CommonModule,
+    ResponderQuestionario
   ],
   declarations: [
     //LocalStorage, 
     //ConnectHTTP
     CnpjPipe,
     CpfPipe,
-    ResponderQuestionarioComponent
+    // ResponderQuestionarioComponent
   ],
   exports: [
-    ResponderQuestionarioComponent
+    ResponderQuestionario
   ],
   providers: [
     LocalStorage,

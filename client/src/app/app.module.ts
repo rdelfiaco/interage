@@ -49,8 +49,6 @@ import { BaseLayoutComponent } from './layout/base-layout/base-layout.component'
 import { AppsLayoutComponent } from './layout/apps-layout/apps-layout.component';
 import { PagesLayoutComponent } from './layout/pages-layout/pages-layout.component';
 import { SharedModule } from './shared/shared.module';
-// import { ResponderQuestionario } from './responder-questionario/responder-questionario.module';
-// import { ResponderQuestionarioComponent } from './responder-questionario/responder-questionario.component';
 
 
 
@@ -72,7 +70,6 @@ import { SharedModule } from './shared/shared.module';
     BaseLayoutComponent,
     AppsLayoutComponent,
     PagesLayoutComponent,
-    // ResponderQuestionarioComponent
   ],
   imports: [
     BrowserModule,
@@ -104,7 +101,7 @@ import { SharedModule } from './shared/shared.module';
     AngularDualListBoxModule,
     CrudCampanhaModule,
     QuestionarioModule,
-    SharedModule
+    SharedModule,    
   ],
   providers: [MDBSpinningPreloader
   ],
