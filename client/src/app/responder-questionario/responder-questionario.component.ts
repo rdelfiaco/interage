@@ -166,7 +166,7 @@ export class ResponderQuestionarioComponent implements OnInit, OnDestroy {
     return textarea;
   }
 
-  async proxPergunta() {
+  proxPergunta() {
     if (!this.alternativaEscolhida && !this.alternativasEscolhidas && !this.respostaEscrita) {
       return alert('Precisa informar um reposta para poder prosseguir!');
     }
@@ -202,26 +202,27 @@ export class ResponderQuestionarioComponent implements OnInit, OnDestroy {
       this.perguntaAtual = proxPerg;
       this.montaPergunta();
 
-      async function salvaResp(a = null) {
-        let objResp = {
-          id_alternativa: a ? a.id : null,
-          id_usuario: this.usuarioLogado.id,
-          id_receptor: null,
-          dt_resposta: new Date(),
-          observacao: this.respostaEscrita,
-          id_evento: this.eventoId,
-        }
-        let gravarResposta = await this.connectHTTP.callService({
-          service: 'gravaRespostaQuestionario',
-          paramsService: { data: JSON.stringify(objResp) }
-        }) as any;
-        if (gravarResposta.error) {
-          return this.toastrService.error(gravarResposta.error);
-        }
-      }
     }
     catch (e) {
       this.toastrService.error('Erro ao ler as permissoes resp', e);
+    }
+
+    async function salvaResp(a = null) {
+      let objResp = {
+        id_alternativa: a ? a.id : null,
+        id_usuario: this.usuarioLogado.id,
+        id_receptor: null,
+        dt_resposta: new Date(),
+        observacao: this.respostaEscrita,
+        id_evento: this.eventoId,
+      }
+      let gravarResposta = await this.connectHTTP.callService({
+        service: 'gravaRespostaQuestionario',
+        paramsService: { data: JSON.stringify(objResp) }
+      }) as any;
+      if (gravarResposta.error) {
+        return this.toastrService.error(gravarResposta.error);
+      }
     }
   }
 
