@@ -251,4 +251,11 @@ ngOnInit() {
     this.router.navigate([`motivosEventosAutomaticos/{"idMotivo":${id},"nomeMotivo":"${nome}"}`]);
 
   }
+
+  getSelectedValueQuestionario(id){
+
+  }
+  getSelectedValuePrioridade(id){
+    
+  }
 }
