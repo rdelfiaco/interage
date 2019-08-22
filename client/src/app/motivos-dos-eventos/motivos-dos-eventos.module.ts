@@ -10,6 +10,8 @@ import { SharedModule } from '../shared/shared.module';
 import { CarregandoModule } from '../shared/carregando/carregando.module';
 import { AngularDualListBoxModule } from 'angular-dual-listbox';
 import { MotivosRespostasComponent } from './motivos-respostas/motivos-respostas.component';
+import { MotivosEventosAutomaticosComponent } from './motivos-eventos-automaticos/motivos-eventos-automaticos.component';
+
 
 @NgModule({
   imports: [
@@ -25,7 +27,8 @@ import { MotivosRespostasComponent } from './motivos-respostas/motivos-respostas
   ],
   declarations: [MotivosCanaisComponent,
                 MotivosDosEventosComponent,
-                MotivosRespostasComponent
+                MotivosRespostasComponent,
+                MotivosEventosAutomaticosComponent
                 ]
 })
 export class MotivosDosEventosModule { }

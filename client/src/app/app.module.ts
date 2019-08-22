@@ -78,7 +78,7 @@ import { CanaisComponent } from './canais/canais.component';
     TipoDeClienteComponent,
     ObjecaoComponent,
     ClassifcacaoDeClientesComponent,
-    CanaisComponent
+    CanaisComponent,
   ],
 
   imports: [
