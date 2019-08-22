@@ -315,7 +315,7 @@ const routes: Routes = [
         canActivate: [AuthGuard]
       },
       {
-        path: 'MotivosEventosAutomaticos/:id',
+        path: 'motivosEventosAutomaticos/:id',
         component: MotivosEventosAutomaticosComponent ,
         canActivate: [AuthGuard]
       },

@@ -163,14 +163,14 @@ export class DashboardComponent implements OnInit {
   async ngOnInit() {
 
     
-      let propostas = await this.connectHTTP.callService({
-        service: 'getPropostasPorStatusSintetico',
-        paramsService: {
-          idUsuarioLogado: this.usuarioLogado.id,
-          // dataInicial: this.dataInicial,
-          // dataFinal: this.dataFinal
-        }
-      }) as any;
+      // let propostas = await this.connectHTTP.callService({
+      //   service: 'getPropostasPorStatusSintetico',
+      //   paramsService: {
+      //     idUsuarioLogado: this.usuarioLogado.id,
+      //     // dataInicial: this.dataInicial,
+      //     // dataFinal: this.dataFinal
+      //   }
+      // }) as any;
   
   
     };

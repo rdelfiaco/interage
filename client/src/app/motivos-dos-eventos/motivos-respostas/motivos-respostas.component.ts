@@ -3,7 +3,7 @@ import { ToastService } from '../../../lib/ng-uikit-pro-standard';
 import { ConnectHTTP } from '../../shared/services/connectHTTP';
 import { UsuarioService } from '../../usuario/usuario.service';
 import { Location } from '@angular/common';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { FormGroup, FormBuilder } from '@angular/forms';
 
 
@@ -41,6 +41,7 @@ export class MotivosRespostasComponent implements OnInit {
     private _location: Location,
     private route: ActivatedRoute,
     private formBuilder: FormBuilder,
+    private router: Router,
 
   ) { 
 
@@ -245,4 +246,9 @@ ngOnInit() {
     this._location.back();
   }
   
+  eventosAutomaticos(id, nome){
+
+    this.router.navigate([`motivosEventosAutomaticos/{"idMotivo":${id},"nomeMotivo":"${nome}"}`]);
+
+  }
 }

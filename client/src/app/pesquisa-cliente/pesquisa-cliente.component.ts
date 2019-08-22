@@ -59,9 +59,11 @@ export class PesquisaClienteComponent implements OnInit {
       }
     }) as any;
     this.clientes = clientesEncontrados.resposta;
-    this.clientes = this.clientes.map(cliente => {
-      return { value: cliente.id, label: cliente.nome }
-    })
+    if (this.clientes) {
+      this.clientes = this.clientes.map(cliente => {
+        return { value: cliente.id, label: cliente.nome }
+      })
+  }
   }
 
   pesquisar(event) {

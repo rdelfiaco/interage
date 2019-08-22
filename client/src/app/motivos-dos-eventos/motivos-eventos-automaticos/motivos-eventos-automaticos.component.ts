@@ -7,7 +7,10 @@ import { Component, OnInit } from '@angular/core';
 })
 export class MotivosEventosAutomaticosComponent implements OnInit {
 
-  constructor() { }
+  constructor(
+
+    
+  ) { }
 
   ngOnInit() {
   }
