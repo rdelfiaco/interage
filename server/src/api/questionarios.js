@@ -17,6 +17,7 @@ function getQuestionarios(req, res) {
 
     executaSQL(credenciais, sql)
       .then(res => {
+        console.log(res)
         resolve(res)
       })
       .catch(err => {
@@ -153,13 +154,33 @@ function deleteQuestionario(req, res) {
   });
 };
 
-function gravaRespostaQuestionario(req, res) {
+function getQuestionarioCompletoById(req, res) {
   return new Promise(function (resolve, reject) {
     let credenciais = {
       token: req.query.token,
       idUsuario: req.query.id_usuario
     };
 
+    let sql = `select * FROM view_questionario_alt_perg
+      WHERE id_questionario=${req.query.id}`;
+
+    executaSQL(credenciais, sql)
+      .then(res => {
+        resolve(res)
+      })
+      .catch(err => {
+        reject(err)
+      })
+  });
+};
+
+function gravaRespostaQuestionario(req, res) {
+  return new Promise(function (resolve, reject) {
+    let credenciais = {
+      token: req.query.token,
+      idUsuario: req.query.id_usuario
+    };
+    console.dir(req.query.data);
     req.query.q = JSON.parse(req.query.data);
     console.dir(req.query.q);
     let sql = `insert into quest_respostas(
@@ -168,7 +189,7 @@ function gravaRespostaQuestionario(req, res) {
       id_receptor,
       dt_resposta,
       observacao,
-      id_evento) VALUES('${req.query.q.id_alternativa}', '${req.query.q.id_usuario}', '${req.query.q.id_receptor}', '${req.query.q.dt_resposta}', '${req.query.q.observacao}', '${req.query.q.id_evento}') RETURNING id;`
+      id_evento) VALUES(${req.query.q.id_alternativa},${req.query.q.id_usuario}, ${req.query.q.id_receptor}, now(), '${req.query.q.observacao}',${req.query.q.id_evento}) RETURNING id;`
     console.log(sql);
     executaSQL(credenciais, sql)
       .then(res => {
@@ -189,5 +210,6 @@ module.exports = {
   updateStatusQuestionario,
   getQuestionarioById,
   getPerguntasByIdUqestionario,
+  getQuestionarioCompletoById,
   gravaRespostaQuestionario
 };

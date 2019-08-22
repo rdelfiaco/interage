@@ -52,7 +52,7 @@ export class AlternativaEditComponent implements OnInit {
       this.tableData = data;
     }
     catch (e) {
-      this.toastrService.error('Erro ao ler as permissoes', e);
+      this.toastrService.error('Erro ao ler as permissoes 21', e);
     }
   }
 
@@ -81,7 +81,7 @@ export class AlternativaEditComponent implements OnInit {
       }
     }
     catch (e) {
-      this.toastrService.error('Erro ao ler as permissoes', e);
+      this.toastrService.error('Erro ao ler as permissoes 22', e);
     }
   }
 
@@ -99,7 +99,7 @@ export class AlternativaEditComponent implements OnInit {
       }
     }
     catch (e) {
-      this.toastrService.error('Erro ao ler as permissoes do departamento', e);
+      this.toastrService.error('Erro ao ler as permissoes 23', e);
     }
   }
 
@@ -116,7 +116,7 @@ export class AlternativaEditComponent implements OnInit {
       }
     }
     catch (e) {
-      this.toastrService.error('Erro ao ler as permissoes', e);
+      this.toastrService.error('Erro ao ler as permissoes 24', e);
     }
   }
 }

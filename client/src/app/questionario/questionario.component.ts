@@ -52,6 +52,7 @@ export class QuestionarioComponent implements OnInit {
 
   async getQuestionarios() {
     try {
+      debugger
       let resp = await this.connectHTTP.callService({
         service: 'getQuestionarios',
         paramsService: {}
@@ -63,8 +64,8 @@ export class QuestionarioComponent implements OnInit {
       }
     }
     catch (e) {
-      
-      this.toastrService.error('Erro ao ler as permissoes de questionário', e);
+      debugger
+      this.toastrService.error('Erro ao ler as permissoes de questionário 4', e);
     }
   }
 
@@ -83,7 +84,7 @@ export class QuestionarioComponent implements OnInit {
       }
     }
     catch (e) {
-      this.toastrService.error('Erro ao ler as permissoes do departamento', e);
+      this.toastrService.error('Erro ao ler as permissoes 3', e);
     }
   }
 
@@ -100,7 +101,7 @@ export class QuestionarioComponent implements OnInit {
       }
     }
     catch (e) {
-      this.toastrService.error('Erro ao ler as permissoes', e);
+      this.toastrService.error('Erro ao ler as permissoes 2', e);
     }
   }
 
@@ -121,7 +122,7 @@ export class QuestionarioComponent implements OnInit {
       }
     }
     catch (e) {
-      this.toastrService.error('Erro ao ler as permissoes do departamento', e);
+      this.toastrService.error('Erro ao ler as permissoes 1', e);
     }
   }
 }

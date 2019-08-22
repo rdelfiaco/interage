@@ -53,6 +53,7 @@ export class PerguntaEditComponent implements OnInit {
 
   async getDataPergunta() {
     try {
+      debugger
       let respQuest = await this.connectHTTP.callService({
         service: 'getPerguntaById',
         paramsService: { id: this.pergId }
@@ -74,7 +75,8 @@ export class PerguntaEditComponent implements OnInit {
       this.tableData = data;
     }
     catch (e) {
-      this.toastrService.error('Erro ao ler as permissoes', e);
+      debugger
+      this.toastrService.error('Erro ao ler as permissoes 31', e);
     }
   }
 
@@ -108,7 +110,7 @@ export class PerguntaEditComponent implements OnInit {
       }
     }
     catch (e) {
-      this.toastrService.error('Erro ao ler as permissoes', e);
+      this.toastrService.error('Erro ao ler as permissoes 32', e);
     }
   }
 
@@ -126,7 +128,7 @@ export class PerguntaEditComponent implements OnInit {
       }
     }
     catch (e) {
-      this.toastrService.error('Erro ao ler as permissoes do departamento', e);
+      this.toastrService.error('Erro ao ler as permissoes 33', e);
     }
   }
 
@@ -144,7 +146,7 @@ export class PerguntaEditComponent implements OnInit {
       }
     }
     catch (e) {
-      this.toastrService.error('Erro ao ler as permissoes do departamento', e);
+      this.toastrService.error('Erro ao ler as permissoes 34', e);
     }
   }
 
@@ -161,7 +163,7 @@ export class PerguntaEditComponent implements OnInit {
       }
     }
     catch (e) {
-      this.toastrService.error('Erro ao ler as permissoes', e);
+      this.toastrService.error('Erro ao ler as permissoes 35', e);
     }
   }
 
@@ -178,7 +180,7 @@ export class PerguntaEditComponent implements OnInit {
       }
     }
     catch (e) {
-      this.toastrService.error('Erro ao ler as permissoes', e);
+      this.toastrService.error('Erro ao ler as permissoes 36', e);
     }
   }
 
@@ -195,7 +197,7 @@ export class PerguntaEditComponent implements OnInit {
       }
     }
     catch (e) {
-      this.toastrService.error('Erro ao ler as permissoes', e);
+      this.toastrService.error('Erro ao ler as permissoes 37', e);
     }
   }
 
@@ -221,7 +223,7 @@ export class PerguntaEditComponent implements OnInit {
       }
     }
     catch (e) {
-      this.toastrService.error('Erro ao ler as permissoes do departamento', e);
+      this.toastrService.error('Erro ao ler as permissoes 38', e);
     }
   }
 
