@@ -257,7 +257,6 @@ export class TelemarketingQuestionarioComponent implements OnInit {
     const self = this;
     this.motivos_respostas.some((motivo) => {
       if (motivo.id == motivoResposta.value) {
-        debugger
         if (motivo.id == '38'){
           this.questId = (motivo.id_questionaio || 2);
           return this.respquestionarioModal.show();
@@ -283,7 +282,6 @@ export class TelemarketingQuestionarioComponent implements OnInit {
   }
 
   encerrouQuest() {
-    debugger
     this.respquestionarioModal.hide();
   }
 

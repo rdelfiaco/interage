@@ -69,7 +69,6 @@ export class ResponderQuestionarioComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    debugger
     if (this.questId)
       this.getDataQuestionario();
   }
@@ -318,7 +317,6 @@ export class ResponderQuestionarioComponent implements OnInit, OnDestroy {
         }
       });
       this.questionario = data;
-      debugger
       this.responder();
     }
     catch (e) {
