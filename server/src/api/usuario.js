@@ -470,7 +470,7 @@ function salvarPermissoesDoUsuario(req, res){
         executaSQLComTransacao(credenciais, client, sqlDelet ).then(resDel => {
           executaSQLComTransacao(credenciais, client, sqlInsert). then( resInsert => {
             client.query('COMMIT')
-            .then((resp) => { resolve('Permissões do usuário atualizadas ') })
+            .then((resp) => { resolve( {resposta: 'Permissões do usuário atualizadas '})})
             .catch(err => {  reject(err) });
           });
           });

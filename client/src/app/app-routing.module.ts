@@ -57,6 +57,7 @@ import { AlternativaEditComponent } from './questionario/components/alternativa/
 import { NetworkingComponent } from './cadastro-pessoa/networking/networking.component';
 import { PausaComponent } from './pausa/pausa.component';
 import { PausaDoUsuarioComponent } from './pausa/pausa-do-usuario/pausa-do-usuario.component';
+import { MotivosEventosAutomaticosComponent } from './motivos-dos-eventos/motivos-eventos-automaticos/motivos-eventos-automaticos.component';
 
 
 
@@ -311,6 +312,11 @@ const routes: Routes = [
       {
         path: 'motivosRespostas/:id',
         component: MotivosRespostasComponent,
+        canActivate: [AuthGuard]
+      },
+      {
+        path: 'motivosEventosAutomaticos/:id',
+        component: MotivosEventosAutomaticosComponent ,
         canActivate: [AuthGuard]
       },
     ]

@@ -79,7 +79,7 @@ import { SharedModule } from './shared/shared.module';
     TipoDeClienteComponent,
     ObjecaoComponent,
     ClassifcacaoDeClientesComponent,
-    CanaisComponent
+    CanaisComponent,
   ],
   imports: [
     BrowserModule,
