@@ -82,12 +82,12 @@
       </button>
     </div>
     <div class="modal-content">
-      <app-responder-questionario [questId]=5 ></app-responder-questionario>
+      <app-responder-questionario [questId]=2 ></app-responder-questionario>
       <form class="questionarioForm">
         <div class="row">
           <div class="col-lg-11">
             <div class="md-form">
-              <input (input)="data.nome=$event.target.value" mdbInputDirective formControlName="nome" min="5"
+              <input (input)="data.nome=$event.target.value" mdbInputDirective min="5"
                 type="text" id="nome" class="form-control">
               <label for="nome">Nome</label>
             </div>

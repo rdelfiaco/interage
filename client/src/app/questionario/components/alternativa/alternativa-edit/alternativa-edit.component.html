@@ -13,7 +13,7 @@
     <div class="row">
       <div class="col-lg-12">
         <div class="md-form">
-          <input [value]="tableData.nome" (input)="tableData.nome = $event.target.value;" mdbInputDirective formControlName="nome" min="5" type="text" id="nome" class="form-control">
+          <input [value]="tableData.nome" (input)="tableData.nome = $event.target.value;" mdbInputDirective min="5" type="text" id="nome" class="form-control">
           <label for="nome">Nome</label>
         </div>
       </div>
@@ -21,7 +21,7 @@
     <div class="row">
       <div class="col-lg-8">
         <div class="md-form">
-          <input (input)="tableData.sequencia_alternativa = $event.target.value;" [value]="tableData.sequencia_alternativa" mdbInputDirective formControlName="sequencia" min="1" type="number" id="sequencia"
+          <input (input)="tableData.sequencia_alternativa = $event.target.value;" [value]="tableData.sequencia_alternativa" mdbInputDirective min="1" type="number" id="sequencia"
             class="form-control">
           <label for="sequencia">Sequencia</label>
         </div>
@@ -33,7 +33,7 @@
       </div>
       <div class="col-lg-12">
         <div class="md-form">
-          <input (input)="tableData.id_proxima_pergunta = $event.target.value;" [value]="tableData.id_proxima_pergunta" mdbInputDirective formControlName="prox_pergunta" min="1" type="number" id="prox_pergunta"
+          <input (input)="tableData.id_proxima_pergunta = $event.target.value;" [value]="tableData.id_proxima_pergunta" mdbInputDirective min="1" type="number" id="prox_pergunta"
             class="form-control">
           <label for="prox_pergunta">Próxima Pergunta</label>
         </div>

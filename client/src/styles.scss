@@ -170,6 +170,14 @@ body {
   font-size: 1.3rem;
 }
 
+.quest-observacao {
+  flex-direction: column;
+  text-align: start;
+  align-items: start;
+  display: flex;
+  font-size: 1.3rem;
+}
+
 .quest-response-input {
   opacity: 1 !important;
   height: 23px !important;

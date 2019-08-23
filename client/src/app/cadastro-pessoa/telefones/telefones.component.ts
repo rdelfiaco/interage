@@ -135,7 +135,6 @@ export class TelefonesComponent implements OnInit {
   }
 
   editarTelefone(telefoneId) {
-    debugger
     const telefoneSelecionado_ = this._pessoaObject.telefones.filter(t => t.id == telefoneId)[0];
     this.telefoneForm = this.formBuilder.group({
       id: [telefoneSelecionado_.id],

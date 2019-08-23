@@ -1,5 +1,4 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormGroup } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
 import { ConnectHTTP } from '../../../../shared/services/connectHTTP';
@@ -19,12 +18,12 @@ export class PerguntaEditComponent implements OnInit {
     proximaPerguntaId: ''
   };
 
-  tableData : {
+  tableData = {
     id: '',
     alternativas: [{}],
     id_questionario: '',
     nome:'',
-    status: '',
+    status: false,
     sequencia_pergunta: '',
     descricao_pergunta: '',
     multipla_escolha: ''
@@ -53,7 +52,6 @@ export class PerguntaEditComponent implements OnInit {
 
   async getDataPergunta() {
     try {
-      debugger
       let respQuest = await this.connectHTTP.callService({
         service: 'getPerguntaById',
         paramsService: { id: this.pergId }
@@ -75,7 +73,6 @@ export class PerguntaEditComponent implements OnInit {
       this.tableData = data;
     }
     catch (e) {
-      debugger
       this.toastrService.error('Erro ao ler as permissoes 31', e);
     }
   }
@@ -228,7 +225,6 @@ export class PerguntaEditComponent implements OnInit {
   }
 
   sortBy(by: string | any): void {
-    debugger
     this.tableData.alternativas.sort((a: any, b: any) => {
       if (a[by] < b[by]) {
         return this.sorted ? 1 : -1;

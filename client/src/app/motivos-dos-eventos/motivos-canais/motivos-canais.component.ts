@@ -130,7 +130,6 @@ export class MotivosCanaisComponent implements OnInit {
               canaisDoMotivo: JSON.stringify(this.targe)
             }
           }) 
-          debugger
           if (resposta.error){
             this.toastrService.error(resposta.error);
           }else {

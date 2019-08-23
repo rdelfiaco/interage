@@ -1,5 +1,4 @@
 import { Component, OnInit, Input, ViewChild } from '@angular/core';
-import { FormGroup, FormBuilder } from '@angular/forms';
 import { ConnectHTTP } from '../../shared/services/connectHTTP';
 import { LocalStorage } from '../../shared/services/localStorage';
 import { Router, ActivatedRouteSnapshot, ActivatedRoute } from '@angular/router';
@@ -53,7 +52,6 @@ export class QuestionarioEditComponent implements OnInit {
 
   async getDataQuestionario() {
     try {
-      debugger
       let respQuest = await this.connectHTTP.callService({
         service: 'getQuestionarioById',
         paramsService: { id: this.idQuest }
@@ -61,12 +59,11 @@ export class QuestionarioEditComponent implements OnInit {
       if (respQuest.error) {
         return this.toastrService.error(respQuest.error);
       }
-      let data = (respQuest.resposta || {}).questionario;
+      let data = (respQuest.resposta || {}).questionario['0'];
       data.perguntas = (respQuest.resposta || {}).perguntas;
       this.tableData = data;
     }
     catch (e) {
-      debugger
       this.toastrService.error('Erro ao ler as permissoes 17', e);
     }
   }

@@ -41,7 +41,6 @@ export class BaseLayoutComponent {
   }
 
   logout() {
-    debugger
     this.auth.logout();
     this.usuarioLogado = null;
     // window.location.reload();

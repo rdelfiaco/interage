@@ -52,7 +52,6 @@ export class QuestionarioComponent implements OnInit {
 
   async getQuestionarios() {
     try {
-      debugger
       let resp = await this.connectHTTP.callService({
         service: 'getQuestionarios',
         paramsService: {}
@@ -64,7 +63,6 @@ export class QuestionarioComponent implements OnInit {
       }
     }
     catch (e) {
-      debugger
       this.toastrService.error('Erro ao ler as permissoes de questionário 4', e);
     }
   }
