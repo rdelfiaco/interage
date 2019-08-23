@@ -65,9 +65,12 @@ export class TelemarketingQuestionarioComponent implements OnInit {
   abaSelecionada: Observable<number> = new Observable((observer) => {
     observer.next(1);
   });
+  questId = null;
+  eventoId = null;
 
   @ViewChild("dataReagendamento") datePicker: MDBDatePickerComponent;
   @ViewChild('elaborarProposta') elaborarProposta: ModalDirective;
+  @ViewChild('respquestionarioModal') respquestionarioModal: ModalDirective;
 
   @Input() modal: any
   @Input() campanhaSelecionada: any
@@ -88,7 +91,6 @@ export class TelemarketingQuestionarioComponent implements OnInit {
       return { label: m.nome, value: m.id }
     })
   }
-
   get motivos_respostas(): any {
     return this._motivos_respostas
   }
@@ -156,7 +158,6 @@ export class TelemarketingQuestionarioComponent implements OnInit {
   ngOnInit() {
   }
 
-
   ngOnChanges(changes: SimpleChanges) {
     if (changes["pessoa"] && this.pessoa) {
       this.pessoa.subscribe(pessoa => {
@@ -173,7 +174,8 @@ export class TelemarketingQuestionarioComponent implements OnInit {
     }
     if (changes["evento"] && this.evento) {
       this.evento.subscribe(evento => {
-        this._eventoObject = evento
+        this._eventoObject = evento;
+        this.eventoId = evento.id;
         if (this._pessoaObject) this._setQuestionarioForm();
       });
     }
@@ -255,6 +257,10 @@ export class TelemarketingQuestionarioComponent implements OnInit {
     const self = this;
     this.motivos_respostas.some((motivo) => {
       if (motivo.id == motivoResposta.value) {
+        if (motivo.id == '38'){
+          this.questId = (motivo.id_questionaio || 2);
+          return this.respquestionarioModal.show();
+        }
         this.questionarioForm.controls['motivoRespostaSelecionado'].setValue(motivoResposta.value)
 
         this.reagendar = motivo.reagendar;
@@ -269,11 +275,14 @@ export class TelemarketingQuestionarioComponent implements OnInit {
         self.questionarioForm.controls['data'].updateValueAndValidity();
         self.questionarioForm.controls['hora'].updateValueAndValidity();
         self.questionarioForm.controls['proposta'].updateValueAndValidity();
-
         if (this.exige_proposta) this.elaborarProposta.show();
 
       }
     })
+  }
+
+  encerrouQuest() {
+    this.respquestionarioModal.hide();
   }
 
   discar() {

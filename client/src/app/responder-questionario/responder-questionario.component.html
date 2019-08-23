@@ -1,0 +1,43 @@
+<!-- <div *ngIf="!respondendo && !concluiu">
+  <div class="row">
+    <div class="col-lg-11">
+      <button type="button" mdbBtn color="dark-green" mdbWavesEffect (click)="responder();">Responder
+        questionário</button>
+    </div>
+  </div>
+</div> -->
+<div [class]="respondendo ? '' : 'displayNone'">
+  <div class="row">
+    <div class="col-lg-12 text-center">
+      <h3>{{questionario.nome}}</h3>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="md-form text-left">
+        <p id="questpergunta"></p>
+      </div>
+    </div>
+    <div class="col-lg-12 mb-2">
+      <label *ngIf="multiEscolha" class="quest-text-direction">Escolha umas das alternativas:</label>
+      <label *ngIf="!multiEscolha" class="quest-text-direction">Informe abaixo o motivo:</label>
+    </div>
+  </div>
+  <div class="row quest-container">
+  </div>
+  <div class="row">
+    <div class="col-lg-12 text-right">
+      <div class="md-form">
+        <button type="button" mdbBtn color="light" mdbWavesEffect (click)="encerrar()">Encerrar</button>
+        <button type="button" mdbBtn color="dark-green" mdbWavesEffect (click)="proxPergunta();">Avançar</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div *ngIf="!respondendo && concluiu">
+  <div class="row">
+    <div class="col-lg-11">
+      <label>{{msg}}</label>
+    </div>
+  </div>
+</div>

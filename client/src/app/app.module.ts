@@ -54,6 +54,7 @@ import { TipoDeClienteComponent } from './tipo-de-cliente/tipo-de-cliente.compon
 import { ObjecaoComponent } from './objecao/objecao.component';
 import { ClassifcacaoDeClientesComponent } from './classifcacao-de-clientes/classifcacao-de-clientes.component';
 import { CanaisComponent } from './canais/canais.component';
+import { SharedModule } from './shared/shared.module';
 
 
 
@@ -80,7 +81,6 @@ import { CanaisComponent } from './canais/canais.component';
     ClassifcacaoDeClientesComponent,
     CanaisComponent,
   ],
-
   imports: [
     BrowserModule,
     MDBBootstrapModulesPro.forRoot(),
@@ -111,14 +111,13 @@ import { CanaisComponent } from './canais/canais.component';
     AngularDualListBoxModule,
     CrudCampanhaModule,
     QuestionarioModule,
+    SharedModule,
     PausaModule,
     MotivosDosEventosModule
   ],
   providers: [MDBSpinningPreloader
-
   ],
   bootstrap: [AppComponent],
-  
   schemas: [NO_ERRORS_SCHEMA]
 })
 export class AppModule { }

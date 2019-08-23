@@ -7,6 +7,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BrowserModule } from '@angular/platform-browser';
 import { PipesModule } from '../shared/pipes/pipesModule';
 import { PropostaModule } from '../proposta/proposta.module';
+import { SharedModule } from '../shared/shared.module';
 
 @NgModule({
   imports: [
@@ -18,7 +19,8 @@ import { PropostaModule } from '../proposta/proposta.module';
     ToastModule.forRoot(),
     BrowserAnimationsModule,
     PipesModule,
-    PropostaModule
+    PropostaModule,
+    SharedModule
   ],
   declarations: [
     TelemarketingQuestionarioComponent,

@@ -88,6 +88,9 @@ export class TelemarketingComponent implements OnInit {
     else this.tableData = follow.resposta as Array<object>;
   }
 
+  closemodal(modal) {
+  }
+
 
   getSelectedValue(campanhaSelecionada: any) {
     this.campanhaSelecionada = campanhaSelecionada
@@ -117,7 +120,6 @@ export class TelemarketingComponent implements OnInit {
     }
     else {
       this.eventoObject = telemarketing.resposta.evento;
-
       this.evento = new Observable((observer) => {
         observer.next(telemarketing.resposta.evento);
         self.carregouEvento = true;
@@ -129,7 +131,6 @@ export class TelemarketingComponent implements OnInit {
         }, 0);
         self.pessoaObject = telemarketing.resposta.pessoa;
       });
-
       this.motivos_respostas = telemarketing.resposta.motivos_respostas
       this.predicoes = telemarketing.resposta.predicoes
       this.objecoes = telemarketing.resposta.objecoes

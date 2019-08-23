@@ -17,6 +17,7 @@ function getQuestionarios(req, res) {
 
     executaSQL(credenciais, sql)
       .then(res => {
+        console.log(res)
         resolve(res)
       })
       .catch(err => {
@@ -32,26 +33,20 @@ function getQuestionarioById(req, res) {
       token: req.query.token,
       idUsuario: req.query.id_usuario
     };
-
     let sql = `SELECT * FROM questionarios where questionarios.id=${req.query.id}`
-    // let resultado = null;
     executaSQL(credenciais, sql)
-      .then(res => {
-        // resultado = res;
-        // console.log(' result questionarios' + res);
-        // sql = `select * from quest_perguntas where quest_perguntas.id_questionario=${req.query.id}`;
-        // executaSQL(credenciais, sql)
-        //   .then(_res => {
-        //     console.log(' result perguntas' + _res);
-        //     console.dir(resultado)
-        //     resultado.perguntas = _res
-        //     console.dir(resultado)
-        //     resolve(resultado);
-        //   })
-        //   .catch(_err => {
-          //     reject(_err)
-          //   })
-        resolve(res);
+      .then(questionario => {
+        sql = `select * from quest_perguntas where quest_perguntas.id_questionario=${req.query.id}`;
+        executaSQL(credenciais, sql)
+          .then(perguntas => {
+            resolve({
+              questionario,
+              perguntas
+            });
+          })
+          .catch(_err => {
+            reject(_err)
+          })
       })
       .catch(err => {
         reject(err)
@@ -108,7 +103,7 @@ function updateStatusQuestionario(req, res) {
     req.query.q = JSON.parse(req.query.data);
 
     let sql = `UPDATE questionarios SET status=${req.query.q.status} WHERE questionarios.id=${req.query.q.id}`;
-    
+
     executaSQL(credenciais, sql)
       .then(res => {
         resolve(res)
@@ -159,6 +154,53 @@ function deleteQuestionario(req, res) {
   });
 };
 
+function getQuestionarioCompletoById(req, res) {
+  return new Promise(function (resolve, reject) {
+    let credenciais = {
+      token: req.query.token,
+      idUsuario: req.query.id_usuario
+    };
+
+    let sql = `select * FROM view_questionario_alt_perg
+      WHERE id_questionario=${req.query.id}`;
+
+    executaSQL(credenciais, sql)
+      .then(res => {
+        resolve(res)
+      })
+      .catch(err => {
+        reject(err)
+      })
+  });
+};
+
+function gravaRespostaQuestionario(req, res) {
+  return new Promise(function (resolve, reject) {
+    let credenciais = {
+      token: req.query.token,
+      idUsuario: req.query.id_usuario
+    };
+    console.dir(req.query.data);
+    req.query.q = JSON.parse(req.query.data);
+    console.dir(req.query.q);
+    let sql = `insert into quest_respostas(
+      id_alternativa,
+      id_usuario,
+      id_receptor,
+      dt_resposta,
+      observacao,
+      id_evento) VALUES(${req.query.q.id_alternativa},${req.query.q.id_usuario}, ${req.query.q.id_receptor}, now(), '${req.query.q.observacao}',${req.query.q.id_evento}) RETURNING id;`
+    console.log(sql);
+    executaSQL(credenciais, sql)
+      .then(res => {
+        resolve(res)
+      })
+      .catch(err => {
+        reject(err)
+      })
+  });
+};
+
 
 module.exports = {
   getQuestionarios,
@@ -167,5 +209,7 @@ module.exports = {
   deleteQuestionario,
   updateStatusQuestionario,
   getQuestionarioById,
-  getPerguntasByIdUqestionario
+  getPerguntasByIdUqestionario,
+  getQuestionarioCompletoById,
+  gravaRespostaQuestionario
 };

@@ -143,6 +143,8 @@ declaraServico('deleteQuestionario',  questionarios.deleteQuestionario);
 declaraServico('updateStatusQuestionario',  questionarios.updateStatusQuestionario);
 declaraServico('getQuestionarioById',  questionarios.getQuestionarioById);
 declaraServico('getPerguntasByIdUqestionario',  questionarios.getPerguntasByIdUqestionario);
+declaraServico('getQuestionarioCompletoById',  questionarios.getQuestionarioCompletoById);
+declaraServico('gravaRespostaQuestionario',  questionarios.gravaRespostaQuestionario);
 // questtionario alternativas
 declaraServico('getAlternativas',  questAlternativas.getAlternativas);
 declaraServico('getAlternativaById',  questAlternativas.getAlternativaById);

@@ -1,5 +1,4 @@
 import { Component, OnInit, Input, ViewChild } from '@angular/core';
-import { FormGroup, FormBuilder } from '@angular/forms';
 import { ConnectHTTP } from '../../shared/services/connectHTTP';
 import { LocalStorage } from '../../shared/services/localStorage';
 import { Router, ActivatedRouteSnapshot, ActivatedRoute } from '@angular/router';
@@ -22,9 +21,9 @@ export class QuestionarioEditComponent implements OnInit {
     multipla_escolha: false,
     descricao: ''
   };
+  private sorted = false;
 
   @ViewChild('perguntaadd') modalperguntaadd: ModalDirective;
-  sorted: any;
 
   constructor(
     private _location: Location,
@@ -57,22 +56,15 @@ export class QuestionarioEditComponent implements OnInit {
         service: 'getQuestionarioById',
         paramsService: { id: this.idQuest }
       }) as any;
-      let respPergQuest = await this.connectHTTP.callService({
-        service: 'getPerguntasByIdUqestionario',
-        paramsService: { id: this.idQuest }
-      }) as any;
       if (respQuest.error) {
         return this.toastrService.error(respQuest.error);
       }
-      if (respPergQuest.error) {
-        return this.toastrService.error(respPergQuest.error);
-      }
-      let data = respQuest.resposta[0];
-      data.perguntas = respPergQuest.resposta;
+      let data = (respQuest.resposta || {}).questionario['0'];
+      data.perguntas = (respQuest.resposta || {}).perguntas;
       this.tableData = data;
     }
     catch (e) {
-      this.toastrService.error('Erro ao ler as permissoes', e);
+      this.toastrService.error('Erro ao ler as permissoes 17', e);
     }
   }
 
@@ -91,7 +83,7 @@ export class QuestionarioEditComponent implements OnInit {
       }
     }
     catch (e) {
-      this.toastrService.error('Erro ao ler as permissoes', e);
+      this.toastrService.error('Erro ao ler as permissoes 16', e);
     }
   }
 
@@ -109,7 +101,7 @@ export class QuestionarioEditComponent implements OnInit {
       }
     }
     catch (e) {
-      this.toastrService.error('Erro ao ler as permissoes', e);
+      this.toastrService.error('Erro ao ler as permissoes 15', e);
     }
   }
 
@@ -126,7 +118,7 @@ export class QuestionarioEditComponent implements OnInit {
       }
     }
     catch (e) {
-      this.toastrService.error('Erro ao ler as permissoes', e);
+      this.toastrService.error('Erro ao ler as permissoes 14', e);
     }
   }
 
@@ -143,7 +135,7 @@ export class QuestionarioEditComponent implements OnInit {
       }
     }
     catch (e) {
-      this.toastrService.error('Erro ao ler as permissoes', e);
+      this.toastrService.error('Erro ao ler as permissoes 13', e);
     }
   }
 
@@ -161,7 +153,7 @@ export class QuestionarioEditComponent implements OnInit {
       }
     }
     catch (e) {
-      this.toastrService.error('Erro ao ler as permissoes do departamento', e);
+      this.toastrService.error('Erro ao ler as permissoes 12', e);
     }
   }
 
@@ -179,8 +171,23 @@ export class QuestionarioEditComponent implements OnInit {
       }
     }
     catch (e) {
-      this.toastrService.error('Erro ao ler as permissoes do departamento', e);
+      this.toastrService.error('Erro ao ler as permissoes 11', e);
     }
+  }
+
+  sortBy(by: string | any): void {
+    this.tableData.perguntas.sort((a: any, b: any) => {
+      if (a[by] < b[by]) {
+        return this.sorted ? 1 : -1;
+      }
+      if (a[by] > b[by]) {
+        return this.sorted ? -1 : 1;
+      }
+
+      return 0;
+    });
+
+    this.sorted = !this.sorted;
   }
 
 
@@ -201,22 +208,7 @@ export class QuestionarioEditComponent implements OnInit {
       }
     }
     catch (e) {
-      this.toastrService.error('Erro ao ler as permissoes do departamento', e);
+      this.toastrService.error('Erro ao ler as permissoes 18', e);
     }
-  }
-
-  sortBy(by: string | any): void {
-    this.tableData.sort((a: any, b: any) => {
-      if (a[by] < b[by]) {
-        return this.sorted ? 1 : -1;
-      }
-      if (a[by] > b[by]) {
-        return this.sorted ? -1 : 1;
-      }
-
-      return 0;
-    });
-
-    this.sorted = !this.sorted;
   }
 }

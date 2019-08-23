@@ -1,5 +1,4 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormGroup } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
 import { ConnectHTTP } from '../../../../shared/services/connectHTTP';
@@ -19,19 +18,19 @@ export class PerguntaEditComponent implements OnInit {
     proximaPerguntaId: ''
   };
 
-  tableData : {
+  tableData = {
     id: '',
+    alternativas: [{}],
     id_questionario: '',
     nome:'',
-    status: '',
-    alternativas: '',
+    status: false,
     sequencia_pergunta: '',
     descricao_pergunta: '',
     multipla_escolha: ''
   };
   pergId = null;
   @ViewChild('alternativaadd') alternativaadd: ModalDirective;
-  sorted: any;
+  sorted = false;
 
   constructor(
     private router: Router,
@@ -74,7 +73,7 @@ export class PerguntaEditComponent implements OnInit {
       this.tableData = data;
     }
     catch (e) {
-      this.toastrService.error('Erro ao ler as permissoes', e);
+      this.toastrService.error('Erro ao ler as permissoes 31', e);
     }
   }
 
@@ -108,7 +107,7 @@ export class PerguntaEditComponent implements OnInit {
       }
     }
     catch (e) {
-      this.toastrService.error('Erro ao ler as permissoes', e);
+      this.toastrService.error('Erro ao ler as permissoes 32', e);
     }
   }
 
@@ -126,7 +125,7 @@ export class PerguntaEditComponent implements OnInit {
       }
     }
     catch (e) {
-      this.toastrService.error('Erro ao ler as permissoes do departamento', e);
+      this.toastrService.error('Erro ao ler as permissoes 33', e);
     }
   }
 
@@ -144,7 +143,7 @@ export class PerguntaEditComponent implements OnInit {
       }
     }
     catch (e) {
-      this.toastrService.error('Erro ao ler as permissoes do departamento', e);
+      this.toastrService.error('Erro ao ler as permissoes 34', e);
     }
   }
 
@@ -161,7 +160,7 @@ export class PerguntaEditComponent implements OnInit {
       }
     }
     catch (e) {
-      this.toastrService.error('Erro ao ler as permissoes', e);
+      this.toastrService.error('Erro ao ler as permissoes 35', e);
     }
   }
 
@@ -178,7 +177,7 @@ export class PerguntaEditComponent implements OnInit {
       }
     }
     catch (e) {
-      this.toastrService.error('Erro ao ler as permissoes', e);
+      this.toastrService.error('Erro ao ler as permissoes 36', e);
     }
   }
 
@@ -195,23 +194,8 @@ export class PerguntaEditComponent implements OnInit {
       }
     }
     catch (e) {
-      this.toastrService.error('Erro ao ler as permissoes', e);
+      this.toastrService.error('Erro ao ler as permissoes 37', e);
     }
-  }
-
-  sortBy(by: string | any): void {
-    (this.tableData.alternativas|| []).sort((a: any, b: any) => {
-      if (a[by] < b[by]) {
-        return this.sorted ? 1 : -1;
-      }
-      if (a[by] > b[by]) {
-        return this.sorted ? -1 : 1;
-      }
-
-      return 0;
-    });
-
-    this.sorted = !this.sorted;
   }
 
   async salvarAlternativa() {
@@ -236,7 +220,22 @@ export class PerguntaEditComponent implements OnInit {
       }
     }
     catch (e) {
-      this.toastrService.error('Erro ao ler as permissoes do departamento', e);
+      this.toastrService.error('Erro ao ler as permissoes 38', e);
     }
+  }
+
+  sortBy(by: string | any): void {
+    this.tableData.alternativas.sort((a: any, b: any) => {
+      if (a[by] < b[by]) {
+        return this.sorted ? 1 : -1;
+      }
+      if (a[by] > b[by]) {
+        return this.sorted ? -1 : 1;
+      }
+
+      return 0;
+    });
+
+    this.sorted = !this.sorted;
   }
 }
