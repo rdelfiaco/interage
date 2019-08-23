@@ -32,7 +32,7 @@ class Perg {
 export class ResponderQuestionarioComponent implements OnInit, OnDestroy {
   @Input() questId = null;
   @Input() eventoId = null;
-  @Output() encerrou = new EventEmitter();
+  @Output() callback = new EventEmitter();
   questionario: any = {};
   respondendo = false;
   msg = '';
@@ -69,7 +69,9 @@ export class ResponderQuestionarioComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.getDataQuestionario();
+    debugger
+    if (this.questId)
+      this.getDataQuestionario();
   }
 
   ngOnDestroy() {
@@ -275,7 +277,7 @@ export class ResponderQuestionarioComponent implements OnInit, OnDestroy {
     this.concluiu = true;
     this.msg = msg;
     this.toastrService.success(msg);
-    this.encerrou.emit();
+    this.callback.emit();
   }
 
   encerrar() {
@@ -316,6 +318,8 @@ export class ResponderQuestionarioComponent implements OnInit, OnDestroy {
         }
       });
       this.questionario = data;
+      debugger
+      this.responder();
     }
     catch (e) {
       this.toastrService.error('Erro ao ler as permissoes resp', e);
