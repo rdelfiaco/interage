@@ -92,34 +92,15 @@ export class UsuariosCampanhaComponent implements OnInit {
   }
 
   async salvarUsuariosDaCampanha(){
-      this.disabledVoltar = false
+    this.disabledVoltar = false
+    let resposta  = await this.bancoDados.salvaDados('salvarUsuariosDaCampanha',
+                    {campanhaSelecionada: JSON.stringify(this.campanhaSelecionada ) ,
+                      usuariosDaCampanha: JSON.stringify(this.targe)}) as any;
 
-        // try {
-        //   let resposta = await this.connectHTTP.callService({
-        //     service: 'salvarUsuariosDaCampanha',
-        //     paramsService: {
-        //       campanhaSelecionado: JSON.stringify(this.campanhaselecionada ) ,
-        //       usuariosDaCampanha: JSON.stringify(this.targe)
-        //     }
-        //   }) 
-        //   if (resposta.error){
-        //     this.toastrService.error(resposta.error);
-        //   }else {
-        //     this.toastrService.success('Salvo com sucesso');
-        //   }
-        // }
-        // catch (e) {
-        //   this.toastrService.error('Erro ao salvar');
-        // }
-
-        let resposta  = await this.bancoDados.lerDados('salvarUsuariosDaCampanha',
-                        {campanhaSelecionada: JSON.stringify(this.campanhaSelecionada ) ,
-                          usuariosDaCampanha: JSON.stringify(this.targe)}) as any;
-
-        console.log(resposta)
+    if (resposta.error) {this.toastrService.error('Erro ao salvar');}
+        else {this.toastrService.success('Salvo com sucesso');}
+    
   }
-
-
 
   voltar(){
     this.service.abaAtual = 1 

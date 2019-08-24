@@ -108,6 +108,7 @@ function getPessoa(req, res) {
       idUsuario: req.query.id_usuario
     };
 
+    if (req.query.id_pessoa != '[object Object]' ){
       let sql = `SELECT * FROM pessoas WHERE id=${req.query.id_pessoa}`
       executaSQL(credenciais, sql).then(res => {
         var enderecos = {};
@@ -157,7 +158,7 @@ function getPessoa(req, res) {
       .catch(err => {
         reject(err)
       })
-                
+    }             
               
   });
 }

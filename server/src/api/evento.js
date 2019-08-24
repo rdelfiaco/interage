@@ -74,9 +74,7 @@ function motivosRespostas(req, res) {
 
       client.connect()
 
-      let sqlMotivosResposta = `SELECT motivos_respostas.id, motivos_respostas.exige_predicao, motivos_respostas.exige_objecao, 
-                       motivos_respostas.nome, motivos_respostas.ordem_listagem, motivos_respostas.exige_proposta,
-                       motivos_respostas.exige_observacao, motivos_eventos_automaticos.reagendar, motivos_respostas.acao_js
+      let sqlMotivosResposta = `SELECT motivos_respostas.* , motivos_eventos_automaticos.reagendar
                        FROM motivos_respostas
                       LEFT JOIN motivos_eventos_automaticos ON motivos_respostas.id = motivos_eventos_automaticos.id_motivo_resposta
                       WHERE motivos_respostas.id_motivo=${req.query.id_motivo} AND status=true`

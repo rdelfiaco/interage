@@ -254,11 +254,12 @@ export class TelemarketingQuestionarioComponent implements OnInit {
   }
 
   selecionaMotivoResposta(motivoResposta: selectValues) {
+    debugger
     const self = this;
     this.motivos_respostas.some((motivo) => {
       if (motivo.id == motivoResposta.value) {
-        if (motivo.id == '38'){
-          this.questId = (motivo.id_questionaio || 2);
+        if (motivo.id_questionario){
+          this.questId = motivo.id_questionario;
           return this.respquestionarioModal.show();
         }
         this.questionarioForm.controls['motivoRespostaSelecionado'].setValue(motivoResposta.value)
@@ -283,6 +284,7 @@ export class TelemarketingQuestionarioComponent implements OnInit {
 
   encerrouQuest() {
     this.respquestionarioModal.hide();
+    this.gravarLigacao();
   }
 
   discar() {
