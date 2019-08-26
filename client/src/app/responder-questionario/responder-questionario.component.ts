@@ -22,6 +22,7 @@ class Perg {
   nome: null;
   sequencia_pergunta: null;
   status: null;
+  id_proxima_pergunta: null;
 }
 
 @Component({
@@ -54,6 +55,7 @@ export class ResponderQuestionarioComponent implements OnInit, OnDestroy {
     nome: null,
     sequencia_pergunta: null,
     status: null,
+    id_proxima_pergunta: null,
   };
   multiEscolha = false;
   alternativaEscolhida = null;
@@ -198,6 +200,7 @@ export class ResponderQuestionarioComponent implements OnInit, OnDestroy {
   }
 
   proxPergunta() {
+    console.log(this.perguntaAtual)
     let self = this;
     if (!this.alternativaEscolhida && !this.alternativasEscolhidas && !this.respostaEscrita) {
       return alert('Precisa informar um reposta para poder prosseguir!');
@@ -219,7 +222,9 @@ export class ResponderQuestionarioComponent implements OnInit, OnDestroy {
         salvaResp(this.alternativaEscolhida);
         proxPerg = this.questionario.perguntas.find(p => p.id == this.alternativaEscolhida.id_proxima_pergunta)
       }
-      else if (this.perguntaAtual.tipo_pergunta == 2) {
+      else {
+      proxPerg = this.questionario.perguntas.find(p => p.id == this.perguntaAtual.id_proxima_pergunta);
+      if (this.perguntaAtual.tipo_pergunta == 2) {
         this.alternativasEscolhidas = this.perguntaAtual.alternativas.filter(alt => {
           return this.alternativasEscolhidas.some(ac => ac == alt.id)
         });
@@ -228,15 +233,16 @@ export class ResponderQuestionarioComponent implements OnInit, OnDestroy {
         })
       }
       else {
-        salvaResp()
-      }
-      if (!proxPerg || this.multiEscolha)
-        proxPerg = this.questionario.perguntas.find(p => p.sequencia_pergunta == (this.perguntaAtual.sequencia_pergunta + 1));
-      if (proxPerg && proxPerg.tipo_pergunta != 3 && !proxPerg['alternativas'][0].id_proxima_pergunta && !proxPerg['alternativas'][0].nome) {
-        proxPerg = this.questionario.perguntas.find(p => {
-          return (p.sequencia_pergunta >= (this.perguntaAtual.sequencia_pergunta + 1) && p.alternativas[0].id_proxima_pergunta && p.alternativas[0].nome)
-        });
-      }
+        salvaResp();
+        }
+      };
+      // if (!proxPerg || this.multiEscolha)
+      //   proxPerg = this.questionario.perguntas.find(p => p.sequencia_pergunta == (this.perguntaAtual.sequencia_pergunta + 1));
+      // if (proxPerg && proxPerg.tipo_pergunta != 3 && !proxPerg['alternativas'][0].id_proxima_pergunta && !proxPerg['alternativas'][0].nome) {
+      //   proxPerg = this.questionario.perguntas.find(p => {
+      //     return (p.sequencia_pergunta >= (this.perguntaAtual.sequencia_pergunta + 1) && p.alternativas[0].id_proxima_pergunta && p.alternativas[0].nome)
+      //   });
+      // }
       if (!proxPerg) {
         return this.terminou();
       }
@@ -250,11 +256,12 @@ export class ResponderQuestionarioComponent implements OnInit, OnDestroy {
 
     async function salvaResp(a = null) {
       let objResp = {
-        id_alternativa: a ? a.id : self.perguntaAtual.id,
+        id_alternativa: a ? a.id : null,
         id_usuario: self.usuarioLogado.id,
         id_receptor: null,
         observacao: (self.respostaEscrita || ''),
         id_evento: self.eventoId,
+        id_pergunta: self.perguntaAtual.id
       }
       let gravarResposta = await self.connectHTTP.callService({
         service: 'gravaRespostaQuestionario',
@@ -303,6 +310,7 @@ export class ResponderQuestionarioComponent implements OnInit, OnDestroy {
             nome: perg.pergunda,
             tipo_pergunta: perg.tipo_pergunta,
             sequencia_pergunta: perg.sequencia_pergunta,
+            id_proxima_pergunta: perg.id_proxima_pergunta,
             alternativas: (respQuest.resposta.filter(alt => alt.id_pergunta === perg.id_pergunta).map(alt => {
               return {
                 id: alt.id_alternativa,
@@ -346,6 +354,7 @@ export class ResponderQuestionarioComponent implements OnInit, OnDestroy {
       nome: null,
       sequencia_pergunta: null,
       status: null,
+      id_proxima_pergunta: null,
     };
     this.multiEscolha = false;
     this.alternativaEscolhida = null;

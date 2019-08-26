@@ -48,7 +48,6 @@ tabelaLimpa: boolean;
 
       this.propostaComuc.emitiProposta.subscribe(
         proposta => { 
-          console.log('ler tabela fipe ', proposta )
           this.proposta = proposta;
           }
       );

@@ -254,15 +254,17 @@ export class TelemarketingQuestionarioComponent implements OnInit {
   }
 
   selecionaMotivoResposta(motivoResposta: selectValues) {
-    debugger
+    
     const self = this;
     this.motivos_respostas.some((motivo) => {
       if (motivo.id == motivoResposta.value) {
+
+        this.questionarioForm.controls['motivoRespostaSelecionado'].setValue(motivoResposta.value)
+
         if (motivo.id_questionario){
           this.questId = motivo.id_questionario;
           return this.respquestionarioModal.show();
         }
-        this.questionarioForm.controls['motivoRespostaSelecionado'].setValue(motivoResposta.value)
 
         this.reagendar = motivo.reagendar;
         this.exige_observacao = motivo.exige_observacao;
@@ -283,6 +285,7 @@ export class TelemarketingQuestionarioComponent implements OnInit {
   }
 
   encerrouQuest() {
+    debugger
     this.respquestionarioModal.hide();
     this.gravarLigacao();
   }
@@ -291,7 +294,6 @@ export class TelemarketingQuestionarioComponent implements OnInit {
     this.discando = true;
   }
   async gravarLigacao() {
-
     const usuarioLogado = this.localStorage.getLocalStorage('usuarioLogado') as any;
     let parametros = {
       id_pessoa: usuarioLogado.id_pessoa,
@@ -310,6 +312,7 @@ export class TelemarketingQuestionarioComponent implements OnInit {
       proposta: this.questionarioForm.value.proposta,
       propostaJSON: this.questionarioForm.value.propostaJSON
     }
+    console.log('parametros', parametros)
     let metaPessoa = await this.connectHTTP.callService({
       service: 'salvarEvento',
       paramsService: parametros

@@ -28,7 +28,7 @@ function getUmEvento(req, res) {
             and (id_campanha = ${req.query.id_campanha} or (tipodestino = 'P' and id_campanha is not null ))
             order by id_status_evento desc, id_prioridade, dt_para_exibir LIMIT 1`
 
-      //console.log(sql)
+      console.log(sql)
       client.query(sql)
         .then(res => {
           if (res.rowCount > 0) {
@@ -254,17 +254,21 @@ function salvarEvento(req, res) {
 
       const client = new Client(dbconnection)
 
+      console.log(1, req.query)
       client.connect()
       let sqlMotivoRespostaAutomaticos = `SELECT * from motivos_eventos_automaticos
                               WHERE motivos_eventos_automaticos.id_motivo_resposta=${req.query.id_motivos_respostas}`;
+                              
+        console.log(2,sqlMotivoRespostaAutomaticos)
 
       client.query(sqlMotivoRespostaAutomaticos).then(res => {
         const motivoResposta_automatico = res.rows;
-
         let sqlMotivoResposta = `SELECT * from motivos_respostas
                               WHERE motivos_respostas.id=${req.query.id_motivos_respostas}`;
 
         client.query(sqlMotivoResposta).then(res => {
+          console.log(3,sqlMotivoResposta)
+
           const motivoResposta = res.rows[0];
           const motivoRespostaAcaoSQL = res.rows[0].acao_sql;
           
@@ -323,6 +327,7 @@ function salvarEvento(req, res) {
                   RETURNING tipoDestino, id_pessoa_organograma;
                   `;
                   
+                  console.log(update)
               client.query(update).then((updateEventoEncerrado) => {
                 if (updateEventoEncerrado.rowCount != 1) {
                   client.query('COMMIT').then((resposta) => {

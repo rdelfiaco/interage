@@ -55,11 +55,10 @@ export class TelemarketingComponent implements OnInit {
     })
 
     this.getFollowDoUsuario();
-    
     this.metaPessoa = r.resposta.metaPessoa[0];
+    if (!this.metaPessoa.ligacoes_realizadas) this.metaPessoa.ligacoes_realizadas = 0;
     this._constroiGraficoMeta(this.metaPessoa);
    
-
   }
 
   _constroiGraficoMeta(meta) {

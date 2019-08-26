@@ -189,7 +189,12 @@ function gravaRespostaQuestionario(req, res) {
       id_receptor,
       dt_resposta,
       observacao,
-      id_evento) VALUES(${req.query.q.id_alternativa},${req.query.q.id_usuario}, ${req.query.q.id_receptor}, now(), '${req.query.q.observacao}',${req.query.q.id_evento}) RETURNING id;`
+      id_evento, 
+      id_pergunta) 
+      VALUES( ${req.query.q.id_alternativa},
+        ${req.query.q.id_usuario}, 
+        ${req.query.q.id_receptor}, now(), '${req.query.q.observacao}',
+        ${req.query.q.id_evento}, ${req.query.q.id_pergunta} ) RETURNING id;`
     console.log(sql);
     executaSQL(credenciais, sql)
       .then(res => {
