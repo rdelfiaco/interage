@@ -61,7 +61,7 @@ export class MotivosRespostasComponent implements OnInit {
       exige_observacao: [''],
       exige_objecao: [''],
       exige_proposta: [''],
-      id_questionaio: [''],
+      id_questionario: [''],
       id_prioridade: [''],
       ordem_listagem: [''],
       acao_sql: [''],
@@ -150,7 +150,7 @@ ngOnInit() {
     this.formularioForm.controls['exige_observacao'].enable();
     this.formularioForm.controls['exige_objecao'].enable();
     this.formularioForm.controls['exige_proposta'].enable();
-    this.formularioForm.controls['id_questionaio'].enable();
+    this.formularioForm.controls['id_questionario'].enable();
     this.formularioForm.controls['id_prioridade'].enable();
     this.formularioForm.controls['ordem_listagem'].enable();
     this.formularioForm.controls['tentativas'].enable();
@@ -174,7 +174,7 @@ ngOnInit() {
     this.formularioForm.controls['exige_observacao'].disable();
     this.formularioForm.controls['exige_objecao'].disable();
     this.formularioForm.controls['exige_proposta'].disable();
-    this.formularioForm.controls['id_questionaio'].disable();
+    this.formularioForm.controls['id_questionario'].disable();
     this.formularioForm.controls['id_prioridade'].disable();
     this.formularioForm.controls['ordem_listagem'].disable();
     this.formularioForm.controls['tentativas'].disable();
@@ -195,7 +195,7 @@ ngOnInit() {
     this.formularioForm.controls['exige_observacao'].setValue(this.tableData_.exige_observacao);
     this.formularioForm.controls['exige_objecao'].setValue(this.tableData_.exige_objecao);
     this.formularioForm.controls['exige_proposta'].setValue(this.tableData_.exige_proposta);
-    this.formularioForm.controls['id_questionaio'].setValue(this.tableData_.id_questionaio);
+    this.formularioForm.controls['id_questionario'].setValue(this.tableData_.id_questionario);
     this.formularioForm.controls['id_prioridade'].setValue(this.tableData_.id_prioridade);
     this.formularioForm.controls['ordem_listagem'].setValue(this.tableData_.ordem_listagem);
     this.formularioForm.controls['tentativas'].setValue(this.tableData_.tentativas);
@@ -215,7 +215,7 @@ ngOnInit() {
       this.formularioForm.controls['exige_observacao'].enable();
       this.formularioForm.controls['exige_objecao'].enable();
       this.formularioForm.controls['exige_proposta'].enable();
-      this.formularioForm.controls['id_questionaio'].enable();
+      this.formularioForm.controls['id_questionario'].enable();
       this.formularioForm.controls['id_prioridade'].enable();
       this.formularioForm.controls['ordem_listagem'].enable();
       this.formularioForm.controls['tentativas'].enable();

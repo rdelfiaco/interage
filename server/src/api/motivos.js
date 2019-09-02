@@ -220,12 +220,10 @@ function crudRespostasMotivo(req, res){
     req.query = dadosAtuais;
     let tabela = 'motivos_respostas';
     let idTabela = req.query.id;
-    console.log('req.query ',req.query )
     let sql = ''
     if (crud == 'C') sql = sqlCreate(); 
     if (crud == 'D') sql = sqlDelete();
     if (crud == 'U') sql = sqlUpdate();
-    console.log(sql)
     executaSQL(credenciais, sql).then(res => {
       resolve(res)
 
@@ -237,10 +235,10 @@ function crudRespostasMotivo(req, res){
     function sqlCreate(){
       let sql = `INSERT INTO motivos_respostas(
         id_motivo, status,  nome,   exige_predicao, exige_observacao,
-           exige_objecao, exige_proposta, id_questionaio, id_prioridade,
+           exige_objecao, exige_proposta, id_questionario, id_prioridade,
           ordem_listagem, acao_sql, acao_js, tentativas)
                 VALUES ( ${req.query.id_motivo}, ${req.query.status},  '${req.query.nome}', ${req.query.exige_predicao}, 
-                ${req.query.exige_observacao}, ${req.query.exige_objecao}, ${req.query.exige_proposta}, ${req.query.id_questionaio}, ${req.query.id_prioridade},
+                ${req.query.exige_observacao}, ${req.query.exige_objecao}, ${req.query.exige_proposta}, ${req.query.id_questionario}, ${req.query.id_prioridade},
                 ${req.query.ordem_listagem}, '${req.query.acao_sql}', '${req.query.acao_js}', ${req.query.tentativas}
                 ) RETURNING id;`;
       return sql;
@@ -258,7 +256,7 @@ function crudRespostasMotivo(req, res){
                       exige_observacao = ${req.query.exige_observacao},
                       exige_objecao = ${req.query.exige_objecao},
                       exige_proposta = ${req.query.exige_proposta},
-                      id_questionaio = ${req.query.id_questionaio},
+                      id_questionario = ${req.query.id_questionario},
                       id_prioridade = ${req.query.id_prioridade},
                       ordem_listagem = ${req.query.ordem_listagem},
                       acao_sql = '${req.query.acao_sql}',

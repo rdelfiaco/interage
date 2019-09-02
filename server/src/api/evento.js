@@ -155,8 +155,6 @@ function _criarEvento(client, id_campanha, id_motivo, id_evento_pai, id_evento_a
   });
 }
 
-
-
 function encaminhaEvento(req, res) {
   return new Promise(function (resolve, reject) {
 
@@ -254,20 +252,16 @@ function salvarEvento(req, res) {
 
       const client = new Client(dbconnection)
 
-      console.log(1, req.query)
       client.connect()
       let sqlMotivoRespostaAutomaticos = `SELECT * from motivos_eventos_automaticos
                               WHERE motivos_eventos_automaticos.id_motivo_resposta=${req.query.id_motivos_respostas}`;
                               
-        console.log(2,sqlMotivoRespostaAutomaticos)
-
       client.query(sqlMotivoRespostaAutomaticos).then(res => {
         const motivoResposta_automatico = res.rows;
         let sqlMotivoResposta = `SELECT * from motivos_respostas
                               WHERE motivos_respostas.id=${req.query.id_motivos_respostas}`;
 
         client.query(sqlMotivoResposta).then(res => {
-          console.log(3,sqlMotivoResposta)
 
           const motivoResposta = res.rows[0];
           const motivoRespostaAcaoSQL = res.rows[0].acao_sql;
@@ -276,9 +270,6 @@ function salvarEvento(req, res) {
                                  
           client.query(sqlMotivo).then(res => {
           const motivoAcaoSQL = res.rows[0].acao_sql;
-          
-
-
 
           client.query('BEGIN').then((res1) => {
             //console.log('req.query.proposta', req.query.proposta)
@@ -327,7 +318,6 @@ function salvarEvento(req, res) {
                   RETURNING tipoDestino, id_pessoa_organograma;
                   `;
                   
-                  console.log(update)
               client.query(update).then((updateEventoEncerrado) => {
                 if (updateEventoEncerrado.rowCount != 1) {
                   client.query('COMMIT').then((resposta) => {
@@ -424,9 +414,9 @@ function salvarEvento(req, res) {
                       reject(err)
                     })
                   }
-                
                   // executa ação SQL da resposta do motivo 
                   if (motivoRespostaAcaoSQL){
+                    console.log(13,motivoRespostaAcaoSQL)
                     let sql = motivoRespostaAcaoSQL.replace('${req.query.id_evento}', `${req.query.id_evento}`)
                     let credenciais = {
                       token: req.query.token,
