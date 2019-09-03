@@ -12,7 +12,7 @@ import { ResponderQuestionario } from '../responder-questionario/responder-quest
 @NgModule({
   imports: [
     CommonModule,
-    ResponderQuestionario
+    ResponderQuestionario,
   ],
   declarations: [
     //LocalStorage, 
