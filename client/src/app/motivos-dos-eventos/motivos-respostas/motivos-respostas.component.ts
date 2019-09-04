@@ -248,7 +248,7 @@ ngOnInit() {
   
   eventosAutomaticos(id, nome){
 
-    this.router.navigate([`motivosEventosAutomaticos/{"idMotivo":${id},"nomeMotivo":"${nome}"}`]);
+    this.router.navigate([`motivosEventosAutomaticos/{"idResposta":${id},"nomeResposta":"${nome}"}`]);
 
   }
 

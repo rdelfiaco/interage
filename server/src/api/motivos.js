@@ -2,8 +2,10 @@ const { executaSQL } = require('./executaSQL');
 const { executaSQLComTransacao } = require('./executaSQL');
 const { getCanais } = require('./canais'); 
 const { awaitSQL } = require('./shared');
-const {getQuestionarios} = require('./questionarios');
-const {getPrioridade} = require('./prioridade')
+const { getQuestionarios } = require('./questionarios');
+const { getPrioridade } = require('./prioridade')
+const { getDepartamentos } = require('./departamento')
+const { getUsuarios } = require('./usuario')
 
 function getMotivos(req, res){
     return new Promise(function (resolve, reject) {
@@ -206,6 +208,79 @@ function getRespostasMotivoSeleconado(req, res){
   });
 };
 
+
+function getMotivosRespostasAutomaticas(req, res){
+  return new Promise(function (resolve, reject) {
+    let credenciais = {
+      token: req.query.token,
+      idUsuario: req.query.id_usuario
+    };
+      
+    let sql = `select mea.id , id_motivo_resposta, mre.nome as motivo_resposta, 
+    mea.id_motivo, mot.nome as motivo,
+    mea.id_canal, can.nome as canal,
+    mea.id_prioridade, pri.nome as prioridade,
+    case when mea.gera_para = 1 then 'Usuário fixo'
+       when mea.gera_para = 2 then 'Usuário que encerrou evento'
+       when mea.gera_para = 3 then 'Usuário que atende o cliente'
+       when mea.gera_para = 4 then 'Usuário que criou o evento que está sendo encerrado'
+    end as tipo_usuario,
+    iif(tipodestino = 'O', 'Depatamento', 'Usuário') as tipo_destino,
+    iif(tipodestino = 'O', dep.nome, pes.nome) as  destino,
+    prazo_para_exibir, reagendar 
+    from motivos_eventos_automaticos mea
+    inner join motivos_respostas mre on mea.id_motivo_resposta = mre.id 
+    inner join motivos mot on mea.id_motivo = mot.id 
+    inner join canais can on mea.id_canal = can.id 
+    inner join prioridade pri on mea.id_prioridade = pri.id 
+    left join pessoas pes on mea.id_pessoa_organograma = pes.id and mea.tipodestino = 'P'
+    left join organograma dep on mea.id_pessoa_organograma = dep.id and mea.tipodestino = 'O'
+    where mea.id_motivo_resposta =  ${req.query.idRespostaSelecionada} ` 
+    executaSQL(credenciais, sql)
+      .then(eventosAutomaticoMotivo => {
+        getMotivos(req, res)
+          .then(motivos => { 
+            getPrioridade(req, res)
+            .then(prioridade => {
+              getCanais(req, res)
+              .then(canais => {
+                getDepartamentos(req, res)
+                .then(departamentos => {
+                  getUsuarios(req, res)
+                  .then(usuarios => {
+                    resolve({eventosAutomaticoMotivo: eventosAutomaticoMotivo, 
+                        motivos: motivos, prioridade: prioridade,
+                        canais: canais, departamentos: departamentos, usuarios: usuarios });
+                    })
+                    .catch(err => {
+                      reject(err)
+                    });
+                    })
+                  .catch(err => {
+                    reject(err)
+                  });
+                })
+              .catch(err => {
+                reject(err)
+              });
+            })
+            .catch(err => {
+              reject(err)
+            });
+          })
+          .catch(err => {
+            reject(err)
+          });
+        })
+        .catch(err => {
+          reject(err)
+        });
+  });
+};
+
+
+
+
 function crudRespostasMotivo(req, res){
   return new Promise(function (resolve, reject) {
     let credenciais = {
@@ -271,10 +346,18 @@ function crudRespostasMotivo(req, res){
   });
 };
 
+
+
+
+
+
+
+
 module.exports = { 
                     getMotivos, 
                     crudMotivos, 
                     getCanaisMotivoSeleconado, 
                     salvarCanaisDoMotivo, 
                     getRespostasMotivoSeleconado,
-                    crudRespostasMotivo }
+                    crudRespostasMotivo,
+                    getMotivosRespostasAutomaticas }

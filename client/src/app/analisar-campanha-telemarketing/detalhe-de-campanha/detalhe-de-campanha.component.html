@@ -148,4 +148,18 @@
       </div>
     </div>
   </div>
+
+  <ngx-treeview
+    [config]="config"
+    [items]="items_"
+    (selectedChange)="onSelectedChange($event)"
+    (filterChange)="onFilterChange($event)">
+  </ngx-treeview>
+
+
+
+
 </div>
+
+
+

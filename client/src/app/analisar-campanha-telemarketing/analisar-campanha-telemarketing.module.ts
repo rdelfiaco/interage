@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MDBBootstrapModulesPro, ToastModule } from '../../lib/ng-uikit-pro-standard';
+import { TreeviewModule } from 'ngx-treeview';
 
 @NgModule({
   imports: [
@@ -12,6 +13,7 @@ import { MDBBootstrapModulesPro, ToastModule } from '../../lib/ng-uikit-pro-stan
     FormsModule,
     MDBBootstrapModulesPro.forRoot(),
     ToastModule.forRoot(),
+    TreeviewModule.forRoot(),
 
   ],
   declarations: [
