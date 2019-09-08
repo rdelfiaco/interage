@@ -85,7 +85,7 @@
     </div>
   </mdb-card>
   
-<!--   
+  
   <div mdbModal #formulario="mdbModal" class="modal fade top"  tabindex="-1"  role="dialog" 
         aria-labelledby="myBasicModalLabel" aria-hidden="true" >
   <div class="modal-dialog  modal-lg" role="document">
@@ -99,73 +99,86 @@
           <div class="modal-content">
             <div class="modal-body">
             <form [formGroup]="formularioForm">
+              <br>
               <div class="row">
-                <div class="md-form col" style="margin-left: 20px">
-                    <input  mdbInputDirective formControlName="id" 
-                      type="text" id="id" class="form-control">
-                    <label for="id">Id</label>
-                </div>
-                <div class="md-form col-7">
-                  <input  mdbInputDirective formControlName="nome" 
-                    type="text" id="nome" class="form-control">
-                  <label for="nome">Nome</label>
-                </div>
-
-              </div>
-              <div class="row">
-                <div class="md-form col">
-                  <mdb-checkbox  formControlName="exige_predicao"  >Exige predição</mdb-checkbox>
-                </div>
-                <div class="md-form col">
-                  <mdb-checkbox  formControlName="exige_observacao"  >Exige Observação</mdb-checkbox>
-                </div>
-                <div class="md-form col">
-                  <mdb-checkbox  formControlName="exige_objecao"  >Exige objeção</mdb-checkbox>
-                </div>
-                <div class="md-form col">
-                  <mdb-checkbox  formControlName="exige_proposta"  >Exige proposta</mdb-checkbox>
-                </div>
-              </div>
-              <div class="row">
-                <div class="md-form col" style="margin-left: 20px">
-                    <input  mdbInputDirective formControlName="ordem_listagem" 
-                      type="text" id="ordem_listagem" class="form-control">
-                    <label for="ordem_listagem">Ordem de Listagem</label>
-                </div>
-                <div class="md-form col" style="margin-left: 20px">
-                  <input  mdbInputDirective formControlName="tentativas" 
-                    type="text" id="tentativas" class="form-control">
-                  <label for="tentativas">Tentativas</label>
-                </div>
-              </div> 
-              <div class="row">
-                <div class="col mdb-select-form">
-                  <mdb-select formControlName="" (selected)="getSelectedValueQuestionario($event)"
-                    [options]="questionarios" [multiple]="false" placeholder="Questionario"></mdb-select>
-                  <label>Questionário</label>
-                </div>
-                <div class="col mdb-select-form">
+                <div class="col-3 mdb-select-form">
                   <mdb-select formControlName="id_prioridade" (selected)="getSelectedValuePrioridade($event)"
                     [options]="prioridades" [multiple]="false" placeholder="Prioridade"></mdb-select>
                   <label>Prioridade</label>
                 </div> 
-              </div>          
-              <div class="row">
-                <div class="md-form col" style="margin-left: 20px">
-                    <input  mdbInputDirective formControlName="acao_sql" 
-                      type="text" id="acao_sql" class="form-control">
-                    <label for="acao_sql">Ação sql</label>
+                <div class="col-3">
+                  <mdb-checkbox  formControlName="reagendar"  >Reagendar</mdb-checkbox>
+                </div>
+                <div class="md-form col" style="margin-left: 30px; margin-top: -5px">
+                  <input  mdbInputDirective formControlName="prazo_para_exibir" 
+                    type="text" id="prazo_para_exibir" class="form-control">
+                  <label for="prazo_para_exibir">Prazo para exibir em minutos</label>
                 </div>
               </div>
+              <br>
               <div class="row">
-                <div class="md-form col" style="margin-left: 20px">
-                    <input  mdbInputDirective formControlName="acao_js" 
-                      type="text" id="acao_js" class="form-control">
-                    <label for="acao_js">Ação JS</label>
+                <div class="col-4 mdb-select-form">
+                  <mdb-select formControlName="id_canal"  (selected)="getMotivosDoCanal($event)"
+                    [options]="canais" [multiple]="false" placeholder="Canal"></mdb-select>
+                  <label>Canal</label>
+                </div> 
+                <div class="col mdb-select-form">
+                  <mdb-select formControlName="id_motivo" 
+                    [options]="motivosDoCanal" [multiple]="false" placeholder="Motivo"></mdb-select>
+                  <label>Motivo</label>
+                </div> 
+              </div>
+              <br>
+              <div class="row">
+   
+                <div class="col mdb-select-form">
+                  <mdb-select formControlName="id_tipo_usuario"   (selected)="selecionouTipoUsuario($event)"
+                    [options]="tipo_usuario" [multiple]="false" placeholder="Tipo do usuário"></mdb-select>
+                  <label>Tipo do usuário</label>
+                </div> 
+
+              </div>
+              <br>
+              <div *ngIf="id_tipo_usuario == 1"  class="row">
+   
+                <div class="col mdb-select-form">
+                  <mdb-select formControlName="id_tipo_destino"  (selected)="selecionouTipoDestino($event)"
+                    [options]="tipodestino" [multiple]="false" placeholder="Tipo do destino"></mdb-select>
+                  <label>Tipo do destino</label>
+                </div> 
+
+              </div>
+              <br>
+              <div *ngIf="id_tipo_destino == 'O'"  class="row">
+   
+                <div class="col mdb-select-form">
+                  <mdb-select formControlName="id_destino" 
+                    [options]="departamentos" [multiple]="false" placeholder="Departamento"></mdb-select>
+                  <label>Departamento</label>
+                </div> 
+
+              </div>
+              <div *ngIf="id_tipo_destino == 'P'"  class="row">
+   
+                <div class="col mdb-select-form">
+                  <mdb-select formControlName="id_destino" 
+                    [options]="usuarios" [multiple]="false" placeholder="Usuário"></mdb-select>
+                  <label>Usuário</label>
+                </div> 
+
+              </div>
+
+              <div class="row">
+                <div class="md-form col"  style="margin-left: 10px" >
+                  <input  mdbInputDirective formControlName="observacao_origem" 
+                    type="text" id="observacao_origem" class="form-control">
+                  <label for="observacao_origem">Observção de origem </label>
                 </div>
               </div>
+
             </form>
           </div>
+        <br>
         <div class="modal-footer">
           <div class="col-lg-12 text-right">
             <div class="md-form">
@@ -178,4 +191,4 @@
     </div>
   </div>
   </div>
-   -->
+  

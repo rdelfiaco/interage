@@ -1,3 +1,4 @@
+import { map } from 'rxjs/operators';
 import { Component, OnInit } from '@angular/core';
 import { ToastService } from '../../../lib/ng-uikit-pro-standard';
 import { ConnectHTTP } from '../../shared/services/connectHTTP';
@@ -19,11 +20,15 @@ export class MotivosEventosAutomaticosComponent implements OnInit {
   questionarios: any;
   prioridades: any;
   motivos: any;
+  motivosDoCanal: any;
   canais: any;
+  canaisMotivos: any;
   departamentos: any;
   usuarios: any;
-  gera_para: Array<object>;
+  tipo_usuario: Array<object>;
   tipodestino: Array<object>;
+  id_tipo_usuario: any;
+  id_tipo_destino: any;
 
   idRespostaSelecionada: any;
   nomeRespostaSelecionada: any;
@@ -62,9 +67,9 @@ export class MotivosEventosAutomaticosComponent implements OnInit {
       id_motivo_resposta: [this.idRespostaSelecionada],
       id_motivo: [''],
       id_canal: [''],
-      gera_para: [''],
-      tipodestino: [''],
-      id_pessoa_organograma: [''],
+      id_tipo_usuario: [''],
+      id_tipo_destino: [''],
+      id_destino: [''],
       id_prioridade: [''],
       observacao_origem: [''],
       prazo_para_exibir: [''],
@@ -114,34 +119,36 @@ ngOnInit() {
         this.motivos = resp.resposta.motivos as Array<object>;
         this.prioridades = resp.resposta.prioridade as Array<object>;
         this.canais = resp.resposta.canais as Array<object>;
+        this.canaisMotivos = resp.resposta.canaisMotivos as Array<object>;
         this.departamentos = resp.resposta.departamentos as Array<object>;
         this.usuarios = resp.resposta.usuarios as Array<object>;
         
         this.canais =  this.canais.filter((r) => {if (r.status) return true }).map((c: any) => {
           return { value: c.id, label: c.nome }
-        });        
+        });       
+
+        //povoa a combo do motivo 
+        this.getMotivosDoCanal(this.canais.filter((r) => {if (r.value == resp.resposta.eventosAutomaticoMotivo[0].id_canal ) return r })[0])
+
         this.departamentos =  this.departamentos.filter((r) => {if (r.status) return true }).map((c: any) => {
-          return { value: c.id, label: c.nome }
-        }); 
-        this.motivos =  this.motivos.filter((r) => {if (r.status) return true }).map((c: any) => {
           return { value: c.id, label: c.nome }
         }); 
         this.prioridades =  this.prioridades.filter((r) => {if (r.status) return true }).map((c: any) => {
           return { value: c.id, label: c.nome }
         }); 
         this.usuarios =  this.usuarios.filter((r) => {if (r.status) return true }).map((c: any) => {
-          return { value: c.id, label: c.nome }
+          return { value: Number(c.id_pessoa), label: c.nome }
         }); 
 
         this.tipodestino = []
-        this.tipodestino.push({ value: 1, label: 'Usuário', tipodestino: 'P'})
-        this.tipodestino.push({ value: 2, label: 'Departamento', tipodestino: 'O'})
+        this.tipodestino.push({ value: 'P', label: 'Usuário', tipodestino: 'P'})
+        this.tipodestino.push({ value: 'O', label: 'Departamento', tipodestino: 'O'})
 
-        this.gera_para = []
-        this.gera_para.push({ value: 1, label: 'Usuário fixo'})
-        this.gera_para.push({ value: 2, label: 'Usuário que encerrou evento'})
-        this.gera_para.push({ value: 3, label: 'Usuário que atende o cliente'})
-        this.gera_para.push({ value: 4, label: 'Usuário que criou o evento que está sendo encerrado'})
+        this.tipo_usuario = []
+        this.tipo_usuario.push({ value: 1, label: 'Usuário fixo'})
+        this.tipo_usuario.push({ value: 2, label: 'Usuário que encerrou evento'})
+        this.tipo_usuario.push({ value: 3, label: 'Usuário que atende o cliente'})
+        this.tipo_usuario.push({ value: 4, label: 'Usuário que criou o evento que está sendo encerrado'})
 
       }
     }
@@ -157,9 +164,9 @@ ngOnInit() {
     this.formularioForm.controls['id_motivo_resposta'].setValue(this.idRespostaSelecionada);
     this.formularioForm.controls['id_motivo'].setValue('');
     this.formularioForm.controls['id_canal'].setValue('');
-    this.formularioForm.controls['gera_para'].setValue('');
-    this.formularioForm.controls['tipodestino'].setValue('');
-    this.formularioForm.controls['id_pessoa_organograma'].setValue('');
+    this.formularioForm.controls['id_tipo_usuario'].setValue('');
+    this.formularioForm.controls['id_tipo_destino'].setValue('');
+    this.formularioForm.controls['id_destino'].setValue('');
     this.formularioForm.controls['id_prioridade'].setValue('');
     this.formularioForm.controls['observacao_origem'].setValue('');
     this.formularioForm.controls['prazo_para_exibir'].setValue('');
@@ -179,9 +186,9 @@ ngOnInit() {
     this.formularioForm.controls['id_motivo_resposta'].disable();
     this.formularioForm.controls['id_motivo'].enable();
     this.formularioForm.controls['id_canal'].enable();
-    this.formularioForm.controls['gera_para'].enable();
-    this.formularioForm.controls['tipodestino'].enable();
-    this.formularioForm.controls['id_pessoa_organograma'].enable();
+    this.formularioForm.controls['id_tipo_usuario'].enable();
+    this.formularioForm.controls['id_tipo_destino'].enable();
+    this.formularioForm.controls['id_destino'].enable();
     this.formularioForm.controls['id_prioridade'].enable();
     this.formularioForm.controls['observacao_origem'].enable();
     this.formularioForm.controls['prazo_para_exibir'].enable();
@@ -197,9 +204,9 @@ ngOnInit() {
     this.formularioForm.controls['id_motivo_resposta'].disable();
     this.formularioForm.controls['id_motivo'].disable();
     this.formularioForm.controls['id_canal'].disable();
-    this.formularioForm.controls['gera_para'].disable();
-    this.formularioForm.controls['tipodestino'].disable();
-    this.formularioForm.controls['id_pessoa_organograma'].disable();
+    this.formularioForm.controls['id_tipo_usuario'].disable();
+    this.formularioForm.controls['id_tipo_destino'].disable();
+    this.formularioForm.controls['id_destino'].disable();
     this.formularioForm.controls['id_prioridade'].disable();
     this.formularioForm.controls['observacao_origem'].disable();
     this.formularioForm.controls['prazo_para_exibir'].disable();
@@ -215,15 +222,19 @@ ngOnInit() {
     this.formularioForm.controls['id_motivo_resposta'].setValue(this.idRespostaSelecionada);
     this.formularioForm.controls['id_motivo'].setValue(this.tableData_.id_motivo);
     this.formularioForm.controls['id_canal'].setValue(this.tableData_.id_canal);
-    this.formularioForm.controls['gera_para'].setValue(this.tableData_.gera_para);
-    this.formularioForm.controls['tipodestino'].setValue(this.tableData_.tipodestino);
-    this.formularioForm.controls['id_pessoa_organograma'].setValue(this.tableData_.id_pessoa_organograma);
+    this.formularioForm.controls['id_tipo_usuario'].setValue(this.tableData_.id_tipo_usuario);
+    this.formularioForm.controls['id_tipo_destino'].setValue(this.tableData_.id_tipo_destino);
+    this.formularioForm.controls['id_destino'].setValue( Number( this.tableData_.id_destino));
     this.formularioForm.controls['id_prioridade'].setValue(this.tableData_.id_prioridade);
     this.formularioForm.controls['observacao_origem'].setValue(this.tableData_.observacao_origem);
     this.formularioForm.controls['prazo_para_exibir'].setValue(this.tableData_.prazo_para_exibir);
     this.formularioForm.controls['reagendar'].setValue(this.tableData_.reagendar);
 
+    this.id_tipo_usuario = this.tableData_.id_tipo_usuario;
+    this.id_tipo_destino = this.tableData_.id_tipo_destino;
     this.formularioFormAud = this.formularioForm.value;
+
+    console.log(this.id_tipo_destino)
   }
 
   async salvar() {
@@ -233,16 +244,16 @@ ngOnInit() {
       this.formularioForm.controls['id_motivo_resposta'].enable();
       this.formularioForm.controls['id_motivo'].enable();
       this.formularioForm.controls['id_canal'].enable();
-      this.formularioForm.controls['gera_para'].enable();
-      this.formularioForm.controls['tipodestino'].enable();
-      this.formularioForm.controls['id_pessoa_organograma'].enable();
+      this.formularioForm.controls['id_tipo_usuario'].enable();
+      this.formularioForm.controls['id_tipo_destino'].enable();
+      this.formularioForm.controls['id_destino'].enable();
       this.formularioForm.controls['id_prioridade'].enable();
       this.formularioForm.controls['observacao_origem'].enable();
       this.formularioForm.controls['prazo_para_exibir'].enable();
       this.formularioForm.controls['reagendar'].enable();
 
       let resp = await this.connectHTTP.callService({
-        service: 'crudEventoAutomativoRespostaMotivo',
+        service: 'crudMotivosRespostasAutomaticas',
         paramsService: {
           dadosAtuais: JSON.stringify(this.formularioForm.value),
           dadosAnteriores: JSON.stringify(this.formularioFormAud),
@@ -278,5 +289,31 @@ ngOnInit() {
   getSelectedValuePrioridade(id){
     
   }
+
+  getMotivosDoCanal(canal){
+
+    this.motivosDoCanal =  this.canaisMotivos.filter((r) => {
+      if (r.id_canal == canal.value) return true })
+
+    let motivosDoCanal_ = [];
+    this.motivosDoCanal = this.motivosDoCanal.forEach(e => {
+       this.motivos.filter((r) => { if(r.id == e.id_motivo && r.status) return true}).map(( c: any) => { 
+        motivosDoCanal_.push( { value: c.id, label: c.nome} )
+      }) 
+    });
+    this.motivosDoCanal = motivosDoCanal_;
+
+    if (this.motivosDoCanal.length < 1 ) this.toastrService.error('O canal selecionado não possui motivo');
+
+  }
+  selecionouTipoUsuario() {
+    this.id_tipo_usuario = this.formularioForm.controls['id_tipo_usuario'].value;
+
+  }
+
+  selecionouTipoDestino(){
+    this.id_tipo_destino = this.formularioForm.controls['id_tipo_destino'].value;
+  }
+
 }
 
