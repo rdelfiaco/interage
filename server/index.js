@@ -71,7 +71,9 @@ declaraServico('getCanaisMotivoSeleconado',  motivos.getCanaisMotivoSeleconado);
 declaraServico('salvarCanaisDoMotivo',  motivos.salvarCanaisDoMotivo);
 declaraServico('getRespostasMotivoSeleconado',  motivos.getRespostasMotivoSeleconado);
 declaraServico('crudRespostasMotivo',  motivos.crudRespostasMotivo);
-
+declaraServico('getMotivosRespostasAutomaticas',  motivos.getMotivosRespostasAutomaticas);
+declaraServico('crudMotivosRespostasAutomaticas',  motivos.crudMotivosRespostasAutomaticas);
+declaraServico('getCanaisMotivos',  motivos.getCanaisMotivos);
 
 declaraServico('getConfiguracao', config.getConfiguracao);
 declaraServico('getSQLs', exportaSQL.getSQLs);

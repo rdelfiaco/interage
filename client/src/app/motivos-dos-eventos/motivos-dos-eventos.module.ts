@@ -12,7 +12,6 @@ import { AngularDualListBoxModule } from 'angular-dual-listbox';
 import { MotivosRespostasComponent } from './motivos-respostas/motivos-respostas.component';
 import { MotivosEventosAutomaticosComponent } from './motivos-eventos-automaticos/motivos-eventos-automaticos.component';
 
-
 @NgModule({
   imports: [
     CommonModule,

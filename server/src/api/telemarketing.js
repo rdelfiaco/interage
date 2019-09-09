@@ -6,7 +6,6 @@ const { getPessoa } = require('./pessoa');
 
 function getLigacaoTelemarketing(req, res) {
   return new Promise(function (resolve, reject) {
-
     checkTokenAccess(req).then(historico => {
       getUmEvento(req).then(evento => {
         if (evento == 'Não há eventos!')

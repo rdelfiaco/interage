@@ -36,7 +36,6 @@ export class PesquisaPlacaComponent implements OnInit {
     this.propostaComuc.emitiProposta.subscribe(
       proposta => {
         //this.proposta = proposta;
-        console.log('placa ', this.proposta)
       }
     );
   }

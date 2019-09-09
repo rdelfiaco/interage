@@ -55,11 +55,10 @@ export class TelemarketingComponent implements OnInit {
     })
 
     this.getFollowDoUsuario();
-    
     this.metaPessoa = r.resposta.metaPessoa[0];
+    if (!this.metaPessoa.ligacoes_realizadas) this.metaPessoa.ligacoes_realizadas = 0;
     this._constroiGraficoMeta(this.metaPessoa);
    
-
   }
 
   _constroiGraficoMeta(meta) {
@@ -106,8 +105,7 @@ export class TelemarketingComponent implements OnInit {
   async solicitarLigacao() {
     var self = this;
     this.formAberto = true;
-    
-    let telemarketing = await this.connectHTTP.callService({
+    let telemarketing = await this.connectHTTP.callService({      
       service: 'getLigacaoTelemarketing',
       paramsService: {
         id_campanha: this.campanhaSelecionada.value,
