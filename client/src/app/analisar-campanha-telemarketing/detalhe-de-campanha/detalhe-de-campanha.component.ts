@@ -113,7 +113,7 @@ export class DetalheDeCampanhaComponent implements OnInit {
 
 
     config = TreeviewConfig.create({
-      hasAllCheckBox: false,
+      hasAllCheckBox: true,
       hasFilter: true,
       hasCollapseExpand: false,
       decoupleChildFromParent: true, 
@@ -193,8 +193,6 @@ getRooms(): TreeviewItem[] {
 }
 
 povoaAlternativas(id_pergunta: any){
-debugger
-  
 
   let alternativa  = this.questRespSintetica.filter((r) => {if (r.id_pergunta == id_pergunta) return true }).map((c: any) => {
     return { text: c.alternativa, value: c.tot_resp , collapsed: false, children: [] } 
