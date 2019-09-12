@@ -369,7 +369,6 @@ function crudMotivosRespostasAutomaticas(req, res){
     // divide o objeto em atuais e anteriores 
     let dadosAtuais = JSON.parse(req.query.dadosAtuais);
     const dadosAnteriores =  JSON.parse(req.query.dadosAnteriores);
-    console.log('34',dadosAtuais)
     const crud = req.query.crud;
     req.query = dadosAtuais;
     let tabela = 'motivos_respostas';
@@ -379,7 +378,6 @@ function crudMotivosRespostasAutomaticas(req, res){
     if (crud == 'D') sql = sqlDelete();
     if (crud == 'U') sql = sqlUpdate();
 
-    console.log('35',sql)
 
     executaSQL(credenciais, sql).then(res => {
       resolve(res)

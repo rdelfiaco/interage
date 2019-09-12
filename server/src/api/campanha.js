@@ -591,12 +591,16 @@ function getDetalheCampanha(req, res){
       getDetalheCampanhaConsultor(req).then(detalheCampanhaConsultor => {
         getDetalheCampanhaStatusConsultor(req).then(detalheCampanhaStatusConsultor => {
           getDetalheCampanhaConsultorStatus(req).then(detalheCampanhaConsultorStatus => {
-            if (!detalheCampanhaStatus || !detalheCampanhaConsultor || !detalheCampanhaStatusConsultor 
-                || !detalheCampanhaConsultorStatus
-                ) reject('Campanha de telemarketing sem retorno');
+            getQuestRespSintetica(req).then(questRespSintetica => {
+              if (!detalheCampanhaStatus || !detalheCampanhaConsultor || !detalheCampanhaStatusConsultor 
+                  || !detalheCampanhaConsultorStatus || !questRespSintetica
+                  ) reject('Campanha de telemarketing sem retorno');
 
-            resolve({ detalheCampanhaStatus, detalheCampanhaStatusConsultor, 
-              detalheCampanhaConsultor, detalheCampanhaConsultorStatus });
+              resolve({ detalheCampanhaStatus, detalheCampanhaStatusConsultor, 
+                detalheCampanhaConsultor, detalheCampanhaConsultorStatus, questRespSintetica });
+              }).catch(e => {
+                reject(e);
+              });
           }).catch(e => {
             reject(e);
           });
@@ -628,6 +632,27 @@ function getDetalheCampanhaStatus(req, res){
           and date(dt_resolvido) between date('${req.query.dtInicial}') and date('${req.query.dtFinal}')
           group by id_campanha, id_resp_motivo , resposta_motivo
           order by resposta_motivo
+    `
+    executaSQL(credenciais, sql)
+      .then(res => {
+          resolve(res);
+      })
+      .catch(err => {
+        reject(err)
+      })
+  })
+}
+
+function getQuestRespSintetica(req, res){
+  return new Promise(function (resolve, reject) {
+    let credenciais = {
+      token: req.query.token,
+      idUsuario: req.query.id_usuario
+    };
+                                         
+    let sql = `
+        select * from view_quest_resp_sintetica
+          where id_campanha = ${req.query.idCampanha}
     `
     executaSQL(credenciais, sql)
       .then(res => {
@@ -866,4 +891,5 @@ function salvarCampanhasDoUsuario(req, res){
 
 module.exports = { getCampanhasDoUsuario, getCampanhas, getCampanhaAnalisar, getCampanhaResultado, getCampanhaFollowDoUsuario,
   getEventosRelatorioCampanha, getClientesPendentes, getCampanhaTelemarketingAnalisar, getCampanhasTelemarketingAtivas,
-  getDetalheCampanha, getCampanhasUsuarioSeleconado, salvarCampanhasDoUsuario, getUsuariosCampanhaSelecionada, salvarUsuariosDaCampanha }
+  getDetalheCampanha, getCampanhasUsuarioSeleconado, salvarCampanhasDoUsuario, getUsuariosCampanhaSelecionada, 
+  getQuestRespSintetica, salvarUsuariosDaCampanha }

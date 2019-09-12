@@ -5,8 +5,8 @@ import { LocalStorage } from '../../shared/services/localStorage';
 import { ToastService, IMyOptions } from '../../../lib/ng-uikit-pro-standard';
 import { Usuario } from '../../login/usuario';
 import * as moment from 'moment';
-import { TreeviewItem, TreeviewConfig } from 'ngx-treeview';
-
+import { TreeviewItem, TreeviewConfig, DropdownTreeviewComponent, TreeviewHelper, TreeviewI18n  } from 'ngx-treeview';
+import { throwIfEmpty } from 'rxjs/operators';
 
 @Component({
   selector: 'app-detalhe-de-campanha',
@@ -26,8 +26,11 @@ export class DetalheDeCampanhaComponent implements OnInit {
   detalheCampanhaConsultor: Array<any> = [];
   detalheCampanhaConsultorStatus: Array<any> = [];
   detalheCampanhaConsultorStatusTodos: Array<any> = [];
+  questRespSintetica: Array<any> = [];
   statusSelecionado: string;
   usuarioSelecionado: string;
+  items_: TreeviewItem[];
+
 
   public myDatePickerOptions: IMyOptions = {
     // Strings and translations
@@ -63,9 +66,10 @@ export class DetalheDeCampanhaComponent implements OnInit {
      });
   };
 
-  ngOnInit() {
-    this.getDetalheCampanha()
-    this.items_ = this.getBooks();
+  async ngOnInit() {
+    await this.getDetalheCampanha()
+    //this.items_ = this.getBooks();
+    this.items_ = this.treeViewquestRespSintetica();
   }
 
 
@@ -80,10 +84,14 @@ export class DetalheDeCampanhaComponent implements OnInit {
         }
       }) as any;
 
+      console.log(retorno.resposta)
       this.detalheCampanhaStatus = retorno.resposta.detalheCampanhaStatus;
       this.detalheCampanhaStatusConsultorTodos = retorno.resposta.detalheCampanhaStatusConsultor;
       this.detalheCampanhaConsultor = retorno.resposta.detalheCampanhaConsultor;
       this.detalheCampanhaConsultorStatusTodos = retorno.resposta.detalheCampanhaConsultorStatus;
+      this.questRespSintetica = retorno.resposta.questRespSintetica;
+      if (this.questRespSintetica[0].nome_questionario == null) this.questRespSintetica = [];
+
 
   }
 
@@ -106,40 +114,15 @@ export class DetalheDeCampanhaComponent implements OnInit {
 
     config = TreeviewConfig.create({
       hasAllCheckBox: false,
-      hasFilter: false,
+      hasFilter: true,
       hasCollapseExpand: false,
-      decoupleChildFromParent: false, 
-      maxHeight: 500
+      decoupleChildFromParent: true, 
+      maxHeight: 900
   });
 
-    
-//   itCategory = new TreeviewItem({
-//     text: 'IT', value: 9, children: [
-//         {
-//             text: 'Programming', value: 91, children: [{
-//                 text: 'Frontend', value: 911, children: [
-//                     { text: 'Angular 1', value: 9111 },
-//                     { text: 'Angular 2', value: 9112 },
-//                     { text: 'ReactJS', value: 9113 }
-//                 ]
-//             }, {
-//                 text: 'Backend', value: 912, children: [
-//                     { text: 'C#', value: 9121 },
-//                     { text: 'Java', value: 9122 },
-//                     { text: 'Python', value: 9123, checked: false }
-//                 ]
-//             }]
-//         },
-//         {
-//             text: 'Networking', value: 92, children: [
-//                 { text: 'Internet', value: 921 },
-//                 { text: 'Security', value: 922 }
-//             ]
-//         }
-//     ]
-//  });
 
-items_: TreeviewItem[];
+
+
 
 
 
@@ -209,6 +192,54 @@ getRooms(): TreeviewItem[] {
   return [childrenCategory, itCategory, teenCategory, othersCategory];
 }
 
+povoaAlternativas(id_pergunta: any){
+debugger
+  
+
+  let alternativa  = this.questRespSintetica.filter((r) => {if (r.id_pergunta == id_pergunta) return true }).map((c: any) => {
+    return { text: c.alternativa, value: c.tot_resp , collapsed: false, children: [] } 
+  });
+
+  if (alternativa[0].text == null) alternativa = [];
+
+  return alternativa
+
+}
+
+povoaPerguntas(id_questionario: any){
+
+  let perguntas = []
+  
+  this.questRespSintetica.forEach((item) => {
+      var index = perguntas.findIndex( redItem => {
+            return item.id_pergunta == redItem.id_pergunta; 
+           });
+      if (index > -1){
+        perguntas[index].tot_resp =  perguntas[index].tot_resp +  item.tot_resp
+      }else 
+      {
+        perguntas.push(item);
+      } 
+  });
+    
+    return perguntas.map((item) => { return { text: item.pergunta, value: item.tot_resp,  collapsed: false, children: this.povoaAlternativas(item.id_pergunta) }})
+}
+
+
+povoaQuestionario(){
+    
+    let questionario = { text: this.questRespSintetica[0].nome_questionario , value: this.questRespSintetica[0].id_questionario,  collapsed: false, children: this.povoaPerguntas(this.questRespSintetica[0].id_questionario) }
+    
+    return questionario
+
+}
+
+treeViewquestRespSintetica(): TreeviewItem[] {
+
+  const questionario = new TreeviewItem( this.povoaQuestionario() );
+  
+  return [questionario];
+}
 
 
 
