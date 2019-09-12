@@ -195,7 +195,7 @@ getRooms(): TreeviewItem[] {
 povoaAlternativas(id_pergunta: any){
 
   let alternativa  = this.questRespSintetica.filter((r) => {if (r.id_pergunta == id_pergunta) return true }).map((c: any) => {
-    return { text: c.alternativa, value: c.tot_resp , collapsed: false, children: [] } 
+    return { text: c.alternativa, value: c.id_alternativa , collapsed: false, children: [] } 
   });
 
   if (alternativa[0].text == null) alternativa = [];
@@ -220,7 +220,7 @@ povoaPerguntas(id_questionario: any){
       } 
   });
     
-    return perguntas.map((item) => { return { text: item.pergunta, value: item.tot_resp,  collapsed: false, children: this.povoaAlternativas(item.id_pergunta) }})
+    return perguntas.map((item) => { return { text: item.pergunta, value: item.id_pergunta,  collapsed: false, children: this.povoaAlternativas(item.id_pergunta) }})
 }
 
 
