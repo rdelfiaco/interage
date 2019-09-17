@@ -5,7 +5,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MDBBootstrapModulesPro, ToastModule } from '../../lib/ng-uikit-pro-standard';
 import { TreeviewModule } from 'ngx-treeview';
-
+import { DropdownTreeviewSelectComponent } from './detalhe-de-campanha/drop-treeview.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -17,7 +17,8 @@ import { TreeviewModule } from 'ngx-treeview';
   ],
   declarations: [
     AnalisarCampanhaTelemarketingComponent,
-    DetalheDeCampanhaComponent
+    DetalheDeCampanhaComponent,
+    DropdownTreeviewSelectComponent
   ],
   exports:[
     
