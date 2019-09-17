@@ -664,6 +664,27 @@ function getQuestRespSintetica(req, res){
   })
 }
 
+function getQuestRespAnalitica(req, res){
+  return new Promise(function (resolve, reject) {
+    let credenciais = {
+      token: req.query.token,
+      idUsuario: req.query.id_usuario
+    };
+                                         
+    let sql = `
+        select * from view_quest_resp_sintetica
+          where id_alternativa = ${req.query.idAlternativa}
+    `
+    executaSQL(credenciais, sql)
+      .then(res => {
+          resolve(res);
+      })
+      .catch(err => {
+        reject(err)
+      })
+  })
+}
+
 
 function getDetalheCampanhaConsultor(req, res){
   return new Promise(function (resolve, reject) {
