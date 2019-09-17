@@ -194,11 +194,10 @@ getRooms(): TreeviewItem[] {
 
 povoaAlternativas(id_pergunta: any){
 
-  let alternativa  = this.questRespSintetica.filter((r) => {if (r.id_pergunta == id_pergunta) return true }).map((c: any) => {
-    return { text: c.alternativa, value: c.id_alternativa , collapsed: false, children: [] } 
+  let alternativa  = this.questRespSintetica.filter((r) => { 
+    if (r.id_pergunta == id_pergunta && r.id_alternativa != null) return true }).map((c: any) => {
+    return { text: `${c.alternativa} = ${c.tot_resp}` , value: c.id_alternativa , collapsed: false, children: [] } 
   });
-
-  if (alternativa[0].text == null) alternativa = [];
 
   return alternativa
 
@@ -219,8 +218,8 @@ povoaPerguntas(id_questionario: any){
         perguntas.push(item);
       } 
   });
-    
-    return perguntas.map((item) => { return { text: item.pergunta, value: item.id_pergunta,  collapsed: false, children: this.povoaAlternativas(item.id_pergunta) }})
+    console.log('per.', perguntas)
+    return perguntas.map((item) => { return { text: `${item.pergunta}  ${ item.tipo_pergunta > 2 ?  ' = ' + item.tot_resp : ''}` , value: item.id_pergunta,  collapsed: false, children: this.povoaAlternativas(item.id_pergunta) }})
 }
 
 
