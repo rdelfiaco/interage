@@ -141,7 +141,7 @@
         </div>
       </div>
     </div>
-    <div class="row mt-3">
+    <div class="row mt-4">
       <div class="col-6 col-sm-6">
         <div
           class="view view-cascade gradient-card-header blue-gradient narrower py-1 mx-2  d-flex justify-content-center align-items-center">
@@ -156,9 +156,32 @@
       <div class="col-6 col-sm-6">
         <div
           class="view view-cascade gradient-card-header blue-gradient narrower py-1 mx-2  d-flex justify-content-center align-items-center">
-          <h6 class="white-text font-weight-bold mt-2 ">Resumo analítico</h6>
+          <h6 class="white-text font-weight-bold mt-2 ">Resumo analítico de respostas</h6>
         </div>
         <div style="display: block">
+          <table class="table table-hover table-responsive-md mb-0">
+            <thead>
+              <tr>
+                <th>Cliente</th>
+                <th>Data Resposta</th>
+                <th>Usuário</th>
+                <th>Pergunta</th>
+                <th>Alternativa</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of questRespAnalitica">
+                <td>{{item.cliente}}</td>
+                <td>{{transformData(item.dt_resposta)}}</td>
+                <td>{{item.usuario}}</td>
+                <td>{{item.pergunda}}</td>
+                <td>{{item.alternativa}}</td>
+              </tr>
+              <tr *ngIf="!questRespAnalitica.length" >
+                <td colspan="5" class="text-center">Nenhuma resposta selecionada ou não existe registros para as selecionadas.</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </div>
     </div>
@@ -169,8 +192,8 @@
       </div>
     </div>
   </div>
-    <!-- <ngx-dropdown-treeview [config]="config" [headerTemplate]="headerTemplate" [items]="items_" [itemTemplate]="itemTemplate">
+  <!-- <ngx-dropdown-treeview [config]="config" [headerTemplate]="headerTemplate" [items]="items_" [itemTemplate]="itemTemplate">
   </ngx-dropdown-treeview> -->
-    <!-- <dropdown-treeview-select [items]="items_" [(value)]="value" (valueChange)="onSelectedChange($event)"  (filterChange)="onFilterChange($event)">
+  <!-- <dropdown-treeview-select [items]="items_" [(value)]="value" (valueChange)="onSelectedChange($event)"  (filterChange)="onFilterChange($event)">
   </dropdown-treeview-select> -->
 </div>

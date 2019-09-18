@@ -672,7 +672,7 @@ function getQuestRespAnalitica(req, res){
     };
                                          
     let sql = `
-        select * from view_quest_resp_sintetica
+        select * from view_quest_resp_analitica
           where id_alternativa = ${req.query.idAlternativa}
     `
     executaSQL(credenciais, sql)
@@ -913,4 +913,4 @@ function salvarCampanhasDoUsuario(req, res){
 module.exports = { getCampanhasDoUsuario, getCampanhas, getCampanhaAnalisar, getCampanhaResultado, getCampanhaFollowDoUsuario,
   getEventosRelatorioCampanha, getClientesPendentes, getCampanhaTelemarketingAnalisar, getCampanhasTelemarketingAtivas,
   getDetalheCampanha, getCampanhasUsuarioSeleconado, salvarCampanhasDoUsuario, getUsuariosCampanhaSelecionada, 
-  getQuestRespSintetica, salvarUsuariosDaCampanha }
+  getQuestRespSintetica, salvarUsuariosDaCampanha, getQuestRespAnalitica }

@@ -96,6 +96,7 @@ declaraServico('getCampanhas', campanha.getCampanhas );
 declaraServico('getCampanhaAnalisar', campanha.getCampanhaAnalisar );
 declaraServico('salvarCampanhasDoUsuario', campanha.salvarCampanhasDoUsuario );
 declaraServico('getEventosRelatorioCampanha', campanha.getEventosRelatorioCampanha );
+declaraServico('getQuestRespAnalitica', campanha.getQuestRespAnalitica );
 declaraServico('getProdutividadeCallCenter', produtividade.getProdutividadeCallCenter );
 
 //Departamento

@@ -27,6 +27,7 @@ export class DetalheDeCampanhaComponent implements OnInit {
   detalheCampanhaConsultorStatus: Array<any> = [];
   detalheCampanhaConsultorStatusTodos: Array<any> = [];
   questRespSintetica: Array<any> = [];
+  questRespAnalitica = [];
   statusSelecionado: string;
   usuarioSelecionado: string;
   items_: TreeviewItem[];
@@ -95,13 +96,12 @@ export class DetalheDeCampanhaComponent implements OnInit {
 
   detalheStatus(id_resp_motivo, status_ligacao) {
     this.statusSelecionado = status_ligacao;
-    this.detalheCampanhaStatusConsultor = this.detalheCampanhaStatusConsultorTodos.filter(t => t.id_resp_motivo == id_resp_motivo)
-
+    this.detalheCampanhaStatusConsultor = this.detalheCampanhaStatusConsultorTodos.filter(t => t.id_resp_motivo === id_resp_motivo);
   }
 
   detalheUsuario(id_pessoa_resolveu, pessoa_resolveu) {
     this.usuarioSelecionado = pessoa_resolveu;
-    this.detalheCampanhaConsultorStatus = this.detalheCampanhaConsultorStatusTodos.filter(t => t.id_pessoa_resolveu == id_pessoa_resolveu)
+    this.detalheCampanhaConsultorStatus = this.detalheCampanhaConsultorStatusTodos.filter(t => t.id_pessoa_resolveu === id_pessoa_resolveu);
 
   }
 
@@ -109,20 +109,35 @@ export class DetalheDeCampanhaComponent implements OnInit {
     history.back();
   }
 
-  getRooms(): TreeviewItem[] {
-    const items: TreeviewItem[] = [];
-    for (let i = 0; i < 1000; i++) {
-      const value: any = i === 0 ? { name: `${i}` } : i;
-      const checked = i % 100 === 0;
-      const item = new TreeviewItem({ text: `Room ${i}`, value: value, checked: checked });
-      items.push(item);
-    }
-
-    return items;
+  transformData(dt_resposta) {
+    return moment(dt_resposta).format('DD/MM/YYYY');
   }
 
-  onSelectedChange(a: any) {
-    console.log(a);
+  get getTitleAnalitico() {
+    if (this.questRespAnalitica.length) {
+      return ' - ' + this.questRespAnalitica[0]['pergunda'] + this.questRespAnalitica[0]['alternativa'];
+    }
+    return '';
+  }
+
+  async getRespAnalitico(idAlternativa) {
+    const retorno = await this.connectHTTP.callService({
+      service: 'getQuestRespAnalitica',
+      paramsService: { idAlternativa }
+    }) as any;
+    return retorno.resposta;
+  }
+
+  async onSelectedChange(a: any) {
+    let data = [];
+    for (let index = 0; index < a.length; index++) {
+      const element = a[index];
+      const ret = await this.getRespAnalitico(element);
+      if (ret[0].cliente && ret[0].dt_resposta) {
+        data = [...data, ...ret];
+      }
+    }
+    this.questRespAnalitica = data;
   }
 
   onFilterChange(a: any) {
@@ -131,11 +146,12 @@ export class DetalheDeCampanhaComponent implements OnInit {
 
   povoaAlternativas(id_pergunta: any) {
     const alternativa = this.questRespSintetica.filter((r) => {
-      if (r.id_pergunta === id_pergunta && r.alternativa != null) { return true; }
+      if (r.id_pergunta === id_pergunta && r.id_alternativa != null) { return true; }
     }).map((c: any) => {
       return {
-        text: `${c.alternativa} = ${c.tot_resp}` + (c.proxima_pergunta ? '-> Próxima pergunta: ' + c.proxima_pergunta : ''),
-        value: c.alternativa,
+        // text: `${c.alternativa} = ${c.tot_resp}` + (c.proxima_pergunta ? ' -> Próxima pergunta: ' + c.proxima_pergunta : ''),
+        text: `${c.alternativa}` + (c.proxima_pergunta ? ' -> Próx. Perg: ' + c.proxima_pergunta : ''),
+        value: c.id_alternativa,
         collapsed: false,
         checked: false,
         children: []

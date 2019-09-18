@@ -285,7 +285,6 @@ export class TelemarketingQuestionarioComponent implements OnInit {
   }
 
   encerrouQuest() {
-    debugger
     this.respquestionarioModal.hide();
     this.gravarLigacao();
   }
