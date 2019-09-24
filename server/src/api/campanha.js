@@ -1,11 +1,21 @@
-const { checkTokenAccess } = require('./checkTokenAccess');
-const { getPredicoesCampanha } = require('./predicao');
-const { getMetaPessoa } = require('./metaLigacoes');
-const { executaSQL } = require('./executaSQL');
-const { executaSQLComTransacao } = require('./executaSQL');
+const {
+  checkTokenAccess
+} = require('./checkTokenAccess');
+const {
+  getPredicoesCampanha
+} = require('./predicao');
+const {
+  getMetaPessoa
+} = require('./metaLigacoes');
+const {
+  executaSQL
+} = require('./executaSQL');
+const {
+  executaSQLComTransacao
+} = require('./executaSQL');
 
-function sqlEventosPaiDaCampanha(req){
-  
+function sqlEventosPaiDaCampanha(req) {
+
   let sqlEventosPaiDaCampanha = `select id from eventos 
   where id_campanha = ${req.query.idCampanha} 
   and date(dt_criou) = date('${req.query.dtCriou}')
@@ -20,7 +30,9 @@ function getCampanhasDoUsuario(req, res) {
 
     checkTokenAccess(req).then(historico => {
       const dbconnection = require('../config/dbConnection')
-      const { Client } = require('pg')
+      const {
+        Client
+      } = require('pg')
 
       const client = new Client(dbconnection)
 
@@ -37,9 +49,11 @@ function getCampanhasDoUsuario(req, res) {
               let campanhas = res.rows;
 
               client.end();
-              resolve({ campanhas, metaPessoa })
-            }
-            else {
+              resolve({
+                campanhas,
+                metaPessoa
+              })
+            } else {
               client.end();
               reject('Campanha não encontrada')
             }
@@ -59,7 +73,7 @@ function getCampanhasDoUsuario(req, res) {
 
 function getCampanhas(req, res) {
   return new Promise(function (resolve, reject) {
-    
+
     let credenciais = {
       token: req.query.token,
       idUsuario: req.query.id_usuario
@@ -71,12 +85,12 @@ function getCampanhas(req, res) {
                 inner join motivos m on c.id_motivo = m.id `
 
     executaSQL(credenciais, sql)
-    .then(res => {
-      resolve(res);
+      .then(res => {
+        resolve(res);
       })
-    .catch(err => {
-      reject(err)
-    })
+      .catch(err => {
+        reject(err)
+      })
   })
 }
 
@@ -90,11 +104,16 @@ function getCampanhaAnalisar(req, res) {
           getPredicoesCampanha(req).then(campanhaPredicoes => {
             getCampanhaResultado(req).then(campanhaResultado => {
               getTotalLigacoesCampanha(req).then(totalLigacoesCampanha => {
-                  if (!campanhaProspects || !campanhaTentando || !campanhaPredicoes 
-                      || !campanhaResultado || !totalLigacoesCampanha  ) reject('Campanha sem retorno');
+                if (!campanhaProspects || !campanhaTentando || !campanhaPredicoes ||
+                  !campanhaResultado || !totalLigacoesCampanha) reject('Campanha sem retorno');
 
-                  resolve({ campanhaProspects, campanhaTentando, campanhaPredicoes, 
-                          campanhaResultado, totalLigacoesCampanha });
+                resolve({
+                  campanhaProspects,
+                  campanhaTentando,
+                  campanhaPredicoes,
+                  campanhaResultado,
+                  totalLigacoesCampanha
+                });
               }).catch(e => {
                 reject(e);
               });
@@ -123,7 +142,9 @@ function getCampanhaProspects(req, res) {
 
     checkTokenAccess(req).then(historico => {
       const dbconnection = require('../config/dbConnection')
-      const { Client } = require('pg')
+      const {
+        Client
+      } = require('pg')
 
       const client = new Client(dbconnection)
 
@@ -143,8 +164,7 @@ function getCampanhaProspects(req, res) {
             resolve(registros)
           }
           reject('prospects não encontrados')
-        }
-        )
+        })
         .catch(err => {
           client.end();
           console.log(err)
@@ -160,7 +180,9 @@ function getCampanhaTentando(req, res) {
 
     checkTokenAccess(req).then(historico => {
       const dbconnection = require('../config/dbConnection')
-      const { Client } = require('pg')
+      const {
+        Client
+      } = require('pg')
 
       const client = new Client(dbconnection)
 
@@ -197,8 +219,7 @@ function getCampanhaTentando(req, res) {
             resolve(registros)
           }
           reject('Campanha tentando não encontrados')
-        }
-        )
+        })
         .catch(err => {
           client.end();
           console.log(err)
@@ -214,7 +235,9 @@ function getCampanhaResultado(req, res) {
 
     checkTokenAccess(req).then(historico => {
       const dbconnection = require('../config/dbConnection')
-      const { Client } = require('pg')
+      const {
+        Client
+      } = require('pg')
 
       const client = new Client(dbconnection)
 
@@ -248,8 +271,7 @@ function getCampanhaResultado(req, res) {
             let registros = res.rows;
             client.end();
             resolve(registros)
-          }
-          else
+          } else
             reject('Campanha resultado não encontrados')
           client.end();
         })
@@ -268,7 +290,9 @@ function getEventosRelatorioCampanha(req, res) {
 
     checkTokenAccess(req).then(historico => {
       const dbconnection = require('../config/dbConnection')
-      const { Client } = require('pg')
+      const {
+        Client
+      } = require('pg')
 
       const client = new Client(dbconnection)
 
@@ -285,13 +309,11 @@ function getEventosRelatorioCampanha(req, res) {
             let eventos = res.rows;
             client.end();
             resolve(eventos)
-          }
-          else {
+          } else {
             reject('Não há eventos!')
             client.end();
           }
-        }
-        )
+        })
         .catch(err => {
           client.end();
           reject(err)
@@ -307,7 +329,9 @@ function getTotalLigacoesCampanha(req, res) {
 
     checkTokenAccess(req).then(historico => {
       const dbconnection = require('../config/dbConnection')
-      const { Client } = require('pg')
+      const {
+        Client
+      } = require('pg')
 
       const client = new Client(dbconnection)
 
@@ -328,8 +352,7 @@ function getTotalLigacoesCampanha(req, res) {
             let eventos = res.rows;
             client.end();
             resolve(eventos)
-          }
-          else {
+          } else {
             reject('Não há eventos!')
             client.end();
           }
@@ -344,13 +367,13 @@ function getTotalLigacoesCampanha(req, res) {
   })
 }
 
-function getCampanhasTelemarketingAtivas(req, res){
+function getCampanhasTelemarketingAtivas(req, res) {
   return new Promise(function (resolve, reject) {
     let credenciais = {
       token: req.query.token,
       idUsuario: req.query.idUsuarioLogado
     };
-                                            
+
     // let sql = `select e.id_campanha,  ROW_NUMBER() OVER (ORDER BY nome) AS sequencia,
     //           ca.nome || ' - inseridos ' || count(e.*) || ' clientes em: ' || to_char(date(e.dt_criou), 'DD/MM/YYYY')  as nome_completo, 
     //           ca.nome, date(e.dt_criou) as dt_criou, count(e.*) as tot_inseridos 
@@ -426,8 +449,9 @@ left join ( select id_campanha, count(*) as propostas
       .then(res => {
         if (res) {
           resolve(res);
-        }
-        else resolve({total_registros: 0});
+        } else resolve({
+          total_registros: 0
+        });
       })
       .catch(err => {
         reject(err)
@@ -436,16 +460,19 @@ left join ( select id_campanha, count(*) as propostas
 
 }
 
-function getCampanhaTelemarketingAnalisar(req, res){
+function getCampanhaTelemarketingAnalisar(req, res) {
   return new Promise(function (resolve, reject) {
     checkTokenAccess(req).then(historico => {
       getClientesPendentes(req).then(clientesPendentes => {
         getLigacoesRealizadas(req).then(ligacoesRealizadas => {
           getClientesConcluidos(req).then(clientesConcluidos => {
-            if (!clientesPendentes || !ligacoesRealizadas || !clientesConcluidos 
-                ) reject('Campanha de telemarketing sem retorno');
+            if (!clientesPendentes || !ligacoesRealizadas || !clientesConcluidos) reject('Campanha de telemarketing sem retorno');
 
-            resolve({ clientesPendentes, ligacoesRealizadas, clientesConcluidos });
+            resolve({
+              clientesPendentes,
+              ligacoesRealizadas,
+              clientesConcluidos
+            });
           }).catch(e => {
             reject(e);
           })
@@ -461,13 +488,13 @@ function getCampanhaTelemarketingAnalisar(req, res){
   })
 }
 
-function getClientesConcluidos(req, res){
+function getClientesConcluidos(req, res) {
   return new Promise(function (resolve, reject) {
     let credenciais = {
       token: req.query.token,
       idUsuario: req.query.idUsuarioLogado
     };
-                                            
+
     let sql = `select distinct id_pessoa_receptor, cliente from view_eventos 
           where id_campanha = ${req.query.idCampanha}                                      
           and  id_evento_pai is null 
@@ -484,10 +511,11 @@ function getClientesConcluidos(req, res){
     executaSQL(credenciais, sql)
       .then(res => {
         if (res) {
-          let clientesConcluidos = res ;
+          let clientesConcluidos = res;
           resolve(clientesConcluidos);
-        }
-        else resolve({total_registros: 0});
+        } else resolve({
+          total_registros: 0
+        });
       })
       .catch(err => {
         reject(err)
@@ -496,13 +524,13 @@ function getClientesConcluidos(req, res){
 }
 
 
-function getLigacoesRealizadas(req, res){
+function getLigacoesRealizadas(req, res) {
   return new Promise(function (resolve, reject) {
     let credenciais = {
       token: req.query.token,
       idUsuario: req.query.idUsuarioLogado
     };
-                                            
+
     let sql = `select * from view_eventos 
     where id_campanha = ${req.query.idCampanha} 
     and id_status_evento in (3, 7)                                      
@@ -516,8 +544,9 @@ function getLigacoesRealizadas(req, res){
         if (res) {
           let ligacoesRealizadas = res;
           resolve(ligacoesRealizadas);
-        }
-        else resolve({total_registros: 0});
+        } else resolve({
+          total_registros: 0
+        });
       })
       .catch(err => {
         reject(err)
@@ -525,13 +554,13 @@ function getLigacoesRealizadas(req, res){
   })
 }
 
-function getClientesPendentes(req, res){
+function getClientesPendentes(req, res) {
   return new Promise(function (resolve, reject) {
     let credenciais = {
       token: req.query.token,
       idUsuario: req.query.idUsuarioLogado
     };
-                                            
+
     let sql = `select * from view_eventos 
     where id_campanha = ${req.query.idCampanha} 
     and id_status_evento in (1, 4)                                      
@@ -541,12 +570,13 @@ function getClientesPendentes(req, res){
     order by cliente, dt_resolvido`
     executaSQL(credenciais, sql)
       .then(res => {
-        
+
         if (res) {
           let clientesPendentes = res;
           resolve(clientesPendentes);
-        }
-        else resolve({total_registros: 0});
+        } else resolve({
+          total_registros: 0
+        });
       })
       .catch(err => {
         reject(err)
@@ -555,7 +585,7 @@ function getClientesPendentes(req, res){
 
 }
 
-function getCampanhaFollowDoUsuario(req, res){
+function getCampanhaFollowDoUsuario(req, res) {
   return new Promise(function (resolve, reject) {
     let credenciais = {
       token: req.query.token,
@@ -573,8 +603,9 @@ function getCampanhaFollowDoUsuario(req, res){
         if (res) {
           let clientesPendentes = res;
           resolve(clientesPendentes);
+        } else {
+          resolve(0)
         }
-        else {resolve(0)}
       })
       .catch(err => {
         reject(err)
@@ -584,26 +615,28 @@ function getCampanhaFollowDoUsuario(req, res){
 }
 
 
-function getDetalheCampanha(req, res){
+function getDetalheCampanha(req, res) {
   return new Promise(function (resolve, reject) {
-   
+
     getDetalheCampanhaStatus(req).then(detalheCampanhaStatus => {
       getDetalheCampanhaConsultor(req).then(detalheCampanhaConsultor => {
         getDetalheCampanhaStatusConsultor(req).then(detalheCampanhaStatusConsultor => {
           getDetalheCampanhaConsultorStatus(req).then(detalheCampanhaConsultorStatus => {
             getQuestRespSintetica(req).then(questRespSintetica => {
-              if (!detalheCampanhaStatus || !detalheCampanhaConsultor || !detalheCampanhaStatusConsultor 
-                  || !detalheCampanhaConsultorStatus || !questRespSintetica
-                  ) reject('Campanha de telemarketing sem retorno');
+              if (!detalheCampanhaStatus || !detalheCampanhaConsultor || !detalheCampanhaStatusConsultor ||
+                !detalheCampanhaConsultorStatus || !questRespSintetica
+              ) reject('Campanha de telemarketing sem retorno');
 
-              resolve({ detalheCampanhaStatus, detalheCampanhaStatusConsultor, 
-                detalheCampanhaConsultor, detalheCampanhaConsultorStatus, questRespSintetica });
-              }).catch(e => {
-                reject(e);
+              resolve({
+                detalheCampanhaStatus,
+                detalheCampanhaStatusConsultor,
+                detalheCampanhaConsultor,
+                detalheCampanhaConsultorStatus,
+                questRespSintetica
               });
-          }).catch(e => {
-            reject(e);
-          });
+            }).catch(e => {
+              reject(e);
+            });
           }).catch(e => {
             reject(e);
           });
@@ -613,17 +646,20 @@ function getDetalheCampanha(req, res){
       }).catch(e => {
         reject(e);
       });
+    }).catch(e => {
+      reject(e);
+    });
   });
 };
 
 
-function getDetalheCampanhaStatus(req, res){
+function getDetalheCampanhaStatus(req, res) {
   return new Promise(function (resolve, reject) {
     let credenciais = {
       token: req.query.token,
       idUsuario: req.query.id_usuario
     };
-                                         
+
     let sql = `
         select id_campanha, id_resp_motivo , resposta_motivo as status_ligacao, count(*) as total
           from view_eventos 
@@ -635,7 +671,7 @@ function getDetalheCampanhaStatus(req, res){
     `
     executaSQL(credenciais, sql)
       .then(res => {
-          resolve(res);
+        resolve(res);
       })
       .catch(err => {
         reject(err)
@@ -643,20 +679,20 @@ function getDetalheCampanhaStatus(req, res){
   })
 }
 
-function getQuestRespSintetica(req, res){
+function getQuestRespSintetica(req, res) {
   return new Promise(function (resolve, reject) {
     let credenciais = {
       token: req.query.token,
       idUsuario: req.query.id_usuario
     };
-                                         
+
     let sql = `
         select * from view_quest_resp_sintetica
           where id_campanha = ${req.query.idCampanha}
     `
     executaSQL(credenciais, sql)
       .then(res => {
-          resolve(res);
+        resolve(res);
       })
       .catch(err => {
         reject(err)
@@ -664,21 +700,20 @@ function getQuestRespSintetica(req, res){
   })
 }
 
-function getQuestRespAnalitica(req, res){
+function getQuestRespAnalitica(req, res) {
   return new Promise(function (resolve, reject) {
     let credenciais = {
       token: req.query.token,
       idUsuario: req.query.id_usuario
     };
-       
-    console.log(req.res.idAlternativa)
+
     let sql = `
         select * from view_quest_resp_analitica
-          where id_alternativa in ( ${req.query.idAlternativa} )
-    `
+          where id_alternativa in (${req.query.idAlternativa}) OR id_campanha in (${req.query.idAlternativa})`
+    console.log('---------'+sql);
     executaSQL(credenciais, sql)
       .then(res => {
-          resolve(res);
+        resolve(res);
       })
       .catch(err => {
         reject(err)
@@ -687,13 +722,13 @@ function getQuestRespAnalitica(req, res){
 }
 
 
-function getDetalheCampanhaConsultor(req, res){
+function getDetalheCampanhaConsultor(req, res) {
   return new Promise(function (resolve, reject) {
     let credenciais = {
       token: req.query.token,
       idUsuario: req.query.id_usuario
     };
-                                            
+
     let sql = `
       select id_campanha, id_pessoa_resolveu, pessoa_resolveu, count(*) as total
         from view_eventos 
@@ -705,7 +740,7 @@ function getDetalheCampanhaConsultor(req, res){
     `
     executaSQL(credenciais, sql)
       .then(res => {
-          resolve(res);
+        resolve(res);
       })
       .catch(err => {
         reject(err)
@@ -713,13 +748,13 @@ function getDetalheCampanhaConsultor(req, res){
   })
 }
 
-function getDetalheCampanhaConsultorStatus(req, res){
+function getDetalheCampanhaConsultorStatus(req, res) {
   return new Promise(function (resolve, reject) {
     let credenciais = {
       token: req.query.token,
       idUsuario: req.query.id_usuario
     };
-                                            
+
     let sql = `
       select id_campanha, id_pessoa_resolveu, pessoa_resolveu, id_resp_motivo , resposta_motivo as status_ligacao, count(*) as total
         from view_eventos 
@@ -731,7 +766,7 @@ function getDetalheCampanhaConsultorStatus(req, res){
     `
     executaSQL(credenciais, sql)
       .then(res => {
-          resolve(res);
+        resolve(res);
       })
       .catch(err => {
         reject(err)
@@ -739,13 +774,13 @@ function getDetalheCampanhaConsultorStatus(req, res){
   })
 }
 
-function getDetalheCampanhaStatusConsultor(req, res){
+function getDetalheCampanhaStatusConsultor(req, res) {
   return new Promise(function (resolve, reject) {
     let credenciais = {
       token: req.query.token,
       idUsuario: req.query.id_usuario
     };
-                                            
+
     let sql = `
       select id_campanha, id_resp_motivo , resposta_motivo as status_ligacao, id_pessoa_resolveu, pessoa_resolveu,  count(*) as total
         from view_eventos 
@@ -757,7 +792,7 @@ function getDetalheCampanhaStatusConsultor(req, res){
     `
     executaSQL(credenciais, sql)
       .then(res => {
-          resolve(res);
+        resolve(res);
       })
       .catch(err => {
         reject(err)
@@ -766,114 +801,136 @@ function getDetalheCampanhaStatusConsultor(req, res){
 }
 
 
-function getCampanhasUsuarioSeleconado(req, res){
+function getCampanhasUsuarioSeleconado(req, res) {
   return new Promise(function (resolve, reject) {
     let credenciais = {
       token: req.query.token,
       idUsuario: req.query.id_usuario
     };
-                                            
+
     let sql = `SELECT * FROM campanhas_usuarios
     INNER JOIN campanhas ON campanhas_usuarios.id_campanha=campanhas.id
-    WHERE campanhas_usuarios.id_usuario=  ${req.query.id} ` 
-        
+    WHERE campanhas_usuarios.id_usuario=  ${req.query.id} `
+
     executaSQL(credenciais, sql)
       .then(resCampanhasUsuario => {
-        getCampanhas(req, res) .then(campanhas => {
-          resolve({campanhasUsuario: resCampanhasUsuario, campanhas: campanhas});
+        getCampanhas(req, res).then(campanhas => {
+            resolve({
+              campanhasUsuario: resCampanhasUsuario,
+              campanhas: campanhas
+            });
+          })
+          .catch(err => {
+            reject(err)
+          })
+          .catch(err => {
+            reject(err)
+          })
       })
-      .catch(err => {
-        reject(err)
-      })
-      .catch(err => {
-        reject(err)
-      })
-    })
   })
 }
 
 
-function salvarCampanhasDoUsuario(req, res){
+function salvarCampanhasDoUsuario(req, res) {
   return new Promise(function (resolve, reject) {
     let credenciais = {
       token: req.query.token,
       idUsuario: req.query.id_usuario
     };
 
-    let usuarioSelecionado = JSON.parse (req.query.usuarioSelecionado);
-    let campanhasDoUsuario = JSON.parse( req.query.campanhasDoUsuario );
+    let usuarioSelecionado = JSON.parse(req.query.usuarioSelecionado);
+    let campanhasDoUsuario = JSON.parse(req.query.campanhasDoUsuario);
 
     let sqlDelet = `DELETE FROM campanhas_usuarios
-    WHERE campanhas_usuarios.id_usuario  =  ${usuarioSelecionado.id} ` 
+    WHERE campanhas_usuarios.id_usuario  =  ${usuarioSelecionado.id} `
 
     let sqlInsert = ` INSERT INTO public.campanhas_usuarios(
                       id_usuario, id_campanha)
             VALUES  `
-    for (i = 0; i <= campanhasDoUsuario.length -1 ;  i++ ){
-      sqlInsert =  sqlInsert  + `(${usuarioSelecionado.id}, ${campanhasDoUsuario[i]._id}),`
+    for (i = 0; i <= campanhasDoUsuario.length - 1; i++) {
+      sqlInsert = sqlInsert + `(${usuarioSelecionado.id}, ${campanhasDoUsuario[i]._id}),`
     }
-    sqlInsert = sqlInsert.substr(0,  sqlInsert.length -1 ) 
-    if (!campanhasDoUsuario.length) { sqlInsert = "Select now()" }
+    sqlInsert = sqlInsert.substr(0, sqlInsert.length - 1)
+    if (!campanhasDoUsuario.length) {
+      sqlInsert = "Select now()"
+    }
 
 
     const dbconnection = require('../config/dbConnection');
-    const { Client } = require('pg');
+    const {
+      Client
+    } = require('pg');
     const client = new Client(dbconnection);
     client.connect();
 
     client.query('BEGIN').then((res1) => {
-        executaSQLComTransacao(credenciais, client, sqlDelet ).then(resDel => {
-          executaSQLComTransacao(credenciais, client, sqlInsert). then( resInsert => {
-            client.query('COMMIT')
-            .then((resp) => { resolve({ resposta: 'Campanhas do usuário atualizadas '}) })
-            .catch(err => {  reject(err) });
-          });
-          });
+      executaSQLComTransacao(credenciais, client, sqlDelet).then(resDel => {
+        executaSQLComTransacao(credenciais, client, sqlInsert).then(resInsert => {
+          client.query('COMMIT')
+            .then((resp) => {
+              resolve({
+                resposta: 'Campanhas do usuário atualizadas '
+              })
+            })
+            .catch(err => {
+              reject(err)
+            });
         });
-    })
-  }
+      });
+    });
+  })
+}
 
-  function salvarUsuariosDaCampanha(req, res){
-    return new Promise(function (resolve, reject) {
-      let credenciais = {
-        token: req.query.token,
-        idUsuario: req.query.id_usuario
-      };
-  
-      let campanhaSelecionada = JSON.parse (req.query.campanhaSelecionada);
-      let usuariosDaCampanha = JSON.parse( req.query.usuariosDaCampanha );
+function salvarUsuariosDaCampanha(req, res) {
+  return new Promise(function (resolve, reject) {
+    let credenciais = {
+      token: req.query.token,
+      idUsuario: req.query.id_usuario
+    };
+
+    let campanhaSelecionada = JSON.parse(req.query.campanhaSelecionada);
+    let usuariosDaCampanha = JSON.parse(req.query.usuariosDaCampanha);
 
 
-      let sqlDelet = `DELETE FROM campanhas_usuarios
-      WHERE campanhas_usuarios.id_campanha =  ${campanhaSelecionada.id} ` 
-  
-      let sqlInsert = ` INSERT INTO public.campanhas_usuarios(
+    let sqlDelet = `DELETE FROM campanhas_usuarios
+      WHERE campanhas_usuarios.id_campanha =  ${campanhaSelecionada.id} `
+
+    let sqlInsert = ` INSERT INTO public.campanhas_usuarios(
                        id_campanha, id_usuario)
               VALUES  `
-      for (i = 0; i <= usuariosDaCampanha.length -1 ;  i++ ){
-        sqlInsert =  sqlInsert  + `(${campanhaSelecionada.id}, ${usuariosDaCampanha[i]._id}),`
-      }
-      sqlInsert = sqlInsert.substr(0,  sqlInsert.length -1 ) 
-      if (!usuariosDaCampanha.length) { sqlInsert = "Select now()" }
-  
-      
-      const dbconnection = require('../config/dbConnection');
-      const { Client } = require('pg');
-      const client = new Client(dbconnection);
-      client.connect();
-  
-      client.query('BEGIN').then((res1) => {
-          executaSQLComTransacao(credenciais, client, sqlDelet ).then(resDel => {
-            executaSQLComTransacao(credenciais, client, sqlInsert). then( resInsert => {
-              client.query('COMMIT')
-              .then((resp) => { resolve({ resposta: 'Campanhas do usuário atualizadas '}) })
-              .catch(err => {  reject(err) });
-            });
-            });
-          });
-      })
+    for (i = 0; i <= usuariosDaCampanha.length - 1; i++) {
+      sqlInsert = sqlInsert + `(${campanhaSelecionada.id}, ${usuariosDaCampanha[i]._id}),`
     }
-  
+    sqlInsert = sqlInsert.substr(0, sqlInsert.length - 1)
+    if (!usuariosDaCampanha.length) {
+      sqlInsert = "Select now()"
+    }
+
+
+    const dbconnection = require('../config/dbConnection');
+    const {
+      Client
+    } = require('pg');
+    const client = new Client(dbconnection);
+    client.connect();
+
+    client.query('BEGIN').then((res1) => {
+      executaSQLComTransacao(credenciais, client, sqlDelet).then(resDel => {
+        executaSQLComTransacao(credenciais, client, sqlInsert).then(resInsert => {
+          client.query('COMMIT')
+            .then((resp) => {
+              resolve({
+                resposta: 'Campanhas do usuário atualizadas '
+              })
+            })
+            .catch(err => {
+              reject(err)
+            });
+        });
+      });
+    });
+  })
+}
 
 
 
@@ -881,37 +938,52 @@ function salvarCampanhasDoUsuario(req, res){
 
 
 
-  function getUsuariosCampanhaSelecionada(req, res){
-    return new Promise(function (resolve, reject) {
-      let credenciais = {
-        token: req.query.token,
-        idUsuario: req.query.id_usuario
-      };
-      let campanhaSelecionada = JSON.parse (req.query.campanhaSelecionada);
-       
-      let sql = `SELECT * FROM campanhas_usuarios cu
+
+function getUsuariosCampanhaSelecionada(req, res) {
+  return new Promise(function (resolve, reject) {
+    let credenciais = {
+      token: req.query.token,
+      idUsuario: req.query.id_usuario
+    };
+    let campanhaSelecionada = JSON.parse(req.query.campanhaSelecionada);
+
+    let sql = `SELECT * FROM campanhas_usuarios cu
                 INNER JOIN usuarios u ON cu.id_usuario = u.id
                 INNER JOIN pessoas pe on u.id_pessoa = pe.id 
-      WHERE cu.id_campanha =  ${campanhaSelecionada.id} ` 
-          
-      executaSQL(credenciais, sql)
-        .then(res => {
-            resolve(res);
-        })
-        .catch(err => {
-          reject(err)
-        })
-        .catch(err => {
-          reject(err)
-        })
+      WHERE cu.id_campanha =  ${campanhaSelecionada.id} `
+
+    executaSQL(credenciais, sql)
+      .then(res => {
+        resolve(res);
       })
-  }
-  
+      .catch(err => {
+        reject(err)
+      })
+      .catch(err => {
+        reject(err)
+      })
+  })
+}
 
 
 
 
-module.exports = { getCampanhasDoUsuario, getCampanhas, getCampanhaAnalisar, getCampanhaResultado, getCampanhaFollowDoUsuario,
-  getEventosRelatorioCampanha, getClientesPendentes, getCampanhaTelemarketingAnalisar, getCampanhasTelemarketingAtivas,
-  getDetalheCampanha, getCampanhasUsuarioSeleconado, salvarCampanhasDoUsuario, getUsuariosCampanhaSelecionada, 
-  getQuestRespSintetica, salvarUsuariosDaCampanha, getQuestRespAnalitica }
+
+module.exports = {
+  getCampanhasDoUsuario,
+  getCampanhas,
+  getCampanhaAnalisar,
+  getCampanhaResultado,
+  getCampanhaFollowDoUsuario,
+  getEventosRelatorioCampanha,
+  getClientesPendentes,
+  getCampanhaTelemarketingAnalisar,
+  getCampanhasTelemarketingAtivas,
+  getDetalheCampanha,
+  getCampanhasUsuarioSeleconado,
+  salvarCampanhasDoUsuario,
+  getUsuariosCampanhaSelecionada,
+  getQuestRespSintetica,
+  salvarUsuariosDaCampanha,
+  getQuestRespAnalitica
+}

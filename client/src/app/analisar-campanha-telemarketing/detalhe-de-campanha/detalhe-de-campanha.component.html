@@ -1,12 +1,19 @@
-<div class="card card-cascade narrower">
+<mdb-card cascade="true" narrower="true">
+  <!--Card image-->
   <div
-    class="view view-cascade gradient-card-header blue-gradient narrower py-2 mx-4 mb-3 d-flex justify-content-center align-items-center">
+    class="view view-cascade gradient-card-header blue-gradient narrower py-2 mx-4 mb-3 d-flex justify-content-between align-items-center">
     <div>
       <button type="button" mdbBtn color="white" outline="true" rounded="true" size="sm" class="px-2" mdbWavesEffect>
         <mdb-icon fas fas icon="info" class="mt-0"></mdb-icon>
       </button>
     </div>
     <h4 class="white-text mx-3 mt-2 font-weight-bold text-uppercase">Detalhes da campanha: {{nome}}</h4>
+    <div>
+      <button mdbBtn color="white" outline="true" rounded="true" size="sm" type="button" (click)="voltar();"
+        class="px-2" mdbWavesEffect>
+        Voltar
+      </button>
+    </div>
   </div>
   <div class="px-4">
     <div class="row mt-4">
@@ -141,7 +148,7 @@
         </div>
       </div>
     </div>
-    <div class="row mt-4">
+    <div class="row mt-4 mb-5">
       <div class="col-6 col-sm-6">
         <div
           class="view view-cascade gradient-card-header blue-gradient narrower py-1 mx-2  d-flex justify-content-center align-items-center">
@@ -157,8 +164,14 @@
         <div
           class="view view-cascade gradient-card-header blue-gradient narrower py-1 mx-2  d-flex justify-content-center align-items-center">
           <h6 class="white-text font-weight-bold mt-2 ">Resumo analítico de respostas</h6>
+          <div>
+            <button mdbBtn color="white" outline="true" rounded="true" size="sm" type="button"
+              (click)="exportaAnalitico()" class="px-2" mdbWavesEffect>
+              Exportar
+            </button>
+          </div>
         </div>
-        <div style="display: block">
+        <div class="table-responsive table-resp">
           <table class="table table-hover table-responsive-md mb-0">
             <thead>
               <tr>
@@ -167,6 +180,7 @@
                 <th>Usuário</th>
                 <th>Pergunta</th>
                 <th>Alternativa</th>
+                <th>Observação</th>
               </tr>
             </thead>
             <tbody>
@@ -176,19 +190,15 @@
                 <td>{{item.usuario}}</td>
                 <td>{{item.pergunda}}</td>
                 <td>{{item.alternativa}}</td>
+                <td>{{item.observacao}}</td>
               </tr>
-              <tr *ngIf="!questRespAnalitica.length" >
-                <td colspan="5" class="text-center">Nenhuma resposta selecionada ou não existe registros para as selecionadas.</td>
+              <tr *ngIf="!questRespAnalitica.length">
+                <td colspan="5" class="text-center">Nenhuma resposta selecionada ou não existe registros para as
+                  selecionadas.</td>
               </tr>
             </tbody>
           </table>
         </div>
-      </div>
-    </div>
-    <div class="row justify-content-end">
-      <div class="md-form">
-        <button type="button" mdbBtn color="danger" class="waves-light" aria-label="Cancelar" (click)="voltar();"
-          mdbWavesEffect>Voltar</button>
       </div>
     </div>
   </div>
@@ -196,4 +206,4 @@
   </ngx-dropdown-treeview> -->
   <!-- <dropdown-treeview-select [items]="items_" [(value)]="value" (valueChange)="onSelectedChange($event)"  (filterChange)="onFilterChange($event)">
   </dropdown-treeview-select> -->
-</div>
+</mdb-card>

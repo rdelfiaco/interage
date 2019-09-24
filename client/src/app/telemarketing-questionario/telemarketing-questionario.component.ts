@@ -67,6 +67,7 @@ export class TelemarketingQuestionarioComponent implements OnInit {
   });
   questId = null;
   eventoId = null;
+  pessoaId = null;
 
   @ViewChild("dataReagendamento") datePicker: MDBDatePickerComponent;
   @ViewChild('elaborarProposta') elaborarProposta: ModalDirective;
@@ -161,7 +162,8 @@ export class TelemarketingQuestionarioComponent implements OnInit {
   ngOnChanges(changes: SimpleChanges) {
     if (changes["pessoa"] && this.pessoa) {
       this.pessoa.subscribe(pessoa => {
-        this._pessoaObject = pessoa
+        this._pessoaObject = pessoa;
+        this.pessoaId = this.pessoa.principal.id;
         this._pessoaObject.telefones = this._pessoaObject.telefones.map((telefone) => {
           return {
             ...telefone,

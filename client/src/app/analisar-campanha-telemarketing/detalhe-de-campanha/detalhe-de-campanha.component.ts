@@ -7,6 +7,7 @@ import { Usuario } from '../../login/usuario';
 import * as moment from 'moment';
 import { TreeviewItem, TreeviewConfig, DropdownTreeviewComponent, TreeviewHelper, TreeviewI18n } from 'ngx-treeview';
 import { throwIfEmpty } from 'rxjs/operators';
+import { Angular5Csv } from 'angular5-csv/Angular5-csv';
 
 @Component({
   selector: 'app-detalhe-de-campanha',
@@ -36,7 +37,7 @@ export class DetalheDeCampanhaComponent implements OnInit {
     hasFilter: true,
     hasCollapseExpand: true,
     decoupleChildFromParent: false,
-    maxHeight: 900
+    maxHeight: 700
   });
 
 
@@ -129,16 +130,15 @@ export class DetalheDeCampanhaComponent implements OnInit {
   }
 
   async onSelectedChange(a: any) {
-    console.log(a)
-    let data = [];
-    // for (let index = 0; index < a.length; index++) {
-    //   const element = a[index];
+    if (a.length) {
       const ret = await this.getRespAnalitico(a);
-    //   if (ret[0].cliente && ret[0].dt_resposta) {
-    //     data = [...data, ...ret];
-    //   }
-    // }
-    this.questRespAnalitica = ret;
+      if (ret[0].cliente && ret[0].dt_resposta) {
+        this.questRespAnalitica = ret;
+        console.log(this.questRespAnalitica[0]);
+      }
+    } else {
+      this.questRespAnalitica = [];
+    }
   }
 
   onFilterChange(a: any) {
@@ -199,5 +199,26 @@ export class DetalheDeCampanhaComponent implements OnInit {
   treeViewquestRespSintetica(): TreeviewItem[] {
     const questionario = new TreeviewItem(this.povoaQuestionario());
     return [questionario];
+  }
+
+
+  exportaAnalitico() {
+    if (this.questRespAnalitica.length) {
+      const content = this.questRespAnalitica.map(q => {
+        return {
+          cliente: q.cliente,
+          data: this.transformData(q.dt_resposta),
+          usuario: q.usuario,
+          pergunda: q.pergunda,
+          alternativa: q.alternativa,
+          observacao: q.observacao,
+        };
+      });
+      new Angular5Csv(content, 'data-table', {
+        fieldSeparator: ';',
+        headers: ['Cliente', 'Data Resposta', 'Usuário', 'Pergunta', 'Alternativa', 'Observação'],
+        type: 'text/csv;charset=utf-8;'
+      });
+    }
   }
 }

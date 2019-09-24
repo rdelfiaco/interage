@@ -46,7 +46,7 @@
       <mdb-tab heading="NETWORKING" [disabled]="!(pessoa | async)">
         <div class="row">
           <div class="col-12">
-            <app-networking [pessoa]="pessoa" (refresh)="refreshDad()" ></app-networking>
+            <app-networking [pessoa]="pessoa" (refresh)="refreshDad()"></app-networking>
           </div>
         </div>
       </mdb-tab>
@@ -54,7 +54,7 @@
       <mdb-tab heading="MARKETING" [disabled]="!(pessoa | async)">
         <div class="row">
           <div class="col-12">
-            <app-marketing [pessoa]="pessoa" (refresh)="refreshDad()" ></app-marketing>
+            <app-marketing [pessoa]="pessoa" (refresh)="refreshDad()"></app-marketing>
           </div>
         </div>
       </mdb-tab>
@@ -68,12 +68,20 @@
       </mdb-tab>
       <!-- Panel 8 -->
       <mdb-tab heading="Auditoria" [disabled]="!this.checkPermissaoRecurso.usuarioLocadoAcessaRecurso(36)">
-          <div class="row">
-            <div class="col-12">
-              <app-auditoria [pessoa]="pessoa" (refresh)="refreshDad()" ></app-auditoria>
-            </div>
+        <div class="row">
+          <div class="col-12">
+            <app-auditoria [pessoa]="pessoa" (refresh)="refreshDad()"></app-auditoria>
           </div>
-        </mdb-tab>
+        </div>
+      </mdb-tab>
+      <!-- Panel 9 -->
+    <mdb-tab heading="Questionários" [disabled]="!(pessoa | async)">
+        <div class="row">
+          <div class="col-12">
+            <app-questionarios-pessoa [pessoa]="pessoa" (refresh)="refreshDad()"></app-questionarios-pessoa>
+          </div>
+        </div>
+      </mdb-tab>
     </mdb-tabset>
   </div>
 </div>

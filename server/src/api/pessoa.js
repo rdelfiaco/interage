@@ -1148,6 +1148,53 @@ function getTratamentoPessoaFisica(req, res) {
   })
 }
 
+function getQuestariosPessoaId(req, res) {
+  return new Promise(function (resolve, reject) {
+    let credenciais = {
+      token: req.query.token,
+      idUsuario: req.query.id_usuario
+    };
+
+    let sql = `SELECT q.id, q.nome, q.status, count(perg.*) as qtde_perguntas FROM questionarios q
+                left join quest_perguntas perg on q.id = perg.id_questionario
+                group by q.id, q.nome, q.status`
+
+    let sql = `
+        select * from view_quest_resp_sintetica
+          where id_receptor = ${req.query.idPessoa}
+    `
+    executaSQL(credenciais, sql)
+      .then(res => {
+        resolve(res);
+      })
+      .catch(err => {
+        reject(err)
+      })
+  })
+}
+
+function getQuestRespAnaliticaPessoaId(req, res) {
+  return new Promise(function (resolve, reject) {
+    let credenciais = {
+      token: req.query.token,
+      idUsuario: req.query.id_usuario
+    };
+
+    let sql = `
+        select * from view_quest_resp_analitica
+          where id_receptor in (${req.query.idPessoa})`
+    console.log('---------'+sql);
+    executaSQL(credenciais, sql)
+      .then(res => {
+        resolve(res);
+      })
+      .catch(err => {
+        reject(err)
+      })
+  })
+}
+
+
 module.exports = {
   getPessoa,
   salvarPessoa,
@@ -1164,5 +1211,6 @@ module.exports = {
   getPessoaPorCPFCNPJ,
   getTipoRelacionamentos,
   crudRelacionamento,
-  
+  getQuestariosPessoaId,
+  getQuestRespAnaliticaPessoaId,
 }

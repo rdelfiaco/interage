@@ -75,21 +75,16 @@ export class ExportarComponent implements OnInit {
       return { value: sql.id, label: sql.nome, sql:sql.sql }
     })
     this.sqlSelectValue = this.sqlSelect[0].value;
-
-    
-  };
+  }
 
   async executarSQL(){
-
     try {
-      
-
       let sql_ = this.sqlSelect.filter(registro => {
         if (registro.value == this.sqlSelectValue) {
           return registro.sql
         }
-      })
-      sql_ = sql_[0].sql
+      });
+      sql_ = sql_[0].sql;
       let getResultadoSQLs = await this.connectHTTP.callService({
         service: 'getResultadoSQLs',
         paramsService: {
@@ -100,22 +95,14 @@ export class ExportarComponent implements OnInit {
           sql: sql_
         }
       });
-
       new Angular5Csv(getResultadoSQLs.resposta, 'data-table', {
         fieldSeparator: ';',
         headers: Object.keys(getResultadoSQLs.resposta[0]),
         type: 'text/csv;charset=utf-8;'
       });
-
-    }
-    catch (e) {
+    } catch (e) {
       this.toastrService.error('Erro ao executar a SQL : ', e.error);
       this.tableData = [];
     }
-
-
   }
-
-  
-
 }

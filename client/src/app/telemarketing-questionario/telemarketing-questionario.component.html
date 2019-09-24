@@ -126,7 +126,7 @@
       </button>
     </div>
     <div class="modal-content">
-      <app-responder-questionario *ngIf="(questId && eventoId)" [questId]="questId" [eventoId]="eventoId" (callback)="encerrouQuest($event)" ></app-responder-questionario>
+      <app-responder-questionario *ngIf="(questId && eventoId && pessoaId)" [questId]="questId" receptorId="pessoaId" [eventoId]="eventoId" (callback)="encerrouQuest($event)" ></app-responder-questionario>
     </div>
   </div>
 </div>
