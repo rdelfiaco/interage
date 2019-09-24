@@ -51,14 +51,14 @@ export class DropdownTreeviewSelectComponent implements OnChanges {
     }
 
     private updateSelectedItem() {
-        if (!isNil(this.items)) {
-            const selectedItem = TreeviewHelper.findItemInList(this.items, this.value);
-            if (selectedItem) {
-                this.selectItem(selectedItem);
-            } else {
-                this.selectAll();
-            }
-        }
+        // if (!isNil(this.items)) {
+        //     const selectedItem = TreeviewHelper.findItemInList(this.items, this.value);
+        //     if (selectedItem) {
+        //         this.selectItem(selectedItem);
+        //     } else {
+        //         this.selectAll();
+        //     }
+        // }
     }
 
     private selectItem(item: TreeviewItem) {

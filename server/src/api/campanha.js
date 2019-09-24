@@ -670,10 +670,11 @@ function getQuestRespAnalitica(req, res){
       token: req.query.token,
       idUsuario: req.query.id_usuario
     };
-                                         
+       
+    console.log(req.res.idAlternativa)
     let sql = `
         select * from view_quest_resp_analitica
-          where id_alternativa = ${req.query.idAlternativa}
+          where id_alternativa in ( ${req.query.idAlternativa} )
     `
     executaSQL(credenciais, sql)
       .then(res => {

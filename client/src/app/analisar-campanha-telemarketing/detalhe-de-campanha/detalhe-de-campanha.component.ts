@@ -35,7 +35,7 @@ export class DetalheDeCampanhaComponent implements OnInit {
     hasAllCheckBox: true,
     hasFilter: true,
     hasCollapseExpand: true,
-    decoupleChildFromParent: true,
+    decoupleChildFromParent: false,
     maxHeight: 900
   });
 
@@ -129,15 +129,16 @@ export class DetalheDeCampanhaComponent implements OnInit {
   }
 
   async onSelectedChange(a: any) {
+    console.log(a)
     let data = [];
-    for (let index = 0; index < a.length; index++) {
-      const element = a[index];
-      const ret = await this.getRespAnalitico(element);
-      if (ret[0].cliente && ret[0].dt_resposta) {
-        data = [...data, ...ret];
-      }
-    }
-    this.questRespAnalitica = data;
+    // for (let index = 0; index < a.length; index++) {
+    //   const element = a[index];
+      const ret = await this.getRespAnalitico(a);
+    //   if (ret[0].cliente && ret[0].dt_resposta) {
+    //     data = [...data, ...ret];
+    //   }
+    // }
+    this.questRespAnalitica = ret;
   }
 
   onFilterChange(a: any) {
@@ -152,7 +153,7 @@ export class DetalheDeCampanhaComponent implements OnInit {
         // text: `${c.alternativa} = ${c.tot_resp}` + (c.proxima_pergunta ? ' -> Próxima pergunta: ' + c.proxima_pergunta : ''),
         text: `${c.alternativa}` + (c.proxima_pergunta ? ' -> Próx. Perg: ' + c.proxima_pergunta : ''),
         value: c.id_alternativa,
-        collapsed: false,
+        collapsed: true,
         checked: false,
         children: []
       };
