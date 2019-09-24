@@ -33,6 +33,7 @@ class Perg {
 export class ResponderQuestionarioComponent implements OnInit, OnDestroy {
   @Input() questId = null;
   @Input() eventoId = null;
+  @Input() receptorId = null;
   @Output() callback = new EventEmitter();
   questionario: any = {};
   respondendo = false;
@@ -89,7 +90,7 @@ export class ResponderQuestionarioComponent implements OnInit, OnDestroy {
     this.limpaPergunta();
     this.multiEscolha = this.perguntaAtual.tipo_pergunta == 2;
     this.setaPergunta(this.perguntaAtual.nome);
-    if (this.perguntaAtual.tipo_pergunta == 3) {
+    if (this.perguntaAtual.tipo_pergunta === 3) {
       this.criaRespostaNormal();
     }
     else if (this.perguntaAtual.tipo_pergunta == 1 || this.perguntaAtual.tipo_pergunta == 2) {
@@ -193,6 +194,28 @@ export class ResponderQuestionarioComponent implements OnInit, OnDestroy {
     reposta.appendChild(divPai);
   }
 
+  criaRespostaTipoData(exige_observacao = false) {
+    let divPai = document.createElement('div');
+    divPai.className = 'col-lg-12 quest-observacao mb-3';
+
+    let input_date = document.createElement('input');
+    input_date.id = "alternativa_data";
+    input_date.type = "date";
+    input_date.className = 'quest-response-input';
+    input_date.onkeypress = (event) => {
+      this.respostaEscrita = event.target['value'];
+    };
+    if (exige_observacao) {
+      let span = document.createElement('label');
+      span.textContent = 'Observação (Campo Obrigatório)';
+      span.className = 'ml-0 mb-3';
+      divPai.appendChild(span);
+    }
+    const reposta = document.querySelector(".quest-container");
+    divPai.appendChild(input_date);
+    reposta.appendChild(divPai);
+  }
+
   getAlternativa(id) {
     return this.perguntaAtual.alternativas.find(alt => {
       return alt.id === parseInt(id);
@@ -258,7 +281,7 @@ export class ResponderQuestionarioComponent implements OnInit, OnDestroy {
       let objResp = {
         id_alternativa: a ? a.id : null,
         id_usuario: self.usuarioLogado.id,
-        id_receptor: null,
+        id_receptor: this.receptorId,
         observacao: (self.respostaEscrita || ''),
         id_evento: self.eventoId,
         id_pergunta: self.perguntaAtual.id

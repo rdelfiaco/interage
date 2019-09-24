@@ -16,8 +16,8 @@
     <div class="row">
       <div class="col-lg-12">
         <div class="md-form">
-          <input mdbInputDirective [ngModelOptions]="{standalone: true}" min="5" type="text" id="nome" class="form-control"
-            [(ngModel)]='tableData.nome' [value]="tableData.nome">
+          <input mdbInputDirective [ngModelOptions]="{standalone: true}" min="5" type="text" id="nome"
+            class="form-control" [(ngModel)]='tableData.nome' [value]="tableData.nome">
           <label for="nome">Nome do questionário</label>
         </div>
       </div>
@@ -61,10 +61,15 @@
               </a>
             </th>
             <th class="th-lg text-center" width="20%">
-              <a (click)="sortBy('multipla_escolha')">Multipla Escolha
+              <a (click)="sortBy('tipo_pergunta')">Tipo de Pergunta
                 <mdb-icon fas icon="sort" class="ml-1"></mdb-icon>
               </a>
             </th>
+            <!-- <th class="th-lg text-center" width="20%">
+              <a (click)="sortBy('multipla_escolha')">Multipla Escolha
+                <mdb-icon fas icon="sort" class="ml-1"></mdb-icon>
+              </a>
+            </th> -->
             <th class="th-lg text-center" width="10%">Ações
             </th>
           </tr>
@@ -77,9 +82,12 @@
             <td class="text-center">
               <mdb-checkbox [checked]="row.status" (change)="updateStatusPergunta(row.id, row.status)"></mdb-checkbox>
             </td>
-            <td class="text-center">
+            <!-- <td class="text-center">
               <mdb-checkbox [checked]="row.multipla_escolha"
                 (change)="updateMultiEscolhaPergunta(row.id, row.multipla_escolha)"></mdb-checkbox>
+            </td> -->
+            <td class="text-center">
+              <span>{{getDecricaoTipo(row.tipo_pergunta)}}</span>
             </td>
             <td class="text-center">
               <div>
@@ -113,19 +121,25 @@
     <div class="modal-content">
       <form class="p-4">
         <div class="row">
-          <div class="col-lg-12">
+          <div class="col-lg-8">
             <div class="md-form">
-              <input (input)="novaPergunta.nome = $event.target.value" mdbInputDirective min="5"
-                type="text" id="nome" class="form-control">
+              <input (input)="novaPergunta.nome = $event.target.value" mdbInputDirective min="5" type="text" id="nome"
+                class="form-control">
               <label for="nome">Nome</label>
             </div>
+          </div>
+          <div class="col-lg-4" style="margin-top: -16px;">
+            <label for="nome">Tipo de pergunta</label>
+            <mdb-select id="tipoPergunta" [ngModelOptions]="{standalone: true}" placeholder="Escolha o tipo de pergunta"
+            [(ngModel)]="novaPergunta.tipo_pergunta" (selected)="getSelectedValue($event)" [options]="tiposPergunta"
+            [multiple]="false" placeholder="Tipo de pergunta"></mdb-select>
           </div>
         </div>
         <div class="row">
           <div class="col-lg-8">
             <div class="md-form">
-              <input (input)="novaPergunta.sequencia = $event.target.value" mdbInputDirective
-                min="1" type="number" id="sequencia" class="form-control">
+              <input (input)="novaPergunta.sequencia = $event.target.value" mdbInputDirective min="1" type="number"
+                id="sequencia" class="form-control">
               <label for="sequencia">Sequencia</label>
             </div>
           </div>
@@ -137,7 +151,7 @@
           </div>
           <div class="col-lg-2">
             <div class="md-form">
-              <mdb-checkbox (change)="novaPergunta.multipla_escolha = $event.checked" >Multipla Escolha</mdb-checkbox>
+              <mdb-checkbox (change)="novaPergunta.multipla_escolha = $event.checked">Multipla Escolha</mdb-checkbox>
             </div>
           </div>
         </div>

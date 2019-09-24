@@ -20,17 +20,37 @@ export class PerguntaEditComponent implements OnInit {
 
   tableData = {
     id: '',
-    alternativas: [{}],
+    alternativas: [],
     id_questionario: '',
     nome:'',
     status: false,
     sequencia_pergunta: '',
     descricao_pergunta: '',
-    multipla_escolha: ''
+    multipla_escolha: '',
+    tipo_pergunta: null
   };
   pergId = null;
   @ViewChild('alternativaadd') alternativaadd: ModalDirective;
   sorted = false;
+
+  tiposPergunta = [
+    {
+      value: 1,
+      label: 'Objetiva'
+    },
+    {
+      value: 2,
+      label: 'Múltipla-escolha'
+    },
+    {
+      value: 3,
+      label: 'Discursiva'
+    },
+    {
+      value: 4,
+      label: 'Data'
+    },
+  ];
 
   constructor(
     private router: Router,
@@ -56,6 +76,7 @@ export class PerguntaEditComponent implements OnInit {
         service: 'getPerguntaById',
         paramsService: { id: this.pergId }
       }) as any;
+      debugger
       let respPergQuest = await this.connectHTTP.callService({
         service: 'getAlternativasByIdPerguntas',
         paramsService: { id: this.pergId }
@@ -65,8 +86,7 @@ export class PerguntaEditComponent implements OnInit {
       }
       if (respPergQuest.error) {
         return this.toastrService.error(respPergQuest.error);
-      }
-      ;
+      };
       let data = respQuest.resposta[0];
       if (respPergQuest.resposta[0] && respPergQuest.resposta[0].id)
         data.alternativas = respPergQuest.resposta;
@@ -87,6 +107,7 @@ export class PerguntaEditComponent implements OnInit {
 
 
   async updatePergunta() {
+    debugger
     try {
       let resp = await this.connectHTTP.callService({
         service: 'updatePergunta',
@@ -96,6 +117,7 @@ export class PerguntaEditComponent implements OnInit {
             nome: this.tableData.nome,
             sequencia_pergunta: this.tableData.sequencia_pergunta,
             descricao_pergunta: this.tableData.descricao_pergunta,
+            tipo_pergunta: this.tableData.tipo_pergunta,
           })
         }
       }) as any;
@@ -237,5 +259,11 @@ export class PerguntaEditComponent implements OnInit {
     });
 
     this.sorted = !this.sorted;
+  }
+
+
+  getSelectedValue(data) {
+    this.tableData.tipo_pergunta = data.value;
+    return data;
   }
 }

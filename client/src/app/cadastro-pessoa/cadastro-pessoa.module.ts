@@ -12,6 +12,7 @@ import { NetworkingComponent } from './networking/networking.component';
 import { PesquisaClienteModule } from './../pesquisa-cliente/pesquisa-cliente.module';
 import { MarketingComponent } from './marketing/marketing.component';
 import { AuditoriaComponent } from './auditoria/auditoria.component';
+import { QuestionariosPessoaComponent } from './questionarios-pessoa/questionarios-pessoa.component';
 
 @NgModule({
   imports: [
@@ -31,7 +32,8 @@ import { AuditoriaComponent } from './auditoria/auditoria.component';
     EnderecosComponent,
     NetworkingComponent,
     MarketingComponent,
-    AuditoriaComponent,],
+    AuditoriaComponent,
+    QuestionariosPessoaComponent,],
   exports: [
     CadastroPessoaComponent,
     PrincipalComponent,

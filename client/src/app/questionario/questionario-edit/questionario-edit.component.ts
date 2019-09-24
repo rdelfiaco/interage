@@ -19,9 +19,28 @@ export class QuestionarioEditComponent implements OnInit {
     status: true,
     sequencia: '',
     multipla_escolha: false,
-    descricao: ''
+    descricao: '',
+    tipo_pergunta: 1
   };
   private sorted = false;
+  tiposPergunta = [
+    {
+      value: 1,
+      label: 'Objetiva'
+    },
+    {
+      value: 2,
+      label: 'Múltipla-escolha'
+    },
+    {
+      value: 3,
+      label: 'Discursiva'
+    },
+    {
+      value: 4,
+      label: 'Data'
+    },
+  ];
 
   @ViewChild('perguntaadd') modalperguntaadd: ModalDirective;
 
@@ -36,6 +55,12 @@ export class QuestionarioEditComponent implements OnInit {
     this.route.params.subscribe(res => {
       this.idQuest = res.id;
     });
+  }
+
+  getDecricaoTipo(tipo) {
+    if (!tipo) return '-';
+    const res = this.tiposPergunta.filter(t => t.value === tipo)[0];
+    return res.label || '-';
   }
 
   ngOnInit() {
@@ -192,12 +217,14 @@ export class QuestionarioEditComponent implements OnInit {
 
 
   async salvarPergunta() {
+    debugger
     try {
       let questionarioId = this.idQuest;
       let resp = await this.connectHTTP.callService({
         service: 'addPergunta',
         paramsService: {
-          data: JSON.stringify({ ...this.novaPergunta, questionarioId })}
+          data: JSON.stringify({ ...this.novaPergunta, questionarioId })
+        }
         }) as any;
       if (resp.error) {
         this.toastrService.error(resp.error);
@@ -210,5 +237,10 @@ export class QuestionarioEditComponent implements OnInit {
     catch (e) {
       this.toastrService.error('Erro ao ler as permissoes 18', e);
     }
+  }
+
+  getSelectedValue(data) {
+    this.novaPergunta.tipo_pergunta = data.value;
+    return data;
   }
 }
