@@ -93,6 +93,9 @@ export class ResponderQuestionarioComponent implements OnInit, OnDestroy {
     if (this.perguntaAtual.tipo_pergunta === 3) {
       this.criaRespostaNormal();
     }
+    else if (this.perguntaAtual.tipo_pergunta === 4) {
+      this.criaRespostaTipoData();
+    }
     else if (this.perguntaAtual.tipo_pergunta == 1 || this.perguntaAtual.tipo_pergunta == 2) {
       this.perguntaAtual.alternativas.forEach(alt => {
         let divPai = document.createElement('div');
