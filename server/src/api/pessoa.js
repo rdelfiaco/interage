@@ -1155,12 +1155,8 @@ function getQuestariosPessoaId(req, res) {
       idUsuario: req.query.id_usuario
     };
 
-    let sql = `SELECT q.id, q.nome, q.status, count(perg.*) as qtde_perguntas FROM questionarios q
-                left join quest_perguntas perg on q.id = perg.id_questionario
-                group by q.id, q.nome, q.status`
-
     let sql = `
-        select * from view_quest_resp_sintetica
+        select * from view_quest_resp_analitica
           where id_receptor = ${req.query.idPessoa}
     `
     executaSQL(credenciais, sql)

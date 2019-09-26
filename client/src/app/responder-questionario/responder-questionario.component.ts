@@ -284,7 +284,7 @@ export class ResponderQuestionarioComponent implements OnInit, OnDestroy {
       let objResp = {
         id_alternativa: a ? a.id : null,
         id_usuario: self.usuarioLogado.id,
-        id_receptor: this.receptorId,
+        id_receptor: self.receptorId,
         observacao: (self.respostaEscrita || ''),
         id_evento: self.eventoId,
         id_pergunta: self.perguntaAtual.id

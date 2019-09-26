@@ -1,53 +1,57 @@
 <div class="row mt-5">
-    <div class="col-6 col-sm-6">
-      <div
-        class="view view-cascade gradient-card-header blue-gradient narrower py-1 mx-2  d-flex justify-content-center align-items-center">
-        <h6 class="white-text font-weight-bold mt-2 ">Questionários respondido</h6>
-      </div>
-      <div style="display: block">
+  <div class="col-12 col-sm-12">
+    <div
+      class="view view-cascade gradient-card-header blue-gradient narrower py-1 mx-2  d-flex justify-content-center align-items-center">
+      <h6 class="white-text font-weight-bold mt-2 ">Questionários respondido</h6>
+    </div>
+    <div style="display: block">
+      <table class="table table-hover table-responsive-md mb-0">
+        <thead>
+          <tr>
+            <th>Nome questionário</th>
+            <th>Data </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngIf="questionarios.length" #list *ngFor="let item of questionarios">
+            <td>{{item.nome_questionario}}</td>
+            <td>{{item.dt_resposta}}</td>
+          </tr>
+          <tr *ngIf="!questionarios.length">
+            <td colspan="2">Nenhum questionário foi respondido.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <!-- <div class="col-6 col-sm-6">
+    <div
+      class="view view-cascade gradient-card-header blue-gradient narrower py-1 mx-2  d-flex justify-content-center align-items-center">
+      <h6 class="white-text font-weight-bold mt-2 ">Questionário selecionado - {{questionarioSelecionado}}</h6>
+      <div class="table-responsive table-resp">
         <table class="table table-hover table-responsive-md mb-0">
           <thead>
             <tr>
-              <th>Nome questionário</th>
-              <th>Data </th>
+              <th>Pergunta</th>
+              <th>Data Resposta</th>
+              <th>Alternativa</th>
+              <th>Observação</th>
             </tr>
           </thead>
           <tbody>
-            <tr #list *ngFor="let item of questionarios">
-              <td>{{item.nome_questionario}}</td>
-              <td>{{item.data_resposta}}</td>
+            <tr *ngFor="let item of questRespAnalitica">
+              <td>{{item.pergunda}}</td>
+              <td>{{transformData(item.dt_resposta)}}</td>
+              <td>{{item.alternativa}}</td>
+              <td>{{item.observacao}}</td>
+            </tr>
+            <tr *ngIf="!questRespAnalitica.length">
+              <td colspan="5" class="text-center">Nenhuma resposta selecionada ou não existe registros para as
+                selecionadas.</td>
             </tr>
           </tbody>
         </table>
       </div>
     </div>
-    <div class="col-6 col-sm-6">
-      <div
-        class="view view-cascade gradient-card-header blue-gradient narrower py-1 mx-2  d-flex justify-content-center align-items-center">
-        <h6 class="white-text font-weight-bold mt-2 ">Questionário selecionado - {{questionarioSelecionado}}</h6>
-        <div class="table-responsive table-resp">
-            <table class="table table-hover table-responsive-md mb-0">
-              <thead>
-                <tr>
-                  <th>Pergunta</th>
-                  <th>Data Resposta</th>
-                  <th>Alternativa</th>
-                  <th>Observação</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr *ngFor="let item of questRespAnalitica">
-                  <td>{{item.pergunda}}</td>
-                  <td>{{transformData(item.dt_resposta)}}</td>
-                  <td>{{item.alternativa}}</td>
-                  <td>{{item.observacao}}</td>
-                </tr>
-                <tr *ngIf="!questRespAnalitica.length">
-                  <td colspan="5" class="text-center">Nenhuma resposta selecionada ou não existe registros para as
-                    selecionadas.</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-    </div>
-  </div>
+  </div> -->
+</div>

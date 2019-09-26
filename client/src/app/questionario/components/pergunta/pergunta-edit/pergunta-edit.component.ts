@@ -76,7 +76,6 @@ export class PerguntaEditComponent implements OnInit {
         service: 'getPerguntaById',
         paramsService: { id: this.pergId }
       }) as any;
-      debugger
       let respPergQuest = await this.connectHTTP.callService({
         service: 'getAlternativasByIdPerguntas',
         paramsService: { id: this.pergId }
@@ -106,8 +105,7 @@ export class PerguntaEditComponent implements OnInit {
   }
 
 
-  async updatePergunta() {
-    debugger
+  async updatePergunta() {    
     try {
       let resp = await this.connectHTTP.callService({
         service: 'updatePergunta',

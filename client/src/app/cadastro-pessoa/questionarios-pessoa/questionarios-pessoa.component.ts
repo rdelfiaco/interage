@@ -12,13 +12,22 @@ export class QuestionariosPessoaComponent implements OnInit {
   @Input() pessoa: Observable<string[]>;
   questRespAnalitica = [];
   questionarioSelecionado = '';
+  _pessoaObject
   constructor(
     private connectHTTP: ConnectHTTP,
   ) { }
 
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['pessoa'] && this.pessoa) {
+      this.pessoa.subscribe(pessoa => {
+        this._pessoaObject = pessoa;
+        this.getQuestariosPessoaId(pessoa['principal']);
+      });
+    }
+  }
+
   ngOnInit() {
-    debugger
-    this.getQuestariosPessoaId();
   }
 
   async getQuestRespAnaliticaPessoaId(idPessoa) {
@@ -26,15 +35,17 @@ export class QuestionariosPessoaComponent implements OnInit {
       service: 'getQuestRespAnaliticaPessoaId',
       paramsService: { idPessoa }
     }) as any;
-    return retorno.resposta;
+    if (retorno.resposta.length && retorno.resposta[0].id) {
+      this.questRespAnalitica = retorno.resposta;
+    }
   }
 
-  async getQuestariosPessoaId() {
+  async getQuestariosPessoaId(pessoa: any) {
+    // return;
     debugger
-    return;
     const retorno = await this.connectHTTP.callService({
       service: 'getQuestariosPessoaId',
-      paramsService: { idPessoa: this.pessoa['id'] }
+      paramsService: { idPessoa: pessoa.id }
     }) as any;
     return retorno.resposta;
   }

@@ -163,7 +163,7 @@ export class TelemarketingQuestionarioComponent implements OnInit {
     if (changes["pessoa"] && this.pessoa) {
       this.pessoa.subscribe(pessoa => {
         this._pessoaObject = pessoa;
-        this.pessoaId = this.pessoa.principal.id;
+        this.pessoaId = pessoa.principal.id;
         this._pessoaObject.telefones = this._pessoaObject.telefones.map((telefone) => {
           return {
             ...telefone,
