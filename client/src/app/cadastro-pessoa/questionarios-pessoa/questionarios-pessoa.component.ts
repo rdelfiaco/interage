@@ -1,6 +1,7 @@
 import { Component, OnInit, Output, Input, EventEmitter, SimpleChanges } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ConnectHTTP } from '../../shared/services/connectHTTP';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-questionarios-pessoa',
@@ -10,9 +11,13 @@ import { ConnectHTTP } from '../../shared/services/connectHTTP';
 export class QuestionariosPessoaComponent implements OnInit {
   @Output() refresh = new EventEmitter();
   @Input() pessoa: Observable<string[]>;
-  questRespAnalitica = [];
-  questionarioSelecionado = '';
-  _pessoaObject
+  questRespAnalitica: any = [];
+  questionarioSelecionado = {
+    id: null,
+    nome: '',
+    data: '',
+    respostas: []
+  };
   constructor(
     private connectHTTP: ConnectHTTP,
   ) { }
@@ -21,7 +26,6 @@ export class QuestionariosPessoaComponent implements OnInit {
   ngOnChanges(changes: SimpleChanges) {
     if (changes['pessoa'] && this.pessoa) {
       this.pessoa.subscribe(pessoa => {
-        this._pessoaObject = pessoa;
         this.getQuestariosPessoaId(pessoa['principal']);
       });
     }
@@ -30,24 +34,35 @@ export class QuestionariosPessoaComponent implements OnInit {
   ngOnInit() {
   }
 
-  async getQuestRespAnaliticaPessoaId(idPessoa) {
-    const retorno = await this.connectHTTP.callService({
-      service: 'getQuestRespAnaliticaPessoaId',
-      paramsService: { idPessoa }
-    }) as any;
-    if (retorno.resposta.length && retorno.resposta[0].id) {
-      this.questRespAnalitica = retorno.resposta;
-    }
+  selectQuest(item) {
+    this.questionarioSelecionado = item;
   }
 
   async getQuestariosPessoaId(pessoa: any) {
-    // return;
     const retorno = await this.connectHTTP.callService({
       service: 'getQuestariosPessoaId',
       paramsService: { idPessoa: pessoa.id }
     }) as any;
     if (retorno.resposta.length && retorno.resposta[0].id) {
-      this.questRespAnalitica = retorno.resposta;
+      retorno.resposta.forEach(resp => {
+        if (!this.questRespAnalitica.some(q => q.id === resp.id_questionario)) {
+          this.questRespAnalitica.push({
+            id: resp.id_questionario,
+            nome: resp.nome_questionario,
+            data: moment(resp.dt_resposta).format('DD/MM/YYYY'),
+            respostas: []
+          });
+        }
+        this.questRespAnalitica.forEach(quest => {
+          if (resp.id_questionario === quest.id) {
+            quest.respostas.push({
+              nome: resp.pergunda,
+              alternativa: resp.alternativa,
+              observacao: resp.observacao
+            });
+          }
+        });
+      });
     }
   }
 }
