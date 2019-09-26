@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, Input, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, Input, EventEmitter, SimpleChanges } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ConnectHTTP } from '../../shared/services/connectHTTP';
 
@@ -42,11 +42,13 @@ export class QuestionariosPessoaComponent implements OnInit {
 
   async getQuestariosPessoaId(pessoa: any) {
     // return;
-    debugger
     const retorno = await this.connectHTTP.callService({
       service: 'getQuestariosPessoaId',
       paramsService: { idPessoa: pessoa.id }
     }) as any;
-    return retorno.resposta;
+    debugger
+    if (retorno.resposta.length && retorno.resposta[0].id) {
+      this.questRespAnalitica = retorno.resposta;
+    }
   }
 }
