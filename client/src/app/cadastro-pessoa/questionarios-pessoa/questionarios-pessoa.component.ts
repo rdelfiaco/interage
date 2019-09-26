@@ -46,7 +46,6 @@ export class QuestionariosPessoaComponent implements OnInit {
       service: 'getQuestariosPessoaId',
       paramsService: { idPessoa: pessoa.id }
     }) as any;
-    debugger
     if (retorno.resposta.length && retorno.resposta[0].id) {
       this.questRespAnalitica = retorno.resposta;
     }
