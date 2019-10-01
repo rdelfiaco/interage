@@ -86,7 +86,6 @@ export class DetalheDeCampanhaComponent implements OnInit {
         dtFinal: this.dataFinal
       }
     }) as any;
-    console.log(retorno.resposta)
     this.detalheCampanhaStatus = retorno.resposta.detalheCampanhaStatus;
     this.detalheCampanhaStatusConsultorTodos = retorno.resposta.detalheCampanhaStatusConsultor;
     this.detalheCampanhaConsultor = retorno.resposta.detalheCampanhaConsultor;
@@ -130,11 +129,11 @@ export class DetalheDeCampanhaComponent implements OnInit {
   }
 
   async onSelectedChange(a: any) {
+    console.log('123', a)
     if (a.length) {
       const ret = await this.getRespAnalitico(a);
       if (ret[0].cliente && ret[0].dt_resposta) {
         this.questRespAnalitica = ret;
-        console.log(this.questRespAnalitica[0]);
       }
     } else {
       this.questRespAnalitica = [];
@@ -151,7 +150,7 @@ export class DetalheDeCampanhaComponent implements OnInit {
     }).map((c: any) => {
       return {
         // text: `${c.alternativa} = ${c.tot_resp}` + (c.proxima_pergunta ? ' -> Próxima pergunta: ' + c.proxima_pergunta : ''),
-        text: `${c.alternativa}` + (c.proxima_pergunta ? ' -> Próx. Perg: ' + c.proxima_pergunta : ''),
+        text: `${c.alternativa} = ${c.tot_resp} ` + (c.proxima_pergunta ? ' -> Próx. Perg: ' + c.proxima_pergunta : ''),
         value: c.id_alternativa,
         collapsed: true,
         checked: false,
@@ -173,7 +172,6 @@ export class DetalheDeCampanhaComponent implements OnInit {
         perguntas.push(item);
       }
     });
-    console.log('per.', perguntas);
     return perguntas.map((item) => {
       return {
         text: `${item.pergunta}  ${item.tipo_pergunta > 2 ? ' = ' + item.tot_resp : ''}`,
@@ -217,7 +215,7 @@ export class DetalheDeCampanhaComponent implements OnInit {
       new Angular5Csv(content, 'data-table', {
         fieldSeparator: ';',
         headers: ['Cliente', 'Data Resposta', 'Usuário', 'Pergunta', 'Alternativa', 'Observação'],
-        type: 'text/csv;charset=utf-8;'
+        // type: 'text/csv;charset=utf-8;'
       });
     }
   }

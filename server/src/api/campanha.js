@@ -709,7 +709,7 @@ function getQuestRespAnalitica(req, res) {
 
     let sql = `
         select * from view_quest_resp_analitica
-          where id_alternativa in (${req.query.idAlternativa}) OR id_campanha in (${req.query.idAlternativa})`
+          where id_alternativa in (${req.query.idAlternativa}) or id_pergunta in (${req.query.idAlternativa}) `
     console.log('---------'+sql);
     executaSQL(credenciais, sql)
       .then(res => {
@@ -931,13 +931,6 @@ function salvarUsuariosDaCampanha(req, res) {
     });
   })
 }
-
-
-
-
-
-
-
 
 function getUsuariosCampanhaSelecionada(req, res) {
   return new Promise(function (resolve, reject) {
