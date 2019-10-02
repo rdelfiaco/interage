@@ -18,8 +18,8 @@ export class DetalheDeCampanhaComponent implements OnInit {
 
   idCampanha: number;
   nome: string;
-  dataInicial: string;
-  dataFinal: string;
+  dataInicial: any;
+  dataFinal: any;
   usuarioLogado: Usuario;
   detalheCampanhaStatus: Array<any> = [];
   detalheCampanhaStatusConsultor: Array<any> = [];
@@ -113,6 +113,12 @@ export class DetalheDeCampanhaComponent implements OnInit {
     return moment(dt_resposta).format('DD/MM/YYYY');
   }
 
+  getObservacao(i) {
+    if (i.tipo_pergunta === 4) {
+      return this.transformData(i.observacao);
+    }
+  }
+
   get getTitleAnalitico() {
     if (this.questRespAnalitica.length) {
       return ' - ' + this.questRespAnalitica[0]['pergunda'] + this.questRespAnalitica[0]['alternativa'];
@@ -125,7 +131,21 @@ export class DetalheDeCampanhaComponent implements OnInit {
       service: 'getQuestRespAnalitica',
       paramsService: { idAlternativa }
     }) as any;
-    return retorno.resposta;
+    debugger
+    return retorno.resposta.filter(resp => {
+      const respTime = new Date(resp.dt_resposta).getTime();
+      const dt_inicial = moment(
+        this.dataInicial.split('/')[2] + '/' +
+        this.dataInicial.split('/')[1] + '/' +
+        this.dataInicial.split('/')[0]
+      ).startOf('day').toDate().getTime();
+      const dt_final = moment(
+        this.dataFinal.split('/')[2] + '/' +
+        this.dataFinal.split('/')[1] + '/' +
+        this.dataFinal.split('/')[0]
+      ).endOf('day').toDate().getTime();
+      return respTime >= dt_inicial && respTime <= dt_final;
+    });
   }
 
   async onSelectedChange(a: any) {
