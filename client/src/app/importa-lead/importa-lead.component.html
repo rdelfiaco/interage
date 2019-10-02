@@ -29,10 +29,13 @@
         </div>
       </div>
       <div class="row">
-        <div class="col-lg-10 mt-3">
+        <div class="col-lg-6 mt-3">
           <mdb-checkbox [checked]=excluiDuplicadosChk (change)="onChangeExcluiDuplicadosChk(excluiDuplicadosChk)">As
             linhas com id_lead_origem e CPF_CNPJ duplicadas serão excluidas
           </mdb-checkbox>
+        </div>
+        <div class="col-lg-3 mt-3">
+          <mdb-checkbox [checked]=cobrancaChk (change)= "onChangeCobranca(cobrancaChk)">Campanha de cobrança</mdb-checkbox>
         </div>
         <div class="col-lg-2 justify-content-end d-flex">
           <button type="button" [disabled]="!importar" mdbBtn color="primary" class="waves-light" aria-label="Enviar"

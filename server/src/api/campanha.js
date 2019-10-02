@@ -710,7 +710,6 @@ function getQuestRespAnalitica(req, res) {
     let sql = `
         select * from view_quest_resp_analitica
           where id_alternativa in (${req.query.idAlternativa}) or id_pergunta in (${req.query.idAlternativa}) `
-    console.log('---------'+sql);
     executaSQL(credenciais, sql)
       .then(res => {
         resolve(res);
@@ -959,6 +958,74 @@ function getUsuariosCampanhaSelecionada(req, res) {
 }
 
 
+function crudCampanha(req, res){
+  return new Promise(function (resolve, reject) {
+    let credenciais = {
+      token: req.query.token,
+      idUsuario: req.query.id_usuario
+    };
+   const dataPadrão = '01/01/1900'
+// divide o objeto em atuais e anteriores 
+  let dadosAtuais = JSON.parse(req.query.dadosAtuais);
+  const dadosAnteriores =  JSON.parse(req.query.dadosAnteriores);
+  const crud = req.query.crud;
+  req.query = dadosAtuais;
+  //req.query.id_usuario = credenciais.idUsuario;
+  let tabela = 'campanhas';
+  let idTabela = req.query.id;
+  let sql = ''
+  if (crud == 'C') sql = sqlCreate(); 
+  if (crud == 'D') sql = sqlDelete();
+  if (crud == 'U') sql = sqlUpdate();
+  executaSQL(credenciais, sql).then(res => {
+    // auditoria 
+    // if (crud == 'C') idTabela = res[0].id;
+    // auditoria(credenciais, tabela, crud , idTabela, dadosAnteriores, dadosAtuais );
+    resolve(res)
+
+  })
+  .catch(err => {
+    reject(err)
+  });
+
+  function sqlCreate(){
+    let sql = `INSERT INTO campanhas(
+      id_canal, nome, descricao, dt_inicio, dt_fim, id_questionario, id_motivo, status)
+      VALUES (${!req.query.id_canal ? null : req.query.id_canal},
+        '${req.query.nome}',
+        '${req.query.descricao}',
+         date('${!req.query.dt_inicio ? dataPadrão : req.query.dt_inicio }'),
+        date('${!req.query.dt_fim ? dataPadrão : req.query.dt_fim}'),
+        ${ !req.query.id_questionario ? null : req.query.id_questionario },
+        ${ !req.query.id_motivo ? null : req.query.id_motivo},
+        ${req.query.status})
+              RETURNING id;`;
+    return sql;
+  };
+  function sqlDelete(){
+    let sql = `DELETE FROM campanhas
+                WHERE id= ${req.query.id};`;
+    return sql;
+  };
+  function sqlUpdate(){
+    let sql = `UPDATE campanhas
+               SET  status=${req.query.status}, 
+                    nome='${req.query.nome}',
+                    descricao='${req.query.descricao}',
+                    id_canal=${!req.query.id_canal ? null : req.query.id_canal},
+                    id_motivo= ${!req.query.id_motivo ? null : req.query.id_motivo},
+                    id_questionario= ${ !req.query.id_questionario ? null : req.query.id_questionario},
+                    dt_inicio=date('${!req.query.dt_inicio ? dataPadrão : req.query.dt_inicio}'),
+                    dt_fim=date('${!req.query.dt_fim ? dataPadrão : req.query.dt_fim}')
+              WHERE id= ${req.query.id};`;
+    return sql;
+  };
+
+
+});
+};
+
+
 
 
 
@@ -978,5 +1045,6 @@ module.exports = {
   getUsuariosCampanhaSelecionada,
   getQuestRespSintetica,
   salvarUsuariosDaCampanha,
-  getQuestRespAnalitica
+  getQuestRespAnalitica,
+  crudCampanha
 }

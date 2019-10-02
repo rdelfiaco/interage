@@ -8,10 +8,7 @@ import { CarregandoModule } from '../shared/carregando/carregando.module';
 import { SharedModule } from '../shared/shared.module';
 import { AngularDualListBoxModule } from 'angular-dual-listbox';
 
-import { UpdateCampanhaComponent } from './update-campanha/update-campanha.component';
-import { ReadCampanhaComponent } from './read-campanha/read-campanha.component';
-import { DeleteCampanhaComponent } from './delete-campanha/delete-campanha.component';
-import { CreateCampanhaComponent } from './create-campanha/create-campanha.component';
+
 import { UsuariosCampanhaComponent } from './usuarios-campanha/usuarios-campanha.component';
 import { CrudCampanhaComponent } from './crud-campanha.component';
 
@@ -28,10 +25,7 @@ import { CrudCampanhaComponent } from './crud-campanha.component';
     CarregandoModule,
     AngularDualListBoxModule,
   ],
-  declarations: [ CreateCampanhaComponent, 
-                  DeleteCampanhaComponent,
-                  ReadCampanhaComponent,
-                  UpdateCampanhaComponent,
+  declarations: [ 
                   UsuariosCampanhaComponent,  
                   CrudCampanhaComponent,            
   ]

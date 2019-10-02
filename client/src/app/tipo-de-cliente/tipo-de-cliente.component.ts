@@ -2,6 +2,7 @@ import { ConnectHTTP } from '../shared/services/connectHTTP';
 import { ToastService, MDBModalRef } from '../../lib/ng-uikit-pro-standard';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { Component, OnInit } from '@angular/core';
+import { BancoDados } from '../shared/services/bancoDados';
 
 
 @Component({
@@ -25,7 +26,8 @@ export class TipoDeClienteComponent implements OnInit {
   constructor(
     private connectHTTP: ConnectHTTP,
     private toastrService: ToastService,
-    private formBuilder: FormBuilder) {
+    private formBuilder: FormBuilder,
+    private bancoDados: BancoDados = new BancoDados) {
 
       this.formularioForm = this.formBuilder.group({
         id:  [''],
@@ -58,21 +60,13 @@ export class TipoDeClienteComponent implements OnInit {
   }
 
   async getTipoClientes() {
-    try {
-      let resp = await this.connectHTTP.callService({
-        service: 'getTipoClientes',
-        paramsService: {}
-      }) as any;
-      if (resp.error) {
-        this.toastrService.error(resp.error);
-      } else {
-        this.tableData = resp.resposta;
-      }
-    }
-    catch (e) {
-      
-      this.toastrService.error('Erro ao ler tipo de clientes', e);
-    }
+
+    let resp  = await this.bancoDados.lerDados('getTipoClientes', {}) as any;
+    debugger
+    if (resp.resposta) 
+       {this.tableData = resp.resposta; }
+    else { this.toastrService.error('Erro ao ler tipo de clientes', resp.error )}
+
   }
 
   adicionar(){

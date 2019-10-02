@@ -98,6 +98,7 @@ declaraServico('salvarCampanhasDoUsuario', campanha.salvarCampanhasDoUsuario);
 declaraServico('getEventosRelatorioCampanha', campanha.getEventosRelatorioCampanha);
 declaraServico('getQuestRespAnalitica', campanha.getQuestRespAnalitica);
 declaraServico('getProdutividadeCallCenter', produtividade.getProdutividadeCallCenter);
+declaraServico('crudCampanha', campanha.crudCampanha);
 
 //Departamento
 declaraServico('getDepartamentos', departamentos.getDepartamentos);

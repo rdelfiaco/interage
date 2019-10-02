@@ -18,7 +18,6 @@ function importaLead(req, res){
     const { Client } = require('pg');
     const client = new Client(dbconnection);
     client.connect();
-
     //inicio da transação 
    client.query('BEGIN').then((res1) => {
     // deleta a tabela lead_a_importar
@@ -257,15 +256,25 @@ function updateTabLeadAImportar(credenciais, client, id_leads_mailing, id_campan
 function insertCampanha(credenciais, client, arquivoCSV) {
   return new Promise(function (resolve, reject) {
   let linha = arquivoCSV.csvLinhas[0];
-  let sql = `
-  INSERT INTO public.campanhas(
-     id_canal, nome, descricao, dt_inicio, dt_fim, id_motivo)
-    VALUES (3, '${linha['nome_lead']}' || ' ' || to_char(now(), 'dd/mm/yyyy')  , '${linha['nome_lead']}' , date(now()), date(now()) + 360, 1)
-    RETURNING id;
-  `
-  executaSQLComTransacao (credenciais, client, sql)
-  .then(res => { resolve( res ) })
-  .catch(err => { reject( err ) })
+  if (linha.id_campanha) {
+    let res = [];
+    //res[0].id = linha.id_campanha;
+    res.push({id: linha.id_campanha})
+    resolve( res )
+  }
+  else{
+
+    let sql = `
+    INSERT INTO public.campanhas(
+      id_canal, nome, descricao, dt_inicio, dt_fim, id_motivo)
+      VALUES (3, '${linha['nome_lead']}' || ' ' || to_char(now(), 'dd/mm/yyyy')  , '${linha['nome_lead']}' , date(now()), date(now()) + 360, 1)
+      RETURNING id;
+    `
+    executaSQLComTransacao (credenciais, client, sql)
+    .then(res => { resolve( res ) })
+    .catch(err => { reject( err ) })
+  }
+
 });
 }
 
@@ -315,7 +324,7 @@ function existeCpfCnpjEmPessoas(credenciais, client) {
 
   let sql = `
   update lead_a_importar li set possui_cadastro_anterior = true, id_pessoa = pe.id 
-  from (select * from pessoas ) as pe where li.cpf_cnpj  = pe.cpf_cnpj 
+  from (select * from pessoas ) as pe where TO_NUMBER( li.cpf_cnpj, '999999999999999')  = TO_NUMBER( pe.cpf_cnpj, '999999999999999')
   `
 
   executaSQLComTransacao (credenciais, client, sql)
@@ -368,7 +377,6 @@ function insertTabLeadAImportar(credenciais, client, arquivoCSV) {
       sql = sql + linhaSQL
     }
     sql = sql.substr(0, sql.length - 2) 
-
     executaSQLComTransacao (credenciais, client, sql)
     .then(res => {  resolve( res ) })
     .catch(err => { reject( err ) })

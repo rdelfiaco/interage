@@ -13,11 +13,9 @@ function getQuestionarios(req, res) {
     let sql = `SELECT q.id, q.nome, q.status, count(perg.*) as qtde_perguntas FROM questionarios q
                left join quest_perguntas perg on q.id = perg.id_questionario
                group by q.id, q.nome, q.status`
-    // let sql = `SELECT * from questionarios`
 
     executaSQL(credenciais, sql)
       .then(res => {
-        console.log(res)
         resolve(res)
       })
       .catch(err => {
@@ -83,7 +81,6 @@ function addQuestionario(req, res) {
     req.query.q = JSON.parse(req.query.data);
 
     let sql = `INSERT INTO questionarios(nome, status) VALUES('${req.query.q.nome}', '${req.query.q.status}') RETURNING id;`
-    console.log(sql);
     executaSQL(credenciais, sql)
       .then(res => {
         resolve(res)
@@ -122,7 +119,6 @@ function updateQuestionario(req, res) {
     };
 
     req.query.q = JSON.parse(req.query.data);
-    console.log(req.query.q);
     let sql = `UPDATE questionarios SET nome='${req.query.q.nome}' WHERE questionarios.id=${req.query.q.id}`;
     executaSQL(credenciais, sql)
       .then(res => {
@@ -195,7 +191,6 @@ function gravaRespostaQuestionario(req, res) {
         ${req.query.q.id_usuario}, 
         ${req.query.q.id_receptor}, now(), '${req.query.q.observacao}',
         ${req.query.q.id_evento}, ${req.query.q.id_pergunta} ) RETURNING id;`
-    console.log(sql);
     executaSQL(credenciais, sql)
       .then(res => {
         resolve(res)

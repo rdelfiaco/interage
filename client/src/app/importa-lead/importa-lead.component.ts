@@ -5,6 +5,8 @@ import { ConnectHTTP } from '../shared/services/connectHTTP';
 import { LocalStorage } from '../shared/services/localStorage';
 import { Usuario } from '../login/usuario';
 import { ToastService } from '../../lib/ng-uikit-pro-standard';
+import { convertInjectableProviderToFactory } from '@angular/core/src/di/injectable';
+import { join } from 'path';
 
 
 
@@ -17,6 +19,7 @@ import { ToastService } from '../../lib/ng-uikit-pro-standard';
 export class ImportaLeadComponent implements OnInit {
 
   public csvRecords: Array<any>;
+  public csvRecordsCobr: Array<any>;
 
   @ViewChild('fileImportInput') fileImportInput: any;
 
@@ -29,9 +32,11 @@ export class ImportaLeadComponent implements OnInit {
   csvRecordsArray: Array<any>;
   nomeChk: boolean = false;
   cpfChk: boolean = false;
+  cobrancaChk: boolean = true;
   importar: boolean = false;
   usuarioLogado: any;
   headersRow: Array<any>;
+  headersRowCobr: Array<any>;
   informacao: string;
   excluiDuplicadosChk: boolean = true;
   resultado: any;
@@ -75,6 +80,23 @@ export class ImportaLeadComponent implements OnInit {
      indexCorrepondente = new Array(28);
      colunasNumber = [2,3,5,6,15,17,18,19,20,21,22,23,24,27];
      colunasString = [0,1,4,7,8,9,10,11,12,13,14,16,25,26]; 
+
+// layout cobrança 
+
+tituloHeadersRowCobr = [
+  "Nome",                 // 0   string 
+  "CPF_CNPJ",             // 1
+  "Placas",                 // 2
+  "VencimentoOriginal",     // 3
+  "DataVencimento",       // 4
+  "Telefone",             // 5
+  "TelefoneCelular"      // 6
+]
+indexCorrepondenteCobr = new Array(6);
+colunasNumberCobr = [1];
+colunasStringCobr = [0,2,3,4,5,6]; 
+
+// Nome	
 
   constructor(private connectHTTP: ConnectHTTP, 
               private localStorage: LocalStorage,
@@ -141,7 +163,12 @@ export class ImportaLeadComponent implements OnInit {
 
 
   fileChangeListener($event: any): void {
-
+    if (this.cobrancaChk){
+        this.tituloHeadersRow = this.tituloHeadersRowCobr;
+        this.indexCorrepondente =  this.indexCorrepondenteCobr;
+        this.colunasNumber = this.colunasNumberCobr;
+        this.colunasString = this.colunasStringCobr;
+    }
         
     var text = [];
     var files = $event.srcElement.files;
@@ -258,80 +285,81 @@ export class ImportaLeadComponent implements OnInit {
       }
       data = data.substr(0, data.length - 3) 
       data = data + '}'
+      if (data) dataArr.push(JSON.parse(data));
 
-      var data_ = JSON.parse(data);
-
-      dataArr.push(data_);
       data = '{';
      
     }
 
-    // se não for para excluir só será emitido um alerta 
-    if (!this.excluiDuplicadosChk){
-    // verifica se tem idLeadOrigem duplicado 
-      let idLeadOrigem = dataArr.map( function( elem ) {
-            return elem.id_origem_lead
-      });
-      var duplicado = false
-      var idLeadOrigemDuplicado = 0
-      idLeadOrigem.forEach( function( elem, i, array ) {
+    if (!this.cobrancaChk){
+      // se não for para excluir só será emitido um alerta 
+      if (!this.excluiDuplicadosChk){
+      // verifica se tem idLeadOrigem duplicado 
+        let idLeadOrigem = dataArr.map( function( elem ) {
+              return elem.id_origem_lead
+        });
+        var duplicado = false
+        var idLeadOrigemDuplicado = 0
+        idLeadOrigem.forEach( function( elem, i, array ) {
+          if (array.indexOf( elem ) != i) {
+            idLeadOrigemDuplicado = elem
+            duplicado = true;
+            }
+        } );
+
+        if (duplicado) {
+          this.toastrService.error(`O id_lead_Origem ${idLeadOrigemDuplicado} está duplicado` )
+          return [];
+        }
+
+          // verifica se tem cpf_cnpj duplicado 
+          let cpf_cnpjLeadOrigem = dataArr.map( function( elem ) {
+            return elem.cpf_cnpj
+        });
+        duplicado = false
+        let cpf_cnpjLeadOrigemDuplicado = 0
+        cpf_cnpjLeadOrigem.forEach( function( elem, i, array ) {
         if (array.indexOf( elem ) != i) {
-          idLeadOrigemDuplicado = elem
+          cpf_cnpjLeadOrigemDuplicado = elem
           duplicado = true;
           }
-      } );
+        } );
 
-      if (duplicado) {
-        this.toastrService.error(`O id_lead_Origem ${idLeadOrigemDuplicado} está duplicado` )
+        if (duplicado) {
+        this.toastrService.error(`O CPF_CNPJ ${cpf_cnpjLeadOrigemDuplicado} está duplicado` )
         return [];
-      }
-
-        // verifica se tem cpf_cnpj duplicado 
-         let cpf_cnpjLeadOrigem = dataArr.map( function( elem ) {
-          return elem.cpf_cnpj
-      });
-      duplicado = false
-      let cpf_cnpjLeadOrigemDuplicado = 0
-      cpf_cnpjLeadOrigem.forEach( function( elem, i, array ) {
-      if (array.indexOf( elem ) != i) {
-        cpf_cnpjLeadOrigemDuplicado = elem
-        duplicado = true;
         }
-      } );
 
-      if (duplicado) {
-      this.toastrService.error(`O CPF_CNPJ ${cpf_cnpjLeadOrigemDuplicado} está duplicado` )
-      return [];
-      }
-
-  }else{
-    
-    var dataArr_= [] ;
-    // retira os id_lead_origem duplicados 
-    dataArr.forEach((item) => {
-        var duplicated  = dataArr_.findIndex (redItem => {
-            return item.id_origem_lead == redItem.id_origem_lead;
-        }) > -1;
-
-        if(!duplicated) {
-            dataArr_.push(item);
-        }
-    });
-    dataArr = dataArr_;
-    dataArr_ = [];
-        // retira os cpf_cnpj duplicados 
-        dataArr.forEach((item) => {
-          var duplicated  = dataArr_.findIndex(redItem => {
-              return item.cpf_cnpj == redItem.cpf_cnpj;
+    }else{
+      
+      var dataArr_= [] ;
+      // retira os id_lead_origem duplicados 
+      dataArr.forEach((item) => {
+          var duplicated  = dataArr_.findIndex (redItem => {
+              return item.id_origem_lead == redItem.id_origem_lead;
           }) > -1;
-  
+
           if(!duplicated) {
               dataArr_.push(item);
           }
       });
       dataArr = dataArr_;
+      dataArr_ = [];
+          // retira os cpf_cnpj duplicados 
+          dataArr.forEach((item) => {
+            var duplicated  = dataArr_.findIndex(redItem => {
+                return item.cpf_cnpj == redItem.cpf_cnpj;
+            }) > -1;
+    
+            if(!duplicated) {
+                dataArr_.push(item);
+            }
+        });
+        dataArr = dataArr_;
 
+    }
   }
+
 
     this.totalLinhas = dataArr.length;
 
@@ -363,6 +391,8 @@ export class ImportaLeadComponent implements OnInit {
     }
 
     for (let j = 0; j < headers.length; j++) {
+      headers[j] = headers[j].replace('/','_');
+      headers[j] = headers[j].replace(' ','');
       headerArray.push(headers[j]);
     }
     return headerArray;
@@ -389,6 +419,7 @@ export class ImportaLeadComponent implements OnInit {
   async importarCSVSQL() {
   
      //this.importando = true;
+     if (this.cobrancaChk) this.converteLayOutCobr() 
      try {
         let resultado = await this.connectHTTP.sendFile({
           service: 'importaLead',
@@ -396,7 +427,8 @@ export class ImportaLeadComponent implements OnInit {
             arquivo: JSON.stringify({
                       csvHeader: this.headersRow,
                       csvLinhas: this.csvRecords
-                      })
+                      }),
+            cobrancaChk: this.cobrancaChk
           }
         });
         this.resultado = resultado.resposta as Array<object>;
@@ -434,5 +466,74 @@ export class ImportaLeadComponent implements OnInit {
       this.excluiDuplicadosChk = true
     }
   }
+
+  onChangeCobranca(onChangeCobranca_){
+    if (onChangeCobranca_){
+        this.cobrancaChk = false
+    }else
+    {
+        this.cobrancaChk = true
+    }
+  }
+
+
+  converteLayOutCobr(){
+    debugger
+    this.csvRecordsCobr = this.csvRecords;
+    this.headersRow = [];
+    this.headersRow[0] = "id_origem_lead";
+    this.headersRow[1] = "nome_lead"
+    this.headersRow[2] = "tipo_pessoa"
+    this.headersRow[3] = "cpf_cnpj"
+    this.headersRow[4] = "nome"
+    this.headersRow[5] = "ddd1"
+    this.headersRow[6] = "fone1"
+    this.headersRow[7] = "ddd2"
+    this.headersRow[8] = "fone2"
+    this.headersRow[9] = "observacoes"
+    this.headersRow[10] = "id_campanha" 
+
+    this.csvRecords = [];
+    let registro: string;
+    let index: number;
+    let registro_: any;
+
+    for (let j = 0; j < this.csvRecordsCobr.length; j++) {
+      registro = '{ '
+      registro = registro + `"${this.headersRow[0]}": "${j+1}", `  
+      registro = registro + `"${this.headersRow[1]}": "Cobrança", `
+      registro = registro + `"${this.headersRow[2]}": "${this.csvRecordsCobr[j].CPF_CNPJ.lengt > 11 ? 'J' : 'F' }",`;
+      registro = registro + `"${this.headersRow[3]}": "${this.csvRecordsCobr[j].CPF_CNPJ}" ,`;
+      registro = registro + `"${this.headersRow[4]}": "${this.csvRecordsCobr[j].Nome}" ,`;
+      registro = registro + `"${this.headersRow[5]}": "${this.csvRecordsCobr[j].Telefone.substring(1,3)}" ,`;
+      registro = registro + `"${this.headersRow[6]}": "${this.csvRecordsCobr[j].Telefone.substring(4).replace('-','')}" ,`;
+      registro = registro + `"${this.headersRow[7]}": "${this.csvRecordsCobr[j].TelefoneCelular.substring(1,3)}" ,`;
+      registro = registro + `"${this.headersRow[8]}": "${this.csvRecordsCobr[j].TelefoneCelular.substring(4).replace('-','')}", `;
+      registro = registro + `"${this.headersRow[9]}": "${'Placas : ' + this.csvRecordsCobr[j].Placas + '; Vencimento Original : ' + 
+      this.csvRecordsCobr[j].VencimentoOriginal + '; Data Vencimento: ' + this.csvRecordsCobr[j].DataVencimento}" ,`;
+      registro = registro + `"${this.headersRow[10]}": "19"`;
+      registro = registro + '}';
+      registro_ = JSON.parse(registro);
+      // verifica se já tem um cpf_cnpj 
+      index = null
+      this.csvRecords.forEach( (elem, i) => {
+        if (elem.cpf_cnpj == registro_.cpf_cnpj ) {
+          index = i
+        }
+      });
+      if (index) {
+        this.csvRecords[index].observacoes = this.csvRecords[index].observacoes + registro_.observacoes
+      }else { 
+        this.csvRecords.push(registro_);
+      }
+    }
+
+    console.log(this.csvRecords)
+    
+
+  }
+
+
+
 
 }
