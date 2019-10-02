@@ -3,6 +3,7 @@ import { ConnectHTTP } from '../shared/services/connectHTTP';
 import { ToastService, InputsModule } from '../../lib/ng-uikit-pro-standard';
 import { Usuario } from '../login/usuario';
 import { LocalStorage } from '../shared/services/localStorage';
+import * as moment from 'moment';
 
 class Perg {
   alternativas: [{
@@ -60,7 +61,7 @@ export class ResponderQuestionarioComponent implements OnInit, OnDestroy {
   };
   multiEscolha = false;
   alternativaEscolhida = null;
-  respostaEscrita = '';
+  respostaEscrita: any = '';
   concluiu = false;
   usuarioLogado: Usuario;
   alternativasEscolhidas = [];
@@ -97,6 +98,7 @@ export class ResponderQuestionarioComponent implements OnInit, OnDestroy {
       this.criaRespostaTipoData();
     }
     else if (this.perguntaAtual.tipo_pergunta == 1 || this.perguntaAtual.tipo_pergunta == 2) {
+      this.respostaEscrita = '';
       this.perguntaAtual.alternativas.forEach(alt => {
         let divPai = document.createElement('div');
         divPai.className = 'col-lg-12 quest-response mb-3';
@@ -135,19 +137,21 @@ export class ResponderQuestionarioComponent implements OnInit, OnDestroy {
     let input = document.createElement('input');
     input.type = "radio";
     input.id = id;
-    input.className = 'quest-response-input';
+    input.className = 'quest-response-input form-control';
     input.name = "alternativa";
     input.value = id;
     input.onclick = (event) => {
       const id = event.target['value'];
       const alt = this.getAlternativa(id)
+      this.respostaEscrita = '';
       if (alt.exige_observacao) {
         this.criaRespostaNormal(alt.exige_observacao);
       }
       else {
         const campo = document.querySelector('.quest-observacao');
-        if (campo)
+        if (campo) {
           document.querySelector(".quest-container").removeChild(campo);
+        }
       }
       this.alternativaEscolhida = event.target['value'];
     };
@@ -158,7 +162,7 @@ export class ResponderQuestionarioComponent implements OnInit, OnDestroy {
     let input = document.createElement('input');
     input.type = "checkbox";
     input.id = id;
-    input.className = 'quest-response-input';
+    input.className = 'quest-response-input form-control';
     input.name = "alternativa";
     input.value = id;
     input.onchange = (event) => {
@@ -176,13 +180,23 @@ export class ResponderQuestionarioComponent implements OnInit, OnDestroy {
     return input;
   }
 
+  removeCamposObservacao() {
+    let divPai = document.querySelector('.quest-container');
+    let textarea = document.querySelector('.quest-observacao');
+    this.respostaEscrita = '';
+    divPai.removeChild(textarea);
+  }
+
   criaRespostaNormal(exige_observacao = false) {
+    if (document.querySelector('.quest-response-textarea')) {
+      this.removeCamposObservacao();
+    }
     let divPai = document.createElement('div');
     divPai.className = 'col-lg-12 quest-observacao mb-3';
 
     let textarea = document.createElement('textarea');
     textarea.id = "alternativa";
-    textarea.className = 'quest-response-textarea';
+    textarea.className = 'quest-response-textarea form-control';
     textarea.onkeypress = (event) => {
       this.respostaEscrita = event.target['value'];
     };
@@ -204,9 +218,10 @@ export class ResponderQuestionarioComponent implements OnInit, OnDestroy {
     let input_date = document.createElement('input');
     input_date.id = "alternativa_data";
     input_date.type = "date";
-    input_date.className = 'quest-response-input';
-    input_date.onkeypress = (event) => {
-      this.respostaEscrita = event.target['value'];
+    input_date.className = 'quest-response-date form-control';
+    input_date.onchange = (event) => {
+      debugger
+      this.respostaEscrita = new Date(event.target['value']).toISOString();
     };
     if (exige_observacao) {
       let span = document.createElement('label');
@@ -226,7 +241,6 @@ export class ResponderQuestionarioComponent implements OnInit, OnDestroy {
   }
 
   proxPergunta() {
-    console.log(this.perguntaAtual)
     let self = this;
     if (!this.alternativaEscolhida && !this.alternativasEscolhidas && !this.respostaEscrita) {
       return alert('Precisa informar um reposta para poder prosseguir!');
@@ -249,17 +263,17 @@ export class ResponderQuestionarioComponent implements OnInit, OnDestroy {
         proxPerg = this.questionario.perguntas.find(p => p.id == this.alternativaEscolhida.id_proxima_pergunta)
       }
       else {
-      proxPerg = this.questionario.perguntas.find(p => p.id == this.perguntaAtual.id_proxima_pergunta);
-      if (this.perguntaAtual.tipo_pergunta == 2) {
-        this.alternativasEscolhidas = this.perguntaAtual.alternativas.filter(alt => {
-          return this.alternativasEscolhidas.some(ac => ac == alt.id)
-        });
-        this.alternativasEscolhidas.forEach(a => {
-          salvaResp(a);
-        })
-      }
-      else {
-        salvaResp();
+        proxPerg = this.questionario.perguntas.find(p => p.id == this.perguntaAtual.id_proxima_pergunta);
+        if (this.perguntaAtual.tipo_pergunta == 2) {
+          this.alternativasEscolhidas = this.perguntaAtual.alternativas.filter(alt => {
+            return this.alternativasEscolhidas.some(ac => ac == alt.id)
+          });
+          this.alternativasEscolhidas.forEach(a => {
+            salvaResp(a);
+          })
+        }
+        else {
+          salvaResp();
         }
       };
       // if (!proxPerg || this.multiEscolha)

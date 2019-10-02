@@ -181,12 +181,20 @@ body {
 .quest-response-input {
   opacity: 1 !important;
   height: 23px !important;
+  width: 22px !important;
   cursor: pointer;
+}
+
+
+.quest-response-date {
+  opacity: 1 !important;
+  width: 20%;
+  cursor: pointer
 }
 
 .quest-response-textarea {
   width: 100%;
-  height: 100px;
+  height: 100px !important;
 }
 
 .quest-response-text {
