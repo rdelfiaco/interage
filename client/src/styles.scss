@@ -201,3 +201,13 @@ body {
   margin-bottom: 0;
   cursor: pointer;
 }
+
+.modal-header {
+  position: relative;
+  button.close {
+    position: absolute;
+    right: 20px;
+    top: 20px;
+    z-index: 500000000000;
+  }
+}

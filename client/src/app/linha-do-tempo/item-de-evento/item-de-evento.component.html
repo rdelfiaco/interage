@@ -96,16 +96,20 @@
   </div>
 </div>
 
-<div mdbModal #visualizarDetalhesEvento="mdbModal" [config]="{backdrop: true, ignoreBackdropClick: true}"
-  class="modal fade right" role="dialog" aria-labelledby="myBasicModalLabel" aria-hidden="true">
+<div mdbModal #visualizarDetalhesEvento="mdbModal" [config]="{backdrop: true, ignoreBackdropClick: false}"
+  class="modal fade right" role="dialog" aria-labelledby="myBasicModalLabel" aria-hidden="false">
   <div class="modal-dialog modal-fluid" role="document">
     <div *ngIf="eventoSelecionado" class="modal-header light-blue darken-3 white-text">
-      <h4  class="modal-title w-100" id="myModalLabel">Evento {{eventoSelecionado.motivo}}
+      <h4  class="modal-title w-90" id="myModalLabel">Evento {{eventoSelecionado.motivo}}
         <button *ngIf="eventoSelecionado && eventoSelecionado.excedeu_tentativas" mdbBtn type="button" color="danger"
           size="sm" mdbWavesEffect>Excedeu Tentativas</button></h4>
-      <button type="button" class="close pull-right" aria-label="Close" (click)="visualizarDetalhesEvento.hide()">
-        <span aria-hidden="true">×</span>
+      <button type="button" style="cursor:pointer;" class="close" data-dismiss="modal" aria-label="Close"
+        (click)="visualizarDetalhesEvento.hide()">
+        <span aria-hidden="true" style="color:white; cursor:pointer;">&times;</span>
       </button>
+      <!-- <button type="button" class="close pull-right" aria-label="Close" (click)="">
+        <span aria-hidden="true">×</span>
+      </button> -->
     </div>
     <div class="modal-content">
       <div class="modal-body" style="overflow: auto; height: 80vh;">
