@@ -169,7 +169,7 @@ export class DetalheDeCampanhaComponent implements OnInit {
     }).map((c: any) => {
       return {
         // text: `${c.alternativa} = ${c.tot_resp}` + (c.proxima_pergunta ? ' -> Próxima pergunta: ' + c.proxima_pergunta : ''),
-        text: `${c.alternativa} = ${c.tot_resp} ` + (c.proxima_pergunta ? ' -> Próx. Perg: ' + c.proxima_pergunta : ''),
+        text: `${c.alternativa}` + (c.proxima_pergunta ? ' -> Próx. Perg: ' + c.proxima_pergunta : ''),
         value: c.id_alternativa,
         collapsed: true,
         checked: false,
@@ -186,14 +186,16 @@ export class DetalheDeCampanhaComponent implements OnInit {
         return item.id_pergunta === redItem.id_pergunta;
       });
       if (index > -1) {
-        perguntas[index].tot_resp = perguntas[index].tot_resp + item.tot_resp;
+        // perguntas[index].tot_resp = perguntas[index].tot_resp + item.tot_resp;
+        perguntas[index].tot_resp = perguntas[index].tot_resp;
       } else {
         perguntas.push(item);
       }
     });
     return perguntas.map((item) => {
       return {
-        text: `${item.pergunta}  ${item.tipo_pergunta > 2 ? ' = ' + item.tot_resp : ''}`,
+        // text: `${item.pergunta}  ${item.tipo_pergunta > 2 ? ' = ' + item.tot_resp : ''}`,
+        text: `${item.pergunta}`,
         value: item.id_pergunta,
         collapsed: true,
         checked: false,
