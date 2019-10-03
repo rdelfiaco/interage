@@ -85,10 +85,12 @@ function inserirDestinatariosCampanha(credenciais, client,id_leads_mailing, id_c
 	INSERT INTO public.eventos(
     id_campanha, id_motivo,id_status_evento, id_pessoa_criou, dt_criou, dt_prevista_resolucao, dt_para_exibir, tipodestino, id_pessoa_organograma, 	id_pessoa_receptor, id_prioridade,  observacao_origem, id_canal)
 
- select ${id_campanha}, 1,1,1, now(),date(now())+180,now(), 'O', 4, pe.id, 2, 'Vender para o cliente', 3
+ select ${id_campanha}, camp.id_motivo,1,1, now(),date(now())+180,now(), 'O', 4, pe.id, 2, li.observacoes, camp.id_canal
  from pessoas pe
  inner join pessoas_leads_mailing plem on pe.id = plem.id_pessoa and id_leads_mailing = ${id_leads_mailing}
-   `
+ inner join lead_a_importar li on pe.id = li.id_pessoa  
+ inner join campanhas camp on camp.id = ${id_campanha}
+ `
   executaSQLComTransacao (credenciais, client, sql)
   .then(res => { resolve( res ) })
   .catch(err => { reject( err ) })

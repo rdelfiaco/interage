@@ -1072,7 +1072,7 @@ async function pesquisaPessoas(req, res) {
         pesquisa = 'dtN';
       }
       if (pesquisa == '') {
-        pesquisaTexto = pesquisaTexto.replace(/\W/gi, '');
+        //pesquisaTexto = pesquisaTexto.replace(/\W/gi, '');
         pesquisa = `SELECT p.*, up.apelido_fantasia as carteira FROM pessoas p
             left join usuarios u on p.id_usuario_carteira = u.id
             left join pessoas up on u.id_pessoa = up.id 

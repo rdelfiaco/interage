@@ -37,6 +37,7 @@ export class TelemarketingComponent implements OnInit {
               private dt: ChangeDetectorRef,
               private router: Router) {
     this.usuarioLogado = this.localStorage.getLocalStorage('usuarioLogado') as Usuario;
+    if (!this.metaPessoa.ligacoes_realizadas) this.metaPessoa.ligacoes_realizadas = 0;
   }
 
   async ngOnInit() {
