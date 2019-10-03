@@ -131,7 +131,6 @@ export class DetalheDeCampanhaComponent implements OnInit {
       service: 'getQuestRespAnalitica',
       paramsService: { idAlternativa }
     }) as any;
-    debugger
     return retorno.resposta.filter(resp => {
       const respTime = new Date(resp.dt_resposta).getTime();
       const dt_inicial = moment(

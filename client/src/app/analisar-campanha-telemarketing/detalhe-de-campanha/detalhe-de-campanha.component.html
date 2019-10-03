@@ -164,13 +164,15 @@
         <div
           class="view view-cascade gradient-card-header blue-gradient narrower py-1 mx-2  d-flex justify-content-center align-items-center">
           <h6 class="white-text font-weight-bold mt-2 ">Resumo analítico de respostas</h6>
-          <div>
+          <div style="right: 0;position: absolute;">
             <button mdbBtn color="white" outline="true" rounded="true" size="sm" type="button"
               (click)="exportaAnalitico()" class="px-2" mdbWavesEffect>
               Exportar
             </button>
           </div>
         </div>
+        <h6 *ngIf="questRespAnalitica.length" class="white-black font-weight-bold mt-4 mt-0 ml-2 ">Total de Respostas:
+          {{questRespAnalitica.length}}</h6>
         <div class="table-responsive table-resp">
           <table class="table table-hover table-responsive-md mb-0">
             <thead>
