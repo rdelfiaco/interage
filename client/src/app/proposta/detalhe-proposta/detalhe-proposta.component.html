@@ -145,10 +145,18 @@
                   <label for="dtsalvou">data do registro</label>
                 </div>
 
-                <a mdbBtn floating="true" size="sm" gradient="blue" style="margin-left: 70px "
+                <!-- <a mdbBtn floating="true" size="sm" gradient="blue" style="margin-left: 70px "
                    mdbWavesEffect (click)="openPDF(proposta.proposta_json)">
                   <mdb-icon icon="file-pdf-o"></mdb-icon>
-                </a>
+                </a> -->
+
+                <button type="button" style="white-space: nowrap;" (click)="openPDF(proposta.proposta_json)" mdbBtn color="warning" class="waves-light"
+                aria-label="Voltar" mdbWavesEffect>Proposta comercial</button>
+                <button type="button" style="white-space: nowrap;" (click)="openPDF(proposta.proposta_json)" mdbBtn color="success" class="waves-light"
+                aria-label="Voltar" mdbWavesEffect>Termo de adesão</button>
+                <button type="button" style="white-space: nowrap;" (click)="openPDF(proposta.proposta_json)" mdbBtn color="info" class="waves-light"
+                aria-label="Voltar" mdbWavesEffect>Proposta de admissão </button>
+
 
               </div>
 

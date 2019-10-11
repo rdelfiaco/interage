@@ -100,7 +100,7 @@ export class PrincipalComponent implements OnInit {
       nome: ['', [Validators.required]],
       tipo: [this.tipoPessoaSelecionada, [Validators.required]],
       id_pronome_tratamento: [''],
-      datanascimento: ['DD/MM/YYYY', [Validators.required]],
+      datanascimento: [''],
       sexo: [''],
       rg_ie: [''],
       orgaoemissor: [''],
@@ -120,6 +120,7 @@ export class PrincipalComponent implements OnInit {
 
 
   _setQuestionarioForm() {
+    debugger
     this.tipoPessoaSelecionada = this.pessoa.principal.tipo;
     this.principalForm = this.formBuilder.group({
       id: [this.pessoa.principal.id],
@@ -204,11 +205,12 @@ export class PrincipalComponent implements OnInit {
        return this.toastrService.error('Informe um CPF válido');
     }
 
-    if (this.tipoPessoaSelecionada == 'J' && validaCnpj.isValid(this.principalForm.value.cpf_cnpj)) {
+    if (this.tipoPessoaSelecionada == 'J' && !validaCnpj.isValid(this.principalForm.value.cpf_cnpj)) {
        return this.toastrService.error('Informe um CNPJ válido');
     }
 
     this.checkAtividadePessoa()
+    debugger;
     if (this.principalForm.controls['id'].value.value != '') {
       try {
         await this.connectHTTP.callService({
@@ -233,7 +235,11 @@ export class PrincipalComponent implements OnInit {
           }) 
         }) as any;
         
+        this.principalForm.controls['id'].enable();
+
         this.principalForm.controls['id'].setValue(res.resposta.id);
+
+        this.principalForm.controls['id'].disable();
 
         this.toastrService.success('Salvo com sucesso');
 

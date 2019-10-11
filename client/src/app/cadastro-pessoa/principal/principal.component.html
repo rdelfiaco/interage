@@ -27,11 +27,11 @@
       </div>
     </div>
     <div class="row">
-      <div class="md-form form-group col mdb-date-form mb-1">
-        <!-- <mdb-date-picker name="datanascimento" formControlName="datanascimento"  [options]="myDatePickerOptions" [placeholder]="'Selecione a data'" required>
-        </mdb-date-picker> -->
-        <input style="margin-top: 40px"  name="datanascimento" formControlName="datanascimento"   id="datanascimento" type="text" >
-        <label for="datanascimento" >Data Nascimento DD/MM/YYYY </label>
+      <div class="md-form col" style="margin-top: -10px" >
+        <mdb-date-picker formControlName="datanascimento" #datanascimento name="mydate" [options]="myDatePickerOptions"
+          [placeholder]="'Selecione a data'" required id="datanascimento">
+        </mdb-date-picker>
+        <label for="datanascimento"  >Data Nascimento</label>
       </div>
       <div class="col mdb-select-form">
         <mdb-select formControlName="sexo" [placeholder]="'Selecione o Sexo'" [options]="enumSexo" [multiple]="false">
@@ -128,12 +128,17 @@
       </div>
     </div>
     <div class="row">
-      <div class="md-form form-group col mdb-date-form">
-        <!-- <mdb-date-picker name="mydate" [options]="myDatePickerOptions" [placeholder]="'Selecione a data'" required>
-        </mdb-date-picker> -->
+      <!-- <div class="md-form form-group col mdb-date-form">
         <input style="margin-top: 40px"  name="datanascimento" formControlName="datanascimento"   id="datanascimento" type="text" >
         <label class="">Data Fundação</label>
-      </div>
+      </div> -->
+      <div class="md-form col" style="margin-top: -10px" >
+        <mdb-date-picker formControlName="datanascimento" #datanascimento name="mydate" [options]="myDatePickerOptions"
+          [placeholder]="'Selecione a data'" required id="datanascimento">
+        </mdb-date-picker>
+        <label for="datanascimento"  >Data Fundação</label>
+    </div>
+
       <div class="md-form col-4">
         <input mdbInputDirective formControlName="rg_ie" type="text" id="rg_ie" class="form-control">
         <label for="rg_ie">IE</label>

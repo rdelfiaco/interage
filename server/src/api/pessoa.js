@@ -300,7 +300,7 @@ function salvarPessoa(req, res) {
       req.query.datanascimento = req.query.datanascimento == 'Invalid date' ? 'null': req.query.datanascimento;
       req.query.datanascimento = req.query.datanascimento == 'DD/MM/YYYY' ? 'null': req.query.datanascimento;
 
-      console.log((req.query.datanascimento == 'null' || req.query.datanascimento == ''  ? null : " date('" + req.query.datanascimento + "')" ))
+     // console.log((req.query.datanascimento == 'null' || req.query.datanascimento == ''  ? null : " date('" + req.query.datanascimento + "')" ))
 
       let update = String;
       client.query('BEGIN').then((res1) => {
@@ -315,6 +315,7 @@ function salvarPessoa(req, res) {
         
         update = update.replace(/'null'/g, null)
         update = update.replace(/'`'/g, ' ')
+
 
        client.query(update).then((res) => {
           client.query('COMMIT').then((resposta) => {
@@ -447,7 +448,9 @@ async function  adicionarPessoa(req, res) {
         ret.push('id_usuario_incluiu,')
         ret.push('id_usuario_carteira,')
         ret.push('id_tipo_cliente,')
-        ret.push('id_classificacao_cliente')
+        ret.push('id_classificacao_cliente,')
+        ret.push('id_atividade')
+
         ret.push(')')
 
         ret.push('VALUES(')
@@ -470,7 +473,9 @@ async function  adicionarPessoa(req, res) {
         ret.push(req.query.id_usuario + ",")
         ret.push(possui_carteira_cli ? req.query.id_usuario: 'NULL'+ ",")
         ret.push((req.query.id_tipo_cliente != '' ? "'" + req.query.id_tipo_cliente + "'" : 'NULL') + ",")
-        ret.push((req.query.id_classificacao_cliente != '' ? "'" + req.query.id_classificacao_cliente + "'" : 'NULL') )
+        ret.push((req.query.id_classificacao_cliente != '' ? "'" + req.query.id_classificacao_cliente + "'" : 'NULL')+ "," )
+        ret.push((req.query.id_atividade != 'null' || req.query.id_atividade != '' ? "'" + req.query.id_atividade + "'" : null))
+
         ret.push(')')
         return ret.join(' ');
       }
@@ -495,7 +500,9 @@ async function  adicionarPessoa(req, res) {
         ret.push('id_usuario_incluiu,')
         ret.push('id_usuario_carteira,')
         ret.push('id_tipo_cliente,')
-        ret.push('id_classificacao_cliente')
+        ret.push('id_classificacao_cliente,')
+        ret.push('datanascimento,')
+        ret.push('id_atividade')
         ret.push(')')
         ret.push('VALUES(')
 
@@ -514,9 +521,12 @@ async function  adicionarPessoa(req, res) {
         ret.push('now(),')
         ret.push('now(),')
         ret.push(req.query.id_usuario + ",")
-        ret.push(possui_carteira_cli ? req.query.id_usuario: 'NULL')
+        ret.push((possui_carteira_cli ? req.query.id_usuario: 'NULL') + ",")
         ret.push((req.query.id_tipo_cliente != '' ? "'" + req.query.id_tipo_cliente + "'" : 'NULL') + ",")
-        ret.push((req.query.id_classificacao_cliente != '' ? "'" + req.query.id_classificacao_cliente + "'" : 'NULL') + ",")
+        ret.push((req.query.id_classificacao_cliente != '' ? "'" + req.query.id_classificacao_cliente + "'" : 'NULL')+ ",")
+        ret.push((req.query.datanascimento == 'null' || req.query.datanascimento == ''  ? 'NULL': " date('" + req.query.datanascimento + "')" )+ ",")
+        ret.push((req.query.id_atividade != 'null' || req.query.id_atividade != '' ? "'" + req.query.id_atividade + "'" : null))
+
         ret.push(')')
         return ret.join(' ');
       }
@@ -1179,7 +1189,6 @@ function getQuestRespAnaliticaPessoaId(req, res) {
     let sql = `
         select * from view_quest_resp_analitica
           where id_receptor in (${req.query.idPessoa})`
-    console.log('---------'+sql);
     executaSQL(credenciais, sql)
       .then(res => {
         resolve(res);
