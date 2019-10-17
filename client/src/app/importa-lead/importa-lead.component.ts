@@ -478,7 +478,7 @@ colunasStringCobr = [0,2,3,4,5,6];
 
 
   converteLayOutCobr(){
-    debugger
+    
     this.csvRecordsCobr = this.csvRecords;
     this.headersRow = [];
     this.headersRow[0] = "id_origem_lead";

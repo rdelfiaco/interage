@@ -120,7 +120,7 @@ export class PrincipalComponent implements OnInit {
 
 
   _setQuestionarioForm() {
-    debugger
+    
     this.tipoPessoaSelecionada = this.pessoa.principal.tipo;
     this.principalForm = this.formBuilder.group({
       id: [this.pessoa.principal.id],
@@ -210,7 +210,7 @@ export class PrincipalComponent implements OnInit {
     }
 
     this.checkAtividadePessoa()
-    debugger;
+    ;
     if (this.principalForm.controls['id'].value.value != '') {
       try {
         await this.connectHTTP.callService({

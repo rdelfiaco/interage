@@ -1,13 +1,13 @@
 <form [formGroup]="questionarioForm" class="formQuestionario">
   <div class="row">
     <div class="row">
-        <div class="col-lg-12 text-right">
-          <div class="md-form">
-            <button type="button" mdbBtn color="light" mdbWavesEffect >Primeira Ligação</button>
-            <button type="button" mdbBtn color="blue" mdbWavesEffect >Ligações Anteriores</button>
-          </div>
+      <div class="col-lg-12 text-right">
+        <div class="md-form">
+          <button type="button" mdbBtn color="light" mdbWavesEffect>Primeira Ligação</button>
+          <button type="button" mdbBtn color="blue" mdbWavesEffect>Ligações Anteriores</button>
         </div>
       </div>
+    </div>
     <div class="md-form input-group">
 
       <div *ngIf="quantEventosDaPessoa == 1" class="btn-group" mdbDropdown>
@@ -116,17 +116,20 @@
 </form>
 
 <div mdbModal #respquestionarioModal="mdbModal" class="modal fade" tabindex="-1" role="dialog"
-  aria-labelledby="myBasicModalLabel" aria-hidden="true" [config]="{backdrop: true}">
-  <div class="modal-dialog  modal-fluid" role="document">
-    <div class="modal-header light-blue darken-3 white-text">
-      <h4 class="modal-title">Responder Questionário</h4>
-      <button type="button" style="cursor:pointer;" class="close" data-dismiss="modal" aria-label="Close"
-        (click)="respquestionarioModal.hide()">
-        <span aria-hidden="true" style="color:white; cursor:pointer;">&times;</span>
-      </button>
-    </div>
-    <div class="modal-content">
-      <app-responder-questionario *ngIf="(questId && eventoId && pessoaId)" [questId]="questId" [receptorId]="pessoaId" [eventoId]="eventoId" (callback)="encerrouQuest($event)" ></app-responder-questionario>
+  aria-labelledby="myBasicModalLabel" aria-hidden="true" [config]="{backdrop: true, ignoreBackdropClick: true}">
+  <div class="modal-dialog modal-resp-questionario  modal-fluid" role="document">
+    <div class="modal-content p-0">
+      <div class="modal-header light-blue darken-3 white-text">
+        <h4 class="modal-title">Responder Questionário</h4>
+        <button type="button" style="cursor:pointer;" class="close" data-dismiss="modal" aria-label="Close"
+          (click)="respquestionarioModal.hide()">
+          <span aria-hidden="true" style="color:white; cursor:pointer;">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body p-4">
+        <app-responder-questionario *ngIf="(questId && eventoId && pessoaId)" [questId]="questId" [receptorId]="pessoaId"
+          [eventoId]="eventoId" (callback)="encerrouQuest($event)"></app-responder-questionario>
+      </div>
     </div>
   </div>
 </div>

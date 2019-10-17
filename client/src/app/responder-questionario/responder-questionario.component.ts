@@ -26,6 +26,15 @@ class Perg {
   id_proxima_pergunta: null;
 }
 
+interface PerRespondia {
+  id_alternativa: number;
+  id_evento: string;
+  id_pergunta: number;
+  id_receptor: string;
+  id_usuario: number;
+  observacao: any;
+}
+
 @Component({
   selector: 'app-responder-questionario',
   templateUrl: './responder-questionario.component.html',
@@ -37,6 +46,7 @@ export class ResponderQuestionarioComponent implements OnInit, OnDestroy {
   @Input() receptorId = null;
   @Output() callback = new EventEmitter();
   questionario: any = {};
+  respostas = [];
   respondendo = false;
   msg = '';
   perguntaAtual = {
@@ -59,6 +69,7 @@ export class ResponderQuestionarioComponent implements OnInit, OnDestroy {
     status: null,
     id_proxima_pergunta: null,
   };
+  perguntaAnterior = null;
   multiEscolha = false;
   alternativaEscolhida = null;
   respostaEscrita: any = '';
@@ -91,18 +102,23 @@ export class ResponderQuestionarioComponent implements OnInit, OnDestroy {
     this.limpaPergunta();
     this.multiEscolha = this.perguntaAtual.tipo_pergunta == 2;
     this.setaPergunta(this.perguntaAtual.nome);
+    
+    const respExistente = this.respostas.filter(r => r.id_pergunta == this.perguntaAtual.id)[0];
     if (this.perguntaAtual.tipo_pergunta === 3) {
-      this.criaRespostaNormal();
+      this.criaRespostaNormal(null, (respExistente || {}).observacao);
     }
     else if (this.perguntaAtual.tipo_pergunta === 4) {
-      this.criaRespostaTipoData();
+      this.criaRespostaTipoData(null, (respExistente || {}).observacao);
     }
     else if (this.perguntaAtual.tipo_pergunta == 1 || this.perguntaAtual.tipo_pergunta == 2) {
       this.respostaEscrita = '';
       this.perguntaAtual.alternativas.forEach(alt => {
+        let respAtual = this.respostas.some(r => {
+          return (r.id_pergunta == this.perguntaAtual.id && r.id_alternativa == alt.id)
+        });
         let divPai = document.createElement('div');
         divPai.className = 'col-lg-12 quest-response mb-3';
-        const input = (this.perguntaAtual.tipo_pergunta == 2) ? this.criaAlternativaMultiEscolha(alt.nome, alt.id) : this.criaAlternativaMultiplaEscolha(alt.nome, alt.id);
+        const input = (this.perguntaAtual.tipo_pergunta == 2) ? this.criaAlternativaMultiEscolha(alt.nome, alt.id, respAtual) : this.criaAlternativaMultiplaEscolha(alt.nome, alt.id, respAtual);
         divPai.appendChild(input);
         let span = document.createElement('label');
         span.textContent = alt.nome;
@@ -133,10 +149,14 @@ export class ResponderQuestionarioComponent implements OnInit, OnDestroy {
     pergunta.textContent = text;
   }
 
-  criaAlternativaMultiplaEscolha(text, id) {
+  criaAlternativaMultiplaEscolha(text, id, checked = false) {
     let input = document.createElement('input');
     input.type = "radio";
     input.id = id;
+    input.checked = checked;
+    if (checked) {
+      this.montaObservacao(id);
+    }
     input.className = 'quest-response-input form-control';
     input.name = "alternativa";
     input.value = id;
@@ -158,26 +178,59 @@ export class ResponderQuestionarioComponent implements OnInit, OnDestroy {
     return input;
   }
 
-  criaAlternativaMultiEscolha(text, id) {
+  montaObservacao(id) {
+    const alt = this.getAlternativa(id)
+    this.respostaEscrita = '';
+    if (alt.exige_observacao) {
+      this.criaRespostaNormal(alt.exige_observacao);
+    }
+    else {
+      const campo = document.querySelector('.quest-observacao');
+      if (campo) {
+        document.querySelector(".quest-container").removeChild(campo);
+      }
+    }
+    this.alternativaEscolhida = id;
+  };
+
+  criaAlternativaMultiEscolha(text, id, checked = false) {
     let input = document.createElement('input');
     input.type = "checkbox";
     input.id = id;
+    input.checked = checked;
+    if (checked) {
+      this.setAlterinativasSelecionadas(id);
+    }
     input.className = 'quest-response-input form-control';
     input.name = "alternativa";
     input.value = id;
     input.onchange = (event) => {
       if (event.target['checked']) {
-        if (!this.alternativasEscolhidas.length)
+        if (!this.alternativasEscolhidas.length) {
           return this.alternativasEscolhidas.push(event.target['value']);
-        if (this.alternativasEscolhidas.some(a => a != event.target['value']))
+        }
+        if (this.alternativasEscolhidas.some(a => a != event.target['value'])) {
           return this.alternativasEscolhidas.push(event.target['value']);
+        }
       }
       this.alternativasEscolhidas.forEach((a, index) => {
-        if (a == event.target['value'])
+        if (a == event.target['value']) {
           this.alternativasEscolhidas.splice(index, 1);
+        }
       });
     };
     return input;
+  }
+
+  setAlterinativasSelecionadas(id) {
+    if (id) {
+      if (!this.alternativasEscolhidas.length) {
+        return this.alternativasEscolhidas.push(id);
+      }
+      if (this.alternativasEscolhidas.some(a => a != id)) {
+        return this.alternativasEscolhidas.push(id);
+      }
+    }
   }
 
   removeCamposObservacao() {
@@ -187,19 +240,22 @@ export class ResponderQuestionarioComponent implements OnInit, OnDestroy {
     divPai.removeChild(textarea);
   }
 
-  criaRespostaNormal(exige_observacao = false) {
+  criaRespostaNormal(exige_observacao = false, text = '') {
     if (document.querySelector('.quest-response-textarea')) {
       this.removeCamposObservacao();
     }
     let divPai = document.createElement('div');
     divPai.className = 'col-lg-12 quest-observacao mb-3';
-
+    if (text) {
+      this.respostaEscrita = text;
+    }
     let textarea = document.createElement('textarea');
     textarea.id = "alternativa";
     textarea.className = 'quest-response-textarea form-control';
     textarea.onkeypress = (event) => {
       this.respostaEscrita = event.target['value'];
     };
+    textarea.innerText = text;
     if (exige_observacao) {
       let span = document.createElement('label');
       span.textContent = 'Observação (Campo Obrigatório)';
@@ -211,16 +267,18 @@ export class ResponderQuestionarioComponent implements OnInit, OnDestroy {
     reposta.appendChild(divPai);
   }
 
-  criaRespostaTipoData(exige_observacao = false) {
+  criaRespostaTipoData(exige_observacao = false, date = null) {
     let divPai = document.createElement('div');
     divPai.className = 'col-lg-12 quest-observacao mb-3';
-
     let input_date = document.createElement('input');
     input_date.id = "alternativa_data";
     input_date.type = "date";
+    input_date.value = date;
     input_date.className = 'quest-response-date form-control';
+    if (date) {
+      this.respostaEscrita = date;
+    }
     input_date.onchange = (event) => {
-      debugger
       this.respostaEscrita = new Date(event.target['value']).toISOString();
     };
     if (exige_observacao) {
@@ -242,19 +300,20 @@ export class ResponderQuestionarioComponent implements OnInit, OnDestroy {
 
   proxPergunta() {
     let self = this;
-    if (!this.alternativaEscolhida && !this.alternativasEscolhidas && !this.respostaEscrita) {
-      return alert('Precisa informar um reposta para poder prosseguir!');
+    if (!this.alternativaEscolhida && !this.alternativasEscolhidas.length && !this.respostaEscrita) {
+      return this.toastrService.warning('Precisa informar um reposta para poder prosseguir!');
     }
     let alternativa = [];
     if (this.perguntaAtual.tipo_pergunta == 1) {
       const alt = this.getAlternativa(this.alternativaEscolhida);
       if (alt.exige_observacao && !this.respostaEscrita) {
-        return alert('Precisa acrescentar uma observação nesta alternativa!');
+        return this.toastrService.warning('Precisa acrescentar uma observação nesta alternativa!');
       }
       else if (!alt.exige_observacao) this.respostaEscrita = '';
     }
     let proxPerg: Perg;
     try {
+      
       if (this.perguntaAtual.tipo_pergunta == 1) {
         this.alternativaEscolhida = this.perguntaAtual.alternativas.find(alt => {
           return alt.id === parseInt(this.alternativaEscolhida);
@@ -264,7 +323,12 @@ export class ResponderQuestionarioComponent implements OnInit, OnDestroy {
       }
       else {
         proxPerg = this.questionario.perguntas.find(p => p.id == this.perguntaAtual.id_proxima_pergunta);
-        if (this.perguntaAtual.tipo_pergunta == 2) {
+        if (this.perguntaAtual.tipo_pergunta === 2) {
+          this.respostas.forEach((r, i) => {
+            if (r.id_pergunta == this.perguntaAtual.id) {
+              this.respostas.splice(i, 1);
+            }
+          });
           this.alternativasEscolhidas = this.perguntaAtual.alternativas.filter(alt => {
             return this.alternativasEscolhidas.some(ac => ac == alt.id)
           });
@@ -286,7 +350,8 @@ export class ResponderQuestionarioComponent implements OnInit, OnDestroy {
       if (!proxPerg) {
         return this.terminou();
       }
-      this.perguntaAtual = proxPerg;
+      this.perguntaAnterior = { ...this.perguntaAtual };
+      this.perguntaAtual = { ...proxPerg };
       this.montaPergunta();
 
     }
@@ -294,7 +359,7 @@ export class ResponderQuestionarioComponent implements OnInit, OnDestroy {
       this.toastrService.error('Erro ao ler as permissoes resp', e);
     }
 
-    async function salvaResp(a = null) {
+    function salvaResp(a = null) {
       let objResp = {
         id_alternativa: a ? a.id : null,
         id_usuario: self.usuarioLogado.id,
@@ -303,12 +368,18 @@ export class ResponderQuestionarioComponent implements OnInit, OnDestroy {
         id_evento: self.eventoId,
         id_pergunta: self.perguntaAtual.id
       }
-      let gravarResposta = await self.connectHTTP.callService({
-        service: 'gravaRespostaQuestionario',
-        paramsService: { data: JSON.stringify(objResp) }
-      }) as any;
-      if (gravarResposta.error) {
-        return self.toastrService.error(gravarResposta.error);
+      let existeRespPerguntaAtual = self.respostas.filter(r => {
+        return (r.id_pergunta == objResp.id_pergunta);
+      })[0];
+      if (!existeRespPerguntaAtual) {
+        self.respostas.push(objResp);
+      } else {
+        self.respostas = self.respostas.map(r => {
+          if (r.id_pergunta == existeRespPerguntaAtual.id_pergunta) {
+            return objResp;
+          }
+          return r;
+        });
       }
     }
   }
@@ -322,8 +393,50 @@ export class ResponderQuestionarioComponent implements OnInit, OnDestroy {
     this.respostaEscrita = '';
     this.concluiu = true;
     this.msg = msg;
+    this.salvaReps();
     this.toastrService.success(msg);
+  }
+
+  async salvaReps() {
+    
+    if (this.respostas.length) {
+      for (let index = 0; index < this.respostas.length; index++) {
+        const element = this.respostas[index];
+        let gravarResposta = await this.connectHTTP.callService({
+          service: 'gravaRespostaQuestionario',
+          paramsService: { data: JSON.stringify(element) }
+        }) as any;
+        if (gravarResposta.error) {
+          return this.toastrService.error(gravarResposta.error);
+        }
+      }
+    }
+    
     this.callback.emit();
+    this.respostas = [];
+  }
+
+  get podeVoltar() {
+    return this.respostas.length && this.perguntaAtual.sequencia_pergunta > 1;
+  }
+
+  voltar() {
+    // const perguntaAnterior: PerRespondia = this.respostas[this.respostas.length - 1];
+    // if (this.perguntaAnterior) {
+    // }
+    let pergAnteriror = null; 
+    this.questionario.perguntas.forEach(p => {
+      if (p.alternativas.some(alt => alt.id_proxima_pergunta == this.perguntaAtual.id)) {
+        pergAnteriror = p;
+      }
+    });
+    if (pergAnteriror) {
+      this.perguntaAtual = pergAnteriror;
+    }
+    else {
+      this.perguntaAtual = this.questionario.perguntas.find(p => p.sequencia_pergunta == (this.perguntaAtual.sequencia_pergunta - 1));
+    }
+    this.montaPergunta();
   }
 
   encerrar() {

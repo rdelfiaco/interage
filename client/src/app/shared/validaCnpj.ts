@@ -47,7 +47,7 @@ const format: format = (number: string): string => {
 }
 
 const isValid: isValid = (number: string, strict?: boolean): boolean => {
-  debugger
+  
   const stripped: string = strip(number, strict)
 
   // CNPJ must be defined

@@ -1,9 +1,10 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, ViewChild } from '@angular/core';
 import { ConnectHTTP } from '../shared/services/connectHTTP';
 import { LocalStorage } from '../shared/services/localStorage';
 import { Usuario } from '../login/usuario';
 import { Observable, Subscriber } from 'rxjs';
 import {  Router } from '@angular/router';
+import { ModalDirective } from '../../lib/ng-uikit-pro-standard';
 
 @Component({
   selector: 'telemarketing',
@@ -31,6 +32,7 @@ export class TelemarketingComponent implements OnInit {
   pessoaNome: string;
   velocimetro: string;
   tableData = [];
+  @ViewChild('basicModal') basicModal: ModalDirective;
 
   constructor(private connectHTTP: ConnectHTTP, 
               private localStorage: LocalStorage, 
@@ -38,6 +40,10 @@ export class TelemarketingComponent implements OnInit {
               private router: Router) {
     this.usuarioLogado = this.localStorage.getLocalStorage('usuarioLogado') as Usuario;
     if (!this.metaPessoa.ligacoes_realizadas) this.metaPessoa.ligacoes_realizadas = 0;
+  }
+
+  closeModal() {
+    this.basicModal.hide();
   }
 
   async ngOnInit() {

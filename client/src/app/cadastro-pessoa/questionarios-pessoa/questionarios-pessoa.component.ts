@@ -38,6 +38,13 @@ export class QuestionariosPessoaComponent implements OnInit {
     this.questionarioSelecionado = item;
   }
 
+  getObs(obs) {
+    if (new Date(obs).toString() == 'Invalid Date') {
+      return obs;
+    }
+    return moment(new Date(obs)).format('DD/MM/YYYY');
+  }
+
   async getQuestariosPessoaId(pessoa: any) {
     const retorno = await this.connectHTTP.callService({
       service: 'getQuestariosPessoaId',

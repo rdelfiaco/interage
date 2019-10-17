@@ -28,7 +28,8 @@
   <div class="row">
     <div class="col-lg-12 text-right">
       <div class="md-form">
-        <button type="button" mdbBtn color="light" mdbWavesEffect (click)="encerrar()">Encerrar</button>
+        <button type="button" mdbBtn color="red" mdbWavesEffect (click)="encerrar()">Encerrar</button>
+        <button type="button" mdbBtn *ngIf="podeVoltar" color="light" mdbWavesEffect (click)="voltar()">Voltar alternativa</button>
         <button type="button" mdbBtn color="dark-green" mdbWavesEffect (click)="proxPergunta();">Avançar</button>
       </div>
     </div>

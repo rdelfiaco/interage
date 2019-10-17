@@ -62,7 +62,7 @@ export class TipoDeClienteComponent implements OnInit {
   async getTipoClientes() {
 
     let resp  = await this.bancoDados.lerDados('getTipoClientes', {}) as any;
-    debugger
+    
     if (resp.resposta) 
        {this.tableData = resp.resposta; }
     else { this.toastrService.error('Erro ao ler tipo de clientes', resp.error )}
