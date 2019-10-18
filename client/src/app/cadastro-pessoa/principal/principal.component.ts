@@ -111,6 +111,8 @@ export class PrincipalComponent implements OnInit {
       apelido_fantasia: [''],
       id_atividade: [''],
       cnh:[''],
+      cnh_validade:[''],
+      cnh_categoria:[''],
       id_tipo_cliente:[''],
       id_classificacao_cliente:[''],
     })
@@ -138,6 +140,8 @@ export class PrincipalComponent implements OnInit {
       apelido_fantasia: [this.pessoa.principal.apelido_fantasia],
       id_atividade: [this.pessoa.principal.id_atividade],
       cnh: [this.pessoa.principal.cnh],
+      cnh_validade:  [moment(this.pessoa.principal.cnh_validade ).format('DD/MM/YYYY') ],
+      cnh_categoria: [this.pessoa.principal.cnh_categoria],
       id_tipo_cliente: [this.pessoa.principal.id_tipo_cliente],
       id_classificacao_cliente: [this.pessoa.principal.id_classificacao_cliente]
     })

@@ -53,12 +53,24 @@
         <input mdbInputDirective formControlName="cpf_cnpj" type="text" id="cpf" class="form-control">
         <label for="cpf">CPF</label>
       </div>
+
+    </div>
+    <div class="row">
       <div class="md-form col-3">
         <input mdbInputDirective formControlName="cnh" type="text" id="cnh" class="form-control">
-        <label for="cnh">CNH</label>
+        <label for="cnh">CNH número</label>
+      </div>
+      <div class="md-form col-3" style="margin-top: -10px" >
+        <mdb-date-picker formControlName="cnh_validade" #cnh_validade name="mydate" [options]="myDatePickerOptions"
+        [placeholder]="'Selecione a data'" required id="cnh_validade_">
+      </mdb-date-picker>
+      <label for="cnh_validade_" > CNH Validade</label>
+      </div>
+      <div class="md-form col-3">
+        <input mdbInputDirective formControlName="cnh_categoria" type="text" id="cnh_categoria_" class="form-control">
+        <label for="cnh_categoria_">CNH categoria</label>
       </div>
     </div>
-
     <div class="row">
       <div class="col-4 mdb-select-form">
         <mdb-select [filterEnabled]="true" formControlName="id_atividade" [placeholder]="'Selecione a profissão'"

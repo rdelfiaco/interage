@@ -1,3 +1,4 @@
+import { async } from '@angular/core/testing';
 import { Proposta } from './../proposta';
 import { Component, OnInit, Input } from '@angular/core';
 import { ConnectHTTP } from '../../shared/services/connectHTTP';
@@ -12,6 +13,8 @@ import { img } from '../imagem';
 import { ToastService } from '../../../lib/ng-uikit-pro-standard';
 import * as numeral from 'numeral';
 import 'numeral/locales';
+import { BancoDados } from '../../shared/services/bancoDados';
+
 
 numeral.locale('pt-br');
 numeral(10000).format('0,0') // 10.000
@@ -26,6 +29,7 @@ export class DetalhePropostaComponent implements OnInit {
 
   carregando: boolean = false;
   proposta: any;
+  pessoa: any;
   usuarioLogadoSupervisor: boolean;
   usuarioLogado: Usuario;
   idProposta: number;
@@ -36,7 +40,9 @@ export class DetalhePropostaComponent implements OnInit {
     private connectHTTP: ConnectHTTP, 
     private localStorage: LocalStorage,
     private formBuilder: FormBuilder,
-    private toastrService: ToastService) {
+    private toastrService: ToastService,
+    private bancoDados: BancoDados = new BancoDados,
+    ) {
     this.usuarioLogado = this.localStorage.getLocalStorage('usuarioLogado') as Usuario;
     pdfMake.vfs = pdfFonts.pdfMake.vfs;
     this.usuarioLogadoSupervisor = this.usuarioLogado.dashboard === "supervisor" || this.usuarioLogado.dashboard === "admin";
@@ -94,7 +100,6 @@ export class DetalhePropostaComponent implements OnInit {
       }
     }) as any;
     this.proposta = propostaEncontrada.resposta[0];
-    console.log(this.proposta)
     this.povoaFormulario();
 
 
@@ -135,7 +140,50 @@ export class DetalhePropostaComponent implements OnInit {
       rastreadorInstalacao: numeral(Number(this.proposta.rastreador_instalacao)).format('0.00'),
       entrada: numeral(Number(this.proposta.entrada)).format('0.00'),
       dtsalvou:this.proposta.dtsalvou ? moment(this.proposta.dtsalvou).format('DD/MM/YYYY HH:mm:ss') : this.proposta.dtsalvou,
-    })                                
+    })    
+    
+    
+    this.propostaForm.controls['id'].disable();
+    this.propostaForm.controls['status'].disable();
+    this.propostaForm.controls['id_status_proposta'].disable();
+    this.propostaForm.controls['cliente'].disable();
+    if (this.proposta.id_status_proposta != 3) {
+    this.propostaForm.controls['placa'].disable();
+    }else
+    {
+      this.propostaForm.controls['placa'].enable();
+    }
+    this.propostaForm.controls['tipo_veiculo'].disable();
+    this.propostaForm.controls['marca'].disable();
+    this.propostaForm.controls['modelo'].disable();
+    this.propostaForm.controls['codigofipe'].disable();
+    this.propostaForm.controls['ano_modelo'].disable();
+    this.propostaForm.controls['preco_medio'].disable();
+    this.propostaForm.controls['cota'].disable();
+    this.propostaForm.controls['data_consulta'].disable();
+    this.propostaForm.controls['adesao'].disable();
+    this.propostaForm.controls['mensalidade'].disable();
+    this.propostaForm.controls['participacao'].disable();
+    this.propostaForm.controls['app'].disable();
+    this.propostaForm.controls['carro_reserva_'].disable();
+    this.propostaForm.controls['fundo_terceiros_'].disable();
+    this.propostaForm.controls['protecao_vidros_'].disable();
+    this.propostaForm.controls['rastreador_'].disable();
+    this.propostaForm.controls['usuario'].disable();
+    this.propostaForm.controls['dtsalvou'].disable();
+    this.propostaForm.controls['novoPortabilidade_'].disable();
+    this.propostaForm.controls['particularComercial_'].disable();
+    this.propostaForm.controls['normalLeilao_'].disable();
+    this.propostaForm.controls['cotaAlterada'].disable();
+    this.propostaForm.controls['parcelasAdesao'].disable();
+    this.propostaForm.controls['parcelasRastreador'].disable();
+    this.propostaForm.controls['rastreadorInstalacao'].disable();
+    this.propostaForm.controls['entrada'].disable();
+
+    
+
+
+
   }
 
 
@@ -167,4 +215,321 @@ export class DetalhePropostaComponent implements OnInit {
     }
 
   }
+
+  async propostaAdmissao(){
+
+    await this.getCliente();
+
+    var docDefinition = {
+      pageSize: 'A4',
+      pageMargins: [10, 10, 5, 5],
+      content: [
+        {  // cabeçalho
+          style: 'tableExample',
+          table: {
+            widths: [130, 270, 120],
+            body: [
+              [{
+                image: 'logotipo',
+                width: 80,
+                height: 95,
+                alignment: 'center',
+                margin: [0, 0, 0, 0],
+                border: [false, false, false, false]
+              }, {
+                text: `Altis Proteção Veicular e Benefícios
+                Avenida Laudelino Gomes, nº 61, Qd. 210 Lt.38
+                Setor Pedro Ludovico – Goiânia – GO
+                CEP: 74830-090 – Telefone: (62) 3259-0830
+                WhatsApp: (62) 9 8538-0830
+                altisprotecaoveicular.com.br`
+                ,
+                alignment: 'center',
+                fontSize: 10,
+                height: 95,
+                margin: [0, 20, 0, 0],
+                border: [false, false, false, false]
+              },
+              {
+                text: `Número: 
+                ${this.proposta.id}`
+                ,
+                alignment: 'center',
+                fontSize: 15,
+                height: 95,
+                margin: [0, 40, 0, 0],
+                border: [false, false, false, false]
+              }
+              ]
+            ]
+          },
+          
+        },
+        {   // responsável
+          style: 'tableExample',
+          table: {
+            widths: [568.5],
+            heights: [30],
+
+            body: [
+              [{
+                text: `PROPOSTA DE ADMISSÃO DE ASSOCIADO`,
+                alignment: 'center',
+                fontSize: 15,
+                height: 95,
+                color: '#FFFFFF',
+                fillColor: '#000000',
+                margin: [5, 5, 0, 0],
+                border: [false, false, false, false],
+              }],
+
+            ]
+          }
+        },
+        {   // Dados do associado   
+          style: 'tableExample',
+          table: {
+            widths: [568.5],
+            heights: [30],
+
+            body: [
+              [{
+                text: 
+                  `Associado: ${this.pessoa.principal.nome}
+                  CPF/CNPJ:   ${this.pessoa.principal.cpf_cnpj}`,
+                alignment: 'left',
+                style: 'Paragrafo',
+                margin: [5, 5, 0, 0],
+                border: [false, false, false, false],
+              }],
+
+            ]
+          }
+        },
+        // {   // Tabela Fipe
+        //   style: 'tableExample',
+        //   table: {
+        //     widths: [200, 360],
+        //     heights: [20],
+
+        //     body: [
+        //       [{
+        //         text: 'Marca/Modelo:',
+        //         margin: [5, 5, 0, 0],
+        //         border: [true, false, true, true],
+        //       },
+        //       {
+        //         text: `${this.proposta.marca} / ${this.proposta.modelo}`,
+        //         margin: [5, 5, 0, 0],
+        //         border: [true, false, true, true],
+        //       }
+        //       ],
+        //       [{
+        //         text: 'Ano Modelo:',
+        //         margin: [5, 5, 0, 0],
+        //         border: [true, true, true, true],
+        //       },
+        //       {
+        //         text: `${this.proposta.anoModelo}`,
+        //         margin: [5, 5, 0, 0],
+        //         border: [true, true, true, true],
+        //       }
+        //       ],
+        //       [{
+        //         text: 'Cód. FIPE',
+        //         margin: [5, 5, 0, 0],
+        //         border: [true, false, true, true],
+        //       },
+        //       {
+        //         text: `${this.proposta.codigoFipe}`,
+        //         margin: [5, 5, 0, 0],
+        //         border: [true, false, true, true],
+        //       }
+        //       ],
+        //       [{
+        //         text: 'Valor fipe',
+        //         margin: [5, 5, 0, 0],
+        //         border: [true, true, true, true],
+        //       },
+        //       {
+        //         text: `${this.proposta.precoMedio}`,
+        //         margin: [5, 5, 0, 0],
+        //         border: [true, true, true, true],
+        //       }
+        //       ]
+
+        //     ]
+        //   }
+        // },
+        // {   // valores da proposta 
+        //   style: 'tableExample',
+        //   table: {
+        //     widths: [200, 360],
+        //     heights: [200],
+
+        //     body: [
+        //       [{
+        //         text: [ `Entrada:\n R$ ${numeral(this.proposta.entrada).format('00.00')}
+        //               \n\n Onze parcelas:\n`, 
+        //              {text:  '(plano anual)',  style: 'font14'},
+        //              `\n R$ ${numeral(this.proposta.mensalidade).format('00.00')}
+        //              ${parcelamentoRastreador} 
+        //             \n\n Cota de participação:\n R$ ${numeral(this.proposta.participacao).format('0,000.00')} `],
+        //         style: 'header',
+        //         margin: [15, 20, 0, 5],
+        //         border: [true, false, true, true],
+        //       },
+        //       {
+        //         text: [
+        //           {
+        //             text: 'COBERTURAS INCLUSAS',
+        //             alignment: 'center',
+        //             style: 'subheader',
+        //           },
+        //           {
+        //             text: `\n\nSem perfil de condutor! (Qualquer pessoa habilitada pode conduzir o veículo) 
+        //                 \nSem Consulta SPC/SERASA 
+        //                 \nSem limite de km rodado; Sem perfil de guarda de veículo, não exige garagem;
+        //                 \nRoubo, furto, incêndio, colisão, capotamento, tombamento, desastres naturais como: enchente, chuva de granizo, queda de árvore; 
+        //                 \nAssistência 24H em todo Brasil; 
+        //                 \n${reboqueIlimitado}
+        //                 \nSocorro elétrico e mecânico; Chaveiro; Taxi, SOS Pneus;
+        //                 \nMensalidade Contínua (sem renovação); Não trabalhamos com Bônus; 
+        //                 \n${normalLeilaoSisnsitro}
+        //                 \n${this.proposta.terceiros}
+        //                 \n${this.proposta.appDescricao}
+        //                 \n${this.proposta.reboque}
+        //                 \n${this.proposta.carroReserva}
+        //                 \n${this.proposta.protecaoVidros}
+        //                 \n${this.proposta.rastreador}
+        //                 `,
+        //             fontSize: 9,
+        //           }
+        //         ],
+        //         margin: [5, 5, 0, 0],
+        //         border: [true, false, true, true],
+        //       }
+        //       ],
+        //       // [
+        //       //   {
+        //       //     text: 'OUTRAS COBERTURAS OPCIONAIS OFERECIDAS',
+        //       //     style: 'subheader',
+        //       //     margin: [5, 25, 0, 0],
+        //       //   },
+        //       //   {
+        //       //     text: `${produtoAdicionais1}
+        //       //         \nAPP (ACIDENTES PESSOAIS DE PASSAGEIROS) até 20 mil;
+        //       //         \nFundo para terceiros de 50 mil;
+        //       //         \nFundo para terceiros de 70 mil.
+        //       //         ` ,
+        //       //     alignment: 'left',
+        //       //     fontSize: 9,
+        //       //     margin: [5, 0, 0, 0],
+        //       //   }
+        //       // ],
+        //     ]
+        //   }
+        // },
+        // {// texto OUTRAS COBERTURAS OPCIONAIS OFERECIDAS
+        //   style: 'tableExample',
+        //   table: { 
+        //     widths: [568.5],
+        //     heights: [30],
+        //     body: [
+        //       [{
+        //         text: [
+        //           { 
+        //             text:'OUTRAS COBERTURAS OPCIONAIS OFERECIDAS',
+        //             style: 'ParagrafoBold',
+        //             alignment: 'center',
+
+        //           },
+        //           {
+        //             text: `\n\n${this.fundoTerceiroOutros}
+        //             ${this.carroReservaOutros}
+        //             ${this.protecaoVidroOutros}
+        //             ${this.appOutros}
+        //             ${this.rastreadorOutros}`,
+        //             fontSize: 9,
+        //             alignment: 'left',
+        //           }
+        //         ], 
+                
+        //         margin: [0, 0, 0, 0],
+                
+        //         border: [true, false, true, true],
+        //       }
+        //     ]
+        //     ]
+        //   }
+        // },
+        // {   // texto informativo e validade da proposta
+        //   style: 'tableExample',
+        //   table: {
+        //     widths: [568.5],
+        //     heights: [30],
+        //     body: [
+        //       [{
+        //         text: `A ALTIS atua legalmente perante a lei, respeitando a constituição e o código civil. Não possui nenhum impedimento legal e se responsabiliza solidariamente com os princípios embasado nas leis* Lei no 9.790, de 23 de março de 1999.  / CAPÍTULO I / DA QUALIFICAÇÃO COMO ORGANIZAÇÃO DA SOCIEDADE CIVIL* Constituição da Republica Federativa do Brasil 1988 / TÍTULO II / Dos Direitos / Garantias Fundamentais / CAPÍTULO I / DOS DIREITOS E DEVERES INDIVIDUAIS E COLETIVOS / Art. 5º /Incisos: XVII a XXI.* Código Civil - Lei 10406/02 | Lei no 10.406, de 10 de janeiro de 2002 / TÍTULO II / Da Sociedade / CAPÍTULO II / DAS ASSOCIAÇÕES. 
+                
+        //         Validade: 15 dias a partir de ${this.hoje}. `,
+        //         fillColor: '#eeeeee',
+        //         margin: [5, 5, 5, 5],
+        //         alignment: 'left',
+        //         style: 'small',
+        //         border: [true, false, true, true],
+        //       }]
+        //     ]
+        //   }
+        // },
+      ],
+      styles: {
+        header: {
+          fontSize: 18,
+          bold: true
+        },
+        subheader: {
+          fontSize: 15,
+          bold: true
+        },
+        ParagrafoBold: {
+          fontSize: 12,
+          bold: true
+        },
+        Paragrafo: {
+          fontSize: 12,
+          bold: true
+        },
+        quote: {
+          italics: true
+        },
+        font14: {
+          fontSize: 14
+        },
+        small: {
+          fontSize: 8
+        },
+      },
+      images: { logotipo: img }
+    };
+
+    pdfMake.createPdf(docDefinition).open()
+
+
+
+
+
+  }
+
+
+  async getCliente(){
+
+    this.pessoa = await this.bancoDados.lerDados('getPessoa', { id_pessoa: this.proposta.id_pessoa_cliente }) as any;
+    this.pessoa = this.pessoa.resposta; 
+    console.log(this.pessoa)
+
+    
+  }
+
+
 }

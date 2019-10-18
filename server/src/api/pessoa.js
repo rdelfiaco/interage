@@ -290,6 +290,7 @@ function salvarPessoa(req, res) {
       const dadosAtuais = JSON.parse(req.query.dadosAtuais);
       const dadosAnteriores =  JSON.parse(req.query.dadosAnteriores);
 
+      console.log(dadosAtuais)
       req.query = {...dadosAtuais};
       req.query.id_usuario = credenciais.idUsuario;
 
@@ -316,7 +317,7 @@ function salvarPessoa(req, res) {
         update = update.replace(/'null'/g, null)
         update = update.replace(/'`'/g, ' ')
 
-
+        console.log(update)
        client.query(update).then((res) => {
           client.query('COMMIT').then((resposta) => {
             client.end();
@@ -349,6 +350,8 @@ function salvarPessoa(req, res) {
           ret.push('orgaoemissor=' + (req.query.orgaoemissor != 'null' || req.query.orgaoemissor != '' ? "'" + req.query.orgaoemissor + "'" : null))
           ret.push('cpf_cnpj=' + (req.query.cpf_cnpj != 'null' || req.query.cpf_cnpj != ''  ? "'" + req.query.cpf_cnpj + "'" : null))
           ret.push('cnh=' + (req.query.cnh != 'null' || req.query.cnh != ''  ? "'" + req.query.cnh + "'" : null))
+          ret.push('cnh_validade=' + (req.query.cnh_validade == 'null' || req.query.cnh_validade == ''  ? null : " date('" + req.query.cnh_validade + "')" ))
+          ret.push('cnh_categoria=' + (req.query.cnh_categoria != 'null' || req.query.cnh_categoria != ''  ? "'" + req.query.cnh_categoria + "'" : null))
           ret.push('email=' + (req.query.email != 'null' || req.query.email != '' ? "'" + req.query.email + "'" : null))
           ret.push('website=' + (req.query.website != 'null' || req.query.website != '' ? "'" + req.query.website + "'" : null))
           ret.push('id_atividade=' + (req.query.id_atividade != 'null' || req.query.id_atividade != '' ? "'" + req.query.id_atividade + "'" : null))
@@ -439,6 +442,8 @@ async function  adicionarPessoa(req, res) {
         ret.push('orgaoemissor,')
         ret.push('cpf_cnpj,')
         ret.push('cnh,')
+        ret.push('cnh_validade,')
+        ret.push('cnh_categoria,')
         ret.push('email,')
         ret.push('website,')
         ret.push('observacoes,')
@@ -464,6 +469,8 @@ async function  adicionarPessoa(req, res) {
         ret.push((req.query.orgaoemissor != '' ? "'" + req.query.orgaoemissor + "'" : 'NULL') + ",")
         ret.push((req.query.cpf_cnpj != '' ? "'" + req.query.cpf_cnpj + "'" : 'NULL') + ",")
         ret.push((req.query.cnh != '' ? "'" + req.query.cnh + "'" : 'NULL') + ",")
+        ret.push((req.query.cnh_validade == 'null' || req.query.cnh_validade == ''  ? 'NULL': " date('" + req.query.cnh_validade + "')" ) + ",")
+        ret.push((req.query.cnh_categoria != '' ? "'" + req.query.cnh_categoria + "'" : 'NULL') + ",")
         ret.push((req.query.email != '' ? "'" + req.query.email + "'" : 'NULL') + ",")
         ret.push((req.query.website != '' ? "'" + req.query.website + "'" : 'NULL') + ",")
         ret.push((req.query.observacoes != '' ? "'" + req.query.observacoes + "'" : 'NULL') + ",")
