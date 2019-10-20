@@ -140,6 +140,9 @@ declaraServico('getPessoa', pessoa.getPessoa);
 declaraServico('crudRelacionamento', pessoa.crudRelacionamento);
 declaraServico('getQuestariosPessoaId', pessoa.getQuestariosPessoaId);
 declaraServico('getQuestRespAnaliticaPessoaId', pessoa.getQuestRespAnaliticaPessoaId);
+declaraServico('getPessoaDadosPrincipais', pessoa.getPessoaDadosPrincipais);
+
+
 
 // questionario
 declaraServico('getQuestionarios', questionarios.getQuestionarios);

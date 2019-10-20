@@ -1206,6 +1206,36 @@ function getQuestRespAnaliticaPessoaId(req, res) {
   })
 }
 
+function getPessoaDadosPrincipais(req, res) {
+  return new Promise(function (resolve, reject) {
+    let credenciais = {
+      token: req.query.token,
+      idUsuario: req.query.id_usuario
+    };
+
+    let sql = `
+            select   (select to_char(ddd, 'FM"("99")"') || to_char(telefone,'FM9 0000"-"0000')  from pessoas_telefones pt where p.id = pt.id_pessoa and  principal):: character varying(15) as tel_1
+        , (select to_char(ddd, 'FM"("99")"') || to_char(telefone,'FM9 0000"-"0000')  from pessoas_telefones pt where p.id = pt.id_pessoa and not principal order by id desc limit 1 ):: character varying(15) as tel_2
+        , p.*
+        , to_char(pe.cep , 'FM99"."999"-"999') as cep,pe.logradouro,pe.bairro,pe.complemento
+        , ci.nome as cidade, ci.uf_cidade as uf
+        , case when p.tipo = 'F' 
+              then to_char(TO_NUMBER(cpf_cnpj, '99999999999999999') , 'FM000"."000"."000"-"00')
+              else to_char(TO_NUMBER(cpf_cnpj, '99999999999999999'), 'FM00"."000"."000"/"0000"-"00') end as cpf_cnpj_format
+        from pessoas p
+        inner join pessoas_enderecos pe  on  p.id = pe.id_pessoa and  recebe_correspondencia
+        inner join cidades ci on pe.id_cidade = ci.id
+        where p.id =  ${req.query.id_pessoa}
+    `
+    executaSQL(credenciais, sql)
+      .then(res => {
+        resolve(res);
+      })
+      .catch(err => {
+        reject(err)
+      })
+  })
+}
 
 module.exports = {
   getPessoa,
@@ -1225,4 +1255,5 @@ module.exports = {
   crudRelacionamento,
   getQuestariosPessoaId,
   getQuestRespAnaliticaPessoaId,
+  getPessoaDadosPrincipais,
 }

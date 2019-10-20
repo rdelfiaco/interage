@@ -35,6 +35,7 @@ export class DetalhePropostaComponent implements OnInit {
   idProposta: number;
   propostaForm: FormGroup;
 
+
   constructor(
     private route: ActivatedRoute,
     private connectHTTP: ConnectHTTP, 
@@ -86,8 +87,9 @@ export class DetalhePropostaComponent implements OnInit {
     })
   }
 
-  ngOnInit() {
-    this.carregaProposta();
+  async ngOnInit() {
+    await this.carregaProposta();
+
   }
 
 
@@ -265,18 +267,18 @@ export class DetalhePropostaComponent implements OnInit {
           },
           
         },
-        {   // responsável
+        {   // Linha de título 
           style: 'tableExample',
           table: {
             widths: [568.5],
-            heights: [30],
+            heights: [20],
 
             body: [
               [{
                 text: `PROPOSTA DE ADMISSÃO DE ASSOCIADO`,
                 alignment: 'center',
                 fontSize: 15,
-                height: 95,
+                height: 75,
                 color: '#FFFFFF',
                 fillColor: '#000000',
                 margin: [5, 5, 0, 0],
@@ -295,12 +297,100 @@ export class DetalhePropostaComponent implements OnInit {
             body: [
               [{
                 text: 
-                  `Associado: ${this.pessoa.principal.nome}
-                  CPF/CNPJ:   ${this.pessoa.principal.cpf_cnpj}`,
+                  `Associado: ${this.pessoa.nome}
+                  CPF/CNPJ:   ${this.pessoa.cpf_cnpj_format}                                        Data de Nascimento: ${moment(this.pessoa.datanascimento).format('DD/MM/YYYY') }
+                  CNH: ${this.pessoa.cnh}             Categoria: ${this.pessoa.cnh_categoria}             Validade: ${moment(this.pessoa.cnh_validade).format('DD/MM/YYYY')}
+                  CEP:  ${this.pessoa.cep}        Endereço: ${this.pessoa.logradouro}      Complemento: ${this.pessoa.complemento}
+                  Bairro: ${this.pessoa.bairro}     Cidade/UF: ${this.pessoa.cidade} - ${this.pessoa.uf}
+                  Telefone:  ${this.pessoa.tel_1}     ${this.pessoa.tel_2}
+                  E-mail: ${this.pessoa.email} \n`
+                  
+                  ,
+
                 alignment: 'left',
                 style: 'Paragrafo',
                 margin: [5, 5, 0, 0],
                 border: [false, false, false, false],
+                lineHeight: 2
+              }],
+
+            ]
+          }
+        },
+        {   // Texto 1   
+          style: 'tableExample',
+          table: {
+            widths: [568.5],
+            heights: [30],
+
+            body: [
+              [{
+                text: `O proponente acima qualificado requer através do presente termo a admissão ao quadro de associados da ALTIS PROTEÇÃO VEICULAR E BENEFÍCIOS, CNPJ: 29.758.305/0001-49, nos termos de seu Estatuto Social, declarando estar ciente de seus direitos e deveres, bem como sujeito às obrigações previstas no referido estatuto, no regimento interno, regulamentos da associação e normas deliberativas de seus órgãos estatutários, no exato limite de suas respectivas competências.\n
+                A ALTIS PROTEÇÃO VEICULAR é uma associação privada sem fins lucrativos, com base legal na Constituição Federal em seu artigo 5º, inc. XVII, XVIII, XIX, XX e XXI, bem como no Código Civil, em seu artigo 53 e seguintes, e tem como objetivo a defesa e promoção dos interesses de seus associados, com todas as suas atividades fundamentadas pelo princípio do associativismo.\n
+                O proponente declara ainda serem exatas e verdadeiras todas as informações prestadas, estando ciente de que a eventual inexatidão das mesmas implicará a perda de direitos como associado, em analogia aos termos do art. 766 do Código Civil.\n`,
+                style: 'Paragrafo',
+                margin: [5, 5, 0, 0],
+                border: [true, true, true, true],
+              }],
+
+            ]
+          }
+        },
+          {   // linha branco
+            style: 'tableExample',
+            table: {
+              widths: [568.5],
+              heights: [10],
+              body: [
+                [{
+                  text: ``,
+                  style: 'Paragrafo',
+                  margin: [5, 5, 0, 0],
+                  border: [false, false, false, false],
+                }],
+              ]
+            }
+        },
+        {   // Texto 2 
+          style: 'tableExample',
+          table: {
+            widths: [568.5],
+            heights: [30],
+
+            body: [
+              [{
+                
+                text: `Declaro, sob compromisso de honra que as informações que preenchi neste laudo são verdadeiras, assim como declaro que li, entendi e recebi cópia do estatuto e dos regulamentos interno da associação. Também estou ciente que posso encontrar no site da Altis, todos os regulamentos na área do associado.
+                `,
+                style: 'Paragrafo',
+                margin: [5, 5, 0, 0],
+                border: [true, true, true, true],
+              }],
+
+            ]
+          }
+        },
+        {   // roda pé
+          style: 'tableExample',
+          table: {
+            widths: [568.5],
+            heights: [30],
+
+            body: [
+              [{
+                text:[ 
+                  {text:`\nDATA E ASSINATURA DO ASSOCIADO \n\n`},
+                  {text:`\n__________________ DE ______________ DE _______________.\n`,
+                  alignment: 'center', lineHeight: 1},
+                  {text: `\n\n_____________________________\n
+                       VISTORIADOR              `,
+                       alignment: 'right', lineHeight: 0.5
+                  },
+                  {text: `\n\n\n\n_______________________________________\n
+                  ASSOCIADO`, alignment: 'center', lineHeight: 0.5 } 
+                ],
+                  margin: [5, 5, 0, 0],
+                  border: [false, false, false, false],
               }],
 
             ]
@@ -497,8 +587,10 @@ export class DetalhePropostaComponent implements OnInit {
           bold: true
         },
         Paragrafo: {
-          fontSize: 12,
-          bold: true
+          alignment: 'justify',
+          fontSize: 10,
+          bold: false,
+          lineHeight: 1.2,
         },
         quote: {
           italics: true
@@ -524,9 +616,9 @@ export class DetalhePropostaComponent implements OnInit {
 
   async getCliente(){
 
-    this.pessoa = await this.bancoDados.lerDados('getPessoa', { id_pessoa: this.proposta.id_pessoa_cliente }) as any;
-    this.pessoa = this.pessoa.resposta; 
-    console.log(this.pessoa)
+    this.pessoa = await this.bancoDados.lerDados('getPessoaDadosPrincipais', { id_pessoa: this.proposta.id_pessoa_cliente }) as any;
+    this.pessoa = this.pessoa.resposta[0]; 
+    console.log('pessoa', this.pessoa)
 
     
   }
