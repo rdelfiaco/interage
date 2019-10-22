@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ChangeDetectionStrategy } from '@angular/core';
 import { UsuarioService } from '../usuario.service';
 import { ConnectHTTP } from '../../shared/services/connectHTTP';
 import { ToastService } from '../../../lib/ng-uikit-pro-standard';
@@ -7,7 +7,7 @@ import { ToastService } from '../../../lib/ng-uikit-pro-standard';
 @Component({
   selector: 'app-usuario-permissoes',
   templateUrl: './usuario-permissoes.component.html',
-  styleUrls: ['./usuario-permissoes.component.scss']
+  styleUrls: ['./usuario-permissoes.component.scss'],
 })
 export class UsuarioPermissoesComponent implements OnInit {
 

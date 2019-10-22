@@ -412,7 +412,7 @@ export class ResponderQuestionarioComponent implements OnInit, OnDestroy {
       }
     }
     
-    this.callback.emit();
+    this.callback.emit(true);
     this.respostas = [];
   }
 
@@ -440,7 +440,8 @@ export class ResponderQuestionarioComponent implements OnInit, OnDestroy {
   }
 
   encerrar() {
-    this.terminou('Questionário encerrado, reponda novamente no futuro!');
+    this.callback.emit(false);
+    // this.terminou('Questionário encerrado, reponda novamente no futuro!');
     this.toastrService.warning('Questionário encerrado, reponda novamente no futuro!');
   }
 

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ChangeDetectionStrategy } from '@angular/core';
 import { UsuarioService } from '../usuario.service';
 import { ConnectHTTP } from '../../shared/services/connectHTTP';
 import { ToastService } from '../../../lib/ng-uikit-pro-standard';
@@ -6,7 +6,7 @@ import { ToastService } from '../../../lib/ng-uikit-pro-standard';
 @Component({
   selector: 'app-usuario-campanhas',
   templateUrl: './usuario-campanhas.component.html',
-  styleUrls: ['./usuario-campanhas.component.scss']
+  styleUrls: ['./usuario-campanhas.component.scss'],
 })
 export class UsuarioCampanhasComponent implements OnInit {
 

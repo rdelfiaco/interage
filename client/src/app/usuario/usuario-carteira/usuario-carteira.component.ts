@@ -1,4 +1,4 @@
-import { Component, OnInit, Input} from '@angular/core';
+import { Component, OnInit, Input, ChangeDetectionStrategy} from '@angular/core';
 import { UsuarioService } from '../usuario.service';
 import { ConnectHTTP } from '../../shared/services/connectHTTP';
 import { ToastService } from '../../../lib/ng-uikit-pro-standard';
@@ -8,7 +8,7 @@ import { ActivatedRoute } from '@angular/router';
 @Component({
   selector: 'app-usuario-carteira',
   templateUrl: './usuario-carteira.component.html',
-  styleUrls: ['./usuario-carteira.component.scss']
+  styleUrls: ['./usuario-carteira.component.scss'],
 })
 export class UsuarioCarteiraComponent implements OnInit {
 

@@ -1,6 +1,6 @@
 import { TrocarSenhaComponent } from './../trocar-senha/trocar-senha.component';
 import { Usuario } from './../../login/usuario';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { ConnectHTTP } from '../../shared/services/connectHTTP';
 import { LocalStorage } from '../../shared/services/localStorage';
 import { ToastService } from '../../../lib/ng-uikit-pro-standard';
@@ -14,7 +14,7 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'app-listar-usuarios',
   templateUrl: './listar-usuarios.component.html',
-  styleUrls: ['./listar-usuarios.component.scss']
+  styleUrls: ['./listar-usuarios.component.scss'],
 })
 export class ListarUsuariosComponent implements OnInit {
 

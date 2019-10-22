@@ -290,9 +290,11 @@ export class TelemarketingQuestionarioComponent implements OnInit {
     })
   }
 
-  encerrouQuest() {
+  encerrouQuest(concluido) {
     this.respquestionarioModal.hide();
-    this.gravarLigacao();
+    if (concluido) {
+      this.gravarLigacao();
+    }
   }
 
   discar() {
