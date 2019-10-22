@@ -28,7 +28,7 @@ function getUmEvento(req, res) {
             and (id_campanha = ${req.query.id_campanha} or (tipodestino = 'P' and id_campanha is not null ))
             order by id_status_evento desc, id_prioridade, dt_para_exibir LIMIT 1`
 
-      console.log(sql)
+      //console.log(sql)
       client.query(sql)
         .then(res => {
           if (res.rowCount > 0) {
@@ -74,7 +74,7 @@ function motivosRespostas(req, res) {
 
       client.connect()
 
-      let sqlMotivosResposta = `SELECT motivos_respostas.* , motivos_eventos_automaticos.reagendar
+      let sqlMotivosResposta = `SELECT motivos_respostas.* , motivos_eventos_automaticos.reagendar, motivos_eventos_automaticos.prazo_para_exibir
                        FROM motivos_respostas
                       LEFT JOIN motivos_eventos_automaticos ON motivos_respostas.id = motivos_eventos_automaticos.id_motivo_resposta
                       WHERE motivos_respostas.id_motivo=${req.query.id_motivo} AND status=true`
@@ -415,8 +415,8 @@ function salvarEvento(req, res) {
                     })
                   }
                   // executa ação SQL da resposta do motivo 
-                  if (motivoRespostaAcaoSQL){
-                    console.log(13,motivoRespostaAcaoSQL)
+                  if (motivoRespostaAcaoSQL && motivoRespostaAcaoSQL != 'null' ){
+                    //console.log(13,motivoRespostaAcaoSQL)
                     let sql = motivoRespostaAcaoSQL.replace('${req.query.id_evento}', `${req.query.id_evento}`)
                     let credenciais = {
                       token: req.query.token,

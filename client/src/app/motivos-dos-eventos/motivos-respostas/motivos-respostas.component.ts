@@ -53,7 +53,7 @@ export class MotivosRespostasComponent implements OnInit {
     });
 
     this.formularioForm = this.formBuilder.group({
-      id:  ['', true],
+      id:  [''],
       nome: [''],
       status: [''],
       idMotivo: [this.idMotivoSelecionado],
@@ -95,6 +95,7 @@ ngOnInit() {
   }
 
   async getRespostasMotivoSeleconado() {
+    debugger
     try {
       let resp = await this.connectHTTP.callService({
         service: 'getRespostasMotivoSeleconado',

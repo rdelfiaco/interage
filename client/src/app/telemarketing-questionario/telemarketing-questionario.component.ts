@@ -12,6 +12,7 @@ import * as pdfMake from 'pdfmake/build/pdfmake';
 import * as pdfFonts from 'pdfmake/build/vfs_fonts';
 import { img } from '../proposta/imagem';
 
+
 interface selectValues {
   value: string
   label: string
@@ -35,6 +36,9 @@ export class TelemarketingQuestionarioComponent implements OnInit {
   motivosRespostasFormatado: Array<object>
   motivoRespostaSelecionado: object;
   returnProp: boolean = true;
+
+   tzoffset = (new Date()).getTimezoneOffset() * 60000; 
+
   public myDatePickerOptions: IMyOptions = {
     // Strings and translations
     dayLabels: { su: 'Dom', mo: 'Seg', tu: 'Ter', we: 'Qua', th: 'Qui', fr: 'Sex', sa: 'Sab' },
@@ -229,7 +233,7 @@ export class TelemarketingQuestionarioComponent implements OnInit {
     function getHora(data: Date) {
       let h = data.getHours();
       if (h == 23) h = -1;
-      let hora = trataTempo(h + 4)
+      let hora = trataTempo(h + 4 )
       let minutos = trataTempo(data.getMinutes())
       return `${hora}:${minutos}`
     }
@@ -259,6 +263,7 @@ export class TelemarketingQuestionarioComponent implements OnInit {
     
     const self = this;
     this.motivos_respostas.some((motivo) => {
+      debugger
       if (motivo.id == motivoResposta.value) {
 
         this.questionarioForm.controls['motivoRespostaSelecionado'].setValue(motivoResposta.value)
@@ -273,7 +278,6 @@ export class TelemarketingQuestionarioComponent implements OnInit {
         this.exige_predicao = motivo.exige_predicao;
         this.exige_objecao = motivo.exige_objecao;
         this.exige_proposta = motivo.exige_proposta;
-
         self.questionarioForm.controls['observacao'].updateValueAndValidity();
         self.questionarioForm.controls['id_predicao'].updateValueAndValidity();
         self.questionarioForm.controls['id_objecao'].updateValueAndValidity();
@@ -295,6 +299,7 @@ export class TelemarketingQuestionarioComponent implements OnInit {
     this.discando = true;
   }
   async gravarLigacao() {
+
     const usuarioLogado = this.localStorage.getLocalStorage('usuarioLogado') as any;
     let parametros = {
       id_pessoa: usuarioLogado.id_pessoa,
@@ -309,7 +314,7 @@ export class TelemarketingQuestionarioComponent implements OnInit {
       id_objecao: this.questionarioForm.value.id_objecao,
       id_campanha: this.campanhaSelecionada,
       observacao: this.questionarioForm.value.observacao,
-      data: moment(this.questionarioForm.value.data + ' - ' + this.questionarioForm.value.hora, 'DD/MM/YYYY - hh:mm').toISOString(),
+      data: moment(this.questionarioForm.value.data + ' - ' + this.questionarioForm.value.hora, 'DD/MM/YYYY - hh:mm').toISOString(true),
       proposta: this.questionarioForm.value.proposta,
       propostaJSON: this.questionarioForm.value.propostaJSON
     }

@@ -182,10 +182,11 @@ function getRespostasMotivoSeleconado(req, res){
       token: req.query.token,
       idUsuario: req.query.id_usuario
     };
-      
+    
     let sql = `select *
               from motivos_respostas
               where id_motivo = ${req.query.idMotivoSelecionado} ` 
+    console.log(1,sql)  
     executaSQL(credenciais, sql)
       .then(respostasMotivo => {
         getQuestionarios(req, res)
