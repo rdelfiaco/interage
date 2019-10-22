@@ -28,7 +28,8 @@ function salvarProposta(req, res) {
                     , rastreador_instalacao
                     , entrada
                     , mensalidade_alterada
-                    , dtsalvou)
+                    , dtsalvou
+                    , reboque)
                 VALUES (  ${req.query.proposta.idTipoVeiculo},
                           '${req.query.proposta.codigoFipe}',
                           '${req.query.proposta.marca}',
@@ -59,7 +60,8 @@ function salvarProposta(req, res) {
                           ${req.query.proposta.rastreadorInstalacao},
                           ${req.query.proposta.entrada},
                           ${req.query.proposta.mensalidadeAlterada},
-                          now()) RETURNING id`
+                          now(),
+                          ${req.query.proposta.reboque}) RETURNING id`
 
     //console.log('proposta inserir', sql)
 
@@ -117,12 +119,10 @@ function getPropostasDoUsuario(req, res) {
       token: req.query.token,
       idUsuario: req.query.idUsuarioLogado
     };
-    
     let sql = `select * from view_proposta where id_usuario = ${req.query.idUsuarioSelect} 
                and id_status_proposta = ${req.query.id_statusProposta}
                and date(dtsalvou) between date('${req.query.dataInicial}') and date('${req.query.dataFinal}') 
               order by id desc `
-
     executaSQL(credenciais, sql)
       .then(res => {
         if (res) {
@@ -239,27 +239,30 @@ function getStatusProposta(req, res){
   })
 }
 
-function salvarPlacaDaProposta(req, res) {
+function salvarDadosVeiculoDaProposta(req, res) {
   return new Promise(function (resolve, reject) {
 
     let credenciais = {
       token: req.query.token,
       idUsuario: req.query.id_usuario
     };
-
     
-   
-    
-    let sql = `UPDATE propostas set placa = '${req.query.placa}' where id = ${req.query.id}`
+    let sql = `UPDATE propostas set placa = '${req.query.placa}',
+    renavam = '${req.query.renavam}',
+    chassi = '${req.query.chassi}',
+    n_do_motor = '${req.query.n_do_motor}',
+    cor_veiculo = '${req.query.cor_veiculo}',
+    ano_modelo = '${req.query.ano_modelo}'
+    where id = ${req.query.id}`
 
     //console.log(sql)
 
     executaSQL(credenciais, sql).then(registros => {
 
-     resolve('Placa salva com sucesso')
+     resolve('Dados veículo salva com sucesso')
       
     }).catch(e => {
-      reject('Salvar placa da proposta: ',e);
+      reject('Salvar dados do veículo da proposta: ',e);
     });
   })
 };
@@ -267,4 +270,4 @@ function salvarPlacaDaProposta(req, res) {
 
 
 module.exports = { salvarProposta, getPropostasDoUsuario, getPropostaPorId, 
-                  getPropostaFiltros, salvarPlacaDaProposta, getPropostasPorPeriodoSintetico }
+                  getPropostaFiltros, salvarDadosVeiculoDaProposta, getPropostasPorPeriodoSintetico }

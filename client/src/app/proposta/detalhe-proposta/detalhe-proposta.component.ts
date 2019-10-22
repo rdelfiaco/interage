@@ -57,6 +57,10 @@ export class DetalhePropostaComponent implements OnInit {
       id_status_proposta: [''],
       cliente: [''],
       placa:[''],
+      renavam:[''],
+      chassi:[''],
+      n_do_motor:[''],
+      cor_veiculo:[''],
       tipo_veiculo: [''],
       marca:[''],
       modelo: [''],
@@ -116,6 +120,10 @@ export class DetalhePropostaComponent implements OnInit {
       status: this.proposta.status_proposta,
       cliente: this.proposta.cliente,
       placa: this.proposta.placa,
+      renavam: this.proposta.renavam,
+      chassi: this.proposta.chassi ,
+      n_do_motor: this.proposta.n_do_motor,
+      cor_veiculo: this.proposta.cor_veiculo, 
       tipo_veiculo: this.proposta.tipo_veiculo_,
       marca:this.proposta.marca,
       modelo: this.proposta.modelo,
@@ -150,16 +158,27 @@ export class DetalhePropostaComponent implements OnInit {
     this.propostaForm.controls['id_status_proposta'].disable();
     this.propostaForm.controls['cliente'].disable();
     if (this.proposta.id_status_proposta != 3) {
-    this.propostaForm.controls['placa'].disable();
+      this.propostaForm.controls['placa'].disable();
+      this.propostaForm.controls['renavam'].disable();
+      this.propostaForm.controls['chassi'].disable();
+      this.propostaForm.controls['n_do_motor'].disable();
+      this.propostaForm.controls['cor_veiculo'].disable(); 
+      this.propostaForm.controls['ano_modelo'].disable();
+
     }else
     {
       this.propostaForm.controls['placa'].enable();
+      this.propostaForm.controls['renavam'].enable();
+      this.propostaForm.controls['chassi'].enable();
+      this.propostaForm.controls['n_do_motor'].enable();
+      this.propostaForm.controls['cor_veiculo'].enable(); 
+      this.propostaForm.controls['ano_modelo'].enable();
+
     }
     this.propostaForm.controls['tipo_veiculo'].disable();
     this.propostaForm.controls['marca'].disable();
     this.propostaForm.controls['modelo'].disable();
     this.propostaForm.controls['codigofipe'].disable();
-    this.propostaForm.controls['ano_modelo'].disable();
     this.propostaForm.controls['preco_medio'].disable();
     this.propostaForm.controls['cota'].disable();
     this.propostaForm.controls['data_consulta'].disable();
@@ -182,12 +201,7 @@ export class DetalhePropostaComponent implements OnInit {
     this.propostaForm.controls['rastreadorInstalacao'].disable();
     this.propostaForm.controls['entrada'].disable();
 
-    
-
-
-
   }
-
 
   openPDF(docDefinition) {
     let propostaPDF = JSON.parse(docDefinition.replace(/\%23/gim, '#'));
@@ -199,21 +213,24 @@ export class DetalhePropostaComponent implements OnInit {
     history.back();
   }
 
-
-
-  async salvarPlacaDaProposta() {
+  async salvarDadosVeiculoDaProposta() {
     try {
       await this.connectHTTP.callService({
-        service: 'salvarPlacaDaProposta',
+        service: 'salvarDadosVeiculoDaProposta',
         paramsService: {
           id: this.idProposta,
-          placa: this.propostaForm.value.placa
+          placa: this.propostaForm.value.placa,
+          renavam: this.propostaForm.value.renavam,
+          chassi: this.propostaForm.value.chassi ,
+          n_do_motor: this.propostaForm.value.n_do_motor,
+          cor_veiculo: this.propostaForm.value.cor_veiculo, 
+          ano_modelo: this.propostaForm.value.ano_modelo, 
         }
       });
-      this.toastrService.success('Placa salva com sucesso');
+      this.toastrService.success('Dados do veículo salva com sucesso');
     }
     catch (e) {
-      this.toastrService.error('Erro ao salvar placa');
+      this.toastrService.error('Erro ao salvar dados do veículo');
     }
 
   }
@@ -278,10 +295,9 @@ export class DetalhePropostaComponent implements OnInit {
                 text: `PROPOSTA DE ADMISSÃO DE ASSOCIADO`,
                 alignment: 'center',
                 fontSize: 15,
-                height: 75,
                 color: '#FFFFFF',
                 fillColor: '#000000',
-                margin: [5, 5, 0, 0],
+                margin: [5, 2, 0, 0],
                 border: [false, false, false, false],
               }],
 
@@ -311,7 +327,8 @@ export class DetalhePropostaComponent implements OnInit {
                 style: 'Paragrafo',
                 margin: [5, 5, 0, 0],
                 border: [false, false, false, false],
-                lineHeight: 2
+                lineHeight: 2,
+                fontSize: 12,
               }],
 
             ]
@@ -396,182 +413,6 @@ export class DetalhePropostaComponent implements OnInit {
             ]
           }
         },
-        // {   // Tabela Fipe
-        //   style: 'tableExample',
-        //   table: {
-        //     widths: [200, 360],
-        //     heights: [20],
-
-        //     body: [
-        //       [{
-        //         text: 'Marca/Modelo:',
-        //         margin: [5, 5, 0, 0],
-        //         border: [true, false, true, true],
-        //       },
-        //       {
-        //         text: `${this.proposta.marca} / ${this.proposta.modelo}`,
-        //         margin: [5, 5, 0, 0],
-        //         border: [true, false, true, true],
-        //       }
-        //       ],
-        //       [{
-        //         text: 'Ano Modelo:',
-        //         margin: [5, 5, 0, 0],
-        //         border: [true, true, true, true],
-        //       },
-        //       {
-        //         text: `${this.proposta.anoModelo}`,
-        //         margin: [5, 5, 0, 0],
-        //         border: [true, true, true, true],
-        //       }
-        //       ],
-        //       [{
-        //         text: 'Cód. FIPE',
-        //         margin: [5, 5, 0, 0],
-        //         border: [true, false, true, true],
-        //       },
-        //       {
-        //         text: `${this.proposta.codigoFipe}`,
-        //         margin: [5, 5, 0, 0],
-        //         border: [true, false, true, true],
-        //       }
-        //       ],
-        //       [{
-        //         text: 'Valor fipe',
-        //         margin: [5, 5, 0, 0],
-        //         border: [true, true, true, true],
-        //       },
-        //       {
-        //         text: `${this.proposta.precoMedio}`,
-        //         margin: [5, 5, 0, 0],
-        //         border: [true, true, true, true],
-        //       }
-        //       ]
-
-        //     ]
-        //   }
-        // },
-        // {   // valores da proposta 
-        //   style: 'tableExample',
-        //   table: {
-        //     widths: [200, 360],
-        //     heights: [200],
-
-        //     body: [
-        //       [{
-        //         text: [ `Entrada:\n R$ ${numeral(this.proposta.entrada).format('00.00')}
-        //               \n\n Onze parcelas:\n`, 
-        //              {text:  '(plano anual)',  style: 'font14'},
-        //              `\n R$ ${numeral(this.proposta.mensalidade).format('00.00')}
-        //              ${parcelamentoRastreador} 
-        //             \n\n Cota de participação:\n R$ ${numeral(this.proposta.participacao).format('0,000.00')} `],
-        //         style: 'header',
-        //         margin: [15, 20, 0, 5],
-        //         border: [true, false, true, true],
-        //       },
-        //       {
-        //         text: [
-        //           {
-        //             text: 'COBERTURAS INCLUSAS',
-        //             alignment: 'center',
-        //             style: 'subheader',
-        //           },
-        //           {
-        //             text: `\n\nSem perfil de condutor! (Qualquer pessoa habilitada pode conduzir o veículo) 
-        //                 \nSem Consulta SPC/SERASA 
-        //                 \nSem limite de km rodado; Sem perfil de guarda de veículo, não exige garagem;
-        //                 \nRoubo, furto, incêndio, colisão, capotamento, tombamento, desastres naturais como: enchente, chuva de granizo, queda de árvore; 
-        //                 \nAssistência 24H em todo Brasil; 
-        //                 \n${reboqueIlimitado}
-        //                 \nSocorro elétrico e mecânico; Chaveiro; Taxi, SOS Pneus;
-        //                 \nMensalidade Contínua (sem renovação); Não trabalhamos com Bônus; 
-        //                 \n${normalLeilaoSisnsitro}
-        //                 \n${this.proposta.terceiros}
-        //                 \n${this.proposta.appDescricao}
-        //                 \n${this.proposta.reboque}
-        //                 \n${this.proposta.carroReserva}
-        //                 \n${this.proposta.protecaoVidros}
-        //                 \n${this.proposta.rastreador}
-        //                 `,
-        //             fontSize: 9,
-        //           }
-        //         ],
-        //         margin: [5, 5, 0, 0],
-        //         border: [true, false, true, true],
-        //       }
-        //       ],
-        //       // [
-        //       //   {
-        //       //     text: 'OUTRAS COBERTURAS OPCIONAIS OFERECIDAS',
-        //       //     style: 'subheader',
-        //       //     margin: [5, 25, 0, 0],
-        //       //   },
-        //       //   {
-        //       //     text: `${produtoAdicionais1}
-        //       //         \nAPP (ACIDENTES PESSOAIS DE PASSAGEIROS) até 20 mil;
-        //       //         \nFundo para terceiros de 50 mil;
-        //       //         \nFundo para terceiros de 70 mil.
-        //       //         ` ,
-        //       //     alignment: 'left',
-        //       //     fontSize: 9,
-        //       //     margin: [5, 0, 0, 0],
-        //       //   }
-        //       // ],
-        //     ]
-        //   }
-        // },
-        // {// texto OUTRAS COBERTURAS OPCIONAIS OFERECIDAS
-        //   style: 'tableExample',
-        //   table: { 
-        //     widths: [568.5],
-        //     heights: [30],
-        //     body: [
-        //       [{
-        //         text: [
-        //           { 
-        //             text:'OUTRAS COBERTURAS OPCIONAIS OFERECIDAS',
-        //             style: 'ParagrafoBold',
-        //             alignment: 'center',
-
-        //           },
-        //           {
-        //             text: `\n\n${this.fundoTerceiroOutros}
-        //             ${this.carroReservaOutros}
-        //             ${this.protecaoVidroOutros}
-        //             ${this.appOutros}
-        //             ${this.rastreadorOutros}`,
-        //             fontSize: 9,
-        //             alignment: 'left',
-        //           }
-        //         ], 
-                
-        //         margin: [0, 0, 0, 0],
-                
-        //         border: [true, false, true, true],
-        //       }
-        //     ]
-        //     ]
-        //   }
-        // },
-        // {   // texto informativo e validade da proposta
-        //   style: 'tableExample',
-        //   table: {
-        //     widths: [568.5],
-        //     heights: [30],
-        //     body: [
-        //       [{
-        //         text: `A ALTIS atua legalmente perante a lei, respeitando a constituição e o código civil. Não possui nenhum impedimento legal e se responsabiliza solidariamente com os princípios embasado nas leis* Lei no 9.790, de 23 de março de 1999.  / CAPÍTULO I / DA QUALIFICAÇÃO COMO ORGANIZAÇÃO DA SOCIEDADE CIVIL* Constituição da Republica Federativa do Brasil 1988 / TÍTULO II / Dos Direitos / Garantias Fundamentais / CAPÍTULO I / DOS DIREITOS E DEVERES INDIVIDUAIS E COLETIVOS / Art. 5º /Incisos: XVII a XXI.* Código Civil - Lei 10406/02 | Lei no 10.406, de 10 de janeiro de 2002 / TÍTULO II / Da Sociedade / CAPÍTULO II / DAS ASSOCIAÇÕES. 
-                
-        //         Validade: 15 dias a partir de ${this.hoje}. `,
-        //         fillColor: '#eeeeee',
-        //         margin: [5, 5, 5, 5],
-        //         alignment: 'left',
-        //         style: 'small',
-        //         border: [true, false, true, true],
-        //       }]
-        //     ]
-        //   }
-        // },
       ],
       styles: {
         header: {
@@ -613,6 +454,285 @@ export class DetalhePropostaComponent implements OnInit {
 
   }
 
+  async propostaAdesao(){
+
+    await this.getCliente();
+
+    console.log('proposta', this.proposta)
+    var docDefinition = {
+      pageSize: 'A4',
+      pageMargins: [10, 10, 5, 5],
+      content: [
+        {  // cabeçalho
+          style: 'tableExample',
+          table: {
+            widths: [130, 270, 120],
+            body: [
+              [{
+                image: 'logotipo',
+                width: 80,
+                height: 95,
+                alignment: 'center',
+                margin: [0, 0, 0, 0],
+                border: [false, false, false, false]
+              }, {
+                text: `Altis Proteção Veicular e Benefícios
+                Avenida Laudelino Gomes, nº 61, Qd. 210 Lt.38
+                Setor Pedro Ludovico – Goiânia – GO
+                CEP: 74830-090 – Telefone: (62) 3259-0830
+                WhatsApp: (62) 9 8538-0830
+                altisprotecaoveicular.com.br`
+                ,
+                alignment: 'center',
+                fontSize: 10,
+                height: 95,
+                margin: [0, 20, 0, 0],
+                border: [false, false, false, false]
+              },
+              {
+                text: `Número: 
+                ${this.proposta.id}`
+                ,
+                alignment: 'center',
+                fontSize: 15,
+                height: 95,
+                margin: [0, 40, 0, 0],
+                border: [false, false, false, false]
+              }
+              ]
+            ]
+          },
+          
+        },
+        {   // Linha de título 
+          style: 'tableExample',
+          table: {
+            widths: [568.5],
+            heights: 10,
+
+            body: [
+              [{
+                text: `TERMO DE ADESÃO AO PROGRAMA DE PROTEÇÃO VEICULAR`,
+                alignment: 'center',
+                fontSize: 10,
+                color: '#FFFFFF',
+                fillColor: '#000000',
+                margin: [5, 1, 0, 0],
+                border: [false, false, false, false],
+              }],
+
+            ]
+          }
+        },
+        {   // Dados do associado   
+          style: 'tableExample',
+          table: {
+            widths: [568.5],
+            heights: [30],
+
+            body: [
+              [{
+                text:[ 
+                 { text: `Associado: ${this.pessoa.nome}
+                  CPF/CNPJ:   ${this.pessoa.cpf_cnpj_format}              Cidade/UF: ${this.pessoa.cidade} - ${this.pessoa.uf}\n`
+                  ,
+                  lineHeight: 1.2,
+                  fontSize: 12,
+                }, { text: `O associado acima qualificado requer através do presente termo, sua adesão ao Programa de Proteção Veicular da ALTIS PROTEÇÃO VEICULAR E BENEFÍCIOS, CNPJ: 29.758.305/0001-49, declarando estar ciente de seus direitos, deveres e obrigações, bem como sujeito aos termos dos Estatuto Social e Regulamento do Programa de Proteção Veicular, cuja cópia declara haver recebido no momento da assinatura do presente termo. 
+                O PROGRAMA DE PROTEÇÃO VEICULAR (PPV) NÃO DEVE SER CONFUNDIDO EM HIPÓTESE ALGUMA COM SEGURO, TRATANDO-SE DE UM PLANO DE SOCORRO MÚTUO ENTRE SEUS ASSOCIADOS, LEIA ATENTAMENTE AS REGRAS A SEGUIR E O REGULAMENTO DO PROGRAMA.`
+                }
+                ],
+                alignment: 'justify',
+                style: 'Paragrafo',
+                margin: [5, 5, 0, 0],
+                border: [false, false, false, false],
+
+              }],
+
+            ]
+          }
+        },
+        {   // Linha de título 
+          style: 'tableExample',
+          table: {
+            widths: [568.5],
+            heights: [10],
+            body: [
+              [{
+                text: `DADOS DO VEÍCULO`,
+                alignment: 'center',
+                fontSize: 10,
+                color: '#FFFFFF',
+                fillColor: '#000000',
+                margin: [5, 1, 0, 0],
+                border: [false, false, false, false],
+              }],
+            ]
+          }
+        },
+        {   // Texto 1   
+          style: 'tableExample',
+          table: {
+            widths: [568.5],
+            heights: [30],
+            body: [
+              [{
+                text: `MARCA/MODELO: ${this.proposta.marca} / ${this.proposta.modelo}   COR: ${this.proposta.cor_veiculo}   ANO/MOD: ${this.proposta.ano_modelo}
+                 COD.FIPE: ${this.proposta.codigofipe}    PLACA: ${this.proposta.placa} RENAVAM: ${this.proposta.renavam}
+                CHASSI: ${this.proposta.chassi}     Nº DO MOTOR: ${this.proposta.n_do_motor}
+                Vistoria: Descreva as avarias do veículo vistoriado, deverá ser observado as seguintes peças; Lataria (casco), pintura, lanternas, vidros, pneus
+                ________________________________________________________________________________________________________________________
+                ________________________________________________________________________________________________________________________
+                ________________________________________________________________________________________________________________________
+                `,
+                style: 'Paragrafo',
+                margin: [5, 5, 0, 0],
+                border: [false, false, false, false],
+                lineHeight: 1.2,
+              }],
+
+            ]
+          }
+        },
+        {   // Linha de título 
+          style: 'tableExample',
+          table: {
+            widths: [568.5],
+            heights: 10,
+            body: [
+              [{
+                text: `OPÇÕES DE SERVIÇOS E BENEFÍCIOS`,
+                alignment: 'center',
+                fontSize: 10,
+                color: '#FFFFFF',
+                fillColor: '#000000',
+                margin: [5, 1, 0, 0],
+                border: [false, false, false, false],
+              }],
+            ]
+          }
+        },
+        {   // Texto 2 
+          style: 'tableExample',
+          table: {
+            widths: [568.5],
+            heights: [30],
+
+            body: [
+              [{
+                text: `PPV+ASSIST. 24H   ${this.proposta.reboque} 
+                ${this.proposta.fundo_terceiros_}       ${this.proposta.protecao_vidros_}      ${this.proposta.carro_reserva_}  
+                ${this.proposta.app}            ${this.proposta.rastreador_} `,
+                style: 'Paragrafo',
+                margin: [5, 2, 0, 0],
+                border: [false, false, false, false],
+                fontSize: 12,
+                bold: false,
+                lineHeight: 1.2,
+              }],
+            ]
+          }
+        },
+
+        {   // Texto 3
+          style: 'tableExample',
+          table: {
+            widths: [568.5],
+            heights: [30],
+
+            body: [
+              [{
+                text: `*Para serviços contratados, vide regulamento. 
+                OBSERVAÇÕES: O associado declara estar ciente de:
+                •	Que somente terá direto às coberturas caso o veiculo esteja sendo conduzido por condutor devidamente habilitado e com habilitação válida dentro da vigência.
+                •	Que não há estipulação de prazo para entrega do veículo em caso de reparos provenientes de acidentes, visto que a monta dos danos sofridos, a disponibilidade de oficinas e a disponibilidade de peças no mercado fogem do controle da associação.
+                •	Que se desejar se desligar do PPV deverá encaminhar um requerimento preenchido para a associação, devendo o associado estar adimplente com todas as suas obrigações relativas ao PPV.
+                •	Que os benefícios do PPV para veículos do associado cadastrado têm início às 48h (quarenta e oito horas) úteis após a data de realização da vistoria do veículo e do pagamento da taxa de adesão (sendo necessário ambos para cobertura). 
+                `,
+                margin: [0, 2, 0, 0],
+                border: [false, false, false, false],
+                fontSize: 8,
+                bold: false,
+                lineHeight: 1,
+              }],
+            ]
+          }
+        },        
+        {   // Texto 2 
+          style: 'tableExample',
+          table: {
+            widths: [568.5],
+            heights: [30],
+            body: [
+              [{
+                text: `Declaro que todas as informações que preenchi neste laudo são exatas e verdadeiras, assim como declaro que li, entendi e recebi a cópia deste laudo e o regulamento do PPV. Estou ciente que a eventual inexatidão destas informações implicará na perda total dos direitos como associado, em analogia ao termo do Artigo 766 do Código Civil. `,
+                style: 'Paragrafo',
+                margin: [5, 1, 0, 0],
+                border: [true, true, true, true],
+              }],
+            ]
+          }
+        },     
+        {   // roda pé
+          style: 'tableExample',
+          table: {
+            widths: [568.5],
+            heights: [30],
+            body: [
+              [{
+                text:[ 
+                  {text:`DATA E ASSINATURA DO ASSOCIADO \n`},
+                  {text:`\n__________________ DE ______________ DE _______________.\n`,
+                  alignment: 'center', lineHeight: 1},
+                  {text: `\n_____________________________\n
+                       VISTORIADOR              `,
+                       alignment: 'right', lineHeight: 0.5
+                  },
+                  {text: `\n_______________________________________\n
+                  ASSOCIADO`, alignment: 'center', lineHeight: 0.5 } 
+                ],
+                  margin: [5, 0, 0, 0],
+                  border: [false, false, false, false],
+              }],
+            ]
+          }
+        },
+      ],
+      styles: {
+        header: {
+          fontSize: 18,
+          bold: true
+        },
+        subheader: {
+          fontSize: 15,
+          bold: true
+        },
+        ParagrafoBold: {
+          fontSize: 12,
+          bold: true
+        },
+        Paragrafo: {
+          alignment: 'justify',
+          fontSize: 10,
+          bold: false,
+          lineHeight: 1.2,
+        },
+        quote: {
+          italics: true
+        },
+        font14: {
+          fontSize: 14
+        },
+        small: {
+          fontSize: 8
+        },
+      },
+      images: { logotipo: img }
+    };
+
+    pdfMake.createPdf(docDefinition).open()
+
+  }
 
   async getCliente(){
 

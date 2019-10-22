@@ -91,6 +91,7 @@ function inserirDestinatariosCampanha(credenciais, client,id_leads_mailing, id_c
  inner join lead_a_importar li on pe.id = li.id_pessoa  
  inner join campanhas camp on camp.id = ${id_campanha}
  `
+ console.log(123, sql)
   executaSQLComTransacao (credenciais, client, sql)
   .then(res => { resolve( res ) })
   .catch(err => { reject( err ) })

@@ -59,6 +59,9 @@ export class UsuarioPermissoesComponent implements OnInit {
         this.permissoes = resp.resposta.permissoes; 
         this.permissoesUsuario = resp.resposta.permissoesUsuario; 
         this.povoaVetores()
+
+        console.log('per', this.targe)
+
       }
     }
     catch (e) {
@@ -106,11 +109,9 @@ export class UsuarioPermissoesComponent implements OnInit {
       return 0;
     });
 
-
-
     if ( this.permissoesUsuario[0].nome == null ) this.targe = [];
     if ( this.permissoes[0].nome == null ) this.source = []; 
-    
+
   }
 
   async salvar(){
@@ -135,8 +136,6 @@ export class UsuarioPermissoesComponent implements OnInit {
         }
         
       }
-
-
 
   voltar(){
     this.usuarioService.setAba(1); 

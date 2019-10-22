@@ -1,13 +1,19 @@
 <div class="card card-cascade narrower">
   <div
-    class="view view-cascade gradient-card-header blue-gradient narrower py-2 mx-4 mb-3 d-flex justify-content-center align-items-center">
-    <div>
-      <button type="button" mdbBtn color="white" outline="true" rounded="true" size="sm" class="px-2" mdbWavesEffect>
-        <mdb-icon fas fas icon="info" class="mt-0"></mdb-icon>
-      </button>
-    </div>
-    <h4 class="white-text mx-3 mt-2 font-weight-bold text-uppercase">Pesquisar pessoa</h4>
+  class="view view-cascade gradient-card-header blue-gradient narrower py-2 mx-4 mb-3 d-flex justify-content-between align-items-center">
+  <div>
+    <button type="button" mdbBtn color="white" outline="true" rounded="true" size="sm" class="px-2" mdbWavesEffect>
+      <mdb-icon fas fas icon="info" class="mt-0"></mdb-icon>
+    </button>
   </div>
+  <h4 class="white-text mx-3 mt-2 font-weight-bold text-uppercase">Pesquisar pessoa</h4>
+  <div>
+    <button mdbBtn color="white" outline="true" rounded="true" size="sm" type="button"
+      (click)="openPage('pessoasAdd', $event)" class="px-2" mdbWavesEffect>
+      Adicionar Pessoa
+    </button>
+  </div>
+</div>
   <div class="px-4 p-4">
     <div class="row p-2">
       <div class="col-10">

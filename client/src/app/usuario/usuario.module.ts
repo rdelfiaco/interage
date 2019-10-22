@@ -13,6 +13,7 @@ import { UsuarioCampanhasComponent } from './usuario-campanhas/usuario-campanhas
 import { ListarUsuariosComponent } from './listar-usuarios/listar-usuarios.component';
 import { UsuarioPermissoesComponent } from './usuario-permissoes/usuario-permissoes.component';
 import { AngularDualListBoxModule } from 'angular-dual-listbox';
+import { UsuarioCarteiraComponent } from './usuario-carteira/usuario-carteira.component';
 
 
 @NgModule({
@@ -34,6 +35,7 @@ import { AngularDualListBoxModule } from 'angular-dual-listbox';
     UsuarioCampanhasComponent,
     ListarUsuariosComponent,
     UsuarioPermissoesComponent,
+    UsuarioCarteiraComponent,
   ]
 })
 export class UsuarioModule { }

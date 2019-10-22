@@ -38,9 +38,4 @@ export class UsuarioService {
     this.emitiUsuarioSelecionado.emit(this.UsuarioSelecionadoAtual);
   }
 
-
-
-
-
-
 }

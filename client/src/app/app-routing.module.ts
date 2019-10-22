@@ -1,3 +1,4 @@
+import { UsuarioCarteiraComponent } from './usuario/usuario-carteira/usuario-carteira.component';
 import { MotivosRespostasComponent } from './motivos-dos-eventos/motivos-respostas/motivos-respostas.component';
 import { MotivosCanaisComponent } from './motivos-dos-eventos/motivos-canais/motivos-canais.component';
 import { CanaisComponent } from './canais/canais.component';
@@ -237,6 +238,11 @@ const routes: Routes = [
       {
         path: 'usuarioPermissoes/:id',
         component: UsuarioPermissoesComponent,
+        canActivate: [AuthGuard]
+      },
+      {
+        path: 'usuarioCarteira',
+        component: UsuarioCarteiraComponent,
         canActivate: [AuthGuard]
       },
       {

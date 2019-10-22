@@ -151,7 +151,13 @@ export class PesquisaPessoaComponent implements OnInit {
 
   }
 
-
+  openPage(page: string, event: any) {
+    event.preventDefault();
+    event.stopPropagation();
+    setTimeout(_ => {
+      this.router.navigate([page]);
+    }, 100);
+  }
  
   
 }

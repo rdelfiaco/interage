@@ -188,8 +188,13 @@ colunasStringCobr = [0,2,3,4,5,6];
 
         let csvRecordsArray = csvData.split(/\r\n|\n/);
        
+        console.log(1,csvRecordsArray)
+        // retira linha em branco 
+        csvRecordsArray = csvRecordsArray.filter((elem ) => elem.length > 60);
 
-        
+
+        console.log(2,csvRecordsArray)
+
         this.headersRow = this.getHeaderArray(csvRecordsArray);
 
         if (this.validaHeader()) {
@@ -260,7 +265,7 @@ colunasStringCobr = [0,2,3,4,5,6];
       // define os campos do registro
       for (let i = 0; i < this.headersRow.length; i++) {
 
-        
+
         // valida as colunas 
         let index = this.indexCorrepondente.findIndex(file => file === i)
         

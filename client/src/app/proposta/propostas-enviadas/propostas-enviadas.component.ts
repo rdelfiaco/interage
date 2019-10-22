@@ -21,7 +21,7 @@ export class PropostasEnviadasComponent implements OnInit  {
   usuarioLogado: any;
   idProposta: number;
   
-  dataInicial: string = moment().subtract(3, 'days').format('DD/MM/YYYY')
+  dataInicial: string = moment().subtract(30, 'days').format('DD/MM/YYYY')
   dataFinal: string = moment().format('DD/MM/YYYY')
 
 

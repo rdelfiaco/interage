@@ -32,6 +32,10 @@ export class Proposta {
     private _idPessoaUsuario: number;
     private _idPessoaCliente: number;
     private _placa: string;
+    private _renavam: string;
+    private _chassi: string;
+    private _n_do_motor: string;
+    private _cor_veiculo: string;
     private _observacao: string;
     private _reboque: string;
     private _cotaAlterada: boolean;
@@ -46,6 +50,31 @@ export class Proposta {
     private _rastreadorInstalacao: number;
     private _entrada: number;
     private _mensalidadeAlterada: boolean;
+
+    public get renavam(): string {
+        return this._renavam;
+    }
+    public set renavam(value: string) {
+        this._renavam = value;
+    }
+    public get chassi(): string {
+        return this._chassi;
+    }
+    public set chassi(value: string) {
+        this._chassi = value;
+    }
+    public get n_do_motor(): string {
+        return this._n_do_motor;
+    }
+    public set n_do_motor(value: string) {
+        this._n_do_motor = value;
+    }
+    public get cor_veiculo(): string {
+        return this._cor_veiculo;
+    }
+    public set cor_veiculo(value: string) {
+        this._cor_veiculo = value;
+    }
 
     public get mensalidadeAlterada(): boolean {
         return this._mensalidadeAlterada;
@@ -390,6 +419,10 @@ export class Proposta {
             idPessoaUsuario: this._idPessoaUsuario,
             idPessoaCliente: this._idPessoaCliente,
             placa: this._placa,
+            renavam: this._renavam,
+            chassi: this._chassi,
+            n_do_motor: this._n_do_motor,
+            cor_veiculo: this._cor_veiculo,
             observacao: this._observacao,
             reboque: this._reboque,
             cotaAlterada: this._cotaAlterada,

@@ -9,6 +9,7 @@ import { TabHeadingDirective } from 'ng-uikit-pro-standard';
 import { controlNameBinding } from '@angular/forms/src/directives/reactive_directives/form_control_name';
 import { UsuarioService } from '../usuario.service';
 import SHA1 from  '../../shared/sha1';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-listar-usuarios',
@@ -54,7 +55,8 @@ export class ListarUsuariosComponent implements OnInit {
     private localStorage: LocalStorage,
     private formBuilder: FormBuilder,
     private toastrService: ToastService,
-    private usuarioService : UsuarioService ) {
+    private usuarioService : UsuarioService,
+    private router: Router ) {
     this.usuarioLogado = this.localStorage.getLocalStorage('usuarioLogado') as Usuario;
     this.inicializaForm()
   }
@@ -248,6 +250,13 @@ export class ListarUsuariosComponent implements OnInit {
     let usuarioSelecionado = this.usuarios.filter(t => t.id == usuarioId)[0];
     this.usuarioService.setUsuario( usuarioSelecionado );
     this.usuarioService.setAba(3);
+  }
+
+  carteiraDeClientes(usuarioId){
+    let usuarioSelecionado = this.usuarios.filter(t => t.id == usuarioId)[0];
+    this.usuarioService.setUsuario( usuarioSelecionado );
+    this.usuarioService.setAba(4);
+    // this.router.navigate([`/usuarioCarteira`]);
   }
 
   inicializarSenha(){

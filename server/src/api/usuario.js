@@ -498,6 +498,36 @@ function salvarPermissoesDoUsuario(req, res){
     })
   }
 
+  function getcarteiraUsuarioSeleconado(req, res){
+    return new Promise(function (resolve, reject) {
+      let credenciais = {
+        token: req.query.token,
+        idUsuario: req.query.id_usuario
+      };
+
+      let sql1 = `select id::integer, nome
+      from pessoas 
+      where id_usuario_carteira = ${req.query.id} ` 
+      
+      let sql2 = `select id::integer, nome
+      from pessoas 
+      where  status and id < 5000 ` 
+
+      executaSQL(credenciais, sql1)
+      .then(resCarteiraUsuario => {
+        executaSQL(credenciais, sql2) .then(pessoasNaoPertencenteCarteira => {
+          resolve({carteiraUsuario: resCarteiraUsuario, pessoasNaoPertencenteCarteira: pessoasNaoPertencenteCarteira});
+      })
+      .catch(err => {
+        reject(err)
+      })
+      .catch(err => {
+        reject(err)
+      })
+      })
+    })
+  }
+  
 
 module.exports = { login, 
                    getLogin,
@@ -509,4 +539,5 @@ module.exports = { login,
                   excluirUsuario,
                   adicionarUsuario,
                   salvarPermissoesDoUsuario,
-                  getPermissoesUsuarioSeleconado }  
+                  getPermissoesUsuarioSeleconado,
+                  getcarteiraUsuarioSeleconado }  

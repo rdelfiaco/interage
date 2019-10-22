@@ -43,7 +43,7 @@ declaraServico('consultarPlaca', consultaPlaca.consultarPlaca);
 declaraServico('getPropostasDoUsuario', proposta.getPropostasDoUsuario);
 declaraServico('getPropostaPorId', proposta.getPropostaPorId);
 declaraServico('getPropostaFiltros', proposta.getPropostaFiltros);
-declaraServico('salvarPlacaDaProposta', proposta.salvarPlacaDaProposta);
+declaraServico('salvarDadosVeiculoDaProposta', proposta.salvarDadosVeiculoDaProposta);
 declaraServico('getPropostasPorPeriodoSintetico', proposta.getPropostasPorPeriodoSintetico);
 declaraServico('getTabelaPrecos', tabelaPrecos.getTabelaPrecos);
 
@@ -120,6 +120,7 @@ declaraServico('adicionarUsuario', usuario.adicionarUsuario);
 declaraServico('getPermissoesUsuarioSeleconado', usuario.getPermissoesUsuarioSeleconado);
 declaraServico('salvarPermissoesDoUsuario', usuario.salvarPermissoesDoUsuario);
 declaraServico('getAgentesVendas', usuario.getAgentesVendas);
+declaraServico('getcarteiraUsuarioSeleconado', usuario.getcarteiraUsuarioSeleconado);
 
 // pessoa
 declaraServico('salvarPessoa', pessoa.salvarPessoa);

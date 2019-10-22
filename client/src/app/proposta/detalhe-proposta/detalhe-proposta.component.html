@@ -6,48 +6,67 @@
       <div class="col-12">
           <form [formGroup]="propostaForm" class="formQuestionario">
               <div class="row">
-                  <div class="md-form col-1" [hidden]="!proposta.id">
+                  <div class="md-form col-1" >
                       <input mdbInputDirective formControlName="id" type="text" id="id" class="form-control" >
                       <label for="id">ID</label>
                     </div>
                     <div class="md-form col-2" >
-                        <input mdbInputDirective formControlName="placa" type="text" id="placa" (blur)="salvarPlacaDaProposta()" 
+                        <input mdbInputDirective formControlName="placa" type="text" id="placa" (blur)="salvarDadosVeiculoDaProposta()" 
                         class="form-control" >
                         <label for="placa">Placa</label>
                     </div>                    
-                    <div class="md-form col" [hidden]="!proposta.cliente">
+                    <div class="md-form col" >
                         <input mdbInputDirective formControlName="cliente" type="text" id="cliente" class="form-control" >
                         <label for="cliente">Cliente</label>
                     </div>
-                    <div class="md-form col-3" [hidden]="!proposta.status_proposta">
+                    <div class="md-form col-3" >
                       <input mdbInputDirective formControlName="status" type="text" id="status" class="form-control" >
                       <label for="status">Status</label>
                     </div>
               </div>
               <div class="row">
-                  <div class="md-form col-4" [hidden]="!proposta.tipo_veiculo_">
+                <div class="md-form col" >
+                    <input mdbInputDirective formControlName="renavam" type="text" id="renavam" class="form-control" >
+                    <label for="renavam">RENAVAM</label>
+                  </div>
+                  <div class="md-form col" >
+                      <input mdbInputDirective formControlName="chassi" type="text" id="chassi" (blur)="salvarDadosVeiculoDaProposta()" 
+                      class="form-control" >
+                      <label for="chassi">CHASSI</label>
+                  </div>                    
+                  <div class="md-form col" >
+                      <input mdbInputDirective formControlName="n_do_motor" type="text" id="n_do_motor" class="form-control" >
+                      <label for="n_do_motor">N. do Motor</label>
+                  </div>
+                  <div class="md-form col" >
+                    <input mdbInputDirective formControlName="cor_veiculo" type="text" id="cor_veiculo" class="form-control" >
+                    <label for="cor_veiculo">Cor do Veículo</label>
+                  </div>
+              </div> 
+              <div class="row">
+                  <div class="md-form col-4" >
                       <input mdbInputDirective formControlName="tipo_veiculo" type="text" id="tipo_veiculo" class="form-control" >
                       <label for="tipo_veiculo">Tipo do veículo</label>
                   </div>
-                  <div class="md-form col-2" [hidden]="!proposta.marca">
+                  <div class="md-form col-2" >
                         <input mdbInputDirective formControlName="marca" type="text" id="marca" class="form-control" >
                         <label for="marca">Marca</label>
                   </div>
-                  <div class="md-form col-4" [hidden]="!proposta.modelo">
+                  <div class="md-form col-4" >
                           <input mdbInputDirective formControlName="modelo" type="text" id="modelo" class="form-control" >
                           <label for="modelo">Modelo</label>
                   </div>
-                  <div class="md-form col-2" [hidden]="!proposta.ano_modelo">
-                            <input mdbInputDirective formControlName="ano_modelo" type="text" id="ano_modelo" class="form-control" >
-                            <label for="ano_modelo">Ano</label>
+                  <div class="md-form col-2" >
+                            <input mdbInputDirective formControlName="ano_modelo" type="text" id="ano_modelo" (blur)="salvarDadosVeiculoDaProposta()"  class="form-control" >
+                            <label for="ano_modelo">Ano/Modelo</label>
                   </div>
               </div>
               <div class="row">
-                <div class="md-form col" [hidden]="!proposta.codigofipe">
+                <div class="md-form col" >
                   <input mdbInputDirective formControlName="codigofipe" type="text" id="codigofipe" class="form-control" >
                   <label for="codigofipe">Código tabela FIPE</label>
                 </div>
-                <div class="md-form col" [hidden]="!proposta.preco_medio">
+                <div class="md-form col" >
                   <input mdbInputDirective formControlName="preco_medio" type="text" id="preco_medio" class="form-control" >
                   <label for="preco_medio">Preço médio</label>
                 </div>
@@ -55,66 +74,63 @@
                   <input mdbInputDirective formControlName="data_consulta" type="text" id="data_consulta" class="form-control" >
                   <label for="data_consulta">Data da consulta</label>
                 </div> -->
-                <div class="md-form col" [hidden]="!proposta.cota">
+                <div class="md-form col" >
                   <input mdbInputDirective formControlName="cota" type="text" id="cota" class="form-control" >
                   <label for="cota">Cota</label>
                 </div>
-                <div class="md-form col" [hidden]="!proposta.adesao">
+                <div class="md-form col" >
                   <input mdbInputDirective formControlName="adesao" type="text" id="adesao" class="form-control" >
                   <label for="adesao">Adesão</label>
                 </div>
-                <div class="md-form col" [hidden]="!proposta.parcelas_adesao">
+                <div class="md-form col" >
                     <input mdbInputDirective formControlName="parcelasAdesao" type="text" id="parcelas_adesao" class="form-control" >
                     <label for="parcelas_adesao">Parcelas da adesão</label>
                 </div>
-                <div class="md-form col" [hidden]="!proposta.mensalidade">
+                <div class="md-form col" >
                   <input mdbInputDirective formControlName="mensalidade" type="text" id="mensalidade" class="form-control" >
                   <label for="mensalidade">Mensalidade</label>
                 </div>
-                <div class="md-form col" [hidden]="!proposta.participacao">
+                <div class="md-form col" >
                   <input mdbInputDirective formControlName="participacao" type="text" id="participacao" class="form-control" >
                   <label for="participacao">Cota de participação</label>
                 </div>
               </div>
               <div class="row">
-                <div class="md-form col" [hidden]="!proposta.fundo_terceiros_">
+                <div class="md-form col" >
                   <input mdbInputDirective formControlName="fundo_terceiros_" type="text" id="fundo_terceiros_" class="form-control" >
                   <label for="fundo_terceiros_">Fundo para Terceiros</label>
                 </div>
-                <div class="md-form col" [hidden]="!proposta.carro_reserva_">
+                <div class="md-form col" >
                   <input mdbInputDirective formControlName="carro_reserva_" type="text" id="carro_reserva_" class="form-control" >
                   <label for="carro_reserva_">Carro reserva</label>
                 </div>
-                <div class="md-form col" [hidden]="!proposta.protecao_vidros_">
+                <div class="md-form col" >
                   <input mdbInputDirective formControlName="protecao_vidros_" type="text" id="protecao_vidros_" class="form-control" >
                   <label for="protecao_vidros_">Proteção de vidros</label>
                 </div>
-                <div class="md-form col" [hidden]="!proposta.app">
+                <div class="md-form col" >
                   <input mdbInputDirective formControlName="app" type="text" id="app" class="form-control" >
                   <label for="app">APP</label>
                 </div>
-                <div class="md-form col" [hidden]="!proposta.rastreador_">
+                <div class="md-form col" >
                   <input mdbInputDirective formControlName="rastreador_" type="text" id="rastreador_" class="form-control" >
                   <label for="rastreador_">Rastreador</label>
                 </div>
               </div>
               <div class="row">
-                <div class="md-form col-4" [hidden]="!proposta.parcelas_rastreador">
+                <div class="md-form col-4" >
                   <input mdbInputDirective formControlName="parcelasRastreador" type="text" id="parcelasRastreador" class="form-control" >
                   <label for="parcelasRastreador">Parc. da instalação rastreador</label>
                 </div>
-                <div class="md-form col-4" [hidden]="!proposta.rastreador_instalacao">
+                <div class="md-form col-4" >
                   <input mdbInputDirective formControlName="rastreadorInstalacao" type="text" id="rastreadorInstalacao" class="form-control" >
                   <label for="rastreadorInstalacao">Vlr da instalação do rastreador</label>
                 </div>
-                <div class="md-form col-3" [hidden]="!proposta.entrada">
+                <div class="md-form col-3" >
                   <input mdbInputDirective formControlName="entrada" type="text" id="entrada" class="form-control" >
                   <label for="entrada">Valor da entrada</label>
                 </div>
               </div>
-
-
-
               <div class="row">
                 <div class="md-form col" >
                   <input mdbInputDirective formControlName="novoPortabilidade_" type="text" id="novoPortabilidade_" class="form-control" >
@@ -136,15 +152,16 @@
 
 
               <div class="row">
-                <div class="md-form col-5" [hidden]="!proposta.usuario">
+                <div class="md-form col-5" >
                   <input mdbInputDirective formControlName="usuario" type="text" id="usuario" class="form-control" >
                   <label for="usuario">Usuário que registrou</label>
                 </div>
-                <div class="md-form col-5" [hidden]="!proposta.dtsalvou">
+                <div class="md-form col-5" >
                   <input mdbInputDirective formControlName="dtsalvou" type="text" id="dtsalvou" class="form-control" >
                   <label for="dtsalvou">data do registro</label>
                 </div>
-
+              </div>
+              <div class="row">
                 <!-- <a mdbBtn floating="true" size="sm" gradient="blue" style="margin-left: 70px "
                    mdbWavesEffect (click)="openPDF(proposta.proposta_json)">
                   <mdb-icon icon="file-pdf-o"></mdb-icon>
@@ -152,12 +169,12 @@
 
                 <button type="button" style="white-space: nowrap;" (click)="openPDF(proposta.proposta_json)" mdbBtn color="warning" class="waves-light"
                 aria-label="Voltar" mdbWavesEffect>Proposta comercial</button>
-                <button type="button" style="white-space: nowrap;" (click)="openPDF(proposta.proposta_json)" mdbBtn color="success" class="waves-light"
+                <button type="button" style="white-space: nowrap;" (click)="propostaAdesao()" mdbBtn color="success" class="waves-light"
                 aria-label="Voltar" mdbWavesEffect>Termo de adesão</button>
                 <button type="button" style="white-space: nowrap;" (click)="propostaAdmissao()" mdbBtn color="info" class="waves-light"
                 aria-label="Voltar" mdbWavesEffect>Proposta de admissão </button>
-
-
+                <button type="button" style="white-space: nowrap;" (click)="voltar()" mdbBtn color="danger" class="waves-light"
+                 aria-label="Voltar" mdbWavesEffect>Voltar</button>
               </div>
 
           </form>
@@ -192,7 +209,3 @@
   </mdb-tab>
   
 </mdb-tabset>
-<div class="row justify-content-end">
-    <button type="button" style="white-space: nowrap;" (click)="voltar()" mdbBtn color="danger" class="waves-light"
-      aria-label="Voltar" mdbWavesEffect>Voltar</button>
-</div>

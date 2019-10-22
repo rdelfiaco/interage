@@ -1,23 +1,26 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input} from '@angular/core';
 import { UsuarioService } from '../usuario.service';
 import { ConnectHTTP } from '../../shared/services/connectHTTP';
 import { ToastService } from '../../../lib/ng-uikit-pro-standard';
+import { ActivatedRoute } from '@angular/router';
+
 
 @Component({
-  selector: 'app-usuario-campanhas',
-  templateUrl: './usuario-campanhas.component.html',
-  styleUrls: ['./usuario-campanhas.component.scss']
+  selector: 'app-usuario-carteira',
+  templateUrl: './usuario-carteira.component.html',
+  styleUrls: ['./usuario-carteira.component.scss']
 })
-export class UsuarioCampanhasComponent implements OnInit {
+export class UsuarioCarteiraComponent implements OnInit {
 
 
-  campanhas: any;
-  campanhasUsuario: any; 
+  pessoasNaoPertencenteCarteira: any;
+  carteiraUsuario: any; 
   usuarioSelecionado: object;
-  source: Array<any>;
-  targe:  Array<any>;
+  sourceCart: Array<any>;
+  targeCart:  Array<any>;
   disabledVoltar: boolean = true;
   sorted: boolean = false;
+
 
   novoFormato =  { add: 'Adicionar', 
                   remove: 'Remover', 
@@ -30,66 +33,69 @@ export class UsuarioCampanhasComponent implements OnInit {
     constructor(  private usuarioService : UsuarioService,
                   private connectHTTP: ConnectHTTP,
                   private toastrService: ToastService,
-                ) {  }
+
+                ) { 
+                  
+                 }
 
   ngOnInit() {
 
     //obtem o usuario selecionado 
-    this.usuarioService.emitiUsuarioSelecionado.subscribe(
-      usu => {this.usuarioSelecionado = usu;
-              if (this.usuarioSelecionado){
-                this.disabledVoltar = true;
-                this.lerCampanhasUsuario();
-              }
-      }
-    );
-  }
+  this.usuarioService.emitiUsuarioSelecionado.subscribe(
+    usu => {this.usuarioSelecionado = usu;
+            if (this.usuarioSelecionado){
+              this.disabledVoltar = true;
+              this.lercarteiraUsuario();
+            }
+    }
+  );
+  
+}
 
-  async lerCampanhasUsuario(){
+  async lercarteiraUsuario(){
     try {
       let resp = await this.connectHTTP.callService({
-        service: 'getCampanhasUsuarioSeleconado',
+        service: 'getcarteiraUsuarioSeleconado',
         paramsService: this.usuarioSelecionado
       }) as any;
 
       if (resp.error){
         this.toastrService.error(resp.error);
       }else {
-        this.campanhas = resp.resposta.campanhas; 
-        this.campanhasUsuario = resp.resposta.campanhasUsuario; 
+        console.log(resp.resposta)
+        this.carteiraUsuario = resp.resposta.carteiraUsuario; 
+        this.pessoasNaoPertencenteCarteira = resp.resposta.pessoasNaoPertencenteCarteira;
         this.povoaVetores()
-        console.log('camp', this.targe)
-
+        console.log('cart', this.targeCart)
       }
     }
     catch (e) {
-      this.toastrService.error('Erro ao ler as campanhas do usuário', e);
+      this.toastrService.error('Erro ao ler as carteira do usuário', e);
     }
   }
 
   povoaVetores(){
-
-    this.targe = [];
-    this.source = [];
-    this.campanhas.forEach( element => {
+    this.targeCart = [];
+    this.sourceCart = [];
+    this.pessoasNaoPertencenteCarteira.forEach( element => {
       let registro = 
               {
                 _id: element.id ,
                 _name: element.nome,
               }
-     this.source.push( registro );
+     this.sourceCart.push( registro );
     });
-    this.campanhasUsuario.forEach(element => {
+    this.carteiraUsuario.forEach(element => {
       let registro = 
               {
-                _id: element.id_campanha ,
+                _id: element.id ,
                 _name: element.nome,
               }
-     this.targe.push( registro );
+     this.targeCart.push( registro );
     });
 
     let by = '_name'
-    this.source.sort((a: any, b: any) => {
+    this.sourceCart.sort((a: any, b: any) => {
                   if (a[by] < b[by]) {
                     return this.sorted ? 1 : -1;
                   }
@@ -98,7 +104,7 @@ export class UsuarioCampanhasComponent implements OnInit {
                   }
                   return 0;
                 });
-    this.targe.sort((a: any, b: any) => {
+    this.targeCart.sort((a: any, b: any) => {
       if (a[by] < b[by]) {
         return this.sorted ? 1 : -1;
       }
@@ -108,19 +114,21 @@ export class UsuarioCampanhasComponent implements OnInit {
       return 0;
     });
 
-    if ( this.campanhasUsuario[0].nome == null ) this.targe = [];
-    if ( this.campanhas[0].nome == null ) this.source = []; 
+    if ( this.carteiraUsuario[0].nome == null ) this.targeCart = [];
+    if ( this.pessoasNaoPertencenteCarteira[0].nome == null ) this.sourceCart = []; 
+    
     
   }
 
-  async salvarCampaanhasDoUsuario(){
+  async salvar(){
       this.disabledVoltar = false
+
         try {
           let resposta = await this.connectHTTP.callService({
-            service: 'salvarCampanhasDoUsuario',
+            service: 'salvarcarteiraDoUsuario',
             paramsService: {
               usuarioSelecionado: JSON.stringify(this.usuarioSelecionado) ,
-              campanhasDoUsuario: JSON.stringify(this.targe)
+              carteiraDoUsuario: JSON.stringify(this.targeCart)
             }
           }) 
           if (resposta.error){
@@ -138,7 +146,10 @@ export class UsuarioCampanhasComponent implements OnInit {
 
 
   voltar(){
+//    history.back();
     this.usuarioService.setAba(1); 
+
   }
+
 
 }
