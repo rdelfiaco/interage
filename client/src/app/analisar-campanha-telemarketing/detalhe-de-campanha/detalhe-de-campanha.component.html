@@ -44,7 +44,7 @@
           <h6 class="white-text font-weight-bold text-uppercase mt-2 ">Status</h6>
           <div style="right: 0;position: absolute;">
             <button mdbBtn color="white" outline="true" rounded="true" size="sm" type="button"
-            (click)="dadosParaGrafico(detalheCampanhaStatus); formulario.show()"  class="px-2" mdbWavesEffect>
+            (click)="dadosParaGrafico(detalheCampanhaStatus, 'Status dos contados' ); formulario.show()"  class="px-2" mdbWavesEffect>
               Gráfico
             </button>
           </div>
@@ -226,7 +226,7 @@
       aria-labelledby="myBasicModalLabel" aria-hidden="true" >
 <div class="modal-dialog  modal-lg" role="document">
     <div class="modal-header light-blue darken-3 white-text">
-        <h4 class="modal-title">Gráfico</h4>
+        <h4 class="modal-title">{{titulo}}</h4>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"
           (click)="formulario.hide()">
           <span aria-hidden="true" style="color:white; cursor:pointer;">&times;</span>
@@ -241,7 +241,7 @@
                   [labels]="chartLabelsIB"
                   [colors]="chartColorsIB"
                   [options]="chartOptionsIB"
-                  [legend]="true"
+                  [legend]="false"
                   (chartHover)="chartHoveredIB($event)"
                   (chartClick)="chartClickedIB($event)">
               </canvas>

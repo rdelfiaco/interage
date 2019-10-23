@@ -33,6 +33,8 @@ export class DetalheDeCampanhaComponent implements OnInit {
   statusSelecionado: string;
   usuarioSelecionado: string;
   items_: TreeviewItem[];
+  titulo: string;
+
   config = TreeviewConfig.create({
     hasAllCheckBox: true,
     hasFilter: true,
@@ -41,10 +43,10 @@ export class DetalheDeCampanhaComponent implements OnInit {
     maxHeight: 700
   });
 
-  public chartTypeIB: string =  'pie';
+  public chartTypeIB: string = 'bar' // 'pie';
 
   public chartDatasetsIB: Array<any> = [
-    { data: [300, 50, 100, 40], label: 'Status das propostas' }
+    { data: [300, 50, 100, 40] }
   ];
 
   public chartLabelsIB: Array<any> = ['Ativas', 'Em negociação', 'Recusadas', 'Canceladas'];
@@ -53,7 +55,7 @@ export class DetalheDeCampanhaComponent implements OnInit {
     {
       backgroundColor: ['#FDB45C', '#46BFBD', '#F7464A', '#949FB1'],
       hoverBackgroundColor: ['#FFC870', '#5AD3D1', '#FF5A5E', '#A8B3C5'],
-      borderWidth: 2,
+      borderWidth: 1,
     }
   ];
 
@@ -69,7 +71,7 @@ export class DetalheDeCampanhaComponent implements OnInit {
   }
   public chartHoveredIB(e: any): void {
     
-    console.log('Hoveerded', e)
+    //console.log('Hoveerded', e)
 
    }
 
@@ -278,30 +280,20 @@ export class DetalheDeCampanhaComponent implements OnInit {
     }
   }
 
-  dadosParaGrafico(dados: any){
+  dadosParaGrafico(dados: any, titulo: string){
+    this.titulo = titulo;
     this.chartLabelsIB = [];
     this.chartDatasetsIB[0].data = [];
-    this.chartDatasetsIB[0].label = '';
     this.chartColorsIB[0].backgroundColor = [];
     this.chartColorsIB[0].hoverBackgroundColor = [];
     this.chartColorsIB[0].borderWidth = 2 ;
     dados.forEach(element => {
       this.chartLabelsIB.push(element.status_ligacao);
       this.chartDatasetsIB[0].data.push(element.total);
-      console.log(this.getRandomColor() )
-      this.chartColorsIB[0].backgroundColor.push(`${this.getRandomColor()}`);
-      this.chartColorsIB[0].hoverBackgroundColor.push(`${this.getRandomColor()}`);
+      let rgb_rgba = this.randomColor.getRandomColorRGBeRGBA()
+      this.chartColorsIB[0].backgroundColor.push(`${rgb_rgba.rgba}`);
+      this.chartColorsIB[0].hoverBackgroundColor.push(`${rgb_rgba.rgb}`);
      }); 
-  }
-
-  getRandomColor() {
-    var letters = '0123456789ABCDEF';
-    var color = '#';
-    for (var i = 0; i < 6; i++) {
-      color += letters[Math.floor(Math.random() * 16)];
-    }
-    console.log(12, color)
-    return color;
   }
 
 }

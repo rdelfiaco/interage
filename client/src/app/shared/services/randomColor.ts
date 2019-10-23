@@ -9,5 +9,20 @@ export class RandomColor {
         return color;
       }
 
+      getRandomColorRGBeRGBA() {
+    
+        var rgba = 'rgba( '
+        var rgb = 'rgb( '
+        var color: any;
+        for (var i = 0; i < 3; i++) {
+          color = Math.floor(Math.random() * 255) ;
+          rgba += color + ' , '; 
+          rgb +=  color + ' , '; 
+        }
+        rgba += ' 0.3 )';
+        rgb =  rgb.substring(0,  rgb.length - 3) + ' )';
+    
+        return  { rgba: rgba, rgb: rgb };
+      }
 
 }
