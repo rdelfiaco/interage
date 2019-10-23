@@ -311,6 +311,7 @@ function crudRespostasMotivo(req, res){
     if (crud == 'C') sql = sqlCreate(); 
     if (crud == 'D') sql = sqlDelete();
     if (crud == 'U') sql = sqlUpdate();
+    //console.log('crudRespostasMotivo',sql)
     executaSQL(credenciais, sql).then(res => {
       resolve(res)
 

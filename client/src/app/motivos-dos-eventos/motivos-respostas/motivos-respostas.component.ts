@@ -56,13 +56,13 @@ export class MotivosRespostasComponent implements OnInit {
       id:  [''],
       nome: [''],
       status: [''],
-      idMotivo: [this.idMotivoSelecionado],
-      exige_predicao: [''],
-      exige_observacao: [''],
-      exige_objecao: [''],
-      exige_proposta: [''],
-      id_questionario: [''],
-      id_prioridade: [''],
+      id_motivo: [this.idMotivoSelecionado],
+      exige_predicao: [false],
+      exige_observacao: [false],
+      exige_objecao: [false],
+      exige_proposta: [false],
+      id_questionario: [null],
+      id_prioridade: [2],
       ordem_listagem: [''],
       acao_sql: [''],
       acao_js: [''],
@@ -132,7 +132,7 @@ ngOnInit() {
     this.formularioForm.controls['id'].setValue('');
     this.formularioForm.controls['nome'].setValue('');
     this.formularioForm.controls['status'].setValue(true);
-    this.formularioForm.controls['idMotivo'].setValue(this.idMotivoSelecionado);
+    this.formularioForm.controls['id_motivo'].setValue(this.idMotivoSelecionado);
     this.formularioForm.controls['id'].disable();
     this.formularioFormAud = this.formularioForm.value;
     this.titleBntEnviar = 'Salvar';
@@ -157,7 +157,7 @@ ngOnInit() {
     this.formularioForm.controls['tentativas'].enable();
     this.formularioForm.controls['acao_sql'].enable();
     this.formularioForm.controls['acao_js'].enable();
-    this.formularioForm.controls['idMotivo'].setValue(this.idMotivoSelecionado);
+    this.formularioForm.controls['id_motivo'].setValue(this.idMotivoSelecionado);
 
 
     
@@ -181,7 +181,7 @@ ngOnInit() {
     this.formularioForm.controls['tentativas'].disable();
     this.formularioForm.controls['acao_sql'].disable();
     this.formularioForm.controls['acao_js'].disable();
-    this.formularioForm.controls['idMotivo'].setValue(this.idMotivoSelecionado);
+    this.formularioForm.controls['id_motivo'].setValue(this.idMotivoSelecionado);
 
   }
 
@@ -203,7 +203,7 @@ ngOnInit() {
     this.formularioForm.controls['acao_sql'].setValue(this.tableData_.acao_sql);
     this.formularioForm.controls['acao_js'].setValue(this.tableData_.acao_js);
     this.formularioForm.controls['id'].enable();
-    this.formularioForm.controls['idMotivo'].setValue(this.idMotivoSelecionado);
+    this.formularioForm.controls['id_motivo'].setValue(this.idMotivoSelecionado);
     this.formularioFormAud = this.formularioForm.value;
   }
 
@@ -222,6 +222,7 @@ ngOnInit() {
       this.formularioForm.controls['tentativas'].enable();
       this.formularioForm.controls['acao_sql'].enable();
       this.formularioForm.controls['acao_js'].enable();
+      this.formularioForm.controls['id_motivo'].enable();
       let resp = await this.connectHTTP.callService({
         service: 'crudRespostasMotivo',
         paramsService: {
