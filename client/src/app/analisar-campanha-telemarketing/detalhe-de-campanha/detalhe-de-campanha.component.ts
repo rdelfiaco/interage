@@ -8,6 +8,7 @@ import * as moment from 'moment';
 import { TreeviewItem, TreeviewConfig, DropdownTreeviewComponent, TreeviewHelper, TreeviewI18n } from 'ngx-treeview';
 import { throwIfEmpty } from 'rxjs/operators';
 import { Angular5Csv } from 'angular5-csv/Angular5-csv';
+import { RandomColor } from '../../shared/services/randomColor';
 
 @Component({
   selector: 'app-detalhe-de-campanha',
@@ -40,6 +41,41 @@ export class DetalheDeCampanhaComponent implements OnInit {
     maxHeight: 700
   });
 
+  public chartTypeIB: string =  'pie';
+
+  public chartDatasetsIB: Array<any> = [
+    { data: [300, 50, 100, 40], label: 'Status das propostas' }
+  ];
+
+  public chartLabelsIB: Array<any> = ['Ativas', 'Em negociação', 'Recusadas', 'Canceladas'];
+
+  public chartColorsIB: Array<any> = [
+    {
+      backgroundColor: ['#FDB45C', '#46BFBD', '#F7464A', '#949FB1'],
+      hoverBackgroundColor: ['#FFC870', '#5AD3D1', '#FF5A5E', '#A8B3C5'],
+      borderWidth: 2,
+    }
+  ];
+
+  backgroundColor: ['#FDB45C', '#46BFBD', '#F7464A', '#949FB1'];
+  hoverBackgroundColor: ['#FFC870', '#5AD3D1', '#FF5A5E', '#A8B3C5'];
+
+  public chartOptionsIB: any = {
+    responsive: true
+  };
+  public chartClickedIB(e: any): void { 
+
+    console.log('status', e)
+  }
+  public chartHoveredIB(e: any): void {
+    
+    console.log('Hoveerded', e)
+
+   }
+
+
+
+
 
   public myDatePickerOptions: IMyOptions = {
     // Strings and translations
@@ -60,7 +96,8 @@ export class DetalheDeCampanhaComponent implements OnInit {
   constructor(private route: ActivatedRoute,
     private connectHTTP: ConnectHTTP,
     private localStorage: LocalStorage,
-    private toastrService: ToastService) {
+    private toastrService: ToastService,
+    private randomColor: RandomColor ) {
     this.usuarioLogado = this.localStorage.getLocalStorage('usuarioLogado') as Usuario;
     this.route.params.subscribe(res => {
       let parametros = res.parametros;
@@ -240,4 +277,31 @@ export class DetalheDeCampanhaComponent implements OnInit {
       });
     }
   }
+
+  dadosParaGrafico(dados: any){
+    this.chartLabelsIB = [];
+    this.chartDatasetsIB[0].data = [];
+    this.chartDatasetsIB[0].label = '';
+    this.chartColorsIB[0].backgroundColor = [];
+    this.chartColorsIB[0].hoverBackgroundColor = [];
+    this.chartColorsIB[0].borderWidth = 2 ;
+    dados.forEach(element => {
+      this.chartLabelsIB.push(element.status_ligacao);
+      this.chartDatasetsIB[0].data.push(element.total);
+      console.log(this.getRandomColor() )
+      this.chartColorsIB[0].backgroundColor.push(`${this.getRandomColor()}`);
+      this.chartColorsIB[0].hoverBackgroundColor.push(`${this.getRandomColor()}`);
+     }); 
+  }
+
+  getRandomColor() {
+    var letters = '0123456789ABCDEF';
+    var color = '#';
+    for (var i = 0; i < 6; i++) {
+      color += letters[Math.floor(Math.random() * 16)];
+    }
+    console.log(12, color)
+    return color;
+  }
+
 }

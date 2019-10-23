@@ -8,6 +8,7 @@ import { CheckPermissaoRecurso } from './services/checkPemissaoRecurso';
 import { CnpjPipe } from './pipes/validaCnpj/cnpj.pipe';
 import { CpfPipe } from './pipes/validaCpf/cpf.pipe';
 import { ResponderQuestionario } from '../responder-questionario/responder-questionario.module';
+import { RandomColor } from './services/randomColor';
 
 @NgModule({
   imports: [
@@ -30,7 +31,7 @@ import { ResponderQuestionario } from '../responder-questionario/responder-quest
     Valida,
     CheckPermissaoRecurso,
     BancoDados,
-
+    RandomColor,
   ]
 })
 export class SharedModule { }
