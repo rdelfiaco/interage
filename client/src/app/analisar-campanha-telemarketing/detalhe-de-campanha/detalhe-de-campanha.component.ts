@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { async } from '@angular/core/testing';
+import { Component, OnInit, ElementRef, QueryList, ViewChildren } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ConnectHTTP } from '../../shared/services/connectHTTP';
 import { LocalStorage } from '../../shared/services/localStorage';
 import { ToastService, IMyOptions } from '../../../lib/ng-uikit-pro-standard';
@@ -9,6 +10,11 @@ import { TreeviewItem, TreeviewConfig, DropdownTreeviewComponent, TreeviewHelper
 import { throwIfEmpty } from 'rxjs/operators';
 import { Angular5Csv } from 'angular5-csv/Angular5-csv';
 import { RandomColor } from '../../shared/services/randomColor';
+import * as pdfMake from 'pdfmake/build/pdfmake';
+import * as pdfFonts from 'pdfmake/build/vfs_fonts';
+import { img } from '../../proposta/imagem';
+import * as html2canvas from 'html2canvas';
+
 
 @Component({
   selector: 'app-detalhe-de-campanha',
@@ -34,6 +40,11 @@ export class DetalheDeCampanhaComponent implements OnInit {
   usuarioSelecionado: string;
   items_: TreeviewItem[];
   titulo: string;
+  chartPerguntas: any;
+  labels: Array<any> = [];
+  datasets: Array<any> = [];
+  perguntasQuest: Array<any> = [];
+  alternativasPeguntas: Array<any> = []; 
 
   config = TreeviewConfig.create({
     hasAllCheckBox: true,
@@ -46,10 +57,11 @@ export class DetalheDeCampanhaComponent implements OnInit {
   public chartTypeIB: string = 'bar' // 'pie';
 
   public chartDatasetsIB: Array<any> = [
-    { data: [300, 50, 100, 40] }
+    { data: [300, 50, 100, 40], label: 'Todos' },
   ];
 
   public chartLabelsIB: Array<any> = ['Ativas', 'Em negociação', 'Recusadas', 'Canceladas'];
+  public chartIdLabelsIB: Array<any> = [1,2,3];
 
   public chartColorsIB: Array<any> = [
     {
@@ -67,7 +79,10 @@ export class DetalheDeCampanhaComponent implements OnInit {
   };
   public chartClickedIB(e: any): void { 
 
-    console.log('status', e)
+    let index = e.active[0]._index
+    
+    console.log('id_ ', this.chartIdLabelsIB[index], this.chartLabelsIB[index])
+
   }
   public chartHoveredIB(e: any): void {
     
@@ -99,9 +114,11 @@ export class DetalheDeCampanhaComponent implements OnInit {
     private connectHTTP: ConnectHTTP,
     private localStorage: LocalStorage,
     private toastrService: ToastService,
-    private randomColor: RandomColor ) {
+    private randomColor: RandomColor,
+    private elementRef: ElementRef, ) {
     this.usuarioLogado = this.localStorage.getLocalStorage('usuarioLogado') as Usuario;
     this.route.params.subscribe(res => {
+      pdfMake.vfs = pdfFonts.pdfMake.vfs;
       let parametros = res.parametros;
       parametros = JSON.parse(parametros);
       this.idCampanha = parametros.idCampanha;
@@ -206,6 +223,7 @@ export class DetalheDeCampanhaComponent implements OnInit {
     const alternativa = this.questRespSintetica.filter((r) => {
       if (r.id_pergunta === id_pergunta && r.id_alternativa != null) { return true; }
     }).map((c: any) => {
+      this.alternativasPeguntas.push(c)
       return {
         // text: `${c.alternativa} = ${c.tot_resp}` + (c.proxima_pergunta ? ' -> Próxima pergunta: ' + c.proxima_pergunta : ''),
         text: `${c.alternativa}` + (c.proxima_pergunta ? ' -> Próx. Perg: ' + c.proxima_pergunta : ''),
@@ -220,6 +238,8 @@ export class DetalheDeCampanhaComponent implements OnInit {
 
   povoaPerguntas(id_questionario: any) {
     const perguntas = [];
+    this.perguntasQuest = [];
+    this.alternativasPeguntas = [];
     this.questRespSintetica.forEach((item) => {
       const index = perguntas.findIndex(redItem => {
         return item.id_pergunta === redItem.id_pergunta;
@@ -229,6 +249,7 @@ export class DetalheDeCampanhaComponent implements OnInit {
         perguntas[index].tot_resp = perguntas[index].tot_resp;
       } else {
         perguntas.push(item);
+        this.perguntasQuest.push(item);
       }
     });
     return perguntas.map((item) => {
@@ -283,17 +304,36 @@ export class DetalheDeCampanhaComponent implements OnInit {
   dadosParaGrafico(dados: any, titulo: string){
     this.titulo = titulo;
     this.chartLabelsIB = [];
+    this.chartIdLabelsIB = [];
     this.chartDatasetsIB[0].data = [];
+    this.chartDatasetsIB[0].label = titulo;
     this.chartColorsIB[0].backgroundColor = [];
     this.chartColorsIB[0].hoverBackgroundColor = [];
     this.chartColorsIB[0].borderWidth = 2 ;
     dados.forEach(element => {
       this.chartLabelsIB.push(element.status_ligacao);
+      this.chartIdLabelsIB.push(element.id_resp_motivo);
       this.chartDatasetsIB[0].data.push(element.total);
       let rgb_rgba = this.randomColor.getRandomColorRGBeRGBA()
       this.chartColorsIB[0].backgroundColor.push(`${rgb_rgba.rgba}`);
       this.chartColorsIB[0].hoverBackgroundColor.push(`${rgb_rgba.rgb}`);
      }); 
-  }
+  };
 
+  gerarPDF(){
+
+    var imag: any;
+    html2canvas(document.getElementById('graficoStatus')).then( function (canvas) {
+           imag = canvas.toDataURL("image/png");
+           var docDefinition = {
+            content: [{
+                image: imag,
+                width: 500
+            }]
+          };
+          pdfMake.createPdf(docDefinition).open()
+    });
+  };
+  
+   
 }
