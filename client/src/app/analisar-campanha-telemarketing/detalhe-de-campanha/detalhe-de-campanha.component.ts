@@ -1,3 +1,4 @@
+import { element } from 'protractor';
 import { async } from '@angular/core/testing';
 import { Component, OnInit, ElementRef, QueryList, ViewChildren } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -15,6 +16,43 @@ import * as pdfFonts from 'pdfmake/build/vfs_fonts';
 import { img } from '../../proposta/imagem';
 import * as html2canvas from 'html2canvas';
 
+import { Chart } from 'chart.js';
+
+
+// const baseConfig: Chart.ChartConfiguration = {
+//   type: 'bar',
+//   options: {
+//     responsive: true,
+//     maintainAspectRatio: false,
+//     legend: { display: true },
+//     scales: {
+//       xAxes: [{ display: true }],
+//       yAxes: [{ display: true }],
+//     }
+//   }
+// };
+
+var baseConfig: Chart.ChartConfiguration = {
+  type: 'bar',
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    legend: { display: true },
+    scales: {
+      xAxes: [{ display: true }],
+      yAxes: [{ display: true ,
+        ticks: {
+          beginAtZero: true
+      }}],
+    },
+  //   title: {
+  //     display: true,
+  //     text: 'Custom Chart Title'
+  // }
+  }
+};
+
+
 
 @Component({
   selector: 'app-detalhe-de-campanha',
@@ -23,6 +61,12 @@ import * as html2canvas from 'html2canvas';
 })
 export class DetalheDeCampanhaComponent implements OnInit {
 
+  @ViewChildren('pr_chart', { read: ElementRef }) chartElementRefs: QueryList<ElementRef>;
+  charts: Chart[] = [];
+  optionsBar: Chart.CharOption[] = [];
+  chartData: Chart.ChartData[] = [];
+  
+  formularioGraficoResposta: boolean = false;
   idCampanha: number;
   nome: string;
   dataInicial: any;
@@ -75,15 +119,27 @@ export class DetalheDeCampanhaComponent implements OnInit {
   hoverBackgroundColor: ['#FFC870', '#5AD3D1', '#FF5A5E', '#A8B3C5'];
 
   public chartOptionsIB: any = {
-    responsive: true
+    responsive: true,
+    legend: { display: false },
+    scales: {
+      xAxes: [{ display: true }],
+      yAxes: [{ display: true ,
+        ticks: {
+          beginAtZero: true
+      }}]
+    }
   };
+
   public chartClickedIB(e: any): void { 
 
     let index = e.active[0]._index
     
     console.log('id_ ', this.chartIdLabelsIB[index], this.chartLabelsIB[index])
 
+    console.log(this.detalheCampanhaStatus)
+
   }
+
   public chartHoveredIB(e: any): void {
     
     //console.log('Hoveerded', e)
@@ -204,7 +260,6 @@ export class DetalheDeCampanhaComponent implements OnInit {
   }
 
   async onSelectedChange(a: any) {
-    console.log('123', a)
     if (a.length) {
       const ret = await this.getRespAnalitico(a);
       if (ret[0].cliente && ret[0].dt_resposta) {
@@ -217,6 +272,7 @@ export class DetalheDeCampanhaComponent implements OnInit {
 
   onFilterChange(a: any) {
     console.log(a);
+  
   }
 
   povoaAlternativas(id_pergunta: any) {
@@ -320,20 +376,130 @@ export class DetalheDeCampanhaComponent implements OnInit {
      }); 
   };
 
-  gerarPDF(){
+  gerarPDF(objeto: any){
 
-    var imag: any;
-    html2canvas(document.getElementById('graficoStatus')).then( function (canvas) {
-           imag = canvas.toDataURL("image/png");
+    var imagDoc: any;
+    html2canvas(document.getElementById(objeto)).then( function (canvas) {
+           imagDoc = canvas.toDataURL("image/png");
            var docDefinition = {
-            content: [{
-                image: imag,
+            pageSize: 'A4',
+            pageMargins: [10, 10, 5, 5],
+            content: [
+              {
+                image: imagDoc,
                 width: 500
-            }]
+              }],
           };
           pdfMake.createPdf(docDefinition).open()
     });
   };
   
+  fecharFormularioGraficoResposta(){
+    this.formularioGraficoResposta = false;
+  }
+
+
+  povoaVetoresGraficoPerguntas(){
+    debugger;
+
+    let baseConfig_: Chart.ChartConfiguration;
+
+    this.formularioGraficoResposta = true;
+    this.charts = [];
+    this.chartData = [];
+    this.optionsBar = [];
+    let labels: Array<any> = [];
+    let datasets: Array<any> = [];
+    let regAltFiltr: Array<any> = [];
+    let dataReg: Array<number> = [];
+    let label: string;
+    let backgroundColor: Array<any> = [];
+    let borderColor: Array<any> = [];
+    let totRespPergunta: number;
+
+    this.perguntasQuest.forEach((elemPerg ) => {
+      
+      regAltFiltr = [];
+      dataReg = [];
+      label = '';
+      backgroundColor = [];
+      borderColor = [];
+      labels = [];
+      datasets = [];
+      totRespPergunta = 0;
+
+      // filtra as alternativas da pergunta 
+      this.alternativasPeguntas.forEach(elemAlt => {
+          if (elemPerg.id_pergunta == elemAlt.id_pergunta) {
+            regAltFiltr.push(elemAlt);
+          } 
+      });
+      // pova vetores das alternativas da pergunta 
+      regAltFiltr.forEach( elem => {
+        labels.push(elem.alternativa);
+        dataReg.push(elem.tot_resp);
+        totRespPergunta += elem.tot_resp;
+        let rgb_rgba = this.randomColor.getRandomColorRGBeRGBA()
+        backgroundColor.push(`${rgb_rgba.rgba}`);
+        borderColor.push(`${rgb_rgba.rgb}`);
+      })
+      // se o tipo da pergunda for 3 e 4 
+      if (elemPerg.tipo_pergunta > 2){
+        labels.push('Dados informados');
+        dataReg.push(elemPerg.tot_resp);
+        totRespPergunta += elemPerg.tot_resp;
+        let rgb_rgba = this.randomColor.getRandomColorRGBeRGBA()
+        backgroundColor.push(`${rgb_rgba.rgba}`);
+        borderColor.push(`${rgb_rgba.rgb}`);
+      }
+      // monta datasets da pergunta 
+      datasets.push({
+        data: dataReg,
+        backgroundColor: backgroundColor,
+        borderColor:  borderColor,
+        borderWidth: 1,
+      })
+      
+      this.optionsBar.push({
+          responsive: true,
+          maintainAspectRatio: false,
+          legend: { display: false },
+          scales: {
+            xAxes: [{ display: true }],
+            yAxes: [{ display: true ,
+              ticks: {
+                beginAtZero: true
+            }}],
+          },
+          title: {
+            display: true,
+            text: `${elemPerg.pergunta} => total de respostas: ${totRespPergunta}`,
+            padding: 20,
+            fontSize: 14, 
+            fontFamily: 'Arial' 
+        },
+        
+      });
+
+      this.chartData.push({
+        labels: labels,
+        datasets: datasets,
+      })
+    
+      baseConfig = baseConfig_;
+
+    });
+  }
+
+    montaGraficosPerguntas(){
+
+      this.formularioGraficoResposta = true;
+
+      this.charts = this.chartElementRefs.map((chartElementRef, index) => {
+        const config = Object.assign({}, { type: "bar", options: this.optionsBar[index], data: this.chartData[index] });
+        return new Chart(chartElementRef.nativeElement, config);
+      });
+    }
+
    
 }
