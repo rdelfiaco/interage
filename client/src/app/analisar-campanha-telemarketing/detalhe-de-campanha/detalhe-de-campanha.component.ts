@@ -18,20 +18,8 @@ import * as html2canvas from 'html2canvas';
 
 import { Chart } from 'chart.js';
 
-
-// const baseConfig: Chart.ChartConfiguration = {
-//   type: 'bar',
-//   options: {
-//     responsive: true,
-//     maintainAspectRatio: false,
-//     legend: { display: true },
-//     scales: {
-//       xAxes: [{ display: true }],
-//       yAxes: [{ display: true }],
-//     }
-//   }
-// };
-
+// exemplo de como fazer graficos dinamicos 
+//https://stackblitz.com/edit/angular-chartjs-multiple-charts?file=src%2Fapp%2Fapp.component.ts
 var baseConfig: Chart.ChartConfiguration = {
   type: 'bar',
   options: {
