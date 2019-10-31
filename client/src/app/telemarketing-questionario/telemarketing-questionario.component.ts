@@ -263,7 +263,6 @@ export class TelemarketingQuestionarioComponent implements OnInit {
     
     const self = this;
     this.motivos_respostas.some((motivo) => {
-      debugger
       if (motivo.id == motivoResposta.value) {
 
         this.questionarioForm.controls['motivoRespostaSelecionado'].setValue(motivoResposta.value)

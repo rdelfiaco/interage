@@ -12,7 +12,6 @@ export class CheckPermissaoRecurso{
 
 
     usuarioLocadoAcessaRecurso(recurso){
-        debugger
         let permissoesUsuarioLocado = [];
         (this.usuarioLogado.permissoes || []).forEach(elem =>{
             permissoesUsuarioLocado.push(elem.id_recursos)

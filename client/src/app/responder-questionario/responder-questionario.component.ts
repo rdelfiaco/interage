@@ -299,6 +299,7 @@ export class ResponderQuestionarioComponent implements OnInit, OnDestroy {
   }
 
   proxPergunta() {
+    debugger
     let self = this;
     if (!this.alternativaEscolhida && !this.alternativasEscolhidas.length && !this.respostaEscrita) {
       return this.toastrService.warning('Precisa informar um reposta para poder prosseguir!');
@@ -369,7 +370,7 @@ export class ResponderQuestionarioComponent implements OnInit, OnDestroy {
         id_pergunta: self.perguntaAtual.id
       }
       let existeRespPerguntaAtual = self.respostas.filter(r => {
-        return (r.id_pergunta == objResp.id_pergunta);
+        return (r.id_pergunta == objResp.id_pergunta && r.id_alternativa == objResp.id_alternativa );
       })[0];
       if (!existeRespPerguntaAtual) {
         self.respostas.push(objResp);
@@ -398,7 +399,7 @@ export class ResponderQuestionarioComponent implements OnInit, OnDestroy {
   }
 
   async salvaReps() {
-    
+    debugger
     if (this.respostas.length) {
       for (let index = 0; index < this.respostas.length; index++) {
         const element = this.respostas[index];
