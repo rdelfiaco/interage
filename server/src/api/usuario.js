@@ -511,7 +511,7 @@ function salvarPermissoesDoUsuario(req, res){
       
       let sql2 = `select id::integer, nome
       from pessoas 
-      where  status and id < 5000 ` 
+      where  status and id < 50 ` 
 
       executaSQL(credenciais, sql1)
       .then(resCarteiraUsuario => {

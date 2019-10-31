@@ -58,11 +58,13 @@ export class PesquisaClienteComponent implements OnInit {
         searchText: this.searchText
       }
     }) as any;
+    if (clientesEncontrados.resposta) {
     this.clientes = clientesEncontrados.resposta;
     if (this.clientes) {
       this.clientes = this.clientes.map(cliente => {
         return { value: cliente.id, label: cliente.nome }
       })
+    }
   }
   }
 

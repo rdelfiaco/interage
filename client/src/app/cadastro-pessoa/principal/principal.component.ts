@@ -54,6 +54,7 @@ export class PrincipalComponent implements OnInit {
   tipoDeTratamentoFisica: any;
   tiposDeCliente: any;
   classificacoesDeCliente: any;
+  usuariosCarteira: any;
   atividadesPessoaFisica: any;
   atividadesPessoaJuridica: any;
   serchFilter: string;
@@ -115,6 +116,7 @@ export class PrincipalComponent implements OnInit {
       cnh_categoria:[''],
       id_tipo_cliente:[''],
       id_classificacao_cliente:[''],
+      id_usuario_carteira:[''],
     })
     this.principalFormAud = this.principalForm.value;
   }
@@ -122,14 +124,13 @@ export class PrincipalComponent implements OnInit {
 
 
   _setQuestionarioForm() {
-    
     this.tipoPessoaSelecionada = this.pessoa.principal.tipo;
     this.principalForm = this.formBuilder.group({
       id: [this.pessoa.principal.id],
       nome: [this.pessoa.principal.nome, [Validators.required]],
       tipo: [this.pessoa.principal.tipo, [Validators.required]],
       id_pronome_tratamento: [this.pessoa.principal.id_pronome_tratamento],
-      datanascimento: [moment(this.pessoa.principal.datanascimento ).format('DD/MM/YYYY') ],
+      datanascimento: [ this.pessoa.principal.datanascimento ? moment(this.pessoa.principal.datanascimento ).format('DD/MM/YYYY') : moment().format('DD/MM/YYYY') ],
       sexo: [this.pessoa.principal.sexo],
       rg_ie: [this.pessoa.principal.rg_ie],
       orgaoemissor: [this.pessoa.principal.orgaoemissor],
@@ -140,10 +141,11 @@ export class PrincipalComponent implements OnInit {
       apelido_fantasia: [this.pessoa.principal.apelido_fantasia],
       id_atividade: [this.pessoa.principal.id_atividade],
       cnh: [this.pessoa.principal.cnh],
-      cnh_validade:  [moment(this.pessoa.principal.cnh_validade ).format('DD/MM/YYYY') ],
+      cnh_validade:  [ this.pessoa.principal.cnh_validade ?  moment(this.pessoa.principal.cnh_validade ).format('DD/MM/YYYY') : moment().format('DD/MM/YYYY')],
       cnh_categoria: [this.pessoa.principal.cnh_categoria],
       id_tipo_cliente: [this.pessoa.principal.id_tipo_cliente],
-      id_classificacao_cliente: [this.pessoa.principal.id_classificacao_cliente]
+      id_classificacao_cliente: [this.pessoa.principal.id_classificacao_cliente],
+      id_usuario_carteira: [this.pessoa.principal.id_usuario_carteira]
     })
     this.principalFormAud = this.principalForm.value;
   }
@@ -178,8 +180,6 @@ export class PrincipalComponent implements OnInit {
       if(t.status) return { label: t.nome, value: t.id };
     })
 
-
-
     let atividades = await this.connectHTTP.callService({
       service: 'getAtividades',
       paramsService: {}
@@ -196,7 +196,39 @@ export class PrincipalComponent implements OnInit {
       .map((t) => {
         return { label: t.name, value: t.id };
       })
+
+      let getUsuarios = await this.connectHTTP.callService({
+        service: 'getUsuarios',
+        paramsService: {}
+      }) as any;
+    debugger
+      this.usuariosCarteira  = getUsuarios.resposta.map((t) => {
+        if(t.status){
+        return { label: t.nome, value: t.id_usuario };
+      } else
+      {
+        return { label: `_Inativo -> ${t.nome}`  , value: t.id_usuario };
+      }
+      })
+      // order pelo nome o usuos carteira 
+      this.usuariosCarteira.sort(function (a, b) {
+        if (a.label > b.label) {
+          return 1;
+        }
+        if (a.label < b.label) {
+          return -1;
+        }
+        // a must be equal to b
+        return 0;
+      });
+
+
+
   }
+
+
+
+
 
   getSelectedValuePessoa(pessoa: selectValues) {
     this.tipoPessoaSelecionada = pessoa.value;
@@ -212,6 +244,15 @@ export class PrincipalComponent implements OnInit {
     if (this.tipoPessoaSelecionada == 'J' && !validaCnpj.isValid(this.principalForm.value.cpf_cnpj)) {
        return this.toastrService.error('Informe um CNPJ válido');
     }
+
+    // se a data de nascimento e dt de validade da CNH for igual a data de hoje 
+    // pressupõe que o usuário não deseja informar as datas  
+    if (this.principalForm.controls['datanascimento'].value == moment().format('DD/MM/YYYY')
+    ) { this.principalForm.controls['datanascimento'].setValue('');}
+
+    if (this.principalForm.controls['cnh_validade'].value == moment().format('DD/MM/YYYY')
+    ) { this.principalForm.controls['cnh_validade'].setValue('');}
+
 
     this.checkAtividadePessoa()
     ;

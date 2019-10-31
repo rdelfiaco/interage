@@ -27,17 +27,22 @@
       </div>
     </div>
     <div class="row">
-      <div class="md-form col" style="margin-top: -10px" >
+      <div class="md-form col-3" style="margin-top: -3px" >
         <mdb-date-picker formControlName="datanascimento" #datanascimento name="mydate" [options]="myDatePickerOptions"
-          [placeholder]="'Selecione a data'" required id="datanascimento">
+          [placeholder]="'Selecione a data'" required id="datanascimento_">
         </mdb-date-picker>
-        <label for="datanascimento"  >Data Nascimento</label>
+        <label for="datanascimento_"  >Data Nascimento</label>
       </div>
-      <div class="col mdb-select-form">
+      <div class="col-3 mdb-select-form">
         <mdb-select formControlName="sexo" [placeholder]="'Selecione o Sexo'" [options]="enumSexo" [multiple]="false">
         </mdb-select>
         <label>Sexo</label>
       </div>
+      <div class="mdb-select-form col-6">
+          <mdb-select [filterEnabled]="true" formControlName="id_usuario_carteira" [placeholder]="'Selecione o usuário vendendor'"
+            [options]="usuariosCarteira" [multiple]="false"></mdb-select>
+          <label>Vendedor</label>
+        </div>
     </div>
 
     <div class="row">

@@ -151,16 +151,20 @@
 
 <div [formGroup]="usuarioForm" mdbModal #excluirModal="mdbModal" class="modal fade" tabindex="-1" role="dialog"
   aria-labelledby="myBasicModalLabel" aria-hidden="true" [config]="{backdrop: true}">
-  <div class="modal-dialog modal-fluid" role="document">
+  <div class="modal-dialog modal-lg" role="document">
     <div class="modal-header light-blue darken-3 white-text">
-      <h4 class="modal-title">Exluir o usuário</h4>
+      <h4 class="modal-title">Excluir o usuário</h4>
       <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="excluirModal.hide()">
         <span aria-hidden="true">&times;</span>
       </button>
     </div>
     <div class="modal-content">
-      <h4> {{usuarioNomeSelecionado}}</h4>
-      <div class="row justify-content-end">
+      <div style="margin-left: 15px;">
+        <br>
+        <h4> {{usuarioNomeSelecionado}}</h4>
+        <br>
+      </div>
+      <div class="modal-footer justify-content-end">
         <div class="md-form">
           <button type="button" mdbBtn color="danger" class="waves-light" aria-label="Cancelar"
             (click)="excluirModal.hide()" mdbWavesEffect>Cancelar</button>

@@ -358,6 +358,7 @@ function salvarPessoa(req, res) {
           ret.push('observacoes=' + (req.query.observacoes != 'null' || req.query.observacoes != '' ? "'" + req.query.observacoes + "'" : null))
           ret.push('id_tipo_cliente=' + (req.query.id_tipo_cliente != 'null' || req.query.id_tipo_cliente != '' ? "'" + req.query.id_tipo_cliente + "'" : null))
           ret.push('id_classificacao_cliente=' + (req.query.id_classificacao_cliente != 'null' || req.query.id_classificacao_cliente != '' ? "'" + req.query.id_classificacao_cliente + "'" : null))
+          ret.push('id_usuario_carteira=' + (req.query.id_usuario_carteira != 'null' || req.query.id_usuario_carteira != '' ? req.query.id_usuario_carteira  : null))
          
           return ret.join(', ');
         }
@@ -482,6 +483,8 @@ async function  adicionarPessoa(req, res) {
         ret.push((req.query.id_tipo_cliente != '' ? "'" + req.query.id_tipo_cliente + "'" : 'NULL') + ",")
         ret.push((req.query.id_classificacao_cliente != '' ? "'" + req.query.id_classificacao_cliente + "'" : 'NULL')+ "," )
         ret.push((req.query.id_atividade != 'null' || req.query.id_atividade != '' ? "'" + req.query.id_atividade + "'" : null))
+
+
 
         ret.push(')')
         return ret.join(' ');

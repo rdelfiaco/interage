@@ -86,6 +86,7 @@ export class AuthService {
         }
       })
       ;
+      debugger;
       this.usuarioLogadoObject = usuarioLogado.resposta;
       this.localStorage.postLocalStorage('usuarioLogado', usuarioLogado.resposta)
       this._setValidadeToken();

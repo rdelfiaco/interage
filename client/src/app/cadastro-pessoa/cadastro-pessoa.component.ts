@@ -67,7 +67,6 @@ export class CadastroPessoaComponent implements OnInit {
     //  - se o cliente não estiver vinculado a nenhuma carteira o usuário logado pode ter acesso; 
     //  - se o cliente esteja vinculado a uma carteria e se o usuário logado possui carteira o
     //           o acesso aos dados do cliente somente se ele pertence a carteira do usuário logado  
-    console.log(pessoa.resposta)
     if ((this.usuarioLogado.possui_carteira_cli && pessoa.resposta.principal.id_usuario_carteira ) ||
       (this.usuarioLogado.id_pessoa == pessoa.resposta.principal.id)) {
       if ((this.usuarioLogado.id == pessoa.resposta.principal.id_usuario_carteira) || 
