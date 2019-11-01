@@ -241,6 +241,7 @@ export class ResponderQuestionarioComponent implements OnInit, OnDestroy {
   }
 
   criaRespostaNormal(exige_observacao = false, text = '') {
+    debugger
     if (document.querySelector('.quest-response-textarea')) {
       this.removeCamposObservacao();
     }
@@ -299,7 +300,6 @@ export class ResponderQuestionarioComponent implements OnInit, OnDestroy {
   }
 
   proxPergunta() {
-    debugger
     let self = this;
     if (!this.alternativaEscolhida && !this.alternativasEscolhidas.length && !this.respostaEscrita) {
       return this.toastrService.warning('Precisa informar um reposta para poder prosseguir!');
@@ -314,7 +314,7 @@ export class ResponderQuestionarioComponent implements OnInit, OnDestroy {
     }
     let proxPerg: Perg;
     try {
-      
+      debugger
       if (this.perguntaAtual.tipo_pergunta == 1) {
         this.alternativaEscolhida = this.perguntaAtual.alternativas.find(alt => {
           return alt.id === parseInt(this.alternativaEscolhida);
@@ -361,6 +361,7 @@ export class ResponderQuestionarioComponent implements OnInit, OnDestroy {
     }
 
     function salvaResp(a = null) {
+      debugger;
       let objResp = {
         id_alternativa: a ? a.id : null,
         id_usuario: self.usuarioLogado.id,

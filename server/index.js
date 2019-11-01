@@ -194,6 +194,8 @@ declaraServico('crudCanais', canais.crudCanais);
 
 
 app.listen(nodeStart.port, "0.0.0.0");
+
+
 console.log(`Servidor iniciado na em http://localhost:${nodeStart.port}`)
 
 
@@ -214,6 +216,7 @@ function declaraServico(nomeServico, funcao) {
 }
 
 function declaraServicoPost(nomeServico, funcao) {
+  console.log(1)
   app.post(`/${nomeServico}`, (req, res) => {
     funcao(req)
       .then(linhas => {

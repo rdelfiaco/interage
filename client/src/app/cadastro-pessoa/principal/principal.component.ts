@@ -201,7 +201,6 @@ export class PrincipalComponent implements OnInit {
         service: 'getUsuarios',
         paramsService: {}
       }) as any;
-    debugger
       this.usuariosCarteira  = getUsuarios.resposta.map((t) => {
         if(t.status){
         return { label: t.nome, value: t.id_usuario };

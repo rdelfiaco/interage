@@ -13,7 +13,7 @@ function importaLead(req, res){
     };
 
     let arquivoCSV = JSON.parse( req.query.arquivo);
-
+    console.log(arquivoCSV)
     const dbconnection = require('../config/dbConnection');
     const { Client } = require('pg');
     const client = new Client(dbconnection);
@@ -22,6 +22,7 @@ function importaLead(req, res){
    client.query('BEGIN').then((res1) => {
     // deleta a tabela lead_a_importar
      deletaTabLeadAImportar (credenciais, client).then((resp) => {
+       console.log('2 ') 
       // inseri o lead recebido na tabela lead_a_importar
       insertTabLeadAImportar(credenciais, client, arquivoCSV).then((resp) => {
        // Verificar se o lead existente com cpf_cnpj na tabela de pessoas 
@@ -30,10 +31,12 @@ function importaLead(req, res){
         insertLeadEmPessoas(credenciais, client).then((resp) => {
         // Incluir o nome do lead na tabela de leads_mailing 
           insertLeadsMailing(credenciais, client, arquivoCSV).then((resp) => {
+            console.log('Number(resp[0].id) ', Number(resp[0].id))
           let id_leads_mailing = Number(resp[0].id)
           // cria  campanha com o mesmo nome do lead 
             insertCampanha(credenciais, client, arquivoCSV).then((resp) => {
               let id_campanha = Number(resp[0].id)
+              console.log('id_campanha ', id_campanha)
               // alterar o id_leads_mailing e o id_campanha na tabela lead_a_importar
               updateTabLeadAImportar(credenciais, client, id_leads_mailing, id_campanha).then((resp) => {
                 // inserir pessoas sem cpf_cnpj 

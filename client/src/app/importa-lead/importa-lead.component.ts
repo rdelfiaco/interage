@@ -422,7 +422,6 @@ colunasStringCobr = [0,2,3,4,5,6];
 
   
   async importarCSVSQL() {
-  
      //this.importando = true;
      if (this.cobrancaChk) this.converteLayOutCobr() 
      try {

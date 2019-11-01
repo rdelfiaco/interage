@@ -119,14 +119,35 @@ export class DetalheDeCampanhaComponent implements OnInit {
   };
 
   public chartClickedIB(e: any): void { 
-
+    debugger
     let index = e.active[0]._index
-    
-    console.log('id_ ', this.chartIdLabelsIB[index], this.chartLabelsIB[index])
+    let filtros = ` where id_campanha = ${this.detalheCampanhaStatus[0].id_campanha} and id_resp_motivo = ${this.chartIdLabelsIB[index]} and date(dt_resolvido) between date(to_data('${this.dataInicial}','ddmmyyyy')) and date(to_data('${this.dataFinal}','ddmmyyyy')) `
+ 
+    // retira todas as / do filtro
+    filtros = filtros.replace('/','').replace('/','').replace('/','').replace('/','');
 
-    console.log(this.detalheCampanhaStatus)
-
+    this.showTable('Clientes do status de contato selecionado',10,filtros,'evento')
+ 
   }
+
+
+  showTable(titulo: any, idSql: number,  filtros: any, rotaDetalhe: any  ){
+
+
+
+    if (idSql>0) {
+      let parametros = `/showTable/{"idSql":${idSql},"filtros":"${filtros}","titulo": "${titulo}", "rotaDetalhe": "${rotaDetalhe}"}`
+       this.router.navigate([parametros]);
+      }     
+      
+      
+  }
+
+
+
+
+
+
 
   public chartHoveredIB(e: any): void {
     
@@ -159,7 +180,8 @@ export class DetalheDeCampanhaComponent implements OnInit {
     private localStorage: LocalStorage,
     private toastrService: ToastService,
     private randomColor: RandomColor,
-    private elementRef: ElementRef, ) {
+    private elementRef: ElementRef,
+    private router: Router ) {
     this.usuarioLogado = this.localStorage.getLocalStorage('usuarioLogado') as Usuario;
     this.route.params.subscribe(res => {
       pdfMake.vfs = pdfFonts.pdfMake.vfs;
