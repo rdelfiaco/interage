@@ -168,7 +168,12 @@
 
     <div class="row">
       <div class="md-form col-5">
-        <input mdbInputDirective formControlName="cpf_cnpj" type="text" id="cpf_cnpj" class="form-control">
+        <input mdbInputDirective 
+            [value]="principalForm.get('cpf_cnpj').value | mascaraCnpj"
+            formControlName="cpf_cnpj" 
+            type="text" 
+            id="cpf_cnpj" 
+            class="form-control">
         <label for="cpf_cnpj">CNPJ</label>
       </div>
       <div class="col mdb-select-form">
