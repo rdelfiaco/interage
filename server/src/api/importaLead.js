@@ -351,17 +351,17 @@ function insertTabLeadAImportar(credenciais, client, arquivoCSV) {
     sql = sql + ') VALUES ';
     let linhaSQL = String; 
     let linha = arquivoCSV.csvLinhas[0];
-    let tipPessoa = '';
+    var tipoPessoa = '';
     for (let j = 0; j < arquivoCSV.csvLinhas.length; j++) {
       linhaSQL = '(';
       linha = arquivoCSV.csvLinhas[j]
       for (let i = 0; i < arquivoCSV.csvHeader.length; i++) {
         if (arquivoCSV.csvHeader[i] == 'tipo_pessoa'){
-          tipPessoa = linha[arquivoCSV.csvHeader[i]]
+          tipoPessoa = linha[arquivoCSV.csvHeader[i]]
         }
         if (isNumber(linha[arquivoCSV.csvHeader[i]])) {
           if (arquivoCSV.csvHeader[i] == 'cpf_cnpj'){
-            if (tipPessoa = 'J') {
+            if (tipoPessoa = 'J') {
               linhaSQL = linhaSQL + `'${zeroEsquerda(linha[arquivoCSV.csvHeader[i]],14)}', `
             } else {
               linhaSQL = linhaSQL + `'${zeroEsquerda(linha[arquivoCSV.csvHeader[i]],11)}', `
@@ -383,6 +383,7 @@ function insertTabLeadAImportar(credenciais, client, arquivoCSV) {
       sql = sql + linhaSQL
     }
     sql = sql.substr(0, sql.length - 2) 
+    console.log('sql ', sql)
     executaSQLComTransacao (credenciais, client, sql)
     .then(res => {  resolve( res ) })
     .catch(err => { reject( err ) })

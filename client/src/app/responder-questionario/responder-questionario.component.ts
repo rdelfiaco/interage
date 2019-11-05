@@ -205,6 +205,7 @@ export class ResponderQuestionarioComponent implements OnInit, OnDestroy {
     input.name = "alternativa";
     input.value = id;
     input.onchange = (event) => {
+      
       if (event.target['checked']) {
         if (!this.alternativasEscolhidas.length) {
           return this.alternativasEscolhidas.push(event.target['value']);
@@ -253,7 +254,8 @@ export class ResponderQuestionarioComponent implements OnInit, OnDestroy {
     let textarea = document.createElement('textarea');
     textarea.id = "alternativa";
     textarea.className = 'quest-response-textarea form-control';
-    textarea.onkeypress = (event) => {
+    // textarea.onkeypress = (event) => {
+      textarea.onblur = (event) => {
       this.respostaEscrita = event.target['value'];
     };
     textarea.innerText = text;
@@ -269,6 +271,7 @@ export class ResponderQuestionarioComponent implements OnInit, OnDestroy {
   }
 
   criaRespostaTipoData(exige_observacao = false, date = null) {
+    debugger
     let divPai = document.createElement('div');
     divPai.className = 'col-lg-12 quest-observacao mb-3';
     let input_date = document.createElement('input');
@@ -279,9 +282,11 @@ export class ResponderQuestionarioComponent implements OnInit, OnDestroy {
     if (date) {
       this.respostaEscrita = date;
     }
-    input_date.onchange = (event) => {
-      this.respostaEscrita = new Date(event.target['value']).toISOString();
+    input_date.onblur = (event) => {
+      this.respostaEscrita = moment(event.target['value']).format('DD/MM/YYYY');
+      
     };
+
     if (exige_observacao) {
       let span = document.createElement('label');
       span.textContent = 'Observação (Campo Obrigatório)';

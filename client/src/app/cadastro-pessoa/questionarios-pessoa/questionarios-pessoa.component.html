@@ -42,7 +42,8 @@
           <tr *ngFor="let item of questionarioSelecionado.respostas">
             <td>{{item.nome}}</td>
             <td>{{item.alternativa}}</td>
-            <td>{{getObs(item.observacao)}}</td>
+            <!-- <td>{{getObs(item.observacao)}}</td> -->
+            <td>{{item.observacao}}</td>
           </tr>
           <tr *ngIf="!questionarioSelecionado.respostas.length">
               <td colspan="5" class="text-center">Nenhuma resposta selecionada ou não existe registros para as

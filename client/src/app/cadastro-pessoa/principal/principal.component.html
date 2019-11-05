@@ -55,7 +55,11 @@
         <label for="orgaoEmissor">Orgão Emissor</label>
       </div>
       <div class="md-form col-3">
-        <input mdbInputDirective formControlName="cpf_cnpj" type="text" id="cpf" class="form-control">
+        <input mdbInputDirective 
+        [value]="principalForm.get('cpf_cnpj').value | mascaraCpf"
+        formControlName="cpf_cnpj" 
+        type="text" id="cpf" 
+        class="form-control">
         <label for="cpf">CPF</label>
       </div>
 

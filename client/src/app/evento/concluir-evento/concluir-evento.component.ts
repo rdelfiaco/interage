@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, ViewChild, SimpleChanges, EventEmitter, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
-import { MDBDatePickerComponent, IMyOptions } from '../../../lib/ng-uikit-pro-standard';
+import { MDBDatePickerComponent, IMyOptions, ModalDirective } from '../../../lib/ng-uikit-pro-standard';
 import * as moment from 'moment';
 import { ConnectHTTP } from '../../shared/services/connectHTTP';
 import { LocalStorage } from '../../shared/services/localStorage';
@@ -29,8 +29,15 @@ export class ConcluirEventoComponent implements OnInit {
   predicoesFormatado: Array<object>
   private _objecoes: Array<object>;
   objecoesFormatado: Array<object>
+  questId = null;
+  eventoId = null;
+  pessoaId = null;
+
+
   @Output() fechaModal = new EventEmitter();
   @ViewChild("dataReagendamento") datePicker: MDBDatePickerComponent;
+  @ViewChild('respquestionarioModal') respquestionarioModal: ModalDirective;
+
   public myDatePickerOptions: IMyOptions = {
     // Strings and translations
     dayLabels: { su: 'Dom', mo: 'Seg', tu: 'Ter', we: 'Qua', th: 'Qui', fr: 'Sex', sa: 'Sab' },
@@ -187,7 +194,18 @@ export class ConcluirEventoComponent implements OnInit {
           this.exige_objecao = true;
         else this.exige_objecao = false
 
+        if (motivo.id_questionario){
+          debugger
+          this.questId = motivo.id_questionario;
+          this.eventoId = this._eventoObject.id;
+          this.pessoaId = this._eventoObject.id_pessoa_receptor
+          return this.respquestionarioModal.show();
+        }
+
         self.questionarioForm.controls['observacao'].updateValueAndValidity();
+
+
+
       }
     })
   }
@@ -215,4 +233,13 @@ export class ConcluirEventoComponent implements OnInit {
     });
     this.fechaModal.emit();
   }
+
+  encerrouQuest(concluido) {
+    this.respquestionarioModal.hide();
+    if (concluido) {
+      this.concluiEvento();
+    }
+  }
+
+
 }
