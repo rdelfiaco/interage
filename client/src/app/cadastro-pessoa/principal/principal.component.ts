@@ -1,7 +1,7 @@
 import { format } from './../../shared/validaCpf';
-import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { IMyOptions, ToastService } from '../../../lib/ng-uikit-pro-standard';
+import { IMyOptions, ToastService, ModalDirective } from '../../../lib/ng-uikit-pro-standard';
 import { ConnectHTTP } from '../../shared/services/connectHTTP';
 import { Usuario } from '../../login/usuario';
 import { LocalStorage } from '../../shared/services/localStorage';
@@ -24,11 +24,11 @@ export class PrincipalComponent implements OnInit {
   private _pessoa: any;
   private usuarioLogado: any;
   
+  @ViewChild('modalCriarEvento') modalCriarEvento: ModalDirective;
   @Output() refresh = new EventEmitter();
   @Output() refreshPessoaAdd = new EventEmitter();
   @Input()
           set pessoa(evento: any) {
-            
             this._pessoa = evento;
             if (this._pessoa)
               this._setQuestionarioForm();
@@ -58,7 +58,8 @@ export class PrincipalComponent implements OnInit {
   atividadesPessoaFisica: any;
   atividadesPessoaJuridica: any;
   serchFilter: string;
-
+  idPessoaReceptor: any;
+  
   tipoPessoaSelecionada: string = 'F';
   principalForm: FormGroup
   principalFormAud: any;
@@ -124,6 +125,8 @@ export class PrincipalComponent implements OnInit {
 
 
   _setQuestionarioForm() {
+    debugger
+    this.idPessoaReceptor = this.pessoa.principal.id;
     this.tipoPessoaSelecionada = this.pessoa.principal.tipo;
     this.principalForm = this.formBuilder.group({
       id: [this.pessoa.principal.id],
@@ -222,7 +225,6 @@ export class PrincipalComponent implements OnInit {
       });
 
 
-
   }
 
 
@@ -307,4 +309,10 @@ export class PrincipalComponent implements OnInit {
     this.principalForm.controls['apelido_fantasia'].setValue(this.principalForm.value.nome);
 
   }
+
+  fechaModal() {
+    this.modalCriarEvento.hide();
+  }
+
+
 }

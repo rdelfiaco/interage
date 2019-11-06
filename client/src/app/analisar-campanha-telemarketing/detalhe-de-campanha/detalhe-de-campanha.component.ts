@@ -119,7 +119,6 @@ export class DetalheDeCampanhaComponent implements OnInit {
   };
 
   public chartClickedIB(e: any): void { 
-    debugger
     let index = e.active[0]._index
     let filtros = ` where id_campanha = ${this.detalheCampanhaStatus[0].id_campanha} and id_resp_motivo = ${this.chartIdLabelsIB[index]} and date(dt_resolvido) between date(to_data('${this.dataInicial}','ddmmyyyy')) and date(to_data('${this.dataFinal}','ddmmyyyy')) `
  
@@ -132,9 +131,7 @@ export class DetalheDeCampanhaComponent implements OnInit {
 
 
   showTable(titulo: any, idSql: number,  filtros: any, rotaDetalhe: any  ){
-
-
-
+    
     if (idSql>0) {
       let parametros = `/showTable/{"idSql":${idSql},"filtros":"${filtros}","titulo": "${titulo}", "rotaDetalhe": "${rotaDetalhe}"}`
        this.router.navigate([parametros]);
@@ -193,6 +190,8 @@ export class DetalheDeCampanhaComponent implements OnInit {
       this.dataFinal = `${parametros.dataFinal.substring(8, 10)}/${parametros.dataFinal.substring(5, 7)}/${parametros.dataFinal.substring(0, 4)}`
     });
   };
+
+
 
   async ngOnInit() {
     await this.getDetalheCampanha()
@@ -410,7 +409,6 @@ export class DetalheDeCampanhaComponent implements OnInit {
 
 
   povoaVetoresGraficoPerguntas(){
-    debugger;
 
     let baseConfig_: Chart.ChartConfiguration;
 
@@ -426,8 +424,12 @@ export class DetalheDeCampanhaComponent implements OnInit {
     let backgroundColor: Array<any> = [];
     let borderColor: Array<any> = [];
     let totRespPergunta: number;
+    let perguntasAlternativas: Array<any> = [];
 
-    this.perguntasQuest.forEach((elemPerg ) => {
+    console.log('perguntasAlternativas ',perguntasAlternativas)
+
+    for (let index = 0; index < this.perguntasQuest.length; index++) {
+      const elemPerg = this.perguntasQuest[index];
       
       regAltFiltr = [];
       dataReg = [];
@@ -437,14 +439,22 @@ export class DetalheDeCampanhaComponent implements OnInit {
       labels = [];
       datasets = [];
       totRespPergunta = 0;
-
+     
       // filtra as alternativas da pergunta 
       this.alternativasPeguntas.forEach(elemAlt => {
           if (elemPerg.id_pergunta == elemAlt.id_pergunta) {
             regAltFiltr.push(elemAlt);
           } 
       });
-      // pova vetores das alternativas da pergunta 
+      // povoa registro das perguntas com alternativa
+      perguntasAlternativas.push(
+        {
+        id_pergunta : elemPerg.id_pergunta,
+        alternativas : regAltFiltr
+        }
+    )
+
+      // povoa vetores das alternativas da pergunta 
       regAltFiltr.forEach( elem => {
         labels.push(elem.alternativa);
         dataReg.push(elem.tot_resp);
@@ -487,8 +497,37 @@ export class DetalheDeCampanhaComponent implements OnInit {
             padding: 20,
             fontSize: 14, 
             fontFamily: 'Arial' 
-        },
-        
+            },
+          'onClick' :  (evt, item) => {
+              console.log('item ' ,item)
+              
+              
+
+              console.log('item[0]._index ', item[0]._index)
+              console.log('item[0]._chart.chart.id ', item[0]._chart.chart.id)
+              let alternativa = null;
+              let pergunta = null;
+              let id_alternativa = null;
+              let id_pergunta = perguntasAlternativas[item[0]._chart.chart.id - 1].id_pergunta ;
+              if (perguntasAlternativas[item[0]._chart.chart.id - 1].alternativas.length > 0 ) {
+                id_alternativa =  perguntasAlternativas[item[0]._chart.chart.id - 1].alternativas[item[0]._index].id_alternativa
+                alternativa = perguntasAlternativas[item[0]._chart.chart.id - 1].alternativas[item[0]._index].alternativa;
+                pergunta = perguntasAlternativas[item[0]._chart.chart.id - 1].alternativas[item[0]._index].pergunta;
+
+              }
+
+              console.log('id_alternativa', id_alternativa);
+              console.log('id_pergunta ', id_pergunta );
+
+
+               let filtros = ` where id_pergunta = ${id_pergunta} and (id_alternativa = ${id_alternativa} or id_alternativa is null) and date(dt_resposta) between date(to_data('${this.dataInicial}','ddmmyyyy')) and date(to_data('${this.dataFinal}','ddmmyyyy')) `;
+           
+              // retira todas as / do filtro
+              filtros = filtros.replace('/','').replace('/','').replace('/','').replace('/','');
+          
+              this.showTable(`Clientes que responderal a alternativa:  ${alternativa}, da pergunta:  ${pergunta}`,11,filtros,'evento')
+
+            },
       });
 
       this.chartData.push({
@@ -498,7 +537,15 @@ export class DetalheDeCampanhaComponent implements OnInit {
     
       baseConfig = baseConfig_;
 
-    });
+      if (index === this.perguntasQuest.length-1) {
+        this.montaGraficosPerguntas();
+        setTimeout(() => {
+          this.montaGraficosPerguntas();
+        }, 100);
+      }
+    };
+
+    
   }
 
     montaGraficosPerguntas(){
@@ -506,7 +553,11 @@ export class DetalheDeCampanhaComponent implements OnInit {
       this.formularioGraficoResposta = true;
 
       this.charts = this.chartElementRefs.map((chartElementRef, index) => {
-        const config = Object.assign({}, { type: "bar", options: this.optionsBar[index], data: this.chartData[index] });
+        const config = Object.assign({}, { type: "bar", 
+                                options: this.optionsBar[index], 
+                                data: this.chartData[index],
+                                
+                              });
         return new Chart(chartElementRef.nativeElement, config);
       });
     }

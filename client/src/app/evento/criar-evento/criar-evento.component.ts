@@ -16,9 +16,11 @@ export class CriarEventoComponent implements OnInit {
   public _evento: any
   @Input()
   set pessoa(pessoa: any) {
+    debugger
     if (pessoa)
       pessoa.subscribe((pessoa) => {
         this.pessoaId = new Observable((observer) => {
+          
           observer.next(pessoa.principal.id)
         })
         this.criarEventoForm.controls['pessoaId'].setValue(pessoa.principal.id);
@@ -38,8 +40,8 @@ export class CriarEventoComponent implements OnInit {
   get evento(): any {
     return this._evento
   }
-
-  @Input() disabled: any
+  @Input() idPessoaReceptor: any;
+  @Input() disabled: any;
   @Output() fechaModal = new EventEmitter()
   motivosDoCanal: Array<any> = [];
   motivosDoCanalSelecionado: Array<any> = [];
@@ -87,7 +89,6 @@ export class CriarEventoComponent implements OnInit {
   }
 
   async ngOnInit() {
-
     let eventoEncontrado = await this.connectHTTP.callService({
       service: 'informacoesParaCriarEvento',
       paramsService: {
