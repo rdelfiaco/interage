@@ -69,6 +69,7 @@ export class ResponderQuestionarioComponent implements OnInit, OnDestroy {
     status: null,
     id_proxima_pergunta: null,
   };
+  indexResposata = 0;
   perguntaAnterior = null;
   multiEscolha = false;
   alternativaEscolhida = null;
@@ -373,13 +374,15 @@ export class ResponderQuestionarioComponent implements OnInit, OnDestroy {
         id_receptor: self.receptorId,
         observacao: (self.respostaEscrita || ''),
         id_evento: self.eventoId,
-        id_pergunta: self.perguntaAtual.id
+        id_pergunta: self.perguntaAtual.id,
+        perguntaAnterior:  (self.perguntaAnterior ? self.perguntaAnterior : null)
       }
       let existeRespPerguntaAtual = self.respostas.filter(r => {
         return (r.id_pergunta == objResp.id_pergunta && r.id_alternativa == objResp.id_alternativa );
       })[0];
       if (!existeRespPerguntaAtual) {
         self.respostas.push(objResp);
+        self.indexResposata++;
       } else {
         self.respostas = self.respostas.map(r => {
           if (r.id_pergunta == existeRespPerguntaAtual.id_pergunta) {
@@ -424,25 +427,37 @@ export class ResponderQuestionarioComponent implements OnInit, OnDestroy {
   }
 
   get podeVoltar() {
+    if (this.perguntaAtual.sequencia_pergunta){
     return this.respostas.length && this.perguntaAtual.sequencia_pergunta > 1;
+    }else
+    {
+      return false
+    }
   }
 
   voltar() {
     // const perguntaAnterior: PerRespondia = this.respostas[this.respostas.length - 1];
     // if (this.perguntaAnterior) {
     // }
-    let pergAnteriror = null; 
-    this.questionario.perguntas.forEach(p => {
-      if (p.alternativas.some(alt => alt.id_proxima_pergunta == this.perguntaAtual.id)) {
-        pergAnteriror = p;
-      }
-    });
-    if (pergAnteriror) {
-      this.perguntaAtual = pergAnteriror;
-    }
-    else {
-      this.perguntaAtual = this.questionario.perguntas.find(p => p.sequencia_pergunta == (this.perguntaAtual.sequencia_pergunta - 1));
-    }
+
+    // let pergAnteriror = null; 
+    // this.questionario.perguntas.forEach(p => {
+    //   if (p.alternativas.some(alt => alt.id_proxima_pergunta == this.perguntaAtual.id)) {
+    //     pergAnteriror = p;
+    //   }
+    // });
+    // if (pergAnteriror) {
+    //   this.perguntaAtual = pergAnteriror;
+    // }
+    // else {
+    //   this.perguntaAtual = this.questionario.perguntas.find(p => p.sequencia_pergunta == (this.perguntaAtual.sequencia_pergunta - 1));
+    // }
+
+    this.perguntaAtual = this.respostas[this.indexResposata - 1].perguntaAnterior;
+
+    this.respostas.splice((this.respostas.length - 1), 1)
+    this.indexResposata--;
+
     this.montaPergunta();
   }
 

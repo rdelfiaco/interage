@@ -237,7 +237,7 @@
     </div>
     <div class="modal-content">
       <div class="modal-body" style="overflow: auto; height: 80vh;">
-        <app-criar-evento [idPessoaReceptor]="idPessoaReceptor" (fechaModal)="fechaModal()" ></app-criar-evento>
+        <app-criar-evento [atendimento]="pessoa" [disabled]="true" (fechaModal)="fechaModal()" ></app-criar-evento>
       </div>
     </div>
   </div>

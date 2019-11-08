@@ -14,9 +14,12 @@ import { Router } from '@angular/router';
 export class CriarEventoComponent implements OnInit {
   private _pessoa: any
   public _evento: any
+
+  pessoaId: any
+
   @Input()
   set pessoa(pessoa: any) {
-    debugger
+    
     if (pessoa)
       pessoa.subscribe((pessoa) => {
         this.pessoaId = new Observable((observer) => {
@@ -25,14 +28,25 @@ export class CriarEventoComponent implements OnInit {
         })
         this.criarEventoForm.controls['pessoaId'].setValue(pessoa.principal.id);
       });
+
   }
   get pessoa(): any {
     return this._pessoa;
   }
-  pessoaId: any;
+@Input() 
+  set atendimento(atendimento : any) {
+    if (atendimento){
+      this.criarEventoForm.controls['pessoaId'].setValue(atendimento.principal.id);
+      this.pessoaId = atendimento.principal.id;
+    }
+  }
+  get atendimento(): any {
+    return this._pessoa;
+  }
 
   @Input()
   set evento(evento: any) {
+    console.log('evento ', evento )
     this._evento = evento;
     this.criarEventoForm.controls['canal'].setValue(evento.id_canal);
     this.criarEventoForm.controls['id_motivo'].setValue(evento.id_motivo);
@@ -50,6 +64,7 @@ export class CriarEventoComponent implements OnInit {
   canaisSelect: Array<any>
   usuarioSelect: Array<any>
   optionsTipoDestino: Array<any>
+  
 
   public myDatePickerOptions: IMyOptions = {
     dayLabels: { su: 'Dom', mo: 'Seg', tu: 'Ter', we: 'Qua', th: 'Qui', fr: 'Sex', sa: 'Sab' },

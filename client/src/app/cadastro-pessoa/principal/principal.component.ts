@@ -125,7 +125,7 @@ export class PrincipalComponent implements OnInit {
 
 
   _setQuestionarioForm() {
-    debugger
+    
     this.idPessoaReceptor = this.pessoa.principal.id;
     this.tipoPessoaSelecionada = this.pessoa.principal.tipo;
     this.principalForm = this.formBuilder.group({

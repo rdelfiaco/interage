@@ -669,6 +669,7 @@ function getDetalheCampanhaStatus(req, res) {
           group by id_campanha, id_resp_motivo , resposta_motivo
           order by resposta_motivo
     `
+    console.log(' getDetalheCampanha ',sql)
     executaSQL(credenciais, sql)
       .then(res => {
         resolve(res);
