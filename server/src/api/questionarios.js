@@ -176,9 +176,7 @@ function gravaRespostaQuestionario(req, res) {
       token: req.query.token,
       idUsuario: req.query.id_usuario
     };
-    console.log(req.query.data);
     req.query.q = JSON.parse(req.query.data);
-    console.log(req.query.q);
     let sql = `insert into quest_respostas(
       id_alternativa,
       id_usuario,

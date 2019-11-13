@@ -5,15 +5,37 @@ import { Usuario } from '../login/usuario';
 import { LocalStorage } from '../shared/services/localStorage';
 import * as moment from 'moment';
 
-class Perg {
+// class Perg {
+//   alternativas: [{
+//     id: null,
+//     id_pergunta: null,
+//     id_proxima_pergunta: null,
+//     nome: null,
+//     sequencia_alternativa: null,
+//     status: null,
+//     exige_observacao: null,
+//     exige_data: null,
+//   }];
+//   tipo_pergunta: null;
+//   descricao_pergunta: null;
+//   id: null;
+//   id_questionario: null;
+//   multipla_escolha: null;
+//   nome: null;
+//   sequencia_pergunta: null;
+//   status: null;
+//   id_proxima_pergunta: null;
+// }
+class Perg  {
   alternativas: [{
     id: null,
     id_pergunta: null,
     id_proxima_pergunta: null,
     nome: null,
     sequencia_alternativa: null,
-    exige_observacao: null,
     status: null,
+    exige_observacao: null,
+    exige_data: null,
   }];
   tipo_pergunta: null;
   descricao_pergunta: null;
@@ -24,7 +46,7 @@ class Perg {
   sequencia_pergunta: null;
   status: null;
   id_proxima_pergunta: null;
-}
+};
 
 interface PerRespondia {
   id_alternativa: number;
@@ -57,7 +79,8 @@ export class ResponderQuestionarioComponent implements OnInit, OnDestroy {
       nome: null,
       sequencia_alternativa: null,
       status: null,
-      exige_observacao: null
+      exige_observacao: null,
+      exige_data: null,
     }],
     tipo_pergunta: null,
     descricao_pergunta: null,
@@ -166,7 +189,11 @@ export class ResponderQuestionarioComponent implements OnInit, OnDestroy {
       const alt = this.getAlternativa(id)
       this.respostaEscrita = '';
       if (alt.exige_observacao) {
+        if (alt.exige_data){
+          this.criaRespostaTipoData();
+        }else {
         this.criaRespostaNormal(alt.exige_observacao);
+        }
       }
       else {
         const campo = document.querySelector('.quest-observacao');
@@ -180,10 +207,16 @@ export class ResponderQuestionarioComponent implements OnInit, OnDestroy {
   }
 
   montaObservacao(id) {
+    //debugger
     const alt = this.getAlternativa(id)
     this.respostaEscrita = '';
     if (alt.exige_observacao) {
+      if (alt.exige_data) {
+        this.criaRespostaTipoData();
+      }else
+      {
       this.criaRespostaNormal(alt.exige_observacao);
+      }
     }
     else {
       const campo = document.querySelector('.quest-observacao');
@@ -243,7 +276,7 @@ export class ResponderQuestionarioComponent implements OnInit, OnDestroy {
   }
 
   criaRespostaNormal(exige_observacao = false, text = '') {
-    debugger
+    //debugger
     if (document.querySelector('.quest-response-textarea')) {
       this.removeCamposObservacao();
     }
@@ -272,7 +305,7 @@ export class ResponderQuestionarioComponent implements OnInit, OnDestroy {
   }
 
   criaRespostaTipoData(exige_observacao = false, date = null) {
-    debugger
+    //debugger
     let divPai = document.createElement('div');
     divPai.className = 'col-lg-12 quest-observacao mb-3';
     let input_date = document.createElement('input');
@@ -320,7 +353,7 @@ export class ResponderQuestionarioComponent implements OnInit, OnDestroy {
     }
     let proxPerg: Perg;
     try {
-      debugger
+      //debugger
       if (this.perguntaAtual.tipo_pergunta == 1) {
         this.alternativaEscolhida = this.perguntaAtual.alternativas.find(alt => {
           return alt.id === parseInt(this.alternativaEscolhida);
@@ -367,7 +400,7 @@ export class ResponderQuestionarioComponent implements OnInit, OnDestroy {
     }
 
     function salvaResp(a = null) {
-      debugger;
+      //debugger;
       let objResp = {
         id_alternativa: a ? a.id : null,
         id_usuario: self.usuarioLogado.id,
@@ -408,7 +441,7 @@ export class ResponderQuestionarioComponent implements OnInit, OnDestroy {
   }
 
   async salvaReps() {
-    debugger
+    //debugger
     if (this.respostas.length) {
       for (let index = 0; index < this.respostas.length; index++) {
         const element = this.respostas[index];
@@ -427,7 +460,7 @@ export class ResponderQuestionarioComponent implements OnInit, OnDestroy {
   }
 
   get podeVoltar() {
-    if (this.perguntaAtual.sequencia_pergunta){
+    if ((this.perguntaAtual || {} ).sequencia_pergunta){
     return this.respostas.length && this.perguntaAtual.sequencia_pergunta > 1;
     }else
     {
@@ -478,6 +511,7 @@ export class ResponderQuestionarioComponent implements OnInit, OnDestroy {
         nome: respQuest.resposta[0].nome_questionario,
         perguntas: []
       };
+      //debugger
       respQuest.resposta.forEach(perg => {
         if (!data.perguntas.some(p => p.id === perg.id_pergunta)) {
           data.perguntas.push({
@@ -494,6 +528,7 @@ export class ResponderQuestionarioComponent implements OnInit, OnDestroy {
                 id_proxima_pergunta: alt.id_proxima_pergunta,
                 nome: alt.alternativa,
                 exige_observacao: alt.exige_observacao,
+                exige_data:alt.exige_data,
                 sequencia_alternativa: alt.sequencia_alternativa
               }
             }))
@@ -519,8 +554,9 @@ export class ResponderQuestionarioComponent implements OnInit, OnDestroy {
         id_proxima_pergunta: null,
         nome: null,
         sequencia_alternativa: null,
-        exige_observacao: null,
         status: null,
+        exige_observacao: null,
+        exige_data: null,
       }],
       descricao_pergunta: null,
       tipo_pergunta: null,

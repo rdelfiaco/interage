@@ -111,7 +111,7 @@ export class CriarEventoComponent implements OnInit {
     }) as any;
 
     this.departamentoSelect = eventoEncontrado.resposta.organograma;
-    this.departamentoSelect = this.departamentoSelect.map(departamento => {
+    this.departamentoSelect = (this.departamentoSelect || [] ).map(departamento => {
       return { value: departamento.id, label: departamento.nome }
     });
 

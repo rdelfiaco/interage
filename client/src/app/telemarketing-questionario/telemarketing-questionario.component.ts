@@ -292,14 +292,14 @@ export class TelemarketingQuestionarioComponent implements OnInit {
   encerrouQuest(concluido) {
     this.respquestionarioModal.hide();
     if (concluido) {
-      this.gravarLigacao();
+      this.gravarLigacao(true);
     }
   }
 
   discar() {
     this.discando = true;
   }
-  async gravarLigacao() {
+  async gravarLigacao(respondeuQuestionario: boolean = false) {
 
     const usuarioLogado = this.localStorage.getLocalStorage('usuarioLogado') as any;
     let parametros = {
@@ -317,9 +317,9 @@ export class TelemarketingQuestionarioComponent implements OnInit {
       observacao: this.questionarioForm.value.observacao,
       data: moment(this.questionarioForm.value.data + ' - ' + this.questionarioForm.value.hora, 'DD/MM/YYYY - hh:mm').toISOString(true),
       proposta: this.questionarioForm.value.proposta,
+      respondeuQuestionario: respondeuQuestionario,
       propostaJSON: this.questionarioForm.value.propostaJSON
     }
-    console.log('parametros', parametros)
     let metaPessoa = await this.connectHTTP.callService({
       service: 'salvarEvento',
       paramsService: parametros

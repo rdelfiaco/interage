@@ -255,9 +255,25 @@ function salvarEvento(req, res) {
       client.connect()
       let sqlMotivoRespostaAutomaticos = `SELECT * from motivos_eventos_automaticos
                               WHERE motivos_eventos_automaticos.id_motivo_resposta=${req.query.id_motivos_respostas}`;
-                              
+       
+      if (req.query.respondeuQuestionario) {
+      sqlMotivoRespostaAutomaticos = `
+      select q_ev_aut.*, 
+      case when r_perg.agendamento then r_perg.agendamento else r_alt.agendamento end agendamento, 
+      case when r_perg.agendamento then date(r_perg.dt_exibir) else date(r_alt.dt_exibir) end dt_exibir 
+      from quest_eventos_automaticos q_ev_aut
+      left join (select q_alt.id, q_alt.agendamento, case when q_alt.agendamento then date(observacao) else null end as dt_exibir from quest_respostas q_resp 
+             inner join quest_alternativas q_alt on q_resp.id_alternativa = q_alt.id 
+            where id_evento = ${req.query.id_evento} ) r_alt on q_ev_aut.id_quest_alternativa = r_alt.id
+      left join (select q_perg.id, q_perg.agendamento, case when q_perg.agendamento then date(observacao) else null end as dt_exibir from quest_respostas q_resp 
+             inner join quest_perguntas q_perg on q_resp.id_pergunta = q_perg.id 
+            where id_evento = ${req.query.id_evento}) r_perg on q_ev_aut.id_quest_pergunta  = r_perg.id`
+      }                      
+
       client.query(sqlMotivoRespostaAutomaticos).then(res => {
         const motivoResposta_automatico = res.rows;
+        // console.log('motivoResposta_automatico ',motivoResposta_automatico )
+        
         let sqlMotivoResposta = `SELECT * from motivos_respostas
                               WHERE motivos_respostas.id=${req.query.id_motivos_respostas}`;
 
@@ -342,17 +358,17 @@ function salvarEvento(req, res) {
                 //console.log('selectQuantidadeTentativas', selectQuantidadeTentativas)
                 client.query(selectQuantidadeTentativas).then((qtdTentativas) => {
                   qtdTentativas = parseInt(qtdTentativas.rows[0].count);
-                  //console.log('motivoResposta_automatico.length', motivoResposta_automatico)
+                  // console.log('motivoResposta_automatico.length', motivoResposta_automatico)
 
-                  //console.log('qtdTentativas', qtdTentativas)
-                  //console.log('motivoResposta.tentativas', motivoResposta.tentativas)
-                  //console.log('motivoResposta.tentativas > qtdTentativas', motivoResposta.tentativas > qtdTentativas)
+                  // console.log('qtdTentativas', qtdTentativas)
+                  // console.log('motivoResposta.tentativas', motivoResposta.tentativas)
+                  // console.log('motivoResposta.tentativas > qtdTentativas', motivoResposta.tentativas > qtdTentativas)
                   if (motivoResposta.tentativas > qtdTentativas) {
 
                     if (motivoResposta_automatico.length > 0) {
                       motivoResposta_automatico.map((m, index, array) => {
                         eventoCriar = createEvent(m, motivoResposta, updateEventoEncerrado)
-                        //console.log('eventoCriar', eventoCriar)
+                        // console.log('eventoCriar', eventoCriar)
 
                         client.query(eventoCriar).then(res => {
                           //console.log('index == array.length - 1', index == array.length - 1)
@@ -480,9 +496,11 @@ function salvarEvento(req, res) {
           tipoDestino = req.query.tipoDestino;
           id_pessoa_organograma = req.query.id_pessoa_organograma_destino;
         }
+        if (motivoRespostaAutomatico.agendamento){
+          req.query.data =  new Date(motivoRespostaAutomatico.dt_exibir).toISOString() ;
+        }
 
         let id_prioridade = getPrioridadeDoEvento();
-        //console.log(req.query.data)
         return `INSERT INTO eventos(
             id_campanha,
             id_motivo,

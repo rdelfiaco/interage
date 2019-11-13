@@ -27,7 +27,7 @@
     <div class="row text-center align-items-end">
       <div class="col-lg-3">
         <div class="md-form">
-          <div class="h4">Total de ligações realizadas: {{metaPessoa.ligacoes_realizadas | number}}</div>
+          <div class="h4">Total de ligações realizadas: {{(metaPessoa || {} ).ligacoes_realizadas | number}}</div>
         </div>
       </div>
       <div class="col-lg-6">
