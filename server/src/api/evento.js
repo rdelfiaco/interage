@@ -28,7 +28,7 @@ function getUmEvento(req, res) {
             and (id_campanha = ${req.query.id_campanha} or (tipodestino = 'P' and id_campanha is not null ))
             order by id_status_evento desc, id_prioridade, dt_para_exibir LIMIT 1`
 
-      //console.log(sql)
+      console.log(sql)
       client.query(sql)
         .then(res => {
           if (res.rowCount > 0) {
@@ -79,7 +79,7 @@ function motivosRespostas(req, res) {
                       LEFT JOIN motivos_eventos_automaticos ON motivos_respostas.id = motivos_eventos_automaticos.id_motivo_resposta
                       WHERE motivos_respostas.id_motivo=${req.query.id_motivo} AND status=true`
 
-      //console.log(sqlMotivosResposta);
+      console.log(sqlMotivosResposta);
       client.query(sqlMotivosResposta).then(res => {
         let motivos_respostas = res.rows;
 
@@ -253,10 +253,13 @@ function salvarEvento(req, res) {
       const client = new Client(dbconnection)
 
       client.connect()
+
+      console.log('req.query ', req.query)
+
       let sqlMotivoRespostaAutomaticos = `SELECT * from motivos_eventos_automaticos
                               WHERE motivos_eventos_automaticos.id_motivo_resposta=${req.query.id_motivos_respostas}`;
        
-      if (req.query.respondeuQuestionario) {
+      if (req.query.respondeuQuestionario != 'false' ) {
       sqlMotivoRespostaAutomaticos = `
       select q_ev_aut.*, 
       case when r_perg.agendamento then r_perg.agendamento else r_alt.agendamento end agendamento, 
@@ -476,6 +479,7 @@ function salvarEvento(req, res) {
       function createEvent(motivoRespostaAutomatico, motivoResposta, updateEventoEncerrado) {
         let tipoDestino;
         let id_pessoa_organograma;
+        console.log('motivoRespostaAutomatico ', motivoRespostaAutomatico)
         if (motivoRespostaAutomatico.gera_para == 1) {
           tipoDestino = motivoRespostaAutomatico.tipodestino;
           id_pessoa_organograma = motivoRespostaAutomatico.id_pessoa_organograma;
@@ -499,6 +503,18 @@ function salvarEvento(req, res) {
         if (motivoRespostaAutomatico.agendamento){
           req.query.data =  new Date(motivoRespostaAutomatico.dt_exibir).toISOString() ;
         }
+        // trata o que o novo evento irá herdar 
+        if (motivoRespostaAutomatico.novo_evento_herda == 2 ){
+          req.query.id_campanha = null;
+        }else {if (motivoRespostaAutomatico.novo_evento_herda == 3 ){
+          req.query.id_campanha = null;
+          req.query.id_evento_pai = null;
+
+        }else {if (motivoRespostaAutomatico.novo_evento_herda == 4 ){
+          req.query.id_campanha = null;
+          req.query.id_evento_pai = null;
+          req.query.id_evento = null
+        }}}
 
         let id_prioridade = getPrioridadeDoEvento();
         return `INSERT INTO eventos(

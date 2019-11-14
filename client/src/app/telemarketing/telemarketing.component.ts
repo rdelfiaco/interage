@@ -110,6 +110,7 @@ export class TelemarketingComponent implements OnInit {
     this.campanhaIniciada = null
   }
   async solicitarLigacao() {
+    console.log('this.campanhaSelecionada.value ', this.campanhaSelecionada.value)
     var self = this;
     this.formAberto = true;
     let telemarketing = await this.connectHTTP.callService({      

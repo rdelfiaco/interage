@@ -162,6 +162,7 @@ export class TelemarketingQuestionarioComponent implements OnInit {
   }
 
   ngOnInit() {
+
   }
 
   ngOnChanges(changes: SimpleChanges) {
