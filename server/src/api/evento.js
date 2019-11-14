@@ -254,7 +254,6 @@ function salvarEvento(req, res) {
 
       client.connect()
 
-      console.log('req.query ', req.query)
 
       let sqlMotivoRespostaAutomaticos = `SELECT * from motivos_eventos_automaticos
                               WHERE motivos_eventos_automaticos.id_motivo_resposta=${req.query.id_motivos_respostas}`;
@@ -275,7 +274,7 @@ function salvarEvento(req, res) {
 
       client.query(sqlMotivoRespostaAutomaticos).then(res => {
         const motivoResposta_automatico = res.rows;
-        // console.log('motivoResposta_automatico ',motivoResposta_automatico )
+        console.log('motivoResposta_automatico ',motivoResposta_automatico )
         
         let sqlMotivoResposta = `SELECT * from motivos_respostas
                               WHERE motivos_respostas.id=${req.query.id_motivos_respostas}`;
@@ -371,7 +370,7 @@ function salvarEvento(req, res) {
                     if (motivoResposta_automatico.length > 0) {
                       motivoResposta_automatico.map((m, index, array) => {
                         eventoCriar = createEvent(m, motivoResposta, updateEventoEncerrado)
-                        // console.log('eventoCriar', eventoCriar)
+                        console.log('eventoCriar', eventoCriar)
 
                         client.query(eventoCriar).then(res => {
                           //console.log('index == array.length - 1', index == array.length - 1)

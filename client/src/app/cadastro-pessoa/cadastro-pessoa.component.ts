@@ -79,7 +79,7 @@ export class CadastroPessoaComponent implements OnInit {
       }
     }
     else {
-      
+      debugger
       // verifica se o usuário logado possui acesso aos clientes sem carteira 
       if ( this.checkPermissaoRecurso.usuarioLocadoAcessaRecurso(4) || 
            this.usuarioLogado.id_pessoa == pessoa.resposta.principal.id) {
