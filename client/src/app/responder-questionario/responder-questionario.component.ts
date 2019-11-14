@@ -26,7 +26,7 @@ import * as moment from 'moment';
 //   status: null;
 //   id_proxima_pergunta: null;
 // }
-class Perg  {
+class Perg {
   alternativas: [{
     id: null,
     id_pergunta: null,
@@ -126,7 +126,7 @@ export class ResponderQuestionarioComponent implements OnInit, OnDestroy {
     this.limpaPergunta();
     this.multiEscolha = this.perguntaAtual.tipo_pergunta == 2;
     this.setaPergunta(this.perguntaAtual.nome);
-    
+
     const respExistente = this.respostas.filter(r => r.id_pergunta == this.perguntaAtual.id)[0];
     if (this.perguntaAtual.tipo_pergunta === 3) {
       this.criaRespostaNormal(null, (respExistente || {}).observacao);
@@ -189,10 +189,10 @@ export class ResponderQuestionarioComponent implements OnInit, OnDestroy {
       const alt = this.getAlternativa(id)
       this.respostaEscrita = '';
       if (alt.exige_observacao) {
-        if (alt.exige_data){
+        if (alt.exige_data) {
           this.criaRespostaTipoData();
-        }else {
-        this.criaRespostaNormal(alt.exige_observacao);
+        } else {
+          this.criaRespostaNormal(alt.exige_observacao);
         }
       }
       else {
@@ -207,15 +207,13 @@ export class ResponderQuestionarioComponent implements OnInit, OnDestroy {
   }
 
   montaObservacao(id) {
-    //debugger
     const alt = this.getAlternativa(id)
     this.respostaEscrita = '';
     if (alt.exige_observacao) {
       if (alt.exige_data) {
         this.criaRespostaTipoData();
-      }else
-      {
-      this.criaRespostaNormal(alt.exige_observacao);
+      } else {
+        this.criaRespostaNormal(alt.exige_observacao);
       }
     }
     else {
@@ -239,7 +237,7 @@ export class ResponderQuestionarioComponent implements OnInit, OnDestroy {
     input.name = "alternativa";
     input.value = id;
     input.onchange = (event) => {
-      
+
       if (event.target['checked']) {
         if (!this.alternativasEscolhidas.length) {
           return this.alternativasEscolhidas.push(event.target['value']);
@@ -276,7 +274,6 @@ export class ResponderQuestionarioComponent implements OnInit, OnDestroy {
   }
 
   criaRespostaNormal(exige_observacao = false, text = '') {
-    //debugger
     if (document.querySelector('.quest-response-textarea')) {
       this.removeCamposObservacao();
     }
@@ -289,7 +286,7 @@ export class ResponderQuestionarioComponent implements OnInit, OnDestroy {
     textarea.id = "alternativa";
     textarea.className = 'quest-response-textarea form-control';
     // textarea.onkeypress = (event) => {
-      textarea.onblur = (event) => {
+    textarea.onblur = (event) => {
       this.respostaEscrita = event.target['value'];
     };
     textarea.innerText = text;
@@ -305,7 +302,6 @@ export class ResponderQuestionarioComponent implements OnInit, OnDestroy {
   }
 
   criaRespostaTipoData(exige_observacao = false, date = null) {
-    //debugger
     let divPai = document.createElement('div');
     divPai.className = 'col-lg-12 quest-observacao mb-3';
     let input_date = document.createElement('input');
@@ -318,7 +314,7 @@ export class ResponderQuestionarioComponent implements OnInit, OnDestroy {
     }
     input_date.onblur = (event) => {
       this.respostaEscrita = moment(event.target['value']).format('DD/MM/YYYY');
-      
+
     };
 
     if (exige_observacao) {
@@ -353,7 +349,6 @@ export class ResponderQuestionarioComponent implements OnInit, OnDestroy {
     }
     let proxPerg: Perg;
     try {
-      //debugger
       if (this.perguntaAtual.tipo_pergunta == 1) {
         this.alternativaEscolhida = this.perguntaAtual.alternativas.find(alt => {
           return alt.id === parseInt(this.alternativaEscolhida);
@@ -400,7 +395,6 @@ export class ResponderQuestionarioComponent implements OnInit, OnDestroy {
     }
 
     function salvaResp(a = null) {
-      //debugger;
       let objResp = {
         id_alternativa: a ? a.id : null,
         id_usuario: self.usuarioLogado.id,
@@ -408,10 +402,10 @@ export class ResponderQuestionarioComponent implements OnInit, OnDestroy {
         observacao: (self.respostaEscrita || ''),
         id_evento: self.eventoId,
         id_pergunta: self.perguntaAtual.id,
-        perguntaAnterior:  (self.perguntaAnterior ? self.perguntaAnterior : null)
+        perguntaAnterior: (self.perguntaAnterior ? self.perguntaAnterior : null)
       }
       let existeRespPerguntaAtual = self.respostas.filter(r => {
-        return (r.id_pergunta == objResp.id_pergunta && r.id_alternativa == objResp.id_alternativa );
+        return (r.id_pergunta == objResp.id_pergunta && r.id_alternativa == objResp.id_alternativa);
       })[0];
       if (!existeRespPerguntaAtual) {
         self.respostas.push(objResp);
@@ -441,7 +435,6 @@ export class ResponderQuestionarioComponent implements OnInit, OnDestroy {
   }
 
   async salvaReps() {
-    //debugger
     if (this.respostas.length) {
       for (let index = 0; index < this.respostas.length; index++) {
         const element = this.respostas[index];
@@ -454,16 +447,15 @@ export class ResponderQuestionarioComponent implements OnInit, OnDestroy {
         }
       }
     }
-    
+
     this.callback.emit(true);
     this.respostas = [];
   }
 
   get podeVoltar() {
-    if ((this.perguntaAtual || {} ).sequencia_pergunta){
-    return this.respostas.length && this.perguntaAtual.sequencia_pergunta > 1;
-    }else
-    {
+    if ((this.perguntaAtual || { sequencia_pergunta: null }).sequencia_pergunta) {
+      return this.respostas.length && this.perguntaAtual.sequencia_pergunta > 1;
+    } else {
       return false
     }
   }
@@ -511,7 +503,6 @@ export class ResponderQuestionarioComponent implements OnInit, OnDestroy {
         nome: respQuest.resposta[0].nome_questionario,
         perguntas: []
       };
-      //debugger
       respQuest.resposta.forEach(perg => {
         if (!data.perguntas.some(p => p.id === perg.id_pergunta)) {
           data.perguntas.push({
@@ -528,7 +519,7 @@ export class ResponderQuestionarioComponent implements OnInit, OnDestroy {
                 id_proxima_pergunta: alt.id_proxima_pergunta,
                 nome: alt.alternativa,
                 exige_observacao: alt.exige_observacao,
-                exige_data:alt.exige_data,
+                exige_data: alt.exige_data,
                 sequencia_alternativa: alt.sequencia_alternativa
               }
             }))

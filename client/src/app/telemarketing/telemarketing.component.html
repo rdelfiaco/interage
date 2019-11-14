@@ -38,7 +38,7 @@
       </div>
       <div class="col-lg-3">
         <div class="md-form">
-          <div class="h4">Meta diária: {{metaPessoa.meta | number}}</div>
+          <div class="h4">Meta diária: {{(metaPessoa || {}).meta | number}}</div>
         </div>
       </div>
     </div>

@@ -282,7 +282,6 @@ export class RanksComponent implements OnInit {
 
 graficoPropostaEmitidas(tipoGrafico: string,  grafico: string, router_: Router, dataInicial_ = this.dataInicial, dataFinal_ = this.dataFinal){
   let router: Router;
-  debugger;
   var ctx = document.getElementById(grafico);
   var labelsFiltro: any;
   var datasetsFiltro: any;

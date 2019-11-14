@@ -67,7 +67,6 @@ export class ConnectHTTP {
 
 
   sendFile(options: optionsCallService): Promise<retObjectCallService> | retObjectCallService {
-    debugger
     const mensagem = this._checkOptionsCallService(options);
     if (mensagem && !mensagem.error) return mensagem;
 

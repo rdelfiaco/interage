@@ -194,8 +194,7 @@ export class ConcluirEventoComponent implements OnInit {
           this.exige_objecao = true;
         else this.exige_objecao = false
 
-        if (motivo.id_questionario){
-          debugger
+        if (motivo.id_questionario){          
           this.questId = motivo.id_questionario;
           this.eventoId = this._eventoObject.id;
           this.pessoaId = this._eventoObject.id_pessoa_receptor

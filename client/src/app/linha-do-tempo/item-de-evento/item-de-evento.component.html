@@ -6,24 +6,23 @@
         <div class="row align-items-center">
           <div class="col-12">
             <div class="row">
-              <button class="col-1" (click)="abreEvento($event, evento);" color="blue" style="white-space: pre;" mdbBtn type="button"  size="sm" mdbWavesEffect>Detalhe</button>
-              <div class="col-2 font12" title="Motivo do evento" style="white-space: pre; margin-top: 15px">
+              <button [ngClass]="{'col-2': !notVendas, 'col-1': notVendas}" (click)="abreEvento($event, evento);" color="blue" style="white-space: pre;" mdbBtn type="button"  size="sm" mdbWavesEffect>Detalhe</button>
+              <div [ngClass]="{'col-3': !notVendas, 'col-2': notVendas}" class="font12" title="Motivo do evento" style="white-space: pre; margin-top: 15px">
               <h6>  {{evento.motivo}} </h6>
               </div>
-              <div class="col-2 font12" title="Status do evento" style="margin-top: 15px">
+              <div [ngClass]="{'col-3': !notVendas, 'col-2': notVendas}" class="font12" title="Status do evento" style="margin-top: 15px">
               <h6>  {{evento.status}} </h6>
               </div>
-              <div class=" col-2 font12" title="Data resolvido ou data prevista para resolução"
+              <div [ngClass]="{'col-3': !notVendas, 'col-2': notVendas}" class="font12" title="Data resolvido ou data prevista para resolução"
                 style="white-space: nowrap; margin-top: 15px"> 
                   <h6>{{(evento.dt_resolvido
                   ||
-                  evento.dt_prevista_resolucao) |
-                  date:'dd/MM/yyyy HH:mm:ss'}}
+                  evento.dt_prevista_resolucao) | date:'dd/MM/yyyy HH:mm:ss'}}
                   </h6> 
               </div>
-              <div class=" col-2 font12" title="Pessoa que visualizou o evento"
+              <div *ngIf="notVendas" class=" col-2 font12" title="Pessoa que visualizou o evento"
                 style="white-space: nowrap; margin-top: 15px"><h6>{{evento.pessoa_visualizou}}</h6></div>
-              <div class=" col-2 font12" title="Pessoa que resolveu o evento"
+              <div *ngIf="notVendas" class=" col-2 font12" title="Pessoa que resolveu o evento"
                 style="white-space: nowrap; margin-top: 15px"><h6>{{evento.pessoa_resolveu}}</h6></div>
             </div>
           </div>

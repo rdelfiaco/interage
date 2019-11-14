@@ -37,7 +37,7 @@ export class TelemarketingQuestionarioComponent implements OnInit {
   motivoRespostaSelecionado: object;
   returnProp: boolean = true;
 
-   tzoffset = (new Date()).getTimezoneOffset() * 60000; 
+  tzoffset = (new Date()).getTimezoneOffset() * 60000;
 
   public myDatePickerOptions: IMyOptions = {
     // Strings and translations
@@ -72,7 +72,8 @@ export class TelemarketingQuestionarioComponent implements OnInit {
   questId = null;
   eventoId = null;
   pessoaId = null;
-
+  eventoSub = null;
+  pessoaSub = null;
   @ViewChild("dataReagendamento") datePicker: MDBDatePickerComponent;
   @ViewChild('elaborarProposta') elaborarProposta: ModalDirective;
   @ViewChild('respquestionarioModal') respquestionarioModal: ModalDirective;
@@ -165,7 +166,7 @@ export class TelemarketingQuestionarioComponent implements OnInit {
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes["pessoa"] && this.pessoa) {
-      this.pessoa.subscribe(pessoa => {
+      this.eventoSub = this.pessoa.subscribe(pessoa => {
         this._pessoaObject = pessoa;
         this.pessoaId = pessoa.principal.id;
         this._pessoaObject.telefones = this._pessoaObject.telefones.map((telefone) => {
@@ -179,7 +180,7 @@ export class TelemarketingQuestionarioComponent implements OnInit {
       });
     }
     if (changes["evento"] && this.evento) {
-      this.evento.subscribe(evento => {
+      this.pessoaSub = this.evento.subscribe(evento => {
         this._eventoObject = evento;
         this.eventoId = evento.id;
         if (this._pessoaObject) this._setQuestionarioForm();
@@ -233,7 +234,7 @@ export class TelemarketingQuestionarioComponent implements OnInit {
     function getHora(data: Date) {
       let h = data.getHours();
       if (h == 23) h = -1;
-      let hora = trataTempo(h + 4 )
+      let hora = trataTempo(h + 4)
       let minutos = trataTempo(data.getMinutes())
       return `${hora}:${minutos}`
     }
@@ -260,14 +261,14 @@ export class TelemarketingQuestionarioComponent implements OnInit {
   }
 
   selecionaMotivoResposta(motivoResposta: selectValues) {
-    
+
     const self = this;
     this.motivos_respostas.some((motivo) => {
       if (motivo.id == motivoResposta.value) {
 
         this.questionarioForm.controls['motivoRespostaSelecionado'].setValue(motivoResposta.value)
 
-        if (motivo.id_questionario){
+        if (motivo.id_questionario) {
           this.questId = motivo.id_questionario;
           return this.respquestionarioModal.show();
         }
@@ -357,11 +358,13 @@ export class TelemarketingQuestionarioComponent implements OnInit {
     this.discando = false;
     this.podeGravar = false;
     this.motivoRespostaSelecionado = null;
-    this.evento = null;
-    this.pessoa = null;
-    this._motivos_respostas = null
+    this.eventoSub.unsubscribe();
+    this.pessoaSub.unsubscribe();
+    this._motivos_respostas = null;
     this.motivosRespostasFormatado = null;
     this.motivoRespostaSelecionado = null;
+    this.evento = null;
+    this.pessoa = null;
     this.clear.emit();
   }
 

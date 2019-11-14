@@ -23,22 +23,24 @@ interface selectValues {
 export class PrincipalComponent implements OnInit {
   private _pessoa: any;
   private usuarioLogado: any;
-  
+
   @ViewChild('modalCriarEvento') modalCriarEvento: ModalDirective;
   @Output() refresh = new EventEmitter();
   @Output() refreshPessoaAdd = new EventEmitter();
   @Input()
-          set pessoa(evento: any) {
-            this._pessoa = evento;
-            if (this._pessoa)
-              this._setQuestionarioForm();
-          }
+  set pessoa(evento: any) {
+    this._pessoa = evento;
+    if (this._pessoa)
+      this._setQuestionarioForm();
+  }
 
   get pessoa(): any {
     return this._pessoa
   }
 
-
+  get notVendas() {
+    return location.pathname !== "/vendasInternas";
+  }
 
   tipoDePessoa: Array<object> = [
     {
@@ -59,7 +61,7 @@ export class PrincipalComponent implements OnInit {
   atividadesPessoaJuridica: any;
   serchFilter: string;
   idPessoaReceptor: any;
-  
+
   tipoPessoaSelecionada: string = 'F';
   principalForm: FormGroup
   principalFormAud: any;
@@ -98,7 +100,7 @@ export class PrincipalComponent implements OnInit {
     private localStorage: LocalStorage,
     private toastrService: ToastService) {
     this.principalForm = this.formBuilder.group({
-      id: [{value:'', disable: true}],
+      id: [{ value: '', disable: true }],
       nome: ['', [Validators.required]],
       tipo: [this.tipoPessoaSelecionada, [Validators.required]],
       id_pronome_tratamento: [''],
@@ -112,12 +114,12 @@ export class PrincipalComponent implements OnInit {
       observacoes: [''],
       apelido_fantasia: [''],
       id_atividade: [''],
-      cnh:[''],
-      cnh_validade:[''],
-      cnh_categoria:[''],
-      id_tipo_cliente:[''],
-      id_classificacao_cliente:[''],
-      id_usuario_carteira:[''],
+      cnh: [''],
+      cnh_validade: [''],
+      cnh_categoria: [''],
+      id_tipo_cliente: [''],
+      id_classificacao_cliente: [''],
+      id_usuario_carteira: [''],
     })
     this.principalFormAud = this.principalForm.value;
   }
@@ -125,7 +127,7 @@ export class PrincipalComponent implements OnInit {
 
 
   _setQuestionarioForm() {
-    
+
     this.idPessoaReceptor = this.pessoa.principal.id;
     this.tipoPessoaSelecionada = this.pessoa.principal.tipo;
     this.principalForm = this.formBuilder.group({
@@ -133,7 +135,7 @@ export class PrincipalComponent implements OnInit {
       nome: [this.pessoa.principal.nome, [Validators.required]],
       tipo: [this.pessoa.principal.tipo, [Validators.required]],
       id_pronome_tratamento: [this.pessoa.principal.id_pronome_tratamento],
-      datanascimento: [ this.pessoa.principal.datanascimento ? moment(this.pessoa.principal.datanascimento ).format('DD/MM/YYYY') : moment().format('DD/MM/YYYY') ],
+      datanascimento: [this.pessoa.principal.datanascimento ? moment(this.pessoa.principal.datanascimento).format('DD/MM/YYYY') : moment().format('DD/MM/YYYY')],
       sexo: [this.pessoa.principal.sexo],
       rg_ie: [this.pessoa.principal.rg_ie],
       orgaoemissor: [this.pessoa.principal.orgaoemissor],
@@ -144,7 +146,7 @@ export class PrincipalComponent implements OnInit {
       apelido_fantasia: [this.pessoa.principal.apelido_fantasia],
       id_atividade: [this.pessoa.principal.id_atividade],
       cnh: [this.pessoa.principal.cnh],
-      cnh_validade:  [ this.pessoa.principal.cnh_validade ?  moment(this.pessoa.principal.cnh_validade ).format('DD/MM/YYYY') : moment().format('DD/MM/YYYY')],
+      cnh_validade: [this.pessoa.principal.cnh_validade ? moment(this.pessoa.principal.cnh_validade).format('DD/MM/YYYY') : moment().format('DD/MM/YYYY')],
       cnh_categoria: [this.pessoa.principal.cnh_categoria],
       id_tipo_cliente: [this.pessoa.principal.id_tipo_cliente],
       id_classificacao_cliente: [this.pessoa.principal.id_classificacao_cliente],
@@ -171,7 +173,7 @@ export class PrincipalComponent implements OnInit {
     }) as any;
 
     this.tiposDeCliente = getTipoClientes.resposta.map((t) => {
-      if(t.status) return { label: t.nome, value: t.id };
+      if (t.status) return { label: t.nome, value: t.id };
     })
 
     let getClassificacaoClientes = await this.connectHTTP.callService({
@@ -180,7 +182,7 @@ export class PrincipalComponent implements OnInit {
     }) as any;
 
     this.classificacoesDeCliente = getClassificacaoClientes.resposta.map((t) => {
-      if(t.status) return { label: t.nome, value: t.id };
+      if (t.status) return { label: t.nome, value: t.id };
     })
 
     let atividades = await this.connectHTTP.callService({
@@ -200,29 +202,28 @@ export class PrincipalComponent implements OnInit {
         return { label: t.name, value: t.id };
       })
 
-      let getUsuarios = await this.connectHTTP.callService({
-        service: 'getUsuarios',
-        paramsService: {}
-      }) as any;
-      this.usuariosCarteira  = getUsuarios.resposta.map((t) => {
-        if(t.status){
+    let getUsuarios = await this.connectHTTP.callService({
+      service: 'getUsuarios',
+      paramsService: {}
+    }) as any;
+    this.usuariosCarteira = getUsuarios.resposta.map((t) => {
+      if (t.status) {
         return { label: t.nome, value: t.id_usuario };
-      } else
-      {
-        return { label: `_Inativo -> ${t.nome}`  , value: t.id_usuario };
+      } else {
+        return { label: `_Inativo -> ${t.nome}`, value: t.id_usuario };
       }
-      })
-      // order pelo nome o usuos carteira 
-      this.usuariosCarteira.sort(function (a, b) {
-        if (a.label > b.label) {
-          return 1;
-        }
-        if (a.label < b.label) {
-          return -1;
-        }
-        // a must be equal to b
-        return 0;
-      });
+    })
+    // order pelo nome o usuos carteira 
+    this.usuariosCarteira.sort(function (a, b) {
+      if (a.label > b.label) {
+        return 1;
+      }
+      if (a.label < b.label) {
+        return -1;
+      }
+      // a must be equal to b
+      return 0;
+    });
 
 
   }
@@ -239,24 +240,24 @@ export class PrincipalComponent implements OnInit {
     this.principalForm.value.cpf_cnpj = this.principalForm.value.cpf_cnpj && this.principalForm.value.cpf_cnpj.replace(/\W/gi, '')
 
     if (this.tipoPessoaSelecionada == 'F' && !validaCpf.isValid(this.principalForm.value.cpf_cnpj)) {
-       return this.toastrService.error('Informe um CPF válido');
+      return this.toastrService.error('Informe um CPF válido');
     }
 
     if (this.tipoPessoaSelecionada == 'J' && !validaCnpj.isValid(this.principalForm.value.cpf_cnpj)) {
-       return this.toastrService.error('Informe um CNPJ válido');
+      return this.toastrService.error('Informe um CNPJ válido');
     }
 
     // se a data de nascimento e dt de validade da CNH for igual a data de hoje 
     // pressupõe que o usuário não deseja informar as datas  
     if (this.principalForm.controls['datanascimento'].value == moment().format('DD/MM/YYYY')
-    ) { this.principalForm.controls['datanascimento'].setValue('');}
+    ) { this.principalForm.controls['datanascimento'].setValue(''); }
 
     if (this.principalForm.controls['cnh_validade'].value == moment().format('DD/MM/YYYY')
-    ) { this.principalForm.controls['cnh_validade'].setValue('');}
+    ) { this.principalForm.controls['cnh_validade'].setValue(''); }
 
 
     this.checkAtividadePessoa()
-    ;
+      ;
     if (this.principalForm.controls['id'].value.value != '') {
       try {
         await this.connectHTTP.callService({
@@ -264,7 +265,7 @@ export class PrincipalComponent implements OnInit {
           paramsService: ({
             dadosAtuais: JSON.stringify(this.principalForm.value),
             dadosAnteriores: JSON.stringify(this.principalFormAud)
-          }) 
+          })
         });
         this.toastrService.success('Salvo com sucesso');
       }
@@ -273,23 +274,23 @@ export class PrincipalComponent implements OnInit {
       }
     }
     else {
-        const res = await this.connectHTTP.callService({
-          service: 'adicionarPessoa',
-          paramsService: ({
-            dadosAtuais: JSON.stringify(this.principalForm.value),
-            dadosAnteriores: JSON.stringify(this.principalFormAud)
-          }) 
-        }) as any;
-        
-        this.principalForm.controls['id'].enable();
+      const res = await this.connectHTTP.callService({
+        service: 'adicionarPessoa',
+        paramsService: ({
+          dadosAtuais: JSON.stringify(this.principalForm.value),
+          dadosAnteriores: JSON.stringify(this.principalFormAud)
+        })
+      }) as any;
 
-        this.principalForm.controls['id'].setValue(res.resposta.id);
+      this.principalForm.controls['id'].enable();
 
-        this.principalForm.controls['id'].disable();
+      this.principalForm.controls['id'].setValue(res.resposta.id);
 
-        this.toastrService.success('Salvo com sucesso');
+      this.principalForm.controls['id'].disable();
 
-        this.refreshPessoaAdd.emit({ idPessoa: res.resposta.id });    
+      this.toastrService.success('Salvo com sucesso');
+
+      this.refreshPessoaAdd.emit({ idPessoa: res.resposta.id });
     }
   }
   checkAtividadePessoa() {
@@ -303,7 +304,7 @@ export class PrincipalComponent implements OnInit {
     }
   }
 
-  nomeMaiusculo(){
+  nomeMaiusculo() {
     this.principalForm.controls['nome'].setValue(this.principalForm.value.nome.toUpperCase());
 
     this.principalForm.controls['apelido_fantasia'].setValue(this.principalForm.value.nome);

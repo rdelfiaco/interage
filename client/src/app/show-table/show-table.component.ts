@@ -53,7 +53,6 @@ export class ShowTableComponent implements OnInit {
     this.route.params.subscribe(res => {
       let parametros = res.parametros 
       parametros = JSON.parse(parametros);
-      debugger
       this.idRegistro = parametros.idRegistro;
       this.idSql = parametros.idSql;
       this.titulo = parametros.titulo;
@@ -68,7 +67,6 @@ export class ShowTableComponent implements OnInit {
 
 
   async ngOnInit() {
-    debugger
     try {
 
       let getResultadoSQLs = await this.connectHTTP.callService({

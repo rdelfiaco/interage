@@ -95,7 +95,6 @@ ngOnInit() {
   }
 
   async getRespostasMotivoSeleconado() {
-    debugger
     try {
       let resp = await this.connectHTTP.callService({
         service: 'getRespostasMotivoSeleconado',

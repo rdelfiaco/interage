@@ -71,6 +71,10 @@ export class ItemDeEventoComponent implements OnInit {
     });
   }
   
+  get notVendas() {
+    return location.pathname !== "/vendasInternas";
+  }
+
   ngOnInit() {
 
   }
