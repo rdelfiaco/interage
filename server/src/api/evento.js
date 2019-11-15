@@ -28,7 +28,7 @@ function getUmEvento(req, res) {
             and (id_campanha = ${req.query.id_campanha} or (tipodestino = 'P' and id_campanha is not null ))
             order by id_status_evento desc, id_prioridade, dt_para_exibir LIMIT 1`
 
-      console.log(sql)
+      // console.log(sql)
       client.query(sql)
         .then(res => {
           if (res.rowCount > 0) {
@@ -79,7 +79,7 @@ function motivosRespostas(req, res) {
                       LEFT JOIN motivos_eventos_automaticos ON motivos_respostas.id = motivos_eventos_automaticos.id_motivo_resposta
                       WHERE motivos_respostas.id_motivo=${req.query.id_motivo} AND status=true`
 
-      console.log(sqlMotivosResposta);
+      // console.log(sqlMotivosResposta);
       client.query(sqlMotivosResposta).then(res => {
         let motivos_respostas = res.rows;
 
@@ -274,7 +274,7 @@ function salvarEvento(req, res) {
 
       client.query(sqlMotivoRespostaAutomaticos).then(res => {
         const motivoResposta_automatico = res.rows;
-        console.log('motivoResposta_automatico ',motivoResposta_automatico )
+        // console.log('motivoResposta_automatico ',motivoResposta_automatico )
         
         let sqlMotivoResposta = `SELECT * from motivos_respostas
                               WHERE motivos_respostas.id=${req.query.id_motivos_respostas}`;
@@ -500,7 +500,8 @@ function salvarEvento(req, res) {
           id_pessoa_organograma = req.query.id_pessoa_organograma_destino;
         }
         if (motivoRespostaAutomatico.agendamento){
-          req.query.data =  new Date(motivoRespostaAutomatico.dt_exibir).toISOString() ;
+          const data = motivoRespostaAutomatico.dt_exibir.toISOString().substring(0,10) + 'T08:00:00.000-03:00';
+          req.query.data = data;
         }
         // trata o que o novo evento irá herdar 
         if (motivoRespostaAutomatico.novo_evento_herda == 2 ){
