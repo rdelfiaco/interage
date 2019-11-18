@@ -370,7 +370,7 @@ function salvarEvento(req, res) {
                     if (motivoResposta_automatico.length > 0) {
                       motivoResposta_automatico.map((m, index, array) => {
                         eventoCriar = createEvent(m, motivoResposta, updateEventoEncerrado)
-                        console.log('eventoCriar', eventoCriar)
+                        //console.log('eventoCriar', eventoCriar)
 
                         client.query(eventoCriar).then(res => {
                           //console.log('index == array.length - 1', index == array.length - 1)
@@ -478,7 +478,7 @@ function salvarEvento(req, res) {
       function createEvent(motivoRespostaAutomatico, motivoResposta, updateEventoEncerrado) {
         let tipoDestino;
         let id_pessoa_organograma;
-        console.log('motivoRespostaAutomatico ', motivoRespostaAutomatico)
+       // console.log('motivoRespostaAutomatico ', motivoRespostaAutomatico)
         if (motivoRespostaAutomatico.gera_para == 1) {
           tipoDestino = motivoRespostaAutomatico.tipodestino;
           id_pessoa_organograma = motivoRespostaAutomatico.id_pessoa_organograma;
@@ -540,7 +540,7 @@ function salvarEvento(req, res) {
             1,
             ${req.query.id_pessoa},
             now(),
-            func_dt_expira(${motivoRespostaAutomatico.id_motivo}),
+            func_dt_expira(${motivoRespostaAutomatico.id_motivo}, '${req.query.data}'),
             '${req.query.data}',
             '${tipoDestino}', 
             ${id_pessoa_organograma},
