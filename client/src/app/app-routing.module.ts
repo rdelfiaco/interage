@@ -1,3 +1,4 @@
+import { TipoDeRelacionamentoComponent } from './tipo-de-relacionamento/tipo-de-relacionamento.component';
 import { UsuarioCarteiraComponent } from './usuario/usuario-carteira/usuario-carteira.component';
 import { MotivosRespostasComponent } from './motivos-dos-eventos/motivos-respostas/motivos-respostas.component';
 import { MotivosCanaisComponent } from './motivos-dos-eventos/motivos-canais/motivos-canais.component';
@@ -59,6 +60,7 @@ import { NetworkingComponent } from './cadastro-pessoa/networking/networking.com
 import { PausaComponent } from './pausa/pausa.component';
 import { PausaDoUsuarioComponent } from './pausa/pausa-do-usuario/pausa-do-usuario.component';
 import { MotivosEventosAutomaticosComponent } from './motivos-dos-eventos/motivos-eventos-automaticos/motivos-eventos-automaticos.component';
+import { RelacionamentoVoltaComponent } from './tipo-de-relacionamento/relacionamento-volta/relacionamento-volta.component';
 
 
 
@@ -323,6 +325,16 @@ const routes: Routes = [
       {
         path: 'motivosEventosAutomaticos/:id',
         component: MotivosEventosAutomaticosComponent ,
+        canActivate: [AuthGuard]
+      },
+      {
+        path: 'tipoDeRelacionamento',
+        component: TipoDeRelacionamentoComponent,
+        canActivate: [AuthGuard]
+      }, 
+      {
+        path: 'relacionamentoVolta/:id',
+        component: RelacionamentoVoltaComponent ,
         canActivate: [AuthGuard]
       },
     ]

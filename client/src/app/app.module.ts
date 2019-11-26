@@ -55,6 +55,7 @@ import { ObjecaoComponent } from './objecao/objecao.component';
 import { ClassifcacaoDeClientesComponent } from './classifcacao-de-clientes/classifcacao-de-clientes.component';
 import { CanaisComponent } from './canais/canais.component';
 import { SharedModule } from './shared/shared.module';
+import { TipoDeRelacionamentoModule } from './tipo-de-relacionamento/tipo-de-relacionamento.module';
 
 
 
@@ -80,6 +81,7 @@ import { SharedModule } from './shared/shared.module';
     ObjecaoComponent,
     ClassifcacaoDeClientesComponent,
     CanaisComponent,
+    
   ],
   imports: [
     BrowserModule,
@@ -113,7 +115,9 @@ import { SharedModule } from './shared/shared.module';
     QuestionarioModule,
     SharedModule,
     PausaModule,
-    MotivosDosEventosModule
+    MotivosDosEventosModule,
+    TipoDeRelacionamentoModule, 
+
   ],
   providers: [MDBSpinningPreloader
   ],

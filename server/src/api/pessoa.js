@@ -290,7 +290,7 @@ function salvarPessoa(req, res) {
       const dadosAtuais = JSON.parse(req.query.dadosAtuais);
       const dadosAnteriores =  JSON.parse(req.query.dadosAnteriores);
 
-      console.log(dadosAtuais)
+      //console.log(dadosAtuais)
       req.query = {...dadosAtuais};
       req.query.id_usuario = credenciais.idUsuario;
 
@@ -317,7 +317,7 @@ function salvarPessoa(req, res) {
         update = update.replace(/'null'/g, null)
         update = update.replace(/'`'/g, ' ')
 
-        console.log(update)
+        //console.log(update)
        client.query(update).then((res) => {
           client.query('COMMIT').then((resposta) => {
             client.end();

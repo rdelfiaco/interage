@@ -27,6 +27,7 @@ const questPerguntas = require('./src/api/questionariosPerguntas');
 const questAlternativas = require('./src/api/questionariosAlternativas');
 const pausa = require('./src/api/pausa');
 const tipoDeClientes = require('./src/api/tipoDeClientes');
+const tipoDeRelacionamentos = require( './src/api/tipoDeRelacionamentos');
 const classificacaoDeClientes = require('./src/api/classsificacaoClientes');
 const objecao = require('./src/api/objecao');
 
@@ -145,6 +146,8 @@ declaraServico('getPessoaDadosPrincipais', pessoa.getPessoaDadosPrincipais);
 
 
 
+
+
 // questionario
 declaraServico('getQuestionarios', questionarios.getQuestionarios);
 declaraServico('addQuestionario', questionarios.addQuestionario);
@@ -180,6 +183,14 @@ declaraServico('registrarInicioPausa', pausa.registrarInicioPausa);
 // tipo de clientes
 declaraServico('getTipoClientes', tipoDeClientes.getTipoClientes);
 declaraServico('crudTipoClientes', tipoDeClientes.crudTipoClientes);
+
+// tipo de Relacionamentos
+declaraServico('getTipoRelacionamentosCon', tipoDeRelacionamentos.getTipoRelacionamentosCon);
+declaraServico('crudTipoRelacionamentos', tipoDeRelacionamentos.crudTipoRelacionamentos);
+declaraServico('getRelacionamentosVolta', tipoDeRelacionamentos.getRelacionamentosVolta);
+declaraServico('salvarRelacionamentoVolta', tipoDeRelacionamentos.salvarRelacionamentoVolta);
+
+
 // classificação de clientes
 declaraServico('getClassificacaoClientes', classificacaoDeClientes.getClassificacaoClientes);
 declaraServico('crudClassificacaoClientes', classificacaoDeClientes.crudClassificacaoClientes);

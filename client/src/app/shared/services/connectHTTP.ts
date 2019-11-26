@@ -14,21 +14,21 @@ interface retObjectCallService {
 }
 
 export class ConnectHTTP {
+  
   localStorage: LocalStorage = new LocalStorage();
   callService(options: optionsCallService): Promise<retObjectCallService> | retObjectCallService {
     const mensagem = this._checkOptionsCallService(options);
     if (mensagem && !mensagem.error) return mensagem;
     return new Promise((resolve, reject) => {
       //TROCA DADOS SERVIDOR
-      const host = options.host || "http://159.69.205.116:3010/" //treinamento
+      // const host = options.host || "http://159.69.205.116:3010/" //treinamento
       // const host = options.host || "http://159.69.205.116:3000/" //Producao
       // const host = options.host || "http://localhost:3000/" //Local_producao
-      //  const host = options.host || "http://localhost:3010/" //Local
+       const host = options.host || "http://localhost:3010/" //Local
       // const host = options.host || "http://192.168.100.210:3010/" //MCPRO
        //const host = options.host || "http://192.168.0.95:3010/" //altis
       const service = options.service
       let url = `${host}${service}`
-
       if (!options.naoExigeToken) {
         let usuarioLogado = this.localStorage.getLocalStorage('usuarioLogado') as Usuario;
         if (usuarioLogado != undefined ){
@@ -74,9 +74,9 @@ export class ConnectHTTP {
     return new Promise((resolve, reject) => {
       
       //TROCA DADOS SERVIDOR
-      const host = options.host || "http://159.69.205.116:3010/" //treinamento
+      // const host = options.host || "http://159.69.205.116:3010/" //treinamento
       // const host = options.host || "http://159.69.205.116:3000/" //Producao
-      // const host = options.host || "http://localhost:3010/" //Local
+      const host = options.host || "http://localhost:3010/" //Local
       // const host = options.host || "http://localhost:3000/" //Local_producao
       // const host = options.host || "http://192.168.100.210:3010/" //MACPRO
       //const host = options.host || "http://192.168.0.95:3010/" //altis
