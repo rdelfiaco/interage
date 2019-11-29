@@ -162,6 +162,8 @@ export class TipoDeRelacionamentoComponent implements OnInit {
     this.ngOnInit();
   };
 
+  getSelectedValuePrioridade() {}
+
   relacionamentoVolta(id: any , descricao: any ){
 
     this.router.navigate([`relacionamentoVolta/{"idTipoDeRelac":${id},"descriTipoDeRelac":"${descricao}"}`]);
