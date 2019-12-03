@@ -46,6 +46,8 @@ function login(req, res) {
                 inner join permissoes_recursos pr on pu.id_recursos = pr.id 
                 where id_usuario = ${usuario.id} `
 
+                console.log('permissoes login ', sql)
+
                 client.query(sql)
                 .then(res => {
 
@@ -421,7 +423,7 @@ function getPermissoesUsuarioSeleconado(req, res){
     from permissoes_usuarios pu
     inner join permissoes_recursos pr on pu.id_recursos = id  
     where pu.id_usuario = ${req.query.id} ` 
-        
+   console.log('permissões ', sql)
     executaSQL(credenciais, sql)
       .then(resPermissoesUsuario => {
         getPermissoes(req, res) .then(permissoes => {

@@ -9,7 +9,7 @@ function salvarProposta(req, res) {
       idUsuario: req.query.id_usuario
     };
 
-    //console.log('req.query.proposta ',  req.query.proposta)
+    console.log('req.query.proposta ',  req.query.proposta)
 
     req.query.proposta = JSON.parse(req.query.proposta);
 
