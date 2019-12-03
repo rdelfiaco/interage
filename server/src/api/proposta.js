@@ -9,10 +9,12 @@ function salvarProposta(req, res) {
       idUsuario: req.query.id_usuario
     };
 
+    //console.log('req.query.proposta ',  req.query.proposta)
+
     req.query.proposta = JSON.parse(req.query.proposta);
 
-    req.query.proposta.placa = req.query.proposta.placa ? req.query.proposta.placa : ''
-
+    req.query.proposta.placa = req.query.proposta.placa ? req.query.proposta.placa : '';
+    req.query.proposta.observacao = req.query.proposta.observacao ? req.query.proposta.observacao : '';
 
     let sql = `INSERT INTO propostas(
                     id_tipo_veiculo, codigofipe, marca, modelo, ano_modelo, data_consulta 
@@ -37,9 +39,9 @@ function salvarProposta(req, res) {
                           '${req.query.proposta.anoModelo}',
                           '${req.query.proposta.dataConsulta}',
                           '${req.query.proposta.precoMedio}',
-                          '${req.query.proposta.adesao}',
-                          '${req.query.proposta.mensalidade}',
-                          '${req.query.proposta.participacao}',
+                          ${req.query.proposta.adesao},
+                          ${req.query.proposta.mensalidade},
+                          ${req.query.proposta.participacao},
                           ${req.query.proposta.cota},
                           ${req.query.proposta.idFundoTerceiros},
                           ${req.query.proposta.idCarroReserva},
@@ -61,9 +63,9 @@ function salvarProposta(req, res) {
                           ${req.query.proposta.entrada},
                           ${req.query.proposta.mensalidadeAlterada},
                           now(),
-                          ${req.query.proposta.reboque}) RETURNING id`
+                          '${req.query.proposta.reboque}') RETURNING id`
 
-    //console.log('proposta inserir', sql)
+    // console.log('proposta inserir', sql)
 
 
     executaSQL(credenciais, sql).then(registros => {
@@ -72,7 +74,7 @@ function salvarProposta(req, res) {
       let id_proposta = registros[0].id;
       let idProposta = registros;
 
-
+      //console.log('idProposta ', id_proposta )
 
       sql = `INSERT INTO public.eventos(
               id_motivo,  
@@ -92,7 +94,7 @@ function salvarProposta(req, res) {
                       1, 
                       ${req.query.proposta.idPessoaUsuario},
                       now(),
-                      func_dt_expira(2),
+                      func_dt_expira(2, now()),
                       now(),
                       'P',
                       ${req.query.proposta.idPessoaDestinatario},
@@ -101,7 +103,7 @@ function salvarProposta(req, res) {
                       '${req.query.proposta.observacao}',
                       7,
                       ${id_proposta})`
-      //console.log('evento', sql)
+     //  console.log('evento', sql)
       executaSQL(credenciais, sql).then(registros => {
         resolve(idProposta)
       }).catch(e => {

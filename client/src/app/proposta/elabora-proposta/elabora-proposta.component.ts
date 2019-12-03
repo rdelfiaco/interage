@@ -712,23 +712,6 @@ export class ElaboraPropostaComponent implements OnInit {
                   border: [true, false, true, true],
                 }
                 ],
-                // [
-                //   {
-                //     text: 'OUTRAS COBERTURAS OPCIONAIS OFERECIDAS',
-                //     style: 'subheader',
-                //     margin: [5, 25, 0, 0],
-                //   },
-                //   {
-                //     text: `${produtoAdicionais1}
-                //         \nAPP (ACIDENTES PESSOAIS DE PASSAGEIROS) até 20 mil;
-                //         \nFundo para terceiros de 50 mil;
-                //         \nFundo para terceiros de 70 mil.
-                //         ` ,
-                //     alignment: 'left',
-                //     fontSize: 9,
-                //     margin: [5, 0, 0, 0],
-                //   }
-                // ],
               ]
             }
           },
@@ -833,8 +816,7 @@ export class ElaboraPropostaComponent implements OnInit {
         this.proposta.idPessoaDestinatario = 5 // buscar supervisor das vendas internas 
     }
 
-
-      //this.propostaComuc.setProposta(this.proposta);
+      this.propostaComuc.setProposta(this.proposta);
 
       if (!this.returnProp) {
         pdfMake.createPdf(docDefinition).open()
@@ -842,7 +824,7 @@ export class ElaboraPropostaComponent implements OnInit {
 
       docDefinition.images.logotipo = ''; // retira  a imagem do logo para salvar
 
-      this.propostaComuc.setPropostaJSON(docDefinition)
+      this.propostaComuc.setPropostaJSON(docDefinition);
 
       const sleep = (milliseconds) => {
         return new Promise(resolve => setTimeout(resolve, milliseconds))
@@ -868,7 +850,8 @@ export class ElaboraPropostaComponent implements OnInit {
   async salvarProposta() {
         let paramsService = {
           proposta: JSON.stringify(this.propostaComuc.getProposta()).replace(/\#/gim, '%23'),
-          propostaJSON: JSON.stringify(this.propostaComuc.getPropostaJSON()).replace(/\#/gim, '%23')
+          // propostaJSON: JSON.stringify(this.propostaComuc.getPropostaJSON()).replace(/\#/gim, '%23')
+          propostaJSON: {}
         };
 
         if (this.returnProp) {

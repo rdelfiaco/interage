@@ -227,7 +227,6 @@ function declaraServico(nomeServico, funcao) {
 }
 
 function declaraServicoPost(nomeServico, funcao) {
-  console.log(1)
   app.post(`/${nomeServico}`, (req, res) => {
     funcao(req)
       .then(linhas => {
