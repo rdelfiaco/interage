@@ -28,7 +28,7 @@ function getUmEvento(req, res) {
             and (id_campanha = ${req.query.id_campanha} or (tipodestino = 'P' and id_campanha is not null ))
             order by id_status_evento desc, id_prioridade, dt_para_exibir LIMIT 1`
 
-      // console.log(sql)
+      console.log(sql)
       client.query(sql)
         .then(res => {
           if (res.rowCount > 0) {

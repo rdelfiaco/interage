@@ -93,6 +93,7 @@ function inserirDestinatariosCampanha(credenciais, client,id_leads_mailing, id_c
  inner join pessoas_leads_mailing plem on pe.id = plem.id_pessoa and id_leads_mailing = ${id_leads_mailing}
  inner join lead_a_importar li on pe.id = li.id_pessoa  
  inner join campanhas camp on camp.id = ${id_campanha}
+ order by pe.nome
  `
  console.log(123, sql)
   executaSQLComTransacao (credenciais, client, sql)
