@@ -6,7 +6,7 @@ import { FormGroup, FormBuilder } from '@angular/forms';
 import { ComunicaPropostaService } from '../comunica-proposta.service';
 import { ToastService } from '../../../lib/ng-uikit-pro-standard';
 import { PlacaPipe } from '../../shared/pipes/placa/placa.pipe';
-import {sinesp}  from 'sinesp-nodejs'
+
 
 @Component({
   selector: 'app-pesquisa-placa',
@@ -44,6 +44,7 @@ export class PesquisaPlacaComponent implements OnInit {
 
     let valorFormatado = this.mascaraPlaca.transform(event.target.value);
     this.formulario.controls['placa'].setValue(valorFormatado)
+    
     if (this.mascaraPlaca.check(valorFormatado)) {
       try {
       let respPlacaConsultada = await this.connectHTTP.callService({
@@ -57,12 +58,11 @@ export class PesquisaPlacaComponent implements OnInit {
       if (JSON.stringify(respPlacaConsultada.resposta, null, 2).length < 10) {this.placaErrada()};
       this.proposta.placa = this.formulario.value.placa;
       this.propostaComuc.setProposta(this.proposta);
-    
-    }catch (error) {
-      this.placaErrada()    
-    }
-
       
+      }catch (error) {
+        this.placaErrada()    
+      }
+    
     }
 
 
