@@ -136,7 +136,7 @@ function _criarEvento(client, id_campanha, id_motivo, id_evento_pai, id_evento_a
       1,
       ${id_pessoa_criou},
       now(),
-      func_dt_expira(${id_motivo}),
+      func_dt_expira(${id_motivo}, now() ),
       '${dt_para_exibir}',
       '${tipoDestino}', 
       ${id_pessoa_organograma},

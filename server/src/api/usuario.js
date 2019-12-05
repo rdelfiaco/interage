@@ -46,7 +46,7 @@ function login(req, res) {
                 inner join permissoes_recursos pr on pu.id_recursos = pr.id 
                 where id_usuario = ${usuario.id} `
 
-                console.log('permissoes login ', sql)
+                //console.log('permissoes login ', sql)
 
                 client.query(sql)
                 .then(res => {
