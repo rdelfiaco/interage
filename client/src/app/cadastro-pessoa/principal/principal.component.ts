@@ -8,6 +8,7 @@ import { LocalStorage } from '../../shared/services/localStorage';
 import validaCpf from '../../shared/validaCpf';
 import validaCnpj from '../../shared/validaCnpj';
 import * as moment from 'moment';
+import { Observable } from 'rxjs';
 
 
 interface selectValues {
@@ -23,7 +24,11 @@ interface selectValues {
 export class PrincipalComponent implements OnInit {
   private _pessoa: any;
   private usuarioLogado: any;
-
+  abaSelecionada: Observable<number> = new Observable((observer) => {
+    observer.next(1);
+  });
+  
+  @ViewChild('modalElaborarProposta') modalElaborarProposta: ModalDirective;
   @ViewChild('modalCriarEvento') modalCriarEvento: ModalDirective;
   @Output() refresh = new EventEmitter();
   @Output() refreshPessoaAdd = new EventEmitter();
@@ -315,5 +320,12 @@ export class PrincipalComponent implements OnInit {
     this.modalCriarEvento.hide();
   }
 
+ fechaModalElaborarProposta(){
+
+  debugger
+  this.modalElaborarProposta.hide();
+  
+
+  }
 
 }

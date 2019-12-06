@@ -14,6 +14,7 @@ import { MarketingComponent } from './marketing/marketing.component';
 import { AuditoriaComponent } from './auditoria/auditoria.component';
 import { QuestionariosPessoaComponent } from './questionarios-pessoa/questionarios-pessoa.component';
 import { CriarEventoModule } from '../evento/criar-evento/criar-evento.module';
+import { PropostaModule } from '../proposta/proposta.module';
 
 @NgModule({
   imports: [
@@ -25,7 +26,9 @@ import { CriarEventoModule } from '../evento/criar-evento/criar-evento.module';
     ReactiveFormsModule,
     PipesModule,
     PesquisaClienteModule,
-    CriarEventoModule
+    CriarEventoModule,
+    PropostaModule,
+    
   ],
   declarations: [
     CadastroPessoaComponent,

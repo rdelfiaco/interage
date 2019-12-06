@@ -212,6 +212,7 @@
   </div>
 
   <div class="row justify-content-end">
+    
     <div class="md-form">
       <button type="button" mdbBtn color="primary" (click)="salvarPessoa();" class="relative waves-light" mdbWavesEffect
         [disabled]="!principalForm.valid">Salvar Pessoa</button>
@@ -220,7 +221,10 @@
       <button type="button" mdbBtn color="blue" (click)="modalCriarEvento.show()" class="relative waves-light" mdbWavesEffect
         [disabled]="!principalForm.valid">Atendimento</button>
     </div>
-
+    <div *ngIf="notVendas" class="md-form">
+        <button type="button" mdbBtn color="primary" (click)="modalElaborarProposta.show();" class="relative waves-light" mdbWavesEffect
+          [disabled]="!principalForm.valid">Elaborar Proposta</button>
+    </div>
  
 
   </div>
@@ -241,6 +245,27 @@
       </div>
     </div>
   </div>
+</div>
+
+
+<div *ngIf="pessoa" mdbModal #modalElaborarProposta="mdbModal"
+[config]="{backdrop: true, ignoreBackdropClick: true}" class="modal fade right" role="dialog"
+aria-labelledby="elaborarProposta" aria-hidden="true">
+<div class="modal-dialog modal-fluid" role="document">
+  <div class="modal-header light-blue darken-3 white-text">
+    <h4 class="modal-title w-100" id="myModalLabel">Elaborando Proposta para - {{pessoa.principal.nome}}</h4>
+    <button type="button" style="cursor:pointer;" class="close" data-dismiss="modal" aria-label="Close"
+    (click)="modalElaborarProposta.hide()">
+    <span aria-hidden="true" style="color:white; cursor:pointer;">&times;</span>
+  </button>
+
+  </div>
+  <div class="modal-content">
+    <div class="modal-body" style="overflow: auto; height: 80vh;">
+      <app-proposta  [abaSelecionada]="abaSelecionada" [pessoa]="pessoa" ></app-proposta>
+    </div>
+  </div>
+</div>
 </div>
 
 
