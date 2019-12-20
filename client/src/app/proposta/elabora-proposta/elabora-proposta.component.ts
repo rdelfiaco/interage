@@ -42,7 +42,6 @@ export class ElaboraPropostaComponent implements OnInit {
   pessoaObject: any;
   @Input()
   set pessoa(pessoa: any) {
-    
     this.pessoaObject = pessoa;
     // this.initValueId = new Observable((observer) => {
     //    if(pessoa) observer.next(pessoa.principal.id);
@@ -52,6 +51,7 @@ export class ElaboraPropostaComponent implements OnInit {
       this.idPessoaCliente = pessoa.principal.id;
       this.Cliente = pessoa.principal.nome;
     }
+    debugger
   }
   get pessoa() {
     return this.pessoaObject;
@@ -115,7 +115,7 @@ export class ElaboraPropostaComponent implements OnInit {
   proposta: Proposta;
 
   // initValueId: Observable<any>;
-  initValueId: number;
+  initValueId: any;
   idPessoaCliente: string;
   Cliente: string;
 
@@ -159,11 +159,10 @@ export class ElaboraPropostaComponent implements OnInit {
     this.tabelaValores = tabelaPrecos.resposta.TabelaValores;
     this.tabelaCombos = tabelaPrecos.resposta.TabelaCombos;
     this.bntGeraProposta = false;
-    
+
     // this.initValueId = new Observable((observer) => {
     //   observer.next('');
     // });
-    debugger;
 
     // combo tipo do veículo 
     this.tipoVeiculoSelect = tabelaPrecos.resposta.TipoVeiculos;

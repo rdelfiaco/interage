@@ -1,3 +1,4 @@
+import { AtendimentoComponent } from './atendimento/atendimento.component';
 import { TipoDeRelacionamentoComponent } from './tipo-de-relacionamento/tipo-de-relacionamento.component';
 import { UsuarioCarteiraComponent } from './usuario/usuario-carteira/usuario-carteira.component';
 import { MotivosRespostasComponent } from './motivos-dos-eventos/motivos-respostas/motivos-respostas.component';
@@ -335,6 +336,11 @@ const routes: Routes = [
       {
         path: 'relacionamentoVolta/:id',
         component: RelacionamentoVoltaComponent ,
+        canActivate: [AuthGuard]
+      },      
+      {
+        path: 'atendimento',
+        component: AtendimentoComponent ,
         canActivate: [AuthGuard]
       },
     ]

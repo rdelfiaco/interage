@@ -892,7 +892,8 @@ function getEventosFiltrados(req, res) {
       req.query.motivos = '0';
     }
 
-    let sql = `select * from view_eventos where  (id_campanha is null and tipodestino = 'P' ) `
+    let sql = `select * from view_eventos where ` 
+    sql = sql + ` (id_campanha is null or (id_campanha is not null and ( ( tipodestino = 'P' and id_usuario in (${req.query.idusuarioSelecionado})) or (listar_seus_eventos and tipodestino = 'O'))))`
     sql = sql + ` and (id_status_evento in (${req.query.status})  or -1 in (${req.query.status})) `  // status 
     if (req.query.dtCricaoRadio == 'true') {
       sql = sql + ` and date(dt_criou) between date('${req.query.dt_inicial}') and date('${req.query.dt_final}')` // data de criação 
@@ -909,7 +910,7 @@ function getEventosFiltrados(req, res) {
     sql = sql + ` and (id_motivo in ( ${req.query.motivos} )  or -1 in ( ${req.query.motivos} )  )` // motivos 
     sql = sql + ` order by dt_criou limit 100` //
     
-
+    //console.log(sql)
     executaSQL(credenciais, sql)
       .then(res => {
         if (res) {
