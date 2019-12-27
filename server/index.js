@@ -64,6 +64,9 @@ declaraServico('salvarEvento', evento.salvarEvento);
 declaraServico('getEventosPendentes', evento.getEventosPendentes);
 declaraServico('getEventosLinhaDoTempo', evento.getEventosLinhaDoTempo);
 declaraServico('getEventosRelatorioUsuario', evento.getEventosRelatorioUsuario);
+declaraServico('getIdEvento', evento.getIdEvento);
+declaraServico('getEventosTelefone', evento.getEventosTelefone);
+
 
 //motivos
 declaraServico('getMotivos', motivos.getMotivos);
@@ -143,6 +146,9 @@ declaraServico('crudRelacionamento', pessoa.crudRelacionamento);
 declaraServico('getQuestariosPessoaId', pessoa.getQuestariosPessoaId);
 declaraServico('getQuestRespAnaliticaPessoaId', pessoa.getQuestRespAnaliticaPessoaId);
 declaraServico('getPessoaDadosPrincipais', pessoa.getPessoaDadosPrincipais);
+declaraServico('getPessoasDoTelefone', pessoa.getPessoasDoTelefone);
+declaraServico('getPessoasEventosDoTelefone', pessoa.getPessoasEventosDoTelefone);
+declaraServico('adicionarPessoaAtendimento', pessoa.adicionarPessoaAtendimento);
 
 
 

@@ -6,6 +6,9 @@ const { getPessoa } = require('./pessoa');
 const { salvarProposta } = require('./proposta');
 const { getUsuarios } = require('./usuario');
 const { executaSQL } = require('./executaSQL');
+const { buscaValorDoAtributo } = require( './shared');
+const {awaitSQL} = require( './shared');
+
 
 function getUmEvento(req, res) {
   return new Promise(function (resolve, reject) {
@@ -28,7 +31,7 @@ function getUmEvento(req, res) {
             and (id_campanha = ${req.query.id_campanha} or (tipodestino = 'P' and id_campanha is not null ))
             order by id_status_evento desc, id_prioridade, dt_para_exibir LIMIT 1`
 
-      console.log(sql)
+      //console.log(sql)
       client.query(sql)
         .then(res => {
           if (res.rowCount > 0) {
@@ -79,7 +82,6 @@ function motivosRespostas(req, res) {
                       LEFT JOIN motivos_eventos_automaticos ON motivos_respostas.id = motivos_eventos_automaticos.id_motivo_resposta
                       WHERE motivos_respostas.id_motivo=${req.query.id_motivo} AND status=true`
 
-      // console.log(sqlMotivosResposta);
       client.query(sqlMotivosResposta).then(res => {
         let motivos_respostas = res.rows;
 
@@ -109,11 +111,16 @@ function encerrarEvento(client, id_pessoa, id_evento, id_status_evento) {
   });
 }
 
-function _criarEvento(client, id_campanha, id_motivo, id_evento_pai, id_evento_anterior,
+async function _criarEvento(client, id_campanha, id_motivo, id_evento_pai, id_evento_anterior,
   id_pessoa_criou, dt_para_exibir, tipoDestino, id_pessoa_organograma, id_pessoa_receptor,
-  observacao_origem, id_canal) {
+  observacao_origem, id_canal, protocolo, idTelefonePessoa) {
+
+
+
+
   return new Promise(function (resolve, reject) {
     let update = `INSERT INTO eventos(
+      id,
       id_campanha,
       id_motivo,
       id_evento_pai,
@@ -128,8 +135,10 @@ function _criarEvento(client, id_campanha, id_motivo, id_evento_pai, id_evento_a
       id_pessoa_receptor,
       id_prioridade,
       observacao_origem,
-      id_canal)
-      VALUES (${id_campanha || 'NULL'},
+      id_canal,
+      id_telefone)
+      VALUES ( ${protocolo},
+      ${id_campanha || 'NULL'},
       ${id_motivo},
       ${id_evento_pai || 'NULL'},
       ${id_evento_anterior || 'NULL'},
@@ -143,10 +152,11 @@ function _criarEvento(client, id_campanha, id_motivo, id_evento_pai, id_evento_a
       ${id_pessoa_receptor},
       '2',
       '${observacao_origem}',
-      ${id_canal})
+      ${id_canal},
+      ${idTelefonePessoa ? idTelefonePessoa:  'NULL'})
       RETURNING id`;
 
-    //console.log(update)
+    console.log(update)
     client.query(update).then((updateEventoCriado) => {
       resolve(updateEventoCriado)
     }).catch(err => {
@@ -205,20 +215,48 @@ function encaminhaEvento(req, res) {
   })
 }
 
-function criarEvento(req, res) {
+async function criarEvento(req, res) {
+  
+  let credenciais = {
+    token: req.query.token,
+    idUsuario: req.query.id_usuario
+  };
+
+  if (!req.query.eventoAnterior) {req.query.eventoAnterior = null}
+
+  var eventoPai = null;
+  var eventoAnterior = req.query.eventoAnterior != null && req.query.eventoAnterior != undefined ? req.query.eventoAnterior : null;
+  if (eventoAnterior) {
+    if (eventoAnterior != null ) {
+      eventoPai = await buscaValorDoAtributo(credenciais, 'id_evento_pai', 'eventos', `id = ${eventoAnterior}` );
+      eventoPai = eventoPai[0].eventoPai;
+      if (eventoPai == null) { eventoPai = eventoAnterior };
+    }
+  }
+  var protocolo = req.query.protocolo;
+
+  if (protocolo == null || protocolo){
+    protocolo =  await awaitSQL(credenciais, `select nextval('evento_id_seq') as id` );
+    protocolo = protocolo[0].id;
+  }
+
+  var idTelefonePessoa = await buscaValorDoAtributo(credenciais, 'id', 'pessoas_telefones', `id_pessoa = ${req.query.id_pessoa_receptor} and ddd = ${req.query.ddd} and telefone = ${req.query.telefone}` );
+  idTelefonePessoa = idTelefonePessoa[0].id ? idTelefonePessoa[0].id : '';
+
   return new Promise(function (resolve, reject) {
 
     checkTokenAccess(req).then(historico => {
-      const dbconnection = require('../config/dbConnection')
-      const { Client } = require('pg')
+      const dbconnection = require('../config/dbConnection');
+      const { Client } = require('pg');
 
       const client = new Client(dbconnection)
       
+
       client.connect();
       client.query('BEGIN').then((res1) => {
-        _criarEvento(client, req.query.id_campanha, req.query.id_motivo, 'NULL', 'NULL',
+        _criarEvento(client, req.query.id_campanha, req.query.id_motivo, eventoPai , eventoAnterior,
           req.query.id_pessoa_resolveu, req.query.dt_para_exibir, req.query.tipoDestino, req.query.id_pessoa_organograma, req.query.id_pessoa_receptor,
-          req.query.observacao_origem, req.query.id_canal).then(eventoCriado => {
+          req.query.observacao_origem, req.query.id_canal, protocolo, idTelefonePessoa ).then(eventoCriado => {
             client.query('COMMIT').then((resposta) => {
               resolve(eventoCriado)
               client.end();
@@ -1072,7 +1110,7 @@ function getMotivosCanais(client) {
   return new Promise(function (resolve, reject) {
     let sql = `select * from motivos
                 LEFT JOIN motivos_canais ON motivos_canais.id_motivo = motivos.id
-                WHERE status=true`
+                WHERE status and inicia_processo `
 
     client.query(sql)
       .then(res => {
@@ -1136,6 +1174,49 @@ and date(dt_criou) between date('${req.query.dataInicial}') and date('${req.quer
 }
 
 
+function getIdEvento(req, res) {
+  return new Promise(function (resolve, reject) {
+    let credenciais = {
+      token: req.query.token,
+      idUsuario: req.query.id_usuario
+    };
+
+    let sql = `select nextval('evento_id_seq') as id_evento `
+    executaSQL(credenciais, sql)
+      .then(res => {
+        if (res.length > 0) {
+          resolve({idEvento: res[0].id_evento})
+        }
+        else reject('Erro!')
+      })
+      .catch(err => {
+        reject(err)
+      })
+  })
+}
+
+function getEventosTelefone(req, res) {
+  return new Promise(function (resolve, reject) {
+    let credenciais = {
+      token: req.query.token,
+      idUsuario: req.query.id_usuario
+    };
+
+    let sql = `select * from view_eventos  where telefone = '${req.query.dddTelefone}' `
+    console.log(sql)
+    executaSQL(credenciais, sql)
+      .then(res => {
+        if (res.length > 0) {
+          resolve(res)
+        }
+        else reject('Erro!')
+      })
+      .catch(err => {
+        reject(err)
+      })
+  })
+}
+
 module.exports = {
   getUmEvento,
   motivosRespostas,
@@ -1151,5 +1232,7 @@ module.exports = {
   encaminhaEvento,
   criarEvento,
   getCountEventosPendentes,
-  getEventosPorPeriodoSintetico
+  getEventosPorPeriodoSintetico,
+  getIdEvento,
+  getEventosTelefone
 }

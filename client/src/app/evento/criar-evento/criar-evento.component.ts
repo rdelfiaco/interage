@@ -14,7 +14,7 @@ import { Router } from '@angular/router';
 export class CriarEventoComponent implements OnInit {
   private _pessoa: any
   public _evento: any
-
+  _idCanal: any
   pessoaId: any
 
   @Input()
@@ -54,9 +54,30 @@ export class CriarEventoComponent implements OnInit {
   get evento(): any {
     return this._evento
   }
-  @Input() idPessoaReceptor: any;
+
+  @Input() eventoAnterior: any = null;
+  @Input() protocolo: any = null;
+  @Input() ddd: any = null;
+  @Input() telefone: any = null;
+
+  @Input() 
+  set idPessoaReceptor(idPessoaReceptor: any){ 
+    this.pessoaId = idPessoaReceptor;
+    this._evento = false;
+    this.criarEventoForm.controls['pessoaId'].setValue(idPessoaReceptor);
+
+  }
+  @Input() 
+  set idCanal(idCanal: any){
+    debugger
+    this.criarEventoForm.controls['canal'].setValue(idCanal);
+    this._idCanal = idCanal;
+  }
+  
+
   @Input() disabled: any;
-  @Output() fechaModal = new EventEmitter()
+  @Output() fechaModal: EventEmitter<any> = new EventEmitter();
+
   motivosDoCanal: Array<any> = [];
   motivosDoCanalSelecionado: Array<any> = [];
   criarEventoForm: FormGroup;
@@ -90,10 +111,10 @@ export class CriarEventoComponent implements OnInit {
       pessoaOrgonograma: ['', [
         Validators.required
       ]],
-      canal: ['', [
+      canal: [{value:'', disabled: this._evento}, [
         Validators.required
       ]],
-      id_motivo: ['', [
+      id_motivo: [{value:'', disabled: this._evento}, [
         Validators.required
       ]],
       pessoaId: ['', [Validators.required]],
@@ -128,6 +149,9 @@ export class CriarEventoComponent implements OnInit {
     this.motivosDoCanal = eventoEncontrado.resposta.motivosCanais;
     if (this._evento && this._evento.id_canal)
       this.onSelectCanal({ value: this._evento.id_canal });
+
+    if (this._idCanal)
+      this.onSelectCanal({ value: this._idCanal });
 
     this.optionsTipoDestino = this.usuarioSelect;
 
@@ -209,9 +233,18 @@ export class CriarEventoComponent implements OnInit {
           id_pessoa_receptor: this.criarEventoForm.value.pessoaId,
           observacao_origem: this.criarEventoForm.value.observacao,
           id_canal: this.criarEventoForm.value.canal,
+          eventoAnterior: this.eventoAnterior,
+          protocolo: this.protocolo,
+          ddd: this.ddd,
+          telefone: this.telefone
         }
       }) as any;
-      this.toastrService.success('Evento criado com sucesso!');
+      console.log('res ', res)
+      if (res.error) {
+        this.toastrService.error('Error ao criar evento')
+      } else {
+        this.toastrService.success('Evento criado com sucesso!');
+      };
       this.fechaModal.emit();
     }
   }

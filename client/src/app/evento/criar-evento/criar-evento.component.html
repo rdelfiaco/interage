@@ -16,7 +16,7 @@
   <div class="row">
     <div class="col-6">
       <div class="md-form">
-      <mdb-select formControlName="canal" [disabled]="_evento" [options]="canaisSelect"
+      <mdb-select formControlName="canal" [options]="canaisSelect"
           (selected)="onSelectCanal($event)" [multiple]="false" 
           placeholder="Selecione o canal" id="-canal"></mdb-select>
           <label for="-canal" style="margin-top: -20px; margin-left: 0px;" >Canal</label>
@@ -24,7 +24,7 @@
   </div>
     <div class="col-6">
         <div class="md-form">
-          <mdb-select formControlName="id_motivo" [disabled]="_evento" [options]="motivosDoCanalSelecionado"
+          <mdb-select formControlName="id_motivo" [options]="motivosDoCanalSelecionado"
             [multiple]="false" placeholder="Selecione o motivo" id="-motivo"></mdb-select>
             <label for="-motivo" style="margin-top: -20px; margin-left: 0px" >Motivo</label>
         </div>
@@ -68,7 +68,7 @@
     </div>
     <div class="md-form">
       <button type="button" mdbBtn color="primary" (click)="criarEvento();" class="relative waves-light" mdbWavesEffect
-        [disabled]="!criarEventoForm.valid">Gravar</button>
+        [disabled]="!criarEventoForm.valid" >Gravar</button>
     </div>
   </div>
 </form>

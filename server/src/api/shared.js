@@ -11,6 +11,7 @@ function isNumber(n) { return /^-?[\d.]+(?:e-?\d+)?$/.test(n); }
 
 
 async function buscaValorDoAtributo(credenciais, atributo, tabela, condicao ){
+  //console.log('buscaValorDoAtributo', `select ${atributo} from ${tabela} where ${condicao}`)
   return executaSQL(credenciais, `select ${atributo} from ${tabela} where ${condicao}`)
 }
 

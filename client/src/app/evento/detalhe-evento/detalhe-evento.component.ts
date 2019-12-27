@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, Input, SimpleChanges } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ConnectHTTP } from '../../shared/services/connectHTTP';
 import { Observable } from 'rxjs';
@@ -33,21 +33,32 @@ export class DetalheEventoComponent implements OnInit {
 
   @ViewChild('modalConcluirEvento') modalConcluirEvento: ModalDirective;
   // @ViewChild('modalEncaminharEvento') modalEncaminharEvento: ModalDirective;
+  @Input() idEvento: any
+
 
   constructor(private route: ActivatedRoute,
     private connectHTTP: ConnectHTTP, private localStorage: LocalStorage) {
     this.usuarioLogado = this.localStorage.getLocalStorage('usuarioLogado') as Usuario;
     this.usuarioLogadoSupervisor = this.usuarioLogado.dashboard === "supervisor" || this.usuarioLogado.dashboard === "admin";
+    
     this.route.params.subscribe(res => {
       this.id_evento = res.id
     });
+
   }
 
   async ngOnInit() {
     this.carregaEvento();
   }
 
+  ngOnChanges(changes: SimpleChanges) {
+    this.carregaEvento();
+  }
+
   async carregaEvento() {
+    if (this.idEvento){
+      this.id_evento = this.idEvento
+    }
     this.carregando = true;
     let eventoEncontrado = await this.connectHTTP.callService({
       service: 'getEventoPorId',
@@ -103,7 +114,11 @@ export class DetalheEventoComponent implements OnInit {
   }
 
   voltar() {
-    history.back();
+    if (this.idEvento){
+      this.fechaModal()
+    }else {
+      history.back();
+    }
   }
 
 }

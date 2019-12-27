@@ -7,6 +7,9 @@ const { checkToken} = require('./checkToken');
             const { Client } = require('pg')
             const client = new Client(dbconnection)
             client.connect()
+
+           // console.log(sql)
+
             client.query(sql).then(res => {
                     let registros 
                     if (res.rowCount > 0) {

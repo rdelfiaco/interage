@@ -205,7 +205,7 @@
 
     <div class="row">
       <div class="md-form col">
-        <input mdbInputDirective formControlName="id" type="text" id="id" class="form-control" disabled>
+        <input mdbInputDirective formControlName="id" type="text" id="id" class="form-control" >
         <label for="id">Id</label>
       </div>
     </div>
@@ -215,7 +215,7 @@
     
     <div class="md-form">
       <button type="button" mdbBtn color="primary" (click)="salvarPessoa();" class="relative waves-light" mdbWavesEffect
-        [disabled]="!principalForm.valid">Salvar Pessoa</button>
+        [disabled]="!principalForm.valid && id">Salvar Pessoa</button>
     </div>
     <div *ngIf="notVendas" class="md-form">
       <button type="button" mdbBtn color="blue" (click)="modalCriarEvento.show()" class="relative waves-light" mdbWavesEffect

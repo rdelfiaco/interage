@@ -632,12 +632,12 @@ function salvarTelefonePessoa(req, res) {
                   ${principal},
                   ${req.query.id_tipo_telefone},
                   '${req.query.contato}',
-                  '55', now())`;}
+                  '55', now()) RETURNING id`;}
           client.query(update).then((res) => {
             client.query('COMMIT').then((resposta) => {
               client.end();
               auditoria(credenciais,'telefones',operacao,req.query.id, req.query.id_pessoa, dadosAnteriores, dadosAtuais);
-              resolve(resposta)
+              resolve({resposta: resposta, idTelefone: res.rows[0].id })
             }).catch(err => {
               client.end();
               reject(err)
@@ -1240,6 +1240,124 @@ function getPessoaDadosPrincipais(req, res) {
   })
 }
 
+function getPessoasEventosDoTelefone(req, res) {
+  return new Promise(function (resolve, reject) {
+    let credenciais = {
+      token: req.query.token,
+      idUsuario: req.query.id_usuario
+    };
+
+    let sql = `
+    select p.id as id_cliente, p.nome as nome_cliente, p.cpf_cnpj, e.*, m.nome as motivo, ste.nome as status, pt.id as id_telefone_pessoa
+    from pessoas_telefones pt
+    inner join pessoas p on pt.id_pessoa = p.id
+    left join eventos e on p.id = id_pessoa_receptor
+    left join motivos m on e.id_motivo = m.id
+    left join status_evento ste on e.id_status_evento = ste.id
+    where pt.ddd = ${req.query.ddd}
+    and pt.telefone =   ${req.query.telefone} 
+    order by p.nome`
+    
+    //console.log('sql ', sql)
+    executaSQL(credenciais, sql)
+      .then(res => {
+        resolve(res);
+      })
+      .catch(err => {
+        reject(err)
+      })
+  })
+}
+
+function getPessoasDoTelefone(req, res) {
+  return new Promise(function (resolve, reject) {
+    let credenciais = {
+      token: req.query.token,
+      idUsuario: req.query.id_usuario
+    };
+
+    let sql = `
+    select p.id as id_cliente, p.nome as nome_cliente, p.cpf_cnpj
+    from pessoas_telefones pt
+    inner join pessoas p on pt.id_pessoa = p.id
+
+    where pt.ddd = ${req.query.ddd}
+    and pt.telefone =   ${req.query.telefone} 
+    order by p.nome`
+    
+    //console.log('sql ', sql)
+    executaSQL(credenciais, sql)
+      .then(res => {
+        resolve(res);
+      })
+      .catch(err => {
+        reject(err)
+      })
+  })
+}
+
+
+function adicionarPessoaAtendimento(req, res) {
+  return new Promise(function (resolve, reject) {
+    let credenciais = {
+      token: req.query.token,
+      idUsuario: req.query.id_usuario
+    };
+
+    req.query.cpf_cnpj = req.query.cpf_cnpj.replace(/\W/gi, '');
+    let ret = [];
+    ret.push("(")
+    ret.push("nome,")
+    ret.push("tipo,")
+    ret.push('cpf_cnpj,')
+    ret.push('apelido_fantasia,')
+    ret.push('dtinclusao,')
+    ret.push('dtalteracao,')
+    ret.push('id_usuario_incluiu')
+    ret.push(')')
+
+    ret.push('VALUES(')
+
+    ret.push("'" + req.query.nome + "',")
+    ret.push("'F',")
+    ret.push((req.query.cpf_cnpj != '' ? "'" + req.query.cpf_cnpj + "'" : 'NULL') + ",")
+    ret.push("'" + req.query.nome + "',")
+    ret.push('now(),')
+    ret.push('now(),')
+    ret.push(req.query.id_usuario)
+    ret.push(')')
+    ret = ret.join(' ');
+
+    let sql = `INSERT INTO pessoas ${ret} RETURNING id`;
+
+    executaSQL(credenciais, sql)
+      .then(res => {
+        let idPessoa = res[0].id;
+        req.query.dadosAtuais = {
+          principal : true,
+          id_tipo_telefone : 1,
+          contato : '',
+          id_pessoa : idPessoa,
+          ddd: req.query.ddd,
+          telefone: req.query.telefone,
+        }
+        req.query.dadosAtuais = JSON.stringify(req.query.dadosAtuais)
+        req.query.dadosAnteriores  = JSON.stringify(req.query.dadosAtuais)
+        salvarTelefonePessoa(req, res)
+        .then(res => {
+          resolve({idPessoa: idPessoa, idTelefone: res.idTelefone})
+        })
+        .catch(err => {
+          reject(err)
+        })
+      })
+      .catch(err => {
+        reject(err)
+      })
+  })
+}
+
+
 module.exports = {
   getPessoa,
   salvarPessoa,
@@ -1250,6 +1368,7 @@ module.exports = {
   salvarEnderecoPessoa,
   pesquisaPessoas,
   adicionarPessoa,
+  adicionarPessoaAtendimento,
   editaTelefonePrincipal,
   editaEnderecoDeCorrespondencia,
   getTratamentoPessoaFisica,
@@ -1259,4 +1378,6 @@ module.exports = {
   getQuestariosPessoaId,
   getQuestRespAnaliticaPessoaId,
   getPessoaDadosPrincipais,
+  getPessoasDoTelefone,
+  getPessoasEventosDoTelefone
 }

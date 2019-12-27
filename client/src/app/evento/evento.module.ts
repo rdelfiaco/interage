@@ -1,3 +1,4 @@
+import { CriarEventoComponent } from './criar-evento/criar-evento.component';
 import { NgModule, NO_ERRORS_SCHEMA } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { EventoComponent } from './evento.component';
@@ -58,7 +59,8 @@ import { LinhaDoTempoModule } from '../linha-do-tempo/linha-do-tempo.module';
     DetalheEventoComponent,
     LinhaDoTempoEventoComponent,
     ItemLinhaDoTempoEventoComponent,
-    ConcluirEventoComponent
+    ConcluirEventoComponent,
+    CriarEventoComponent
   ],
   schemas: [NO_ERRORS_SCHEMA]
 })

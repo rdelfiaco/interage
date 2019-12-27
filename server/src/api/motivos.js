@@ -71,7 +71,12 @@ function crudMotivos(req, res){
   function sqlUpdate(){
     let sql = `UPDATE motivos
                SET  status=${req.query.status}, 
-                    nome='${req.query.nome}'
+                    nome='${req.query.nome}',
+                    gera_email= ${req.query.gera_email},
+                    acao_sql= ${req.query.acao_sql},
+                    acao_js= ${req.query.acao_js},
+                    inicia_processo= ${req.query.inicia_processo},
+                    prazo_finalizacao = ${req.query.prazo_finalizacao}
               WHERE id= ${req.query.id};`;
     return sql;
   };

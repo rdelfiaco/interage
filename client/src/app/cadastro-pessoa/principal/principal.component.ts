@@ -127,6 +127,7 @@ export class PrincipalComponent implements OnInit {
       id_usuario_carteira: [''],
     })
     this.principalFormAud = this.principalForm.value;
+    this.principalForm.controls['id'].disable();
   }
 
 
