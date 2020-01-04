@@ -2,12 +2,13 @@ const { checkTokenAccess } = require('./checkTokenAccess');
 const { executaSQL } = require('./executaSQL');
 const { buscaValorDoAtributo } = require( './shared');
 const { auditoria } = require('./auditoria');
+const { buscaPessoa } = require('./apiSGA')
 
 
 
 
 
-function getPessoaPorCPFCNPJ(req, res) {
+async function  getPessoaPorCPFCNPJ(req, res) {
   return new Promise(function (resolve, reject) {
     let credenciais = {
       token: req.query.token,
@@ -16,7 +17,24 @@ function getPessoaPorCPFCNPJ(req, res) {
     req.query.cpf_cnpj = req.query.cpf_cnpj.replace(/\W/gi, '');
     let sql = `SELECT * FROM pessoas WHERE cpf_cnpj = '${req.query.cpf_cnpj}'`
     executaSQL(credenciais, sql).then(res => {
+        if (res[0].id != null){
         resolve(res)
+        }else{
+           buscaPessoa(req, res)
+          .then( resBuscaPessoa => {
+              req.query.nome = resBuscaPessoa.nome;
+              adicionarPessoaAtendimento(req, res)
+              .then( res => {
+                res = { idPessoa: res.idPessoa , 
+                        idTelefone: res.idTelefone,  
+                        nome: resBuscaPessoa.nome};
+                resolve(res )
+              })
+              .catch(erro => { reject(erro)})
+            })
+          .catch(error => {reject( error) });
+      }
+
     })
     .catch(err => {
       reject(err)
@@ -602,6 +620,7 @@ function salvarTelefonePessoa(req, res) {
       req.query = {...dadosAtuais} 
 
       client.connect()
+
 
       let update;
       client.query('BEGIN').then(() => {

@@ -8,7 +8,7 @@ const { getUsuarios } = require('./usuario');
 const { executaSQL } = require('./executaSQL');
 const { buscaValorDoAtributo } = require( './shared');
 const {awaitSQL} = require( './shared');
-
+const {salvarTelefonePessoa} = require('./pessoa');
 
 function getUmEvento(req, res) {
   return new Promise(function (resolve, reject) {
@@ -113,10 +113,7 @@ function encerrarEvento(client, id_pessoa, id_evento, id_status_evento) {
 
 async function _criarEvento(client, id_campanha, id_motivo, id_evento_pai, id_evento_anterior,
   id_pessoa_criou, dt_para_exibir, tipoDestino, id_pessoa_organograma, id_pessoa_receptor,
-  observacao_origem, id_canal, protocolo, idTelefonePessoa) {
-
-
-
+  observacao_origem, id_canal, protocolo, idTelefonePessoa, encerrado ) {
 
   return new Promise(function (resolve, reject) {
     let update = `INSERT INTO eventos(
@@ -136,14 +133,25 @@ async function _criarEvento(client, id_campanha, id_motivo, id_evento_pai, id_ev
       id_prioridade,
       observacao_origem,
       id_canal,
-      id_telefone)
+      id_telefone `;
+
+      if (encerrado) {
+        update = update + `, dt_resolvido, id_pessoa_resolveu, observacao_retorno ` 
+      };
+
+      update = update + `)
       VALUES ( ${protocolo},
       ${id_campanha || 'NULL'},
       ${id_motivo},
       ${id_evento_pai || 'NULL'},
-      ${id_evento_anterior || 'NULL'},
-      1,
-      ${id_pessoa_criou},
+      ${id_evento_anterior || 'NULL'},`
+      
+      if (!encerrado) {
+        update = update +  `1 ,`
+      } else
+      update = update + `3 ,`
+
+      update = update + ` ${id_pessoa_criou},
       now(),
       func_dt_expira(${id_motivo}, now() ),
       '${dt_para_exibir}',
@@ -153,10 +161,16 @@ async function _criarEvento(client, id_campanha, id_motivo, id_evento_pai, id_ev
       '2',
       '${observacao_origem}',
       ${id_canal},
-      ${idTelefonePessoa ? idTelefonePessoa:  'NULL'})
+      ${idTelefonePessoa ? idTelefonePessoa:  'NULL'}`;
+
+      if (encerrado) {
+        update = update + `, now() , ${id_pessoa_organograma}, '${observacao_origem}' ` 
+      }
+      
+      update = update + `)
       RETURNING id`;
 
-    console.log(update)
+    //console.log(update)
     client.query(update).then((updateEventoCriado) => {
       resolve(updateEventoCriado)
     }).catch(err => {
@@ -243,6 +257,31 @@ async function criarEvento(req, res) {
   var idTelefonePessoa = await buscaValorDoAtributo(credenciais, 'id', 'pessoas_telefones', `id_pessoa = ${req.query.id_pessoa_receptor} and ddd = ${req.query.ddd} and telefone = ${req.query.telefone}` );
   idTelefonePessoa = idTelefonePessoa[0].id ? idTelefonePessoa[0].id : '';
 
+  var reqAux = req.query;
+  if (idTelefonePessoa == ''  && req.query.telefone != null ){
+
+    req.query.dadosAtuais = {
+      principal : true,
+      id_tipo_telefone : 1,
+      contato : '',
+      id_pessoa :req.query.id_pessoa_receptor,
+      ddd: req.query.ddd,
+      telefone: req.query.telefone,
+    }
+    req.query.dadosAtuais = JSON.stringify(req.query.dadosAtuais)
+    req.query.dadosAnteriores  = JSON.stringify(req.query.dadosAtuais)
+   let resultado =  await salvarTelefonePessoa(req, res)
+    .then(res => {
+      idTelefonePessoa = res.idTelefone
+    })
+    .catch(err => {
+      idTelefonePessoa = '';
+    })
+
+  }
+
+  req.query = reqAux;
+
   return new Promise(function (resolve, reject) {
 
     checkTokenAccess(req).then(historico => {
@@ -256,7 +295,7 @@ async function criarEvento(req, res) {
       client.query('BEGIN').then((res1) => {
         _criarEvento(client, req.query.id_campanha, req.query.id_motivo, eventoPai , eventoAnterior,
           req.query.id_pessoa_resolveu, req.query.dt_para_exibir, req.query.tipoDestino, req.query.id_pessoa_organograma, req.query.id_pessoa_receptor,
-          req.query.observacao_origem, req.query.id_canal, protocolo, idTelefonePessoa ).then(eventoCriado => {
+          req.query.observacao_origem, req.query.id_canal, protocolo, idTelefonePessoa, req.query.encerrado ).then(eventoCriado => {
             client.query('COMMIT').then((resposta) => {
               resolve(eventoCriado)
               client.end();
@@ -265,6 +304,7 @@ async function criarEvento(req, res) {
               reject(err)
             })
           }).catch(err => {
+
             client.end();
             reject(err)
           })

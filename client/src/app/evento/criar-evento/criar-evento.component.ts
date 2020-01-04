@@ -11,6 +11,8 @@ import { Router } from '@angular/router';
   templateUrl: './criar-evento.component.html',
   styleUrls: ['./criar-evento.component.scss']
 })
+ 
+
 export class CriarEventoComponent implements OnInit {
   private _pessoa: any
   public _evento: any
@@ -81,11 +83,11 @@ export class CriarEventoComponent implements OnInit {
   motivosDoCanal: Array<any> = [];
   motivosDoCanalSelecionado: Array<any> = [];
   criarEventoForm: FormGroup;
-  departamentoSelect: Array<any>
-  canaisSelect: Array<any>
-  usuarioSelect: Array<any>
-  optionsTipoDestino: Array<any>
-  
+  departamentoSelect: Array<any>;
+  canaisSelect: Array<any>;
+  usuarioSelect: Array<any>;
+  optionsTipoDestino: Array<any>;
+
 
   public myDatePickerOptions: IMyOptions = {
     dayLabels: { su: 'Dom', mo: 'Seg', tu: 'Ter', we: 'Qua', th: 'Qui', fr: 'Sex', sa: 'Sab' },
@@ -120,7 +122,8 @@ export class CriarEventoComponent implements OnInit {
       pessoaId: ['', [Validators.required]],
       data: [''],
       hora: [''],
-      observacao: ['']
+      observacao: [''],
+      encerrado:[false]
     })
   }
 
@@ -194,11 +197,14 @@ export class CriarEventoComponent implements OnInit {
   ]
 
   async criarEvento() {
+    
+    const usuarioLogado = this.localStorage.getLocalStorage('usuarioLogado') as any;
+
     let dataHora = this.criarEventoForm.value.hora.split(':');
     dataHora[0] = parseInt(dataHora[0]) === 24 ? "00" : dataHora[0];
 
+
     let dataExibir = moment(`${this.criarEventoForm.value.data} - ${dataHora[0]}:${dataHora[1]}`, 'DD/MM/YYYY - HH:mm').toISOString()
-    const usuarioLogado = this.localStorage.getLocalStorage('usuarioLogado') as any;
     
     if (this.evento) {
       await this.connectHTTP.callService({
@@ -236,21 +242,23 @@ export class CriarEventoComponent implements OnInit {
           eventoAnterior: this.eventoAnterior,
           protocolo: this.protocolo,
           ddd: this.ddd,
-          telefone: this.telefone
+          telefone: this.telefone,
+          encerrado: this.criarEventoForm.value.encerrado
         }
       }) as any;
-      console.log('res ', res)
       if (res.error) {
         this.toastrService.error('Error ao criar evento')
       } else {
         this.toastrService.success('Evento criado com sucesso!');
       };
+      //this.limpar();
       this.fechaModal.emit();
     }
   }
   cancelar() {
     this.fechaModal.emit();
   }
+
   limpar() {
     this.criarEventoForm.controls['tipodestino'].setValue('P');
     this.criarEventoForm.controls['pessoaOrgonograma'].setValue('');
@@ -258,6 +266,7 @@ export class CriarEventoComponent implements OnInit {
     this.criarEventoForm.controls['id_motivo'].setValue('');
     this.criarEventoForm.controls['pessoaId'].setValue('');
     this.criarEventoForm.controls['observacao'].setValue('');
+    this.criarEventoForm.controls['encerrado'].setValue(false);
 
     let data = new Date();
     let date = moment().format('DD/MM/YYYY');
@@ -267,9 +276,32 @@ export class CriarEventoComponent implements OnInit {
     let hours = getHora(data);
     this.criarEventoForm.controls['hora'].setValue(hours);
 
-    this._pessoa = null;
-    this._evento = null;
+    //this._pessoa = null;
+    //this._evento = null;
+
+    if (this._evento && this._evento.id_canal)
+      this.onSelectCanal({ value: this._evento.id_canal });
+
+    if (this._idCanal)
+      this.onSelectCanal({ value: this._idCanal });
+
   }
+
+  defineDestinatario(){
+
+    const usuarioLogado = this.localStorage.getLocalStorage('usuarioLogado') as any;
+
+    if (this.criarEventoForm.value.encerrado){
+      this.criarEventoForm.controls['tipodestino'].setValue('P');
+      this.criarEventoForm.controls['pessoaOrgonograma'].setValue( usuarioLogado.id_pessoa );
+    }else{
+      this.criarEventoForm.controls['tipodestino'].setValue('P');
+      this.criarEventoForm.controls['pessoaOrgonograma'].setValue( '' );
+    }
+
+  }
+
+
 }
 
 function getHora(data: Date) {

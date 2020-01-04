@@ -1,0 +1,13 @@
+
+function criaEventosDeRegras(){
+
+
+
+}
+
+function criaEventosDeCobrancaSGA(){
+
+    
+
+
+}

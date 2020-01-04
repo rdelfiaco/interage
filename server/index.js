@@ -30,12 +30,18 @@ const tipoDeClientes = require('./src/api/tipoDeClientes');
 const tipoDeRelacionamentos = require( './src/api/tipoDeRelacionamentos');
 const classificacaoDeClientes = require('./src/api/classsificacaoClientes');
 const objecao = require('./src/api/objecao');
+const motor = require('./src/api/motor');
+const apiSGA = require('./src/api/apiSGA');
+
 
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
   extended: true
 }));
+
+//integração com SGA
+declaraServico('buscaPessoa', apiSGA.buscaPessoa )
 
 
 //proposta
@@ -209,7 +215,6 @@ declaraServico('crudCanais', canais.crudCanais);
 
 
 
-
 app.listen(nodeStart.port, "0.0.0.0");
 
 
@@ -253,3 +258,5 @@ function headerResponse(res) {
   res.set("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT");
   res.set("Access-Control-Allow-Headers", "Access-Control-Allow-Origin, Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers, cache-control");
 }
+
+

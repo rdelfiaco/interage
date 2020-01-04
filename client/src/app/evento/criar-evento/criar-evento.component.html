@@ -9,7 +9,7 @@
     <div class="col-8">
       <div class="md-form">
         <mdb-select formControlName="pessoaOrgonograma" [options]="optionsTipoDestino" [multiple]="false"
-          placeholder="Destino"></mdb-select>
+          placeholder="Destinatário"></mdb-select>
       </div>
     </div>
   </div>
@@ -31,19 +31,18 @@
     </div>
   </div>
   <div class="row">
-    <div class="md-form mt-0 mb-0 col-6">
-      <!-- <mdb-date-picker formControlName="data" #dataReagendamento (dateChanged)="onDateChange($event)" name="mydate"
-        [options]="myDatePickerOptions" [placeholder]="'Selecione a data'" required></mdb-date-picker> -->
-      <mdb-date-picker formControlName="data" #dataReagendamento name="mydate" [options]="myDatePickerOptions"
-        [placeholder]="'Selecione a data'" required></mdb-date-picker>
-      <label for="telefoneDiscado" class="">Agendar para:</label>
+    <div class="md-form col-4" >
+      <mdb-date-picker formControlName="data"  name="mydate" [options]="myDatePickerOptions"
+        [placeholder]="'Selecione a data'" required [label]="'Agendar para:'" ></mdb-date-picker>
     </div>
-    <div class="col-6">
-      <div class="md-form">
+    <div class="md-form col-4" >
         <mdb-time-picker formControlName="hora" [buttonLabel]="'Done'" [twelvehour]="false" [darktheme]="true"
           [placeholder]="'Selecione a hora'" [label]="'Agendar para:'"></mdb-time-picker>
-      </div>
     </div>
+    <div class="md-form col-4" >
+      <mdb-checkbox  formControlName="encerrado" (change)="defineDestinatario();"  >Cria evento encerrado</mdb-checkbox>
+    </div>
+
   </div>
   <div class="row mt-3">
     <div class="col-12">
@@ -68,7 +67,7 @@
     </div>
     <div class="md-form">
       <button type="button" mdbBtn color="primary" (click)="criarEvento();" class="relative waves-light" mdbWavesEffect
-        [disabled]="!criarEventoForm.valid" >Gravar</button>
+        [disabled]="!criarEventoForm.valid" id="bntGravar" >Gravar</button>
     </div>
   </div>
 </form>

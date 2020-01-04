@@ -6,6 +6,7 @@ import { ToastService, ModalDirective } from '../../lib/ng-uikit-pro-standard';
 import { Observable } from 'rxjs';
 import { Usuario } from '../login/usuario';
 import { Router } from '@angular/router';
+import { isNumber } from 'util';
 
 
 @Component({
@@ -97,6 +98,9 @@ export class PesquisaPessoaComponent implements OnInit {
   }
 
   async pesquisar() {
+    let textoPesquisaPessoa_ = this.textoPesquisaPessoa.replace(/\W/gi, '');
+    if (isNumber(textoPesquisaPessoa_)) {this.textoPesquisaPessoa = textoPesquisaPessoa_} 
+     
     try {
       let pessoasEncontradas = await this.connectHTTP.callService({
         service: 'pesquisaPessoas',

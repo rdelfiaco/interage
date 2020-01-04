@@ -323,26 +323,40 @@ export class AtendimentoComponent implements OnInit {
   async getPessoaPorCPFCNPJ(){
       // verifica se a pessoa já é usuário 
     let getPessoaPorCPFCNPJ = await this.connectHTTP.callService({
-    service: 'getPessoaPorCPFCNPJ',
-    paramsService: {
-      cpf_cnpj:  this.pessoaForm.value.cpf_cnpj // this.cpfCnpjPessoa
+      service: 'getPessoaPorCPFCNPJ',
+      //service: 'buscaPessoa',
+      paramsService: {
+      cpf_cnpj:  this.pessoaForm.value.cpf_cnpj, // this.cpfCnpjPessoa
+      ddd: this.ddd,
+      telefone: this.telefone
     }
   }) as any;
-  if (getPessoaPorCPFCNPJ.resposta[0].id){
-    this.pessoaForm.controls['id_pessoa'].setValue(getPessoaPorCPFCNPJ.resposta[0].id);
-    this.pessoaForm.controls['nome'].reset({ value: getPessoaPorCPFCNPJ.resposta[0].nome , disabled: true });      
-    return true;
-  }else {
+
+  console.log('getPessoaPorCPFCNPJ ',getPessoaPorCPFCNPJ)
+
+
+  if (getPessoaPorCPFCNPJ.error != '') {
     this.pessoaForm.value.cpf_cnpj = this.pessoaForm.value.cpf_cnpj && this.pessoaForm.value.cpf_cnpj.replace(/\W/gi, '')
     if (!validaCpf.isValid(this.pessoaForm.value.cpf_cnpj)) {
       this.pessoaForm.controls['nome'].reset({ value: '' , disabled: true });  
       this.toastrService.error('Informe um CPF válido');
       return false;
     }
-
     this.pessoaForm.controls['nome'].reset({ value: '' , disabled: false }); 
     return true;
   }
+
+  debugger
+
+  if (getPessoaPorCPFCNPJ.resposta[0]){
+      this.pessoaForm.controls['id_pessoa'].setValue(getPessoaPorCPFCNPJ.resposta[0].id);
+      this.pessoaForm.controls['nome'].reset({ value: getPessoaPorCPFCNPJ.resposta[0].nome , disabled: true });      
+    }else {
+      this.pessoaForm.controls['id_pessoa'].setValue(getPessoaPorCPFCNPJ.resposta.idPessoa);
+      this.pessoaForm.controls['nome'].reset({ value: getPessoaPorCPFCNPJ.resposta.nome , disabled: true });          
+  }
+
+  return true;
 
 }
 
