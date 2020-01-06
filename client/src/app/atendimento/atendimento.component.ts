@@ -333,16 +333,19 @@ export class AtendimentoComponent implements OnInit {
   }) as any;
 
   console.log('getPessoaPorCPFCNPJ ',getPessoaPorCPFCNPJ)
-
+  
+  debugger
 
   if (getPessoaPorCPFCNPJ.error != '') {
     this.pessoaForm.value.cpf_cnpj = this.pessoaForm.value.cpf_cnpj && this.pessoaForm.value.cpf_cnpj.replace(/\W/gi, '')
     if (!validaCpf.isValid(this.pessoaForm.value.cpf_cnpj)) {
       this.pessoaForm.controls['nome'].reset({ value: '' , disabled: true });  
+      this.pessoaForm.controls['nome'].setValue('');
       this.toastrService.error('Informe um CPF válido');
       return false;
     }
     this.pessoaForm.controls['nome'].reset({ value: '' , disabled: false }); 
+    this.pessoaForm.controls['nome'].setValue('');
     return true;
   }
 

@@ -115,9 +115,16 @@ async function _criarEvento(client, id_campanha, id_motivo, id_evento_pai, id_ev
   id_pessoa_criou, dt_para_exibir, tipoDestino, id_pessoa_organograma, id_pessoa_receptor,
   observacao_origem, id_canal, protocolo, idTelefonePessoa, encerrado ) {
 
+  encerrado = encerrado ? encerrado : false;
+
+  console.log('encerrado ', encerrado)
+
   return new Promise(function (resolve, reject) {
-    let update = `INSERT INTO eventos(
-      id,
+    let update = `INSERT INTO eventos( `
+
+    if (protocolo != null) update = update + `id, `;
+
+    update = update + `
       id_campanha,
       id_motivo,
       id_evento_pai,
@@ -135,22 +142,23 @@ async function _criarEvento(client, id_campanha, id_motivo, id_evento_pai, id_ev
       id_canal,
       id_telefone `;
 
-      if (encerrado) {
+    if (encerrado == true) {
         update = update + `, dt_resolvido, id_pessoa_resolveu, observacao_retorno ` 
       };
 
-      update = update + `)
-      VALUES ( ${protocolo},
+    update = update + `) VALUES ( `
+
+    if (protocolo != null) update = update + `${protocolo},`;
+    update = update + `
       ${id_campanha || 'NULL'},
       ${id_motivo},
       ${id_evento_pai || 'NULL'},
       ${id_evento_anterior || 'NULL'},`
-      
-      if (!encerrado) {
-        update = update +  `1 ,`
-      } else
-      update = update + `3 ,`
-
+      if (encerrado == true) {
+        update = update +  `3 ,`
+      } else{
+        update = update + `1 ,` 
+      }
       update = update + ` ${id_pessoa_criou},
       now(),
       func_dt_expira(${id_motivo}, now() ),
@@ -163,14 +171,14 @@ async function _criarEvento(client, id_campanha, id_motivo, id_evento_pai, id_ev
       ${id_canal},
       ${idTelefonePessoa ? idTelefonePessoa:  'NULL'}`;
 
-      if (encerrado) {
-        update = update + `, now() , ${id_pessoa_organograma}, '${observacao_origem}' ` 
+      if (encerrado == true) {
+        update = update + `, now() , ${id_pessoa_criou}, '${observacao_origem}' ` 
       }
       
       update = update + `)
       RETURNING id`;
 
-    //console.log(update)
+    console.log(update)
     client.query(update).then((updateEventoCriado) => {
       resolve(updateEventoCriado)
     }).catch(err => {
@@ -199,7 +207,7 @@ function encaminhaEvento(req, res) {
         encerrarEvento(client, req.query.id_pessoa_resolveu, req.query.id_evento, statusEvento).then(eventoEncerrado => {
           _criarEvento(client, req.query.id_campanha, req.query.id_motivo, req.query.id_evento_pai, req.query.id_evento,
             req.query.id_pessoa_resolveu, req.query.dt_para_exibir, req.query.tipoDestino, req.query.id_pessoa_organograma, req.query.id_pessoa_receptor,
-            req.query.observacao_origem, req.query.id_canal).then(eventoCriado => {
+            req.query.observacao_origem, req.query.id_canal, null, null, false).then(eventoCriado => {
               client.query('COMMIT').then((resposta) => {
                 resolve(eventoCriado)
                 client.end();
@@ -281,6 +289,8 @@ async function criarEvento(req, res) {
   }
 
   req.query = reqAux;
+
+  console.log('req.query.encerrado ', req.query.encerrado)
 
   return new Promise(function (resolve, reject) {
 
@@ -684,6 +694,16 @@ function getEventosLinhaDoTempo(req, res) {
     };
 
     let sql = `select * from view_eventos where id_pessoa_receptor=${req.query.id_pessoa_receptor}`
+    
+    console.log('req.query.id_evento', req.query.id_evento)
+
+    if (req.query.id_evento != undefined) {
+    sql = `select *
+    from view_eventos 
+    where id = 78876 or  id = evento_pai(78876) or id_evento_pai = evento_pai(78876)
+    `
+    
+    }
 
     executaSQL(credenciais, sql)
       .then(res => {

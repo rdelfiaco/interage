@@ -15,7 +15,7 @@ export class PesquisaClienteComponent implements OnInit {
   clienteSelecionado: string;
   clienteSelecionadoObject: Array<object>;
 
-  @Input() disabled: boolean = false;
+  @Input() disabled: boolean;
   @Input()
   set initValueId(initValueId: any) {
     if (initValueId)

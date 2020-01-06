@@ -13,6 +13,7 @@ export class LinhaDoTempoEventoComponent implements OnInit {
   eventosDaPessoa: any;
   eventoSelecionado: any;
   @Input() pessoa: any;
+  @Input() evento: any;
 
 
   constructor(private toastrService: ToastService,
@@ -27,16 +28,20 @@ export class LinhaDoTempoEventoComponent implements OnInit {
   setEventoSelecionado(eventoSelecionado: any) {
     if (this.eventoSelecionado && this.eventoSelecionado.id === eventoSelecionado.id) this.eventoSelecionado = null;
     else this.eventoSelecionado = eventoSelecionado;
+
+
   }
 
   async ngOnChanges() {
     console.log('LinhaDoTempoEventoComponent', this.pessoa )
+    console.log('this.idEvento', this.evento.id)
     if (!this.pessoa) return;
     try {
       let eventosEncontrados = await this.connectHTTP.callService({
         service: 'getEventosLinhaDoTempo',
         paramsService: {
-          id_pessoa_receptor: this.pessoa.principal.id
+          id_pessoa_receptor: this.pessoa.principal.id,
+          id_evento: this.evento.id
         }
       }) as any;
 

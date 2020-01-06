@@ -29,6 +29,7 @@ export class CriarEventoComponent implements OnInit {
           observer.next(pessoa.principal.id)
         })
         this.criarEventoForm.controls['pessoaId'].setValue(pessoa.principal.id);
+        this.pessoaId = pessoa.principal.id;
       });
 
   }
@@ -50,8 +51,12 @@ export class CriarEventoComponent implements OnInit {
   set evento(evento: any) {
     console.log('evento ', evento )
     this._evento = evento;
-    this.criarEventoForm.controls['canal'].setValue(evento.id_canal);
-    this.criarEventoForm.controls['id_motivo'].setValue(evento.id_motivo);
+    // this.criarEventoForm.controls['canal'].setValue(evento.id_canal);
+    // this.criarEventoForm.controls['id_motivo'].setValue(evento.id_motivo);
+    this.criarEventoForm.controls['canal'].reset({ value: evento.id_canal , disabled: true});
+    this.criarEventoForm.controls['id_motivo'].reset({ value: evento.id_motivo , disabled: true});
+    this.disabledCliente = true;
+
   }
   get evento(): any {
     return this._evento
@@ -65,6 +70,7 @@ export class CriarEventoComponent implements OnInit {
   @Input() 
   set idPessoaReceptor(idPessoaReceptor: any){ 
     this.pessoaId = idPessoaReceptor;
+    this.disabledCliente = true;
     this._evento = false;
     this.criarEventoForm.controls['pessoaId'].setValue(idPessoaReceptor);
 
@@ -72,8 +78,10 @@ export class CriarEventoComponent implements OnInit {
   @Input() 
   set idCanal(idCanal: any){
     debugger
-    this.criarEventoForm.controls['canal'].setValue(idCanal);
+    //this.criarEventoForm.controls['canal'].setValue(idCanal);
+    this.criarEventoForm.controls['canal'].reset({ value: idCanal , disabled: true})
     this._idCanal = idCanal;
+    this.disabledCliente = true;
   }
   
 
@@ -87,7 +95,7 @@ export class CriarEventoComponent implements OnInit {
   canaisSelect: Array<any>;
   usuarioSelect: Array<any>;
   optionsTipoDestino: Array<any>;
-
+  disabledCliente: boolean = false;
 
   public myDatePickerOptions: IMyOptions = {
     dayLabels: { su: 'Dom', mo: 'Seg', tu: 'Ter', we: 'Qua', th: 'Qui', fr: 'Sex', sa: 'Sab' },
@@ -113,10 +121,10 @@ export class CriarEventoComponent implements OnInit {
       pessoaOrgonograma: ['', [
         Validators.required
       ]],
-      canal: [{value:'', disabled: this._evento}, [
+      canal: [{value:'', disabled: false}, [
         Validators.required
       ]],
-      id_motivo: [{value:'', disabled: this._evento}, [
+      id_motivo: [{value:'', disabled: false}, [
         Validators.required
       ]],
       pessoaId: ['', [Validators.required]],
@@ -200,9 +208,11 @@ export class CriarEventoComponent implements OnInit {
     
     const usuarioLogado = this.localStorage.getLocalStorage('usuarioLogado') as any;
 
+    this.criarEventoForm.controls['canal'].enable();
+    this.criarEventoForm.controls['id_motivo'].enable();
+
     let dataHora = this.criarEventoForm.value.hora.split(':');
     dataHora[0] = parseInt(dataHora[0]) === 24 ? "00" : dataHora[0];
-
 
     let dataExibir = moment(`${this.criarEventoForm.value.data} - ${dataHora[0]}:${dataHora[1]}`, 'DD/MM/YYYY - HH:mm').toISOString()
     

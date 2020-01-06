@@ -22,16 +22,21 @@ async function  getPessoaPorCPFCNPJ(req, res) {
         }else{
            buscaPessoa(req, res)
           .then( resBuscaPessoa => {
-              req.query.nome = resBuscaPessoa.nome;
-              adicionarPessoaAtendimento(req, res)
-              .then( res => {
-                res = { idPessoa: res.idPessoa , 
-                        idTelefone: res.idTelefone,  
-                        nome: resBuscaPessoa.nome};
-                resolve(res )
-              })
-              .catch(erro => { reject(erro)})
+             if (!resBuscaPessoa.nome){
+              resolve( '' )
+             }else{
+                req.query.nome = resBuscaPessoa.nome;
+                adicionarPessoaAtendimento(req, res)
+                .then( res => {
+                  res = { idPessoa: res.idPessoa , 
+                          idTelefone: res.idTelefone,  
+                          nome: resBuscaPessoa.nome};
+                  resolve(res )
+                })
+                .catch(erro => { reject(erro)})
+              }
             })
+          
           .catch(error => {reject( error) });
       }
 
