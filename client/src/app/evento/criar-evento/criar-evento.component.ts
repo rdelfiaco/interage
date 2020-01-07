@@ -66,6 +66,7 @@ export class CriarEventoComponent implements OnInit {
   @Input() protocolo: any = null;
   @Input() ddd: any = null;
   @Input() telefone: any = null;
+  @Input() idEventoPai: any = null;
 
   @Input() 
   set idPessoaReceptor(idPessoaReceptor: any){ 
@@ -253,7 +254,8 @@ export class CriarEventoComponent implements OnInit {
           protocolo: this.protocolo,
           ddd: this.ddd,
           telefone: this.telefone,
-          encerrado: this.criarEventoForm.value.encerrado
+          encerrado: this.criarEventoForm.value.encerrado,
+          eventoPai: this.idEventoPai
         }
       }) as any;
       if (res.error) {
@@ -315,7 +317,7 @@ export class CriarEventoComponent implements OnInit {
 }
 
 function getHora(data: Date) {
-  let hora = trataTempo(data.getHours() + 1)
+  let hora = trataTempo(data.getHours() + 0)
   let minutos = trataTempo(data.getMinutes())
   return `${hora}:${minutos}`
 }

@@ -32,6 +32,7 @@ export class AtendimentoComponent implements OnInit {
   lastPageNumber: number;
   maxVisibleItems: number = 10;  
   idEvento: number;
+  idEventoPai: number;
   checkAbreEvento: boolean = false;
   buscaCliente: boolean = false;
   dddTelefone: any;
@@ -81,7 +82,7 @@ export class AtendimentoComponent implements OnInit {
   }
 
   async pesquisar(){
-    debugger
+    
     if (this.telefone && this.ddd){
      this.dddTelefone = `(${this.ddd}) ${this.telefone}`
     let resp = await this.bancoDados.lerDados('getEventosTelefone',{dddTelefone: this.dddTelefone }) as any;
@@ -105,8 +106,7 @@ export class AtendimentoComponent implements OnInit {
 
     this.tableDataCliente = resp.resposta as Array<object>;
 
-    console.log('this.tableData' , this.tableData )
-    console.log('this.tableDataCliente ', this.tableDataCliente )
+
 
     if(!this.tableData[0].id && !this.tableDataCliente[0].id){
       this.tableData = [];
@@ -134,7 +134,8 @@ export class AtendimentoComponent implements OnInit {
             motivo: pessoas.motivo,
             observacao_origem: pessoas.observacao_origem,
             status: pessoas.status,
-            id_telefone: pessoas.id_telefone_pessoa
+            id_telefone: pessoas.id_telefone_pessoa,
+            id_evento_pai: pessoas.id_evento_pai
             }) 
         } else {
           this.tableData.push({ 
@@ -145,6 +146,8 @@ export class AtendimentoComponent implements OnInit {
        }
       });
       this.defineNumeroPagina();
+      console.log('this.tableData' , this.tableData );
+      console.log('this.tableDataCliente ', this.tableDataCliente );
       return;
   }else {
     this.toastrService.error('Favor informar o ddd e o telefone  ');
@@ -306,11 +309,12 @@ export class AtendimentoComponent implements OnInit {
     }
  }
 
-  continuarAtendimento(eventoAnterior: number, idCliente: number ){
+ informacaoDoAtendimento(eventoAnterior: number, idEventoPai: number,  idCliente: number ){
     this.checkCriaEvento = true;
     this.eventoAnterior = eventoAnterior;
     this.eventoAnteriorProtocolo = eventoAnterior;
-    this.tituloModal = 'Continuar o atendimento do protocolo:'
+    this.idEventoPai = idEventoPai;
+    this.tituloModal = 'Informação do atendimento do protocolo: '
     this.modalCriaEvento.show(); 
     this.idCliente = idCliente;
   }

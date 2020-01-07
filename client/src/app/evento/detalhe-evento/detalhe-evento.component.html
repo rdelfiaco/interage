@@ -17,7 +17,7 @@
             <div class="col-12">
               <div class="md-form">
                 <app-formulario-evento [evento]="evento | async"></app-formulario-evento>
-                <div class="row justify-content-end">
+                <div *ngIf="!soConcultar" class="row justify-content-end">
                   <button type="button" style="white-space: nowrap;" (click)="voltar()" mdbBtn color="danger"
                     class="waves-light" aria-label="Voltar" mdbWavesEffect>Voltar</button>
                   <button type="button" [disabled]="!podeConcluir" style="white-space: nowrap;" mdbBtn color="primary"

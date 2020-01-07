@@ -117,8 +117,6 @@ async function _criarEvento(client, id_campanha, id_motivo, id_evento_pai, id_ev
 
   encerrado = encerrado ? encerrado : false;
 
-  console.log('encerrado ', encerrado)
-
   return new Promise(function (resolve, reject) {
     let update = `INSERT INTO eventos( `
 
@@ -178,7 +176,7 @@ async function _criarEvento(client, id_campanha, id_motivo, id_evento_pai, id_ev
       update = update + `)
       RETURNING id`;
 
-    console.log(update)
+    //console.log(update)
     client.query(update).then((updateEventoCriado) => {
       resolve(updateEventoCriado)
     }).catch(err => {
@@ -199,7 +197,7 @@ function encaminhaEvento(req, res) {
       client.connect();
       client.query('BEGIN').then((res1) => {
         //console.log('req.query', req.query)
-        let statusEvento;
+        let statusEvento = 2;
         if (req.query.id_status_evento === '5') statusEvento = 2;
         if (req.query.id_status_evento === '6') statusEvento = 8;
 
@@ -290,7 +288,7 @@ async function criarEvento(req, res) {
 
   req.query = reqAux;
 
-  console.log('req.query.encerrado ', req.query.encerrado)
+  //console.log('req.query.encerrado ', req.query.encerrado)
 
   return new Promise(function (resolve, reject) {
 
@@ -695,16 +693,16 @@ function getEventosLinhaDoTempo(req, res) {
 
     let sql = `select * from view_eventos where id_pessoa_receptor=${req.query.id_pessoa_receptor}`
     
-    console.log('req.query.id_evento', req.query.id_evento)
+    //console.log('req.query.id_evento', req.query.id_evento)
 
     if (req.query.id_evento != undefined) {
     sql = `select *
     from view_eventos 
-    where id = 78876 or  id = evento_pai(78876) or id_evento_pai = evento_pai(78876)
+    where id = ${req.query.id_evento} or  id = evento_pai(${req.query.id_evento}) or id_evento_pai = evento_pai(${req.query.id_evento})
     `
-    
     }
 
+    //console.log('sql ', sql )
     executaSQL(credenciais, sql)
       .then(res => {
         resolve(res)
@@ -1170,7 +1168,8 @@ function getMotivosCanais(client) {
   return new Promise(function (resolve, reject) {
     let sql = `select * from motivos
                 LEFT JOIN motivos_canais ON motivos_canais.id_motivo = motivos.id
-                WHERE status and inicia_processo `
+                WHERE status and inicia_processo 
+                order by id_canal, motivos.nome `
 
     client.query(sql)
       .then(res => {

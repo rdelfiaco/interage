@@ -169,6 +169,9 @@ async function salvarCanaisDoMotivo(req, res){
     const client = new Client(dbconnection);
     client.connect();
 
+    console.log('sqlDelet ', sqlDelet);
+    console.log('sqlInsert ', sqlInsert);
+
     client.query('BEGIN').then((res1) => {
         executaSQLComTransacao(credenciais, client, sqlDelet ).then(resDel => {
           executaSQLComTransacao(credenciais, client, sqlInsert). then( resInsert => {

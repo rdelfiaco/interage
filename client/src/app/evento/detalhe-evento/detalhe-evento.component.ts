@@ -34,7 +34,7 @@ export class DetalheEventoComponent implements OnInit {
   @ViewChild('modalConcluirEvento') modalConcluirEvento: ModalDirective;
   // @ViewChild('modalEncaminharEvento') modalEncaminharEvento: ModalDirective;
   @Input() idEvento: any
-
+  @Input() soConcultar: boolean = false;
 
   constructor(private route: ActivatedRoute,
     private connectHTTP: ConnectHTTP, private localStorage: LocalStorage) {

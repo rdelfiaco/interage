@@ -83,10 +83,10 @@
               rounded="true" size="sm" class="px-2" mdbWavesEffect>
               <mdb-icon fas icon="openid"></mdb-icon>
               </button>
-              <button *ngIf="evento.id" title="Continuar atendimento" (click)="continuarAtendimento(evento.id, evento.id_pessoa_receptor)" type="button" mdbBtn color="blue" outline="true"
+              <!-- <button *ngIf="evento.id" title="Registrar solicitação de informação do atendimento" (click)="informacaoDoAtendimento(evento.id, evento.id_evento_pai, evento.id_pessoa_receptor)" type="button" mdbBtn color="blue" outline="true"
               rounded="true" size="sm" class="px-2" mdbWavesEffect>
               <mdb-icon fas icon="undo" class="mt-0"></mdb-icon>
-              </button>
+              </button> -->
             </td>
           </tr>
         </tbody>
@@ -161,7 +161,7 @@ aria-labelledby="myBasicModalLabel" aria-hidden="true">
   <div class="modal-content">
     <div class="modal-body" style="overflow: auto; height: 80vh;">
       <div *ngIf="checkAbreEvento" >
-      <app-detalhe-evento  [idEvento]="idEvento" ></app-detalhe-evento>
+      <app-detalhe-evento  [idEvento]="idEvento" [soConcultar]="true"></app-detalhe-evento>
     </div>
   </div>
 </div>
@@ -235,7 +235,8 @@ aria-labelledby="myBasicModalLabel" aria-hidden="true">
 
         <app-criar-evento [eventoAnterior]="eventoAnterior" [idPessoaReceptor]="idCliente" 
               [idCanal]="2" [protocolo]="protocolo" (fechaModal)="fechaModal()"
-              [ddd]="ddd" [telefone]="telefone" [disabled]="true"
+              [ddd]="ddd" [telefone]="telefone" [disabled]="true" 
+              [idEventoPai]="idEventoPai"
         ></app-criar-evento>
 
       </div>
