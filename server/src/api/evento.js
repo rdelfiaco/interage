@@ -1285,7 +1285,7 @@ function getInformacaoAtendimentos(req, res) {
     };
 
     let sql = `
-      select   id_pessoa_criou, pessoa_criou, motivo, total, total_reg, round(total::numeric(8,5) / total_reg::numeric(8,5) * 100 ) as perct 
+      select   id_pessoa_criou, pessoa_criou, motivo, total::integer, total_reg::integer, round(total::numeric(8,5) / total_reg::numeric(8,5) * 100 ) as perct 
       from 
       (  
       select id_pessoa_criou, pessoa_criou, motivo, count(*) as total

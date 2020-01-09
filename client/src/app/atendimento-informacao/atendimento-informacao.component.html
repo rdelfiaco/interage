@@ -65,10 +65,24 @@
           <tr *ngFor="let row of tableData;let i = index">
             <td>{{row.motivo}}</td>
             <td>{{row.total}}</td>
-            <td>{{row.perct}}</td>
+            <td>{{row.perct}}%</td>
           </tr>
         </tbody>
+        <tfoot>
+          <tr *ngIf="total > 0 " >
+              <th scope="row">Total</th>
+              <td> {{total}} </td>
+              <td> 100% </td>
+          </tr>
+      </tfoot>
       </table>
     </div>
   </div>
+  <br>
+  <br>
+  <div class="px-4"> 
+    <button mdbBtn type="button" color="default" mdbWavesEffect  (click)="gerarPDF()" >Gerar PDF
+    </button>
+  </div>
+  <br>
 </div>

@@ -6,6 +6,11 @@ import { LocalStorage } from '../shared/services/localStorage';
 import { ToastService, IMyOptions } from '../../lib/ng-uikit-pro-standard';
 import { Valida } from '../shared/services/valida';
 import { BancoDados } from '../shared/services/bancoDados';
+import * as pdfMake from 'pdfmake/build/pdfmake';
+import * as pdfFonts from 'pdfmake/build/vfs_fonts'; 
+
+import { ReportPDF } from '../shared/services/reportPDF';
+
 
 @Component({
   selector: 'app-atendimento-informacao',
@@ -20,6 +25,7 @@ export class AtendimentoInformacaoComponent implements OnInit {
   usuarioSelectNome: string;
   idPessoaDoUsuario: number;
   tableData: Array<any>;
+  total: number;
   private sorted = false;
 
 
@@ -75,10 +81,13 @@ export class AtendimentoInformacaoComponent implements OnInit {
       private toastrService: ToastService, 
       private valida: Valida ,
       private bancoDados: BancoDados = new BancoDados,
+      private reportPDF: ReportPDF = new ReportPDF
 
       ) {
-  this.usuarioLogado = this.localStorage.getLocalStorage('usuarioLogado') as any;
-  }
+         this.usuarioLogado = this.localStorage.getLocalStorage('usuarioLogado') as any;
+         pdfMake.vfs = pdfFonts.pdfMake.vfs;
+
+        }
 
   async ngOnInit() {
 
@@ -89,7 +98,6 @@ export class AtendimentoInformacaoComponent implements OnInit {
     return;
     };
 
-    console.log('usuarios ', usuarios)
     this.usuariosSelect = usuarios.resposta as Array<object>;
     this.usuariosSelect = this.usuariosSelect.filter( result => {
       if(result.status) {
@@ -122,7 +130,12 @@ export class AtendimentoInformacaoComponent implements OnInit {
     };
 
     this.tableData = eventos.resposta;
-
+    this.total = 0;
+    this.tableData.forEach(elem => {
+      if (elem.total != null) this.total = this.total + elem.total;
+    })
+    if (this.tableData[0].motivo == null) this.tableData = [];
+    console.log(' this.total ',  this.total )
     console.log('this.tableData ', this.tableData);
 
   }
@@ -130,7 +143,7 @@ export class AtendimentoInformacaoComponent implements OnInit {
   setNomeUsuario(usuarioSelecionado_){
 
     this.idPessoaDoUsuario = usuarioSelecionado_.value;
-
+    this.usuarioSelectNome = usuarioSelecionado_.nome;
     this.getEventos();
 
   }
@@ -162,6 +175,13 @@ export class AtendimentoInformacaoComponent implements OnInit {
     });
 
     this.sorted = !this.sorted;
+  }
+
+  gerarPDF(){
+    let titulo = `Motivos de atendimentos entre ${this.dataInicial} a ${this.dataFinal} registrados por ${this.usuarioSelectNome}`;
+    var docDefinition = this.reportPDF.gerarPDF(titulo, this.tableData , this.tableData);
+    pdfMake.createPdf( docDefinition ).open();
+
   }
 
 }

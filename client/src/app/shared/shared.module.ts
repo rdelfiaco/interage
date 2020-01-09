@@ -1,3 +1,4 @@
+import { ReportPDF } from './services/reportPDF';
 import { BancoDados } from './services/bancoDados';
 import { Valida } from './services/valida';
 import { ConnectHTTP } from './services/connectHTTP';
@@ -28,6 +29,7 @@ import { RandomColor } from './services/randomColor';
     CheckPermissaoRecurso,
     BancoDados,
     RandomColor,
+    ReportPDF,
   ]
 })
 export class SharedModule { }
