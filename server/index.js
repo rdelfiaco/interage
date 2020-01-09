@@ -72,6 +72,9 @@ declaraServico('getEventosLinhaDoTempo', evento.getEventosLinhaDoTempo);
 declaraServico('getEventosRelatorioUsuario', evento.getEventosRelatorioUsuario);
 declaraServico('getIdEvento', evento.getIdEvento);
 declaraServico('getEventosTelefone', evento.getEventosTelefone);
+declaraServico('getInformacaoAtendimentos', evento.getInformacaoAtendimentos);
+
+
 
 
 //motivos

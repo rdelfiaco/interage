@@ -1,3 +1,4 @@
+import { AtendimentoInformacaoComponent } from './atendimento-informacao/atendimento-informacao.component';
 import { AtendimentoComponent } from './atendimento/atendimento.component';
 import { TipoDeRelacionamentoComponent } from './tipo-de-relacionamento/tipo-de-relacionamento.component';
 import { UsuarioCarteiraComponent } from './usuario/usuario-carteira/usuario-carteira.component';
@@ -341,6 +342,11 @@ const routes: Routes = [
       {
         path: 'atendimento',
         component: AtendimentoComponent ,
+        canActivate: [AuthGuard]
+      },
+      {
+        path: 'atendimentoInformacao',
+        component: AtendimentoInformacaoComponent ,
         canActivate: [AuthGuard]
       },
     ]

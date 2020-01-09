@@ -57,6 +57,7 @@ import { CanaisComponent } from './canais/canais.component';
 import { SharedModule } from './shared/shared.module';
 import { TipoDeRelacionamentoModule } from './tipo-de-relacionamento/tipo-de-relacionamento.module';
 import { AtendimentoComponent } from './atendimento/atendimento.component';
+import { AtendimentoInformacaoComponent } from './atendimento-informacao/atendimento-informacao.component';
 
 
 
@@ -83,6 +84,7 @@ import { AtendimentoComponent } from './atendimento/atendimento.component';
     ClassifcacaoDeClientesComponent,
     CanaisComponent,
     AtendimentoComponent,
+    AtendimentoInformacaoComponent,
     
   ],
   imports: [

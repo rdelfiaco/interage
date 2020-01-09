@@ -1276,6 +1276,49 @@ function getEventosTelefone(req, res) {
   })
 }
 
+
+function getInformacaoAtendimentos(req, res) {
+  return new Promise(function (resolve, reject) {
+    let credenciais = {
+      token: req.query.token,
+      idUsuario: req.query.id_usuario
+    };
+
+    let sql = `
+      select   id_pessoa_criou, pessoa_criou, motivo, total, total_reg, round(total::numeric(8,5) / total_reg::numeric(8,5) * 100 ) as perct 
+      from 
+      (  
+      select id_pessoa_criou, pessoa_criou, motivo, count(*) as total
+      from view_eventos 
+      where id_canal = 2 
+      and id_pessoa_criou = ${req.query.idPessoaDoUsuario}
+      and id_evento_pai is null 
+      and date(dt_criou) between '${req.query.dataInicial}' and '${req.query.dataFinal}'
+      group by id_pessoa_criou, pessoa_criou , motivo 
+      ) aux ,
+      (select count(*) as total_reg
+      from view_eventos 
+      where id_canal = 2 
+      and id_pessoa_criou = ${req.query.idPessoaDoUsuario}
+      and id_evento_pai is null 
+      and date(dt_criou) between '${req.query.dataInicial}' and '${req.query.dataFinal}'
+      ) aux2 
+      order by motivo
+    `
+    console.log(sql)
+    executaSQL(credenciais, sql)
+      .then(res => {
+        if (res.length > 0) {
+          resolve(res)
+        }
+        else reject('Erro!')
+      })
+      .catch(err => {
+        reject(err)
+      })
+  })
+}
+
 module.exports = {
   getUmEvento,
   motivosRespostas,
@@ -1293,5 +1336,6 @@ module.exports = {
   getCountEventosPendentes,
   getEventosPorPeriodoSintetico,
   getIdEvento,
-  getEventosTelefone
+  getEventosTelefone,
+  getInformacaoAtendimentos
 }
