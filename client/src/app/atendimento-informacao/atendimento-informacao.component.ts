@@ -1,3 +1,4 @@
+import { element } from 'protractor';
 import { Component, OnInit } from '@angular/core';
 import * as moment from 'moment';
 import { Http } from '@angular/http';
@@ -178,8 +179,33 @@ export class AtendimentoInformacaoComponent implements OnInit {
   }
 
   gerarPDF(){
+    debugger
     let titulo = `Motivos de atendimentos entre ${this.dataInicial} a ${this.dataFinal} registrados por ${this.usuarioSelectNome}`;
-    var docDefinition = this.reportPDF.gerarPDF(titulo, this.tableData , this.tableData);
+
+    var detalhesColunas = [];
+    var linhas = new Array();
+
+    linhas.push('Motivo');
+    linhas.push('Quantidade' );
+    linhas.push('Percentual');
+    detalhesColunas.push( linhas );
+
+    this.tableData.forEach(element => {
+      var linhas = new Array();
+      linhas.push(element.motivo.toString());
+      linhas.push(element.total.toString());
+      linhas.push( element.perct.toString() + '%');
+
+      detalhesColunas.push( linhas)
+    })
+    var linhas = new Array();
+    linhas.push('Total');
+    linhas.push(this.total.toString() );
+    linhas.push('100%');
+
+
+    detalhesColunas.push( linhas );
+    var docDefinition = this.reportPDF.gerarPDF(titulo, detalhesColunas );
     pdfMake.createPdf( docDefinition ).open();
 
   }
