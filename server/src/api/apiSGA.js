@@ -51,8 +51,8 @@ function buscaPessoa(req, res) {
     
     var data = {
     "codigo_situacao": "2",
-    "data_vencimento_inicial": "01/12/2019",
-    "data_vencimento_final": "25/12/2019"
+    "data_vencimento_inicial": "01/11/2019",
+    "data_vencimento_final": "10/01/2020"
     };
     
     var parametros = { method: 'POST',

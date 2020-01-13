@@ -146,8 +146,8 @@ export class AtendimentoComponent implements OnInit {
        }
       });
       this.defineNumeroPagina();
-      console.log('this.tableData' , this.tableData );
-      console.log('this.tableDataCliente ', this.tableDataCliente );
+      // console.log('this.tableData' , this.tableData );
+      // console.log('this.tableDataCliente ', this.tableDataCliente );
       return;
   }else {
     this.toastrService.error('Favor informar o ddd e o telefone  ');

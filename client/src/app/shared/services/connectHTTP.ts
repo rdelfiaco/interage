@@ -21,7 +21,7 @@ export class ConnectHTTP {
     if (mensagem && !mensagem.error) return mensagem;
     return new Promise((resolve, reject) => {
       //TROCA DADOS SERVIDOR
-      // const host = options.host || "http://159.69.205.116:3010/" //treinamento
+      // const host = options.host || "http://88.99.35.190:3010/" //treinamento
       const host = options.host || "http://88.99.35.190:3000/" //Producao
       // const host = options.host || "http://localhost:3000/" //Local_producao
       //  const host = options.host || "http://localhost:3010/" //Local
@@ -74,7 +74,7 @@ export class ConnectHTTP {
     return new Promise((resolve, reject) => {
       
       //TROCA DADOS SERVIDOR
-      // const host = options.host || "http://159.69.205.116:3010/" //treinamento
+      // const host = options.host || "http://88.99.35.190:3010/" //treinamento
       const host = options.host || "http://88.99.35.190:3000/" //Producao
       // const host = options.host || "http://localhost:3010/" //Local
       // const host = options.host || "http://localhost:3000/" //Local_producao

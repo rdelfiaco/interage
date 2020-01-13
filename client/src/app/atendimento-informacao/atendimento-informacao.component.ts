@@ -136,8 +136,8 @@ export class AtendimentoInformacaoComponent implements OnInit {
       if (elem.total != null) this.total = this.total + elem.total;
     })
     if (this.tableData[0].motivo == null) this.tableData = [];
-    console.log(' this.total ',  this.total )
-    console.log('this.tableData ', this.tableData);
+    // console.log(' this.total ',  this.total )
+    // console.log('this.tableData ', this.tableData);
 
   }
 
