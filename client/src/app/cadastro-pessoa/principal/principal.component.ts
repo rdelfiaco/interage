@@ -37,6 +37,7 @@ export class PrincipalComponent implements OnInit {
     this._pessoa = evento;
     if (this._pessoa)
       this._setQuestionarioForm();
+      this.idPessoa = this._pessoa.principal.id;
   }
 
   get pessoa(): any {
@@ -66,6 +67,7 @@ export class PrincipalComponent implements OnInit {
   atividadesPessoaJuridica: any;
   serchFilter: string;
   idPessoaReceptor: any;
+  idPessoa: any;
 
   tipoPessoaSelecionada: string = 'F';
   principalForm: FormGroup
@@ -297,6 +299,9 @@ export class PrincipalComponent implements OnInit {
       this.toastrService.success('Salvo com sucesso');
 
       this.refreshPessoaAdd.emit({ idPessoa: res.resposta.id });
+
+      this.idPessoa = res.resposta.id;
+
     }
   }
   checkAtividadePessoa() {

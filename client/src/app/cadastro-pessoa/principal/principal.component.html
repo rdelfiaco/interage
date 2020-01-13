@@ -215,7 +215,7 @@
     
     <div class="md-form">
       <button type="button" mdbBtn color="primary" (click)="salvarPessoa();" class="relative waves-light" mdbWavesEffect
-        [disabled]="!principalForm.valid && id">Salvar Pessoa</button>
+        [disabled]="!principalForm.valid && idPessoa">Salvar Pessoa</button>
     </div>
     <div *ngIf="notVendas" class="md-form">
       <button type="button" mdbBtn color="blue" (click)="modalCriarEvento.show()" class="relative waves-light" mdbWavesEffect
