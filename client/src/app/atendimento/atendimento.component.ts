@@ -19,7 +19,7 @@ export class AtendimentoComponent implements OnInit {
   usuarioLogado: Usuario;
   protocolo: number = 0;
   ddd: number = 62;
-  telefone:number;
+  telefone: string;
   paginators: Array<any> = [];
   activePage: number = 1;
   firstVisibleIndex: number = 1;
@@ -41,6 +41,7 @@ export class AtendimentoComponent implements OnInit {
   eventoAnteriorProtocolo: number;
   idCliente: number;
   tituloModal: string;
+  habilitaButton: boolean = true;
 
   tipoPessoaSelecionada: string = 'F';
   pessoaForm: FormGroup;
@@ -83,6 +84,7 @@ export class AtendimentoComponent implements OnInit {
 
   async pesquisar(){
     
+
     if (this.telefone && this.ddd){
      this.dddTelefone = `(${this.ddd}) ${this.telefone}`
     let resp = await this.bancoDados.lerDados('getEventosTelefone',{dddTelefone: this.dddTelefone }) as any;
@@ -275,6 +277,7 @@ export class AtendimentoComponent implements OnInit {
   }
 
   async novoAtendimentoPessoaInformada(){
+
     if (!this.pessoaForm.valid) {
       this.toastrService.error('CPF ou Nome invalido  ');
       return false;
@@ -367,5 +370,9 @@ export class AtendimentoComponent implements OnInit {
 
 }
 
+corrigiTelefone(){
+  this.telefone = this.telefone.trim().replace(/\W/gi, '');
+  this.habilitaButton = false
+}
 
 }

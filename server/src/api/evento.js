@@ -265,9 +265,12 @@ async function criarEvento(req, res) {
 
   var reqAux = req.query;
   if (idTelefonePessoa == ''  && req.query.telefone != null ){
-
+    // verifica se  possui telefone principal 
+      var principal = await buscaValorDoAtributo(credenciais, 'id', 'pessoas_telefones', `id_pessoa = ${req.query.id_pessoa_receptor} `);
+      principal = principal[0].id ? false : true;
+    // inserir telefone   
     req.query.dadosAtuais = {
-      principal : true,
+      principal : principal,
       id_tipo_telefone : 1,
       contato : '',
       id_pessoa :req.query.id_pessoa_receptor,
@@ -276,14 +279,13 @@ async function criarEvento(req, res) {
     }
     req.query.dadosAtuais = JSON.stringify(req.query.dadosAtuais)
     req.query.dadosAnteriores  = JSON.stringify(req.query.dadosAtuais)
-   let resultado =  await salvarTelefonePessoa(req, res)
-    .then(res => {
-      idTelefonePessoa = res.idTelefone
-    })
-    .catch(err => {
-      idTelefonePessoa = '';
-    })
-
+    let resultado =  await salvarTelefonePessoa(req, res)
+      .then(res => {
+        idTelefonePessoa = res.idTelefone
+      })
+      .catch(err => {
+        idTelefonePessoa = '';
+      })
   }
 
   req.query = reqAux;
@@ -1285,27 +1287,27 @@ function getInformacaoAtendimentos(req, res) {
     };
 
     let sql = `
-      select   id_pessoa_criou, pessoa_criou, motivo, total::integer, total_reg::integer, round(total::numeric(8,5) / total_reg::numeric(8,5) * 100 ) as perct 
+      select    motivo, total::integer, total_reg::integer, round(total::numeric(8,5) / total_reg::numeric(8,5) * 100 ) as perct 
       from 
       (  
-      select id_pessoa_criou, pessoa_criou, motivo, count(*) as total
+      select  motivo, count(*) as total
       from view_eventos 
       where id_canal = 2 
-      and id_pessoa_criou = ${req.query.idPessoaDoUsuario}
+      and (id_pessoa_criou in (${req.query.idPessoaDosUsuarios}) or -1 in (${req.query.idPessoaDosUsuarios}))
       and id_evento_pai is null 
       and date(dt_criou) between '${req.query.dataInicial}' and '${req.query.dataFinal}'
-      group by id_pessoa_criou, pessoa_criou , motivo 
+      group by  motivo 
       ) aux ,
       (select count(*) as total_reg
       from view_eventos 
       where id_canal = 2 
-      and id_pessoa_criou = ${req.query.idPessoaDoUsuario}
+      and (id_pessoa_criou in (${req.query.idPessoaDosUsuarios}) or -1 in (${req.query.idPessoaDosUsuarios}))
       and id_evento_pai is null 
       and date(dt_criou) between '${req.query.dataInicial}' and '${req.query.dataFinal}'
       ) aux2 
       order by motivo
     `
-    console.log(sql)
+    //console.log(sql)
     executaSQL(credenciais, sql)
       .then(res => {
         if (res.length > 0) {

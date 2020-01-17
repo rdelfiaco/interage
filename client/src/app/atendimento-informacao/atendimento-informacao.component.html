@@ -25,8 +25,8 @@
         <div class="row" style="margin-top: 50px">
           <div class="col-md-12">
             <mdb-select [(ngModel)]="usuarioSelectValue"
-              (selected)="setNomeUsuario($event)" [options]="usuariosSelect"
-              placeholder="Escolha um usuário" style="font-size: 0.5rem;"></mdb-select>
+              (selected)="setNomeUsuario($event)" [options]="usuariosSelect" [multiple]="true"
+              placeholder="Escolha o usuário" style="font-size: 0.5rem;"></mdb-select>
             <label>Usuário que realizou os atendimentos</label>
           </div>
         </div>

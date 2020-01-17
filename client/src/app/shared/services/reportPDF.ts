@@ -13,15 +13,17 @@ export class ReportPDF {
 
         var docDefinition = {
             pageSize: 'A4',
+            pageMargins: 72,
             header: {
-                margin: 10,
+                
                 columns: [
                     {
+                        margin: [10, 10, 0, 0],
                         image: 'logotipo',
                         width: 50
                     },
                     {
-                        margin: [10, 20, 5, 0],
+                        margin: [0, 40, 5, 0],
                         text: titulo,
                         alignment: 'center',
                         fontSize: 12,
@@ -32,7 +34,7 @@ export class ReportPDF {
             footer:  function(currentPage, pageCount) { 
                     let texto =  `Página: ${currentPage.toString()} de  ${pageCount}            Emitido em: ${hoje} por INTERAGE CRM ` 
                     return  {text: texto ,
-                             margin: 10,
+                             margin: [10, 10, 0,0],
                              fontSize: 8}
                     },
             content: [ 

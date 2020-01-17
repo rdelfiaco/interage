@@ -25,7 +25,6 @@ function login(req, res) {
         if (res.rowCount > 0) {
           let token_access = generateTokenUserAcess()
           let usuario = res.rows[0];
-
           if(usuario.senha == senhaCriptografada) {
 
             client.query(`insert into historico_login(id_usuario, ip, datahora, token_access, ativo)

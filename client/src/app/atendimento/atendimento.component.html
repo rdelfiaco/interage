@@ -14,16 +14,16 @@
       <label for="ddd" style="margin-left: 10px;" >DDD</label>
     </div>
     <div class="md-form col-2">
-      <input mdbInputDirective [(ngModel)]="telefone" type="text" id="telefone" class="form-control">
-      <label for="telefone" style="margin-left: 10px;" >Telefone</label>
+      <input mdbInputDirective [(ngModel)]="telefone" type="text" id="telefone" class="form-control" (change)="corrigiTelefone()"  >
+      <label for="telefone" style="margin-left: 10px;"   >Telefone</label>
     </div>
     <div class="col-2">
-      <button type="button" mdbBtn color="primary" class="relative waves-light"
+      <button type="button" mdbBtn color="primary" class="relative waves-light" [disabled]="habilitaButton"
         (click)="pesquisar()" mdbWavesEffect>
         Pesquisar Pessoas e Atendimentos anteriores</button>
     </div>
     <div class="col-2">
-      <button type="button" mdbBtn color="primary" class="relative waves-light"
+      <button type="button" mdbBtn color="primary" class="relative waves-light" [disabled]="habilitaButton"
         (click)="novoAtendimentoPessoa()" mdbWavesEffect>
         Registrar novo atendimento para uma nova pessoa</button>
     </div>

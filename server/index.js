@@ -3,6 +3,7 @@ const router = express.Router();
 const app = express();
 const nodeStart = require('./src/config/nodeStart');
 const bodyParser = require('body-parser');
+const SHA1 = require('./src/api/SHA1');
 
 const usuario = require('./src/api/usuario');
 const campanha = require('./src/api/campanha');
@@ -224,6 +225,41 @@ app.listen(nodeStart.port, "0.0.0.0");
 console.log(`Servidor iniciado na em http://localhost:${nodeStart.port}`)
 
 
+
+var timeMotor = async function ()  {
+
+  var req = {
+      query: {
+      login: 'interage',
+      senha: SHA1.SHA1('crm123!@#'),
+      id_usuario: 1,
+      token: ''
+      }
+  };
+  var res = '';
+  
+  await  usuario.login(req, res)
+  .then ( res => {
+    req.query.token = res.token;
+  });
+
+
+  console.log('Horário que o motor funcionou => ', Date());
+
+  // motor.criaEventosDeRegras();
+
+   motor.criaEventosDeCobrancaSGA(req); 
+
+
+
+  setTimeout(timeMotor, 1800000);
+
+  
+}
+
+timeMotor();
+
+
 function declaraServico(nomeServico, funcao) {
   app.get(`/${nomeServico}`, (req, res) => {
     funcao(req)
@@ -261,5 +297,6 @@ function headerResponse(res) {
   res.set("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT");
   res.set("Access-Control-Allow-Headers", "Access-Control-Allow-Origin, Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers, cache-control");
 }
+
 
 

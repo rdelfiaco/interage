@@ -2,7 +2,7 @@ const { checkTokenAccess } = require('./checkTokenAccess');
 const { executaSQL } = require('./executaSQL');
 const { buscaValorDoAtributo } = require( './shared');
 const { auditoria } = require('./auditoria');
-const { buscaPessoa } = require('./apiSGA')
+const { getAssociado } = require('./apiSGA')
 
 
 
@@ -20,29 +20,33 @@ async function  getPessoaPorCPFCNPJ(req, res) {
         if (res[0].id != null){
         resolve(res)
         }else{
-           buscaPessoa(req, res)
-          .then( resBuscaPessoa => {
-             if (!resBuscaPessoa.nome){
+          var req_ = {...req};
+           getAssociado(req, res) 
+          .then( resGetAssociado => { 
+             if (!resGetAssociado.nome || resGetAssociado.nome === undefined ){
+              console.log('resGetAssociado ', resGetAssociado)
               resolve( '' )
-             }else{
-                req.query.nome = resBuscaPessoa.nome;
-                adicionarPessoaAtendimento(req, res)
+             }else{ 
+                req = req_;
+                req.query.resGetAssociado = resGetAssociado;
+                req.query.nome = resGetAssociado.nome;
+                adicionarPessoaSGA(req, res)
                 .then( res => {
                   res = { idPessoa: res.idPessoa , 
                           idTelefone: res.idTelefone,  
-                          nome: resBuscaPessoa.nome};
+                          nome: resGetAssociado.nome
+                        };
                   resolve(res )
                 })
-                .catch(erro => { reject(erro)})
-              }
+                .catch(erro => { reject({ sql: sql , error:  erro})})
+              } 
             })
           
-          .catch(error => {reject( error) });
+          .catch(error => {reject({ sql: sql , error:  error}) });
       }
-
     })
     .catch(err => {
-      reject(err)
+      reject({ sql: sql , error:  err})
     });
   });
 };
@@ -626,6 +630,7 @@ function salvarTelefonePessoa(req, res) {
 
       client.connect()
 
+ 
 
       let update;
       client.query('BEGIN').then(() => {
@@ -633,7 +638,9 @@ function salvarTelefonePessoa(req, res) {
 
         client.query(buscaTelefone).then((telefonesPessoa) => {
           let principal = req.query.principal;
+           
           if (!telefonesPessoa.rowCount) principal = true
+
           if (req.query.id){
             update = `UPDATE pessoas_telefones SET
                       ddd='${req.query.ddd}',
@@ -656,7 +663,7 @@ function salvarTelefonePessoa(req, res) {
                   ${principal},
                   ${req.query.id_tipo_telefone},
                   '${req.query.contato}',
-                  '55', now()) RETURNING id`;}
+                  '55', now()) RETURNING id`;} 
           client.query(update).then((res) => {
             client.query('COMMIT').then((resposta) => {
               client.end();
@@ -1102,6 +1109,10 @@ async function pesquisaPessoas(req, res) {
       client.connect()
 
       var pesquisaTexto = req.query.searchText.toLowerCase();
+      pesquisaTexto =  pesquisaTexto.replace('.', '');
+      pesquisaTexto =  pesquisaTexto.replace('.', '');
+      pesquisaTexto =  pesquisaTexto.replace('-', '');
+
       let pesquisaId = pesquisaTexto.substring(3);
       let pesquisa = '';
       if (pesquisaTexto.substring(0,3) == 'id=' ) {
@@ -1146,6 +1157,7 @@ async function pesquisaPessoas(req, res) {
       }
 
           pesquisa = pesquisa + ` limit 100`
+      //console.log('pesquisa ', pesquisa)
       client.query(pesquisa).then((res) => {
         client.end()
         if (res.rowCount > 0) {
@@ -1328,6 +1340,7 @@ function adicionarPessoaAtendimento(req, res) {
       idUsuario: req.query.id_usuario
     };
 
+
     req.query.cpf_cnpj = req.query.cpf_cnpj.replace(/\W/gi, '');
     let ret = [];
     ret.push("(")
@@ -1352,8 +1365,12 @@ function adicionarPessoaAtendimento(req, res) {
     ret.push(')')
     ret = ret.join(' ');
 
+    console.log('  eee', req.query.codigo_associado)
+
     let sql = `INSERT INTO pessoas ${ret} RETURNING id`;
 
+    console.log(sql)
+    
     executaSQL(credenciais, sql)
       .then(res => {
         let idPessoa = res[0].id;
@@ -1365,8 +1382,8 @@ function adicionarPessoaAtendimento(req, res) {
           ddd: req.query.ddd,
           telefone: req.query.telefone,
         }
-        req.query.dadosAtuais = JSON.stringify(req.query.dadosAtuais)
-        req.query.dadosAnteriores  = JSON.stringify(req.query.dadosAtuais)
+        req.query.dadosAtuais = JSON.stringify(req.query.dadosAtuais);
+        req.query.dadosAnteriores  = JSON.stringify(req.query.dadosAtuais);
         salvarTelefonePessoa(req, res)
         .then(res => {
           resolve({idPessoa: idPessoa, idTelefone: res.idTelefone})
@@ -1381,6 +1398,242 @@ function adicionarPessoaAtendimento(req, res) {
   })
 }
 
+
+async function adicionarPessoaSGA(req, res) {
+  let credenciais = {
+    token: req.query.token,
+    idUsuario: req.query.id_usuario
+  };
+  req.query.resGetAssociado.cpf = req.query.resGetAssociado.cpf.replace(/\W/gi, '');
+
+  var idPessoa = await buscaValorDoAtributo( credenciais, 'id', 'pessoas' , `cpf_cnpj = '${req.query.resGetAssociado.cpf}' `)
+
+  idPessoa = Object.values( idPessoa[0])[0];
+  console.log('idPessoa ', req.query.resGetAssociado.cpf , idPessoa )
+
+  if (idPessoa) {
+      var idTelefone = await buscaValorDoAtributo( credenciais, 'id', 'pessoas_telefones', ` principal and id_pessoa = ${idPessoa} `)
+      idTelefone = Object.values( idTelefone[0])[0];
+    }
+
+  return new Promise(function (resolve, reject) {
+  
+    if (idPessoa){
+      resolve({idPessoa: idPessoa, idTelefone: idTelefone})
+    }
+    
+    if (!req.query.telefone){
+      req.query.ddd = req.query.resGetAssociado.telefone_fixo.substring(1,3) ;
+      req.query.telefone = req.query.resGetAssociado.telefone_fixo.substring(4);
+      req.query.telefone = req.query.telefone.replace('-', '');
+    } 
+
+    let req_ =  {...req}; 
+     
+
+    let ret = [];
+    ret.push("(")
+
+    ret.push('nome,');
+    ret.push('apelido_fantasia,');
+    ret.push('sexo,');
+    ret.push('datanascimento,');
+    ret.push('rg_ie,');
+    ret.push('orgaoemissor,');
+    ret.push('dt_expedicao_rg,');
+    ret.push('cnh,');
+    ret.push('cnh_categoria,');
+    ret.push('cnh_validade,');
+    ret.push('cpf_cnpj,');
+    ret.push('email,');
+    ret.push('website,');
+    ret.push('codigo_associado,');
+    ret.push('dtinclusao,');
+    ret.push('dtalteracao,');
+    ret.push('id_usuario_incluiu');
+
+    ret.push(')')
+    ret.push('VALUES(')
+
+    ret.push("'" + req.query.resGetAssociado.nome + "',");
+    ret.push("'" + req.query.resGetAssociado.nome + "',");
+    ret.push("'" + req.query.resGetAssociado.sexo + "',");
+    ret.push("'" + req.query.resGetAssociado.data_nascimento + "',");
+    ret.push("'" + req.query.resGetAssociado.rg + "',");
+    ret.push("'" + req.query.resGetAssociado.orgao_expedidor_rg + "',");
+    ret.push(req.query.resGetAssociado.data_expedicao_rg != null  ?  "'" + req.query.resGetAssociado.data_expedicao_rg + "'" : 'NULL' + ",")
+    ret.push("'" + req.query.resGetAssociado.cnh + "',");
+    ret.push("'" + req.query.resGetAssociado.categoria_cnh + "',");
+    ret.push(req.query.resGetAssociado.data_vencimento_habilitacao !=  null ?   "'" + req.query.resGetAssociado.data_vencimento_habilitacao + "'" : 'NULL'     + ",");
+    ret.push("'" + req.query.resGetAssociado.cpf + "',");
+    ret.push("'" + req.query.resGetAssociado.email + "',");
+    ret.push("'" + req.query.resGetAssociado.email_auxiliar + "',");
+    ret.push("'" + req.query.resGetAssociado.codigo_associado + "',");
+    ret.push('now(),');
+    ret.push('now(),')
+    ret.push(req.query.id_usuario );
+
+    ret.push(')')
+    ret = ret.join(' ');
+
+    let sql = `INSERT INTO pessoas ${ret} RETURNING id`;
+    executaSQL(credenciais, sql)
+      .then(res => {
+        var idPessoa = res[0].id;
+
+        req.query.dadosAtuais = {
+          principal : true,
+          id_tipo_telefone : 1, 
+          contato : '',
+          id_pessoa : idPessoa,
+          ddd: req.query.ddd,
+          telefone: req.query.telefone,
+        }
+        req.query.dadosAtuais = JSON.stringify(req.query.dadosAtuais);
+        req.query.dadosAnteriores  = JSON.stringify(req.query.dadosAtuais);
+        salvarTelefonePessoa(req, res)
+        .then(res => { 
+             inserirTelefoneFixo(req_, idPessoa);
+             inserirTelefoneCelular(req_, idPessoa); 
+             inserirTelefoneCelularAux(req_, idPessoa);
+             inserirTelefoneComercial(req_, idPessoa);
+            resolve({idPessoa: idPessoa, idTelefone: res.idTelefone})
+             
+        })
+        .catch(err => {
+          reject(err)
+        })
+      })
+      .catch(err => {
+        reject(err)
+      })
+  })
+
+   async function inserirTelefoneFixo(req, idPessoa ){
+
+      req.query.ddd = req.query.resGetAssociado.telefone_fixo.substring(1,3) ;
+      let telefone = req.query.resGetAssociado.telefone_fixo.substring(4);
+      telefone = telefone.replace('-', '');
+
+      if (telefone != `${req.query.telefone}`  &&  telefone.length > 5 ){
+          
+        req.query.telefone = telefone;
+        req.query.dadosAtuais = {
+          principal : false,
+          id_tipo_telefone : 8,
+          contato : '',
+          id_pessoa : idPessoa,
+          ddd: req.query.ddd,
+          telefone: req.query.telefone,
+        }
+        req.query.dadosAtuais = JSON.stringify(req.query.dadosAtuais);
+        req.query.dadosAnteriores  = JSON.stringify(req.query.dadosAtuais);
+
+        salvarTelefonePessoa(req, res)
+        .then(res => { 
+          res_ = res ;
+        })
+        .catch(err => {
+          err_ = err;
+        })
+      }
+      return true
+    }
+
+    async function inserirTelefoneCelular(req, idPessoa ){
+
+      req.query.ddd = req.query.resGetAssociado.telefone_celular.substring(1,3) ;
+      let telefone = req.query.resGetAssociado.telefone_celular.substring(4);
+      telefone = telefone.replace('-', '');
+
+      if (telefone != `${req.query.telefone}`  &&  telefone.length > 5 ){
+
+        req.query.telefone = telefone;
+        req.query.dadosAtuais = {
+          principal : false,
+          id_tipo_telefone : 9,
+          contato : '',
+          id_pessoa : idPessoa,
+          ddd: Number.isInteger( req.query.ddd) ? req.query.ddd : 0,
+          telefone: req.query.telefone,
+        }
+        req.query.dadosAtuais = JSON.stringify(req.query.dadosAtuais);
+        req.query.dadosAnteriores  = JSON.stringify(req.query.dadosAtuais);
+        salvarTelefonePessoa(req, res)
+        .then(res => {
+          res_ = res ;
+        })
+        .catch(err => {
+          err_ = err;
+        })
+      }
+      return true
+    }
+
+    async function inserirTelefoneCelularAux(req, idPessoa ){
+
+      req.query.ddd = req.query.resGetAssociado.telefone_celular_aux.substring(1,3) ;
+      let telefone = req.query.resGetAssociado.telefone_celular_aux.substring(4);
+      telefone = telefone.replace('-', '');
+
+      if (telefone != `${req.query.telefone}`  &&  telefone.length > 5){
+
+        req.query.telefone = telefone;
+        req.query.dadosAtuais = {
+          principal : false,
+          id_tipo_telefone : 10,
+          contato : '',
+          id_pessoa : idPessoa,
+          ddd: Number.isInteger( req.query.ddd) ? req.query.ddd : 0,
+          telefone: req.query.telefone,
+        }
+        req.query.dadosAtuais = JSON.stringify(req.query.dadosAtuais);
+        req.query.dadosAnteriores  = JSON.stringify(req.query.dadosAtuais);
+        salvarTelefonePessoa(req, res)
+        .then(res => {
+          res_ = res ;
+        })
+        .catch(err => {
+          err_ = err;
+        })
+      }
+      return true
+    }
+
+    async function inserirTelefoneComercial(req, idPessoa ){
+
+      req.query.ddd = req.query.resGetAssociado.telefone_comercial.substring(1,3) ;
+      let telefone = req.query.resGetAssociado.telefone_comercial.substring(4);
+      telefone = telefone.replace('-', '');
+
+      if (telefone != `${req.query.telefone}`  &&  telefone.length > 5){
+          
+        req.query.telefone = telefone;
+        req.query.dadosAtuais = {
+          principal : false,
+          id_tipo_telefone : 11,
+          contato : '',
+          id_pessoa : idPessoa,
+          ddd: Number.isInteger( req.query.ddd) ? req.query.ddd : 0,
+          telefone: req.query.telefone,
+        }
+        req.query.dadosAtuais = JSON.stringify(req.query.dadosAtuais);
+        req.query.dadosAnteriores  = JSON.stringify(req.query.dadosAtuais);
+        salvarTelefonePessoa(req, res)
+        .then(res => {
+          res_ = res ;
+        })
+        .catch(err => {
+          err_ = err;
+        })
+      }
+      return true
+    }
+
+
+
+
+}
 
 module.exports = {
   getPessoa,

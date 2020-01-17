@@ -22,7 +22,7 @@ export class AtendimentoInformacaoComponent implements OnInit {
 
   usuarioLogado: any;
   usuariosSelect: Array<any>;
-  usuarioSelectValue:  string;
+  usuarioSelectValue:  Array<any>;
   usuarioSelectNome: string;
   idPessoaDoUsuario: number;
   tableData: Array<any>;
@@ -108,18 +108,19 @@ export class AtendimentoInformacaoComponent implements OnInit {
       return { value: usuarios_.id_pessoa, label: usuarios_.nome }
     });
 
+    this.usuariosSelect.push({ value: -1, label: "Todos" });
 
-    this.usuarioSelectNome = this.usuariosSelect[0].label;
-    this.usuarioSelectValue = this.usuariosSelect[0].value;
+    this.usuarioSelectValue = [-1]
     
-
+    this.getEventos();
 
   };
 
   async getEventos( ){
     let eventos  = await this.bancoDados.lerDados('getInformacaoAtendimentos',
     {
-      idPessoaDoUsuario: this.idPessoaDoUsuario,
+      //idPessoaDoUsuario: this.idPessoaDoUsuario,
+      idPessoaDosUsuarios: this.usuarioSelectValue,
       dataInicial: this.dataInicial,
       dataFinal: this.dataFinal
 
@@ -136,15 +137,11 @@ export class AtendimentoInformacaoComponent implements OnInit {
       if (elem.total != null) this.total = this.total + elem.total;
     })
     if (this.tableData[0].motivo == null) this.tableData = [];
-    // console.log(' this.total ',  this.total )
-    // console.log('this.tableData ', this.tableData);
 
   }
 
   setNomeUsuario(usuarioSelecionado_){
 
-    this.idPessoaDoUsuario = usuarioSelecionado_.value;
-    this.usuarioSelectNome = usuarioSelecionado_.nome;
     this.getEventos();
 
   }
@@ -180,7 +177,7 @@ export class AtendimentoInformacaoComponent implements OnInit {
 
   gerarPDF(){
     debugger
-    let titulo = `Motivos de atendimentos entre ${this.dataInicial} a ${this.dataFinal} registrados por ${this.usuarioSelectNome}`;
+    let titulo = `Motivos de atendimentos entre ${this.dataInicial} a ${this.dataFinal}`;
 
     var detalhesColunas = [];
     var linhas = new Array();
