@@ -24,7 +24,7 @@ async function  getPessoaPorCPFCNPJ(req, res) {
            getAssociado(req, res) 
           .then( resGetAssociado => { 
              if (!resGetAssociado.nome || resGetAssociado.nome === undefined ){
-              console.log('resGetAssociado ', resGetAssociado)
+              // console.log('resGetAssociado ', resGetAssociado)
               resolve( '' )
              }else{ 
                 req = req_;
@@ -1365,21 +1365,21 @@ function adicionarPessoaAtendimento(req, res) {
     ret.push(')')
     ret = ret.join(' ');
 
-    console.log('  eee', req.query.codigo_associado)
+    //console.log('  eee', req.query.codigo_associado)
 
     let sql = `INSERT INTO pessoas ${ret} RETURNING id`;
 
-    console.log(sql)
+    //console.log(sql)
     
     executaSQL(credenciais, sql)
       .then(res => {
-        let idPessoa = res[0].id;
+        let idPessoa = res[0].id; 
         req.query.dadosAtuais = {
           principal : true,
           id_tipo_telefone : 1,
           contato : '',
           id_pessoa : idPessoa,
-          ddd: req.query.ddd,
+          ddd: Number.isInteger( req.query.ddd) ? req.query.ddd : 0,
           telefone: req.query.telefone,
         }
         req.query.dadosAtuais = JSON.stringify(req.query.dadosAtuais);
@@ -1409,7 +1409,6 @@ async function adicionarPessoaSGA(req, res) {
   var idPessoa = await buscaValorDoAtributo( credenciais, 'id', 'pessoas' , `cpf_cnpj = '${req.query.resGetAssociado.cpf}' `)
 
   idPessoa = Object.values( idPessoa[0])[0];
-  console.log('idPessoa ', req.query.resGetAssociado.cpf , idPessoa )
 
   if (idPessoa) {
       var idTelefone = await buscaValorDoAtributo( credenciais, 'id', 'pessoas_telefones', ` principal and id_pessoa = ${idPessoa} `)
@@ -1420,7 +1419,7 @@ async function adicionarPessoaSGA(req, res) {
   
     if (idPessoa){
       resolve({idPessoa: idPessoa, idTelefone: idTelefone})
-    }
+    } 
     
     if (!req.query.telefone){
       req.query.ddd = req.query.resGetAssociado.telefone_fixo.substring(1,3) ;
@@ -1428,9 +1427,10 @@ async function adicionarPessoaSGA(req, res) {
       req.query.telefone = req.query.telefone.replace('-', '');
     } 
 
+    
+
     let req_ =  {...req}; 
      
-
     let ret = [];
     ret.push("(")
 
@@ -1486,7 +1486,7 @@ async function adicionarPessoaSGA(req, res) {
           id_tipo_telefone : 1, 
           contato : '',
           id_pessoa : idPessoa,
-          ddd: req.query.ddd,
+          ddd: Number.isInteger( req.query.ddd) ? req.query.ddd : 0,
           telefone: req.query.telefone,
         }
         req.query.dadosAtuais = JSON.stringify(req.query.dadosAtuais);
@@ -1523,7 +1523,7 @@ async function adicionarPessoaSGA(req, res) {
           id_tipo_telefone : 8,
           contato : '',
           id_pessoa : idPessoa,
-          ddd: req.query.ddd,
+          ddd: Number.isInteger( req.query.ddd) ? req.query.ddd : 0,
           telefone: req.query.telefone,
         }
         req.query.dadosAtuais = JSON.stringify(req.query.dadosAtuais);

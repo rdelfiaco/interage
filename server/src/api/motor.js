@@ -38,10 +38,10 @@ async function criaEventosDeCobrancaSGA(req){
         
         ultimaGeracaoEventoCobrancao = moment().format('YYYY-MM-DD HH:mm:ss');
 
-        // var result = await alteraValorDoAtributo(credenciais, 
-        //             `valor = '${ultimaGeracaoEventoCobrancao}'`,
-        //             'interage_parametros',
-        //             `nome_parametro = 'ultimaGeracaoEventoCobrancao' `);
+        var result = await alteraValorDoAtributo(credenciais, 
+                    `valor = '${ultimaGeracaoEventoCobrancao}'`,
+                    'interage_parametros',
+                    `nome_parametro = 'ultimaGeracaoEventoCobrancao' `);
   
     
         var res = '' 
@@ -49,7 +49,6 @@ async function criaEventosDeCobrancaSGA(req){
         getBoletosAtrasados(req, res)
         .then(resBoletos => {
             resBoletos.forEach(element => {
-            //  if (element.codigo_associado == 3329){
                 req.query.cpf_cnpj = element.codigo_associado;
                 getAssociado( req , res)
                 .then( resGetAssociado => { 
@@ -62,32 +61,21 @@ async function criaEventosDeCobrancaSGA(req){
                         }else {
                             idPessoa = resGetPessoaPorCPFCNPJ.idPessoa;
                         }  
- 
-                        console.log('id_pessoa ', idPessoa);
-                          
+                        console.log('id_pessoa', idPessoa);
                     })
-                    .catch(error => console.log( 'error 1', 'req ', req , 'erro ',  error   ) );
+                    .catch(error => {});
                 })
-                .catch(error => console.log( 'error 2', error  ) );
-            // } 
+                .catch(error => {});
 
-            var time = function ()  {
-  
-                setTimeout(time, 100000);
-            } 
-
-            time();
-            
+                var time = function ()  {
+                    setTimeout(time, 100000);
+                } 
+                time();
             }); 
         })
-        .catch(error => console.log( 'error 3', error ) )
+        .catch(error => {} );
     }  
-   
     return
-
-
-
-
 }
 
 
