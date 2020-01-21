@@ -254,7 +254,12 @@ export class EventoComponent implements OnInit {
         
       }) as any;
       if (eventos.error) this.tableData = [];
-      else this.tableData = eventos.resposta as Array<object>;
+      else { 
+            this.tableData = eventos.resposta as Array<object>;
+            if (!this.tableData[0].id ) {
+              this.tableData = [];
+            }
+          }
     }
     catch (e) {
       this.toastrService.error('Erro em getEventosFiltrados : ', e.error);

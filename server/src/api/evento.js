@@ -157,7 +157,7 @@ async function _criarEvento(client, id_campanha, id_motivo, id_evento_pai, id_ev
       } else{
         update = update + `1 ,` 
       }
-      update = update + ` ${id_pessoa_criou},
+      update = update + ` ${id_pessoa_criou || 1},
       now(),
       func_dt_expira(${id_motivo}, now() ),
       '${dt_para_exibir}',
@@ -242,6 +242,7 @@ async function criarEvento(req, res) {
     idUsuario: req.query.id_usuario
   };
 
+
   if (!req.query.eventoAnterior) {req.query.eventoAnterior = null}
 
   var eventoPai = null;
@@ -260,9 +261,15 @@ async function criarEvento(req, res) {
     protocolo = protocolo[0].id;
   }
 
-  var idTelefonePessoa = await buscaValorDoAtributo(credenciais, 'id', 'pessoas_telefones', `id_pessoa = ${req.query.id_pessoa_receptor} and ddd = ${req.query.ddd} and telefone = ${req.query.telefone}` );
+
+  if (!req.query.telefone){
+    var idTelefonePessoa = await buscaValorDoAtributo(credenciais, 'id', 'pessoas_telefones', `id_pessoa = ${req.query.id_pessoa_receptor} and principal` );
+  }else{
+    var idTelefonePessoa = await buscaValorDoAtributo(credenciais, 'id', 'pessoas_telefones', `id_pessoa = ${req.query.id_pessoa_receptor} and ddd = ${req.query.ddd} and telefone = ${req.query.telefone}` );
+  }
   idTelefonePessoa = idTelefonePessoa[0].id ? idTelefonePessoa[0].id : '';
 
+ 
   var reqAux = req.query;
   if (idTelefonePessoa == ''  && req.query.telefone != null ){
     // verifica se  possui telefone principal 
@@ -288,11 +295,13 @@ async function criarEvento(req, res) {
       })
   }
 
+  //console.log('req 1', req , 'idTelefonePessoa ' , idTelefonePessoa )
+
   req.query = reqAux;
 
   //console.log('req.query.encerrado ', req.query.encerrado)
 
-  return new Promise(function (resolve, reject) {
+  return new Promise( async function (resolve, reject) {
 
     checkTokenAccess(req).then(historico => {
       const dbconnection = require('../config/dbConnection');
@@ -302,8 +311,9 @@ async function criarEvento(req, res) {
       
 
       client.connect();
-      client.query('BEGIN').then((res1) => {
-        _criarEvento(client, req.query.id_campanha, req.query.id_motivo, eventoPai , eventoAnterior,
+      client.query('BEGIN').then( async (res1) => {
+
+       await _criarEvento(client, req.query.id_campanha, req.query.id_motivo, eventoPai , eventoAnterior,
           req.query.id_pessoa_resolveu, req.query.dt_para_exibir, req.query.tipoDestino, req.query.id_pessoa_organograma, req.query.id_pessoa_receptor,
           req.query.observacao_origem, req.query.id_canal, protocolo, idTelefonePessoa, req.query.encerrado ).then(eventoCriado => {
             client.query('COMMIT').then((resposta) => {
@@ -1034,7 +1044,7 @@ function getCountEventosPendentes(req, res) {
     };
 
     let sql = `select count(*) from view_eventos where
-                   id_campanha is null and
+                   (id_campanha is null or id_campanha = 19 ) and
                    dt_para_exibir <= now() and
                    id_status_evento in (1, 4, 5, 6) and
                    tipodestino = 'P' and id_usuario in ( ${req.query.idUsuarioLogado})`

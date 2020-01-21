@@ -22,7 +22,7 @@ async function  getPessoaPorCPFCNPJ(req, res) {
         }else{
           var req_ = {...req};
            getAssociado(req, res) 
-          .then( resGetAssociado => { 
+          .then( async resGetAssociado => { 
              if (!resGetAssociado.nome || resGetAssociado.nome === undefined ){
               // console.log('resGetAssociado ', resGetAssociado)
               resolve( '' )
@@ -30,7 +30,7 @@ async function  getPessoaPorCPFCNPJ(req, res) {
                 req = req_;
                 req.query.resGetAssociado = resGetAssociado;
                 req.query.nome = resGetAssociado.nome;
-                adicionarPessoaSGA(req, res)
+                await adicionarPessoaSGA(req, res)
                 .then( res => {
                   res = { idPessoa: res.idPessoa , 
                           idTelefone: res.idTelefone,  
@@ -608,9 +608,8 @@ function getTipoTelefone(req, res) {
 }
 
 function salvarTelefonePessoa(req, res) {
-  return new Promise(function (resolve, reject) {
-
-    checkTokenAccess(req).then(historico => {
+  return new Promise( async function (resolve, reject) {
+    checkTokenAccess(req).then( async historico => {
       const dbconnection = require('../config/dbConnection')
       const { Client } = require('pg')
 
@@ -620,82 +619,93 @@ function salvarTelefonePessoa(req, res) {
         token: req.query.token,
         idUsuario: req.query.id_usuario
       };
-
+    
       // divide o objeto em atuais e anteriores 
       const dadosAtuais = JSON.parse(req.query.dadosAtuais);
       const dadosAnteriores =  JSON.parse(req.query.dadosAnteriores);
+      
       let operacao = 'U';
-
+    
       req.query = {...dadosAtuais} 
+      var idTelefone = ''
+      if (!req.query.id) {
+        var idTelefone = await buscaValorDoAtributo(credenciais, 'id', 'pessoas_telefones', 
+        `id_pessoa=${req.query.id_pessoa} and telefone='${req.query.telefone}' and ddd = '${req.query.ddd}' ` );
+        idTelefone = Object.values( idTelefone[0])[0];
+      }
+    
 
-      client.connect()
+      if (idTelefone == null){ 
+        client.connect()
 
- 
+        let update;
+        client.query('BEGIN').then(() => {
+          const buscaTelefone = `SELECT * FROM pessoas_telefones WHERE pessoas_telefones.id_pessoa = ${req.query.id_pessoa}`
 
-      let update;
-      client.query('BEGIN').then(() => {
-        const buscaTelefone = `SELECT * FROM pessoas_telefones WHERE pessoas_telefones.id_pessoa = ${req.query.id_pessoa}`
+          client.query(buscaTelefone).then((telefonesPessoa) => {
+            let principal = req.query.principal;
+            
+            if (!telefonesPessoa.rowCount) principal = true
 
-        client.query(buscaTelefone).then((telefonesPessoa) => {
-          let principal = req.query.principal;
-           
-          if (!telefonesPessoa.rowCount) principal = true
-
-          if (req.query.id){
-            update = `UPDATE pessoas_telefones SET
-                      ddd='${req.query.ddd}',
-                      telefone='${req.query.telefone}',
-                      ramal=${req.query.ramal || null},
-                      principal=${principal},
-                      id_tipo_telefone=${req.query.id_tipo_telefone},
-                      contato='${req.query.contato}',
-                      ddi=55,
-                      dtalteracao=now()
-                      WHERE pessoas_telefones.id=${req.query.id}`;}
-          else{
-            operacao = 'C'
-            update = `INSERT INTO pessoas_telefones(
-            id_pessoa, ddd, telefone, ramal, principal, id_tipo_telefone, contato, ddi,dtalteracao)
-            VALUES('${req.query.id_pessoa}',
-                  '${req.query.ddd}',
-                  '${req.query.telefone}',
-                  ${req.query.ramal || null},
-                  ${principal},
-                  ${req.query.id_tipo_telefone},
-                  '${req.query.contato}',
-                  '55', now()) RETURNING id`;} 
-          client.query(update).then((res) => {
-            client.query('COMMIT').then((resposta) => {
-              client.end();
-              auditoria(credenciais,'telefones',operacao,req.query.id, req.query.id_pessoa, dadosAnteriores, dadosAtuais);
-              resolve({resposta: resposta, idTelefone: res.rows[0].id })
-            }).catch(err => {
-              client.end();
-              reject(err)
+            if (req.query.id){
+              update = `UPDATE pessoas_telefones SET
+                        ddd='${req.query.ddd}',
+                        telefone='${req.query.telefone}',
+                        ramal=${req.query.ramal || null},
+                        principal=${principal},
+                        id_tipo_telefone=${req.query.id_tipo_telefone},
+                        contato='${req.query.contato}',
+                        ddi=55,
+                        dtalteracao=now()
+                        WHERE pessoas_telefones.id=${req.query.id}`;}
+            else{
+              operacao = 'C'
+              update = `INSERT INTO pessoas_telefones(
+              id_pessoa, ddd, telefone, ramal, principal, id_tipo_telefone, contato, ddi,dtalteracao)
+              VALUES('${req.query.id_pessoa}',
+                    '${req.query.ddd}',
+                    '${req.query.telefone}',
+                    ${req.query.ramal || null},
+                    ${principal},
+                    ${req.query.id_tipo_telefone},
+                    '${req.query.contato}',
+                    '55', now()) RETURNING id`;} 
+            client.query(update).then((res) => {
+              client.query('COMMIT').then((resposta) => {
+                client.end();
+                auditoria(credenciais,'telefones',operacao,req.query.id, req.query.id_pessoa, dadosAnteriores, dadosAtuais);
+                resolve({resposta: resposta, idTelefone: res.rows[0].id })
+              }).catch(err => {
+                client.end();
+                reject(err)
+              })
+            }).catch(e => {
+              client.query('ROLLBACK').then((resposta) => {
+                client.end();
+                reject(e)
+              }).catch(err => {
+                client.end();
+                reject(err)
+              })
             })
-          }).catch(e => {
-            client.query('ROLLBACK').then((resposta) => {
-              client.end();
-              reject(e)
-            }).catch(err => {
-              client.end();
-              reject(err)
-            })
+
+          }).catch(err => {
+            client.end();
+            reject(err)
           })
-
         }).catch(err => {
           client.end();
           reject(err)
-        })
-      }).catch(err => {
-        client.end();
-        reject(err)
-      })
-
-    }).catch(e => {
-      reject(e);
-    });
+        });
+      }else {
+        console.log('idTelefone ', idTelefone )
+        resolve({idTelefone: idTelefone })
+      };
+      }).catch(e => {
+        reject(e);
+      });
   })
+  
 }
 
 async function editaTelefonePrincipal(req, res) {
@@ -1379,7 +1389,7 @@ function adicionarPessoaAtendimento(req, res) {
           id_tipo_telefone : 1,
           contato : '',
           id_pessoa : idPessoa,
-          ddd: Number.isInteger( req.query.ddd) ? req.query.ddd : 0,
+          ddd: Number.isInteger( req.query.ddd) ? req.query.ddd : 62,
           telefone: req.query.telefone,
         }
         req.query.dadosAtuais = JSON.stringify(req.query.dadosAtuais);
@@ -1426,8 +1436,6 @@ async function adicionarPessoaSGA(req, res) {
       req.query.telefone = req.query.resGetAssociado.telefone_fixo.substring(4);
       req.query.telefone = req.query.telefone.replace('-', '');
     } 
-
-    
 
     let req_ =  {...req}; 
      
@@ -1478,7 +1486,7 @@ async function adicionarPessoaSGA(req, res) {
 
     let sql = `INSERT INTO pessoas ${ret} RETURNING id`;
     executaSQL(credenciais, sql)
-      .then(res => {
+      .then(async res => {
         var idPessoa = res[0].id;
 
         req.query.dadosAtuais = {
@@ -1486,21 +1494,23 @@ async function adicionarPessoaSGA(req, res) {
           id_tipo_telefone : 1, 
           contato : '',
           id_pessoa : idPessoa,
-          ddd: Number.isInteger( req.query.ddd) ? req.query.ddd : 0,
+          ddd: Number.isInteger( req.query.ddd) ? req.query.ddd : 62,
           telefone: req.query.telefone,
         }
         req.query.dadosAtuais = JSON.stringify(req.query.dadosAtuais);
         req.query.dadosAnteriores  = JSON.stringify(req.query.dadosAtuais);
-        salvarTelefonePessoa(req, res)
-        .then(res => { 
-             inserirTelefoneFixo(req_, idPessoa);
-             inserirTelefoneCelular(req_, idPessoa); 
-             inserirTelefoneCelularAux(req_, idPessoa);
-             inserirTelefoneComercial(req_, idPessoa);
+        await salvarTelefonePessoa(req, res)
+        .then( async res => { 
+            if (req.query.resGetAssociado) {
+              if (req.query.resGetAssociado.telefone_fixo.length > 5) inserirTelefoneFixo(req_, idPessoa);
+              if (req.query.resGetAssociado.telefone_celular.length > 5) inserirTelefoneCelular(req_, idPessoa); 
+              if (req.query.resGetAssociado.telefone_celular_aux.length > 5) inserirTelefoneCelularAux(req_, idPessoa);
+              if (req.query.resGetAssociado.telefone_comercial.length > 5) inserirTelefoneComercial(req_, idPessoa);
+            }
             resolve({idPessoa: idPessoa, idTelefone: res.idTelefone})
              
-        })
-        .catch(err => {
+        })  
+        .catch(err => {  
           reject(err)
         })
       })
@@ -1523,13 +1533,13 @@ async function adicionarPessoaSGA(req, res) {
           id_tipo_telefone : 8,
           contato : '',
           id_pessoa : idPessoa,
-          ddd: Number.isInteger( req.query.ddd) ? req.query.ddd : 0,
+          ddd: Number.isInteger( req.query.ddd) ? req.query.ddd : 62,
           telefone: req.query.telefone,
         }
         req.query.dadosAtuais = JSON.stringify(req.query.dadosAtuais);
         req.query.dadosAnteriores  = JSON.stringify(req.query.dadosAtuais);
 
-        salvarTelefonePessoa(req, res)
+        await salvarTelefonePessoa(req, res)
         .then(res => { 
           res_ = res ;
         })
@@ -1541,11 +1551,11 @@ async function adicionarPessoaSGA(req, res) {
     }
 
     async function inserirTelefoneCelular(req, idPessoa ){
-
+      console.log('req.query.resGetAssociado ', req.query.resGetAssociado )
       req.query.ddd = req.query.resGetAssociado.telefone_celular.substring(1,3) ;
       let telefone = req.query.resGetAssociado.telefone_celular.substring(4);
       telefone = telefone.replace('-', '');
-
+ 
       if (telefone != `${req.query.telefone}`  &&  telefone.length > 5 ){
 
         req.query.telefone = telefone;
@@ -1554,12 +1564,12 @@ async function adicionarPessoaSGA(req, res) {
           id_tipo_telefone : 9,
           contato : '',
           id_pessoa : idPessoa,
-          ddd: Number.isInteger( req.query.ddd) ? req.query.ddd : 0,
+          ddd: Number.isInteger( req.query.ddd) ? req.query.ddd : 62,
           telefone: req.query.telefone,
         }
         req.query.dadosAtuais = JSON.stringify(req.query.dadosAtuais);
         req.query.dadosAnteriores  = JSON.stringify(req.query.dadosAtuais);
-        salvarTelefonePessoa(req, res)
+        await salvarTelefonePessoa(req, res)
         .then(res => {
           res_ = res ;
         })
@@ -1584,12 +1594,12 @@ async function adicionarPessoaSGA(req, res) {
           id_tipo_telefone : 10,
           contato : '',
           id_pessoa : idPessoa,
-          ddd: Number.isInteger( req.query.ddd) ? req.query.ddd : 0,
+          ddd: Number.isInteger( req.query.ddd) ? req.query.ddd : 62,
           telefone: req.query.telefone,
         }
         req.query.dadosAtuais = JSON.stringify(req.query.dadosAtuais);
         req.query.dadosAnteriores  = JSON.stringify(req.query.dadosAtuais);
-        salvarTelefonePessoa(req, res)
+        await salvarTelefonePessoa(req, res)
         .then(res => {
           res_ = res ;
         })
@@ -1614,12 +1624,12 @@ async function adicionarPessoaSGA(req, res) {
           id_tipo_telefone : 11,
           contato : '',
           id_pessoa : idPessoa,
-          ddd: Number.isInteger( req.query.ddd) ? req.query.ddd : 0,
+          ddd: Number.isInteger( req.query.ddd) ? req.query.ddd : 62,
           telefone: req.query.telefone,
         }
         req.query.dadosAtuais = JSON.stringify(req.query.dadosAtuais);
         req.query.dadosAnteriores  = JSON.stringify(req.query.dadosAtuais);
-        salvarTelefonePessoa(req, res)
+        await salvarTelefonePessoa(req, res)
         .then(res => {
           res_ = res ;
         })

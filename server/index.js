@@ -249,8 +249,7 @@ var timeMotor = async function ()  {
   // motor.criaEventosDeRegras();
 
    motor.criaEventosDeCobrancaSGA(req); 
-
-
+   motor.encerraEventosDeCobrancaSGA(req); 
 
   setTimeout(timeMotor, 1800000);
 
