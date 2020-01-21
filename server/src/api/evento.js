@@ -140,7 +140,7 @@ async function _criarEvento(client, id_campanha, id_motivo, id_evento_pai, id_ev
       id_canal,
       id_telefone `;
 
-    if (encerrado == true) {
+    if (encerrado == 'true') {
         update = update + `, dt_resolvido, id_pessoa_resolveu, observacao_retorno ` 
       };
 
@@ -152,7 +152,7 @@ async function _criarEvento(client, id_campanha, id_motivo, id_evento_pai, id_ev
       ${id_motivo},
       ${id_evento_pai || 'NULL'},
       ${id_evento_anterior || 'NULL'},`
-      if (encerrado == true) {
+      if (encerrado == 'true') {
         update = update +  `3 ,`
       } else{
         update = update + `1 ,` 
@@ -169,7 +169,7 @@ async function _criarEvento(client, id_campanha, id_motivo, id_evento_pai, id_ev
       ${id_canal},
       ${idTelefonePessoa ? idTelefonePessoa:  'NULL'}`;
 
-      if (encerrado == true) {
+      if (encerrado == 'true') {
         update = update + `, now() , ${id_pessoa_criou}, '${observacao_origem}' ` 
       }
       
@@ -1274,7 +1274,7 @@ function getEventosTelefone(req, res) {
     };
 
     let sql = `select * from view_eventos  where telefone = '${req.query.dddTelefone}' `
-    console.log(sql)
+    //console.log(sql)
     executaSQL(credenciais, sql)
       .then(res => {
         if (res.length > 0) {

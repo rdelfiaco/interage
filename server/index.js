@@ -226,37 +226,6 @@ console.log(`Servidor iniciado na em http://localhost:${nodeStart.port}`)
 
 
 
-var timeMotor = async function ()  {
-
-  var req = {
-      query: {
-      login: 'interage',
-      senha: SHA1.SHA1('crm123!@#'),
-      id_usuario: 1,
-      token: ''
-      }
-  };
-  var res = '';
-  
-  await  usuario.login(req, res)
-  .then ( res => {
-    req.query.token = res.token;
-  });
-
-
-  console.log('Horário que o motor funcionou => ', Date());
-
-  // motor.criaEventosDeRegras();
-
-   motor.criaEventosDeCobrancaSGA(req); 
-   motor.encerraEventosDeCobrancaSGA(req); 
-
-  setTimeout(timeMotor, 1800000);
-
-  
-}
-
-timeMotor();
 
 
 function declaraServico(nomeServico, funcao) {
@@ -297,5 +266,35 @@ function headerResponse(res) {
   res.set("Access-Control-Allow-Headers", "Access-Control-Allow-Origin, Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers, cache-control");
 }
 
+var timeMotor = async function ()  {
 
+  var req = {
+      query: {
+      login: 'interage',
+      senha: SHA1.SHA1('crm123!@#'),
+      id_usuario: 1,
+      token: ''
+      }
+  };
+  var res = '';
+  
+  await  usuario.login(req, res)
+  .then ( res => {
+    req.query.token = res.token;
+  });
+
+
+  console.log('Horário que o motor funcionou => ', Date());
+
+  // motor.criaEventosDeRegras();
+
+   motor.criaEventosDeCobrancaSGA(req); 
+   motor.encerraEventosDeCobrancaSGA(req); 
+
+  setTimeout(timeMotor, 1800000);
+
+  
+}
+
+timeMotor();
 

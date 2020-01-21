@@ -1,11 +1,11 @@
 <form [formGroup]="questionarioForm" class="formQuestionario">
-  <div class="row">
+  <div  class="row">
     <div class="col">
       <mdb-select (selected)="selecionaMotivoResposta($event)" [options]="motivosRespostasFormatado" [multiple]="false"
         placeholder="Resultado do contato"></mdb-select>
     </div>
   </div>
-  <div class="row">
+  <div  class="row">
     <div class="md-form col">
       <textarea type="text" id="form7" formControlName="observacao" class="md-textarea form-control" mdbInputDirective></textarea>
       <label for="form7">Observação</label>
@@ -40,7 +40,7 @@
   <div class="row justify-content-end">
     <div class="md-form">
       <button type="button" mdbBtn color="primary" (click)="concluiEvento();" class="relative waves-light"
-        mdbWavesEffect [disabled]="!questionarioForm.valid">Gravar</button>
+        mdbWavesEffect [disabled]="!questionarioForm.valid" >Gravar</button>
     </div>
   </div>
 

@@ -169,8 +169,8 @@ async function salvarCanaisDoMotivo(req, res){
     const client = new Client(dbconnection);
     client.connect();
 
-    console.log('sqlDelet ', sqlDelet);
-    console.log('sqlInsert ', sqlInsert);
+    // console.log('sqlDelet ', sqlDelet);
+    // console.log('sqlInsert ', sqlInsert);
 
     client.query('BEGIN').then((res1) => {
         executaSQLComTransacao(credenciais, client, sqlDelet ).then(resDel => {
@@ -194,7 +194,7 @@ function getRespostasMotivoSeleconado(req, res){
     let sql = `select *
               from motivos_respostas
               where id_motivo = ${req.query.idMotivoSelecionado} ` 
-    console.log(1,sql)  
+    //console.log(1,sql)  
     executaSQL(credenciais, sql)
       .then(respostasMotivo => {
         getQuestionarios(req, res)

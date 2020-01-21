@@ -5,6 +5,7 @@ const { getPessoaPorCPFCNPJ } = require('./pessoa');
 const { criarEvento } =  require( './evento')
 const { awaitSQL, geraEventoDeErro } = require('./shared')
 
+
 function criaEventosDeRegras(){
     console.log( 'criaEventosDeRegras', 123)
 }
@@ -47,13 +48,20 @@ async function encerraEventosDeCobrancaSGA(req){
 
         if (liquidados && dataBaixa != ''){
             //encerra evento de cobrança 
-            console.log('dataBaixa', dataBaixa, ' - ', element.id_evento )
+            var sql = `update eventos set id_status_evento= 3,  dt_visualizou= now(), 
+            id_pessoa_visualizou=1, dt_resolvido=now(), id_pessoa_resolveu=1, 
+            observacao_retorno='Evento concluido automaticamento por constatar que o boleto foi pago em ${ moment(dataBaixa).format('DD/MM/YYYY')}'
+            where id = ${element.id_evento}`
+            awaitSQL(credenciais, sql);
+
+            var sql = `delete from eventos_boletos where id_evento = ${element.id_evento}`
+            awaitSQL(credenciais, sql);
 
         }
          
         //}
 
-    };
+    }; 
 
     return ; 
 }
@@ -203,4 +211,5 @@ async function criaEventosDeCobrancaSGA(req){
 
 module.exports = { criaEventosDeRegras ,
                     criaEventosDeCobrancaSGA,
-                    encerraEventosDeCobrancaSGA }
+                    encerraEventosDeCobrancaSGA,
+                 }
