@@ -33,7 +33,7 @@ const classificacaoDeClientes = require('./src/api/classsificacaoClientes');
 const objecao = require('./src/api/objecao');
 const motor = require('./src/api/motor');
 const apiSGA = require('./src/api/apiSGA');
-
+const parametroInterage = require('./src/api/parametrosInterage');
 
 
 app.use(bodyParser.json());
@@ -160,10 +160,6 @@ declaraServico('getPessoasDoTelefone', pessoa.getPessoasDoTelefone);
 declaraServico('getPessoasEventosDoTelefone', pessoa.getPessoasEventosDoTelefone);
 declaraServico('adicionarPessoaAtendimento', pessoa.adicionarPessoaAtendimento);
 
-
-
-
-
 // questionario
 declaraServico('getQuestionarios', questionarios.getQuestionarios);
 declaraServico('addQuestionario', questionarios.addQuestionario);
@@ -206,26 +202,25 @@ declaraServico('crudTipoRelacionamentos', tipoDeRelacionamentos.crudTipoRelacion
 declaraServico('getRelacionamentosVolta', tipoDeRelacionamentos.getRelacionamentosVolta);
 declaraServico('salvarRelacionamentoVolta', tipoDeRelacionamentos.salvarRelacionamentoVolta);
 
-
 // classificação de clientes
 declaraServico('getClassificacaoClientes', classificacaoDeClientes.getClassificacaoClientes);
 declaraServico('crudClassificacaoClientes', classificacaoDeClientes.crudClassificacaoClientes);
+
 // Objeções
 declaraServico('getObjecao', objecao.getObjecao);
 declaraServico('crudObjecao', objecao.crudObjecao);
+
 //canais
 declaraServico('getCanais', canais.getCanais);
 declaraServico('crudCanais', canais.crudCanais);
 
+//parâmetros do Interage
+declaraServico('getParametrosInterage', parametroInterage.getParametrosInterage);
 
 
 app.listen(nodeStart.port, "0.0.0.0");
 
-
 console.log(`Servidor iniciado na em http://localhost:${nodeStart.port}`)
-
-
-
 
 
 function declaraServico(nomeServico, funcao) {
@@ -293,8 +288,7 @@ var timeMotor = async function ()  {
 
   setTimeout(timeMotor, 1800000);
 
-  
 }
 
-timeMotor();
+//timeMotor();
 

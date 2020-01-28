@@ -1,0 +1,59 @@
+<div class="card card-cascade narrower">
+
+  <div
+  class="view view-cascade gradient-card-header blue-gradient narrower py-2 mx-4 mb-3 d-flex justify-content-between align-items-center">
+  <div>
+    <button type="button" mdbBtn color="white" outline="true" rounded="true" size="sm" class="px-2" mdbWavesEffect>
+      <mdb-icon fas fas icon="info" class="mt-0"></mdb-icon>
+    </button>
+  </div>
+
+  <h4 class="white-text mx-3 mt-2 font-weight-bold text-uppercase align-items-center">PARÂMETROS DO SISTEMA</h4>
+  </div>
+  <div class="px-2">
+
+    <!--Table-->
+    <table class="table table-hover table-responsive-md mb-0">
+
+      <!--Table head-->
+      <thead>
+        <tr>
+          <th class="th-sm">ID
+          </th>
+          <th class="th-sm">Nome do Parâmetro
+            <mdb-icon icon="sort" (click)="sortBy('nome_parametro')"></mdb-icon>
+          </th>
+          <th class="th-sm">Descrição
+            <mdb-icon icon="sort" (click)="sortBy('descricao')"></mdb-icon>
+          </th>
+          <th class="th-sm">Valor
+          </th>
+    
+        </tr>
+      </thead>
+      <!--Table head-->
+
+      <!--Table body-->
+      <tbody>
+        <tr *ngFor="let parametro of tableData; let i = index">
+          <td *ngIf="i+1 >= firstVisibleIndex && i+1 <= lastVisibleIndex">
+           {{parametro.id}} 
+          </td>
+          <td *ngIf="i+1 >= firstVisibleIndex && i+1 <= lastVisibleIndex" >
+            {{parametro.nome_parametro}}</td>
+          <td *ngIf="i+1 >= firstVisibleIndex && i+1 <= lastVisibleIndex" >
+            {{parametro.descricao}}</td>
+          <td *ngIf="i+1 >= firstVisibleIndex && i+1 <= lastVisibleIndex" >
+              <input mdbInputDirective value={{parametro.valor}} max="4" min="3" type="text" 
+              (change)="setParametroValor($event.target.value, parametro.id)"   class="form-control"   >
+          </td>
+        </tr>
+      </tbody>
+      <!--Table body-->
+    </table>
+
+  </div>
+
+
+
+</div>

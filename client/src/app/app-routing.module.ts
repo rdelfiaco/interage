@@ -1,3 +1,4 @@
+import { ParametrosInterageComponent } from './parametros-interage/parametros-interage.component';
 import { AtendimentoInformacaoComponent } from './atendimento-informacao/atendimento-informacao.component';
 import { AtendimentoComponent } from './atendimento/atendimento.component';
 import { TipoDeRelacionamentoComponent } from './tipo-de-relacionamento/tipo-de-relacionamento.component';
@@ -347,6 +348,11 @@ const routes: Routes = [
       {
         path: 'atendimentoInformacao',
         component: AtendimentoInformacaoComponent ,
+        canActivate: [AuthGuard]
+      },
+      {
+        path: 'parametrosInterage',
+        component: ParametrosInterageComponent ,
         canActivate: [AuthGuard]
       },
     ]

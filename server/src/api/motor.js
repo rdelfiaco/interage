@@ -18,14 +18,12 @@ async function encerraEventosDeCobrancaSGA(req){
         idUsuario: req.query.id_usuario
       };
 
-    
+
     var eventosCobranca = await buscaValorDoAtributo(credenciais, '*','eventos_boletos', ' 1 = 1' );
     var res = ''
     for ( const element of eventosCobranca ) {
         var liquidados = true;
         var dataBaixa = '';
-        //86923    86831 86928 86929 
-        //if (element.id_evento == 86835){
 
         for (const boletos of element.codigo_boleto) {
             req.codigo_boleto = boletos
@@ -56,11 +54,7 @@ async function encerraEventosDeCobrancaSGA(req){
 
             var sql = `delete from eventos_boletos where id_evento = ${element.id_evento}`
             awaitSQL(credenciais, sql);
-
         }
-         
-        //}
-
     }; 
 
     return ; 
@@ -73,6 +67,8 @@ async function criaEventosDeCobrancaSGA(req){
         token: req.query.token,
         idUsuario: req.query.id_usuario
       };
+
+    
 
     var periodicidade = await buscaValorDoAtributo(credenciais, 'valor','interage_parametros',`nome_parametro = 'periodicidadeGerarEventosCobra' `)
     periodicidade = Object.values( periodicidade[0])[0];
@@ -194,12 +190,16 @@ async function criaEventosDeCobrancaSGA(req){
         console.log('total de Boletos gerados: ', totalBoletos);
         console.log('Total de boletos não gerados: ', boletosNaoGerados.length);
         console.log('Total de eventos já existentes: ', eventosCobrancaJaExistente );
+
+        var result = await alteraValorDoAtributo(credenciais, 
+            `valor = '${ultimaGeracaoEventoCobranca}'`,
+            'interage_parametros',
+            `nome_parametro = 'ultimaGeracaoEventoCobranca' `);
+
+            
     }; 
 
-    var result = await alteraValorDoAtributo(credenciais, 
-        `valor = '${ultimaGeracaoEventoCobranca}'`,
-        'interage_parametros',
-        `nome_parametro = 'ultimaGeracaoEventoCobranca' `);
+
 
     return    
 }

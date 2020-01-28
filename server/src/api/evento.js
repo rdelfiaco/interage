@@ -905,6 +905,7 @@ function getMotivos(req, res) {
     })
   })
 }
+
 function getCanais(req, res) {
   return new Promise(function (resolve, reject) {
 
