@@ -74,48 +74,22 @@ export class ParametrosInterageComponent implements OnInit {
       else { this.toastrService.error('Erro ao ler Parâmetros do Interage', resp.error )}
   
     }
-  
-   
-  
-   
-  
-  
-  
-  
-  
-    async salvar() {
-      try {
-        this.formularioForm.controls['id'].enable();
-        this.formularioForm.controls['nome'].enable();
-        this.formularioForm.controls['status'].enable();
-        let resp = await this.connectHTTP.callService({
-          service: 'crudTipoClientes',
-          paramsService: {
-            dadosAtuais: JSON.stringify(this.formularioForm.value),
-            dadosAnteriores: JSON.stringify(this.formularioFormAud),
-            crud: this.crud
-          }
-        });
-        if (resp.error) {
-            this.toastrService.error('Operação não realizada', resp.error );
-        }else
-        {
-          this.toastrService.success('Operação realizada com sucesso');
-        }
-      }
-      catch (e) {
-        this.toastrService.error('Operação não realizada');
-      }
-      this.ngOnInit();
+
+    async setParametroValor(id, valor ){
+
+      let resp  = await this.bancoDados.lerDados('setParametrosInterages', {
+        id_parametro: id,
+        valor: valor
+      }) as any;
+
+      if (resp.error) {
+        this.toastrService.error('Operação não realizada', resp.error );
+    }else
+    {
+      this.toastrService.success('Operação realizada com sucesso');
     }
-
-    setParametroValor(valor, id){
-
-      console.log('setParametroValor', valor, id)
-
-
-
-    }
+    this.ngOnInit();
+    };
   
   }
   

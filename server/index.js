@@ -215,6 +215,7 @@ declaraServico('getCanais', canais.getCanais);
 declaraServico('crudCanais', canais.crudCanais);
 
 //parâmetros do Interage
+declaraServico('setParametrosInterages', parametroInterage.setParametrosInterages);
 declaraServico('getParametrosInterage', parametroInterage.getParametrosInterage);
 
 

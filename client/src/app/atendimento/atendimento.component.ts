@@ -237,6 +237,7 @@ export class AtendimentoComponent implements OnInit {
   async abreEvento(evento: any) {
     if (evento.id) {
     this.checkAbreEvento = true;
+    this.idEvento = evento.id;
     if (evento.id_status_evento == 1 || evento.id_status_evento == 4) {
       let resp = await this.bancoDados.lerDados('visualizarEvento',
               {            id_evento: evento.id,
@@ -247,7 +248,6 @@ export class AtendimentoComponent implements OnInit {
         return;
        };
       };
-        this.idEvento = evento.id;
         this.modalAbreEvento.show();
     }
 

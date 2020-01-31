@@ -45,7 +45,7 @@
             {{parametro.descricao}}</td>
           <td *ngIf="i+1 >= firstVisibleIndex && i+1 <= lastVisibleIndex" >
               <input mdbInputDirective value={{parametro.valor}} max="4" min="3" type="text" 
-              (change)="setParametroValor($event.target.value, parametro.id)"   class="form-control"   >
+              (change)="setParametroValor(parametro.id, $event.target.value )"   class="form-control"   >
           </td>
         </tr>
       </tbody>

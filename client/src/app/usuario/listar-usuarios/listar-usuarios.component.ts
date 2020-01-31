@@ -1,6 +1,6 @@
 import { TrocarSenhaComponent } from './../trocar-senha/trocar-senha.component';
 import { Usuario } from './../../login/usuario';
-import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, HostListener } from '@angular/core';
 import { ConnectHTTP } from '../../shared/services/connectHTTP';
 import { LocalStorage } from '../../shared/services/localStorage';
 import { ToastService } from '../../../lib/ng-uikit-pro-standard';
@@ -16,8 +16,11 @@ import { Router } from '@angular/router';
   templateUrl: './listar-usuarios.component.html',
   styleUrls: ['./listar-usuarios.component.scss'],
 })
+
+
 export class ListarUsuariosComponent implements OnInit {
 
+  
 
   Usuario: {
     id: number;
@@ -29,12 +32,15 @@ export class ListarUsuariosComponent implements OnInit {
   departamentoSelect: Array<any>;
   departamentoIdSelect: number;
   usuarios: Array<any>;
+  usuariosTabela: Array<any>;
   usuarioSelecionado: boolean = false;
   usuarioNomeSelecionado: string;
   usuarioIdSelecionado: number;
   sorted: boolean = false;
   departamentoNome: any;
+  searchText: string;
 
+  @HostListener('input') oninput() { this.pesquisar();}
 
     niveisHierarquicoSelect: Array<object> = [
     {
@@ -89,6 +95,7 @@ export class ListarUsuariosComponent implements OnInit {
       }
     }) as any;
     this.usuarios = getUsuarios.resposta;
+    this.usuariosTabela = getUsuarios.resposta;
     this.usuarioSelecionado = false;
   }
 
@@ -201,6 +208,27 @@ export class ListarUsuariosComponent implements OnInit {
     });
     //}
     this.sorted = !this.sorted;
+  }
+
+
+  filterIt(arr, valueToFind) {
+    return arr.filter(function(obj) {
+      return Object.keys(obj).some((key) => {
+        if(['id','cpf_cnpj', 'nome', 'login'].includes(key) &&  obj[key] ){
+            return obj[key].toString().includes(valueToFind);
+        } else { 
+            return false; 
+        }
+      });
+    });
+  }
+
+  pesquisar() {
+    if (!this.searchText) {
+      this.usuariosTabela = this.usuarios;
+    } else {
+      this.usuariosTabela =  this.filterIt(this.usuarios, this.searchText);
+    }
   }
 
   async getPessoaPorCPFCNPJ(){
