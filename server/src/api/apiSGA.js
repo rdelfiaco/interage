@@ -1,32 +1,52 @@
 const fetch = require('node-fetch');
+const {  executaSQLSemToken } = require( './executaSQL');
 
+    async function authorization(){
+        return new Promise( async function (resolve, reject) {
+            await executaSQLSemToken(`select valor from interage_parametros where nome_parametro = 'tokenSGA' `)
+            .then( res => {
+                authorization = `Bearer ${res[0].valor}`;
+                resolve( authorization);
+             }) 
+            .catch ( resolve('') )
+        })
+
+    }
+ 
     function getAssociado(req, res) {
-        return new Promise(function (resolve, reject) {
+        return new Promise( async function (resolve, reject) {
 
+            var authorization = await executaSQLSemToken(`select valor from interage_parametros where nome_parametro = 'tokenSGA' `);
+            authorization = `Bearer ${authorization[0].valor}`;
             var url = 'https://api.hinova.com.br/api/sga/v2/associado/buscar/' + req.query.cpf_cnpj;
             var headers = {
             "Content-Type": "application/json",
-            "Authorization": "Bearer b24fe65e91c0b6869510a566c7b125d6945645121fab4e43f3256a921b1e7566d41cb4d3903dce2e4060634d48ea96441c35acb6849fe19018eb364d298ce5cebfdb4d2b146ff404138079785544e080a11a88780f0430c501b7ce21ae85ecd8e200d76fd4714d742ff51a82b9b7ee62"
+            "Authorization": authorization
             };
             
+            console.log('headers ', headers)
+
             var parametros = { method: 'GET',
             headers: headers, 
             cache: 'default' 
             };
             fetch(url, parametros)
-            .then(res => 
-                resolve (res.json()))
+            .then(res => {
+                console.log('getAssociado ', res )
+                resolve (res.json())})
             .catch(error => reject( error) );
         })
 
     }
     
-    function buscaPlaca(dadosPlaca) {
+    async function buscaPlaca(dadosPlaca) {
     
+    var authorization = await executaSQLSemToken(`select valor from interage_parametros where nome_parametro = 'tokenSGA' `);
+    authorization = `Bearer ${authorization[0].valor}`;
     var url = 'https://api.hinova.com.br/api/sga/v2/veiculo/buscar/' + dadosPlaca;
     var headers = {
     "Content-Type": "application/json",
-    "Authorization": "Bearer b24fe65e91c0b6869510a566c7b125d6945645121fab4e43f3256a921b1e7566d41cb4d3903dce2e4060634d48ea96441c35acb6849fe19018eb364d298ce5cebfdb4d2b146ff404138079785544e080a11a88780f0430c501b7ce21ae85ecd8e200d76fd4714d742ff51a82b9b7ee62"
+    "Authorization": authorization
     };
     
     var parametros = { method: 'GET',
@@ -41,7 +61,10 @@ const fetch = require('node-fetch');
     }
     
     function getBoletosAtrasados(req, res) {
-    return new Promise(function (resolve, reject) {
+    return new Promise(async function (resolve, reject) {
+
+        var authorization = await executaSQLSemToken(`select valor from interage_parametros where nome_parametro = 'tokenSGA' `);
+        authorization = `Bearer ${authorization[0].valor}`;
 
         var dataInical = req.dataInical;
         var dataFinal = req.dataFinal;
@@ -49,7 +72,7 @@ const fetch = require('node-fetch');
         var url = 'https://api.hinova.com.br/api/sga/v2/listar/boleto';
         var headers = {
         "Content-Type": "application/json",
-        "Authorization": "Bearer b24fe65e91c0b6869510a566c7b125d6945645121fab4e43f3256a921b1e7566d41cb4d3903dce2e4060634d48ea96441c35acb6849fe19018eb364d298ce5cebfdb4d2b146ff404138079785544e080a11a88780f0430c501b7ce21ae85ecd8e200d76fd4714d742ff51a82b9b7ee62"
+        "Authorization": authorization
         };
 
         // var data = {
@@ -78,14 +101,17 @@ const fetch = require('node-fetch');
 
     function getBoletosBixados(req, res) {
 
-        return new Promise(function (resolve, reject) {
+        return new Promise( async function (resolve, reject) {
     
+            var authorization = await executaSQLSemToken(`select valor from interage_parametros where nome_parametro = 'tokenSGA' `);
+            authorization = `Bearer ${authorization[0].valor}`;
+
             var codigo_boleto = req.codigo_boleto;
     
             var url = 'https://api.hinova.com.br/api/sga/v2/listar/boleto';
             var headers = {
             "Content-Type": "application/json",
-            "Authorization": "Bearer b24fe65e91c0b6869510a566c7b125d6945645121fab4e43f3256a921b1e7566d41cb4d3903dce2e4060634d48ea96441c35acb6849fe19018eb364d298ce5cebfdb4d2b146ff404138079785544e080a11a88780f0430c501b7ce21ae85ecd8e200d76fd4714d742ff51a82b9b7ee62"
+            "Authorization": authorization
             };
 
             var data = {
@@ -105,11 +131,9 @@ const fetch = require('node-fetch');
             .catch(error => reject( error) );
         })
         };
-    
-
 
     async function getIdPessoaAssociado(boletoAtrasado ){
-        return new Promise(function (resolve, reject) {
+        return new Promise( async function (resolve, reject) {
             var req = { query: {cpf_cnpj: boletoAtrasado.codigo_associado}};
             var res = '';
 
@@ -126,7 +150,6 @@ const fetch = require('node-fetch');
             .catch(error => reject( error) );
         });
     } 
-
  
     module.exports = { 
         getAssociado,
