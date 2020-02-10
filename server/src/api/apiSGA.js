@@ -1,17 +1,6 @@
 const fetch = require('node-fetch');
 const {  executaSQLSemToken } = require( './executaSQL');
 
-    async function authorization(){
-        return new Promise( async function (resolve, reject) {
-            await executaSQLSemToken(`select valor from interage_parametros where nome_parametro = 'tokenSGA' `)
-            .then( res => {
-                authorization = `Bearer ${res[0].valor}`;
-                resolve( authorization);
-             }) 
-            .catch ( resolve('') )
-        })
-
-    }
  
     function getAssociado(req, res) {
         return new Promise( async function (resolve, reject) {
@@ -151,11 +140,112 @@ const {  executaSQLSemToken } = require( './executaSQL');
         });
     } 
  
+
+    function getVoluntariosAtivos(req, res) {
+        return new Promise( async function (resolve, reject) {
+
+            var authorization = await executaSQLSemToken(`select valor from interage_parametros where nome_parametro = 'tokenSGA' `);
+            authorization = `Bearer ${authorization[0].valor}`;
+            var url = 'https://api.hinova.com.br/api/sga/v2/listar/voluntario/ativo';
+            var headers = {
+            "Content-Type": "application/json",
+            "Authorization": authorization
+            };
+            
+            var parametros = { method: 'GET',
+            headers: headers, 
+            cache: 'default' 
+            };
+            fetch(url, parametros)
+            .then(res => {
+                resolve (res.json())})
+            .catch(error => reject( error) );
+        })
+
+    }
+
+    function getSituacaoAdesaoVoluntario(req, res) {
+        return new Promise( async function (resolve, reject) {
+
+            var authorization = await executaSQLSemToken(`select valor from interage_parametros where nome_parametro = 'tokenSGA' `);
+            authorization = `Bearer ${authorization[0].valor}`;
+
+            var url = `https://api.hinova.com.br/api/sga/v2/listar/situacao-adesao-voluntario/${req.query.codigo_voluntario}`;
+            var headers = {
+            "Content-Type": "application/json",
+            "Authorization": authorization
+            };
+            
+            var parametros = { method: 'GET',
+            headers: headers, 
+            cache: 'default' 
+            };
+            fetch(url, parametros)
+            .then(res => {
+                resolve (res.json())})
+            .catch(error => reject( error) );
+        })
+
+    }
+
+    function getSituacaoFinaceiroVeiculo(req, res) {
+        return new Promise( async function (resolve, reject) {
+
+            var authorization = await executaSQLSemToken(`select valor from interage_parametros where nome_parametro = 'tokenSGA' `);
+            authorization = `Bearer ${authorization[0].valor}`;
+
+            var url = `https://api.hinova.com.br/api/sga/v2/buscar/situacao-financeira-veiculo/${req.query.codigo_veiculo}`;
+            var headers = {
+            "Content-Type": "application/json",
+            "Authorization": authorization
+            };
+            
+            var parametros = { method: 'GET',
+            headers: headers, 
+            cache: 'default' 
+            };
+            fetch(url, parametros)
+            .then(res => {
+                resolve (res.json())})
+            .catch(error => reject( error) );
+        })
+
+    }
+
+
+    function getContratos(req, res) {
+        return new Promise( async function (resolve, reject) {
+
+            var authorization = await executaSQLSemToken(`select valor from interage_parametros where nome_parametro = 'tokenSGA' `);
+            authorization = `Bearer ${authorization[0].valor}`;
+
+            var url = 'https://api.hinova.com.br/api/sga/v2/sincronismo-produto-fornecedor/listar/';
+            var headers = {
+            "Content-Type": "application/json",
+            "Authorization": authorization
+            };
+            
+            var parametros = { method: 'GET',
+            headers: headers, 
+            cache: 'default' 
+            };
+            fetch(url, parametros)
+            .then(res => {
+                resolve (res.json())})
+            .catch(error => reject( error) );
+        })
+
+    }   
+
+
     module.exports = { 
         getAssociado,
         getBoletosAtrasados,
         getIdPessoaAssociado,
         getBoletosBixados,
-        
+        getVoluntariosAtivos,
+        getSituacaoAdesaoVoluntario,
+        getSituacaoFinaceiroVeiculo,
+        getContratos
 
     }

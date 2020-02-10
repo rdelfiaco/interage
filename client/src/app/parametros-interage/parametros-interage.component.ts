@@ -1,7 +1,7 @@
 import { ConnectHTTP } from '../shared/services/connectHTTP';
 import { ToastService, MDBModalRef } from '../../lib/ng-uikit-pro-standard';
 import { FormGroup, FormBuilder } from '@angular/forms';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener } from '@angular/core';
 import { BancoDados } from '../shared/services/bancoDados';
 
 @Component({
@@ -13,11 +13,16 @@ export class ParametrosInterageComponent implements OnInit {
 
   
     tableData: any;
+    tableParametro: any
     tableData_: any;
     private sorted = false;
     formularioTitulo: string;
     titleBntEnviar: string = 'Salvar';
     crud: string;
+    searchText: string;
+    
+    @HostListener('input') oninput() { this.pesquisar();}
+
   
     formularioForm: FormGroup;
     formularioFormAud: any;
@@ -27,7 +32,6 @@ export class ParametrosInterageComponent implements OnInit {
     firstVisibleIndex: number = 1;
     lastVisibleIndex: number = 10;
     url: any = 'https://jsonplaceholder.typicode.com/posts';
-    searchText: string;
     firstPageNumber: number = 1;
     lastPageNumber: number;
     maxVisibleItems: number = 10;
@@ -61,18 +65,37 @@ export class ParametrosInterageComponent implements OnInit {
   
       this.sorted = !this.sorted;
     }
+
+
+    filterIt(arr, valueToFind) {
+      return arr.filter(function(obj) {
+        return Object.keys(obj).some((key) => {
+          if(['id','nome_parametro', 'descricao', ].includes(key) &&  obj[key] ){
+              return obj[key].toString().includes(valueToFind);
+          } else { 
+              return false; 
+          }
+        });
+      });
+    };
+  
+    pesquisar() {
+      if (!this.searchText) {
+        this.tableData = this.tableParametro;
+      } else {
+        this.tableData =  this.filterIt(this.tableParametro, this.searchText);
+      }
+    }
   
     async getParametrosInterage() {
   
 
       let resp  = await this.bancoDados.lerDados('getParametrosInterage', {}) as any;
       
-      console.log(resp)
-
       if (resp.resposta) 
-         {this.tableData = resp.resposta; }
+         {this.tableData = resp.resposta;
+          this.tableParametro = resp.resposta; }
       else { this.toastrService.error('Erro ao ler Parâmetros do Interage', resp.error )}
-  
     }
 
     async setParametroValor(id, valor ){
@@ -90,6 +113,8 @@ export class ParametrosInterageComponent implements OnInit {
     }
     this.ngOnInit();
     };
+
+
   
   }
   

@@ -11,6 +11,11 @@
   <h4 class="white-text mx-3 mt-2 font-weight-bold text-uppercase align-items-center">PARÂMETROS DO SISTEMA</h4>
   </div>
   <div class="px-2">
+    <div class="md-form col">
+      <input mdbInputDirective  max="4" min="3" type="text" id="search" [(ngModel)]="searchText"
+      class="form-control" name="search" (onkeypress)="pesquisar()" >
+      <label for="search">Pesquisar</label>
+    </div>
 
     <!--Table-->
     <table class="table table-hover table-responsive-md mb-0">
@@ -36,14 +41,10 @@
       <!--Table body-->
       <tbody>
         <tr *ngFor="let parametro of tableData; let i = index">
-          <td *ngIf="i+1 >= firstVisibleIndex && i+1 <= lastVisibleIndex">
-           {{parametro.id}} 
-          </td>
-          <td *ngIf="i+1 >= firstVisibleIndex && i+1 <= lastVisibleIndex" >
-            {{parametro.nome_parametro}}</td>
-          <td *ngIf="i+1 >= firstVisibleIndex && i+1 <= lastVisibleIndex" >
-            {{parametro.descricao}}</td>
-          <td *ngIf="i+1 >= firstVisibleIndex && i+1 <= lastVisibleIndex" >
+          <td > {{parametro.id}} </td>
+          <td> {{parametro.nome_parametro}}</td>
+          <td> {{parametro.descricao}}</td>
+          <td>
               <input mdbInputDirective value={{parametro.valor}} max="4" min="3" type="text" 
               (change)="setParametroValor(parametro.id, $event.target.value )"   class="form-control"   >
           </td>

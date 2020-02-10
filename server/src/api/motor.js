@@ -1,5 +1,8 @@
 const moment = require ('moment');
-const { getBoletosAtrasados , getAssociado, getBoletosBixados } = require('./apiSGA');
+const { getBoletosAtrasados , getAssociado,
+        getBoletosBixados, getVoluntariosAtivos, 
+        getSituacaoAdesaoVoluntario, getSituacaoFinaceiroVeiculo, 
+        getContratos } = require('./apiSGA');
 const { buscaValorDoAtributo, alteraValorDoAtributo } = require( './shared');
 const { getPessoaPorCPFCNPJ } = require('./pessoa');
 const { criarEvento } =  require( './evento')
@@ -24,13 +27,15 @@ async function encerraEventosDeCobrancaSGA(req){
     for ( const element of eventosCobranca ) {
         var liquidados = true;
         var dataBaixa = '';
+        var boleto;
 
         for (const boletos of element.codigo_boleto) {
+            boleto = {};
             req.codigo_boleto = boletos
             
             await getBoletosBixados(req, res)
             .then( res => { 
-                //console.log(res)
+                boleto = res
                 if (!res.error){
                      dataBaixa = res[0].data_pagamento;
                 }else {
@@ -47,13 +52,18 @@ async function encerraEventosDeCobrancaSGA(req){
         if (liquidados && dataBaixa != ''){
             //encerra evento de cobrança 
             var sql = `update eventos set id_status_evento= 3,  dt_visualizou= now(), 
-            id_pessoa_visualizou=1, dt_resolvido=now(), id_pessoa_resolveu=1, 
+            id_pessoa_visualizou=1, dt_resolvido=now(), id_pessoa_resolveu=1, id_resp_motivo = 59 
             observacao_retorno='Evento concluido automaticamento por constatar que o boleto foi pago em ${ moment(dataBaixa).format('DD/MM/YYYY')}'
             where id = ${element.id_evento}`
             awaitSQL(credenciais, sql);
 
             var sql = `delete from eventos_boletos where id_evento = ${element.id_evento}`
             awaitSQL(credenciais, sql);
+
+            var dias = moment(boleto.data_pagamento).format('YYYY-MM-DD').diff( moment(boleto.data_vencimento_original).format('YYYY-MM-DD'), 'days' ); 
+            console.log(boleto)
+            console.log( 'Qtde dias para pagar ',  dias); 
+        
         }
     }; 
 
@@ -205,6 +215,115 @@ async function criaEventosDeCobrancaSGA(req){
 }
 
 
+async function criaEventosDePosVendaSGA(req){
+
+    let credenciais = {
+        token: req.query.token,
+        idUsuario: req.query.id_usuario
+      };
+   
+    var periodicidade = await buscaValorDoAtributo(credenciais, 'valor','interage_parametros',`nome_parametro = 'ultimaGeracaoEventosPosVenda' `)
+    periodicidade = Object.values( periodicidade[0])[0];
+    var ultimaGeracaoEventosPosVenda = await buscaValorDoAtributo(credenciais, 'valor','interage_parametros',`nome_parametro = 'ultimaGeracaoEventosPosVenda' `)
+    ultimaGeracaoEventosPosVenda = Object.values( ultimaGeracaoEventosPosVenda[0])[0];
+    var destinatarioEventosPosVenda = await buscaValorDoAtributo(credenciais, 'valor','interage_parametros',`nome_parametro = 'destinatarioEventosPosVenda' `)
+    destinatarioEventosPosVenda = Object.values( destinatarioEventosPosVenda[0])[0];
+    
+    if ( moment() >= moment(ultimaGeracaoEventosPosVenda).add( periodicidade, 'hours') ){
+
+        var dataFinal = moment().subtract(3, 'days').format('DD/MM/YYYY');
+
+        var dataInical  = moment().subtract(30, 'days').format('DD/MM/YYYY');
+
+        req.dataInical = dataInical;
+        req.dataFinal = dataFinal;
+        
+        ultimaGeracaoEventoCobranca = moment().format('YYYY-MM-DD HH:mm:ss');
+
+        // var res = '';
+        // var voluntariosAtivos = [];
+        // await getVoluntariosAtivos(req, res)
+        // .then( resBoletos => {
+        //     voluntariosAtivos = resBoletos;
+        // })
+        // .catch(error => { voluntariosAtivos = [] });
+        // for ( const element of voluntariosAtivos ) {
+        //    i = 0;
+        //     req.query.codigo_voluntario = element.codigo_voluntario;
+        //     await getSituacaoAdesaoVoluntario( req , res)
+        //     .then(  async resSituacao => { 
+        //         let adesoes = resSituacao.adesoes
+        //         for ( const elementAdes of adesoes ) {
+        //             if (elementAdes.data_adesao > '2020-02-01'){
+        //                 i++;
+        //                 console.log('elementAdes.data_adesao ', elementAdes.data_adesao)
+        //                 req.query.codigo_veiculo = elementAdes.codigo_veiculo;
+        //                 await getSituacaoFinaceiroVeiculo(req, res)
+        //                 .then( async resVeiculo => { 
+        //                     if (resVeiculo[0].cpf){
+        //                         console.log( 'cpf ', resVeiculo[0].cpf )
+        //                     }
+        //                 })
+        //             }
+        //         }
+        //     })
+        //     .catch( error => {});
+
+        //     console.log('Voluntário ', element.codigo_voluntario,  ' adesões ', i )
+        // }
+
+        var res 
+        await getContratos(req, res)
+        .then( async resContratos => {
+            //console.log('resContratos.quantidade_veiculos ', resContratos.quantidade_veiculos )
+            for (i= 0; i < resContratos.quantidade_veiculos; i++ ) {
+                if ( resContratos[i].data_contrato_associado > moment().subtract(7, 'days').format('YYYY-MM-DD') ){
+                    req.query.cpf_cnpj = resContratos[i].cpf;
+                    await getPessoaPorCPFCNPJ(req, res)
+                    .then( async resGetPessoaPorCPFCNPJ => {
+                        if (Array.isArray(resGetPessoaPorCPFCNPJ)) {
+                            idPessoa = resGetPessoaPorCPFCNPJ[0].id;
+                        }else {
+                            idPessoa = resGetPessoaPorCPFCNPJ.idPessoa;
+                        }   
+                    //acrescenta paramentos para criar evento
+                    req.query.id_campanha = 20;
+                    req.query.id_motivo = 28;
+                    req.query.tipoDestino = 'P';
+                    req.query.id_pessoa_organograma = destinatarioEventosPosVenda;
+                    req.query.id_pessoa_receptor = idPessoa ;
+                    req.query.observacao_origem = `Realizar pós venda `;  
+                    req.query.id_canal = 3;
+                    req.query.dt_para_exibir = moment().format('YYYY-MM-DD HH:mm:ss');
+                    req.query.codigo_veiculo = resContratos[i].codigo_veiculo;
+                    // verifica se não tem evento de pós venda em aberto 
+                    //console.log(req.query)
+                    var idEventoPosVenda = await buscaValorDoAtributo(credenciais, 'id','eventos'
+                     ,` id_motivo = 28 and id_status_evento in (1,4,5,6) and id_pessoa_receptor = ${idPessoa} and codigo_veiculo = '${resContratos[i].codigo_veiculo}' `)
+                    idEventoPosVenda = Object.values( idEventoPosVenda[0])[0];
+                    if (!idEventoPosVenda) {
+                        await criarEvento(req, res) 
+                        .then( async resEvento => {
+                        })
+                        .catch(error => {  });
+                    };
+                    })
+                    .catch(error => {  });
+                }
+            }
+        })
+        .catch(error => {  });
+
+        var result = await alteraValorDoAtributo(credenciais, 
+            `valor = '${ultimaGeracaoEventosPosVenda}'`,
+            'interage_parametros',
+            `nome_parametro = 'ultimaGeracaoEventosPosVenda' `);
+
+            
+    }; 
+
+    return    
+}
 
 
 
@@ -212,4 +331,5 @@ async function criaEventosDeCobrancaSGA(req){
 module.exports = { criaEventosDeRegras ,
                     criaEventosDeCobrancaSGA,
                     encerraEventosDeCobrancaSGA,
+                    criaEventosDePosVendaSGA,
                  }

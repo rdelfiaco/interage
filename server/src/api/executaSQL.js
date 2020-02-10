@@ -87,8 +87,6 @@ async function executaSQLSemToken( sql) {
             const client = new Client(dbconnection)
             client.connect()
 
-            console.log(sql)
-
             client.query(sql).then(res => {
                     let registros 
                     if (res.rowCount > 0) {

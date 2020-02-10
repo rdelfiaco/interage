@@ -284,12 +284,14 @@ var timeMotor = async function ()  {
 
   // motor.criaEventosDeRegras();
 
-   motor.criaEventosDeCobrancaSGA(req); 
+  //  motor.criaEventosDeCobrancaSGA(req); 
    motor.encerraEventosDeCobrancaSGA(req); 
+
+   motor.criaEventosDePosVendaSGA(req);
 
   setTimeout(timeMotor, 1800000);
 
 }
 
-//timeMotor();
+timeMotor();
 
