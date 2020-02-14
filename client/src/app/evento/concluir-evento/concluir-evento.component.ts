@@ -70,6 +70,7 @@ export class ConcluirEventoComponent implements OnInit {
     })
   }
 
+
   get motivos_respostas(): any {
     return this._motivos_respostas
   }
@@ -129,6 +130,10 @@ export class ConcluirEventoComponent implements OnInit {
       if (tempo.toString().length == 1) return `0${tempo}`
       return tempo;
     }
+  }
+
+  ValidateRespsotaMotivos(control: AbstractControl){
+
   }
 
   ValidateObservacao(control: AbstractControl) {

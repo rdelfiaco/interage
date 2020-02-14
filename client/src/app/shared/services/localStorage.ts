@@ -21,7 +21,7 @@ export class LocalStorage {
   }
 
   delLocalStorage(path: string) {
-    localStorage.removeItem(path)
+    localStorage.removeItem(`${path}_string`)
   }
 
 }

@@ -96,84 +96,124 @@ export class AnalisarCampanhaTelemarketingComponent implements OnInit {
   // contrele de paginação e sorte da tabela list 
 
   @HostListener('input') oninput() {
-    this.defineNumeroPagina();
-}
+      this.defineNumeroPagina();
+  }
 
-defineNumeroPagina(){
-  this.paginators = [];
-  for (let i = 1; i <= this.search().length; i++) {
-    if (!(this.paginators.indexOf(Math.ceil(i / this.maxVisibleItems)) !== -1)) {
-      this.paginators.push(Math.ceil(i / this.maxVisibleItems));
+  defineNumeroPagina(){
+    this.paginators = [];
+    for (let i = 1; i <= this.search().length; i++) {
+      if (!(this.paginators.indexOf(Math.ceil(i / this.maxVisibleItems)) !== -1)) {
+        this.paginators.push(Math.ceil(i / this.maxVisibleItems));
+      }
+    }
+    this.lastPageNumber = this.paginators.length;
+  }
+
+  changePage(event: any) {
+    if (event.target.text >= 1 && event.target.text <= this.maxVisibleItems) {
+      this.activePage = +event.target.text;
+      this.firstVisibleIndex = this.activePage * this.maxVisibleItems - this.maxVisibleItems + 1;
+      this.lastVisibleIndex = this.activePage * this.maxVisibleItems;
     }
   }
-  this.lastPageNumber = this.paginators.length;
-}
 
-changePage(event: any) {
-  if (event.target.text >= 1 && event.target.text <= this.maxVisibleItems) {
-    this.activePage = +event.target.text;
+  nextPage() {
+    this.activePage += 1;
     this.firstVisibleIndex = this.activePage * this.maxVisibleItems - this.maxVisibleItems + 1;
     this.lastVisibleIndex = this.activePage * this.maxVisibleItems;
   }
-}
+  previousPage() {
+    this.activePage -= 1;
+    this.firstVisibleIndex = this.activePage * this.maxVisibleItems - this.maxVisibleItems + 1;
+    this.lastVisibleIndex = this.activePage * this.maxVisibleItems;
+  }
 
-nextPage() {
-  this.activePage += 1;
-  this.firstVisibleIndex = this.activePage * this.maxVisibleItems - this.maxVisibleItems + 1;
-  this.lastVisibleIndex = this.activePage * this.maxVisibleItems;
-}
-previousPage() {
-  this.activePage -= 1;
-  this.firstVisibleIndex = this.activePage * this.maxVisibleItems - this.maxVisibleItems + 1;
-  this.lastVisibleIndex = this.activePage * this.maxVisibleItems;
-}
+  firstPage() {
+    this.activePage = 1;
+    this.firstVisibleIndex = this.activePage * this.maxVisibleItems - this.maxVisibleItems + 1;
+    this.lastVisibleIndex = this.activePage * this.maxVisibleItems;
+  }
 
-firstPage() {
-  this.activePage = 1;
-  this.firstVisibleIndex = this.activePage * this.maxVisibleItems - this.maxVisibleItems + 1;
-  this.lastVisibleIndex = this.activePage * this.maxVisibleItems;
-}
+  lastPage() {
+    this.activePage = this.lastPageNumber;
+    this.firstVisibleIndex = this.activePage * this.maxVisibleItems - this.maxVisibleItems + 1;
+    this.lastVisibleIndex = this.activePage * this.maxVisibleItems;
+  }
 
-lastPage() {
-  this.activePage = this.lastPageNumber;
-  this.firstVisibleIndex = this.activePage * this.maxVisibleItems - this.maxVisibleItems + 1;
-  this.lastVisibleIndex = this.activePage * this.maxVisibleItems;
-}
-
-sortBy(by: string | any): void {
-  // if (by == 'dt_criou') {
-  //   this.search().reverse();
-  // } else {
-  this.tableData.sort((a: any, b: any) => {
-    if (a[by] < b[by]) {
-      return this.sorted ? 1 : -1;
-    }
-    if (a[by] > b[by]) {
-      return this.sorted ? -1 : 1;
-    }
-    return 0;
-  });
-  //}
-  this.sorted = !this.sorted;
-}
-
-filterIt(arr: any, searchKey: any) {
-  return arr.filter((obj: any) => {
-    return Object.keys(obj).some((key) => {
-      return obj[key].includes(searchKey);
+  sortBy(by: string | any): void {
+    // if (by == 'dt_criou') {
+    //   this.search().reverse();
+    // } else {
+    this.tableData.sort((a: any, b: any) => {
+      if (a[by] < b[by]) {
+        return this.sorted ? 1 : -1;
+      }
+      if (a[by] > b[by]) {
+        return this.sorted ? -1 : 1;
+      }
+      return 0;
     });
-  });
-}
-
-search() {
-
-  if (!this.searchText) {
-    return this.tableData;
+    //}
+    this.sorted = !this.sorted;
   }
 
-  if (this.searchText) {
-    return this.filterIt(this.tableData, this.searchText);
+  filterIt(arr: any, searchKey: any) {
+    return arr.filter((obj: any) => {
+      return Object.keys(obj).some((key) => {
+        return obj[key].includes(searchKey);
+      });
+    });
   }
-}
+
+  search() {
+
+    if (!this.searchText) {
+      return this.tableData;
+    }
+
+    if (this.searchText) {
+      return this.filterIt(this.tableData, this.searchText);
+    }
+  }
+
+  showAnalitico(evento, coluna){
+
+    let filtros: any = '';
+    let idSql = 0;
+    let titulo = '';
+    let rotaDetalhe = '';
+
+    let dataInicial_ = '';
+    let dataFinal_ = '';
+      
+    idSql = 11;
+    filtros= `id_campanha = ${evento.id_campanha} `
+    titulo = `Eventos da campanha ${evento.nome} `;
+    rotaDetalhe = 'evento';
+    if (coluna == 'I'){
+      filtros = filtros + ` and id_evento_pai is null`;
+      titulo = titulo + ` inseridos`;
+    }else if( coluna == 'P'){
+      filtros = filtros + ` and id_status_evento in (1, 4) and id_evento_pai is null`;
+      titulo = titulo + ` pendentes`;
+    }else if( coluna == 'E'){
+      filtros = filtros + ` and id_status_evento in (5, 6)`;
+      titulo = titulo + ` em andamento`;
+    }else if( coluna == 'C'){
+      filtros = filtros + ` and id_status_evento in (3, 7)`;
+      titulo = titulo + ` concluidos`;
+    }else if( coluna == 'PR'){
+      filtros = filtros + ` and id_resp_motivo = 8`;
+      titulo = titulo + ` que tiveram proposta solicitada `;
+    }else if( coluna == 'LR'){
+      filtros = filtros + ` and id_status_evento in (3,7)`;
+      titulo = `Ligações realizadas na campanha  ${evento.nome} `;
+    }
+
+    this.router.navigate([`/showTable/{"idSql":${idSql},"filtros":"${filtros}","dataInicial":"${dataInicial_}","dataFinal":"${dataFinal_}" ,"titulo": "${titulo}", "rotaDetalhe": "${rotaDetalhe}"}`]);
+
+  }
+
 
 }
+

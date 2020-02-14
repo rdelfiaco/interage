@@ -16,6 +16,7 @@ import { Angular5Csv } from 'angular5-csv/Angular5-csv';
 export class ShowTableComponent implements OnInit {
 
 
+  
   idSql: any;
   idRegistro: any;
   usuarioLogado: Usuario;
@@ -52,6 +53,8 @@ export class ShowTableComponent implements OnInit {
     this.usuarioLogado = this.localStorage.getLocalStorage('usuarioLogado') as Usuario;
     this.route.params.subscribe(res => {
       let parametros = res.parametros 
+      parametros = parametros.replace(/[ˆ]/g,'/')
+
       parametros = JSON.parse(parametros);
       this.idRegistro = parametros.idRegistro;
       this.idSql = parametros.idSql;

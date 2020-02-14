@@ -114,7 +114,7 @@ ngOnInit() {
         this.toastrService.error(resp.error);
       } else {
 
-        console.log('resp.resposta', resp.resposta)
+        // console.log('resp.resposta', resp.resposta)
         this.tableData = resp.resposta.eventosAutomaticoMotivo;
         this.motivos = resp.resposta.motivos as Array<object>;
         this.prioridades = resp.resposta.prioridade as Array<object>;
@@ -128,7 +128,9 @@ ngOnInit() {
         });       
 
         //povoa a combo do motivo 
-        this.getMotivosDoCanal(this.canais.filter((r) => {if (r.value == resp.resposta.eventosAutomaticoMotivo[0].id_canal ) return r })[0])
+        if (resp.resposta.eventosAutomaticoMotivo[0].id_canal){
+          this.getMotivosDoCanal(this.canais.filter((r) => {if (r.value == resp.resposta.eventosAutomaticoMotivo[0].id_canal ) return r })[0])
+        };
 
         this.departamentos =  this.departamentos.filter((r) => {if (r.status) return true }).map((c: any) => {
           return { value: c.id, label: c.nome }
@@ -149,6 +151,8 @@ ngOnInit() {
         this.tipo_usuario.push({ value: 2, label: 'Usuário que encerrou evento'})
         this.tipo_usuario.push({ value: 3, label: 'Usuário que atende o cliente'})
         this.tipo_usuario.push({ value: 4, label: 'Usuário que criou o evento que está sendo encerrado'})
+
+
 
       }
     }

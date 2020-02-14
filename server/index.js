@@ -284,8 +284,8 @@ var timeMotor = async function ()  {
 
   // motor.criaEventosDeRegras();
 
-  //  motor.criaEventosDeCobrancaSGA(req); 
-   motor.encerraEventosDeCobrancaSGA(req); 
+   motor.criaEventosDeCobrancaSGA(req); 
+  motor.encerraEventosDeCobrancaSGA(req); 
 
    motor.criaEventosDePosVendaSGA(req);
 
@@ -293,5 +293,5 @@ var timeMotor = async function ()  {
 
 }
 
-timeMotor();
+//timeMotor();
 

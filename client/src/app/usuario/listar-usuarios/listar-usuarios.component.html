@@ -43,8 +43,11 @@
             <td>{{usuario.cpf_cnpj}}</td>
             <td>{{usuario.nome}}</td>
             <td>{{usuario.login}}</td>
-            <td>
+            <!-- <td>
               <mdb-checkbox [checked]="usuario.status" [disabled]="true"></mdb-checkbox>
+            </td> -->
+            <td>
+              {{getStatus(usuario.status)}}
             </td>
             <td>{{usuario.departamento}}</td>
             <td>

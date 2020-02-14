@@ -311,4 +311,13 @@ export class ListarUsuariosComponent implements OnInit {
 
   }
 
+  getStatus(status){
+    if (status) {
+      return 'Ativo'
+    } else {
+      return 'Inativo'
+    }
+
+  }
+
 }

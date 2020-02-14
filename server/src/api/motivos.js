@@ -14,7 +14,7 @@ function getMotivos(req, res){
         idUsuario: req.query.id_usuario
       };
                                               
-      let sql = `SELECT * from motivos ` 
+      let sql = `SELECT * from motivos order by nome ` 
 
       executaSQL(credenciais, sql)
         .then(res => {
@@ -249,6 +249,7 @@ function getMotivosRespostasAutomaticas(req, res){
     left join pessoas pes on mea.id_pessoa_organograma = pes.id and mea.tipodestino = 'P'
     left join organograma dep on mea.id_pessoa_organograma = dep.id and mea.tipodestino = 'O'
     where mea.id_motivo_resposta =  ${req.query.idRespostaSelecionada} ` 
+    //console.log('sql ', sql )
     executaSQL(credenciais, sql)
       .then(eventosAutomaticoMotivo => {
         getMotivos(req, res)
@@ -388,7 +389,7 @@ function crudMotivosRespostasAutomaticas(req, res){
     if (crud == 'D') sql = sqlDelete();
     if (crud == 'U') sql = sqlUpdate();
 
-
+    console.log('sql ', sql)
     executaSQL(credenciais, sql).then(res => {
       resolve(res)
 
@@ -404,9 +405,14 @@ function crudMotivosRespostasAutomaticas(req, res){
         gera_para, tipodestino, id_pessoa_organograma, id_prioridade, 
         observacao_origem, prazo_para_exibir, reagendar)
         VALUES ( ${req.query.id_motivo_resposta}, ${req.query.id_motivo}, 
-          ${req.query.id_canal}, ${req.query.id_tipo_usuario}, '${req.query.id_tipo_destino}', 
-          ${req.query.id_destino}, ${req.query.id_prioridade}, 
-          '${req.query.observacao_origem}', ${req.query.prazo_para_exibir}, ${req.query.reagendar}) RETURNING id;`;
+          ${req.query.id_canal}, 
+          ${req.query.id_tipo_usuario}, 
+          '${req.query.id_tipo_destino}', 
+          ${req.query.id_destino ? req.query.id_destino : null }, 
+          ${req.query.id_prioridade ? req.query.id_prioridade : 2}, 
+          '${req.query.observacao_origem}', 
+           ${ req.query.prazo_para_exibir ? req.query.prazo_para_exibir: 0 },
+           ${req.query.reagendar ? req.query.reagendar : false}) RETURNING id;`;
 
       return sql;
     };

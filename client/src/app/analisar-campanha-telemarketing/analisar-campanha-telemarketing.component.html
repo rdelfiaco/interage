@@ -12,7 +12,7 @@
     <div class="row mt-2">
       <div class="col-lg-12 text-center">
         <div class="md-form">
-          <h4 style="font-weight: bold;color: dimgray;">Para visualizar analiticamente clique no nome da campanha </h4>
+          <h4 style="font-weight: bold;color: dimgray;">Para visualizar analiticamente clique na coluna desejada </h4>
         </div>
       </div>
     </div>
@@ -57,13 +57,13 @@
         <tr style="cursor:pointer;" #list *ngFor="let evento of tableData; let i = index">
           <td *ngIf="i+1 >= firstVisibleIndex && i+1 <= lastVisibleIndex" (click)="abreDetalheCampanha(evento)"
             class="font-weight-bold">{{evento.nome}}</td>
-          <td *ngIf="i+1 >= firstVisibleIndex && i+1 <= lastVisibleIndex" class="text-center">{{evento.inseridos}}</td>
-          <td *ngIf="i+1 >= firstVisibleIndex && i+1 <= lastVisibleIndex" class="text-center">{{evento.pendentes}}</td>
-          <td *ngIf="i+1 >= firstVisibleIndex && i+1 <= lastVisibleIndex" class="text-center">{{evento.contatando}}</td>
-          <td *ngIf="i+1 >= firstVisibleIndex && i+1 <= lastVisibleIndex" class="text-center">{{evento.concluidos}}</td>
-          <td *ngIf="i+1 >= firstVisibleIndex && i+1 <= lastVisibleIndex" class="text-center">
+          <td *ngIf="i+1 >= firstVisibleIndex && i+1 <= lastVisibleIndex" class="text-center" (click)="showAnalitico(evento, 'I')">{{evento.inseridos}}</td>
+          <td *ngIf="i+1 >= firstVisibleIndex && i+1 <= lastVisibleIndex" class="text-center" (click)="showAnalitico(evento, 'P')">{{evento.pendentes}}</td>
+          <td *ngIf="i+1 >= firstVisibleIndex && i+1 <= lastVisibleIndex" class="text-center" (click)="showAnalitico(evento, 'E')">{{evento.contatando}}</td>
+          <td *ngIf="i+1 >= firstVisibleIndex && i+1 <= lastVisibleIndex" class="text-center" (click)="showAnalitico(evento, 'C')">{{evento.concluidos}}</td>
+          <td *ngIf="i+1 >= firstVisibleIndex && i+1 <= lastVisibleIndex" class="text-center"  (click)="showAnalitico(evento, 'PR')">
             {{evento.propostas_solicitadas}}</td>
-          <td *ngIf="i+1 >= firstVisibleIndex && i+1 <= lastVisibleIndex" class="text-center">
+          <td *ngIf="i+1 >= firstVisibleIndex && i+1 <= lastVisibleIndex" class="text-center"  (click)="showAnalitico(evento, 'LR')" >
             {{evento.ligacoes_realizadas}}</td>
           <td *ngIf="i+1 >= firstVisibleIndex && i+1 <= lastVisibleIndex" class="text-center">
             {{evento.media_ligacoes_por_cliente_concluidos}}</td>

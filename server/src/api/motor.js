@@ -32,10 +32,11 @@ async function encerraEventosDeCobrancaSGA(req){
         for (const boletos of element.codigo_boleto) {
             boleto = {};
             req.codigo_boleto = boletos
-            
+            console.log('boletos  ', boletos) 
             await getBoletosBixados(req, res)
             .then( res => { 
-                boleto = res
+                boleto = res[0];
+                console.log('boleto ', boleto)
                 if (!res.error){
                      dataBaixa = res[0].data_pagamento;
                 }else {
@@ -53,17 +54,26 @@ async function encerraEventosDeCobrancaSGA(req){
             //encerra evento de cobrança 
             var sql = `update eventos set id_status_evento= 3,  dt_visualizou= now(), 
             id_pessoa_visualizou=1, dt_resolvido=now(), id_pessoa_resolveu=1, id_resp_motivo = 59 
-            observacao_retorno='Evento concluido automaticamento por constatar que o boleto foi pago em ${ moment(dataBaixa).format('DD/MM/YYYY')}'
+            observacao_retorno='Evento concluido automaticamente por constatar que o boleto foi pago em ${ moment(dataBaixa).format('DD/MM/YYYY')}'
             where id = ${element.id_evento}`
-            awaitSQL(credenciais, sql);
+            // awaitSQL(credenciais, sql);
 
-            var sql = `delete from eventos_boletos where id_evento = ${element.id_evento}`
-            awaitSQL(credenciais, sql);
+            // var sql = `delete from eventos_boletos where id_evento = ${element.id_evento}`
+            // awaitSQL(credenciais, sql);
 
-            var dias = moment(boleto.data_pagamento).format('YYYY-MM-DD').diff( moment(boleto.data_vencimento_original).format('YYYY-MM-DD'), 'days' ); 
-            console.log(boleto)
+            var dt_pagamento = moment(boleto.data_pagamento).format('YYYY-MM-DD');
+            var dt_vencimento = moment(boleto.data_vencimento_original).format('YYYY-MM-DD');
+            
+            var dias = moment(dt_pagamento).diff(dt_vencimento, 'days')
             console.log( 'Qtde dias para pagar ',  dias); 
-        
+            if (dias >= 8 ){
+                console.log('criar evento de solcitação de re-vitoria ')
+
+
+            } 
+
+
+
         }
     }; 
 
@@ -271,7 +281,7 @@ async function criaEventosDePosVendaSGA(req){
 
         //     console.log('Voluntário ', element.codigo_voluntario,  ' adesões ', i )
         // }
-
+ 
         var res 
         await getContratos(req, res)
         .then( async resContratos => {
@@ -292,7 +302,7 @@ async function criaEventosDePosVendaSGA(req){
                     req.query.tipoDestino = 'P';
                     req.query.id_pessoa_organograma = destinatarioEventosPosVenda;
                     req.query.id_pessoa_receptor = idPessoa ;
-                    req.query.observacao_origem = `Realizar pós venda `;  
+                    req.query.observacao_origem = `Confirmar dados do cliente e se ele recebeu o boleto de adesão `;  
                     req.query.id_canal = 3;
                     req.query.dt_para_exibir = moment().format('YYYY-MM-DD HH:mm:ss');
                     req.query.codigo_veiculo = resContratos[i].codigo_veiculo;
@@ -304,10 +314,10 @@ async function criaEventosDePosVendaSGA(req){
                     if (!idEventoPosVenda) {
                         await criarEvento(req, res) 
                         .then( async resEvento => {
-                        })
+                        }) 
                         .catch(error => {  });
                     };
-                    })
+                    }) 
                     .catch(error => {  });
                 }
             }

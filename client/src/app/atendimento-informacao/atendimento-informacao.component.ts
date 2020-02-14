@@ -11,6 +11,7 @@ import * as pdfMake from 'pdfmake/build/pdfmake';
 import * as pdfFonts from 'pdfmake/build/vfs_fonts'; 
 
 import { ReportPDF } from '../shared/services/reportPDF';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -78,6 +79,7 @@ export class AtendimentoInformacaoComponent implements OnInit {
     constructor(
       private http: Http, 
       private connectHTTP: ConnectHTTP, 
+      private router: Router,
       private localStorage: LocalStorage,
       private toastrService: ToastService, 
       private valida: Valida ,
@@ -204,6 +206,30 @@ export class AtendimentoInformacaoComponent implements OnInit {
     detalhesColunas.push( linhas );
     var docDefinition = this.reportPDF.gerarPDF(titulo, detalhesColunas );
     pdfMake.createPdf( docDefinition ).open();
+
+  }
+
+
+  showAnalitico(motivo){
+
+    let filtros: string = '';
+    let idSql = 0;
+    let titulo = '';
+    let rotaDetalhe = '';
+
+    let dataInicial_ = '';
+    let dataFinal_ = '';
+      
+    idSql = 11;
+    filtros = `id_canal = 2 and id_evento_pai is null `;
+    filtros = filtros + ` and date(dt_criou) between date('${this.dataInicial}') and date('${this.dataFinal}') `;
+    filtros = filtros + ` and (id_pessoa_criou in (${this.usuarioSelectValue}) or -1 in (${this.usuarioSelectValue})) `;
+    filtros = filtros + ` and id_motivo = ${motivo.id_motivo}`;
+    titulo = `Atendimento com o motivo ${motivo.motivo} `;
+    rotaDetalhe = 'evento';
+
+    filtros = filtros.replace(/[/]/g,'ˆ')
+    this.router.navigate([`/showTable/{"idSql":${idSql},"filtros":"${filtros}","dataInicial":"${dataInicial_}","dataFinal":"${dataFinal_}" ,"titulo": "${titulo}", "rotaDetalhe": "${rotaDetalhe}"}`]);
 
   }
 

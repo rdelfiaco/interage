@@ -424,9 +424,13 @@ function salvarEvento(req, res) {
               dt_resolvido=now(),
                   id_pessoa_resolveu=${req.query.id_pessoa}, 
                   observacao_retorno='${req.query.observacao}',
-                  id_resp_motivo=${req.query.id_motivos_respostas},
-                  id_telefone=${req.query.id_telefoneDiscado || 'NULL'},
-                  id_predicao=${req.query.id_predicao || 'NULL'},
+                  id_resp_motivo=${req.query.id_motivos_respostas || null },`
+              if (req.query.id_telefoneDiscado) {
+                update = update +
+                  `id_telefone=${req.query.id_telefoneDiscado || 'NULL'},`
+              }
+              update = update + 
+                  `id_predicao=${req.query.id_predicao || 'NULL'},
                   id_objecao=${req.query.id_objecao || 'NULL'}`
               if(temProposta) {
                   update = update + 
@@ -435,7 +439,7 @@ function salvarEvento(req, res) {
                   ` WHERE eventos.id=${req.query.id_evento} AND eventos.id_status_evento in(5,6)
                   RETURNING tipoDestino, id_pessoa_organograma;
                   `;
-                  
+              console.log('finalizaEvento ', update )    
               client.query(update).then((updateEventoEncerrado) => {
                 if (updateEventoEncerrado.rowCount != 1) {
                   client.query('COMMIT').then((resposta) => {
@@ -1162,11 +1166,12 @@ function informacoesParaCriarEvento(req, res) {
       const client = new Client(dbconnection)
 
       client.connect()
-
+      console.log('canais, organograma, usuarios, motivosCanais ')
       getCanais(req).then(canais => {
         getOrganograma(req).then(organograma => {
           getUsuarios(req).then(usuarios => {
             getMotivosCanais(client).then(motivosCanais => {
+              console.log('canais, organograma, usuarios, motivosCanais ', canais, organograma, usuarios, motivosCanais)
               resolve({ canais, organograma, usuarios, motivosCanais })
             })
           })
@@ -1300,16 +1305,16 @@ function getInformacaoAtendimentos(req, res) {
     };
 
     let sql = `
-      select    motivo, total::integer, total_reg::integer, round(total::numeric(8,5) / total_reg::numeric(8,5) * 100 ) as perct 
+      select  id_motivo,  motivo, total::integer, total_reg::integer, round(total::numeric(8,5) / total_reg::numeric(8,5) * 100 ) as perct 
       from 
       (  
-      select  motivo, count(*) as total
+      select  id_motivo, motivo, count(*) as total
       from view_eventos 
       where id_canal = 2 
       and (id_pessoa_criou in (${req.query.idPessoaDosUsuarios}) or -1 in (${req.query.idPessoaDosUsuarios}))
       and id_evento_pai is null 
       and date(dt_criou) between '${req.query.dataInicial}' and '${req.query.dataFinal}'
-      group by  motivo 
+      group by  id_motivo, motivo 
       ) aux ,
       (select count(*) as total_reg
       from view_eventos 

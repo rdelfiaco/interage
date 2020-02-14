@@ -192,10 +192,22 @@ export class DetalheDeCampanhaComponent implements OnInit {
   };
 
 
-
   async ngOnInit() {
+
+    if (this.localStorage.getLocalStorage('dataInicial') ){
+      this.dataInicial = this.localStorage.getLocalStorage('dataInicial');
+      this.dataFinal = this.localStorage.getLocalStorage('dataFinal')
+    };    
     await this.getDetalheCampanha()
     this.items_ = this.treeViewquestRespSintetica();
+
+
+
+  }
+
+  salvaDataAlterada(){
+    this.localStorage.postLocalStorage('dataInicial', this.dataInicial);
+    this.localStorage.postLocalStorage('dataFinal', this.dataFinal);
   }
 
   async getDetalheCampanha() {
@@ -213,6 +225,7 @@ export class DetalheDeCampanhaComponent implements OnInit {
     this.detalheCampanhaConsultorStatusTodos = retorno.resposta.detalheCampanhaConsultorStatus;
     this.questRespSintetica = retorno.resposta.questRespSintetica;
     if (this.questRespSintetica[0].nome_questionario == null) { this.questRespSintetica = []; }
+  
   }
 
   detalheStatus(id_resp_motivo, status_ligacao) {
@@ -227,6 +240,8 @@ export class DetalheDeCampanhaComponent implements OnInit {
   }
 
   voltar() {
+    this.localStorage.delLocalStorage('dataInicial')
+    this.localStorage.delLocalStorage('dataFinal');
     history.back();
   }
 
@@ -426,7 +441,7 @@ export class DetalheDeCampanhaComponent implements OnInit {
     let totRespPergunta: number;
     let perguntasAlternativas: Array<any> = [];
 
-    console.log('perguntasAlternativas ',perguntasAlternativas)
+   // console.log('perguntasAlternativas ',perguntasAlternativas)
 
     for (let index = 0; index < this.perguntasQuest.length; index++) {
       const elemPerg = this.perguntasQuest[index];
@@ -561,6 +576,52 @@ export class DetalheDeCampanhaComponent implements OnInit {
         return new Chart(chartElementRef.nativeElement, config);
       });
     }
+
+
+    showAnalitico(evento, quadro){
+
+      debugger
+
+      let filtros: string = '';
+      let idSql = 0;
+      let titulo = '';
+      let rotaDetalhe = '';
+  
+      let dataInicial_ = '';
+      let dataFinal_ = '';
+        
+      idSql = 11;
+      //filtros= `id_campanha = ${this.idCampanha} and date(dt_resolvido) between `;
+      filtros = `id_campanha = ${this.idCampanha} `;
+      filtros = filtros + ` and date(dt_resolvido) between date('${this.dataInicial}') and date('${this.dataFinal}') `;
+      filtros = filtros + ` and id_resp_motivo is not null `;
+
+      titulo = `Eventos da campanha ${this.nome} `;
+      rotaDetalhe = 'evento';
+      if (quadro == 'status'){
+        filtros = filtros + ` and id_resp_motivo = ${evento.id_resp_motivo}`;
+        titulo = titulo + ` com status ${evento.status_ligacao}`;
+      } else  if (quadro == 'usuario'){
+        filtros = filtros + ` and id_pessoa_resolveu = ${evento.id_pessoa_resolveu}`;
+        titulo = titulo + ` resolvidos por  ${evento.pessoa_resolveu}`;
+      } else  if (quadro == 'usuarioStatus'){
+        filtros = filtros + ` and id_resp_motivo = ${evento.id_resp_motivo}`;
+        filtros = filtros + ` and id_pessoa_resolveu = ${evento.id_pessoa_resolveu}`;
+        titulo = titulo + ` com status ${evento.status_ligacao} e  resolvidos por  ${evento.pessoa_resolveu}`;
+      }  else  if (quadro == 'statusUsuario'){
+        filtros = filtros + ` and id_resp_motivo = ${evento.id_resp_motivo}`;
+        filtros = filtros + ` and id_pessoa_resolveu = ${evento.id_pessoa_resolveu}`;
+        titulo = titulo + ` com status ${evento.status_ligacao} e  resolvidos por  ${evento.pessoa_resolveu}`;
+      }
+
+
+
+
+      filtros = filtros.replace(/[/]/g,'ˆ')
+      this.router.navigate([`/showTable/{"idSql":${idSql},"filtros":"${filtros}","dataInicial":"${dataInicial_}","dataFinal":"${dataFinal_}" ,"titulo": "${titulo}", "rotaDetalhe": "${rotaDetalhe}"}`]);
+  
+    }
+  
 
    
 }

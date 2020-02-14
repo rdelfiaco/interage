@@ -13,7 +13,7 @@ const {  executaSQLSemToken } = require( './executaSQL');
             "Authorization": authorization
             };
             
-            console.log('headers ', headers)
+            //console.log('headers ', headers)
 
             var parametros = { method: 'GET',
             headers: headers, 
@@ -21,7 +21,7 @@ const {  executaSQLSemToken } = require( './executaSQL');
             };
             fetch(url, parametros)
             .then(res => {
-                console.log('getAssociado ', res )
+                //console.log('getAssociado ', res )
                 resolve (res.json())})
             .catch(error => reject( error) );
         })
@@ -109,6 +109,7 @@ const {  executaSQLSemToken } = require( './executaSQL');
             //    "data_emissao_inicial": "01/12/2019",
             //    "data_emissao_final": "31/12/2019"
             }
+            
             
             var parametros = { method: 'POST',
             headers: headers,
