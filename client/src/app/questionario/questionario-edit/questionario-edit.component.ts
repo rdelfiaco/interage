@@ -217,6 +217,7 @@ export class QuestionarioEditComponent implements OnInit {
 
 
   async salvarPergunta() {
+    debugger
     try {
       let questionarioId = this.idQuest;
       let resp = await this.connectHTTP.callService({

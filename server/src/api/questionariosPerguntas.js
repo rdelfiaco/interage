@@ -69,7 +69,10 @@ function addPergunta(req, res) {
       idUsuario: req.query.id_usuario
     };
 
+    console.log('req.query.data ', req.query.data )
     req.query.p = JSON.parse(req.query.data);
+
+    console.log('req.query.p ', req.query.p )
 
     let sql = `INSERT INTO quest_perguntas(
       nome,
@@ -88,7 +91,7 @@ function addPergunta(req, res) {
         '${req.query.p.multipla_escolha}',
          ${req.query.p.tipo_pergunta}
         ) RETURNING id;`
-
+console.log('sql ', sql)
     executaSQL(credenciais, sql)
       .then(res => {
         resolve(res)

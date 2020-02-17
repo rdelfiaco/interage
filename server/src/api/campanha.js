@@ -718,7 +718,7 @@ function getDetalheCampanhaStatus(req, res) {
           group by id_campanha, id_resp_motivo , resposta_motivo
           order by resposta_motivo
     `
-    console.log(' getDetalheCampanha ',sql)
+    //console.log(' getDetalheCampanha ',sql)
     executaSQL(credenciais, sql)
       .then(res => {
         resolve(res);
@@ -839,7 +839,7 @@ function getDetalheCampanhaStatusConsultor(req, res) {
         group by id_campanha, id_resp_motivo , resposta_motivo, id_pessoa_resolveu, pessoa_resolveu 
         order by resposta_motivo,  pessoa_resolveu
     `
-    console.log('sql ', sql )
+    //console.log('sql ', sql )
     executaSQL(credenciais, sql)
       .then(res => {
         resolve(res);

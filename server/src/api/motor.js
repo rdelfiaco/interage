@@ -21,6 +21,9 @@ async function encerraEventosDeCobrancaSGA(req){
         idUsuario: req.query.id_usuario
       };
 
+    var destinatarioEventosCobranca = await buscaValorDoAtributo(credenciais, 'valor','interage_parametros',`nome_parametro = 'destinatarioEventosCobranca' `)
+    destinatarioEventosCobranca = Object.values( destinatarioEventosCobranca[0])[0];
+    
 
     var eventosCobranca = await buscaValorDoAtributo(credenciais, '*','eventos_boletos', ' 1 = 1' );
     var res = ''
@@ -32,22 +35,18 @@ async function encerraEventosDeCobrancaSGA(req){
         for (const boletos of element.codigo_boleto) {
             boleto = {};
             req.codigo_boleto = boletos
-            console.log('boletos  ', boletos) 
             await getBoletosBixados(req, res)
             .then( res => { 
                 boleto = res[0];
-                console.log('boleto ', boleto)
                 if (!res.error){
                      dataBaixa = res[0].data_pagamento;
                 }else {
                     liquidados = false;
                 }
-
             })
             .catch( error => {
                 liquidados = false;
             })
-
         }
 
         if (liquidados && dataBaixa != ''){
@@ -56,19 +55,38 @@ async function encerraEventosDeCobrancaSGA(req){
             id_pessoa_visualizou=1, dt_resolvido=now(), id_pessoa_resolveu=1, id_resp_motivo = 59 
             observacao_retorno='Evento concluido automaticamente por constatar que o boleto foi pago em ${ moment(dataBaixa).format('DD/MM/YYYY')}'
             where id = ${element.id_evento}`
-            // awaitSQL(credenciais, sql);
+            awaitSQL(credenciais, sql);
 
-            // var sql = `delete from eventos_boletos where id_evento = ${element.id_evento}`
-            // awaitSQL(credenciais, sql);
+            var sql = `delete from eventos_boletos where id_evento = ${element.id_evento}`
+            awaitSQL(credenciais, sql);
+
+            // busca o id_pessoa_receptor;
+            var idPessoa = await buscaValorDoAtributo(credenciais, 'id_pessoa_receptor','eventos',`id = ${element.id_evento} `)
+            idPessoa = Object.values( idPessoa[0])[0];
 
             var dt_pagamento = moment(boleto.data_pagamento).format('YYYY-MM-DD');
             var dt_vencimento = moment(boleto.data_vencimento_original).format('YYYY-MM-DD');
-            
+             
             var dias = moment(dt_pagamento).diff(dt_vencimento, 'days')
-            console.log( 'Qtde dias para pagar ',  dias); 
             if (dias >= 8 ){
-                console.log('criar evento de solcitação de re-vitoria ')
+                req.query.id_evento_pai = element.id_evento;
+                req.query.id_motivo = 29;
+                req.query.tipoDestino = 'P';
+                req.query.id_pessoa_organograma = destinatarioEventosCobranca;
+                req.query.id_pessoa_receptor = idPessoa ;
+                req.query.observacao_origem = 'Agendar uma re-vistorio ou soliciar para o cliente realizar a re-vistoria'; 
+                req.query.id_canal = 3;
+                req.query.dt_para_exibir = moment().format('YYYY-MM-DD HH:mm:ss');
 
+                // verifica se não tem evento de combrança em aberto 
+                var idEventoReVistoria = await buscaValorDoAtributo(credenciais, 'id','eventos',` id_motivo = 29 and id_status_evento in (1,4,5,6) and id_pessoa_receptor = ${idPessoa} `)
+                    idEventoReVistoria = Object.values( idEventoReVistoria[0])[0];
+                if (!idEventoReVistoria) {
+                    await criarEvento(req, res) 
+                    .then( async resEvento => { 
+                    })
+                    .catch( e => {})
+                }
 
             } 
 

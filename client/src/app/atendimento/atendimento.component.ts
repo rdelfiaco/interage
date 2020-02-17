@@ -8,7 +8,6 @@ import { BancoDados } from '../shared/services/bancoDados';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
 import validaCpf from '../shared/validaCpf';
-import moment = require('moment');
 
 @Component({
   selector: 'app-atendimento',
@@ -85,7 +84,6 @@ export class AtendimentoComponent implements OnInit {
 
   async pesquisar(){
     
-    this.localStorage.postLocalStorage('inicioAtendimento', moment().format('DD/MM/YYYY HH:mm:ss') )
 
     if (this.telefone && this.ddd){
      this.dddTelefone = `(${this.ddd}) ${this.telefone}`
@@ -256,7 +254,6 @@ export class AtendimentoComponent implements OnInit {
   }
 
   novoAtendimentoPessoa(){
-//        this.localStorage.postLocalStorage('inicioAtendimento', moment().format('DD/MM/YYYY HH:mm:ss') )
 
     if (this.telefone && this.ddd){
         this.dddTelefone = `(${this.ddd}) ${this.telefone}`
@@ -343,10 +340,7 @@ export class AtendimentoComponent implements OnInit {
     }
   }) as any;
 
-  console.log('getPessoaPorCPFCNPJ ',getPessoaPorCPFCNPJ)
   
-  debugger
-
   if (getPessoaPorCPFCNPJ.error != '') {
     this.pessoaForm.value.cpf_cnpj = this.pessoaForm.value.cpf_cnpj && this.pessoaForm.value.cpf_cnpj.replace(/\W/gi, '')
     if (!validaCpf.isValid(this.pessoaForm.value.cpf_cnpj)) {
@@ -359,8 +353,6 @@ export class AtendimentoComponent implements OnInit {
     this.pessoaForm.controls['nome'].setValue('');
     return true;
   }
-
-  debugger
 
   if (getPessoaPorCPFCNPJ.resposta[0]){
       this.pessoaForm.controls['id_pessoa'].setValue(getPessoaPorCPFCNPJ.resposta[0].id);

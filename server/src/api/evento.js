@@ -244,17 +244,18 @@ async function criarEvento(req, res) {
     idUsuario: req.query.id_usuario
   };
 
-
-  if (!req.query.eventoAnterior) {req.query.eventoAnterior = null}
+  if (!req.query.eventoAnterior) {req.query.eventoAnterior = null};
 
   var eventoPai = null;
+  if (req.query.id_evento_pai) {eventoPai = req.query.id_evento_pai};
+
   var eventoAnterior = req.query.eventoAnterior != null && req.query.eventoAnterior != undefined ? req.query.eventoAnterior : null;
   if (eventoAnterior) {
     if (eventoAnterior != null ) {
       eventoPai = await buscaValorDoAtributo(credenciais, 'id_evento_pai', 'eventos', `id = ${eventoAnterior}` );
       eventoPai = eventoPai[0].eventoPai;
       if (eventoPai == null) { eventoPai = eventoAnterior };
-    }
+    } 
   }
   var protocolo = req.query.protocolo;
 
@@ -1166,12 +1167,12 @@ function informacoesParaCriarEvento(req, res) {
       const client = new Client(dbconnection)
 
       client.connect()
-      console.log('canais, organograma, usuarios, motivosCanais ')
+      // console.log('canais, organograma, usuarios, motivosCanais ')
       getCanais(req).then(canais => {
         getOrganograma(req).then(organograma => {
           getUsuarios(req).then(usuarios => {
             getMotivosCanais(client).then(motivosCanais => {
-              console.log('canais, organograma, usuarios, motivosCanais ', canais, organograma, usuarios, motivosCanais)
+              // console.log('canais, organograma, usuarios, motivosCanais ', canais, organograma, usuarios, motivosCanais)
               resolve({ canais, organograma, usuarios, motivosCanais })
             })
           })

@@ -39,9 +39,9 @@ function addAlternativa(req, res) {
       ) VALUES(
         '${req.query.a.nome}',
         '${req.query.a.status}',
-        '${req.query.a.perguntaId}',
-        '${req.query.a.sequencia}',
-        '${req.query.a.proximaPerguntaId}') RETURNING id;`
+        ${req.query.a.perguntaId},
+        ${req.query.a.sequencia},
+        ${req.query.a.proximaPerguntaId ? req.query.a.proximaPerguntaId : null }) RETURNING id;`
 
     executaSQL(credenciais, sql)
       .then(res => {
@@ -103,7 +103,7 @@ function updateAlternativa(req, res) {
 
     let sql = `UPDATE quest_alternativas SET 
       nome='${req.query.a.nome}',
-      id_proxima_pergunta=${req.query.a.proximaPerguntaId},
+      id_proxima_pergunta=${req.query.a.proximaPerguntaId ? req.query.a.proximaPerguntaId : null},
       sequencia_alternativa=${req.query.a.sequencia}
       WHERE quest_alternativas.id=${req.query.a.id}`;
 
