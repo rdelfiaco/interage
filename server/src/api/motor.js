@@ -180,7 +180,7 @@ async function criaEventosDeCobrancaSGA(req){
                         var idEventoCobraca = await buscaValorDoAtributo(credenciais, 'id','eventos',` id_motivo = 13 and id_status_evento in (1,4,5,6) and id_pessoa_receptor = ${idPessoa} `)
                             idEventoCobraca = Object.values( idEventoCobraca[0])[0];
                         if (!idEventoCobraca) {
-                            console.log('antes de criar evento de cobrança ', req.query)
+                            //console.log('antes de criar evento de cobrança ', req.query)
                             await criarEvento(req, res) 
                             .then( async resEvento => {
                             //salva os boletos do evento 
