@@ -286,11 +286,11 @@ var timeMotor = async function ()  {
   // motor.criaEventosDeRegras();
 
 
-  motor.criaEventosDeCobrancaSGA(req); 
+  await motor.criaEventosDeCobrancaSGA(req); 
 
-  motor.encerraEventosDeCobrancaSGA(req); 
+  await motor.encerraEventosDeCobrancaSGA(req); 
 
-  motor.criaEventosDePosVendaSGA(req);
+  await motor.criaEventosDePosVendaSGA(req);
 
   setTimeout(timeMotor, 1800000);
 

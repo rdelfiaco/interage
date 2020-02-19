@@ -16,6 +16,7 @@ function criaEventosDeRegras(){
 // encerra os eventos de cobrança liquidados 
 async function encerraEventosDeCobrancaSGA(req){
 
+    console.log('Encerrando eventos de cobrança ...')
     let credenciais = {
         token: req.query.token,
         idUsuario: req.query.id_usuario
@@ -97,6 +98,8 @@ async function encerraEventosDeCobrancaSGA(req){
 
 async function criaEventosDeCobrancaSGA(req){
 
+    console.log('Criando eventos de cobrança ...')
+
     let credenciais = {
         token: req.query.token,
         idUsuario: req.query.id_usuario
@@ -134,7 +137,7 @@ async function criaEventosDeCobrancaSGA(req){
         uniqueArray = [];
         boletosAtrasadosUnique = [];
         codigosBoletosAtrasados = [];
-        for (i = 0; i < boletosAtrasados.length; i++ ){
+        for (var i = 0; i < boletosAtrasados.length; i++ ){
             if ( uniqueArray.indexOf(boletosAtrasados[i].codigo_associado) == -1 ) {
                 uniqueArray.push(boletosAtrasados[i].codigo_associado);
                 boletosAtrasados[i].observacao_origem = `Boleto com o vencimento ${moment(boletosAtrasados[i].data_vencimento_original).format('DD/MM/YYYY')} e o valor: ${boletosAtrasados[i].valor_boleto} `;
@@ -148,10 +151,8 @@ async function criaEventosDeCobrancaSGA(req){
         boletosAtrasadosUnique
         var totalBoletos = 0;
         var eventosCobrancaJaExistente = 0; 
-        i=0;
        boletosNaoGerados = []; 
        for ( const element of boletosAtrasadosUnique ) {
-           i++;
             req.query.cpf_cnpj = element.codigo_associado;
             await getAssociado( req , res)
             .then(  async resGetAssociado => { 
@@ -164,6 +165,7 @@ async function criaEventosDeCobrancaSGA(req){
                             idPessoa = resGetPessoaPorCPFCNPJ.idPessoa;
                         }  
                         // acrescenta paramentos para criar evento
+                        req.query.id_evento_pai = null
                         req.query.id_campanha = 19;
                         req.query.id_motivo = 13;
                         req.query.tipoDestino = 'P';
@@ -172,11 +174,13 @@ async function criaEventosDeCobrancaSGA(req){
                         req.query.observacao_origem = element.observacao_origem; 
                         req.query.id_canal = 3;
                         req.query.dt_para_exibir = moment().format('YYYY-MM-DD HH:mm:ss');
-
+                        req.query.codigo_veiculo = null;
+                        req.query.placa = null;
                         // verifica se não tem evento de combrança em aberto 
                         var idEventoCobraca = await buscaValorDoAtributo(credenciais, 'id','eventos',` id_motivo = 13 and id_status_evento in (1,4,5,6) and id_pessoa_receptor = ${idPessoa} `)
                             idEventoCobraca = Object.values( idEventoCobraca[0])[0];
                         if (!idEventoCobraca) {
+                            console.log('antes de criar evento de cobrança ', req.query)
                             await criarEvento(req, res) 
                             .then( async resEvento => {
                             //salva os boletos do evento 
@@ -239,6 +243,8 @@ async function criaEventosDeCobrancaSGA(req){
 
 async function criaEventosDePosVendaSGA(req){
 
+    console.log('Criando eventos de Pós venda ...')
+
     let credenciais = {
         token: req.query.token,
         idUsuario: req.query.id_usuario
@@ -260,46 +266,16 @@ async function criaEventosDePosVendaSGA(req){
         req.dataInical = dataInical;
         req.dataFinal = dataFinal;
         
-        ultimaGeracaoEventoCobranca = moment().format('YYYY-MM-DD HH:mm:ss');
+        ultimaGeracaoEventosPosVenda = moment().format('YYYY-MM-DD HH:mm:ss');
 
-        // var res = '';
-        // var voluntariosAtivos = [];
-        // await getVoluntariosAtivos(req, res)
-        // .then( resBoletos => {
-        //     voluntariosAtivos = resBoletos;
-        // })
-        // .catch(error => { voluntariosAtivos = [] });
-        // for ( const element of voluntariosAtivos ) {
-        //    i = 0;
-        //     req.query.codigo_voluntario = element.codigo_voluntario;
-        //     await getSituacaoAdesaoVoluntario( req , res)
-        //     .then(  async resSituacao => { 
-        //         let adesoes = resSituacao.adesoes
-        //         for ( const elementAdes of adesoes ) {
-        //             if (elementAdes.data_adesao > '2020-02-01'){
-        //                 i++;
-        //                 console.log('elementAdes.data_adesao ', elementAdes.data_adesao)
-        //                 req.query.codigo_veiculo = elementAdes.codigo_veiculo;
-        //                 await getSituacaoFinaceiroVeiculo(req, res)
-        //                 .then( async resVeiculo => { 
-        //                     if (resVeiculo[0].cpf){
-        //                         console.log( 'cpf ', resVeiculo[0].cpf )
-        //                     }
-        //                 })
-        //             }
-        //         }
-        //     })
-        //     .catch( error => {});
-
-        //     console.log('Voluntário ', element.codigo_voluntario,  ' adesões ', i )
-        // }
- 
         var res 
         await getContratos(req, res)
         .then( async resContratos => {
-            //console.log('resContratos.quantidade_veiculos ', resContratos.quantidade_veiculos )
-            for (i= 0; i < resContratos.quantidade_veiculos; i++ ) {
+           // console.log('resContratos.quantidade_veiculos ', resContratos.quantidade_veiculos )
+            for (var i = 0; i < resContratos.quantidade_veiculos; i++ ) {
+                //console.log('i ', i )
                 if ( resContratos[i].data_contrato_associado > moment().subtract(7, 'days').format('YYYY-MM-DD') ){
+                    //console.log('resContratos[i] dentro do if ', resContratos[i] )
                     req.query.cpf_cnpj = resContratos[i].cpf;
                     await getPessoaPorCPFCNPJ(req, res)
                     .then( async resGetPessoaPorCPFCNPJ => {
@@ -309,6 +285,7 @@ async function criaEventosDePosVendaSGA(req){
                             idPessoa = resGetPessoaPorCPFCNPJ.idPessoa;
                         }   
                     //acrescenta paramentos para criar evento
+                    req.query.id_evento_pai =  null;
                     req.query.id_campanha = 20;
                     req.query.id_motivo = 28;
                     req.query.tipoDestino = 'P';

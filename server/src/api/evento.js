@@ -117,6 +117,8 @@ async function _criarEvento(client, id_campanha, id_motivo, id_evento_pai, id_ev
 
   encerrado = encerrado ? encerrado : false;
 
+  //console.log('_criarEvento ')
+
   return new Promise(function (resolve, reject) {
     let update = `INSERT INTO eventos( `
 
@@ -170,7 +172,7 @@ async function _criarEvento(client, id_campanha, id_motivo, id_evento_pai, id_ev
       '${observacao_origem}',
       ${id_canal},
       ${idTelefonePessoa ? idTelefonePessoa : 'NULL'},
-      '${codigo_veiculo ? codigo_veiculo : NULL }',
+      '${codigo_veiculo ? codigo_veiculo : null}',
       '${placa ? placa : null}'`;
 
       if (encerrado == 'true') {
@@ -245,6 +247,8 @@ async function criarEvento(req, res) {
     token: req.query.token,
     idUsuario: req.query.id_usuario
   };
+
+  //console.log( 'Criar 1 ', req.query)
 
   if (!req.query.eventoAnterior) {req.query.eventoAnterior = null};
 
@@ -329,7 +333,6 @@ async function criarEvento(req, res) {
               reject(err)
             })
           }).catch(err => {
-
             client.end();
             reject(err)
           })
