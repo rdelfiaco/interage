@@ -1,3 +1,4 @@
+import { element } from 'protractor';
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ConnectHTTP } from '../../shared/services/connectHTTP';
@@ -154,8 +155,8 @@ export class CriarEventoComponent implements OnInit {
     });
 
     this.usuarioSelect = eventoEncontrado.resposta.usuarios;
-    this.usuarioSelect = this.usuarioSelect.map(usuario => {
-      return { value: usuario.id_pessoa, label: usuario.nome }
+    this.usuarioSelect = this.usuarioSelect.filter( element => { return element.status  } ).map(usuario => {
+          return { value: usuario.id_pessoa, label: usuario.nome }
     });
 
     this.motivosDoCanal = eventoEncontrado.resposta.motivosCanais;

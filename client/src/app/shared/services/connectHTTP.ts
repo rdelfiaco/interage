@@ -1,6 +1,10 @@
 import { LocalStorage } from "./localStorage";
 import { Usuario } from "../../login/usuario";
 
+//var localSevidor = "http://88.99.35.190:3000/" //Producao
+var localSevidor =   "http://localhost:3010/";  //Local
+//var localSevidor =  "http://192.168.100.74:3010/" //MCPRO
+
 interface optionsCallService {
   service: string
   paramsService?: any,
@@ -21,8 +25,10 @@ export class ConnectHTTP {
     if (mensagem && !mensagem.error) return mensagem;
     return new Promise((resolve, reject) => {
       //TROCA DADOS SERVIDOR
+      const host = options.host || localSevidor;
+
       // const host = options.host || "http://88.99.35.190:3010/" //treinamento
-      const host = options.host || "http://88.99.35.190:3000/" //Producao
+      // const host = options.host || "http://88.99.35.190:3000/" //Producao
       // const host = options.host || "http://localhost:3000/" //Local_producao
       //  const host = options.host || "http://localhost:3010/" //Local
       // const host = options.host || "http://192.168.100.74:3010/" //MCPRO
@@ -74,8 +80,10 @@ export class ConnectHTTP {
     return new Promise((resolve, reject) => {
       
       //TROCA DADOS SERVIDOR
+      const host = options.host || localSevidor;
+
       // const host = options.host || "http://88.99.35.190:3010/" //treinamento
-      const host = options.host || "http://88.99.35.190:3000/" //Producao
+      // const host = options.host || "http://88.99.35.190:3000/" //Producao
       // const host = options.host || "http://localhost:3010/" //Local
       // const host = options.host || "http://localhost:3000/" //Local_producao
       // const host = options.host || "http://192.168.100.74:3010/" //MACPRO

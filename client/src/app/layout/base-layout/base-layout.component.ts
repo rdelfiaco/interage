@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, NgModule,  OnInit } from '@angular/core';
 import { CheckPermissaoRecurso } from '../../shared/services/checkPemissaoRecurso';
 import { AuthService } from '../../login/auth.service';
 import { Router } from '@angular/router';
@@ -17,7 +17,8 @@ export class BaseLayoutComponent {
   usuarioLogado: Usuario;
   nomeUsuario: string = 'Usuário';
   // TROCA DADOS SERVIDOR TROCAR NUMERO DA VERSÃO
-  versaoSistema: string = 'V.2.1.3';
+  versaoSistema: string = 'T.2.1.3';
+  versaoTeste: boolean = true; 
   counterEvents: number;
   sub: any;
   constructor(private router: Router, 
