@@ -43,8 +43,9 @@ app.use(bodyParser.urlencoded({
 
 //integração com SGA
 declaraServico('buscaPessoa', apiSGA.buscaPessoa )
+declaraServico('getVeiculo', apiSGA.getVeiculo )
 
-
+ 
 //proposta
 declaraServico('salvarProposta', proposta.salvarProposta);
 declaraServico('consultarPlaca', consultaPlaca.consultarPlaca);
@@ -218,7 +219,7 @@ declaraServico('crudCanais', canais.crudCanais);
 declaraServico('setParametrosInterages', parametroInterage.setParametrosInterages);
 declaraServico('getParametrosInterage', parametroInterage.getParametrosInterage);
 
-
+ 
 app.listen(nodeStart.port, "0.0.0.0");
 
 console.log(`Servidor iniciado na em http://localhost:${nodeStart.port}`)

@@ -328,11 +328,11 @@ export class PrincipalComponent implements OnInit {
   }
 
  fechaModalElaborarProposta(){
+  this.modalElaborarProposta.hide();  
+  }
 
-  debugger
-  this.modalElaborarProposta.hide();
-  
-
+  voltar() {
+    history.back();
   }
 
 }

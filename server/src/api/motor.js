@@ -51,8 +51,8 @@ async function encerraEventosDeCobrancaSGA(req){
 
         if (liquidados && dataBaixa != ''){
             //encerra evento de cobrança 
-            var sql = `update eventos set id_status_evento= 3,  dt_visualizou= now(), 
-            id_pessoa_visualizou=1, dt_resolvido=now(), id_pessoa_resolveu=1, id_resp_motivo = 59 
+            var sql = `update eventos set id_status_evento= 3,  dt_visualizou = now(), 
+            id_pessoa_visualizou = 1, dt_resolvido=now(), id_pessoa_resolveu=1, id_resp_motivo = 59,
             observacao_retorno='Evento concluido automaticamente por constatar que o boleto foi pago em ${ moment(dataBaixa).format('DD/MM/YYYY')}'
             where id = ${element.id_evento}`
             awaitSQL(credenciais, sql);
@@ -74,7 +74,7 @@ async function encerraEventosDeCobrancaSGA(req){
                 req.query.tipoDestino = 'P';
                 req.query.id_pessoa_organograma = destinatarioEventosCobranca;
                 req.query.id_pessoa_receptor = idPessoa ;
-                req.query.observacao_origem = 'Agendar uma re-vistorio ou soliciar para o cliente realizar a re-vistoria'; 
+                req.query.observacao_origem = 'Agendar uma re-vistoria ou soliciar para o cliente realizar a re-vistoria'; 
                 req.query.id_canal = 3;
                 req.query.dt_para_exibir = moment().format('YYYY-MM-DD HH:mm:ss');
 
@@ -87,11 +87,7 @@ async function encerraEventosDeCobrancaSGA(req){
                     })
                     .catch( e => {})
                 }
-
             } 
-
-
-
         }
     }; 
 
@@ -105,8 +101,6 @@ async function criaEventosDeCobrancaSGA(req){
         token: req.query.token,
         idUsuario: req.query.id_usuario
       };
-
-    
 
     var periodicidade = await buscaValorDoAtributo(credenciais, 'valor','interage_parametros',`nome_parametro = 'periodicidadeGerarEventosCobra' `)
     periodicidade = Object.values( periodicidade[0])[0];
@@ -324,6 +318,7 @@ async function criaEventosDePosVendaSGA(req){
                     req.query.id_canal = 3;
                     req.query.dt_para_exibir = moment().format('YYYY-MM-DD HH:mm:ss');
                     req.query.codigo_veiculo = resContratos[i].codigo_veiculo;
+                    req.query.placa = resContratos[i].placa;
                     // verifica se não tem evento de pós venda em aberto 
                     //console.log(req.query)
                     var idEventoPosVenda = await buscaValorDoAtributo(credenciais, 'id','eventos'

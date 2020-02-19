@@ -1,10 +1,11 @@
 import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import * as moment from 'moment';
-import { ModalDirective } from '../../../lib/ng-uikit-pro-standard';
+import { ModalDirective, ToastService } from '../../../lib/ng-uikit-pro-standard';
 import { ConnectHTTP } from '../../shared/services/connectHTTP';
 import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
+import { BancoDados } from '../../shared/services/bancoDados';
 
 @Component({
   selector: 'app-formulario-evento',
@@ -13,12 +14,20 @@ import { Router } from '@angular/router';
 })
 export class FormularioEventoComponent implements OnInit {
 
+  
+    placa: any;
+    marca: any;
+    modelo: any;
+    ano: any;
+  
   @Input() evento: any;
   @ViewChild('pessoaEditando') pessoaEditando: ModalDirective;
   eventoForm: FormGroup;
   pessoa: Observable<object>;
   constructor(private formBuilder: FormBuilder,
     private connectHTTP: ConnectHTTP,
+    private toastrService: ToastService, 
+    private bancoDados: BancoDados = new BancoDados,
     private router: Router) {
     this.eventoForm = this.formBuilder.group({
       id: [{value:'', disabled: true}],
@@ -41,7 +50,8 @@ export class FormularioEventoComponent implements OnInit {
       dt_resolvido: [{value:'', disabled: true}],
       observacao_origem: [{value:'', disabled: true}],
       observacao_retorno: [{value:'', disabled: true}],
-      id_proposta: [{value:'', disabled: true}]
+      id_proposta: [{value:'', disabled: true}],
+      placa: [{value:'', disabled: true}]
     });
   }
 
@@ -73,6 +83,7 @@ export class FormularioEventoComponent implements OnInit {
       observacao_origem: this.evento.observacao_origem,
       observacao_retorno: this.evento.observacao_retorno,
       id_proposta: this.evento.id_proposta,
+      placa: this.evento.placa,
     });
   }
 
@@ -84,7 +95,26 @@ export class FormularioEventoComponent implements OnInit {
     return this.router.navigate(['proposta/'+this.evento.id_proposta]);
   }
 
-  
+  async abrirVeiculo(){
+
+    let resp = await this.bancoDados.lerDados('getVeiculo',{
+      placa : this.evento.placa
+    }) as any;
+    if(!resp || resp.error) 
+     {
+      this.toastrService.error('Erro ao ler protocolo ');
+      return;
+    }
+    var veiculo = resp.resposta[0];
+    this.placa = veiculo.placa; 
+    this.marca = veiculo.marca;
+    this.modelo = veiculo.modelo;
+    this.ano = veiculo.ano_fabricacao;
+
+
+    return;
+  }
+
   async cadastroPessoa() {
 
     let pessoaId = this.evento.id_pessoa_receptor;

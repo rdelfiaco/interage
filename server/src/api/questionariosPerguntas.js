@@ -69,10 +69,10 @@ function addPergunta(req, res) {
       idUsuario: req.query.id_usuario
     };
 
-    console.log('req.query.data ', req.query.data )
+   // console.log('req.query.data ', req.query.data )
     req.query.p = JSON.parse(req.query.data);
 
-    console.log('req.query.p ', req.query.p )
+    //console.log('req.query.p ', req.query.p )
 
     let sql = `INSERT INTO quest_perguntas(
       nome,

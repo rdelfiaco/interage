@@ -699,7 +699,7 @@ function salvarTelefonePessoa(req, res) {
           reject(err)
         });
       }else {
-        console.log('idTelefone ', idTelefone )
+        //console.log('idTelefone ', idTelefone )
         resolve({idTelefone: idTelefone })
       };
       }).catch(e => {
@@ -1552,7 +1552,7 @@ async function adicionarPessoaSGA(req, res) {
     }
 
     async function inserirTelefoneCelular(req, idPessoa ){
-      console.log('req.query.resGetAssociado ', req.query.resGetAssociado )
+     // console.log('req.query.resGetAssociado ', req.query.resGetAssociado )
       req.query.ddd = req.query.resGetAssociado.telefone_celular.substring(1,3) ;
       let telefone = req.query.resGetAssociado.telefone_celular.substring(4);
       telefone = telefone.replace('-', '');

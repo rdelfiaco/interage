@@ -212,7 +212,10 @@
   </div>
 
   <div class="row justify-content-end">
-    
+    <div class="md-form">
+      <button type="button" mdbBtn color="danger" (click)="voltar();" class="relative waves-light" mdbWavesEffect
+        [disabled]="!principalForm.valid && idPessoa">Voltar</button>
+    </div>
     <div class="md-form">
       <button type="button" mdbBtn color="primary" (click)="salvarPessoa();" class="relative waves-light" mdbWavesEffect
         [disabled]="!principalForm.valid && idPessoa">Salvar Pessoa</button>

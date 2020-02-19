@@ -238,6 +238,29 @@ const {  executaSQLSemToken } = require( './executaSQL');
 
     }   
 
+    function getVeiculo(req, res) {
+        return new Promise( async function (resolve, reject) {
+
+            var authorization = await executaSQLSemToken(`select valor from interage_parametros where nome_parametro = 'tokenSGA' `);
+            authorization = `Bearer ${authorization[0].valor}`;
+
+            var url = `https://api.hinova.com.br/api/sga/v2/veiculo/buscar/${req.query.placa}`;
+            var headers = {
+            "Content-Type": "application/json",
+            "Authorization": authorization
+            };
+            
+            var parametros = { method: 'GET',
+            headers: headers, 
+            cache: 'default' 
+            };
+            fetch(url, parametros)
+            .then(res => {
+                resolve (res.json())})
+            .catch(error => reject( error) );
+        })
+
+    }
 
     module.exports = { 
         getAssociado,
@@ -247,6 +270,7 @@ const {  executaSQLSemToken } = require( './executaSQL');
         getVoluntariosAtivos,
         getSituacaoAdesaoVoluntario,
         getSituacaoFinaceiroVeiculo,
-        getContratos
+        getContratos,
+        getVeiculo,
 
     }

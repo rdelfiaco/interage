@@ -113,7 +113,7 @@ function encerrarEvento(client, id_pessoa, id_evento, id_status_evento) {
 
 async function _criarEvento(client, id_campanha, id_motivo, id_evento_pai, id_evento_anterior,
   id_pessoa_criou, dt_para_exibir, tipoDestino, id_pessoa_organograma, id_pessoa_receptor,
-  observacao_origem, id_canal, protocolo, idTelefonePessoa, encerrado, codigo_veiculo ) {
+  observacao_origem, id_canal, protocolo, idTelefonePessoa, encerrado, codigo_veiculo, placa ) {
 
   encerrado = encerrado ? encerrado : false;
 
@@ -139,7 +139,8 @@ async function _criarEvento(client, id_campanha, id_motivo, id_evento_pai, id_ev
       observacao_origem,
       id_canal,
       id_telefone,
-      codigo_veiculo `;
+      codigo_veiculo, 
+      placa `;
 
     if (encerrado == 'true') {
         update = update + `, dt_resolvido, id_pessoa_resolveu, observacao_retorno ` 
@@ -169,7 +170,8 @@ async function _criarEvento(client, id_campanha, id_motivo, id_evento_pai, id_ev
       '${observacao_origem}',
       ${id_canal},
       ${idTelefonePessoa ? idTelefonePessoa : 'NULL'},
-      ${codigo_veiculo ? codigo_veiculo : 'NULL' }`;
+      '${codigo_veiculo ? codigo_veiculo : NULL }',
+      '${placa ? placa : null}'`;
 
       if (encerrado == 'true') {
         update = update + `, now() , ${id_pessoa_criou}, '${observacao_origem}' ` 
@@ -207,7 +209,7 @@ function encaminhaEvento(req, res) {
         encerrarEvento(client, req.query.id_pessoa_resolveu, req.query.id_evento, statusEvento).then(eventoEncerrado => {
           _criarEvento(client, req.query.id_campanha, req.query.id_motivo, req.query.id_evento_pai, req.query.id_evento,
             req.query.id_pessoa_resolveu, req.query.dt_para_exibir, req.query.tipoDestino, req.query.id_pessoa_organograma, req.query.id_pessoa_receptor,
-            req.query.observacao_origem, req.query.id_canal, null, null, false).then(eventoCriado => {
+            req.query.observacao_origem, req.query.id_canal, null, null, false, null, null).then(eventoCriado => {
               client.query('COMMIT').then((resposta) => {
                 resolve(eventoCriado)
                 client.end();
@@ -318,7 +320,7 @@ async function criarEvento(req, res) {
 
        await _criarEvento(client, req.query.id_campanha, req.query.id_motivo, eventoPai , eventoAnterior,
           req.query.id_pessoa_resolveu, req.query.dt_para_exibir, req.query.tipoDestino, req.query.id_pessoa_organograma, req.query.id_pessoa_receptor,
-          req.query.observacao_origem, req.query.id_canal, protocolo, idTelefonePessoa, req.query.encerrado, req.query.codigo_veiculo ).then(eventoCriado => {
+          req.query.observacao_origem, req.query.id_canal, protocolo, idTelefonePessoa, req.query.encerrado, req.query.codigo_veiculo, req.query.placa ).then(eventoCriado => {
             client.query('COMMIT').then((resposta) => {
               resolve(eventoCriado)
               client.end();
@@ -440,7 +442,7 @@ function salvarEvento(req, res) {
                   ` WHERE eventos.id=${req.query.id_evento} AND eventos.id_status_evento in(5,6)
                   RETURNING tipoDestino, id_pessoa_organograma;
                   `;
-              console.log('finalizaEvento ', update )    
+              //console.log('finalizaEvento ', update )    
               client.query(update).then((updateEventoEncerrado) => {
                 if (updateEventoEncerrado.rowCount != 1) {
                   client.query('COMMIT').then((resposta) => {

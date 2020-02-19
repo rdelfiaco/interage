@@ -25,7 +25,7 @@ async function alteraValorDoAtributo(credenciais, atributos, tabela, condicao ){
 
 
 async function awaitSQL(credenciais, sql) {
-      console.log('sql ', sql )
+      //console.log('sql ', sql )
       return await executaSQL(credenciais, sql)
 }
 
