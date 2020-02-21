@@ -5,7 +5,6 @@ export class ReportPDF {
 
 
     gerarPDF(titulo: any, lineDetail: any  ){
-        debugger;
         var hoje: string =   moment().format('DD/MM/YYYY HH:mm:ss');
 
         var body = [];

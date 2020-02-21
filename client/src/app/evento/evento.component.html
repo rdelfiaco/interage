@@ -12,7 +12,7 @@
     <h4 class="white-text mx-3 mt-2 font-weight-bold text-uppercase">TAREFAS / EVENTOS</h4>
     <div>
       <button mdbBtn color="white" outline="true" rounded="true" size="sm" type="button"
-        (click)="modalCriarEvento.show()" class="px-2" mdbWavesEffect>
+        (click)="buttonCriarEvento = true;  modalCriarEvento.show()" class="px-2" mdbWavesEffect>
         Criar evento
       </button>
     </div>
@@ -271,19 +271,21 @@
       </div>
     </div>
 
-    <div mdbModal #modalCriarEvento="mdbModal" [config]="{backdrop: true}" class="modal fade right" role="dialog"
-      aria-labelledby="myBasicModalLabel" aria-hidden="true">
-      <div class="modal-dialog modal-fluid" role="document">
-        <div class="modal-header light-blue darken-3 white-text">
-          <h4 class="modal-title w-100" id="myModalLabel">Criar Evento</h4>
-          <button type="button" style="cursor:pointer;" class="close" data-dismiss="modal" aria-label="Close"
-            (click)="modalCriarEvento.hide()">
-            <span aria-hidden="true" style="color:white; cursor:pointer;">&times;</span>
-          </button>
-        </div>
-        <div class="modal-content">
-          <div class="modal-body" style="overflow: auto; height: 80vh;">
-            <app-criar-evento (fechaModal)="fechaModal()"></app-criar-evento>
+    <div *ngIf="buttonCriarEvento"  >
+      <div mdbModal #modalCriarEvento="mdbModal" [config]="{backdrop: true}" class="modal fade right" role="dialog"
+        aria-labelledby="myBasicModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-fluid" role="document">
+          <div class="modal-header light-blue darken-3 white-text">
+            <h4 class="modal-title w-100" id="myModalLabel">Criar Evento</h4>
+            <button type="button" style="cursor:pointer;" class="close" data-dismiss="modal" aria-label="Close"
+              (click)="modalCriarEvento.hide()">
+              <span aria-hidden="true" style="color:white; cursor:pointer;">&times;</span>
+            </button>
+          </div>
+          <div class="modal-content">
+            <div class="modal-body" style="overflow: auto; height: 80vh;">
+              <app-criar-evento (fechaModal)="fechaModal()"></app-criar-evento>
+            </div>
           </div>
         </div>
       </div>

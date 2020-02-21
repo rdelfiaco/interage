@@ -36,6 +36,7 @@ export class EventoComponent implements OnInit {
   eventoFiltros: any;
   tornarResponsavel: any;
   totalEventos: number = 0;
+  buttonCriarEvento: boolean = false;
 
   dataInicial: string = moment().subtract(1, 'days').format('DD/MM/YYYY')
   dataFinal: string = moment().add(1, 'days').format('DD/MM/YYYY')
@@ -92,6 +93,9 @@ export class EventoComponent implements OnInit {
   }
 
   async ngOnInit() {
+
+    if (!this.localStorage.getLocalStorage('usuarioLogado')) return false; 
+
     this.eventoFiltros = await this.connectHTTP.callService({
       service: 'getEventoFiltros',
       paramsService: {
@@ -338,6 +342,7 @@ export class EventoComponent implements OnInit {
   }
 
   fechaModal() {
+    this.buttonCriarEvento = false;
     this.modalCriarEvento.hide();
   }
 

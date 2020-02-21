@@ -35,15 +35,14 @@ export class AuthGuard implements CanActivate {
   }
 
   _checkPermissaoRota(route: ActivatedRouteSnapshot, usuarioLogado: Usuario) {
-    let rotas = [];
-    (usuarioLogado.permissoes || []).forEach(elem =>{
-        if (elem.rota != null) rotas.push(elem.rota)
-    });
-    if (rotas.find( element => element == route.routeConfig.path) ) 
-      { return true;
-      } else {
-        return false;
-      }
-  
+      let rotas = [];
+      (usuarioLogado.permissoes || []).forEach(elem =>{
+          if (elem.rota != null) rotas.push(elem.rota)
+      });
+      if (rotas.find( element => element == route.routeConfig.path) ) 
+        { return true;
+        } else {
+          return false;
+        }
   }
 }

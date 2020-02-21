@@ -284,7 +284,6 @@ export class AtendimentoComponent implements OnInit {
       return false;
     }
     if (this.telefone && this.ddd){
-      debugger
       if(!this.pessoaForm.value.id_pessoa) {
         
         let resp = await this.connectHTTP.callService({

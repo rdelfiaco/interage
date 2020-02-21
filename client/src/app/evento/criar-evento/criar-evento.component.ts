@@ -79,7 +79,6 @@ export class CriarEventoComponent implements OnInit {
   }
   @Input() 
   set idCanal(idCanal: any){
-    debugger
     //this.criarEventoForm.controls['canal'].setValue(idCanal);
     this.criarEventoForm.controls['canal'].reset({ value: idCanal , disabled: true})
     this._idCanal = idCanal;

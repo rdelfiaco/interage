@@ -178,7 +178,6 @@ export class AtendimentoInformacaoComponent implements OnInit {
   }
 
   gerarPDF(){
-    debugger
     let titulo = `Motivos de atendimentos entre ${this.dataInicial} a ${this.dataFinal}`;
 
     var detalhesColunas = [];

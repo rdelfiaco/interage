@@ -20,8 +20,15 @@ export class LocalStorage {
     return localStorage.getItem(`${path}_string`)
   }
 
-  delLocalStorage(path: string) {
-    localStorage.removeItem(`${path}_string`)
+ 
+
+  delLocalStorage(path: string, valor: string) {
+    if (valor == 'date')
+      localStorage.removeItem(`${path}_date`)
+    else if (valor == 'object')
+      localStorage.removeItem(`${path}_object`)
+    else
+      localStorage.removeItem(`${path}_string`)
   }
 
 }

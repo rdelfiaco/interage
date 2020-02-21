@@ -51,7 +51,6 @@ export class ElaboraPropostaComponent implements OnInit {
       this.idPessoaCliente = pessoa.principal.id;
       this.Cliente = pessoa.principal.nome;
     }
-    debugger
   }
   get pessoa() {
     return this.pessoaObject;

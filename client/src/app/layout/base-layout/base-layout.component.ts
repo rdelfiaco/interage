@@ -1,3 +1,4 @@
+import { async } from '@angular/core/testing';
 import { Component, NgModule,  OnInit } from '@angular/core';
 import { CheckPermissaoRecurso } from '../../shared/services/checkPemissaoRecurso';
 import { AuthService } from '../../login/auth.service';
@@ -41,10 +42,19 @@ export class BaseLayoutComponent {
       });
   }
 
-  logout() {
-    this.auth.logout();
-    this.usuarioLogado = null;
-    // window.location.reload();
+  async logout() {
+     let usuarioLogado = this.auth.getUsuarioLogadoLocalStorage();
+    if (!usuarioLogado) return;
+    await this.connectHTTP.callService({
+      service: 'logout',
+      naoExigeToken: true,
+      paramsService: {
+        token: usuarioLogado.token,
+        id_usuario: usuarioLogado.id
+      }
+    })
+    //this.counterEvents.next(0);
+    this.localStorage.delLocalStorage('usuarioLogado', 'object')
     this.router.navigate(['/login']);
   }
 

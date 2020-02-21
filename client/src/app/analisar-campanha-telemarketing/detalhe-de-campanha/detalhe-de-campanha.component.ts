@@ -240,8 +240,8 @@ export class DetalheDeCampanhaComponent implements OnInit {
   }
 
   voltar() {
-    this.localStorage.delLocalStorage('dataInicial')
-    this.localStorage.delLocalStorage('dataFinal');
+    this.localStorage.delLocalStorage('dataInicial', 'string' )
+    this.localStorage.delLocalStorage('dataFinal', 'string');
     history.back();
   }
 
@@ -579,8 +579,6 @@ export class DetalheDeCampanhaComponent implements OnInit {
 
 
     showAnalitico(evento, quadro){
-
-      debugger
 
       let filtros: string = '';
       let idSql = 0;

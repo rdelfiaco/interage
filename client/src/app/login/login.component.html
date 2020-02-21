@@ -11,14 +11,14 @@
               </div>
               <div class="md-form campo-email">
                 <i class="fa fa-user prefix grey-text comp-margin-left"></i>
-                <input type="text" id="loginForm-login" class="form-control" formControlName="login"
-                  data-error="favor digitar seu login" #login mdbInputDirective>
+                <input type="text"  autocomplete="username" id="loginForm-login" class="form-control" formControlName="login"
+                  data-error="favor digitar seu login" #login mdbInputDirective >
                 <label for="loginForm-login">login</label>
               </div>
 
               <div class="md-form campo-senha">
                 <i class="fa fa-lock prefix grey-text comp-margin-left"></i>
-                <input type="password" id="loginForm-senha" class="form-control" formControlName="senha"
+                <input type="password" autocomplete="current-password" id="loginForm-senha" class="form-control" formControlName="senha"
                   data-error="favor digitar sua senha" mdbInputDirective>
                 <label for="loginForm-senha">Senha</label>
               </div>

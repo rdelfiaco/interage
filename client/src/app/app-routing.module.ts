@@ -355,6 +355,7 @@ const routes: Routes = [
         component: ParametrosInterageComponent ,
         canActivate: [AuthGuard]
       },
+    
     ]
   },
   {

@@ -59,7 +59,9 @@ export class AuthService {
     this.counterEvents.next(counter);
 
     this.setInterval = setInterval(async () => {
-      if (!self.usuarioLogadoObject) return clearInterval(self.setInterval);
+
+      //      if (!self.usuarioLogadoObject) return clearInterval(self.setInterval);
+      if (!this.getUsuarioLogadoLocalStorage() ) return clearInterval(self.setInterval);
 
       let res = await self.connectHTTP.callService({
         service: 'getCountEventosPendentes',
@@ -71,6 +73,7 @@ export class AuthService {
       this.counterEvents.next(counter);
     }, timer)
   }
+
   estaLogado(): Observable<boolean> {
     return this.usuarioLogado.asObservable();
   }
@@ -98,11 +101,11 @@ export class AuthService {
   }
 
   checkAutenticacao() {
-    return this._getDataExpiracao() && this._getDataExpiracao().getTime() > new Date().getTime();
+    return this._getDataExpiracao() && this._getDataExpiracao().getTime() > new Date().getTime() ;
   }
 
   validaAutenticacao() {
-      if (this.usuarioLogadoObject){
+      if (this.getUsuarioLogadoLocalStorage()){
       if (this._getDataExpiracao().getTime() > new Date().getTime()) {
         this._setValidadeToken();
       }
@@ -133,11 +136,8 @@ export class AuthService {
         id_usuario: usuarioLogado.id
       }
     })
-    this.counterEvents.next(0);
-    this.localStorage.delLocalStorage(`${usuarioLogado.token}_date`)
-    this.localStorage.delLocalStorage('usuarioLogado_object')
-    this.usuarioLogado.next(false);
-    this.usuarioLogadoObject = null;
+    //this.counterEvents.next(0);
+    this.localStorage.delLocalStorage('usuarioLogado', 'object')
     this.router.navigate(['login']);
   }
 
