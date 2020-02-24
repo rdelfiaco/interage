@@ -24,10 +24,6 @@ import {
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
-import { DashboardAdminComponent } from './dashboard-admin/dashboard-admin.component';
-import { DashboardOperadorComponent } from './dashboard-operador/dashboard-operador.component';
-import { DashboardSupervisorComponent } from './dashboard-supervisor/dashboard-supervisor.component';
-
 import { LoginModule } from './login/login.module';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -41,8 +37,6 @@ import { TelemarketingModule } from './telemarketing/telemarketing.module';
 import { PipesModule } from './shared/pipes/pipesModule';
 import { PesquisaPessoaModule } from './pesquisa-pessoa/pesquisa-pessoa.module';
 import { ExportarComponent } from './exportar/exportar.component';
-import { DashboardPropostaComponent } from './dashboard-proposta/dashboard-proposta.component';
-import { DashboardAgenteComponent } from './dashboard-agente/dashboard-agente.component';
 import { ShowTableComponent } from './show-table/show-table.component';
 import { RanksComponent } from './ranks/ranks.component';
 import { AnalisarCampanhaTelemarketingModule } from './analisar-campanha-telemarketing/analisar-campanha-telemarketing.module';
@@ -65,16 +59,11 @@ import { ParametrosInterageComponent } from './parametros-interage/parametros-in
 @NgModule({
   declarations: [
     AppComponent,
-    DashboardAdminComponent,
-    DashboardOperadorComponent,
-    DashboardSupervisorComponent,
     PageNotFoundComponent,
     AnalisaCampanhaComponent,
     ProdutividadeCallCenterComponent,
     ImportaLeadComponent,
     ExportarComponent,
-    DashboardPropostaComponent,
-    DashboardAgenteComponent,
     ShowTableComponent,
     RanksComponent,
     BaseLayoutComponent,

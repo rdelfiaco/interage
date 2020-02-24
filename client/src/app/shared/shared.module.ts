@@ -8,6 +8,7 @@ import { CommonModule } from '@angular/common';
 import { CheckPermissaoRecurso } from './services/checkPemissaoRecurso';
 import { ResponderQuestionario } from '../responder-questionario/responder-questionario.module';
 import { RandomColor } from './services/randomColor';
+import { Meses } from './services/meses';
 
 @NgModule({
   imports: [
@@ -30,6 +31,7 @@ import { RandomColor } from './services/randomColor';
     BancoDados,
     RandomColor,
     ReportPDF,
+    Meses
   ]
 })
 export class SharedModule { }

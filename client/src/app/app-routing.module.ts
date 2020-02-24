@@ -12,7 +12,6 @@ import { ObjecaoComponent } from './objecao/objecao.component';
 import { TipoDeClienteComponent } from './tipo-de-cliente/tipo-de-cliente.component';
 import { AuditoriaComponent } from './cadastro-pessoa/auditoria/auditoria.component';
 import { MarketingComponent } from './cadastro-pessoa/marketing/marketing.component';
-
 import { BaseLayoutComponent } from './layout/base-layout/base-layout.component';
 import { PagesLayoutComponent } from './layout/pages-layout/pages-layout.component';
 import { UsuariosCampanhaComponent } from './crud-campanha/usuarios-campanha/usuarios-campanha.component';
@@ -25,8 +24,6 @@ import { RanksComponent } from './ranks/ranks.component';
 import { ShowTableComponent } from './show-table/show-table.component';
 import { AnalisarCampanhaTelemarketingComponent } from './analisar-campanha-telemarketing/analisar-campanha-telemarketing.component';
 import { TarefaComponent } from './workflow/tarefa/tarefa.component';
-import { DashboardAgenteComponent } from './dashboard-agente/dashboard-agente.component';
-import { DashboardPropostaComponent } from './dashboard-proposta/dashboard-proposta.component';
 import { WorkflowComponent } from './workflow/workflow.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { ExportarComponent } from './exportar/exportar.component';
@@ -34,11 +31,6 @@ import { DetalhePropostaComponent } from './proposta/detalhe-proposta/detalhe-pr
 import { ImportaLeadComponent } from './importa-lead/importa-lead.component';
 import { PropostaComponent } from './proposta/proposta.component';
 import { EventoComponent } from './evento/evento.component';
-
-import { DashboardSupervisorComponent } from './dashboard-supervisor/dashboard-supervisor.component';
-import { DashboardOperadorComponent } from './dashboard-operador/dashboard-operador.component';
-
-import { DashboardAdminComponent } from './dashboard-admin/dashboard-admin.component';
 import { LoginComponent } from './login/login.component';
 import { NgModule, Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -168,16 +160,6 @@ const routes: Routes = [
       {
         path: 'dashboard',
         component: DashboardComponent,
-        canActivate: [AuthGuard]
-      },
-      {
-        path: 'dashboardProposta',
-        component: DashboardPropostaComponent,
-        canActivate: [AuthGuard]
-      },
-      {
-        path: 'dashboardAgente',
-        component: DashboardAgenteComponent,
         canActivate: [AuthGuard]
       },
       {
