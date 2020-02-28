@@ -66,7 +66,7 @@ const routes: Routes = [
     children: [
       {
         path: '',
-        component: DashboardComponent,
+        component: EventoComponent,
       },
       {
         path: 'semPermissao', component: SemPermissaoComponent

@@ -1,3 +1,4 @@
+import { CarregandoModule } from './../shared/carregando/carregando.module';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DashboardComponent } from './dashboard.component';
@@ -8,7 +9,8 @@ import { MDBBootstrapModulesPro, MDBSpinningPreloader } from '../../lib/ng-uikit
   imports: [
     CommonModule,
     BrowserModule,
-    MDBBootstrapModulesPro.forRoot()
+    MDBBootstrapModulesPro.forRoot(),
+    CarregandoModule
   ],
   declarations: [
     DashboardComponent

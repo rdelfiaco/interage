@@ -17,7 +17,7 @@ export class DetalheEventoComponent implements OnInit {
   motivos_respostas: any;
   predicoes: any;
   objecoes: any;
-  carregando: boolean = false;
+  carregando: boolean = false; 
   pessoa: Observable<string[]>;
   eventoObject: any;
   pessoaObject: any;

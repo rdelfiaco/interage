@@ -1,5 +1,4 @@
 const express = require('express');
-const router = express.Router();
 const app = express();
 const nodeStart = require('./src/config/nodeStart');
 const bodyParser = require('body-parser');
@@ -36,14 +35,18 @@ const apiSGA = require('./src/api/apiSGA');
 const parametroInterage = require('./src/api/parametrosInterage');
 
 
+
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
   extended: true
 }));
 
 //integração com SGA
-declaraServico('buscaPessoa', apiSGA.buscaPessoa )
-declaraServico('getVeiculo', apiSGA.getVeiculo )
+declaraServico('buscaPessoa', apiSGA.buscaPessoa );
+declaraServico('getVeiculo', apiSGA.getVeiculo );
+declaraServico('getBoletos', apiSGA.getBoletos);
+
 
  
 //proposta
@@ -75,6 +78,7 @@ declaraServico('getEventosRelatorioUsuario', evento.getEventosRelatorioUsuario);
 declaraServico('getIdEvento', evento.getIdEvento);
 declaraServico('getEventosTelefone', evento.getEventosTelefone);
 declaraServico('getInformacaoAtendimentos', evento.getInformacaoAtendimentos);
+declaraServico('getEventosBoletosPagos', evento.getEventosBoletosPagos);
 
 
 

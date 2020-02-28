@@ -1345,6 +1345,40 @@ function getInformacaoAtendimentos(req, res) {
   })
 }
 
+function getEventosBoletosPagos(req, res) {
+  return new Promise(function (resolve, reject) {
+    let credenciais = {
+      token: req.query.token,
+      idUsuario: req.query.id_usuario
+    };
+
+    let sql = `
+              select  to_char(dt_resolvido, 'yyyy/mm'), count(*) as total 
+              from eventos 
+              where id_motivo = 13
+              and id_campanha = 19 
+              and dt_resolvido is not null 
+              and id_pessoa_resolveu <> 1 
+              and id_resp_motivo <> 59 
+              and boleto_pago
+              group by to_char(dt_resolvido, 'yyyy/mm')
+              order by to_char(dt_resolvido, 'yyyy/mm') desc 
+              limit 13
+    `
+    //console.log(sql)
+    executaSQL(credenciais, sql)
+      .then(res => {
+        if (res.length > 0) {
+          resolve(res)
+        }
+        else reject('Erro!')
+      })
+      .catch(err => {
+        reject(err)
+      })
+  })
+}
+
 module.exports = {
   getUmEvento,
   motivosRespostas,
@@ -1363,5 +1397,6 @@ module.exports = {
   getEventosPorPeriodoSintetico,
   getIdEvento,
   getEventosTelefone,
-  getInformacaoAtendimentos
+  getInformacaoAtendimentos,
+  getEventosBoletosPagos
 }

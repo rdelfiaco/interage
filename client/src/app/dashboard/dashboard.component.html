@@ -1,29 +1,30 @@
 
+<div *ngIf="!carregando" style="height: 100%; width: 100%">
+  <app-carregando></app-carregando>
+</div>
 
+<div class="row" > 
   <div class="col-6 col-sm-6">
     <div class="view view-cascade gradient-card-header blue-gradient narrower py-1 mx-2  d-flex justify-content-center align-items-center">
-        <h5 class="white-text font-weight-bold text-uppercase ">Cobrança </h5>
+        <h5 class="white-text font-weight-bold text-uppercase ">Boletos</h5>
     </div>
     <div style="display: block">
-      <canvas mdbChart
-          [chartType]="chartTypeIA"
-          [datasets]="chartDatasetsIA"
-          [labels]="chartLabelsIA"
-          [colors]="chartColorsIA"
-          [options]="chartOptionsIA"
-          [legend]="true"
-          (chartHover)="chartHoveredIA($event)"
-          (chartClick)="chartClickedIA($event)">
-      </canvas>
+      <canvas id="chartBoletos" height="320" width="520"></canvas>
+      <h6 style="margin-left: 10px;" class="align-items-center">  Quantidade de boletos do mês atual e dos últimos doze meses   </h6>
     </div>
   </div>
 
+  <div class="col-6 col-sm-6">
+    <div class="view view-cascade gradient-card-header blue-gradient narrower py-1 mx-2  d-flex justify-content-center align-items-center">
+        <h5 class="white-text font-weight-bold text-uppercase ">Atendimento Receptivo</h5>
+    </div>
+    <div style="display: block">
+      <canvas id="chartAtendimentoReceptivo" height="320" width="520"></canvas>
+      <h6 style="margin-left: 10px;" class="align-items-center">Atendimento receptivo dos últimos 30 dias </h6>
+    </div>
+  </div>
 
-
-
-
-
-
+</div>
 
 
   <!-- <div class="row">

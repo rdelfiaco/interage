@@ -49,14 +49,21 @@ const {  executaSQLSemToken } = require( './executaSQL');
     .catch(error => console.log(error));
     }
     
-    function getBoletosAtrasados(req, res) {
+    function getBoletos(req, res) {
     return new Promise(async function (resolve, reject) {
 
         var authorization = await executaSQLSemToken(`select valor from interage_parametros where nome_parametro = 'tokenSGA' `);
         authorization = `Bearer ${authorization[0].valor}`;
 
-        var dataInical = req.dataInical;
+
+        if (req.query.dataInicial){ req.dataInicial =req.query.dataInicial };
+        if (req.query.dataFinal){ req.dataFinal =req.query.dataFinal };
+        if (req.query.codigo_situacao){ req.codigo_situacao =req.query.codigo_situacao };
+
+
+        var dataInicial = req.dataInicial;
         var dataFinal = req.dataFinal;
+        var codigo_situacao = req.codigo_situacao;
 
         var url = 'https://api.hinova.com.br/api/sga/v2/listar/boleto';
         var headers = {
@@ -71,8 +78,8 @@ const {  executaSQLSemToken } = require( './executaSQL');
         // };
 
         var data = {
-                "codigo_situacao": "2",
-                "data_vencimento_inicial": dataInical,
+                "codigo_situacao": codigo_situacao,
+                "data_vencimento_inicial": dataInicial,
                 "data_vencimento_final": dataFinal
         }
         
@@ -80,7 +87,7 @@ const {  executaSQLSemToken } = require( './executaSQL');
         headers: headers,
         body: JSON.stringify(data)
         };
-        
+        //console.log('Boletos parametros ', parametros )
         fetch(url, parametros)
         .then(res => 
             resolve (res.json()))
@@ -264,7 +271,7 @@ const {  executaSQLSemToken } = require( './executaSQL');
 
     module.exports = { 
         getAssociado,
-        getBoletosAtrasados,
+        getBoletos,
         getIdPessoaAssociado,
         getBoletosBixados,
         getVoluntariosAtivos,

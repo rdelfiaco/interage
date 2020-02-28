@@ -1,5 +1,5 @@
 const moment = require ('moment');
-const { getBoletosAtrasados , getAssociado,
+const { getBoletos , getAssociado,
         getBoletosBixados, getVoluntariosAtivos, 
         getSituacaoAdesaoVoluntario, getSituacaoFinaceiroVeiculo, 
         getContratos } = require('./apiSGA');
@@ -52,10 +52,14 @@ async function encerraEventosDeCobrancaSGA(req){
 
         if (liquidados && dataBaixa != ''){
             //encerra evento de cobrança 
-            var sql = `update eventos set id_status_evento= 3,  dt_visualizou = now(), 
-            id_pessoa_visualizou = 1, dt_resolvido=now(), id_pessoa_resolveu=1, id_resp_motivo = 59,
-            observacao_retorno='Evento concluido automaticamente por constatar que o boleto foi pago em ${ moment(dataBaixa).format('DD/MM/YYYY')}'
-            where id = ${element.id_evento}`
+            var sql = ` update eventos set id_status_evento =  3, boleto_pago = true,
+             dt_visualizou = case when dt_visualizou is null then  now() else dt_visualizou end, 
+            id_pessoa_visualizou = case when id_pessoa_visualizou is null then  1 else id_pessoa_visualizou end, 
+			dt_resolvido = case when dt_resolvido is null then now() else dt_resolvido end, 
+			id_pessoa_resolveu = case when id_pessoa_resolveu is null then 1 else id_pessoa_resolveu end, 
+			id_resp_motivo = case  when id_resp_motivo is null then 59 else  id_resp_motivo  end ,
+            observacao_retorno =  observacao_retorno || 'Evento concluido automaticamente por constatar que o boleto foi pago em ${ moment(dataBaixa).format('DD/MM/YYYY')}'
+            where   id = ${element.id_evento}`
             awaitSQL(credenciais, sql);
 
             var sql = `delete from eventos_boletos where id_evento = ${element.id_evento}`
@@ -116,10 +120,11 @@ async function criaEventosDeCobrancaSGA(req){
 
         var dataFinal = moment().subtract(3, 'days').format('DD/MM/YYYY');
 
-        var dataInical  = moment().subtract(30, 'days').format('DD/MM/YYYY');
+        var dataInicial  = moment().subtract(30, 'days').format('DD/MM/YYYY');
 
-        req.dataInical = dataInical;
+        req.dataInicial = dataInicial;
         req.dataFinal = dataFinal;
+        req.codigo_situacao = "2" // abertos;
         
         ultimaGeracaoEventoCobranca = moment().format('YYYY-MM-DD HH:mm:ss');
 
@@ -127,7 +132,7 @@ async function criaEventosDeCobrancaSGA(req){
     
         var res = '';
         var boletosAtrasados = [];
-        await getBoletosAtrasados(req, res)
+        await getBoletos(req, res)
         .then( resBoletos => {
             boletosAtrasados = resBoletos;
         })
@@ -222,10 +227,10 @@ async function criaEventosDeCobrancaSGA(req){
                 geraEventoDeErro(credenciais, 'Erro getAssociado : ' +  JSON.stringify(element ));
                                  });           
         };
-        console.log('Total de boletos: ', boletosAtrasadosUnique.length );
-        console.log('total de Boletos gerados: ', totalBoletos);
-        console.log('Total de boletos não gerados: ', boletosNaoGerados.length);
-        console.log('Total de eventos já existentes: ', eventosCobrancaJaExistente );
+        // console.log('Total de boletos: ', boletosAtrasadosUnique.length );
+        // console.log('total de Boletos gerados: ', totalBoletos);
+        // console.log('Total de boletos não gerados: ', boletosNaoGerados.length);
+        // console.log('Total de eventos já existentes: ', eventosCobrancaJaExistente );
 
         var result = await alteraValorDoAtributo(credenciais, 
             `valor = '${ultimaGeracaoEventoCobranca}'`,
