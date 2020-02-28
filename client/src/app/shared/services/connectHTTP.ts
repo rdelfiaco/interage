@@ -1,8 +1,8 @@
 import { LocalStorage } from "./localStorage";
 import { Usuario } from "../../login/usuario";
 
-//var localSevidor = "http://88.99.35.190:3000/" //Producao
-var localSevidor =   "http://localhost:3010/";  //Local
+var localSevidor = "http://88.99.35.190:3000/" //Producao
+// var localSevidor =   "http://localhost:3010/";  //Local
 //var localSevidor =  "http://192.168.100.74:3010/" //MCPRO
 
 interface optionsCallService {
