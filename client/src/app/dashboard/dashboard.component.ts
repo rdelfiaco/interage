@@ -9,8 +9,8 @@ import { Usuario } from '../login/usuario';
 import * as moment from 'moment';
 import { BancoDados } from '../shared/services/bancoDados';
 import * as Chart from 'chart.js/dist/Chart';
+import * as ChartDataLabels from 'chartjs-plugin-datalabels'; 
 import { RandomColor } from '../shared/services/randomColor';
-
 
 @Component({
   selector: 'app-dashboard',
@@ -33,6 +33,7 @@ export class DashboardComponent implements OnInit {
   meses_ = this.meses.UltimosMeses(this.qtdeMeses);
 
   chartBoletos: any;
+  chartAtendimento: any;
   boletosRecebitosEmDia = [];
   boletosRecebitosForaDoDia = [];
   boletosRecebitosAposContato = [];
@@ -154,6 +155,7 @@ export class DashboardComponent implements OnInit {
     var ctx = document.getElementById('chartBoletos');
   
     this.chartBoletos = new Chart(ctx, {
+      plugins: [],
       type: 'line' ,
       data: {
         labels: this.meses_.ultimosMesesAbreviados,
@@ -180,8 +182,23 @@ export class DashboardComponent implements OnInit {
             borderWidth: 2 },
         ]
       },
+
       options: {
-      }
+        responsive: true,
+        legend: {
+          position: 'bottom',
+        },
+        title: {
+          display: true,
+          text: ' '
+        },
+        plugins: {
+          datalabels: {
+            display: false,
+          }
+        },
+      },
+      
     });
   }
     
@@ -205,12 +222,6 @@ export class DashboardComponent implements OnInit {
     this.eventosAtendimentosLabes =   tableData.map(elem => {
       return  elem.motivo
     })
-
-
-
-
-
-
   }
 
 
@@ -225,25 +236,62 @@ export class DashboardComponent implements OnInit {
       this._borderColor.push(`${rgb_rgba.rgb}`);
     });
 
-
     var ctx = document.getElementById('chartAtendimentoReceptivo');
     
-      this.chartBoletos = new Chart(ctx, {
-        type: 'doughnut' ,
-        data: {
-          labels: this.eventosAtendimentosLabes,
-          datasets: [
-            { data: this.eventosAtendimentosData, 
-              // label: 'Abertos',
-              backgroundColor: this._backgroundColor,
-              borderColor: this._borderColor,
-              // borderWidth: 2 
-            },
-          ]
+    this.chartAtendimento = new Chart(ctx, {
+      plugins: [ChartDataLabels],
+      type: 'doughnut' ,
+      data: {
+        labels: this.eventosAtendimentosLabes,
+        datasets: [
+          { data: this.eventosAtendimentosData, 
+            // label: 'Abertos',
+            backgroundColor: this._backgroundColor,
+            borderColor: this._borderColor,
+            // borderWidth: 2 
+          },
+        ]
+      },
+      options: {
+        responsive: true,
+        legend: {
+          position: 'bottom',
         },
-        options: {
-        }
-      });
+        title: {
+          display: true,
+          text: ' '
+        },
+        animation: {
+          animateScale: true,
+          animateRotate: true
+        },
+        plugins: {
+          datalabels: {
+              formatter: function(value, context) {
+                  var dataset = context.dataset.data;
+                  var total = dataset.reduce(function(previousValue, currentValue, currentIndex, array) {
+                                return previousValue + currentValue;
+                              });
+                  var percentage = Math.floor(((value/total) * 100)+0.5);         
+                  return percentage + '%';
+              }
+          }
+        },
+        tooltips: {
+          callbacks: {
+            label: function(tooltipItem, data) {
+              var dataset = data.datasets[tooltipItem.datasetIndex];
+              var total = dataset.data.reduce(function(previousValue, currentValue, currentIndex, array) {
+                return previousValue + currentValue;
+              });
+              var currentValue = dataset.data[tooltipItem.index];
+              var percentage = Math.floor(((currentValue/total) * 100)+0.5);         
+              return percentage + '%';
+            }
+          }
+        },
+      }
+    });
   }
 
 
