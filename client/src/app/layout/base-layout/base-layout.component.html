@@ -3,7 +3,7 @@
   <mdb-side-nav #sidenav class="sn-bg-4 menu-bg fixed" [fixed]="true">
       <mdb-navbar-brand>
           <li>
-              <div class="logo-wrapper menu-container-avatar waves-light">
+              <div *ngIf="usuarioLogado"  class="logo-wrapper menu-container-avatar waves-light">
                   <img src="/assets/imagens/logos/logo_altis.jpg" class="img-fluid flex-center">
                   <small>{{usuarioLogado.apelido || nomeUsuario}}</small>
                   <div class="dropdown" mdbDropdown>
@@ -274,12 +274,12 @@
       </navlinks>
 
        
-            <!-- <mdb-navbar-brand>
+            <mdb-navbar-brand>
                 <div class="breadcrumbs breadcrumb-dn mr-auto logomarcaCliente">
                     <button mdbBtn type="button" color="danger" size="sm" mdbWavesEffect disabled>SERVIDOR DE
                         TESTE</button>
                 </div>
-            </mdb-navbar-brand> -->
+            </mdb-navbar-brand>
        
 
       <navlinks>

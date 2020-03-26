@@ -225,7 +225,7 @@
         [disabled]="!principalForm.valid">Atendimento</button>
     </div>
     <div *ngIf="notVendas" class="md-form">
-        <button type="button" mdbBtn color="primary" (click)="modalElaborarProposta.show();" class="relative waves-light" mdbWavesEffect
+        <button type="button" mdbBtn color="primary" (click)="pessoaProposta_();  modalElaborarProposta.show();" class="relative waves-light" mdbWavesEffect
           [disabled]="!principalForm.valid">Elaborar Proposta</button>
     </div>
  
@@ -263,7 +263,7 @@ aria-labelledby="elaborarProposta" aria-hidden="true">
   </button>
 
   </div>
-  <div class="modal-content">
+  <div *ngIf="pessoaProposta"  class="modal-content">
     <div class="modal-body" style="overflow: auto; height: 80vh;">
       <app-proposta  [abaSelecionada]="abaSelecionada" [pessoa]="pessoa" ></app-proposta>
     </div>

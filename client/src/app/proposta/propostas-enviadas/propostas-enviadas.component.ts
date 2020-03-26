@@ -127,7 +127,7 @@ export class PropostasEnviadasComponent implements OnInit  {
     }) as any;
     if (propostas.resposta.length > 0) {
       this.propostas = propostas.resposta.map(p => {
-        let propostaPDF = p.proposta_json ? JSON.parse(p.proposta_json.replace(/\%23/gim, '#')) : {};
+        let propostaPDF = p.proposta_json  ? JSON.parse(p.proposta_json.replace(/\%23/gim, '#')) : {};
         propostaPDF.images = { logotipo: img }
         return {
           ...p,

@@ -69,6 +69,7 @@ export class PrincipalComponent implements OnInit {
   serchFilter: string;
   idPessoaReceptor: any;
   idPessoa: any;
+  pessoaProposta: boolean = false;
 
   tipoPessoaSelecionada: string = 'F';
   principalForm: FormGroup
@@ -333,6 +334,10 @@ export class PrincipalComponent implements OnInit {
 
   voltar() {
     history.back();
+  }
+
+  pessoaProposta_() {
+    this.pessoaProposta = true;
   }
 
 }

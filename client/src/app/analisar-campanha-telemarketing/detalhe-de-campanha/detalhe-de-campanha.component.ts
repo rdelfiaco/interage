@@ -51,7 +51,7 @@ export class DetalheDeCampanhaComponent implements OnInit {
 
   @ViewChildren('pr_chart', { read: ElementRef }) chartElementRefs: QueryList<ElementRef>;
   charts: Chart[] = [];
-  optionsBar: Chart.CharOption[] = [];
+  optionsBar: Chart.ChartOptions[] = [];
   chartData: Chart.ChartData[] = [];
   
   formularioGraficoResposta: boolean = false;

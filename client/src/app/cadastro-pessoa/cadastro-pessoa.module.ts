@@ -15,6 +15,7 @@ import { AuditoriaComponent } from './auditoria/auditoria.component';
 import { QuestionariosPessoaComponent } from './questionarios-pessoa/questionarios-pessoa.component';
 import { CriarEventoModule } from '../evento/criar-evento/criar-evento.module';
 import { PropostaModule } from '../proposta/proposta.module';
+import { ServicosContratadosComponent } from './servicos-contratados/servicos-contratados.component';
 
 @NgModule({
   imports: [
@@ -38,7 +39,8 @@ import { PropostaModule } from '../proposta/proposta.module';
     NetworkingComponent,
     MarketingComponent,
     AuditoriaComponent,
-    QuestionariosPessoaComponent,],
+    QuestionariosPessoaComponent,
+    ServicosContratadosComponent,],
   exports: [
     CadastroPessoaComponent,
     PrincipalComponent,

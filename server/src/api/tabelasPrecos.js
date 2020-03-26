@@ -12,15 +12,19 @@ function getTabelaPrecos(req, res) {
                                 getCarroReserva(req).then(CarroReserva => {
                                     getTabelaValores(req).then(TabelaValores => {
                                         getTabelaCombos(req).then(TabelaCombos => {
-                                            if (!TipoVeiculos || !Rastreador
+                                          getCombustivelDesconto(req).then(CombustivelDesconto => {
+                                            if (!TipoVeiculos || !Rastreador || !CombustivelDesconto
                                                 || !ProtecaoVidros || !FundoTerceiros || !App
                                                 || !CarroReserva || !TabelaValores || !TabelaCombos) 
                                                 reject('não encontrado');
-            
-                                            resolve({
-                                                TipoVeiculos, Rastreador,  ProtecaoVidros, 
-                                            FundoTerceiros, App, CarroReserva, TabelaValores, TabelaCombos
-                                            });
+                                              
+                                              resolve({
+                                                  TipoVeiculos, Rastreador,  ProtecaoVidros, CombustivelDesconto,
+                                              FundoTerceiros, App, CarroReserva, TabelaValores, TabelaCombos
+                                              });
+                                            }).catch(e => {
+                                              reject(e);   
+                                          });
                                         }).catch(e => {
                                             reject(e);   
                                         });                                         
@@ -301,5 +305,36 @@ function getTipoVeiculos(req, res) {
     })
   } 
   
+  function getCombustivelDesconto(req, res) {
+    return new Promise(function (resolve, reject) {
+  
+      checkTokenAccess(req).then(historico => {
+        const dbconnection = require('../config/dbConnection')
+        const { Client } = require('pg')
+  
+        const client = new Client(dbconnection)
+  
+        client.connect()
+  
+        let sql = 'select * from combustivel_desconto where status order by valor'
+
+        client.query(sql)
+          .then(res => {
+            let registros = res.rows;
+  
+            client.end();
+            resolve(registros)
+          }
+          )
+          .catch(err => {
+            client.end();
+            reject(err)
+          })
+      }).catch(e => {
+        reject(e)
+      })
+    })
+  } 
+
   module.exports = {getTabelaPrecos}
 

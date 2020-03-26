@@ -1,3 +1,4 @@
+import { ServicosContratadosComponent } from './cadastro-pessoa/servicos-contratados/servicos-contratados.component';
 import { ParametrosInterageComponent } from './parametros-interage/parametros-interage.component';
 import { AtendimentoInformacaoComponent } from './atendimento-informacao/atendimento-informacao.component';
 import { AtendimentoComponent } from './atendimento/atendimento.component';
@@ -114,6 +115,11 @@ const routes: Routes = [
       {
         path: 'pessoasAdd',
         component: CadastroPessoaComponent,
+        canActivate: [AuthGuard]
+      },
+      {
+        path: 'pessoaServicosContratados',
+        component: ServicosContratadosComponent,
         canActivate: [AuthGuard]
       },
       {

@@ -9,9 +9,13 @@ function salvarProposta(req, res) {
       idUsuario: req.query.id_usuario
     };
 
-    //console.log('req.query.proposta ',  req.query.proposta)
+   //req.query.arquivo =   req.query.arquivo.substring(1, req.query.arquivo.length -1 );
+
+   console.log('req.query  ',  JSON.parse(req.query.propostaJSON));
+   
 
     req.query.proposta = JSON.parse(req.query.proposta);
+
 
     req.query.proposta.placa = req.query.proposta.placa ? req.query.proposta.placa : '';
     req.query.proposta.observacao = req.query.proposta.observacao ? req.query.proposta.observacao : '';
@@ -31,7 +35,8 @@ function salvarProposta(req, res) {
                     , entrada
                     , mensalidade_alterada
                     , dtsalvou
-                    , reboque)
+                    , reboque
+                    , id_combustivel_desconto)
                 VALUES (  ${req.query.proposta.idTipoVeiculo},
                           '${req.query.proposta.codigoFipe}',
                           '${req.query.proposta.marca}',
@@ -63,9 +68,10 @@ function salvarProposta(req, res) {
                           ${req.query.proposta.entrada},
                           ${req.query.proposta.mensalidadeAlterada},
                           now(),
-                          '${req.query.proposta.reboque}') RETURNING id`
+                          '${req.query.proposta.reboque}',
+                          ${req.query.proposta.idCombustivelDesconto} ) RETURNING id`
 
-    // console.log('proposta inserir', sql)
+    console.log('proposta inserir', sql)
 
 
     executaSQL(credenciais, sql).then(registros => {
@@ -103,7 +109,7 @@ function salvarProposta(req, res) {
                       '${req.query.proposta.observacao}',
                       7,
                       ${id_proposta})`
-     //  console.log('evento', sql)
+       console.log('evento', sql)
       executaSQL(credenciais, sql).then(registros => {
         resolve(idProposta)
       }).catch(e => {
@@ -125,6 +131,7 @@ function getPropostasDoUsuario(req, res) {
                and id_status_proposta = ${req.query.id_statusProposta}
                and date(dtsalvou) between date('${req.query.dataInicial}') and date('${req.query.dataFinal}') 
               order by id desc `
+    //console.log('getPropostasDoUsuario ',sql )
     executaSQL(credenciais, sql)
       .then(res => {
         if (res) {

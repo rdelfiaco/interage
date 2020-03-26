@@ -1,8 +1,8 @@
 import { LocalStorage } from "./localStorage";
 import { Usuario } from "../../login/usuario";
 
-var localSevidor = "http://88.99.35.190:3000/" //Producao
-// var localSevidor =   "http://localhost:3010/";  //Local
+// var localSevidor = "http://88.99.35.190:3000/" //Producao
+var localSevidor =   "http://localhost:3010/";  //Local
 //var localSevidor =  "http://192.168.100.74:3010/" //MCPRO
 
 interface optionsCallService {
@@ -65,6 +65,7 @@ export class ConnectHTTP {
       xhttp.onerror = (e) => {
         reject(e)
       }
+
       xhttp.open("GET", encodeURI(url), true)
       xhttp.send()
     })
@@ -123,7 +124,7 @@ export class ConnectHTTP {
           resolve({ resposta: {}, error: selfXhttp.responseText })
         }
       }
-
+      debugger
       xhttp.onerror = (e) => {
         reject(e)
       }

@@ -46,6 +46,7 @@ function crudMotivos(req, res){
   if (crud == 'C') sql = sqlCreate(); 
   if (crud == 'D') sql = sqlDelete();
   if (crud == 'U') sql = sqlUpdate();
+  //console.log('motivos ', sql )
   executaSQL(credenciais, sql).then(res => {
     // auditoria 
     // if (crud == 'C') idTabela = res[0].id;
@@ -59,8 +60,21 @@ function crudMotivos(req, res){
 
   function sqlCreate(){
     let sql = `INSERT INTO motivos(
-               status,  nome)
-              VALUES ( ${req.query.status},  '${req.query.nome}') RETURNING id;`;
+               status,  
+               nome,
+               inicia_processo,
+               gera_email,
+               prazo_finalizacao, 
+               acao_sql,
+               acao_js )
+              VALUES ( ${req.query.status},  
+                '${req.query.nome}',
+                ${req.query.inicia_processo},
+                ${req.query.gera_email},
+                ${req.query.prazo_finalizacao},
+                ${ req.query.acao_sql != null  ?  "'" + req.query.acao_sql + "'" : 'NULL' + "," },
+                ${ req.query.acao_js != null  ?  "'" + req.query.acao_js + "'" : 'NULL' + "," }
+                ) RETURNING id;`;
     return sql;
   };
   function sqlDelete(){
@@ -73,9 +87,9 @@ function crudMotivos(req, res){
                SET  status=${req.query.status}, 
                     nome='${req.query.nome}',
                     gera_email= ${req.query.gera_email},
-                    acao_sql= ${req.query.acao_sql},
-                    acao_js= ${req.query.acao_js},
-                    inicia_processo= ${req.query.inicia_processo},
+                    acao_sql= ${ req.query.acao_sql != null  ?  "'" + req.query.acao_sql + "'" : 'NULL' + "," },
+                    acao_js=  ${ req.query.acao_js != null  ?  "'" + req.query.acao_js + "'" : 'NULL' + "," },
+                    inicia_processo= ${req.query.inicia_processo },
                     prazo_finalizacao = ${req.query.prazo_finalizacao}
               WHERE id= ${req.query.id};`;
     return sql;

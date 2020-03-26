@@ -22,6 +22,8 @@ export class Proposta {
     private _carroReserva: String;
     private _idApp: number;
     private _app: string;
+    private _idCombustivelDesconto: number;
+    private _combustivelDesconto: string; 
     private _appDescricao: string;
     private _idRastreador: number;
     private _rastreador: string;
@@ -386,6 +388,18 @@ export class Proposta {
         this._precoMedio = value;
 
     }
+    public get idCombustivelDesconto(): number {
+        return this._idCombustivelDesconto;
+    }
+    public set idCombustivelDesconto(value: number) {
+        this._idCombustivelDesconto = value;
+    }
+    public get combustivelDesconto(): string {
+        return this._combustivelDesconto;
+    }
+    public set combustivelDesconto(value: string) {
+        this._combustivelDesconto = value;
+    }
 
     public propostaObj(): any {
         return {
@@ -437,6 +451,8 @@ export class Proposta {
             rastreadorInstalacao: this._rastreadorInstalacao,
             entrada: this._entrada,
             mensalidadeAlterada: this._mensalidadeAlterada, 
+            idCombustivelDesconto:  this._idCombustivelDesconto,
+            combustivelDesconto:  this._combustivelDesconto
         };
     }
 }
