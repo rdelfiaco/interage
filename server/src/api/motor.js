@@ -102,7 +102,6 @@ async function encerraEventosDeCobrancaSGA(req){
 
 async function criaEventosDeCobrancaSGA(req){
 
-    console.log('Criando eventos de cobrança ...')
 
     let credenciais = {
         token: req.query.token,
@@ -117,6 +116,8 @@ async function criaEventosDeCobrancaSGA(req){
     destinatarioEventosCobranca = Object.values( destinatarioEventosCobranca[0])[0];
     
     if ( moment() >= moment(ultimaGeracaoEventoCobranca).add( periodicidade, 'hours') ){
+
+        console.log('Criando eventos de cobrança ...')
 
         var dataFinal = moment().subtract(3, 'days').format('DD/MM/YYYY');
 
@@ -182,18 +183,22 @@ async function criaEventosDeCobrancaSGA(req){
                         req.query.codigo_veiculo = null;
                         req.query.placa = null;
                         // verifica se não tem evento de combrança em aberto 
-                        var idEventoCobraca = await buscaValorDoAtributo(credenciais, 'id','eventos',` id_motivo = 13 and id_status_evento in (1,4,5,6) and id_pessoa_receptor = ${idPessoa} `)
+                        // var idEventoCobraca = await buscaValorDoAtributo(credenciais, 'id','eventos',` id_motivo = 13 and id_status_evento in (1,4,5,6) and id_pessoa_receptor = ${idPessoa} `)
+                        //     idEventoCobraca = Object.values( idEventoCobraca[0])[0];
+                        // verifica se não tem já foi gerado evento de combrança para os boletos do associado
+                        var boletosDoEvento = boletosAtrasados.filter(  (boletos)  => {
+                            return boletos.codigo_associado == element.codigo_associado
+                        }).map( mapBoletos =>{  
+                            return  mapBoletos.codigo_boleto
+                        });
+                        var idEventoCobraca = await buscaValorDoAtributo(credenciais, 'id_evento','eventos_boletos',`  ${boletosDoEvento[0]}  = any(  codigo_boleto ) `)
                             idEventoCobraca = Object.values( idEventoCobraca[0])[0];
                         if (!idEventoCobraca) {
                             //console.log('antes de criar evento de cobrança ', req.query)
                             await criarEvento(req, res) 
                             .then( async resEvento => {
                             //salva os boletos do evento 
-                            var boletosDoEvento = boletosAtrasados.filter(  (boletos)  => {
-                                return boletos.codigo_associado == element.codigo_associado
-                            }).map( mapBoletos =>{  
-                                return  mapBoletos.codigo_boleto
-                            });
+                            
                                 var sql =  `INSERT INTO public.eventos_boletos(
                                     id_evento, codigo_boleto)
                                     VALUES (${resEvento.rows[0].id}, ARRAY[${boletosDoEvento}]);`

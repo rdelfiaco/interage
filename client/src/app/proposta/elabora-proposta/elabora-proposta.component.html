@@ -284,7 +284,23 @@
                                 R$ {{_app.valor}}
                             </div>
                         </th>
-
+                    </div>
+                    <br>
+                    <div class="row">
+                        <!-- <div> 
+                        Combustível Desconto
+                    </div> -->
+                        <th *ngFor="let _combustivelDesconto of combustivelDesconto; let i = index" class=" col-md-3 tabelaChck">
+                            <div class="form-check form-check-inline tituloProposta">
+                                <input type="radio" class="form-check-input" id="{{ 'chckCombustivelDesconto' + i}}"
+                                    (change)="mudouCombustivelDesconto(i)" [checked]="chckCombustivelDesconto == i" name="chckCombustivelDesconto" mdbInputDirective>
+                                <label class="form-check-label" for="{{ 'chckCombustivelDesconto' + i}}"></label>
+                                {{_combustivelDesconto.nome}}
+                            </div>
+                            <div>
+                                R$ {{_combustivelDesconto.valor}}
+                            </div>
+                        </th>
                     </div>
                     <br>
                     <div class="row">

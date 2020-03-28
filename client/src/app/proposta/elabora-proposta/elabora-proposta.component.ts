@@ -1,3 +1,5 @@
+
+import { async } from '@angular/core/testing';
 import { ModalModule } from './../../../lib/ng-uikit-pro-standard/free/modals/modal.module';
 import { ModalDirective } from './../../../lib/ng-uikit-pro-standard/free/modals/modal.directive';
 import { style } from '@angular/animations';
@@ -13,7 +15,7 @@ import { ToastService } from '../../../lib/ng-uikit-pro-standard';
 import { ComunicaPropostaService } from '../comunica-proposta.service';
 
 import * as pdfMake from 'pdfmake/build/pdfmake';
-import * as pdfFonts from 'pdfmake/build/vfs_fonts';
+import * as pdfFonts from 'pdfmake/build/vfs_fonts'; 
 import { img } from '../imagem';
 
 import * as numeral from 'numeral';
@@ -24,6 +26,8 @@ numeral(10000).format('0,0') // 10.000
 
 import * as moment from 'moment';
 import { timestamp } from 'rxjs/operators';
+import { Router } from '@angular/router';
+import { text } from '@angular/core/src/render3/instructions';
 
 
 interface selectValues {
@@ -73,6 +77,8 @@ export class ElaboraPropostaComponent implements OnInit {
   fundoTerceiro: Array<any>;
   app: Array<any>;
   apps: Array<any>;
+  combustivelDesconto: Array<any>;
+  combustivelDescontos:  Array<any>;
   carrosReservas: Array<any>;
   carroReserva: Array<any>;
   tabelaValores: Array<any>;
@@ -107,6 +113,8 @@ export class ElaboraPropostaComponent implements OnInit {
   protecaoVidroOutros: string = '';
   appOutros: string = '';
   rastreadorOutros: string = '';
+  coberturasInclusas: string;
+  coberturasInclusas2: string;
 
   sVlrVeiculo: string;
   nVlrVeiculo: number;
@@ -131,10 +139,13 @@ export class ElaboraPropostaComponent implements OnInit {
   chckComercial: boolean = false;
   chckNormal: boolean = true;
   chckLeilaoSinistrado: boolean = false;
+  chckCombustivelDesconto: string = "1";
   // 
 
 
-  constructor(private connectHTTP: ConnectHTTP,
+  constructor(
+    private router: Router,
+    private connectHTTP: ConnectHTTP,
     private localStorage: LocalStorage,
     private propostaComuc: ComunicaPropostaService,
     private aba: ComunicaPropostaService,
@@ -157,6 +168,8 @@ export class ElaboraPropostaComponent implements OnInit {
     this.carrosReservas = tabelaPrecos.resposta.CarroReserva;
     this.tabelaValores = tabelaPrecos.resposta.TabelaValores;
     this.tabelaCombos = tabelaPrecos.resposta.TabelaCombos;
+    this.combustivelDescontos = tabelaPrecos.resposta.CombustivelDesconto;
+
     this.bntGeraProposta = false;
 
     // this.initValueId = new Observable((observer) => {
@@ -237,6 +250,8 @@ export class ElaboraPropostaComponent implements OnInit {
     this.rastreador = this.rastreadores.filter(this.filtraTabelas, [nVlrBusca, this.tipoVeiculoSelectValue]);
 
     this.app = this.apps.filter(this.filtraTabelasTipoVeiculos, [this.tipoVeiculoSelectValue]);
+
+    this.combustivelDesconto = this.combustivelDescontos.filter(this.filtraTabelasTipoVeiculos, [this.tipoVeiculoSelectValue]);
     
     if (this.valores.length > 0 ) {
       this.valorPPV = this.valores[0].valor_ppv;
@@ -360,6 +375,14 @@ export class ElaboraPropostaComponent implements OnInit {
         this.proposta.appDescricao = this.app[this.chckApp].descricao;
         this.appOutros = this.app[this.chckApp].outros;
       };
+
+      if (this.combustivelDesconto.length) {
+        this.vlrProposta = this.vlrProposta + Number(this.combustivelDesconto[this.chckCombustivelDesconto].valor)
+        this.proposta.idCombustivelDesconto = this.combustivelDesconto[this.chckCombustivelDesconto].id;
+        this.proposta.combustivelDesconto =  this.combustivelDesconto[this.chckCombustivelDesconto].nome;
+        this.proposta.combustivelDesconto = this.combustivelDesconto[this.chckCombustivelDesconto].descricao;
+      };
+
       if (this.rastreador.length > 0) {
         this.vlrProposta = this.vlrProposta + Number(this.rastreador[this.chckRastreador].valor);
         this.proposta.idRastreador = this.rastreador[this.chckRastreador].id;
@@ -369,7 +392,6 @@ export class ElaboraPropostaComponent implements OnInit {
         if (this.parcelasRastreador > 1 ){
           this.rastreadorInstalacao = ( this.rastreadorInstalacao / this.parcelasRastreador) ;
         }
-
       };
     }
     
@@ -503,6 +525,13 @@ export class ElaboraPropostaComponent implements OnInit {
     this.chckApp = opcao;
     this.somaValoresProposta()
   }
+
+  mudouCombustivelDesconto(opcao){
+    this.chckCombustivelDesconto = opcao;
+    this.somaValoresProposta()
+  }
+
+
   mudouRastreador(opcao) {
     this.chckRastreador = opcao;
     this.somaValoresProposta()
@@ -528,7 +557,7 @@ export class ElaboraPropostaComponent implements OnInit {
   }
 
 
-  geraProposta() {
+  async geraProposta() {
 
     let reboqueIlimitado = 'Reboque ilimitado em caso de colisão, uma vez a cada 12 meses;'
     // se for undefined coloca vazio
@@ -548,15 +577,41 @@ export class ElaboraPropostaComponent implements OnInit {
     }
 
     let parcelamentoRastreador = '';
-    if (this.parcelasRastreador > 1){
+    if (this.parcelasRastreador > 1 && this.rastreadorInstalacao > 0){
       parcelamentoRastreador = `mais ${this.parcelasRastreador - 1} de ${numeral(this.rastreadorInstalacao).format('00.00') } da instalação do rastreador`
     }
-    let normalLeilaoSisnsitro = 'Indenização 100% tabela Fipe, exceto veículos de leilão é remarcado';
+    let normalLeilaoSisnsitro = 'Indenização 100% tabela Fipe, exceto veículos de leilão e remarcado';
     if (this.chckLeilaoSinistrado) {
       normalLeilaoSisnsitro = 'Indenização 80% tabela Fipe'
     }
 
-    if (!this.idPessoaCliente) {
+
+    this.coberturasInclusas = `\n
+    \nSem perfil de condutor! (Qualquer pessoa habilitada pode conduzir o veículo);
+    \nSem Consulta SPC/SERASA;
+    \nSem limite de km rodado, Sem perfil de guarda de veículo, não exige garagem;
+    \nRoubo, furto, incêndio, colisão, capotamento, tombamento;
+    \nDesastres naturais como: enchente, chuva de granizo, queda de árvore;
+    \nAssistência 24H em todo Brasil;
+    \n${reboqueIlimitado};
+    \nSocorro elétrico e mecânico, Chaveiro, Taxi, SOS Pneus;
+    \nMensalidade Contínua (sem renovação), Não trabalhamos com Bônus;
+    \n${normalLeilaoSisnsitro}
+    \n${this.proposta.terceiros}
+    \n${this.proposta.appDescricao}
+    \n${this.proposta.reboque}
+    \n${this.proposta.carroReserva}
+    \n${this.proposta.protecaoVidros}
+    \n${this.proposta.rastreador}
+    \n${this.proposta.combustivelDesconto}`
+    
+//retira os tab 
+this.coberturasInclusas = this.coberturasInclusas.replace(/\  /gim, '')
+// somente 356 caracteres que dar certo 
+this.coberturasInclusas = this.coberturasInclusas.substring(1, 356 )
+
+
+if (!this.idPessoaCliente) {
       this.toastrService.error('Selecione um cliente');
     } else {
 
@@ -581,7 +636,7 @@ export class ElaboraPropostaComponent implements OnInit {
                   alignment: 'center',
                   fontSize: 10,
                   height: 95,
-                  margin: [0, 50, 0, 0],
+                  margin: [0, 30, 0, 0],
                   border: [false, false, false, false]
                 }
                 ]
@@ -661,7 +716,6 @@ export class ElaboraPropostaComponent implements OnInit {
                   border: [true, true, true, true],
                 }
                 ]
-
               ]
             }
           },
@@ -669,52 +723,40 @@ export class ElaboraPropostaComponent implements OnInit {
             style: 'tableExample',
             table: {
               widths: [200, 360],
-              heights: [200],
-
-              body: [
-                [{
-                  text: [ `Entrada:\n R$ ${numeral(this.proposta.entrada).format('00.00')}
-                        \n\n Onze parcelas:\n`, 
-                       {text:  '(plano anual)',  style: 'font14'},
-                       `\n R$ ${numeral(this.proposta.mensalidade).format('00.00')}
-                       ${parcelamentoRastreador} 
-                      \n\n Cota de participação:\n R$ ${numeral(this.proposta.participacao).format('0,000.00')} `],
-                  style: 'header',
-                  margin: [15, 20, 0, 5],
-                  border: [true, false, true, true],
-                },
-                {
-                  text: [
-                    {
-                      text: 'COBERTURAS INCLUSAS',
-                      alignment: 'center',
-                      style: 'subheader',
-                    },
-                    {
-                      text: `\n\nSem perfil de condutor! (Qualquer pessoa habilitada pode conduzir o veículo) 
-                          \nSem Consulta SPC/SERASA 
-                          \nSem limite de km rodado; Sem perfil de guarda de veículo, não exige garagem;
-                          \nRoubo, furto, incêndio, colisão, capotamento, tombamento, desastres naturais como: enchente, chuva de granizo, queda de árvore; 
-                          \nAssistência 24H em todo Brasil; 
-                          \n${reboqueIlimitado}
-                          \nSocorro elétrico e mecânico; Chaveiro; Taxi, SOS Pneus;
-                          \nMensalidade Contínua (sem renovação); Não trabalhamos com Bônus; 
-                          \n${normalLeilaoSisnsitro}
-                          \n${this.proposta.terceiros}
-                          \n${this.proposta.appDescricao}
-                          \n${this.proposta.reboque}
-                          \n${this.proposta.carroReserva}
-                          \n${this.proposta.protecaoVidros}
-                          \n${this.proposta.rastreador}
-                          `,
-                      fontSize: 9,
-                    }
-                  ],
-                  margin: [5, 5, 0, 0],
-                  border: [true, false, true, true],
-                }
-                ],
-              ]
+              heights: [410],
+              body: [[
+                       { text: [
+                            { text: `Entrada:\n R$ ${numeral(this.proposta.entrada).format('00.00')}
+                            \n\n Onze parcelas:\n`} , 
+                            {text:  '(plano anual)',  style: 'font14'},
+                            {text: `\n R$ ${numeral(this.proposta.mensalidade).format('00.00')}
+                            ${parcelamentoRastreador} 
+                          \n\n Cota de participação:\n R$ ${numeral(this.proposta.participacao).format('0,000.00')} `}],
+                        
+                      style: 'header',
+                      margin: [15, 20, 0, 5],
+                      border: [true, false, true, true]
+                      }
+                      ,{
+                        text: [
+                          {
+                            text: 'COBERTURAS INCLUSAS',
+                            alignment: 'center',
+                            fontSize: 15,
+                            style: 'subheader'
+                          },
+                          {
+                            text: this.coberturasInclusas,
+                            fontSize: 9,
+                            alignment: 'left',
+                            style: 'font9:'
+                          
+                          },
+                        ],
+                        margin: [5, 5, 0, 0],
+                        border: [true, false, true, true]
+                      }
+              ]],
             }
           },
           {// texto OUTRAS COBERTURAS OPCIONAIS OFERECIDAS
@@ -724,29 +766,30 @@ export class ElaboraPropostaComponent implements OnInit {
               heights: [30],
               body: [
                 [{
-                  text: [
-                    { 
-                      text:'OUTRAS COBERTURAS OPCIONAIS OFERECIDAS',
-                      style: 'ParagrafoBold',
-                      alignment: 'center',
+                  // text: [
+                  //   // { 
+                  //   //   text:'OUTRAS COBERTURAS OPCIONAIS OFERECIDAS',
+                  //   //   style: 'ParagrafoBold',
+                  //   //   alignment: 'center',
 
-                    },
-                    {
-                      text: `\n\n${this.fundoTerceiroOutros}
-                      ${this.carroReservaOutros}
-                      ${this.protecaoVidroOutros}
-                      ${this.appOutros}
-                      ${this.rastreadorOutros}`,
-                      fontSize: 9,
-                      alignment: 'left',
-                    }
-                  ], 
-                  
+                  //   // },
+                  //   // {
+                  //   //   text: `\n\n${this.fundoTerceiroOutros}
+                  //   //   ${this.carroReservaOutros}
+                  //   //   ${this.protecaoVidroOutros}
+                  //   //   ${this.appOutros}
+                  //   //   ${this.rastreadorOutros}`,
+                  //   //   fontSize: 9,
+                  //   //   alignment: 'left',
+                  //   // }
+                    
+                  // ], 
+                  text:'\nConsulte seu consultor sobre todos os benefícios Altis\n\n',
+                  style: 'ParagrafoBold',
+                  alignment: 'center',
                   margin: [0, 0, 0, 0],
-                  
-                  border: [true, false, true, true],
-                }
-              ]
+                  border: [true, false, true, true]
+                }]
               ]
             }
           },
@@ -764,7 +807,7 @@ export class ElaboraPropostaComponent implements OnInit {
                   margin: [5, 5, 5, 5],
                   alignment: 'left',
                   style: 'small',
-                  border: [true, false, true, true],
+                  border: [true, false, true, true]
                 }]
               ]
             }
@@ -789,13 +832,17 @@ export class ElaboraPropostaComponent implements OnInit {
           font14: {
             fontSize: 14
           },
+          font9: {
+            fontSize: 9
+          },
           small: {
             fontSize: 8
-          },
+          }
         },
         images: { logotipo: img }
       };
       
+     debugger
       
       this.proposta.idUsuario = this.usuarioLogado.id;
       this.proposta.idPessoaUsuario = this.usuarioLogado.id_pessoa;
@@ -816,61 +863,76 @@ export class ElaboraPropostaComponent implements OnInit {
         this.proposta.idStatusProposta = 5;
         this.proposta.idMotivo = 3;
         this.proposta.idPessoaDestinatario = 5 // buscar supervisor das vendas internas 
-    }
+      }
 
       this.propostaComuc.setProposta(this.proposta);
 
-      if (!this.returnProp) {
-        pdfMake.createPdf(docDefinition).open()
-      }
+     
 
       docDefinition.images.logotipo = ''; // retira  a imagem do logo para salvar
-
+    
+      // this.propostaInclusa
+     
       this.propostaComuc.setPropostaJSON(docDefinition);
+      //this.propostaComuc.setPropostaJSON('');
 
       const sleep = (milliseconds) => {
         return new Promise(resolve => setTimeout(resolve, milliseconds))
       }
-      
-      this.salvarProposta();
 
-      if (!this.returnProp) {
-        sleep(5000).then(() => {
-          window.location.reload();
-        })
+            
+      if (await this.salvarProposta()) {
+
+          docDefinition.images.logotipo = img;
+          if (!this.returnProp) {
+            await pdfMake.createPdf(docDefinition).open()
+          }
+            
+          if (!this.returnProp) {
+            sleep(8000).then(() => {
+              //window.location.reload();
+              //this.router.navigate(['propostas'])
+
+              this.aba.setAba(5);
+
+            })
+        }
       }
-
+      
       this.proposta.observacao = '';
-
     }
 
     function fechar() { 
       document.getElementById("posiciona").style.display = 'none'; 
     }
+
   }
 
   async salvarProposta() {
+    debugger
         let paramsService = {
           proposta: JSON.stringify(this.propostaComuc.getProposta()).replace(/\#/gim, '%23'),
-          propostaJSON: JSON.stringify(this.propostaComuc.getPropostaJSON()).replace(/\#/gim, '%23')
-          //propostaJSON: {}
-        };
-
+          propostaJSON: JSON.stringify(this.propostaComuc.getPropostaJSON()).replace(/\#/gim, '%23'),  
+        }; 
+        
         if (this.returnProp) {
           this.returnProposta.emit(paramsService)
         }
         else {
           try {
-              await this.connectHTTP.callService({
-                service: 'salvarProposta',
-                paramsService
-              });
+            await this.connectHTTP.callService({
+              
+                service: 'salvarProposta', 
+                paramsService 
+
+                })                  
               this.toastrService.success('Proposta salva com sucesso!');
+              return true;
           }catch (error) {
               console.log(error)
               this.toastrService.error('Proposta não salva');
               this.bntGeraProposta = true;
-              return 0;
+              return false;
           }
         }
 
@@ -886,3 +948,4 @@ export class ElaboraPropostaComponent implements OnInit {
   }   
   
 }
+

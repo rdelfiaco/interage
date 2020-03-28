@@ -4,18 +4,15 @@ const { getUsuarios } = require('./usuario')
 function salvarProposta(req, res) {
   return new Promise(function (resolve, reject) {
 
-    let credenciais = {
+
+
+     let credenciais = {
       token: req.query.token,
       idUsuario: req.query.id_usuario
     };
 
-   //req.query.arquivo =   req.query.arquivo.substring(1, req.query.arquivo.length -1 );
-
-   console.log('req.query  ',  JSON.parse(req.query.propostaJSON));
-   
-
-    req.query.proposta = JSON.parse(req.query.proposta);
-
+    req.query.proposta = JSON.parse( req.query.proposta);
+    req.query.propostaJSON =  req.query.propostaJSON;
 
     req.query.proposta.placa = req.query.proposta.placa ? req.query.proposta.placa : '';
     req.query.proposta.observacao = req.query.proposta.observacao ? req.query.proposta.observacao : '';
@@ -71,8 +68,7 @@ function salvarProposta(req, res) {
                           '${req.query.proposta.reboque}',
                           ${req.query.proposta.idCombustivelDesconto} ) RETURNING id`
 
-    console.log('proposta inserir', sql)
-
+   // console.log('proposta inserir', sql)
 
     executaSQL(credenciais, sql).then(registros => {
 
@@ -109,7 +105,7 @@ function salvarProposta(req, res) {
                       '${req.query.proposta.observacao}',
                       7,
                       ${id_proposta})`
-       console.log('evento', sql)
+       // console.log('evento', sql)
       executaSQL(credenciais, sql).then(registros => {
         resolve(idProposta)
       }).catch(e => {

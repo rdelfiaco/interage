@@ -50,8 +50,8 @@ declaraServico('getAssociado', apiSGA.getAssociado);
 
 
 //proposta
-//declaraServico('salvarProposta', proposta.salvarProposta);
-declaraServicoPost('salvarProposta', proposta.salvarProposta);
+declaraServico('salvarProposta', proposta.salvarProposta);
+//declaraServicoPost('salvarProposta', proposta.salvarProposta);
 declaraServico('consultarPlaca', consultaPlaca.consultarPlaca);
 declaraServico('getPropostasDoUsuario', proposta.getPropostasDoUsuario);
 declaraServico('getPropostaPorId', proposta.getPropostaPorId);
