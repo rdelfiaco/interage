@@ -1,5 +1,8 @@
+import { Headers } from '@angular/http';
 import { LocalStorage } from "./localStorage";
 import { Usuario } from "../../login/usuario";
+
+import fetch from 'node-fetch';
 
 // var localSevidor = "http://88.99.35.190:3000/" //Producao
 var localSevidor =   "http://localhost:3010/";  //Local
@@ -132,4 +135,121 @@ export class ConnectHTTP {
       return `${o}=${paramsService[o]}`
     }).join('&')
   }
+
+
+  postHHTP(options: optionsCallService): Promise<retObjectCallService> | retObjectCallService {
+    const mensagem = this._checkOptionsCallService(options);
+    if (mensagem && !mensagem.error) return mensagem;
+
+    if (!options.paramsService.arquivo) return { error: 'É necessário enviar o arquivo.', resposta: {} };
+    
+    return new Promise((resolve, reject) => {
+      
+      //TROCA DADOS SERVIDOR
+      const host = options.host || localSevidor;
+
+      const service = options.service
+
+      const arquivo = options.paramsService.arquivo;
+
+      let url = `${host}${service}`
+
+      if (!options.naoExigeToken) {
+        let usuarioLogado = this.localStorage.getLocalStorage('usuarioLogado') as Usuario;
+        if (usuarioLogado != undefined ){
+          options.paramsService = {
+            //...options.paramsService,
+            id_usuario: usuarioLogado.id.toString(),
+            token: usuarioLogado.token
+          }
+        }
+      }
+
+
+      // var formData = new FormData();
+
+      // formData.append("file", options.paramsService.arquivo);
+
+      // delete options.paramsService.arquivo
+      if (options.paramsService) {
+        const paramsService = this._trataParamsService(options.paramsService)
+        url = `${url}${paramsService}`
+      }
+      const xhttp = new XMLHttpRequest()
+
+      xhttp.onload = function () {
+        const selfXhttp = this
+        if (selfXhttp.status === 200) {
+          resolve({ resposta: JSON.parse(selfXhttp.responseText) })
+        } else if (selfXhttp.status === 401) {
+          resolve({ resposta: {}, error: selfXhttp.responseText })
+        }
+      }
+      debugger
+      xhttp.onerror = (e) => {
+        reject(e)
+      }
+      // xhttp.setRequestHeader("Content-Type","multipart/form-data");
+      xhttp.open("POST", encodeURI(url), true)
+      xhttp.send( JSON.stringify({
+        "codigo_associado": 3280,
+        "codigo_situacao_boleto": 1 
+     }  ))
+    })
+  }
+
+  postAPI(options: optionsCallService): Promise<retObjectCallService> | retObjectCallService {
+    const mensagem = this._checkOptionsCallService(options);
+    if (mensagem && !mensagem.error) return mensagem;
+
+    if (!options.paramsService.arquivo) return { error: 'É necessário enviar o arquivo.', resposta: {} };
+    
+    return new Promise((resolve, reject) => {
+      
+      debugger
+      //TROCA DADOS SERVIDOR
+      const host = options.host || localSevidor;
+
+      const service = options.service
+
+      const arquivo = options.paramsService.arquivo.proposta ;
+
+      let url = `${host}${service}`
+
+      if (!options.naoExigeToken) {
+        let usuarioLogado = this.localStorage.getLocalStorage('usuarioLogado') as Usuario;
+        if (usuarioLogado != undefined ){
+          options.paramsService = {
+            //...options.paramsService,
+            id_usuario: usuarioLogado.id.toString(),
+            token: usuarioLogado.token
+          }
+          
+          url = `${host}${service}?id_usuario=${usuarioLogado.id.toString()}&token=${usuarioLogado.token}`
+
+        }
+      }
+
+      const body = JSON.stringify( {teste: 123})
+
+      var parametros = { method: 'POST',
+      body: {teste: "1554"},
+      };
+      url = url + `&proposta=${arquivo}`
+      //console.log('Boletos parametros ', parametros )
+      fetch(url, parametros)
+      .then( (res  => {
+          debugger
+          resolve (res.json()) }))
+      .catch( (error => {
+        debugger
+        reject( error) }));
+
+
+    })
+  }
+
+
 }
+
+

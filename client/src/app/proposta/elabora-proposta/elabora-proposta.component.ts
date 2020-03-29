@@ -1,4 +1,3 @@
-
 import { async } from '@angular/core/testing';
 import { ModalModule } from './../../../lib/ng-uikit-pro-standard/free/modals/modal.module';
 import { ModalDirective } from './../../../lib/ng-uikit-pro-standard/free/modals/modal.directive';
@@ -608,7 +607,7 @@ export class ElaboraPropostaComponent implements OnInit {
 //retira os tab 
 this.coberturasInclusas = this.coberturasInclusas.replace(/\  /gim, '')
 // somente 356 caracteres que dar certo 
-this.coberturasInclusas = this.coberturasInclusas.substring(1, 356 )
+//this.coberturasInclusas = this.coberturasInclusas.substring(1, 356 )
 
 
 if (!this.idPessoaCliente) {
@@ -800,9 +799,10 @@ if (!this.idPessoaCliente) {
               heights: [30],
               body: [
                 [{
-                  text: `A ALTIS atua legalmente perante a lei, respeitando a constituição e o código civil. Não possui nenhum impedimento legal e se responsabiliza solidariamente com os princípios embasado nas leis* Lei no 9.790, de 23 de março de 1999.  / CAPÍTULO I / DA QUALIFICAÇÃO COMO ORGANIZAÇÃO DA SOCIEDADE CIVIL* Constituição da Republica Federativa do Brasil 1988 / TÍTULO II / Dos Direitos / Garantias Fundamentais / CAPÍTULO I / DOS DIREITOS E DEVERES INDIVIDUAIS E COLETIVOS / Art. 5º /Incisos: XVII a XXI.* Código Civil - Lei 10406/02 | Lei no 10.406, de 10 de janeiro de 2002 / TÍTULO II / Da Sociedade / CAPÍTULO II / DAS ASSOCIAÇÕES. 
+                  // text: `A ALTIS atua legalmente perante a lei, respeitando a constituição e o código civil. Não possui nenhum impedimento legal e se responsabiliza solidariamente com os princípios embasado nas leis* Lei no 9.790, de 23 de março de 1999.  / CAPÍTULO I / DA QUALIFICAÇÃO COMO ORGANIZAÇÃO DA SOCIEDADE CIVIL* Constituição da Republica Federativa do Brasil 1988 / TÍTULO II / Dos Direitos / Garantias Fundamentais / CAPÍTULO I / DOS DIREITOS E DEVERES INDIVIDUAIS E COLETIVOS / Art. 5º /Incisos: XVII a XXI.* Código Civil - Lei 10406/02 | Lei no 10.406, de 10 de janeiro de 2002 / TÍTULO II / Da Sociedade / CAPÍTULO II / DAS ASSOCIAÇÕES. 
                   
-                  Validade: 15 dias a partir de ${this.hoje}. `,
+                  // Validade: 15 dias a partir de ${this.hoje}. `,
+                  text:'',
                   fillColor: '#eeeeee',
                   margin: [5, 5, 5, 5],
                   alignment: 'left',
@@ -884,6 +884,9 @@ if (!this.idPessoaCliente) {
       if (await this.salvarProposta()) {
 
           docDefinition.images.logotipo = img;
+          docDefinition.content[5].table.body[0][0].text = `A ALTIS atua legalmente perante a lei, respeitando a constituição e o código civil. Não possui nenhum impedimento legal e se responsabiliza solidariamente com os princípios embasado nas leis* Lei no 9.790, de 23 de março de 1999.  / CAPÍTULO I / DA QUALIFICAÇÃO COMO ORGANIZAÇÃO DA SOCIEDADE CIVIL* Constituição da Republica Federativa do Brasil 1988 / TÍTULO II / Dos Direitos / Garantias Fundamentais / CAPÍTULO I / DOS DIREITOS E DEVERES INDIVIDUAIS E COLETIVOS / Art. 5º /Incisos: XVII a XXI.* Código Civil - Lei 10406/02 | Lei no 10.406, de 10 de janeiro de 2002 / TÍTULO II / Da Sociedade / CAPÍTULO II / DAS ASSOCIAÇÕES. 
+                  
+          Validade: 15 dias a partir de ${this.hoje}. `
           if (!this.returnProp) {
             await pdfMake.createPdf(docDefinition).open()
           }
@@ -948,4 +951,5 @@ if (!this.idPessoaCliente) {
   }   
   
 }
+
 
