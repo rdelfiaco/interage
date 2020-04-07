@@ -62,7 +62,7 @@
       <mdb-tab heading="SERVIÇOS" [disabled]="!(pessoa | async)">
         <div class="row">
           <div class="col-12">
-            <app-servicos-contratados> </app-servicos-contratados>
+            <app-servicos-contratados [pessoa]="pessoa" (refresh)="refreshDad()" > </app-servicos-contratados>
           </div>
         </div>
       </mdb-tab>

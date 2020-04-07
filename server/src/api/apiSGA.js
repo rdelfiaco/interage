@@ -1,5 +1,31 @@
 const fetch = require('node-fetch');
 const {  executaSQLSemToken } = require( './executaSQL');
+const { buscaValorDoAtributo } = require('./shared')
+
+
+function getAssociadoContratos(req, res) {
+    return new Promise( async function (resolve, reject) {
+
+        var authorization = await executaSQLSemToken(`select valor from interage_parametros where nome_parametro = 'tokenSGA' `);
+        authorization = `Bearer ${authorization[0].valor}`;
+        var url = 'https://api.hinova.com.br/api/sga/v2/sincronismo-produto-fornecedor/buscar/cpf/' + req.query.cpf_cnpj;
+        var headers = {
+        "Content-Type": "application/json",
+        "Authorization": authorization
+        };
+        
+        var parametros = { method: 'GET',
+        headers: headers, 
+        cache: 'default' 
+        };
+        fetch(url, parametros)
+        .then(res => {
+            //console.log('getAssociado ', res )
+            resolve (res.json())})
+        .catch(error => reject( error) );
+    })
+
+}
 
  
     function getAssociado(req, res) {
@@ -269,8 +295,57 @@ const {  executaSQLSemToken } = require( './executaSQL');
 
     }
 
+
+
+    async function getPessoaContratos(req, res){
+        return new Promise( async function (resolve, reject) { 
+            let credenciais = {
+                token: req.query.token,
+                idUsuario: req.query.id_usuario
+              };
+            var cpfCnpj = await buscaValorDoAtributo(credenciais, 'cpf_cnpj','pessoas',`id = ${req.query.id_pessoa} `)
+            req.query.cpf_cnpj = Object.values( cpfCnpj[0])[0];
+
+            //console.log('req.query ',req.query)
+            var contratos = [];
+            await getAssociadoContratos(req, res)
+            .then( async res => { 
+                for  (var i = 0; i < res.quantidade_veiculos ; i++ ){
+                    contratos.push(res[i])
+//                    console.log(` i = ${i} de ${res.quantidade_veiculos}`)
+                    req.query.codigo_veiculo = contratos[i].codigo_veiculo;
+                    
+                    await getSituacaoFinaceiroVeiculo(req, res)
+                    .then ( resVeiculo => {
+                        contratos[i].descricao_modelo = resVeiculo[0].descricao_modelo;
+                        contratos[i].codigo_situacao_veiculo = resVeiculo[0].codigo_situacao_veiculo;
+                        contratos[i].descricao_situacao_veiculo = resVeiculo[0].descricao_situacao_veiculo;  
+                        contratos[i].situacao_financeira = resVeiculo[0].situacao_financeira;
+                        // último boleto pago 
+                       // console.log( ` contratos ${i} ${contratos[i]}` )
+
+                    })
+                    .catch( err => { 
+                        //console.log ( 'err ', err ) 
+                    } );
+                }
+                console.log('contratos ', contratos )
+                resolve ( contratos )
+                // resolve (res.json())
+            })
+            .catch( error => {
+                error;
+            })
+
+        });
+    };
+
+
+
+
     module.exports = { 
         getAssociado,
+        getAssociadoContratos,
         getBoletos,
         getIdPessoaAssociado,
         getBoletosBixados,
@@ -279,5 +354,6 @@ const {  executaSQLSemToken } = require( './executaSQL');
         getSituacaoFinaceiroVeiculo,
         getContratos,
         getVeiculo,
+        getPessoaContratos
 
     }

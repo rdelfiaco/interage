@@ -4,7 +4,7 @@ import { ModalDirective } from './../../../lib/ng-uikit-pro-standard/free/modals
 import { style } from '@angular/animations';
 
 import { Proposta } from '../proposta';
-import { Component, OnInit, Input, EventEmitter, OnChanges, SimpleChanges, Type, Output } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, OnChanges, SimpleChanges, Type, Output, ViewChild } from '@angular/core';
 import { Usuario } from '../../login/usuario';
 import { ConnectHTTP } from '../../shared/services/connectHTTP';
 import { LocalStorage } from '../../shared/services/localStorage';
@@ -27,6 +27,7 @@ import * as moment from 'moment';
 import { timestamp } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { text } from '@angular/core/src/render3/instructions';
+import { PropostasEnviadasComponent } from '../propostas-enviadas/propostas-enviadas.component';
 
 
 interface selectValues {
@@ -140,7 +141,6 @@ export class ElaboraPropostaComponent implements OnInit {
   chckLeilaoSinistrado: boolean = false;
   chckCombustivelDesconto: string = "1";
   // 
-
 
   constructor(
     private router: Router,
@@ -802,7 +802,7 @@ if (!this.idPessoaCliente) {
                   // text: `A ALTIS atua legalmente perante a lei, respeitando a constituição e o código civil. Não possui nenhum impedimento legal e se responsabiliza solidariamente com os princípios embasado nas leis* Lei no 9.790, de 23 de março de 1999.  / CAPÍTULO I / DA QUALIFICAÇÃO COMO ORGANIZAÇÃO DA SOCIEDADE CIVIL* Constituição da Republica Federativa do Brasil 1988 / TÍTULO II / Dos Direitos / Garantias Fundamentais / CAPÍTULO I / DOS DIREITOS E DEVERES INDIVIDUAIS E COLETIVOS / Art. 5º /Incisos: XVII a XXI.* Código Civil - Lei 10406/02 | Lei no 10.406, de 10 de janeiro de 2002 / TÍTULO II / Da Sociedade / CAPÍTULO II / DAS ASSOCIAÇÕES. 
                   
                   // Validade: 15 dias a partir de ${this.hoje}. `,
-                  text:'',
+                  text:` ${this.hoje}. `,
                   fillColor: '#eeeeee',
                   margin: [5, 5, 5, 5],
                   alignment: 'left',

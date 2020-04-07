@@ -130,13 +130,12 @@ export class PropostasEnviadasComponent implements OnInit  {
     }) as any;
     if (propostas.resposta.length > 0) {
       this.propostas = propostas.resposta.map(p => {
-        debugger
         let propostaPDF = p.proposta_json  ? JSON.parse(p.proposta_json.replace(/\%23/gim, '#')) : {};
         propostaPDF.images = { logotipo: img }
-        //console.log('propostaPDF.content[5] ', propostaPDF.content[5] )
+        if (propostaPDF.content[5].table.body[0][0].text.length < 15 ) {
         propostaPDF.content[5].table.body[0][0].text = `A ALTIS atua legalmente perante a lei, respeitando a constituição e o código civil. Não possui nenhum impedimento legal e se responsabiliza solidariamente com os princípios embasado nas leis* Lei no 9.790, de 23 de março de 1999.  / CAPÍTULO I / DA QUALIFICAÇÃO COMO ORGANIZAÇÃO DA SOCIEDADE CIVIL* Constituição da Republica Federativa do Brasil 1988 / TÍTULO II / Dos Direitos / Garantias Fundamentais / CAPÍTULO I / DOS DIREITOS E DEVERES INDIVIDUAIS E COLETIVOS / Art. 5º /Incisos: XVII a XXI.* Código Civil - Lei 10406/02 | Lei no 10.406, de 10 de janeiro de 2002 / TÍTULO II / Da Sociedade / CAPÍTULO II / DAS ASSOCIAÇÕES. 
         
-        Validade: 15 dias a partir de ${this.hoje}. `
+        Validade: 15 dias a partir de ` + propostaPDF.content[5].table.body[0][0].text};
 
         return {
           ...p,

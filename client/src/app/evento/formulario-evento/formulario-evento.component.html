@@ -142,7 +142,7 @@
       </div>
     </div>
 
-    <div class="col-12 input-group" [hidden]="!evento.placa">
+    <div *ngIf="evento.placa != 'null' "  class="col-12 input-group" [hidden]="!evento.placa">
       <div class="md-form">
         <input mdbInputDirective formControlName="placa" type="text" id="placa" class="form-control"
           >

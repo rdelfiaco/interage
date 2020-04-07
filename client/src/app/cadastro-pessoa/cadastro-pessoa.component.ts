@@ -57,6 +57,7 @@ export class CadastroPessoaComponent implements OnInit {
   }
 
   async getPessoa(pessoaId: any) {
+    debugger
     let pessoa = await this.connectHTTP.callService({
       service: 'getPessoa',
       paramsService: {

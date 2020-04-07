@@ -1,3 +1,29 @@
-<p>
-  servicos-contratados works!
-</p>
+<div class="row pt-4 p-3">
+  <h4 style="font-weight: bold;color: gray;">Serviços Contratados</h4>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Dt.contrato</th>
+        <th>Placa</th>
+        <th>Valor_fipe</th>
+        <th>Modelo</th>
+        <th>Situação financeira</th>
+        <th>Situação do veículo</th>
+        <th>Vlr boleto</th>
+        <th>Dt.último Pgto</th>
+      </tr>
+    </thead>
+    <tbody *ngFor="let contrato of tableData">
+      <tr class="{{contrato.corLinha}}">
+        <th>{{contrato.data_contrato_veiculo | date:'dd/MM/yyyy' }}</th>
+        <td>{{contrato.placa}}</td>
+        <td>{{ contrato.valor_fipe }}</td>
+        <td>{{contrato.descricao_modelo}}</td>
+        <td>{{contrato.situacao_financeira}}</td>
+        <td>{{contrato.descricao_situacao_veiculo}}</td>
+        <td>???,??</td>
+        <td>??/??/????</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

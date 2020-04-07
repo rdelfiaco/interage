@@ -278,7 +278,7 @@ export class AtendimentoComponent implements OnInit {
   }
 
   async novoAtendimentoPessoaInformada(){
-
+    debugger
     if (!this.pessoaForm.valid) {
       this.toastrService.error('CPF ou Nome invalido  ');
       return false;
@@ -328,6 +328,7 @@ export class AtendimentoComponent implements OnInit {
   }
 
   async getPessoaPorCPFCNPJ(){
+debugger
       // verifica se a pessoa já é usuário 
     let getPessoaPorCPFCNPJ = await this.connectHTTP.callService({
       service: 'getPessoaPorCPFCNPJ',

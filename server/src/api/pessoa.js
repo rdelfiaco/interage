@@ -2,7 +2,7 @@ const { checkTokenAccess } = require('./checkTokenAccess');
 const { executaSQL } = require('./executaSQL');
 const { buscaValorDoAtributo } = require( './shared');
 const { auditoria } = require('./auditoria');
-const { getAssociado } = require('./apiSGA')
+const { getAssociado, getPessoaContratos } = require('./apiSGA')
 
 
 
@@ -148,21 +148,28 @@ function getPessoa(req, res) {
               getRelacionamentos(req).then(resRelacionamento => {
                 getLeadsMiling(req).then(resLeadsMiling => {
                   getAuditoria(req).then(respAuditoria => {
-                    if (!respAuditoria) { auditoria_ = {} ;
-                    }else auditoria_ = respAuditoria;
-                    if (!resLeadsMiling) { leadsMilings = {} ;
-                    }else leadsMilings = resLeadsMiling;
-                    if (!resRelacionamento) { relacionamento = {} ;
-                    }else relacionamentos = resRelacionamento;
-                    if (!resTelefones) { telefones = {} ;
-                    }else telefones = resTelefones;
-                    if (!resEndereco) {enderecos = {}
-                    }else enderecos = resEndereco;
-                    resolve({ principal: pessoa, enderecos, telefones, relacionamentos, leadsMilings, auditoria_ })
-                  })
-                  .catch(err => {
-                    reject(err)
-                  });  
+                    getPessoaContratos(req).then( respAssociadoContratos => { 
+                      if ( !respAssociadoContratos) { associadoContratos = {} ; 
+                        }else associadoContratos = respAssociadoContratos;
+                        if (!respAuditoria) { auditoria_ = {} ;
+                        }else auditoria_ = respAuditoria;
+                        if (!resLeadsMiling) { leadsMilings = {} ;
+                        }else leadsMilings = resLeadsMiling;
+                        if (!resRelacionamento) { relacionamento = {} ;
+                        }else relacionamentos = resRelacionamento;
+                        if (!resTelefones) { telefones = {} ;
+                        }else telefones = resTelefones;
+                        if (!resEndereco) {enderecos = {}
+                        }else enderecos = resEndereco;
+                        resolve({ principal: pessoa, enderecos, telefones, relacionamentos, leadsMilings, auditoria_, associadoContratos })
+                      })
+                      .catch(err => {
+                        reject(err)
+                      });  
+                    })
+                    .catch(err => {
+                      reject(err)
+                    });  
                   })
                 .catch(err => {
                   reject(err)
