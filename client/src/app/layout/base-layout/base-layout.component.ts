@@ -18,7 +18,7 @@ export class BaseLayoutComponent {
   usuarioLogado: Usuario;
   nomeUsuario: string = 'Usuário';
   // TROCA DADOS SERVIDOR TROCAR NUMERO DA VERSÃO
-  versaoSistema: string = 'V.2.1.8';
+  versaoSistema: string = 'V.2.1.9';
   versaoTeste: boolean = true; 
   counterEvents: number;
   sub: any;

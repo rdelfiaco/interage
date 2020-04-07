@@ -39,7 +39,7 @@ export class ServicosContratadosComponent implements OnInit {
         for (var i = 0; i < this.tableData.length ; i++){
           switch(this.tableData[i].situacao_financeira) {
             case 'ADIMPLENTE':
-                if (this.tableData[i].descricao_situacao_veiculo == "PÓS-VENDA"){
+                if (this.tableData[i].descricao_situacao_veiculo == "PÓS-VENDA" || this.tableData[i].descricao_situacao_veiculo == "ATIVO" ){
                   this.tableData[i].corLinha = 'verde' 
                 }else {
                   this.tableData[i].corLinha = 'vermelho'
@@ -47,7 +47,7 @@ export class ServicosContratadosComponent implements OnInit {
               
               break;
             case 'INADIMPLENTE':
-                if (this.tableData[i].descricao_situacao_veiculo == "INADIMPLENTE"){
+                if (this.tableData[i].descricao_situacao_veiculo == "INADIMPLENTE" || this.tableData[i].descricao_situacao_veiculo == "ATIVO" ){
                   this.tableData[i].corLinha = 'laranja' 
                 }else {
                   this.tableData[i].corLinha = 'vermelho'
