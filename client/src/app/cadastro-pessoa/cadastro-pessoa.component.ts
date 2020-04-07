@@ -8,12 +8,16 @@ import { ActivatedRoute } from '@angular/router';
 import { ToastService } from '../../lib/ng-uikit-pro-standard';
 import { CheckPermissaoRecurso } from '../shared/services/checkPemissaoRecurso';
 
+
+
 @Component({
   selector: 'app-cadastro-pessoa',
   templateUrl: './cadastro-pessoa.component.html',
   styleUrls: ['./cadastro-pessoa.component.scss']
 })
 export class CadastroPessoaComponent implements OnInit {
+
+  carregando: boolean = true; 
 
   private _pessoa;
   pessoaObject: any;
@@ -57,14 +61,14 @@ export class CadastroPessoaComponent implements OnInit {
   }
 
   async getPessoa(pessoaId: any) {
-    debugger
+    
     let pessoa = await this.connectHTTP.callService({
       service: 'getPessoa',
       paramsService: {
         id_pessoa: pessoaId
       }
     }) as any;
-
+    this.carregando = false; 
     //  - se o cliente não estiver vinculado a nenhuma carteira o usuário logado pode ter acesso; 
     //  - se o cliente esteja vinculado a uma carteria e se o usuário logado possui carteira o
     //           o acesso aos dados do cliente somente se ele pertence a carteira do usuário logado  

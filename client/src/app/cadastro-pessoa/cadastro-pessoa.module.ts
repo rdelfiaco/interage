@@ -16,6 +16,7 @@ import { QuestionariosPessoaComponent } from './questionarios-pessoa/questionari
 import { CriarEventoModule } from '../evento/criar-evento/criar-evento.module';
 import { PropostaModule } from '../proposta/proposta.module';
 import { ServicosContratadosComponent } from './servicos-contratados/servicos-contratados.component';
+import { CarregandoModule } from '../shared/carregando/carregando.module';
 
 @NgModule({
   imports: [
@@ -29,6 +30,7 @@ import { ServicosContratadosComponent } from './servicos-contratados/servicos-co
     PesquisaClienteModule,
     CriarEventoModule,
     PropostaModule,
+    CarregandoModule
     
   ],
   declarations: [
