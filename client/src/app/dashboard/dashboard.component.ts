@@ -137,7 +137,6 @@ export class DashboardComponent implements OnInit {
 
   async ngOnInit() {
 
-    this.carregando = false;
 
     await this.getBoletosSGA();
     this.graficoBoletos();
@@ -145,7 +144,7 @@ export class DashboardComponent implements OnInit {
     await this.getEventosAtendimento();
     this.graficoEventosAtendimento();
 
-    this.carregando = true;
+    this.carregando = false;
 
   };
 

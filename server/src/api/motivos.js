@@ -72,8 +72,8 @@ function crudMotivos(req, res){
                 ${req.query.inicia_processo},
                 ${req.query.gera_email},
                 ${req.query.prazo_finalizacao},
-                ${ req.query.acao_sql != null  ?  "'" + req.query.acao_sql + "'" : 'NULL' + "," },
-                ${ req.query.acao_js != null  ?  "'" + req.query.acao_js + "'" : 'NULL' + "," }
+                ${ req.query.acao_sql != null  ?  "'" + req.query.acao_sql + "'" : 'NULL' },
+                ${ req.query.acao_js != null  ?  "'" + req.query.acao_js + "'" : 'NULL' }
                 ) RETURNING id;`;
     return sql;
   };
@@ -87,8 +87,8 @@ function crudMotivos(req, res){
                SET  status=${req.query.status}, 
                     nome='${req.query.nome}',
                     gera_email= ${req.query.gera_email},
-                    acao_sql= ${ req.query.acao_sql != null  ?  "'" + req.query.acao_sql + "'" : 'NULL' + "," },
-                    acao_js=  ${ req.query.acao_js != null  ?  "'" + req.query.acao_js + "'" : 'NULL' + "," },
+                    acao_sql= ${ req.query.acao_sql != null  ?  "'" + req.query.acao_sql + "'" : 'NULL'  },
+                    acao_js=  ${ req.query.acao_js != null  ?  "'" + req.query.acao_js + "'" : 'NULL' },
                     inicia_processo= ${req.query.inicia_processo },
                     prazo_finalizacao = ${req.query.prazo_finalizacao}
               WHERE id= ${req.query.id};`;

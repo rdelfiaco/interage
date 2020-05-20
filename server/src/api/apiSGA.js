@@ -329,7 +329,7 @@ function getAssociadoContratos(req, res) {
                         //console.log ( 'err ', err ) 
                     } );
                 }
-                console.log('contratos ', contratos )
+                //console.log('contratos ', contratos )
                 resolve ( contratos )
                 // resolve (res.json())
             })

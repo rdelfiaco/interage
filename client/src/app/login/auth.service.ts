@@ -57,7 +57,6 @@ export class AuthService {
     }) as any;
     let counter = res.resposta[0].count as number;
     this.counterEvents.next(counter);
-
     this.setInterval = setInterval(async () => {
 
       //      if (!self.usuarioLogadoObject) return clearInterval(self.setInterval);

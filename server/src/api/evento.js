@@ -7,8 +7,10 @@ const { salvarProposta } = require('./proposta');
 const { getUsuarios } = require('./usuario');
 const { executaSQL } = require('./executaSQL');
 const { buscaValorDoAtributo } = require( './shared');
-const {awaitSQL} = require( './shared');
-const {salvarTelefonePessoa} = require('./pessoa');
+const { awaitSQL } = require( './shared');
+const { salvarTelefonePessoa } = require('./pessoa');
+const { sendEmail } = require('./email'); 
+
 
 function getUmEvento(req, res) {
   return new Promise(function (resolve, reject) {
@@ -113,9 +115,15 @@ function encerrarEvento(client, id_pessoa, id_evento, id_status_evento) {
 
 async function _criarEvento(client, id_campanha, id_motivo, id_evento_pai, id_evento_anterior,
   id_pessoa_criou, dt_para_exibir, tipoDestino, id_pessoa_organograma, id_pessoa_receptor,
-  observacao_origem, id_canal, protocolo, idTelefonePessoa, encerrado, codigo_veiculo, placa ) {
+  observacao_origem, id_canal, protocolo, idTelefonePessoa, encerrado, codigo_veiculo, placa, credenciais ) {
 
   encerrado = encerrado ? encerrado : false;
+
+  // ler o atributo "gera_email" do motivo 
+  var geraEmail = await buscaValorDoAtributo(credenciais, 'gera_email', 'motivos',`id = ${id_motivo} `)
+  geraEmail = Object.values( geraEmail[0])[0];
+  
+  console.log('geraEmail ', geraEmail )
 
   //console.log('_criarEvento ')
 
@@ -184,6 +192,13 @@ async function _criarEvento(client, id_campanha, id_motivo, id_evento_pai, id_ev
 
     //console.log(update)
     client.query(update).then((updateEventoCriado) => {
+
+ // enviar email para os movito com flag enviar_email =  true 
+      // if( geraEmail) {
+      // console.log('antes do sendEmail ')
+      // sendEmail(update, " " ).then(res =>{ console.log(res)}).catch(err => { console.log(err)}) 
+      // }
+
       resolve(updateEventoCriado)
     }).catch(err => {
       reject(err);
@@ -195,6 +210,12 @@ function encaminhaEvento(req, res) {
   return new Promise(function (resolve, reject) {
 
     checkTokenAccess(req).then(historico => {
+      
+      var credenciais = {
+        token: req.query.token,
+        idUsuario: req.query.id_usuario
+      };
+
       const dbconnection = require('../config/dbConnection')
       const { Client } = require('pg')
 
@@ -211,7 +232,7 @@ function encaminhaEvento(req, res) {
         encerrarEvento(client, req.query.id_pessoa_resolveu, req.query.id_evento, statusEvento).then(eventoEncerrado => {
           _criarEvento(client, req.query.id_campanha, req.query.id_motivo, req.query.id_evento_pai, req.query.id_evento,
             req.query.id_pessoa_resolveu, req.query.dt_para_exibir, req.query.tipoDestino, req.query.id_pessoa_organograma, req.query.id_pessoa_receptor,
-            req.query.observacao_origem, req.query.id_canal, null, null, false, null, null).then(eventoCriado => {
+            req.query.observacao_origem, req.query.id_canal, null, null, false, null, null, credenciais).then(eventoCriado => {
               client.query('COMMIT').then((resposta) => {
                 resolve(eventoCriado)
                 client.end();
@@ -324,7 +345,7 @@ async function criarEvento(req, res) {
 
        await _criarEvento(client, req.query.id_campanha, req.query.id_motivo, eventoPai , eventoAnterior,
           req.query.id_pessoa_resolveu, req.query.dt_para_exibir, req.query.tipoDestino, req.query.id_pessoa_organograma, req.query.id_pessoa_receptor,
-          req.query.observacao_origem, req.query.id_canal, protocolo, idTelefonePessoa, req.query.encerrado, req.query.codigo_veiculo, req.query.placa ).then(eventoCriado => {
+          req.query.observacao_origem, req.query.id_canal, protocolo, idTelefonePessoa, req.query.encerrado, req.query.codigo_veiculo, req.query.placa,credenciais ).then(eventoCriado => {
             client.query('COMMIT').then((resposta) => {
               resolve(eventoCriado)
               client.end();
@@ -359,6 +380,11 @@ function salvarEvento(req, res) {
       const client = new Client(dbconnection)
 
       client.connect()
+
+      var credenciais = {
+        token: req.query.token,
+        idUsuario: req.query.id_usuario
+      };
 
 
       let sqlMotivoRespostaAutomaticos = `SELECT * from motivos_eventos_automaticos
@@ -411,10 +437,7 @@ function salvarEvento(req, res) {
             // executa ação SQL do motivo 
             if (motivoAcaoSQL){
               let sql = motivoAcaoSQL.replace('${req.query.id_evento}', `${req.query.id_evento}`)
-              let credenciais = {
-                token: req.query.token,
-                idUsuario: req.query.id_usuario
-              };
+
               //console.log(credenciais, sql )
               executaSQL(credenciais, sql).then(() =>{
                 resolve('SQL da ação motivo resolvido com sucesso ')
@@ -480,16 +503,30 @@ function salvarEvento(req, res) {
                     if (motivoResposta_automatico.length > 0) {
                       motivoResposta_automatico.map((m, index, array) => {
                         eventoCriar = createEvent(m, motivoResposta, updateEventoEncerrado)
-                        //console.log('eventoCriar', eventoCriar)
+                        console.log('eventoCriar', eventoCriar)
 
-                        client.query(eventoCriar).then(res => {
+                        client.query(eventoCriar).then( async res => {
                           //console.log('index == array.length - 1', index == array.length - 1)
 
                           if (index == array.length - 1)
-                            client.query('COMMIT').then((resposta) => {
+                            client.query('COMMIT').then( async (resposta) => {
+
+                              // verifica se o motivo gera email se for verdadeiro será executado o sendEmail 
+                              console.log('m.id_motivo ', m.id_motivo)
+                              var motivos = await executaSQL(credenciais, `select * from motivos where id = ${m.id_motivo} `)
+                              let geraEmail = Object.values( motivos[0]).geraEmail;
+                              if (geraEmail) {
+                                console.log('antes do sendEmail ')
+                                let infoEmail = {
+                                    destinatario: m
+                                    
+
+                                }
+                                //sendEmail(m, " " ).then(res =>{ console.log(res)}).catch(err => { console.log(err)}) 
+                              }
                               getMetaPessoa(req).then(metaPessoa => {
-                                client.end();
-                                resolve(metaPessoa)
+                              client.end();
+                              resolve(metaPessoa)
                               }).catch(err => {
                                 client.end();
                                 reject(err)
@@ -499,7 +536,6 @@ function salvarEvento(req, res) {
                           client.end();
                           reject(err)
                         })
-
                       })
                     } else {
                       client.query('COMMIT').then(() => {
