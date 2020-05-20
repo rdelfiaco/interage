@@ -18,7 +18,7 @@ export class BaseLayoutComponent {
   usuarioLogado: Usuario;
   nomeUsuario: string = 'Usuário';
   // TROCA DADOS SERVIDOR TROCAR NUMERO DA VERSÃO
-  versaoSistema: string = 'V.2.1.17';
+  versaoSistema: string = 'V.2.1.18';
   versaoTeste: boolean = false; 
   counterEvents: number;
   sub: any;
@@ -30,7 +30,6 @@ export class BaseLayoutComponent {
     this.hasLogado = this.auth.estaLogado();
     this.usuarioLogado = this.localStorage.getLocalStorage('usuarioLogado') as Usuario;
     this.getCounterEvents();
-    
   }
 
   async getCounterEvents() {
