@@ -14,7 +14,7 @@
     "body-parser": "^1.18.3",
     "connect-multiparty": "^2.2.0",
     "express": "^4.16.3",
-    "moment": "^2.24.0",
+    "moment": "^2.26.0",
     "node-fetch": "^2.6.0",
     "pg": "^7.4.3",
     "request": "^2.88.2",
