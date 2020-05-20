@@ -9,7 +9,7 @@ const { executaSQL } = require('./executaSQL');
 const { buscaValorDoAtributo } = require( './shared');
 const { awaitSQL } = require( './shared');
 const { salvarTelefonePessoa } = require('./pessoa');
-const { sendEmail } = require('./email'); 
+//const { sendEmail } = require('./email'); 
 
 
 function getUmEvento(req, res) {
@@ -120,10 +120,10 @@ async function _criarEvento(client, id_campanha, id_motivo, id_evento_pai, id_ev
   encerrado = encerrado ? encerrado : false;
 
   // ler o atributo "gera_email" do motivo 
-  var geraEmail = await buscaValorDoAtributo(credenciais, 'gera_email', 'motivos',`id = ${id_motivo} `)
-  geraEmail = Object.values( geraEmail[0])[0];
+  // var geraEmail = await buscaValorDoAtributo(credenciais, 'gera_email', 'motivos',`id = ${id_motivo} `)
+  // geraEmail = Object.values( geraEmail[0])[0];
   
-  console.log('geraEmail ', geraEmail )
+  // console.log('geraEmail ', geraEmail )
 
   //console.log('_criarEvento ')
 
@@ -512,18 +512,18 @@ function salvarEvento(req, res) {
                             client.query('COMMIT').then( async (resposta) => {
 
                               // verifica se o motivo gera email se for verdadeiro será executado o sendEmail 
-                              console.log('m.id_motivo ', m.id_motivo)
-                              var motivos = await executaSQL(credenciais, `select * from motivos where id = ${m.id_motivo} `)
-                              let geraEmail = Object.values( motivos[0]).geraEmail;
-                              if (geraEmail) {
-                                console.log('antes do sendEmail ')
-                                let infoEmail = {
-                                    destinatario: m
+                              // console.log('m.id_motivo ', m.id_motivo)
+                              // var motivos = await executaSQL(credenciais, `select * from motivos where id = ${m.id_motivo} `)
+                              // let geraEmail = Object.values( motivos[0]).geraEmail;
+                              // if (geraEmail) {
+                              //   console.log('antes do sendEmail ')
+                              //   let infoEmail = {
+                              //       destinatario: m
                                     
 
-                                }
-                                //sendEmail(m, " " ).then(res =>{ console.log(res)}).catch(err => { console.log(err)}) 
-                              }
+                              //   }
+                              //   //sendEmail(m, " " ).then(res =>{ console.log(res)}).catch(err => { console.log(err)}) 
+                              // }
                               getMetaPessoa(req).then(metaPessoa => {
                               client.end();
                               resolve(metaPessoa)
