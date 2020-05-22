@@ -4,8 +4,8 @@ import { Usuario } from "../../login/usuario";
 
 import fetch from 'node-fetch';
 
-var localSevidor = "http://88.99.35.190:3000/" //Producao
-// var localSevidor =   "http://localhost:3010/";  //Local
+// var localSevidor = "http://88.99.35.190:3000/" //Producao
+var localSevidor =   "http://localhost:3010/";  //Local
 //var localSevidor =  "http://192.168.100.74:3010/" //MCPRO
 
 interface optionsCallService {
@@ -115,7 +115,6 @@ export class ConnectHTTP {
           resolve({ resposta: {}, error: selfXhttp.responseText })
         }
       }
-      debugger
       xhttp.onerror = (e) => {
         reject(e)
       }
@@ -185,7 +184,6 @@ export class ConnectHTTP {
           resolve({ resposta: {}, error: selfXhttp.responseText })
         }
       }
-      debugger
       xhttp.onerror = (e) => {
         reject(e)
       }
@@ -206,7 +204,6 @@ export class ConnectHTTP {
     
     return new Promise((resolve, reject) => {
       
-      debugger
       //TROCA DADOS SERVIDOR
       const host = options.host || localSevidor;
 
@@ -239,10 +236,8 @@ export class ConnectHTTP {
       //console.log('Boletos parametros ', parametros )
       fetch(url, parametros)
       .then( (res  => {
-          debugger
           resolve (res.json()) }))
       .catch( (error => {
-        debugger
         reject( error) }));
 
 

@@ -1,5 +1,4 @@
-import { Proposta } from './../proposta';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, EventEmitter, Output } from '@angular/core';
 import { ConnectHTTP } from '../../shared/services/connectHTTP';
 import { LocalStorage } from '../../shared/services/localStorage';
 import { Usuario } from '../../login/usuario';
@@ -26,6 +25,8 @@ export class PropostasEnviadasComponent implements OnInit  {
   dataInicial: string = moment().subtract(30, 'days').format('DD/MM/YYYY')
   dataFinal: string = moment().format('DD/MM/YYYY')
   hoje: string = moment().format('DD/MM/YYYY')
+  
+  @Output() returnPessoaSelecionada: EventEmitter<any> = new EventEmitter();
 
 
 
@@ -73,6 +74,7 @@ export class PropostasEnviadasComponent implements OnInit  {
     this.usuarioLogado = this.localStorage.getLocalStorage('usuarioLogado') as Usuario;
     this.usuarioLogadoSupervisor = this.usuarioLogado.responsavel_membro == "R"; 
     pdfMake.vfs = pdfFonts.pdfMake.vfs;
+    
   }
 
   async ngOnInit() {
@@ -115,9 +117,11 @@ export class PropostasEnviadasComponent implements OnInit  {
 
   fechaModal() {
     this.modalDetalheProposta.hide();
+    
   }
 
   async lerPropostas(){
+    
     let propostas = await this.connectHTTP.callService({
       service: 'getPropostasDoUsuario',
       paramsService: {
@@ -128,7 +132,7 @@ export class PropostasEnviadasComponent implements OnInit  {
         dataFinal: this.dataFinal
       }
     }) as any;
-    if (propostas.resposta.length > 0) {
+    if ( (propostas.resposta.length > 0) && (propostas.resposta[0].id_pessoa_cliente != null)) {
       this.propostas = propostas.resposta.map(p => {
         let propostaPDF = p.proposta_json  ? JSON.parse(p.proposta_json.replace(/\%23/gim, '#')) : {};
         propostaPDF.images = { logotipo: img }
@@ -147,6 +151,10 @@ export class PropostasEnviadasComponent implements OnInit  {
       this.propostas = null;
     }
 
+  }
+
+  fechaModalProposta_(){
+    this.returnPessoaSelecionada.emit();
   }
 
 

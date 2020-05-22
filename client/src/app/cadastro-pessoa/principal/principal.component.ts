@@ -340,4 +340,6 @@ export class PrincipalComponent implements OnInit {
     this.pessoaProposta = true;
   }
 
+
+
 }

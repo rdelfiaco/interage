@@ -63,6 +63,7 @@ export class ElaboraPropostaComponent implements OnInit {
   @Input() returnProp: boolean;
   @Output() returnProposta = new EventEmitter();
 
+
   // @Input() refreshtabelaFipe: TabelaFipe;
 
   usuarioLogado: Usuario;
@@ -79,6 +80,8 @@ export class ElaboraPropostaComponent implements OnInit {
   apps: Array<any>;
   combustivelDesconto: Array<any>;
   combustivelDescontos:  Array<any>;
+  guincho:  Array<any>;
+  guinchos:  Array<any>;
   carrosReservas: Array<any>;
   carroReserva: Array<any>;
   tabelaValores: Array<any>;
@@ -132,6 +135,7 @@ export class ElaboraPropostaComponent implements OnInit {
   chckCarroRes: string = "1";
   chckProtecaoVidro: string = "1";
   chckApp: string = "1";
+  chckGuincho: string = "1";
   chckRastreador: string = "0";
   chckPortabilidade: boolean = false;
   chckNovo: boolean = true;
@@ -168,6 +172,7 @@ export class ElaboraPropostaComponent implements OnInit {
     this.tabelaValores = tabelaPrecos.resposta.TabelaValores;
     this.tabelaCombos = tabelaPrecos.resposta.TabelaCombos;
     this.combustivelDescontos = tabelaPrecos.resposta.CombustivelDesconto;
+    this.guinchos = tabelaPrecos.resposta.Guincho;
 
     this.bntGeraProposta = false;
 
@@ -206,6 +211,7 @@ export class ElaboraPropostaComponent implements OnInit {
     this.chckNormal = false;
     this.chckLeilaoSinistrado = false;
     this.bntGeraProposta = true;
+    
   }
 
   atualizaValorVeiculo(proposta_: Proposta) {
@@ -221,7 +227,6 @@ export class ElaboraPropostaComponent implements OnInit {
 
 
   atualizaTabelas() {
-
 
     let nVlrBusca = 0;
 
@@ -252,6 +257,8 @@ export class ElaboraPropostaComponent implements OnInit {
 
     this.combustivelDesconto = this.combustivelDescontos.filter(this.filtraTabelasTipoVeiculos, [this.tipoVeiculoSelectValue]);
     
+    this.guincho = this.guinchos.filter(this.filtraTabelasTipoVeiculos, [this.tipoVeiculoSelectValue])
+
     if (this.valores.length > 0 ) {
       this.valorPPV = this.valores[0].valor_ppv;
       this.cota = this.valores[0].cota;
@@ -282,7 +289,6 @@ export class ElaboraPropostaComponent implements OnInit {
         this.vlrParticipacao_ =  numeral(this.vlrParticipacao).format('0,000.00');
         this.prcParticipacao = 0;
       }
-
 
 
       // quando for combro ajustar 
@@ -380,6 +386,12 @@ export class ElaboraPropostaComponent implements OnInit {
         this.proposta.idCombustivelDesconto = this.combustivelDesconto[this.chckCombustivelDesconto].id;
         this.proposta.combustivelDesconto =  this.combustivelDesconto[this.chckCombustivelDesconto].nome;
         this.proposta.combustivelDesconto = this.combustivelDesconto[this.chckCombustivelDesconto].descricao;
+      };
+
+      if (this.guincho.length) {
+        this.vlrProposta = this.vlrProposta + Number(this.guincho[this.chckGuincho].valor)
+        this.proposta.idGuincho = this.guincho[this.chckGuincho].id;
+        this.proposta.guincho =  this.guincho[this.chckGuincho].descricao;
       };
 
       if (this.rastreador.length > 0) {
@@ -530,6 +542,10 @@ export class ElaboraPropostaComponent implements OnInit {
     this.somaValoresProposta()
   }
 
+  mudouGuincho(opcao){
+    this.chckGuincho = opcao;
+    this.somaValoresProposta()
+  }
 
   mudouRastreador(opcao) {
     this.chckRastreador = opcao;
@@ -558,7 +574,6 @@ export class ElaboraPropostaComponent implements OnInit {
 
   async geraProposta() {
 
-    let reboqueIlimitado = 'Reboque ilimitado em caso de colisão, uma vez a cada 12 meses;'
     // se for undefined coloca vazio
     this.proposta.carroReserva = this.proposta.carroReserva ? this.proposta.carroReserva : '';
     this.proposta.protecaoVidros = this.proposta.protecaoVidros ? this.proposta.protecaoVidros : '';
@@ -567,12 +582,13 @@ export class ElaboraPropostaComponent implements OnInit {
     this.proposta.rastreador = this.proposta.rastreador ? this.proposta.rastreador : '';
     this.proposta.reboque = this.proposta.reboque ? this.proposta.reboque : '';
     this.rastreadorOutros = this.rastreadorOutros ? this.rastreadorOutros : '';
+    this.proposta.guincho = this.proposta.guincho ? this.proposta.guincho : '';
+
     // moto
     if (this.moto) {
       this.proposta.carroReserva = '';
       this.proposta.protecaoVidros =  '';
       this.proposta.rastreador = '';
-      reboqueIlimitado = '';
     }
 
     let parcelamentoRastreador = '';
@@ -592,17 +608,18 @@ export class ElaboraPropostaComponent implements OnInit {
     \nRoubo, furto, incêndio, colisão, capotamento, tombamento;
     \nDesastres naturais como: enchente, chuva de granizo, queda de árvore;
     \nAssistência 24H em todo Brasil;
-    \n${reboqueIlimitado};
     \nSocorro elétrico e mecânico, Chaveiro, Taxi, SOS Pneus;
     \nMensalidade Contínua (sem renovação), Não trabalhamos com Bônus;
     \n${normalLeilaoSisnsitro}
     \n${this.proposta.terceiros}
     \n${this.proposta.appDescricao}
     \n${this.proposta.reboque}
+    \n${this.proposta.guincho}
     \n${this.proposta.carroReserva}
     \n${this.proposta.protecaoVidros}
     \n${this.proposta.rastreador}
     \n${this.proposta.combustivelDesconto}`
+
     
 //retira os tab 
 this.coberturasInclusas = this.coberturasInclusas.replace(/\  /gim, '')
@@ -783,7 +800,7 @@ if (!this.idPessoaCliente) {
                   //   // }
                     
                   // ], 
-                  text:'\nConsulte seu consultor sobre todos os benefícios Altis\n\n',
+                  text:'\nConsulte seu consultor sobre todos os benefícios Altis\n',
                   style: 'ParagrafoBold',
                   alignment: 'center',
                   margin: [0, 0, 0, 0],
@@ -841,8 +858,6 @@ if (!this.idPessoaCliente) {
         },
         images: { logotipo: img }
       };
-      
-     debugger
       
       this.proposta.idUsuario = this.usuarioLogado.id;
       this.proposta.idPessoaUsuario = this.usuarioLogado.id_pessoa;
@@ -915,7 +930,8 @@ if (!this.idPessoaCliente) {
     debugger
         let paramsService = {
           proposta: JSON.stringify(this.propostaComuc.getProposta()).replace(/\#/gim, '%23'),
-          propostaJSON: JSON.stringify(this.propostaComuc.getPropostaJSON()).replace(/\#/gim, '%23'),  
+          propostaJSON: JSON.stringify(this.propostaComuc.getPropostaJSON()).replace(/\#/gim, '%23').substring(0,3000),  
+          propostaJSON1: JSON.stringify(this.propostaComuc.getPropostaJSON()).replace(/\#/gim, '%23').substring(3001,2999)  
         }; 
         
         if (this.returnProp) {
@@ -924,7 +940,6 @@ if (!this.idPessoaCliente) {
         else {
           try {
             await this.connectHTTP.callService({
-              
                 service: 'salvarProposta', 
                 paramsService 
 

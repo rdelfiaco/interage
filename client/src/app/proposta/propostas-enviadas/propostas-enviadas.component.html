@@ -94,21 +94,14 @@
   </tbody>
 </table>
 
-<span *ngIf="propostas" style="    color: gray;">
-  Total de propostas listadas: {{propostas.length}}
-</span>
-
-
-<!-- <div mdbModal #modalDetalheProposta="mdbModal" [config]="{backdrop: true}" class="modal fade right" role="dialog"
-aria-labelledby="myBasicModalLabel" aria-hidden="true">
-<div class="modal-dialog" role="document">
-  <div class="modal-content">
-    <div class="modal-header">
-      <h4 class="modal-title w-200" id="myModalLabel">Proposta</h4>
-    </div>
-    <div class="modal-body" style="overflow: auto; height: 100vh;">
-      <app-detalhe-proposta  [idProposta]="idProposta"   (fechaModal)="fechaModal()"></app-detalhe-proposta>
-    </div>
+<div class="row" >
+  <div class="col-10"> 
+    <span *ngIf="propostas" style="    color: gray;">
+      Total de propostas listadas: {{propostas.length}}
+    </span>
+  </div>
+  <div class="col-2" >
+    <button type="button" mdbBtn color="danger" class="relative waves-light" (click)="fechaModalProposta_()"
+    mdbWavesEffect>Voltar</button>
   </div>
 </div>
-</div> -->

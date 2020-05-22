@@ -62,7 +62,6 @@ export class CadastroPessoaComponent implements OnInit {
   }
 
   async getPessoa(pessoaId: any) {
-    debugger
 
     let pessoa = await this.connectHTTP.callService({
       service: 'getPessoa',
@@ -70,7 +69,7 @@ export class CadastroPessoaComponent implements OnInit {
         id_pessoa: pessoaId
       }
     }) as any;
-    debugger
+    
     this.carregando = false; 
     //  - se o cliente não estiver vinculado a nenhuma carteira o usuário logado pode ter acesso; 
     //  - se o cliente esteja vinculado a uma carteria e se o usuário logado possui carteira o

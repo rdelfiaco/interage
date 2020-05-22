@@ -35,7 +35,6 @@ export class ServicosContratadosComponent implements OnInit {
       this.pessoa.subscribe(pessoa => {
         this._pessoaObject = pessoa;
         this.tableData = this._pessoaObject.associadoContratos; 
-        debugger
         for (var i = 0; i < this.tableData.length ; i++){
           switch(this.tableData[i].situacao_financeira) {
             case 'ADIMPLENTE':

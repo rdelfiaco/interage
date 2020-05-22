@@ -61,7 +61,6 @@ export class TelefonesComponent implements OnInit {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    debugger
     if (changes["pessoa"] && this.pessoa) {
       this.pessoa.subscribe(pessoa => {
         this._pessoaObject = pessoa

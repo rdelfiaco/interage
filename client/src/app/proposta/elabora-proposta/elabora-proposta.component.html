@@ -304,6 +304,21 @@
                     </div>
                     <br>
                     <div class="row">
+                        <!--  Guincho Ilimitado   -->
+                        <th *ngFor="let _guincho of guincho; let i = index" class=" col-md-3 tabelaChck">
+                            <div class="form-check form-check-inline tituloProposta">
+                                <input type="radio" class="form-check-input" id="{{ 'chckGuincho' + i}}"
+                                    (change)="mudouGuincho(i)" [checked]="chckGuincho == i" name="chckGuincho" mdbInputDirective>
+                                <label class="form-check-label" for="{{ 'chckGuincho' + i}}"></label>
+                                {{_guincho.nome}}
+                            </div>
+                            <div>
+                                R$ {{_guincho.valor}}
+                            </div>
+                        </th>
+                    </div>
+                    <br>
+                    <div class="row">
                         <!-- <div> 
                         Rastreador
                     </div> -->

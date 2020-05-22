@@ -13,15 +13,19 @@ function getTabelaPrecos(req, res) {
                                     getTabelaValores(req).then(TabelaValores => {
                                         getTabelaCombos(req).then(TabelaCombos => {
                                           getCombustivelDesconto(req).then(CombustivelDesconto => {
-                                            if (!TipoVeiculos || !Rastreador || !CombustivelDesconto
-                                                || !ProtecaoVidros || !FundoTerceiros || !App
-                                                || !CarroReserva || !TabelaValores || !TabelaCombos) 
-                                                reject('não encontrado');
-                                              
-                                              resolve({
-                                                  TipoVeiculos, Rastreador,  ProtecaoVidros, CombustivelDesconto,
-                                              FundoTerceiros, App, CarroReserva, TabelaValores, TabelaCombos
-                                              });
+                                            getGuincho(req).then(Guincho => {
+                                              if (!TipoVeiculos || !Rastreador || !CombustivelDesconto
+                                                  || !ProtecaoVidros || !FundoTerceiros || !App || !Guincho
+                                                  || !CarroReserva || !TabelaValores || !TabelaCombos) 
+                                                  reject('não encontrado');
+                                                
+                                                resolve({
+                                                    TipoVeiculos, Rastreador,  ProtecaoVidros, CombustivelDesconto,
+                                                FundoTerceiros, App, CarroReserva, TabelaValores, TabelaCombos, Guincho
+                                                });
+                                              }).catch(e => {
+                                                reject(e);   
+                                            });
                                             }).catch(e => {
                                               reject(e);   
                                           });
@@ -317,6 +321,38 @@ function getTipoVeiculos(req, res) {
         client.connect()
   
         let sql = 'select * from combustivel_desconto where status order by valor'
+
+        client.query(sql)
+          .then(res => {
+            let registros = res.rows;
+  
+            client.end();
+            resolve(registros)
+          }
+          )
+          .catch(err => {
+            client.end();
+            reject(err)
+          })
+      }).catch(e => {
+        reject(e)
+      })
+    })
+  } 
+
+  function getGuincho(req, res) {
+    return new Promise(function (resolve, reject) {
+  
+      checkTokenAccess(req).then(historico => {
+        const dbconnection = require('../config/dbConnection')
+        const { Client } = require('pg')
+  
+        const client = new Client(dbconnection)
+  
+        client.connect()
+  
+        let sql = `SELECT * FROM public.guincho where status
+                    order by id_tipo_veiculo, valor`
 
         client.query(sql)
           .then(res => {

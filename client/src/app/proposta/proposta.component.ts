@@ -25,6 +25,8 @@ export class PropostaComponent implements OnInit {
     return this._abaSelecionada;
   }
 
+
+  @Output() returnPessoaSelecionada: EventEmitter<any> = new EventEmitter();
   @Output() returnProposta = new EventEmitter();
   @Input() returnProp: boolean;
 
@@ -38,7 +40,6 @@ export class PropostaComponent implements OnInit {
   }
 
   ngOnInit() {
-
     this.propostaElaborada = true;
     this.staticTabs.setActiveTab(this.aba.getAba())
 
@@ -51,6 +52,9 @@ export class PropostaComponent implements OnInit {
     this.returnProposta.emit(proposta);
   }
 
+  returnPessoaSelecionada_(){
+    this.returnPessoaSelecionada.emit();
+  }
 
 
 }

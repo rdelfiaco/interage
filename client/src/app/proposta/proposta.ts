@@ -24,6 +24,8 @@ export class Proposta {
     private _app: string;
     private _idCombustivelDesconto: number;
     private _combustivelDesconto: string; 
+    private _idGuincho: number;
+    private _guincho: string; 
     private _appDescricao: string;
     private _idRastreador: number;
     private _rastreador: string;
@@ -400,6 +402,18 @@ export class Proposta {
     public set combustivelDesconto(value: string) {
         this._combustivelDesconto = value;
     }
+    public get idGuincho(): number {
+        return this._idGuincho;
+    }
+    public set idGuincho(value: number) {
+        this._idGuincho = value;
+    }
+    public get guincho(): string {
+        return this._guincho;
+    }
+    public set guincho(value: string) {
+        this._guincho = value;
+    }
 
     public propostaObj(): any {
         return {
@@ -452,7 +466,9 @@ export class Proposta {
             entrada: this._entrada,
             mensalidadeAlterada: this._mensalidadeAlterada, 
             idCombustivelDesconto:  this._idCombustivelDesconto,
-            combustivelDesconto:  this._combustivelDesconto
+            combustivelDesconto:  this._combustivelDesconto,
+            idGuincho: this._idGuincho,
+            guincho: this._guincho
         };
     }
 }
