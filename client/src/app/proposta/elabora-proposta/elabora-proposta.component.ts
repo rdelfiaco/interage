@@ -816,10 +816,9 @@ if (!this.idPessoaCliente) {
               heights: [30],
               body: [
                 [{
-                  // text: `A ALTIS atua legalmente perante a lei, respeitando a constituição e o código civil. Não possui nenhum impedimento legal e se responsabiliza solidariamente com os princípios embasado nas leis* Lei no 9.790, de 23 de março de 1999.  / CAPÍTULO I / DA QUALIFICAÇÃO COMO ORGANIZAÇÃO DA SOCIEDADE CIVIL* Constituição da Republica Federativa do Brasil 1988 / TÍTULO II / Dos Direitos / Garantias Fundamentais / CAPÍTULO I / DOS DIREITOS E DEVERES INDIVIDUAIS E COLETIVOS / Art. 5º /Incisos: XVII a XXI.* Código Civil - Lei 10406/02 | Lei no 10.406, de 10 de janeiro de 2002 / TÍTULO II / Da Sociedade / CAPÍTULO II / DAS ASSOCIAÇÕES. 
+                  text: `A ALTIS atua legalmente perante a lei, respeitando a constituição e o código civil. Não possui nenhum impedimento legal e se responsabiliza solidariamente com os princípios embasado nas leis* Lei no 9.790, de 23 de março de 1999.  / CAPÍTULO I / DA QUALIFICAÇÃO COMO ORGANIZAÇÃO DA SOCIEDADE CIVIL* Constituição da Republica Federativa do Brasil 1988 / TÍTULO II / Dos Direitos / Garantias Fundamentais / CAPÍTULO I / DOS DIREITOS E DEVERES INDIVIDUAIS E COLETIVOS / Art. 5º /Incisos: XVII a XXI.* Código Civil - Lei 10406/02 | Lei no 10.406, de 10 de janeiro de 2002 / TÍTULO II / Da Sociedade / CAPÍTULO II / DAS ASSOCIAÇÕES. 
                   
-                  // Validade: 15 dias a partir de ${this.hoje}. `,
-                  text:` ${this.hoje}. `,
+                  Validade: 15 dias a partir de ${this.hoje}. `,
                   fillColor: '#eeeeee',
                   margin: [5, 5, 5, 5],
                   alignment: 'left',
@@ -882,8 +881,6 @@ if (!this.idPessoaCliente) {
 
       this.propostaComuc.setProposta(this.proposta);
 
-     
-
       docDefinition.images.logotipo = ''; // retira  a imagem do logo para salvar
     
       // this.propostaInclusa
@@ -894,14 +891,11 @@ if (!this.idPessoaCliente) {
       const sleep = (milliseconds) => {
         return new Promise(resolve => setTimeout(resolve, milliseconds))
       }
-
             
       if (await this.salvarProposta()) {
 
           docDefinition.images.logotipo = img;
-          docDefinition.content[5].table.body[0][0].text = `A ALTIS atua legalmente perante a lei, respeitando a constituição e o código civil. Não possui nenhum impedimento legal e se responsabiliza solidariamente com os princípios embasado nas leis* Lei no 9.790, de 23 de março de 1999.  / CAPÍTULO I / DA QUALIFICAÇÃO COMO ORGANIZAÇÃO DA SOCIEDADE CIVIL* Constituição da Republica Federativa do Brasil 1988 / TÍTULO II / Dos Direitos / Garantias Fundamentais / CAPÍTULO I / DOS DIREITOS E DEVERES INDIVIDUAIS E COLETIVOS / Art. 5º /Incisos: XVII a XXI.* Código Civil - Lei 10406/02 | Lei no 10.406, de 10 de janeiro de 2002 / TÍTULO II / Da Sociedade / CAPÍTULO II / DAS ASSOCIAÇÕES. 
-                  
-          Validade: 15 dias a partir de ${this.hoje}. `
+
           if (!this.returnProp) {
             await pdfMake.createPdf(docDefinition).open()
           }
@@ -928,21 +922,25 @@ if (!this.idPessoaCliente) {
 
   async salvarProposta() {
     debugger
-        let paramsService = {
+        let paramsService = { 
           proposta: JSON.stringify(this.propostaComuc.getProposta()).replace(/\#/gim, '%23'),
-          propostaJSON: JSON.stringify(this.propostaComuc.getPropostaJSON()).replace(/\#/gim, '%23').substring(0,3000),  
-          propostaJSON1: JSON.stringify(this.propostaComuc.getPropostaJSON()).replace(/\#/gim, '%23').substring(3001,2999)  
+          propostaJSON: JSON.stringify(this.propostaComuc.getPropostaJSON()).replace(/\#/gim, '%23'),  
         }; 
+        let  arquivo = {
+            proposta: JSON.stringify(this.propostaComuc.getProposta()),
+            propostaJSON: JSON.stringify(this.propostaComuc.getPropostaJSON()),  
+          }
+         
         
         if (this.returnProp) {
           this.returnProposta.emit(paramsService)
         }
         else {
           try {
-            await this.connectHTTP.callService({
+            await this.connectHTTP.sendFile({ 
+              //await this.connectHTTP.postAPI({
                 service: 'salvarProposta', 
-                paramsService 
-
+                paramsService: { arquivo: arquivo }  
                 })                  
               this.toastrService.success('Proposta salva com sucesso!');
               return true;

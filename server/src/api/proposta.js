@@ -9,10 +9,14 @@ function salvarProposta(req, res) {
       idUsuario: req.query.id_usuario
     };
 
-    req.query.proposta = JSON.parse( req.query.proposta);
-    //console.log('req.query.proposta ', req.query.proposta )
-    req.query.propostaJSON =  req.query.propostaJSON + req.query.propostaJSON1;
-    console.log('req.query.proposta ', req.query.proposta )
+    // console.log('req.body ', req.body)
+
+    let arquivo =  req.body ;
+    req.query.proposta = JSON.parse(arquivo.proposta);
+    req.query.propostaJSON =  arquivo.propostaJSON; 
+
+    // console.log('proposta', req.query.proposta  );
+    // console.log( 'propostaJSON',  req.query.propostaJSON );
 
     req.query.proposta.placa = req.query.proposta.placa ? req.query.proposta.placa : '';
     req.query.proposta.observacao = req.query.proposta.observacao ? req.query.proposta.observacao : '';

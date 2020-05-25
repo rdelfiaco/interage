@@ -73,8 +73,11 @@ export class ConnectHTTP {
   sendFile(options: optionsCallService): Promise<retObjectCallService> | retObjectCallService {
     const mensagem = this._checkOptionsCallService(options);
     if (mensagem && !mensagem.error) return mensagem;
-
+    
     if (!options.paramsService.arquivo) return { error: 'É necessário enviar o arquivo.', resposta: {} };
+
+    const arquivo = options.paramsService.arquivo;
+
     return new Promise((resolve, reject) => {
       
       //TROCA DADOS SERVIDOR
@@ -88,19 +91,12 @@ export class ConnectHTTP {
         let usuarioLogado = this.localStorage.getLocalStorage('usuarioLogado') as Usuario;
         if (usuarioLogado != undefined ){
           options.paramsService = {
-            ...options.paramsService,
             id_usuario: usuarioLogado.id.toString(),
             token: usuarioLogado.token
           }
         }
       }
 
-
-      // var formData = new FormData();
-
-      // formData.append("file", options.paramsService.arquivo);
-
-      // delete options.paramsService.arquivo
       if (options.paramsService) {
         const paramsService = this._trataParamsService(options.paramsService)
         url = `${url}${paramsService}`
@@ -118,9 +114,12 @@ export class ConnectHTTP {
       xhttp.onerror = (e) => {
         reject(e)
       }
-      // xhttp.setRequestHeader("Content-Type","multipart/form-data");
-      xhttp.open("POST", encodeURI(url), true)
-      xhttp.send(JSON.stringify(options.paramsService.arquivo))
+      console.log('url', url )
+      debugger
+      
+      xhttp.open("POST", encodeURI(url), true);
+      xhttp.setRequestHeader("Content-Type", "application/json")
+      xhttp.send( JSON.stringify( arquivo ) )
     })
   }
 
@@ -189,6 +188,7 @@ export class ConnectHTTP {
       }
       // xhttp.setRequestHeader("Content-Type","multipart/form-data");
       xhttp.open("POST", encodeURI(url), true)
+      xhttp.setRequestHeader("Content-type", "application/json");
       xhttp.send( JSON.stringify({
         "codigo_associado": 3280,
         "codigo_situacao_boleto": 1 
@@ -228,12 +228,18 @@ export class ConnectHTTP {
       }
 
       const body = JSON.stringify( {teste: 123})
-
-      var parametros = { method: 'POST',
-      body: {teste: "1554"},
+      debugger
+      let arquivo1 = {
+        name: 'John',
+        surname: 'Smith'
       };
-      url = url + `&proposta=${arquivo}`
-      //console.log('Boletos parametros ', parametros )
+      var parametros = 
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(arquivo1)
+        }
+    
       fetch(url, parametros)
       .then( (res  => {
           resolve (res.json()) }))

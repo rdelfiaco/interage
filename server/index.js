@@ -37,10 +37,7 @@ const parametroInterage = require('./src/api/parametrosInterage');
 
 
 
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({
-  extended: true
-}));
+
 
 //integração com SGA
 declaraServico('buscaPessoa', apiSGA.buscaPessoa );
@@ -50,8 +47,8 @@ declaraServico('getAssociado', apiSGA.getAssociado);
 
 
 //proposta
-declaraServico('salvarProposta', proposta.salvarProposta);
-//declaraServicoPost('salvarProposta', proposta.salvarProposta);
+//declaraServico('salvarProposta', proposta.salvarProposta);
+declaraServicoPost('salvarProposta', proposta.salvarProposta);
 declaraServico('consultarPlaca', consultaPlaca.consultarPlaca);
 declaraServico('getPropostasDoUsuario', proposta.getPropostasDoUsuario);
 declaraServico('getPropostaPorId', proposta.getPropostaPorId);
@@ -246,8 +243,30 @@ function declaraServico(nomeServico, funcao) {
   console.log(`Serviço GET ${nomeServico}, declarado com sucesso!`)
 }
 
-function declaraServicoPost(nomeServico, funcao) {
-  app.post(`/${nomeServico}`, (req, res) => {
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({
+  extended: false
+}));
+
+app.post('/teste5', (req, res) =>{
+  console.log(' req 5 ', req.body)
+  res.status(200).send('teste realizado 10')
+})
+
+
+function declaraServicoPost(nomeServico, funcao ) {
+  app.use(bodyParser.json());
+  app.use(bodyParser.urlencoded({ extended: false }));
+
+  let allowCrossDomain = function(req, res, next) {
+    res.header('Access-Control-Allow-Origin', "*");
+    res.header('Access-Control-Allow-Headers', "*");
+    next();
+  }
+  app.use(allowCrossDomain);
+
+  app.post(`/${nomeServico}`, (req, res) =>{
     funcao(req)
       .then(linhas => {
         headerResponse(res)
@@ -258,7 +277,7 @@ function declaraServicoPost(nomeServico, funcao) {
         console.log(`Serviço: ${nomeServico}; Resultado: `, error)
         res.status(401).send(error)
       })
-  });
+  })
   console.log(`Serviço POST ${nomeServico}, declarado com sucesso!`)
 }
 
