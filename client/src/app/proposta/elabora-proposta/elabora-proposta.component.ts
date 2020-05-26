@@ -134,7 +134,7 @@ export class ElaboraPropostaComponent implements OnInit {
   chkFundo: string = "1";
   chckCarroRes: string = "1";
   chckProtecaoVidro: string = "1";
-  chckApp: string = "1";
+  chckApp: string = "0";
   chckGuincho: string = "1";
   chckRastreador: string = "0";
   chckPortabilidade: boolean = false;
@@ -143,7 +143,7 @@ export class ElaboraPropostaComponent implements OnInit {
   chckComercial: boolean = false;
   chckNormal: boolean = true;
   chckLeilaoSinistrado: boolean = false;
-  chckCombustivelDesconto: string = "1";
+  chckCombustivelDesconto: string = "0";
   // 
 
   constructor(

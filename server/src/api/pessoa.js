@@ -7,7 +7,6 @@ const { getAssociado, getPessoaContratos } = require('./apiSGA')
 
 
 
-
 async function  getPessoaPorCPFCNPJ(req, res) {
   return new Promise(function (resolve, reject) {
     let credenciais = {
@@ -25,7 +24,7 @@ async function  getPessoaPorCPFCNPJ(req, res) {
            getAssociado(req, res) 
           .then( async resGetAssociado => { 
              if (!resGetAssociado.nome || resGetAssociado.nome === undefined ){
-              // console.log('resGetAssociado ', resGetAssociado)
+              console.log('resGetAssociado ', resGetAssociado)
               resolve( '' )
              }else{ 
                 req = req_;
@@ -1124,6 +1123,8 @@ async function pesquisaPessoas(req, res) {
 
       const client = new Client(dbconnection)
 
+      
+
       client.connect()
 
       var pesquisaTexto = req.query.searchText.toLowerCase();
@@ -1133,6 +1134,7 @@ async function pesquisaPessoas(req, res) {
 
       let pesquisaId = pesquisaTexto.substring(3);
       let pesquisa = '';
+      let sqlPesquisa = '';
       if (pesquisaTexto.substring(0,3) == 'id=' ) {
           pesquisa = 'id';
       }
@@ -1146,7 +1148,7 @@ async function pesquisaPessoas(req, res) {
       }
       if (pesquisa == '') {
         //pesquisaTexto = pesquisaTexto.replace(/\W/gi, '');
-        pesquisa = `SELECT p.*, up.apelido_fantasia as carteira FROM pessoas p
+        sqlPesquisa = `SELECT p.*, up.apelido_fantasia as carteira FROM pessoas p
             left join usuarios u on p.id_usuario_carteira = u.id
             left join pessoas up on u.id_pessoa = up.id 
             WHERE (lower(p.nome) LIKE '%${pesquisaTexto}%' OR
@@ -1154,37 +1156,91 @@ async function pesquisaPessoas(req, res) {
             LIKE '%${pesquisaTexto}%' OR
             lower(p.cpf_cnpj) LIKE '%${pesquisaTexto}%'  )`
       } else if  (pesquisa == 'id') {
-        pesquisa = `SELECT p.*, up.apelido_fantasia as carteira FROM pessoas p
+        sqlPesquisa = `SELECT p.*, up.apelido_fantasia as carteira FROM pessoas p
             left join usuarios u on p.id_usuario_carteira = u.id
             left join pessoas up on u.id_pessoa = up.id 
             WHERE p.id=${pesquisaId}
             `
       } else if  (pesquisa == 'tel') {
-        pesquisa = `SELECT p.*, up.apelido_fantasia as carteira FROM pessoas p
+        sqlPesquisa = `SELECT p.*, up.apelido_fantasia as carteira FROM pessoas p
             inner join pessoas_telefones pt on p.id = pt.id_pessoa
             left join usuarios u on p.id_usuario_carteira = u.id
             left join pessoas up on u.id_pessoa = up.id 
             WHERE cast(pt.telefone as text ) like  '%${pesquisaId}%'
           `
       } else if  (pesquisa == 'dtN') {
-        pesquisa = `SELECT p.*, up.apelido_fantasia as carteira FROM pessoas p
+        sqlPesquisa = `SELECT p.*, up.apelido_fantasia as carteira FROM pessoas p
             left join usuarios u on p.id_usuario_carteira = u.id
             left join pessoas up on u.id_pessoa = up.id 
             WHERE p.datanascimento = date('${pesquisaId}')
             `
       }
 
-          pesquisa = pesquisa + ` limit 100`
+      sqlPesquisa = sqlPesquisa + ` limit 100`
       //console.log('pesquisa ', pesquisa)
-      client.query(pesquisa).then((res) => {
+      client.query(sqlPesquisa).then( async (res)  =>  {
         client.end()
         if (res.rowCount > 0) {
           resolve(res.rows);
         }
-        else reject(`Não há pessoas com o texto: ${req.query.searchText}`)
-      }).catch(err => {
+        else {
+          
+          // se não tive na base do INTERAGE pesquisa na base do SGA 
+          pesquisaTexto = pesquisaTexto.replace(/\W/gi, '');
+          let testeNumerico = Number(pesquisaTexto)
+          if ( pesquisa == '' && !isNaN(testeNumerico) ) {
+            req.query.cpf_cnpj =   pesquisaTexto ;
+            await getPessoaPorCPFCNPJ(req, res )
+            .then((res ) =>{
+              row = {
+                id: res.idPessoa,
+                nome: res.nome,
+                apelido_fantasia: res.nome,
+                cpf_cnpj: pesquisaTexto,
+                carteira: '',
+                status: true,
+                cadastroNovo: true
+              };
+              rows = [];
+              rows.push(row)
+              // console.log('rows ', rows )
+              resolve(rows)
+            })
+            .catch(( err) => {
+              reject(`Não há pessoas com o texto: ${req.query.searchText}`)
+            })
+          } else reject(`Não há pessoas com o texto: ${req.query.searchText}`)
+
+        }
+      }).catch( async err => {
         client.end();
-        reject(`Não há pessoas com o texto: ${req.query.searchText}`)
+
+          // se não tive na base do INTERAGE pesquisa na base do SGA 
+          pesquisaTexto = pesquisaTexto.replace(/\W/gi, '');
+          let testeNumerico = Number(pesquisaTexto)
+          if ( pesquisa == '' && !isNaN(testeNumerico) ) {
+            req.query.cpf_cnpj =   pesquisaTexto ;
+            await getPessoaPorCPFCNPJ(req, res )
+            .then((res ) =>{
+              row = {
+                id: res.idPessoa,
+                nome: res.nome,
+                apelido_fantasia: res.nome,
+                cpf_cnpj: pesquisaTexto,
+                carteira: '',
+                status: true,
+                cadastroNovo: true
+              };
+              rows = [];
+              rows.push(row)
+              // console.log('rows ', rows )
+              resolve(rows)
+            })
+            .catch(( err) => {
+              reject(`Não há pessoas com o texto: ${req.query.searchText}`)
+            })
+
+          } else reject(`Não há pessoas com o texto: ${req.query.searchText}`)
       })
     }).catch(e => {
       reject(e);

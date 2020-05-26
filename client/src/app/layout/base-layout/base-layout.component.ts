@@ -18,8 +18,8 @@ export class BaseLayoutComponent {
   usuarioLogado: Usuario;
   nomeUsuario: string = 'Usuário';
   // TROCA DADOS SERVIDOR TROCAR NUMERO DA VERSÃO
-  versaoSistema: string = 'V.2.1.20';
-  versaoTeste: boolean = false; 
+  versaoSistema: string;
+  versaoTeste: boolean; 
   counterEvents: number;
   sub: any;
   constructor(private router: Router, 
@@ -30,6 +30,8 @@ export class BaseLayoutComponent {
     this.hasLogado = this.auth.estaLogado();
     this.usuarioLogado = this.localStorage.getLocalStorage('usuarioLogado') as Usuario;
     this.getCounterEvents();
+    this.versaoSistema = 'T.2.1.20';
+    this.versaoTeste = true; 
   }
 
   async getCounterEvents() {

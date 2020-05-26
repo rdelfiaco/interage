@@ -40,7 +40,7 @@ function getAssociadoContratos(req, res) {
             };
             
             //console.log('headers ', headers)
-
+            //console.log('url ', url )
             var parametros = { method: 'GET',
             headers: headers, 
             cache: 'default' 

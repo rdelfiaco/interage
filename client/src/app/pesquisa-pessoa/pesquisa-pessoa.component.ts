@@ -109,6 +109,7 @@ export class PesquisaPessoaComponent implements OnInit {
         }
       }) as any;
       this.pessoasEncontradas = pessoasEncontradas.resposta;
+      console.log('this.pessoasEncontradas ', this.pessoasEncontradas )
       if (!this.pessoasEncontradas.length) {
         this.pessoasEncontradas = [];
         this.toastrService.error(pessoasEncontradas.error);

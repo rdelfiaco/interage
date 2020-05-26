@@ -153,7 +153,6 @@ declaraServico('editaEnderecoDeCorrespondencia', pessoa.editaEnderecoDeCorrespon
 declaraServico('adicionarPessoa', pessoa.adicionarPessoa);
 declaraServico('getTipoRelacionamentos', pessoa.getTipoRelacionamentos);
 declaraServico('getPessoaPorCPFCNPJ', pessoa.getPessoaPorCPFCNPJ);
-declaraServico('getPessoaPorCPFCNPJ', pessoa.getPessoaPorCPFCNPJ);
 declaraServico('getPessoa', pessoa.getPessoa);
 declaraServico('crudRelacionamento', pessoa.crudRelacionamento);
 declaraServico('getQuestariosPessoaId', pessoa.getQuestariosPessoaId);
