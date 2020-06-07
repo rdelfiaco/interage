@@ -313,13 +313,13 @@ export class DetalhePropostaComponent implements OnInit {
             body: [
               [{
                 text: 
-                  `Associado: ${this.pessoa.nome}
-                  CPF/CNPJ:   ${this.pessoa.cpf_cnpj_format}                                        Data de Nascimento: ${moment(this.pessoa.datanascimento).format('DD/MM/YYYY') }
-                  CNH: ${this.pessoa.cnh}             Categoria: ${this.pessoa.cnh_categoria}             Validade: ${moment(this.pessoa.cnh_validade).format('DD/MM/YYYY')}
-                  CEP:  ${this.pessoa.cep}        Endereço: ${this.pessoa.logradouro}      Complemento: ${this.pessoa.complemento}
-                  Bairro: ${this.pessoa.bairro}     Cidade/UF: ${this.pessoa.cidade} - ${this.pessoa.uf}
-                  Telefone:  ${this.pessoa.tel_1}     ${this.pessoa.tel_2}
-                  E-mail: ${this.pessoa.email} \n`
+                  `Associado: ${ this.pessoa.nome}
+                  CPF/CNPJ:   ${this.pessoa.cpf_cnpj_format}     Data de Nascimento: ${ this.pessoa.datanascimento == null ? '  ' :  moment(this.pessoa.datanascimento).format('DD/MM/YYYY') }
+                  CNH: ${this.pessoa.cnh == null ? '        ' : this.pessoa.cnh }      Categoria: ${this.pessoa.cnh_categoria == null ? '  ' : this.pessoa.cnh_categoria}             Validade: ${ this.pessoa.cnh_validade == null ? '   ' : moment(this.pessoa.cnh_validade).format('DD/MM/YYYY')}
+                  CEP:  ${this.pessoa.cep == null ? '       ' : this.pessoa.cep }      Endereço: ${this.pessoa.logradouro == null ? '      ': this.pessoa.logradouro }      Complemento: ${this.pessoa.complemento == null ? '   ' : this.pessoa.complemento}
+                  Bairro: ${this.pessoa.bairro == null ? '   ' : this.pessoa.bairro}     Cidade/UF: ${this.pessoa.cidade == null ? ' ' : this.pessoa.cidade} - ${this.pessoa.uf == null ? ' ' : this.pessoa.uf }
+                  Telefone:  ${this.pessoa.tel_1 == null ? '  ' : this.pessoa.tel_1}     ${this.pessoa.tel_2 == null ? '  ' : this.pessoa.tel_2 }
+                  E-mail: ${this.pessoa.email == null ? ' ' : this.pessoa.email } \n`
                   
                   ,
 
@@ -534,7 +534,7 @@ export class DetalhePropostaComponent implements OnInit {
               [{
                 text:[ 
                  { text: `Associado: ${this.pessoa.nome}
-                  CPF/CNPJ:   ${this.pessoa.cpf_cnpj_format}              Cidade/UF: ${this.pessoa.cidade} - ${this.pessoa.uf}\n`
+                  CPF/CNPJ:   ${this.pessoa.cpf_cnpj_format}              Cidade/UF: ${this.pessoa.cidade == null ? ' ' : this.pessoa.cidade} - ${this.pessoa.uf == null ? '  ' : this.pessoa.uf }\n`
                   ,
                   lineHeight: 1.2,
                   fontSize: 12,
@@ -622,7 +622,7 @@ export class DetalhePropostaComponent implements OnInit {
               [{
                 text: `PPV+ASSIST. 24H   ${this.proposta.reboque} 
                 ${this.proposta.fundo_terceiros_}       ${this.proposta.protecao_vidros_}      ${this.proposta.carro_reserva_}  
-                ${this.proposta.app}            ${this.proposta.rastreador_} `,
+                ${this.proposta.app}     ${this.proposta.combustivel_desconto_ }     ${this.proposta.guincho_ilimitado == null ? ' ' : this.proposta.guincho_ilimitado } ${this.proposta.rastreador_} `,
                 style: 'Paragrafo',
                 margin: [5, 2, 0, 0],
                 border: [false, false, false, false],
@@ -737,8 +737,8 @@ export class DetalhePropostaComponent implements OnInit {
   async getCliente(){
 
     this.pessoa = await this.bancoDados.lerDados('getPessoaDadosPrincipais', { id_pessoa: this.proposta.id_pessoa_cliente }) as any;
+    // console.log('pessoa ', this.pessoa)
     this.pessoa = this.pessoa.resposta[0]; 
-    console.log('pessoa', this.pessoa)
 
     
   }

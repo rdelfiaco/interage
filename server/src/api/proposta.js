@@ -15,7 +15,7 @@ function salvarProposta(req, res) {
     req.query.proposta = JSON.parse(arquivo.proposta);
     req.query.propostaJSON =  arquivo.propostaJSON; 
 
-    // console.log('proposta', req.query.proposta  );
+    //  console.log('proposta', req.query.proposta  );
     // console.log( 'propostaJSON',  req.query.propostaJSON );
 
     req.query.proposta.placa = req.query.proposta.placa ? req.query.proposta.placa : '';
@@ -37,7 +37,8 @@ function salvarProposta(req, res) {
                     , mensalidade_alterada
                     , dtsalvou
                     , reboque
-                    , id_combustivel_desconto)
+                    , id_combustivel_desconto
+                    , id_guincho)
                 VALUES (  ${req.query.proposta.idTipoVeiculo},
                           '${req.query.proposta.codigoFipe}',
                           '${req.query.proposta.marca}',
@@ -70,9 +71,10 @@ function salvarProposta(req, res) {
                           ${req.query.proposta.mensalidadeAlterada},
                           now(),
                           '${req.query.proposta.reboque}',
-                          ${req.query.proposta.idCombustivelDesconto} ) RETURNING id`
+                          ${req.query.proposta.idCombustivelDesconto},
+                          ${req.query.proposta.idGuincho} ) RETURNING id`
 
-    //console.log('proposta inserir', sql)
+    // console.log('proposta inserir', sql)
 
     executaSQL(credenciais, sql).then(registros => {
 

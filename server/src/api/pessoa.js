@@ -1336,10 +1336,12 @@ function getPessoaDadosPrincipais(req, res) {
               then to_char(TO_NUMBER(cpf_cnpj, '99999999999999999') , 'FM000"."000"."000"-"00')
               else to_char(TO_NUMBER(cpf_cnpj, '99999999999999999'), 'FM00"."000"."000"/"0000"-"00') end as cpf_cnpj_format
         from pessoas p
-        inner join pessoas_enderecos pe  on  p.id = pe.id_pessoa and  recebe_correspondencia
-        inner join cidades ci on pe.id_cidade = ci.id
+        left join pessoas_enderecos pe  on  p.id = pe.id_pessoa and  recebe_correspondencia
+        left join cidades ci on pe.id_cidade = ci.id
         where p.id =  ${req.query.id_pessoa}
     `
+
+    // console.log(' sql ', sql )
     executaSQL(credenciais, sql)
       .then(res => {
         resolve(res);
