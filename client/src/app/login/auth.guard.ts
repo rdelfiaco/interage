@@ -16,22 +16,29 @@ export class AuthGuard implements CanActivate {
   canActivate(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean> | boolean {
-    if (this.auth.checkAutenticacao()) {
-      let usuarioLogado = this.localStorage.getLocalStorage('usuarioLogado') as Usuario;
-      if (this._checkPermissaoRota(route, usuarioLogado))
-        return true;
-      else {
-        if (route.routeConfig.path == '/login') {
-          this.router.navigate(['/login']);
-        }else {
-        this.router.navigate(['/semPermissao']);
+  
+   
+   let usuarioLogado = this.localStorage.getLocalStorage('usuarioLogado') as Usuario;
+
+   if (usuarioLogado != null) {
+      if (this.auth.checkAutenticacao()) {
+        if (this._checkPermissaoRota(route, usuarioLogado))
+          return true;
+        else {
+          if (route.routeConfig.path == '/login') {
+            this.router.navigate(['/login']);
+            return true;
+          }else {
+          this.router.navigate(['/semPermissao']);
+          return true;
+          }
         }
       }
+      else {
+        this.auth.logout();
+      }
     }
-    else {
-      this.auth.logout();
-      this.router.navigate(['/login']);
-    }
+    this.router.navigate(['/login']);
   }
 
   _checkPermissaoRota(route: ActivatedRouteSnapshot, usuarioLogado: Usuario) {
@@ -42,6 +49,7 @@ export class AuthGuard implements CanActivate {
       if (rotas.find( element => element == route.routeConfig.path) ) 
         { return true;
         } else {
+
           return false;
         }
   }

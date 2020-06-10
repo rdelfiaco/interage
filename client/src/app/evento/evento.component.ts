@@ -94,6 +94,7 @@ export class EventoComponent implements OnInit {
 
   async ngOnInit() {
 
+    debugger
     if (!this.localStorage.getLocalStorage('usuarioLogado')) return false; 
 
     this.eventoFiltros = await this.connectHTTP.callService({

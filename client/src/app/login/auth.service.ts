@@ -87,6 +87,10 @@ export class AuthService {
           senha: usuario.senha
         }
       })
+      if (usuarioLogado.error.length > 0 ) {
+        this.usuarioLogadoObject = {};  
+        return {error: usuarioLogado.error }  
+      }
       this.usuarioLogadoObject = usuarioLogado.resposta;
       this.localStorage.postLocalStorage('usuarioLogado', usuarioLogado.resposta)
       this._setValidadeToken();
@@ -126,17 +130,18 @@ export class AuthService {
 
   async logout() {
     let usuarioLogado = this.getUsuarioLogadoLocalStorage();
-    if (!usuarioLogado) return;
-    await this.connectHTTP.callService({
-      service: 'logout',
-      naoExigeToken: true,
-      paramsService: {
-        token: usuarioLogado.token,
-        id_usuario: usuarioLogado.id
-      }
-    })
+    if (usuarioLogado) {
+      await this.connectHTTP.callService({
+        service: 'logout',
+        naoExigeToken: true,
+        paramsService: {
+          token: usuarioLogado.token,
+          id_usuario: usuarioLogado.id
+        }
+      })
     //this.counterEvents.next(0);
     this.localStorage.delLocalStorage('usuarioLogado', 'object')
+    }
     this.router.navigate(['login']);
   }
 

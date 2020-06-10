@@ -114,8 +114,7 @@ export class ConnectHTTP {
       xhttp.onerror = (e) => {
         reject(e)
       }
-      console.log('url', url )
-      debugger
+      //console.log('url', url )
       
       xhttp.open("POST", encodeURI(url), true);
       xhttp.setRequestHeader("Content-Type", "application/json")
@@ -228,7 +227,6 @@ export class ConnectHTTP {
       }
 
       const body = JSON.stringify( {teste: 123})
-      debugger
       let arquivo1 = {
         name: 'John',
         surname: 'Smith'

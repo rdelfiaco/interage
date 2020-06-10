@@ -921,7 +921,6 @@ if (!this.idPessoaCliente) {
   }
 
   async salvarProposta() {
-    debugger
         let paramsService = { 
           proposta: JSON.stringify(this.propostaComuc.getProposta()).replace(/\#/gim, '%23'),
           propostaJSON: JSON.stringify(this.propostaComuc.getPropostaJSON()).replace(/\#/gim, '%23'),  
