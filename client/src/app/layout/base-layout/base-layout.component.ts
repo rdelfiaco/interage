@@ -30,8 +30,8 @@ export class BaseLayoutComponent {
     this.hasLogado = this.auth.estaLogado();
     this.usuarioLogado = this.localStorage.getLocalStorage('usuarioLogado') as Usuario;
     this.getCounterEvents();
-    this.versaoSistema = 'T.2.1.21';
-    this.versaoTeste = true; 
+    this.versaoSistema = 'V.2.1.22';
+    this.versaoTeste = false; 
   }
 
   async getCounterEvents() {
