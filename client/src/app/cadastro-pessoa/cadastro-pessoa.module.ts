@@ -17,6 +17,7 @@ import { CriarEventoModule } from '../evento/criar-evento/criar-evento.module';
 import { PropostaModule } from '../proposta/proposta.module';
 import { ServicosContratadosComponent } from './servicos-contratados/servicos-contratados.component';
 import { CarregandoModule } from '../shared/carregando/carregando.module';
+import { ArquivosComponent } from './arquivos/arquivos.component';
 
 @NgModule({
   imports: [
@@ -42,7 +43,8 @@ import { CarregandoModule } from '../shared/carregando/carregando.module';
     MarketingComponent,
     AuditoriaComponent,
     QuestionariosPessoaComponent,
-    ServicosContratadosComponent,],
+    ServicosContratadosComponent,
+    ArquivosComponent,],
   exports: [
     CadastroPessoaComponent,
     PrincipalComponent,

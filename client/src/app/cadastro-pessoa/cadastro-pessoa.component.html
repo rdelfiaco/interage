@@ -39,7 +39,7 @@
         </div>
       </mdb-tab>
       <!-- Panel 4 -->
-      <mdb-tab heading="Histórico dos Contatos" [disabled]="!(pessoa | async)">
+      <mdb-tab heading="Contatos" [disabled]="!(pessoa | async)">
         <div class="row">
           <div class="col-12">
             <app-linha-do-tempo [pessoa]="pessoa | async"></app-linha-do-tempo>
@@ -83,6 +83,13 @@
         <div class="row">
           <div class="col-12">
             <app-questionarios-pessoa [pessoa]="pessoa" (refresh)="refreshDad()"></app-questionarios-pessoa>
+          </div>
+        </div>
+      </mdb-tab>
+      <mdb-tab heading="Arquivos" [disabled]="!(pessoa | async)">
+        <div class="row">
+          <div class="col-12">
+            <app-arquivos [pessoa]="pessoa" (refresh)="refreshDad()"></app-arquivos>
           </div>
         </div>
       </mdb-tab>

@@ -53,6 +53,8 @@ import { TipoDeRelacionamentoModule } from './tipo-de-relacionamento/tipo-de-rel
 import { AtendimentoComponent } from './atendimento/atendimento.component';
 import { AtendimentoInformacaoComponent } from './atendimento-informacao/atendimento-informacao.component';
 import { ParametrosInterageComponent } from './parametros-interage/parametros-interage.component';
+import { StandardUploadsComponent } from './standard-uploads/standard-uploads.component';
+import { FilesUploadsComponent } from './files-uploads/files-uploads.component';
 
 
 
@@ -76,6 +78,8 @@ import { ParametrosInterageComponent } from './parametros-interage/parametros-in
     AtendimentoComponent,
     AtendimentoInformacaoComponent,
     ParametrosInterageComponent,
+    StandardUploadsComponent,
+    FilesUploadsComponent,
     
   ],
   imports: [

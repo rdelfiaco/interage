@@ -68,6 +68,7 @@ export interface UploadInput {
   data?: { [key: string]: string | Blob };
   headers?: { [key: string]: string };
   withCredentials?: boolean;
+  params?: { [key: string]: string };
 }
 
 export function humanizeBytes(bytes: number): string {

@@ -3,7 +3,9 @@ const app = express();
 const nodeStart = require('./src/config/nodeStart');
 const bodyParser = require('body-parser');
 const SHA1 = require('./src/api/SHA1');
+const cors = require('cors');
 
+ 
 const usuario = require('./src/api/usuario');
 const campanha = require('./src/api/campanha');
 const evento = require('./src/api/evento');
@@ -33,9 +35,12 @@ const objecao = require('./src/api/objecao');
 const motor = require('./src/api/motor');
 const apiSGA = require('./src/api/apiSGA');
 const parametroInterage = require('./src/api/parametrosInterage');
+const upDownFiles = require('./src/api/upDownFiles')
 
 
-
+//upDownFiles 
+declaraServico('getFiles', upDownFiles.getFiles)
+declaraServicoPost('postFiles', upDownFiles.postFiles)
 
 
 
@@ -243,20 +248,20 @@ function declaraServico(nomeServico, funcao) {
 }
 
 
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({
-  extended: false
-}));
+// app.use(bodyParser.json());
+// app.use(bodyParser.urlencoded({
+//   extended: false
+// }));
 
-app.post('/teste5', (req, res) =>{
-  console.log(' req 5 ', req.body)
-  res.status(200).send('teste realizado 10')
-})
+// app.post('/teste5', (req, res) =>{
+//   console.log(' req 5 ', req.body)
+//   res.status(200).send('teste realizado 10')
+// })
 
 
 function declaraServicoPost(nomeServico, funcao ) {
   app.use(bodyParser.json());
-  app.use(bodyParser.urlencoded({ extended: false }));
+  app.use(bodyParser.urlencoded({ extended: true }));
 
   let allowCrossDomain = function(req, res, next) {
     res.header('Access-Control-Allow-Origin', "*");
@@ -279,6 +284,14 @@ function declaraServicoPost(nomeServico, funcao ) {
   })
   console.log(`Serviço POST ${nomeServico}, declarado com sucesso!`)
 }
+
+
+
+
+
+
+
+
 
 function headerResponse(res) {
   res.set('Access-Control-Allow-Origin', '*');
@@ -319,5 +332,9 @@ var timeMotor = async function ()  {
 
 }
 
-timeMotor();
+
+
+// timeMotor();
+
+
 

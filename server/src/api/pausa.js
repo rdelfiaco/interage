@@ -8,7 +8,6 @@ function getPausas(req, res) {
         token: req.query.token,
         idUsuario: req.query.id_usuario
       };
-  
       let sql = `select * from pausa  `
       executaSQL(credenciais, sql)
         .then(res => {

@@ -1,3 +1,5 @@
+import { StandardUploadsComponent } from './standard-uploads/standard-uploads.component';
+import { ArquivosComponent } from './cadastro-pessoa/arquivos/arquivos.component';
 import { ServicosContratadosComponent } from './cadastro-pessoa/servicos-contratados/servicos-contratados.component';
 import { ParametrosInterageComponent } from './parametros-interage/parametros-interage.component';
 import { AtendimentoInformacaoComponent } from './atendimento-informacao/atendimento-informacao.component';
@@ -120,6 +122,11 @@ const routes: Routes = [
       {
         path: 'pessoaServicosContratados',
         component: ServicosContratadosComponent,
+        canActivate: [AuthGuard]
+      },
+      {
+        path: 'pessoaArquivos',
+        component: ArquivosComponent,
         canActivate: [AuthGuard]
       },
       {
@@ -343,6 +350,13 @@ const routes: Routes = [
         component: ParametrosInterageComponent ,
         canActivate: [AuthGuard]
       },
+      {
+        path: 'standardUploads',
+        component: StandardUploadsComponent ,
+        canActivate: [AuthGuard]
+      },
+
+      
     
     ]
   },
