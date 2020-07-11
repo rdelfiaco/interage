@@ -1,5 +1,5 @@
 
-module.exports =  ({ //treinamento / desenvolvimento
+module.exports =  ({ // desenvolvimento
     standardPath: '/Users/Enrique/interage/files-uploads/'
 })
 

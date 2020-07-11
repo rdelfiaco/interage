@@ -7,7 +7,7 @@ import { humanizeBytes } from 'ng-uikit-pro-standard';
   templateUrl: './standard-uploads.component.html',
   styleUrls: ['./standard-uploads.component.scss']
 })
-export class StandardUploadsComponent implements OnInit   {
+export class StandardUploadsComponent implements OnInit    {
 
   formData: FormData;
   files: UploadFile[];
@@ -76,6 +76,8 @@ export class StandardUploadsComponent implements OnInit   {
     this.removeFile(this.files[0].id);
     }
 
-    
+    ngOnInit() { 
+      
+    }
 
     }

@@ -1,3 +1,7 @@
+import { EmailTemplateUpdateComponent } from './email-template/email-template-update/email-template-update.component';
+import { EmailTemplateDeleteComponent } from './email-template/email-template-delete/email-template-delete.component';
+import { EmailTemplateCreateComponent } from './email-template/email-template-create/email-template-create.component';
+import { EmailTemplateReadComponent } from './email-template/email-template-read/email-template-read.component';
 import { StandardUploadsComponent } from './standard-uploads/standard-uploads.component';
 import { ArquivosComponent } from './cadastro-pessoa/arquivos/arquivos.component';
 import { ServicosContratadosComponent } from './cadastro-pessoa/servicos-contratados/servicos-contratados.component';
@@ -355,8 +359,26 @@ const routes: Routes = [
         component: StandardUploadsComponent ,
         canActivate: [AuthGuard]
       },
-
-      
+      {
+        path: 'emailTampleteRead',
+        component: EmailTemplateReadComponent ,
+        canActivate: [AuthGuard]
+      },
+      {
+        path: 'emailTampleteCreate',
+        component: EmailTemplateCreateComponent ,
+        canActivate: [AuthGuard]
+      },
+      {
+        path: 'emailTampleteDelete/:id',
+        component: EmailTemplateDeleteComponent ,
+        canActivate: [AuthGuard]
+      },
+      {
+        path: 'emailTampleteUpdate/:id',
+        component: EmailTemplateUpdateComponent ,
+        canActivate: [AuthGuard]
+      },
     
     ]
   },

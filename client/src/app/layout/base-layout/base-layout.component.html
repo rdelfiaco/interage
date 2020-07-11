@@ -185,6 +185,13 @@
                                         </span>
                                     </a>
                                 </li>
+                                <li (click)="openPage('usuario', $event);">
+                                    <a class="waves-effect" mdbRippleRadius>
+                                        <span class="h6 font-weight">Usuários
+                                        </span>
+                                        <!-- sidenav.hide() -->
+                                    </a>
+                              </li>
                           </ul>
                       </mdb-item-body>
                   </mdb-item>
@@ -246,14 +253,14 @@
                                     </span>
                                     <!-- sidenav.hide() -->
                                 </a>
-                          </li>
-                              <li (click)="openPage('usuario', $event);">
-                                    <a class="waves-effect" mdbRippleRadius>
-                                        <span class="h6 font-weight">Usuários
-                                        </span>
-                                        <!-- sidenav.hide() -->
-                                    </a>
                               </li>
+                              <li (click)="openPage('emailTampleteRead', $event);">
+                                <a class="waves-effect" mdbRippleRadius>
+                                    <span class="h6 font-weight">Template de e-mail
+                                    </span>
+                                    <!-- sidenav.hide() -->
+                                </a>
+                          </li>
                           </ul>
                       </mdb-item-body>
                   </mdb-item>

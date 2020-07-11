@@ -22,16 +22,20 @@ export class BaseLayoutComponent {
   versaoTeste: boolean; 
   counterEvents: number;
   sub: any;
+
+  
+
   constructor(private router: Router, 
     private auth: AuthService, 
     private connectHTTP: ConnectHTTP,
     private localStorage: LocalStorage,
-    private checkPermissaoRecurso: CheckPermissaoRecurso) {
+    private checkPermissaoRecurso: CheckPermissaoRecurso ) {
     this.hasLogado = this.auth.estaLogado();
     this.usuarioLogado = this.localStorage.getLocalStorage('usuarioLogado') as Usuario;
     this.getCounterEvents();
     this.versaoSistema = 'T.2.1.22';
     this.versaoTeste = true; 
+
   }
 
   async getCounterEvents() {
