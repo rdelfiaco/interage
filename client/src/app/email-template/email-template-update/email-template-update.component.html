@@ -1,3 +1,36 @@
-<form [formGroup]="editorTextForm" >
-  <angular-editor formControlName="htmlContent" [config]="editorConfig"></angular-editor>
-</form>
+<mdb-card cascade="true" narrower="true">
+  <div [formGroup]="emailTemplatesForm" > 
+      <div
+          class="view view-cascade gradient-card-header blue-gradient narrower py-2 mx-4 mb-3 d-flex justify-content-center align-items-center">
+          <h4 href="" class="white-text mt-2 mx-3 font-weight-bold text-uppercase">Alterar template de e-mail</h4>
+      </div>   
+      <div class="row" style="margin: 10px 0px 0px 20px" >
+          <div class="md-form col-3" style="margin: 10px 0px 0px 20px"  >
+              <input mdbInputDirective formControlName="nomeTemplate" type="text" id="nomeTemplate" class="form-control" >
+              <label for="nomeTemplate">Nome do Template</label>
+          </div>
+          <div class="md-form col-8" style="margin: 10px 0px 0px 0px" >
+              <input mdbInputDirective formControlName="descricao" type="text" id="descricao" class="form-control" >
+              <label for="descricao">Descrição</label>
+          </div>
+      </div>  
+      <div class="row" style="margin: 10px 0px 0px 20px" >
+          <div class="md-form col-8" style="margin: 10px 0px 0px 20px" >
+              <input mdbInputDirective formControlName="assunto" type="text" id="assunto" class="form-control" >
+              <label for="assunto">Assunto</label>
+          </div>
+      </div>   
+      <label style="margin: 10px 0px 0px 20px" >Corpo do e-mail: </label>
+      <div style="margin: 3px 10px 0px 20px" >
+          <angular-editor formControlName="htmlContent" [config]="editorConfig"></angular-editor>
+      </div>
+      <div class="col text-right"  >
+          <button type="button" mdbBtn color="primary" (click)="gravar()"
+            class="relative waves-light" mdbWavesEffect>Gravar</button>
+            <button type="button" style="white-space: nowrap; margin-right: 10px;" (click)="cancelar()" mdbBtn color="danger" class="waves-light"
+            aria-label="Cancelar" mdbWavesEffect>Cancelar</button>
+      </div>
+  
+  
+  </div>
+  </mdb-card >

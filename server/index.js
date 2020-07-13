@@ -38,12 +38,11 @@ const parametroInterage = require('./src/api/parametrosInterage');
 const upDownFiles = require('./src/api/upDownFiles')
 const emailTemplate = require('./src/api/emailTemplate')
 
-
-
 //EmailTemplate
 declaraServico('getEmailTemplate', emailTemplate.getEmailTemplate)
+declaraServico('getByIdEmailTemplate', emailTemplate.getByIdEmailTemplate)
 declaraServicoPost('postEmailTemplate', emailTemplate.postEmailTemplate)
-
+declaraServicoPost('postByIdEmailTemplate', emailTemplate.postByIdEmailTemplate)
 
 //upDownFiles 
 declaraServico('getFiles', upDownFiles.getFiles)

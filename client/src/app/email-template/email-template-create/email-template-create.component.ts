@@ -2,7 +2,6 @@ import { EmailTemplate } from './../email-template.model';
 import { Component, OnInit } from '@angular/core';
 import { AngularEditorConfig } from '@kolkov/angular-editor';
 import { FormGroup, FormBuilder  } from '@angular/forms';
-import { EmailTemplate } from '../email-template.model';
 import { Router } from '@angular/router';
 import { EmailTemplateService } from '../email-template.service';
 

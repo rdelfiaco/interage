@@ -23,6 +23,15 @@ export class EmailTemplateService {
     if ( resp.error != '')  
      { this.toastrService.error('Erro ao ler template de email ', resp.error )}
     return resp 
+  }
+
+  async readById(id: number ) {
+    let resp  = await this.bancoDados.lerDados('getByIdEmailTemplate', { 
+      id: id
+    }) as any;
+    if ( resp.error != '')  
+     { this.toastrService.error('Erro ao ler template de email ', resp.error )}
+    return resp 
   } 
 
   async gravar(emailTemplate: EmailTemplate ) {
@@ -39,9 +48,23 @@ export class EmailTemplateService {
         this.toastrService.error('Template não salvo');
         return false;
     }
-
   }
 
+  async gravarById(emailTemplate: EmailTemplate ) {
+    console.log( 'emailTemplate g ', emailTemplate)
+    try {
+      await this.connectHTTP.sendFile({ 
+          service: 'postByIdEmailTemplate', 
+          paramsService: { arquivo: emailTemplate }  
+          })                  
+        this.toastrService.success('Template salvo com sucesso!');
+        return true;
+    }catch (error) {
+        console.log(error)
+        this.toastrService.error('Template não salvo');
+        return false;
+    }
+  }
 
 
 

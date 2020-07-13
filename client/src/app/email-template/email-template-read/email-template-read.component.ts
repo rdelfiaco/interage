@@ -12,16 +12,15 @@ export class EmailTemplateReadComponent implements OnInit {
 
   emailTemplates: EmailTemplate[];
 
-  
-
   constructor(
     private emailTemplateService: EmailTemplateService,
     private router: Router ,
     private route: ActivatedRoute) 
     { 
-      this.route.params.subscribe(res => {
-        this.id_evento = res.id
-      });
+      // this.route.params.subscribe(res => {
+      //   console.log('read ')
+      //   //this.id_evento = res.id
+      // });
     }
 
   async ngOnInit() {
