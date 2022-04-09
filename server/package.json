@@ -16,7 +16,7 @@
     "cors": "^2.8.5",
     "express": "^4.16.3",
     "formidable": "^1.2.2",
-    "moment": "^2.26.0",
+    "moment": "^2.29.2",
     "node-fetch": "^2.6.0",
     "pg": "^7.4.3",
     "request": "^2.88.2",
