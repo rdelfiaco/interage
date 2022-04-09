@@ -43,7 +43,7 @@
     "html2canvas": "^1.0.0-rc.1",
     "jarallax": "^1.10.3",
     "jquery": "^3.3.1",
-    "moment": "^2.22.2",
+    "moment": "^2.29.2",
     "ng-uikit-pro-standard": "file:ng-uikit-pro-standard-6.2.3.tgz",
     "ngx-treeview": "^6.0.2",
     "node-fetch": "^2.6.0",
