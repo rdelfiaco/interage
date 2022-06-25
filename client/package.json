@@ -46,7 +46,7 @@
     "moment": "^2.22.2",
     "ng-uikit-pro-standard": "file:ng-uikit-pro-standard-6.2.3.tgz",
     "ngx-treeview": "^6.0.2",
-    "node-fetch": "^2.6.0",
+    "node-fetch": "^2.6.7",
     "numeral": "^2.0.6",
     "pdfmake": "^0.1.65",
     "rxjs": "^6.0.0-rc.0",
